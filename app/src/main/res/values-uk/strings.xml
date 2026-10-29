@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Спротив</string>
+
+    <string name="tile_alarm">Тривога</string>
+    <string name="tile_alarm_hint">Статус, загроза, одна дія</string>
+    <string name="tile_now">Що робити зараз</string>
+    <string name="tile_now_hint">Кровотеча, дрон, пожежа, завал</string>
+    <string name="tile_home_life">Побут у кризі</string>
+    <string name="tile_home_life_hint">Немає світла, тепла, води, газу</string>
+    <string name="tile_safe">Я в безпеці</string>
+    <string name="tile_safe_hint">WhatsApp, Signal або SMS</string>
+    <string name="tile_guide">Довідник</string>
+    <string name="tile_guide_hint">Виживання й медицина, офлайн</string>
+    <string name="tile_mine">Моє</string>
+    <string name="tile_mine_hint">Медкартка, план, валіза</string>
+
+    <string name="call_112">Подзвонити 112</string>
+    <string name="call_others">Інші служби</string>
+    <string name="service_unified">112 · Єдиний номер екстрених служб</string>
+    <string name="service_rescue">101 · Рятувальники (пожежа)</string>
+    <string name="service_police">102 · Поліція</string>
+    <string name="service_ambulance">103 · Швидка допомога</string>
+    <string name="service_gas">104 · Аварійна газова служба</string>
+
+    <string name="back">Назад</string>
+    <string name="coming_soon">Розділ готується. Він з’явиться в одному з наступних оновлень.</string>
+    <string name="alarm_not_yet">Тривоги з’являться у версії 1.1. Поки тримайте офіційний застосунок «Повітряна тривога» й завжди слухайте сирени.</string>
+
+    <string name="opening">Відкриваю…</string>
+    <string name="try_again_title">Поки не вдалося відкрити ваші дані</string>
+    <string name="try_again_text">Нічого не змінено. Спробуйте ще раз за мить.</string>
+    <string name="try_again">Спробувати ще раз</string>
+    <string name="key_lost_title">Збережені дані не відкриваються</string>
+    <string name="key_lost_text">Ключа до них більше немає на цьому телефоні, наприклад після скидання налаштувань або пошкодження файлу ключа. Довідник, картки й дзвінки працюють як звичайно. Якщо почати з нуля, старі дані залишаться відкладеними на телефоні, нічого не видаляється, але відкрити їх «Спротив» уже не зможе.</string>
+    <string name="key_lost_fresh">Почати з нуля</string>
+    <string name="key_lost_fresh_confirm">Відкласти старі дані й почати з нуля? Відкрити старі дані «Спротив» уже не зможе.</string>
+    <string name="key_lost_keep">Не зараз</string>
+    <string name="damaged_title">Дані не відкрилися</string>
+    <string name="damaged_text">Ключ підходить, але самі дані не відкрилися, наприклад після невдалого оновлення. Нічого не видалено. Спробуйте ще раз. Якщо не допоможе, старі дані можна відкласти й почати з нуля.</string>
+    <string name="software_key_note">Цей телефон зберігає ключ лише програмно, без захищеного апаратного сховища. Дані зашифровані, але захищені слабше, ніж на більшості телефонів.</string>
+</resources>
