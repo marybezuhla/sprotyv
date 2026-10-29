@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sprotyv</string>
+
+    <string name="tile_alarm">Air alert</string>
+    <string name="tile_alarm_hint">Status, threat, one action</string>
+    <string name="tile_now">What to do now</string>
+    <string name="tile_now_hint">Bleeding, drone, fire, rubble</string>
+    <string name="tile_home_life">Life in a crisis</string>
+    <string name="tile_home_life_hint">No power, heat, water, gas</string>
+    <string name="tile_safe">I am safe</string>
+    <string name="tile_safe_hint">WhatsApp, Signal or SMS</string>
+    <string name="tile_guide">Guide</string>
+    <string name="tile_guide_hint">Survival and medicine, offline</string>
+    <string name="tile_mine">Mine</string>
+    <string name="tile_mine_hint">Medical card, plan, kit</string>
+
+    <string name="call_112">Call 112</string>
+    <string name="call_others">Other services</string>
+    <string name="service_unified">112 · Single emergency number</string>
+    <string name="service_rescue">101 · Rescue service (fire)</string>
+    <string name="service_police">102 · Police</string>
+    <string name="service_ambulance">103 · Ambulance</string>
+    <string name="service_gas">104 · Gas emergency</string>
+
+    <string name="back">Back</string>
+    <string name="coming_soon">This section is being prepared. It will come in one of the next updates.</string>
+    <string name="alarm_not_yet">Alerts come in version 1.1. Until then keep the official “Air Alert” app and always listen to the sirens.</string>
+
+    <string name="opening">Opening…</string>
+    <string name="try_again_title">Could not open your data yet</string>
+    <string name="try_again_text">Nothing was changed. Try again in a moment.</string>
+    <string name="try_again">Try again</string>
+    <string name="key_lost_title">Your saved data cannot be opened</string>
+    <string name="key_lost_text">The key to it is no longer on this phone, for example after a reset or damage to the key file. The guide, cards and calls work as usual. A fresh start sets the old data aside on the phone without deleting it, but Sprotyv will not be able to open it again.</string>
+    <string name="key_lost_fresh">Start fresh</string>
+    <string name="key_lost_fresh_confirm">Set the old data aside and start fresh? Sprotyv will not be able to open the old data.</string>
+    <string name="key_lost_keep">Not now</string>
+    <string name="damaged_title">Your data would not open</string>
+    <string name="damaged_text">The key fits, but the data itself would not open, for example after a failed update. Nothing was deleted. Try again. If it keeps failing, you can set the old data aside and start fresh.</string>
+    <string name="software_key_note">This phone keeps the key in software only, without secure hardware. Your data is encrypted, but less well protected than on most phones.</string>
+</resources>
