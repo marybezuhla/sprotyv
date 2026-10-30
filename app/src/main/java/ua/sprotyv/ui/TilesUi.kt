@@ -60,6 +60,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -71,7 +72,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -294,9 +299,10 @@ fun SimpleHome(content: Content?, pins: List<String>, nav: Nav, onSettings: () -
             Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Pins.simple(pins).forEach { id ->
-                tileInfo(id, content)?.let { info -> TileCard(info, big = true) { nav.go(info.route) } }
-            }
+            // Only tiles that can be shown count towards the six, so the screen matches the editor
+            val fixed = Tiles.FIXED.mapNotNull { tileInfo(it, content) }
+            val chosen = pins.mapNotNull { tileInfo(it, content) }.take(Tiles.SIMPLE_CHOSEN)
+            (fixed + chosen).forEach { info -> TileCard(info, big = true) { nav.go(info.route) } }
         }
         CallBar()
     }
@@ -382,14 +388,16 @@ fun SectionsList(content: Content?, pins: List<String>, nav: Nav, onPin: (String
                     }
                     Spacer(Modifier.width(8.dp))
                     if (pinned) {
-                        FilledTonalButton(onClick = { onPin(info.id, false) }, modifier = Modifier.heightIn(min = 48.dp)) {
-                            Icon(Icons.Filled.Check, contentDescription = stringResource(R.string.pin_remove_desc, info.title))
+                        val say = stringResource(R.string.pin_remove_desc, info.title)
+                        FilledTonalButton(onClick = { onPin(info.id, false) }, modifier = Modifier.heightIn(min = 48.dp).clearAndSetSemantics { contentDescription = say; role = Role.Button }) {
+                            Icon(Icons.Filled.Check, contentDescription = null)
                             Spacer(Modifier.width(4.dp))
                             Text(stringResource(R.string.pin_added))
                         }
                     } else {
-                        OutlinedButton(onClick = { onPin(info.id, true) }, enabled = !full, modifier = Modifier.heightIn(min = 48.dp)) {
-                            Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.pin_add_desc, info.title))
+                        val say = stringResource(R.string.pin_add_desc, info.title)
+                        OutlinedButton(onClick = { onPin(info.id, true) }, enabled = !full, modifier = Modifier.heightIn(min = 48.dp).semantics(mergeDescendants = true) { contentDescription = say }) {
+                            Icon(Icons.Filled.Add, contentDescription = null)
                             Spacer(Modifier.width(4.dp))
                             Text(stringResource(R.string.pin_add))
                         }
@@ -411,9 +419,11 @@ fun EditTilesScreen(content: Content?, mode: Mode?, pins: List<String>, nav: Nav
         Text(stringResource(R.string.edit_yours), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
         val shown = pins.mapNotNull { tileInfo(it, content) }
         val ids = shown.map { it.id }
-        fun change(next: List<String>) = HomePrefs.update(context) { it.copy(pins = next) }
+        // Tiles that cannot be shown now (content unreadable, say) are kept, at the end, not lost
+        val hidden = pins.filter { it !in ids }
+        fun change(next: List<String>) = HomePrefs.update(context) { it.copy(pins = next + hidden) }
         if (shown.isEmpty()) Text(stringResource(R.string.home_empty), style = MaterialTheme.typography.bodyLarge)
-        shown.forEachIndexed { i, info ->
+        shown.forEachIndexed { i, info -> key(info.id) {
             if (mode == Mode.SIMPLE && i == Tiles.SIMPLE_CHOSEN) {
                 HorizontalDivider(thickness = 2.dp)
                 Text(stringResource(R.string.edit_simple_rest), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -432,7 +442,7 @@ fun EditTilesScreen(content: Content?, mode: Mode?, pins: List<String>, nav: Nav
                     Icon(Icons.Filled.Close, contentDescription = stringResource(R.string.remove_tile, info.title))
                 }
             }
-        }
+        } }
         OutlinedButton(onClick = { nav.go(Route.Sections) }, modifier = Modifier.heightIn(min = 56.dp)) {
             Icon(Icons.Filled.Add, contentDescription = null)
             Spacer(Modifier.width(6.dp))
@@ -554,7 +564,11 @@ fun SettingsScreen(mode: Mode?, locked: Boolean, nav: Nav) {
         NavRow(stringResource(R.string.presets_title), stringResource(R.string.presets_hint)) { nav.go(Route.Presets) }
         Text(stringResource(R.string.lock_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
         if (canLock) {
-            Toggle(stringResource(R.string.lock_toggle), locked) { on -> HomePrefs.update(context) { it.copy(locked = on) } }
+            Toggle(stringResource(R.string.lock_toggle), locked) { on ->
+                // Settings are open now; turning the lock on does not shut them on the spot
+                if (on) Guard.keepOpen()
+                HomePrefs.update(context) { it.copy(locked = on) }
+            }
         } else {
             Text(stringResource(R.string.lock_no_screen_lock), style = MaterialTheme.typography.bodyLarge)
         }
