@@ -14,6 +14,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
@@ -75,18 +77,24 @@ fun SituationScreen(content: Content?, nav: Nav) {
             links.forEach { link -> LinkRow(link) { openLink(context, link, toolbar) } }
         }
         // Said plainly: whether this phone's browser keeps a trace of the pages
-        val trace = androidx.compose.runtime.remember { Reach.trace(context) }
+        // Worked out again on every return, e.g. after installing Firefox Focus
+        var trace by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(Reach.trace(context)) }
+        androidx.lifecycle.compose.LifecycleResumeEffect(Unit) {
+            trace = Reach.trace(context)
+            onPauseOrDispose { }
+        }
         Text(
             stringResource(
                 when (trace) {
                     Reach.Trace.FOCUS -> R.string.situation_focus
+                    Reach.Trace.FOCUS_NOT_FROM_PLAY -> R.string.situation_focus_other
                     Reach.Trace.CHROME_TAB -> R.string.situation_no_trace
                     Reach.Trace.BROWSER -> R.string.situation_trace
                 },
             ),
             style = MaterialTheme.typography.bodyMedium,
         )
-        if (trace != Reach.Trace.FOCUS) {
+        if (trace != Reach.Trace.FOCUS && trace != Reach.Trace.FOCUS_NOT_FROM_PLAY && Reach.hasPlay(context)) {
             // Any phone, any main browser: Firefox Focus erases pages on closing
             androidx.compose.material3.TextButton(
                 onClick = { Reach.open(context, FOCUS_PAGE, toolbarColor = toolbar) },

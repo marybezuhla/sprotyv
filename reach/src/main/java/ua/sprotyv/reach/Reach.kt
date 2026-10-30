@@ -66,12 +66,15 @@ object Reach {
         if (!url.startsWith("https://")) return notFound(context)
         val uri = Uri.parse(url)
         val intent = Intent(Intent.ACTION_VIEW, uri).addCategory(Intent.CATEGORY_BROWSABLE)
-        // Firefox Focus, when the person has it from Google Play, opens every page: it erases history
-        // and cookies when closed, whatever the phone's main browser is
-        val telegramApp = uri.host == "t.me" && !handledOnlyByBrowsers(context, intent)
-        focus(context)?.let { pkg -> if (!telegramApp && tryStart(context, Intent(intent).setPackage(pkg))) return }
-        // Telegram links go to a Telegram app when one handles them; otherwise they are pages like any other
-        if (uri.host != "t.me" || handledOnlyByBrowsers(context, intent)) {
+        if (uri.host == "t.me") {
+            // A Telegram app, named outright (an unverified one would otherwise send the link to a browser)
+            nonBrowser(context, intent)?.let { pkg -> if (tryStart(context, Intent(intent).setPackage(pkg))) return }
+        }
+        // Firefox Focus, when the person has it from Google Play, opens every page, whatever the main
+        // browser is: its Erase button removes history and cookies
+        focus(context)?.let { pkg -> if (tryStart(context, Intent(intent).setPackage(pkg))) return }
+        // No Telegram app or Focus took it: a page like any other
+        run {
             // The Custom Tabs protocol by its documented extras, without an extra library
             intent.putExtras(android.os.Bundle().apply { putBinder(EXTRA_SESSION, null) })
             // Leave no trace where the browser can: no history, cookies or cache after the tab closes.
@@ -89,16 +92,26 @@ object Reach {
     }
 
     /** How pages from Sprotyv are kept on this phone, said plainly on the screen. */
-    enum class Trace { FOCUS, CHROME_TAB, BROWSER }
+    enum class Trace { FOCUS, FOCUS_NOT_FROM_PLAY, CHROME_TAB, BROWSER }
 
     fun trace(context: Context): Trace = when {
         focus(context) != null -> Trace.FOCUS
+        FOCUS.any { enabled(context, it) } -> Trace.FOCUS_NOT_FROM_PLAY
         chromeTraceless(context) -> Trace.CHROME_TAB
         else -> Trace.BROWSER
     }
 
-    /** Firefox Focus (or Klar) installed from Google Play, or null. */
-    private fun focus(context: Context): String? = FOCUS.firstOrNull { fromPlay(context, it) }
+    /** Google Play is on this phone (so a link to it can install something). */
+    fun hasPlay(context: Context): Boolean = enabled(context, "com.android.vending")
+
+    /** Firefox Focus (or Klar) installed from Google Play and turned on, or null. */
+    private fun focus(context: Context): String? = FOCUS.firstOrNull { enabled(context, it) && fromPlay(context, it) }
+
+    private fun enabled(context: Context, pkg: String): Boolean = try {
+        context.packageManager.getApplicationInfo(pkg, 0).enabled
+    } catch (e: Exception) {
+        false
+    }
 
     private val FOCUS = listOf("org.mozilla.focus", "org.mozilla.klar")
 
@@ -114,15 +127,17 @@ object Reach {
         false
     }
 
-    /** True when nothing but a web browser would open this link. */
-    private fun handledOnlyByBrowsers(context: Context, intent: Intent): Boolean = try {
+    /** An app other than a web browser that opens this link (Telegram for t.me), or null. */
+    private fun nonBrowser(context: Context, intent: Intent): String? = try {
         val pm = context.packageManager
         val browsers = pm.queryIntentActivities(
-            Intent(Intent.ACTION_VIEW, Uri.parse("https://example.org")).addCategory(Intent.CATEGORY_BROWSABLE), 0,
+            Intent(Intent.ACTION_VIEW, Uri.parse("https://example.org")).addCategory(Intent.CATEGORY_BROWSABLE),
+            android.content.pm.PackageManager.MATCH_ALL,
         ).map { it.activityInfo.packageName }.toSet()
-        pm.queryIntentActivities(intent, 0).all { it.activityInfo.packageName in browsers }
+        // Every app that declares t.me, verified or not
+        pm.queryIntentActivities(intent, android.content.pm.PackageManager.MATCH_ALL).map { it.activityInfo.packageName }.firstOrNull { it !in browsers && it != "android" }
     } catch (e: Exception) {
-        true
+        null
     }
 
     private const val CHROME = "com.android.chrome"
