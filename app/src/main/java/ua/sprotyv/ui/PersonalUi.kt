@@ -71,7 +71,7 @@ fun sortedPeople(list: List<Person>): List<Person> {
 @Composable
 fun rememberPeople(): List<Person>? {
     val people by remember { PersonalStore.observe { it.people().observe() } }.collectAsStateWithLifecycle(null)
-    return people?.let(::sortedPeople)
+    return remember(people) { people?.let(::sortedPeople) }
 }
 
 @Composable
@@ -117,7 +117,8 @@ fun Field(
         placeholder = if (hint.isNotBlank()) ({ Text(hint) }) else null,
         singleLine = !multiline,
         minLines = if (multiline) 2 else 1,
-        // No autocorrect: the keyboard should not learn names, numbers or medical words
+        // No autocorrect. Compose cannot yet ask the keyboard not to learn from what is typed
+        // (Android's no-personalised-learning flag); noted as a known limit
         keyboardOptions = KeyboardOptions(
             keyboardType = if (phone) KeyboardType.Phone else KeyboardType.Text,
             capitalization = if (phone) KeyboardCapitalization.None else KeyboardCapitalization.Sentences,
