@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Sprotyv pictogram "lie_down", built by scripts/pictograms/build.py from Material Symbols (Apache 2.0) -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="48dp" android:height="48dp" android:viewportWidth="960" android:viewportHeight="960">
-    <group android:translateX="40.0" android:translateY="260.0">
-        <group android:scaleX="1.1000" android:scaleY="1.1000">
-            <group android:translateX="-80" android:translateY="680">
-                <path android:fillColor="#FF000000" android:pathData="M390-400q-12.75 0-21.37-8.63Q360-417.25 360-430v-190q0-24.75 17.63-42.38Q395.25-680 420-680h308q63 0 107 44t44 107v99q0 12.75-8.62 21.37Q861.75-400 849-400H390Zm460 120H110q-12.75 0-21.37-8.68-8.63-8.67-8.63-21.5 0-12.82 8.63-21.32Q97.25-340 110-340h740q12.75 0 21.38 8.68 8.62 8.67 8.62 21.5 0 12.82-8.62 21.32-8.63 8.5-21.38 8.5ZM200-400q-50 0-85-35t-35-85q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35Z"/>
+    <group android:translateX="151.4" android:translateY="640.0">
+        <group android:scaleX="0.8214" android:scaleY="0.8214">
+            <group android:translateX="400.0" android:translateY="140.0">
+                <group android:rotation="270">
+                    <group android:translateX="-140.0" android:translateY="-400.0">
+                        <group android:translateX="-340" android:translateY="880">
+                            <path android:fillColor="#FF000000" android:pathData="M420-110v-250h-50q-12.75 0-21.37-8.63Q340-377.25 340-390v-223q0-24.75 17.63-42.38Q375.25-673 400-673h160q24.75 0 42.38 17.62Q620-637.75 620-613v223q0 12.75-8.62 21.37Q602.75-360 590-360h-50v250q0 12.75-8.65 21.37Q522.71-80 509.93-80h-60.15Q437-80 428.5-88.63 420-97.25 420-110Zm60.08-624q-30.08 0-51.58-21.42t-21.5-51.5q0-30.08 21.42-51.58t51.5-21.5q30.08 0 51.58 21.42t21.5 51.5q0 30.08-21.42 51.58t-51.5 21.5Z"/>
+                        </group>
+                    </group>
+                </group>
+            </group>
+        </group>
+    </group>
+    <path android:fillColor="#FF000000" android:pathData="M65 880H895A25 25 0 0 1 920 905V905A25 25 0 0 1 895 930H65A25 25 0 0 1 40 905V905A25 25 0 0 1 65 880Z"/>
+    <group android:translateX="600.0" android:translateY="46.5">
+        <group android:scaleX="0.4354" android:scaleY="0.4354">
+            <group android:translateX="-105" android:translateY="877">
+                <path android:fillColor="#FF000000" android:pathData="M190-80q-29 0-49.5-20.5T120-150v-180q0-29 20.5-49.5T190-400h580q29 0 49.5 20.5T840-330v180q0 29-20.5 49.5T770-80H190Zm86-379q-12 0-23-3t-22-9l-114-66q-7-4-10-10t-1-13q2-7 6.5-11.5T125-578l180-31-48-178q-2-8 .5-14t7.5-10q5-4 12-4.5t14 4.5l150 107 90-161q4-7 10-10t13-1q7 2 12 6t7 12l30 182 175-49q8-2 14.5 1t10.5 8q4 5 4.5 11.5T803-691L697-539l42 24q20 11 14 33.5T724-459H276Z"/>
             </group>
         </group>
     </group>
