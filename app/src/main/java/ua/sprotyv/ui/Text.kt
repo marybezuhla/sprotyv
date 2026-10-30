@@ -32,6 +32,12 @@ fun RichText(text: String, style: TextStyle = MaterialTheme.typography.bodyLarge
     Text(rich(text), style = style, modifier = modifier)
 }
 
+/** The built-in content could not be read. Calls still work from the bar below. */
+@Composable
+fun Broken() {
+    Text(stringResource(R.string.content_broken), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.error)
+}
+
 /** Shown for the moment the built-in content is being read. */
 @Composable
 fun Loading() {

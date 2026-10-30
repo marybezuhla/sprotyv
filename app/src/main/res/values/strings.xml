@@ -67,4 +67,6 @@
     <string name="about_source">Source: %1$s</string>
     <string name="about_license">Licence: %1$s. You may copy and change it with credit, under the same licence.</string>
     <string name="about_not_reviewed">The guide says its medical chapters are not reviewed by a doctor, and chapters 3–6 not by the emergency service or a deminer. In a real emergency follow the official services.</string>
+    <string name="content_broken">This part of the built-in content could not be opened. Please update the app. Calls below still work.</string>
+    <string name="figure">Figure</string>
 </resources>

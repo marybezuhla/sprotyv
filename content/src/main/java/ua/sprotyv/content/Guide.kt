@@ -14,6 +14,8 @@ data class Guide(
     val license: String,
     val changes: String,
     val chapters: List<Chapter>,
+    /** The guide's own warning from its cover, shown in "About the guide". */
+    val disclaimer: List<String> = emptyList(),
 ) {
     /** A section by its number ("7.2", "Б.3"), or null. */
     fun section(num: String): Pair<Chapter, Section>? {
@@ -57,6 +59,7 @@ object GuideReader {
             license = o.getString("license"),
             changes = o.optString("changes", ""),
             chapters = (0 until chapters.length()).map { chapter(chapters.getJSONObject(it)) },
+            disclaimer = o.optJSONArray("disclaimer")?.let { a -> (0 until a.length()).map { a.getString(it) } } ?: emptyList(),
         )
     }
 
@@ -151,11 +154,10 @@ object GuideSearch {
                 val to = minOf(text.length, at + 120)
                 val snippet = (if (from > 0) "…" else "") + text.substring(from, to).replace('\n', ' ').trim() + (if (to < text.length) "…" else "")
                 hits += Hit(c, s, snippet)
-                if (hits.size >= MAX_HITS) return hits
             }
         }
-        // Title matches first: they are what people mean most often
-        return hits.sortedByDescending { h -> words.all { normalize(h.section.title).contains(it) } }
+        // Title matches first (they are what people mean most often), then the cap
+        return hits.sortedByDescending { h -> words.all { normalize(h.section.title).contains(it) } }.take(MAX_HITS)
     }
 
     private fun textOf(blocks: List<Block>): String = buildString {
