@@ -224,13 +224,19 @@ private fun CardBody(card: Card, content: Content, nav: Nav) {
 /**
  * The tourniquet time (guide 7.2: write it on the tourniquet or the forehead, "Т 14:25", for the
  * medics; never loosen it). One tap keeps the time and shows it large, with how long it has been.
- * Only a time is kept, on this phone, until reset; nothing about the person.
+ * Only a time is kept, on this phone, until reset or for a day; nothing about the person. Kept
+ * outside the encrypted data on purpose, so it works at once on a card (a decision on record).
  */
 @Composable
 private fun TourniquetTime() {
     val context = LocalContext.current
     val prefs = remember { context.applicationContext.getSharedPreferences("tourniquet", android.content.Context.MODE_PRIVATE) }
-    var at by remember { mutableStateOf(prefs.getLong("at", 0L).takeIf { it > 0 && System.currentTimeMillis() - it < 24 * 3600_000L }) }
+    var at by remember {
+        val kept = prefs.getLong("at", 0L)
+        // Older than a day: removed from the phone, not just hidden
+        if (kept > 0 && System.currentTimeMillis() - kept >= 24 * 3600_000L) prefs.edit().remove("at").apply()
+        mutableStateOf(kept.takeIf { it > 0 && System.currentTimeMillis() - it < 24 * 3600_000L })
+    }
     var now by remember { mutableStateOf(System.currentTimeMillis()) }
     LaunchedEffect(at) {
         while (at != null) {

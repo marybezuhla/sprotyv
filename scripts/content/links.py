@@ -7,13 +7,17 @@ Aerial targets: only as their sources publish them; nothing on air defence, shoo
 
     python3 scripts/content/links.py   -> content/src/main/assets/links.json
 """
-import json, os
+import json, os, re
 
 CHECKED = "2026-10-30"
 
 def link(id, group, kind, title, note, url="", app="", phone=""):
     assert kind in ("official", "volunteer", "independent"), id
-    assert url.startswith("https://") or (not url and phone), id
+    assert re.fullmatch(r"[a-z0-9-]{1,40}", id), id
+    assert (url and re.fullmatch(r"https://[a-z0-9-]+(\.[a-z0-9-]+)+(/[A-Za-z0-9._~/?=&%-]*)?", url)) or (not url and phone), id
+    assert not app or re.fullmatch(r"[a-z][a-z0-9_]*(\.[a-z0-9_]+)+", app), id
+    assert not phone or re.fullmatch(r"[0-9]{3,4}", phone), id
+    assert 0 < len(title) <= 80 and 0 < len(note) <= 200, id
     return {"id": id, "group": group, "kind": kind, "title": title, "note": note,
             "url": url, "app": app, "phone": phone, "checkedOn": CHECKED}
 
@@ -40,10 +44,10 @@ LINKS = [
          url="https://understandingwar.org"),
     # Help
     link("app-112", "help", "official", "112 Ukraine (МВС)",
-         "Виклик 112 через інтернет, коли немає мобільного зв'язку. Увійдіть через Дію заздалегідь.",
+         "Виклик 112 через інтернет, коли немає мобільного зв'язку. Увійдіть заздалегідь через ID.GOV.UA.",
          url="https://play.google.com/store/apps/details?id=ua.gov.mvs.service112", app="ua.gov.mvs.service112"),
     link("evacuation", "help", "official", "Лінія евакуації 1548",
-         "Цілодобова державна лінія з питань евакуації.",
+         "Цілодобова державна гаряча лінія з кризових питань, зокрема евакуації.",
          phone="1548"),
     link("diia", "help", "official", "Дія: укриття й Пункти незламності",
          "У застосунку Дія є мапа укриттів і Пунктів незламності.",

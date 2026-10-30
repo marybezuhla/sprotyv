@@ -111,6 +111,13 @@ class ContentTest {
             throw AssertionError("plain http must be refused")
         } catch (e: IllegalArgumentException) {
         }
+        // A user part would show one host and open another
+        try {
+            LinksReader.parse("""[{"id":"x","group":"threats","kind":"official","title":"t","note":"n","url":"https://map.example@evil.example","checkedOn":"2026-10-30"}]""")
+            throw AssertionError("user part must be refused")
+        } catch (e: IllegalArgumentException) {
+        }
+        assertEquals("deepstatemap.live", LinksReader.host("https://deepstatemap.live"))
     }
 
     @Test fun cardsAreUnreviewedUntilSomeoneReviews() {

@@ -98,7 +98,7 @@ private fun LinkRow(link: Link, onClick: () -> Unit) {
             }
             Text(link.note, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Text(
-                if (link.phone.isNotEmpty() && link.url.isEmpty()) stringResource(R.string.call_number, link.phone) else link.url.removePrefix("https://").substringBefore('/'),
+                if (link.phone.isNotEmpty() && link.url.isEmpty()) stringResource(R.string.call_number, link.phone) else ua.sprotyv.content.LinksReader.host(link.url),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.primary,
             )

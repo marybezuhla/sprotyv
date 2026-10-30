@@ -54,10 +54,13 @@ object Reach {
     /**
      * Opens a trusted page outside Sprotyv: the source's own app when installed, else the phone's
      * browser as a Custom Tab, which looks part of Sprotyv but loads the page itself (Sprotyv has
-     * no internet). Telegram links go to Telegram. Only https addresses from the built-in list.
+     * no internet). Telegram links open in Telegram when it handles them, else in the browser.
+     * Only https addresses from the built-in list.
      */
     fun open(context: Context, url: String, app: String = "", toolbarColor: Int? = null) {
-        if (app.isNotEmpty()) {
+        // The source's own app only when it came from Google Play: a look-alike installed from a
+        // file under the same name never opens in its place; the page opens instead
+        if (app.isNotEmpty() && fromPlay(context, app)) {
             context.packageManager.getLaunchIntentForPackage(app)?.let { if (tryStart(context, it)) return }
         }
         if (!url.startsWith("https://")) return notFound(context)
@@ -69,6 +72,12 @@ object Reach {
             toolbarColor?.let { intent.putExtra(EXTRA_TOOLBAR_COLOR, it) }
         }
         start(context, intent)
+    }
+
+    private fun fromPlay(context: Context, app: String): Boolean = try {
+        context.packageManager.getInstallSourceInfo(app).installingPackageName == "com.android.vending"
+    } catch (e: Exception) {
+        false
     }
 
     private const val EXTRA_SESSION = "android.support.customtabs.extra.SESSION"
