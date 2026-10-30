@@ -349,4 +349,12 @@
     <string name="kid_hello_hint">Я Соняшник. Натисни на картинку — я підкажу, що робити.</string>
     <string name="kid_well_done">Молодець! 🌟</string>
     <string name="kid_well_done_hint">Тепер ти знаєш, що робити.</string>
+    <string name="call_services">Екстрені служби</string>
+    <string name="service_name_unified">Єдиний номер екстрених служб</string>
+    <string name="service_name_rescue">Рятувальники, пожежа</string>
+    <string name="service_name_police">Поліція</string>
+    <string name="service_name_ambulance">Швидка допомога</string>
+    <string name="service_name_gas">Аварійна газова служба</string>
+    <string name="call_bar_toggle">Кнопки дзвінка внизу екрана</string>
+    <string name="call_bar_hint">Вимкнено — 112 та інші служби відкриває червона слухавка вгорі кожного екрана.</string>
 </resources>

@@ -20,6 +20,8 @@ object HomePrefs {
         val locked: Boolean,
         val theme: ThemeChoice = ThemeChoice.SYSTEM,
         val dynamic: Boolean = false,
+        /** The call bar at the bottom; off, a phone button sits in the corner instead. */
+        val callBar: Boolean = true,
     )
 
     private const val FILE = "home"
@@ -28,6 +30,7 @@ object HomePrefs {
     private const val LOCK = "lock"
     private const val THEME = "theme"
     private const val DYNAMIC = "dynamic"
+    private const val CALL_BAR = "call_bar"
 
     private val flow = MutableStateFlow<State?>(null)
     val state: StateFlow<State?> = flow.asStateFlow()
@@ -41,6 +44,7 @@ object HomePrefs {
             locked = p.getBoolean(LOCK, false),
             theme = ThemeChoice.entries.firstOrNull { it.name == p.getString(THEME, null) } ?: ThemeChoice.SYSTEM,
             dynamic = p.getBoolean(DYNAMIC, false),
+            callBar = p.getBoolean(CALL_BAR, true),
         )
         flow.value = s
         return s
@@ -55,6 +59,7 @@ object HomePrefs {
             .putBoolean(LOCK, next.locked)
             .putString(THEME, next.theme.name)
             .putBoolean(DYNAMIC, next.dynamic)
+            .putBoolean(CALL_BAR, next.callBar)
             .apply()
     }
 }
