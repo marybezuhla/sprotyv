@@ -66,7 +66,8 @@ object Reach {
         if (!url.startsWith("https://")) return notFound(context)
         val uri = Uri.parse(url)
         val intent = Intent(Intent.ACTION_VIEW, uri).addCategory(Intent.CATEGORY_BROWSABLE)
-        if (uri.host != "t.me") {
+        // Telegram links go to a Telegram app when one handles them; otherwise they are pages like any other
+        if (uri.host != "t.me" || handledOnlyByBrowsers(context, intent)) {
             // The Custom Tabs protocol by its documented extras, without an extra library
             intent.putExtras(android.os.Bundle().apply { putBinder(EXTRA_SESSION, null) })
             // Leave no trace where the browser can: no history, cookies or cache after the tab closes.
@@ -93,6 +94,17 @@ object Reach {
         pkg == CHROME && (context.packageManager.getPackageInfo(CHROME, 0).versionName?.substringBefore('.')?.toIntOrNull() ?: 0) >= 137
     } catch (e: Exception) {
         false
+    }
+
+    /** True when nothing but a web browser would open this link. */
+    private fun handledOnlyByBrowsers(context: Context, intent: Intent): Boolean = try {
+        val pm = context.packageManager
+        val browsers = pm.queryIntentActivities(
+            Intent(Intent.ACTION_VIEW, Uri.parse("https://example.org")).addCategory(Intent.CATEGORY_BROWSABLE), 0,
+        ).map { it.activityInfo.packageName }.toSet()
+        pm.queryIntentActivities(intent, 0).all { it.activityInfo.packageName in browsers }
+    } catch (e: Exception) {
+        true
     }
 
     private const val CHROME = "com.android.chrome"
