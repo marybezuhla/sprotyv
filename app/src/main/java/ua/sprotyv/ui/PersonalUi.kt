@@ -98,6 +98,9 @@ fun MineHub(nav: Nav) {
     NavRow(stringResource(R.string.family_plan), stringResource(R.string.family_plan_hint)) { nav.go(Route.Mine(MinePart.PLAN)) }
     NavRow(stringResource(R.string.kit), stringResource(R.string.kit_hint)) { nav.go(Route.Mine(MinePart.KIT)) }
     NavRow(stringResource(R.string.supplies), stringResource(R.string.supplies_hint)) { nav.go(Route.SuppliesRoute) }
+    NavRow(stringResource(R.string.rescuer_screen), stringResource(R.string.rescuer_hint)) { nav.go(Route.Mine(MinePart.RESCUER)) }
+    NavRow(stringResource(R.string.print_title), stringResource(R.string.print_hint)) { nav.go(Route.Mine(MinePart.PRINT)) }
+    NavRow(stringResource(R.string.scan_title), stringResource(R.string.scan_hint)) { nav.go(Route.Scan) }
 }
 
 /** A text field that saves on every change. */

@@ -57,7 +57,10 @@ fun App() {
             MinePart.PEOPLE -> Personal(R.string.people, personal, nav) { PeopleScreen() }
             MinePart.PLAN -> Personal(R.string.family_plan, personal, nav) { PlanScreen() }
             MinePart.KIT -> Personal(R.string.kit, personal, nav) { KitScreen(content, nav) }
+            MinePart.PRINT -> Personal(R.string.print_title, personal, nav) { PrintScreen() }
+            MinePart.RESCUER -> Personal(R.string.rescuer_screen, personal, nav) { RescuerQrScreen(nav) }
         }
+        Route.Scan -> ScanScreen(nav)
         Route.SuppliesRoute -> SuppliesScreen(content, nav)
         is Route.Open -> when (top.section) {
             Section.NOW -> NowScreen(content, nav)
