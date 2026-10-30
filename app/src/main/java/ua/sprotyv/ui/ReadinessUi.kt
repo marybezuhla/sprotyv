@@ -62,11 +62,23 @@ fun ReadinessBlock(content: Content?, nav: Nav) {
         if (content == null || content.guideBroken || keys == null) null
         else Kit.groups(content.guide).let { g -> Readiness.kit(g.sumOf { it.items.count { i -> i.key in keys } }, g.sumOf { it.items.size }) }
     }
+    // Supplies: enough water for the goal counts as one step, each food line in place as another
+    val stored by remember { PersonalStore.observe { db -> db.settings().observe(KEY_SUPPLIES).map { listOf(it) } } }.collectAsStateWithLifecycle(null)
+    val supplies = remember(content, stored) {
+        val raw = stored
+        if (content == null || content.guideBroken || raw == null) null
+        else {
+            val s = ua.sprotyv.content.MySupplies.fromJson(raw.first())
+            val keys = ua.sprotyv.content.Supplies.food(content.guide, s.people, s.days).map { Kit.key(it.what) }
+            Progress((if (s.water >= s.waterGoal) 1 else 0) + keys.count { it in s.have }, 1 + keys.size)
+        }
+    }
     val rows = listOf(
         Triple(R.string.medical_card, medical, Route.Mine(MinePart.MEDICAL)),
         Triple(R.string.people, people, Route.Mine(MinePart.PEOPLE)),
         Triple(R.string.family_plan, plan, Route.Mine(MinePart.PLAN)),
         Triple(R.string.kit, kit, Route.Mine(MinePart.KIT)),
+        Triple(R.string.supplies, supplies, Route.SuppliesRoute),
     )
     Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
