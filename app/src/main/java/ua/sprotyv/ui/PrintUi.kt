@@ -80,9 +80,9 @@ private fun labels(context: Context) = RescuerCode.Labels(
     title = context.getString(R.string.rescuer_title),
     blood = context.getString(R.string.med_blood),
     allergies = context.getString(R.string.med_allergies),
-    medicines = context.getString(R.string.med_medicines),
-    conditions = context.getString(R.string.med_conditions),
-    contact = context.getString(R.string.ice_title),
+    medicines = context.getString(R.string.rescuer_medicines),
+    conditions = context.getString(R.string.rescuer_conditions),
+    contact = context.getString(R.string.rescuer_contact),
 )
 
 /** Everything the owner's printout needs, read in one go. */
@@ -100,7 +100,8 @@ private suspend fun readOwner(): OwnerData? = PersonalStore.read { db ->
 
 private fun ownerPdf(context: Context, d: OwnerData): ByteArray {
     val s: (Int) -> String = { context.getString(it) }
-    val pdf = Pdf(s(R.string.app_name) + " · " + LocalDate.now())
+    // No app name on the page: the paper should not say which app it came from
+    val pdf = Pdf(LocalDate.now().toString())
     pdf.title(s(R.string.print_owner_title))
     pdf.text(s(R.string.print_private), bold = true)
 
@@ -184,16 +185,21 @@ private fun write(context: Context, uri: Uri, bytes: ByteArray): Boolean {
  */
 object Exports {
     private val scope = kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.SupervisorJob() + Dispatchers.IO)
-    private val _result = kotlinx.coroutines.flow.MutableStateFlow<Int?>(null)
-    val result: kotlinx.coroutines.flow.StateFlow<Int?> = _result
+    /** The last result, with the kind of save it belongs to, so it shows only on its own screen. */
+    private val _result = kotlinx.coroutines.flow.MutableStateFlow<Pair<String, Int>?>(null)
+    val result: kotlinx.coroutines.flow.StateFlow<Pair<String, Int>?> = _result
 
     fun clear() { _result.value = null }
 
-    fun save(context: Context, uri: Uri, produce: suspend () -> ByteArray?) {
+    /**
+     * [produce] gets the app context (never a screen's), and has 20 seconds: a save that waits
+     * longer (the owner's data closed and not reopened) is given up and its empty file removed.
+     */
+    fun save(context: Context, uri: Uri, kind: String, produce: suspend (Context) -> ByteArray?) {
         val app = context.applicationContext
         scope.launch {
             val ok = try {
-                val bytes = produce()
+                val bytes = kotlinx.coroutines.withTimeoutOrNull(20_000) { produce(app) }
                 bytes != null && write(app, uri, bytes)
             } catch (e: Exception) {
                 false
@@ -201,7 +207,7 @@ object Exports {
             if (!ok) {
                 try { android.provider.DocumentsContract.deleteDocument(app.contentResolver, uri) } catch (e: Exception) { }
             }
-            _result.value = if (ok) R.string.print_saved else R.string.print_failed
+            _result.value = kind to if (ok) R.string.print_saved else R.string.print_failed
         }
     }
 }
@@ -211,10 +217,10 @@ object Exports {
 fun PrintScreen() {
     val context = LocalContext.current
     var confirm by remember { mutableStateOf(false) }
-    val result by Exports.result.collectAsStateWithLifecycle()
+    val result = Exports.result.collectAsStateWithLifecycle().value?.takeIf { it.first == KIND_OWNER }?.second
     val save = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { uri ->
         if (uri == null) return@rememberLauncherForActivityResult
-        Exports.save(context, uri) { readOwner()?.let { ownerPdf(context, it) } }
+        Exports.save(context, uri, KIND_OWNER) { app -> readOwner()?.let { ownerPdf(app, it) } }
     }
     Text(stringResource(R.string.print_intro), style = MaterialTheme.typography.bodyLarge)
     Button(onClick = { confirm = true }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
@@ -238,10 +244,10 @@ fun PrintScreen() {
 @Composable
 fun CardsPdfButton(content: Content) {
     val context = LocalContext.current
-    val result by Exports.result.collectAsStateWithLifecycle()
+    val result = Exports.result.collectAsStateWithLifecycle().value?.takeIf { it.first == KIND_CARDS }?.second
     val save = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { uri ->
         if (uri == null) return@rememberLauncherForActivityResult
-        Exports.save(context, uri) { cardsPdf(context, content) }
+        Exports.save(context, uri, KIND_CARDS) { app -> cardsPdf(app, content) }
     }
     OutlinedButton(onClick = { Exports.clear(); save.launch("cards.pdf") }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
         Text(stringResource(R.string.print_cards_button))
@@ -270,10 +276,10 @@ fun RescuerQrScreen(nav: Nav) {
     val code = remember(card, people) { RescuerCode.text(card, people.filter { it.ice }, labels(context)) }
     val text = code.text
     val bitmap = remember(text) { qrBitmap(text, 640) }
-    val result by Exports.result.collectAsStateWithLifecycle()
+    val result = Exports.result.collectAsStateWithLifecycle().value?.takeIf { it.first == KIND_RESCUER }?.second
     val save = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("image/png")) { uri ->
         if (uri == null) return@rememberLauncherForActivityResult
-        Exports.save(context, uri) {
+        Exports.save(context, uri, KIND_RESCUER) {
             java.io.ByteArrayOutputStream().use { out -> rescuerPicture(text, bitmap).compress(Bitmap.CompressFormat.PNG, 100, out); out.toByteArray() }
         }
     }
@@ -342,12 +348,12 @@ fun ScanScreen(nav: Nav) {
             notFound = text == null
         }
     }
-    // Leaving the screen removes any photo that is still there
-    androidx.compose.runtime.DisposableEffect(Unit) {
-        onDispose { clearScans(context) }
-    }
+    // No clean-up when the screen goes away: rotating the phone while the camera is open would
+    // delete the photo before it is read. The photo is deleted after reading, when the camera is
+    // cancelled, and on the next fresh start
 
     val camera = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { ok ->
+        // ok == false: cancelled, the (empty) photo goes at once
         if (ok) read(photoUri(context, photo), delete = true) else photo.delete()
     }
     val pick = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -419,6 +425,7 @@ private fun warning(code: String): Int = when (code) {
     Scanned.HIDDEN_ADDRESS -> R.string.scan_warn_hidden
     Scanned.LOOKALIKE_LETTERS -> R.string.scan_warn_lookalike
     Scanned.BARE_NUMBERS -> R.string.scan_warn_numbers
+    Scanned.ENCODED -> R.string.scan_warn_encoded
     else -> R.string.scan_warn_many_parts
 }
 
@@ -436,6 +443,10 @@ private fun scanFile(context: Context): File {
     val dir = File(context.cacheDir, "scan").apply { mkdirs() }
     return File(dir, "scan.jpg")
 }
+
+const val KIND_OWNER = "owner"
+const val KIND_CARDS = "cards"
+const val KIND_RESCUER = "rescuer"
 
 /** Removes every photo in the scan folder. */
 fun clearScans(context: Context) {

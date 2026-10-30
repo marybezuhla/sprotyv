@@ -201,4 +201,8 @@
     <string name="scan_warn_many_parts">The address has many parts; check its real end.</string>
     <string name="rescuer_cut">Some text did not fit and was shortened. Keep the fields short.</string>
     <string name="scan_no_camera">No camera app found on the phone. Choose a picture instead.</string>
+    <string name="rescuer_medicines">Medicines</string>
+    <string name="rescuer_conditions">Conditions</string>
+    <string name="rescuer_contact">Contact</string>
+    <string name="scan_warn_encoded">The address has encoded characters (%); check it carefully.</string>
 </resources>

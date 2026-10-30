@@ -201,4 +201,8 @@
     <string name="scan_warn_many_parts">Адреса з багатьох частин; перевірте її справжнє закінчення.</string>
     <string name="rescuer_cut">Частина тексту не вмістилася й скорочена. Пишіть коротше.</string>
     <string name="scan_no_camera">На телефоні не знайдено застосунку камери. Виберіть зображення.</string>
+    <string name="rescuer_medicines">Ліки</string>
+    <string name="rescuer_conditions">Стани</string>
+    <string name="rescuer_contact">Контакт</string>
+    <string name="scan_warn_encoded">В адресі є закодовані символи (%); перевірте її уважно.</string>
 </resources>

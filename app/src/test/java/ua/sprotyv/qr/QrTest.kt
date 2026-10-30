@@ -53,6 +53,18 @@ class QrTest {
         assertEquals("evil.example", link.host)
     }
 
+    @Test fun tabCannotJoinTwoAddresses() {
+        assertTrue(Scanned.of("https://good.example\t.evil.example/") is Scanned.Plain)
+        assertTrue(Scanned.of("https://good.example .evil.example/") is Scanned.Plain)
+    }
+
+    @Test fun contactComesBeforeLongMedicines() {
+        val long = "дуже довгий опис ".repeat(20)
+        val card = MedicalCard(bloodGroup = "A", allergies = long, medicines = long, conditions = long)
+        val r = RescuerCode.text(card, listOf(Person(name = "Олена", phone = "+380501234567", ice = true)), labels)
+        assertTrue(r.text, "Олена +380501234567" in r.text)
+    }
+
     @Test fun plainTextAndPhones() {
         assertTrue(Scanned.of("Просто текст") is Scanned.Plain)
         assertEquals("+380501234567", (Scanned.of("tel:+380501234567") as Scanned.Phone).number)
