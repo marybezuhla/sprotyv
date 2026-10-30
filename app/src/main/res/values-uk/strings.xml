@@ -467,4 +467,25 @@
         <item>Дорослому: глибина 5–6 см, 100–120 натискань за хвилину</item>
         <item>30 натискань : 2 вдихи</item>
     </string-array>
+    <string name="supplies_dash_title">На скільки вистачить</string>
+    <string name="supplies_water_none">Води менше ніж на день</string>
+    <plurals name="supplies_water_days">
+        <item quantity="one">Води на %1$d день</item>
+        <item quantity="few">Води на %1$d дні</item>
+        <item quantity="many">Води на %1$d днів</item>
+        <item quantity="other">Води на %1$d дня</item>
+    </plurals>
+    <string name="supplies_of_litres">%1$d з %2$d л</string>
+    <string name="supplies_food_have">Їжа</string>
+    <string name="supplies_of">%1$d з %2$d</string>
+    <string name="supplies_water_word">Вода</string>
+    <string name="supplies_expiring">Замініть найближчим часом: %1$s</string>
+    <string name="supplies_water_need">Для мети потрібно %1$d л: 4 л на людину на день.</string>
+    <string name="supplies_water_have">Є вдома:</string>
+    <string name="supplies_litres">%1$d л</string>
+    <string name="supplies_have_hint">Позначте те, що вже є вдома в потрібній кількості. Зберігається зашифровано лише на цьому телефоні.</string>
+    <string name="supplies_add_until">Додати термін придатності</string>
+    <string name="supplies_until">Придатне до %1$s</string>
+    <string name="supplies_pick_month">До якого місяця придатне?</string>
+    <string name="supplies_clear_until">Прибрати</string>
 </resources>

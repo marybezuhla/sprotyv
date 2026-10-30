@@ -104,3 +104,70 @@ object Supplies {
         return if (up == Math.floor(up)) up.toLong().toString() else up.toString().replace('.', ',')
     }
 }
+
+/**
+ * What the owner has at home: the household and goal, litres of water, which food lines are in
+ * place and until when they keep. Kept as one encrypted setting; read leniently, so a damaged or
+ * older value never stops the screen, it only loses what cannot be read.
+ */
+data class MySupplies(
+    val people: Int = 1,
+    val days: Int = Supplies.LEVELS.first(),
+    val water: Int = 0,
+    val waterUntil: String = "",
+    val have: Set<String> = emptySet(),
+    /** Line key ("water" for water) to the last month it keeps, "2027-03". */
+    val until: Map<String, String> = emptyMap(),
+) {
+    /** Litres the goal needs. */
+    val waterGoal: Int get() = Supplies.waterLitres(people, days)
+
+    /** Whole days the water lasts for this household. */
+    val waterDays: Int get() = (water / (Supplies.WATER_PER_PERSON_DAY * people)).toInt()
+
+    /** Lines whose time runs out by the end of next month (or has run out), soonest first. */
+    fun expiring(now: java.time.YearMonth): List<Pair<String, java.time.YearMonth>> =
+        (until + (if (waterUntil.isNotEmpty()) mapOf(WATER to waterUntil) else emptyMap()))
+            .mapNotNull { (k, v) -> month(v)?.let { k to it } }
+            .filter { (k, m) -> (k == WATER || k in have) && !m.isAfter(now.plusMonths(1)) }
+            .sortedBy { it.second }
+
+    fun toJson(): String = org.json.JSONObject()
+        .put("people", people).put("days", days).put("water", water).put("waterUntil", waterUntil)
+        .put("have", org.json.JSONArray(have.sorted()))
+        .put("until", org.json.JSONObject(until.toSortedMap() as Map<*, *>))
+        .toString()
+
+    companion object {
+        const val WATER = "water"
+        private val KEY = Regex("^[a-z0-9]{1,16}$")
+
+        fun month(s: String): java.time.YearMonth? = try {
+            java.time.YearMonth.parse(s)
+        } catch (e: Exception) {
+            null
+        }
+
+        fun fromJson(s: String?): MySupplies {
+            if (s.isNullOrBlank()) return MySupplies()
+            return try {
+                val o = org.json.JSONObject(s)
+                val have = o.optJSONArray("have")?.let { a -> (0 until minOf(a.length(), 200)).map { a.optString(it) } }
+                    ?.filter { KEY.matches(it) }?.toSet() ?: emptySet()
+                val u = o.optJSONObject("until")
+                val until = u?.keys()?.asSequence()?.take(200)
+                    ?.mapNotNull { k -> u.optString(k).takeIf { KEY.matches(k) && month(it) != null }?.let { k to it } }?.toMap() ?: emptyMap()
+                MySupplies(
+                    people = o.optInt("people", 1).coerceIn(1, 20),
+                    days = o.optInt("days", Supplies.LEVELS.first()).takeIf { it in Supplies.LEVELS } ?: Supplies.LEVELS.first(),
+                    water = o.optInt("water", 0).coerceIn(0, 2000),
+                    waterUntil = o.optString("waterUntil", "").takeIf { month(it) != null } ?: "",
+                    have = have,
+                    until = until,
+                )
+            } catch (e: Exception) {
+                MySupplies()
+            }
+        }
+    }
+}
