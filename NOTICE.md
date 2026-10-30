@@ -21,3 +21,6 @@
 - `app/src/main/res/drawable/pict_*.xml` (built by `scripts/pictograms/build.py`) — pictograms for
   card steps, composed from Material Symbols Rounded (Google, Apache License 2.0; the glyphs are in
   `scripts/pictograms/material/` unchanged). Not yet tested with people.
+- `app/src/main/res/drawable/fig_*.xml` (built by `scripts/pictograms/figures.py`) — the pictures in
+  cards, redrawn from the guide's figures (same content, new drawing; CC BY-SA 4.0, credited to the
+  guide), partly from Material Symbols (Apache License 2.0).

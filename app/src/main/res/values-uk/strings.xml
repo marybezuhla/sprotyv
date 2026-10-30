@@ -434,4 +434,37 @@
     <string name="practice_card">Перевірити себе: що зробиш?</string>
     <string name="practice_card_kid">Пограймо: що зробиш?</string>
     <string name="pin_legend">＋ — додати на головну, ✓ — уже на головній.</string>
+    <string name="figure_after">Малюнок за «Довідником виживання»: %1$s</string>
+    <string-array name="fig_prone">
+        <item>Ноги — в бік вибуху</item>
+        <item>Руки закривають голову й шию</item>
+        <item>Рот трохи відкритий</item>
+    </string-array>
+    <string-array name="fig_two_walls">
+        <item>✓ Коридор і санвузол: дві стіни від вулиці</item>
+        <item>✗ Кімнати з вікнами</item>
+        <item>Перша стіна приймає удар, друга зупиняє уламки</item>
+    </string-array>
+    <string-array name="fig_mine_marks">
+        <item>Офіційний знак: червоний, череп, «МІНИ!»</item>
+        <item>Схрещені палиці чи гілки на дорозі</item>
+        <item>Ганчірка на палиці, камені, купки землі</item>
+    </string-array>
+    <string-array name="fig_tourniquet">
+        <item>5–8 см вище рани, ближче до тулуба</item>
+        <item>Не на суглоб і не поверх предметів</item>
+        <item>Затягуйте до повної зупинки крові: буде дуже боляче, це нормально</item>
+        <item>Запишіть час</item>
+    </string-array>
+    <string-array name="fig_recovery">
+        <item>Голова закинута, рот донизу: язик і блювота не перекриють дихання</item>
+        <item>Рука під щокою, друга — вперед</item>
+        <item>Верхнє коліно зігнуте й упирається в землю: тіло не перекотиться</item>
+    </string-array>
+    <string-array name="fig_cpr">
+        <item>Руки прямі в ліктях, тисніть вагою тіла</item>
+        <item>Точка — центр грудей</item>
+        <item>Дорослому: глибина 5–6 см, 100–120 натискань за хвилину</item>
+        <item>30 натискань : 2 вдихи</item>
+    </string-array>
 </resources>

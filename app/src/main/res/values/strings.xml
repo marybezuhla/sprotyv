@@ -434,4 +434,37 @@
     <string name="practice_card">Test yourself: what would you do?</string>
     <string name="practice_card_kid">Let\'s play: what would you do?</string>
     <string name="pin_legend">＋ adds to the home screen, ✓ is already there.</string>
+    <string name="figure_after">Drawn after the survival guide: %1$s</string>
+    <string-array name="fig_prone">
+        <item>Feet towards the blast</item>
+        <item>Arms cover the head and neck</item>
+        <item>Mouth slightly open</item>
+    </string-array>
+    <string-array name="fig_two_walls">
+        <item>✓ Corridor and bathroom: two walls from the street</item>
+        <item>✗ Rooms with windows</item>
+        <item>The first wall takes the blast, the second stops the debris</item>
+    </string-array>
+    <string-array name="fig_mine_marks">
+        <item>Official sign: red, a skull, «МІНИ!» (mines)</item>
+        <item>Crossed sticks or branches on a road</item>
+        <item>A rag on a stick, stones, heaps of earth</item>
+    </string-array>
+    <string-array name="fig_tourniquet">
+        <item>5–8 cm above the wound, closer to the body</item>
+        <item>Not on a joint, not over objects</item>
+        <item>Tighten until the bleeding stops completely: it will hurt a lot, that is normal</item>
+        <item>Write down the time</item>
+    </string-array>
+    <string-array name="fig_recovery">
+        <item>Head tilted back, mouth down: the tongue and vomit will not block breathing</item>
+        <item>One hand under the cheek, the other forward</item>
+        <item>The upper knee bent and resting on the ground: the body will not roll</item>
+    </string-array>
+    <string-array name="fig_cpr">
+        <item>Arms straight at the elbows, press with your body weight</item>
+        <item>The point: the centre of the chest</item>
+        <item>An adult: 5–6 cm deep, 100–120 presses a minute</item>
+        <item>30 presses : 2 breaths</item>
+    </string-array>
 </resources>
