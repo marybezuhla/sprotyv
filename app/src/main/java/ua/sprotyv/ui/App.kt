@@ -203,6 +203,7 @@ private fun Screen(
         Route.Presets -> PresetsScreen(nav)
         Route.Situation -> SituationScreen(content, nav)
         Route.Power -> PowerScreen(content, nav)
+        Route.Directory -> DirectoryScreen(content, nav)
         is Route.External -> {}
         Route.Sections -> Frame(stringResource(R.string.add_tile), nav::back) {
             SectionsList(content, prefs.pins, nav) { id, on -> guarded((if (on) ACTION_PIN else ACTION_UNPIN) + id) }

@@ -23,13 +23,17 @@ data class Link(
         const val OFFICIAL = "official"
         const val VOLUNTEER = "volunteer"
         const val INDEPENDENT = "independent"
-        val GROUPS = listOf("threats", "front", "help", "evac", "search", "mind", "rights", "facts", "power")
+        val GROUPS = listOf("threats", "front", "help", "evac", "search", "mind", "rights", "facts", "power") + DIRECTORY
+        /** "Where to turn": help services for everyday life after and around the war. */
+        val DIRECTORY = listOf("idp", "money", "docs", "kids", "veterans", "health", "care")
         const val POWER = "power"
         const val UNKNOWN_AUTHOR = "unknown_author"
         const val ADS = "ads"
         const val BETA = "beta"
         const val COLLECTS_DATA = "collects_data"
-        val FLAGS = setOf(UNKNOWN_AUTHOR, ADS, BETA, COLLECTS_DATA)
+        const val PAID = "paid"
+        const val PAUSED = "paused"
+        val FLAGS = setOf(UNKNOWN_AUTHOR, ADS, BETA, COLLECTS_DATA, PAID, PAUSED)
     }
 }
 
@@ -47,7 +51,7 @@ object LinksReader {
     /** Strict: only https addresses, known groups and kinds, plain package names, short numbers. */
     fun parse(json: String): List<Link> {
         val a = JSONArray(json)
-        require(a.length() <= 100)
+        require(a.length() <= 400)
         val links = (0 until a.length()).map { i ->
             val o = a.getJSONObject(i)
             Link(
