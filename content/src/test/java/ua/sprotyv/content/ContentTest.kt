@@ -29,6 +29,12 @@ class ContentTest {
         assertEquals(cards.size, cards.map { it.id }.toSet().size)
     }
 
+    @Test fun everyCardHasPractice() {
+        val practice = PracticeReader.parse(File(assets, "practice.json").readText(), cards)
+        cards.forEach { c -> assertTrue("no practice for ${c.id}", practice.any { it.card == c.id }) }
+        practice.forEach { p -> assertEquals(p.id, 1, p.options.count { it.right }) }
+    }
+
     @Test fun guideIsComplete() {
         assertTrue("chapters", guide.chapters.size >= 30)
         assertEquals("CC BY-SA 4.0", guide.license)

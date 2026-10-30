@@ -310,7 +310,7 @@
     <string name="backup_restore_failed">Не вдалося. Ваші дані лишилися як були.</string>
     <string name="plan_code_title">Поділитися планом (QR)</string>
     <string name="plan_code_hint">Зашифрований код для телефону родича</string>
-    <string name="plan_code_intro">Родич наводить камеру «Спротиву» на цей код і вводить пароль. Так увесь сімейний план опиниться на його телефоні.</string>
+    <string name="plan_code_intro">Родич наводить камеру «Спротиву» на цей код і вводить пароль. Так увесь сімейний план опиниться на телефоні родича.</string>
     <string name="plan_code_password">Пароль — чотири слова. Скажіть його голосом, не надсилайте разом із кодом.</string>
     <string name="plan_code_make">Показати код</string>
     <string name="plan_code_empty">Спершу заповніть сімейний план.</string>
@@ -367,7 +367,7 @@
     <string name="safe_quiet_message">Не можу говорити, але я на зв\'язку. Пиши, не дзвони.</string>
     <string name="tourniquet_on">⏱ Наклали турнікет — запам\'ятати час</string>
     <string name="tourniquet_since">Минуло: %1$d год %2$02d хв</string>
-    <string name="tourniquet_write">Запишіть цей час маркером на турнікеті або на лобі пораненого. Не послаблюйте турнікет: знімає лише медик. Час скажіть медикам. Кілька поранених — пишіть час на кожному.</string>
+    <string name="tourniquet_write">Запишіть цей час маркером на турнікеті або на лобі пораненої людини. Не послаблюйте турнікет: знімає лише медик. Час скажіть медикам. Кілька поранених — пишіть час на кожному.</string>
     <string name="tourniquet_reset">Скинути час</string>
     <string name="tourniquet_mark">Т %1$s</string>
     <string name="situation_title">Ситуація</string>
@@ -416,4 +416,21 @@
     <string name="dir_veterans">Ветеранам і родинам</string>
     <string name="dir_health">Здоров\'я й реабілітація</string>
     <string name="dir_care">Літнім і людям з інвалідністю</string>
+    <string name="practice_title">Що зробиш?</string>
+    <string name="practice_hint">Навчальні ситуації за картками: перевірте себе</string>
+    <string name="practice_of">Ситуація %1$d з %2$d</string>
+    <string name="practice_q">Що зробите?</string>
+    <string name="practice_q_kid">Що зробиш?</string>
+    <string name="practice_right">Так.</string>
+    <string name="practice_wrong">Не зовсім.</string>
+    <string name="practice_right_kid">Так! 🌟</string>
+    <string name="practice_wrong_kid">Майже! Ось як краще:</string>
+    <string name="practice_better">Краще: %1$s</string>
+    <string name="practice_next">Далі</string>
+    <string name="practice_finish">Завершити</string>
+    <string name="practice_open_card">Відкрити картку</string>
+    <string name="practice_done">Готово. Повторіть за кілька днів: так краще запам’ятовується.</string>
+    <string name="practice_note">Це навчання. У справжній біді відкривайте картку.</string>
+    <string name="practice_card">Перевірити себе: що зробиш?</string>
+    <string name="practice_card_kid">Пограймо: що зробиш?</string>
 </resources>

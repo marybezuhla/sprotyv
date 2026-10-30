@@ -416,4 +416,21 @@
     <string name="dir_veterans">Veterans and families</string>
     <string name="dir_health">Health and rehabilitation</string>
     <string name="dir_care">Older people and people with disabilities</string>
+    <string name="practice_title">What would you do?</string>
+    <string name="practice_hint">Practice situations from the cards: test yourself</string>
+    <string name="practice_of">Situation %1$d of %2$d</string>
+    <string name="practice_q">What would you do?</string>
+    <string name="practice_q_kid">What would you do?</string>
+    <string name="practice_right">Yes.</string>
+    <string name="practice_wrong">Not quite.</string>
+    <string name="practice_right_kid">Yes! 🌟</string>
+    <string name="practice_wrong_kid">Almost! Here is a better way:</string>
+    <string name="practice_better">Better: %1$s</string>
+    <string name="practice_next">Next</string>
+    <string name="practice_finish">Finish</string>
+    <string name="practice_open_card">Open the card</string>
+    <string name="practice_done">Done. Come back in a few days: that is how it sticks.</string>
+    <string name="practice_note">This is practice. In a real emergency, open the card.</string>
+    <string name="practice_card">Test yourself: what would you do?</string>
+    <string name="practice_card_kid">Let\'s play: what would you do?</string>
 </resources>

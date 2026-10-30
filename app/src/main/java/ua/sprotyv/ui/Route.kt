@@ -22,6 +22,8 @@ sealed interface Route {
     data object Situation : Route
     data object Power : Route
     data object Directory : Route
+    /** "What would you do?" for one card, or for all adult cards when [card] is empty. */
+    data class PracticeRoute(val card: String) : Route
     /** Opens an outside source from "Situation" and comes straight back. */
     data class External(val id: String) : Route
 
@@ -48,6 +50,7 @@ sealed interface Route {
         Situation -> "situation"
         Power -> "power"
         Directory -> "directory"
+        is PracticeRoute -> "practice:$card"
         is External -> "external:$id"
     }
 
@@ -71,6 +74,7 @@ sealed interface Route {
                 "situation" -> Situation
                 "power" -> Power
                 "directory" -> Directory
+                "practice" -> PracticeRoute(value)
                 // Never reopened after the app is restored: that would open a page unasked
                 "external" -> null
                 else -> null

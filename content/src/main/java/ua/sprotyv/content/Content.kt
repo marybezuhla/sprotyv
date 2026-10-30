@@ -14,6 +14,7 @@ class Content(
     private val cardsOrNull: List<Card>?,
     private val kidCardsOrNull: List<Card>? = null,
     private val linksOrNull: List<Link>? = null,
+    private val practiceOrNull: List<Practice>? = null,
 ) {
     val guideBroken get() = guideOrNull == null
     val cardsBroken get() = cardsOrNull == null
@@ -27,6 +28,9 @@ class Content(
     /** "Situation": trusted places to look, opened outside Sprotyv. */
     val links: List<Link> get() = linksOrNull ?: emptyList()
     val linksBroken get() = linksOrNull == null
+
+    /** "What would you do?": practice situations for the cards. Empty if it could not be read. */
+    val practice: List<Practice> get() = practiceOrNull ?: emptyList()
 
     fun card(id: String): Card? = cards.firstOrNull { it.id == id } ?: kidCards.firstOrNull { it.id == id }
 
@@ -57,7 +61,12 @@ class Content(
                 } catch (e: Exception) {
                     null
                 }
-                Content(guide, cards, kids, links).also { loaded = it }
+                val practice = try {
+                    assets.open("practice.json").bufferedReader().use { PracticeReader.parse(it.readText(), cards.orEmpty() + kids.orEmpty()) }
+                } catch (e: Exception) {
+                    null
+                }
+                Content(guide, cards, kids, links, practice).also { loaded = it }
             }
         }
 

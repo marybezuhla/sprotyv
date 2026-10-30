@@ -49,6 +49,7 @@ import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
@@ -169,6 +170,7 @@ private val Tool.title: Int get() = when (this) {
     Tool.RESCUER -> R.string.rescuer_screen
     Tool.PRINT -> R.string.print_title
     Tool.SCAN -> R.string.scan_title
+    Tool.PRACTICE -> R.string.practice_title
 }
 
 private val Tool.hint: Int get() = when (this) {
@@ -190,6 +192,7 @@ private val Tool.hint: Int get() = when (this) {
     Tool.RESCUER -> R.string.rescuer_hint
     Tool.PRINT -> R.string.print_hint
     Tool.SCAN -> R.string.scan_hint
+    Tool.PRACTICE -> R.string.practice_hint
 }
 
 private val Tool.icon: ImageVector? get() = when (this) {
@@ -203,6 +206,7 @@ private val Tool.icon: ImageVector? get() = when (this) {
     Tool.MEDICAL -> Icons.Filled.Favorite
     Tool.PEOPLE -> Icons.Filled.Person
     Tool.SUPPLIES -> Icons.Filled.ShoppingCart
+    Tool.PRACTICE -> Icons.Filled.PlayArrow
     Tool.PRINT, Tool.RESCUER, Tool.SCAN -> Icons.Filled.Share
     else -> null
 }
@@ -226,6 +230,7 @@ val Tool.route: Route get() = when (this) {
     Tool.RESCUER -> Route.Mine(MinePart.RESCUER)
     Tool.PRINT -> Route.Mine(MinePart.PRINT)
     Tool.SCAN -> Route.Scan
+    Tool.PRACTICE -> Route.PracticeRoute("")
 }
 
 /** The group a tile belongs to: the first that names it. "What to do now" and "I am safe" have their own. */
