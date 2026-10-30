@@ -69,6 +69,9 @@ object Reach {
         if (uri.host != "t.me") {
             // The Custom Tabs protocol by its documented extras, without an extra library
             intent.putExtras(android.os.Bundle().apply { putBinder(EXTRA_SESSION, null) })
+            // Leave no trace where the browser can: no history, cookies or cache after the tab closes.
+            // Browsers that cannot simply ignore it; the screen says which is the case
+            intent.putExtra(EXTRA_EPHEMERAL, true)
             toolbarColor?.let { intent.putExtra(EXTRA_TOOLBAR_COLOR, it) }
         }
         start(context, intent)
@@ -80,6 +83,20 @@ object Reach {
         false
     }
 
+    /**
+     * Whether pages open without a trace on this phone: the default browser is Chrome 137 or newer
+     * (Ephemeral Custom Tabs). Other browsers are not assumed to support it.
+     */
+    fun opensWithoutTrace(context: Context): Boolean = try {
+        val probe = Intent(Intent.ACTION_VIEW, Uri.parse("https://example.org")).addCategory(Intent.CATEGORY_BROWSABLE)
+        val pkg = context.packageManager.resolveActivity(probe, android.content.pm.PackageManager.MATCH_DEFAULT_ONLY)?.activityInfo?.packageName
+        pkg == CHROME && (context.packageManager.getPackageInfo(CHROME, 0).versionName?.substringBefore('.')?.toIntOrNull() ?: 0) >= 137
+    } catch (e: Exception) {
+        false
+    }
+
+    private const val CHROME = "com.android.chrome"
+    private const val EXTRA_EPHEMERAL = "androidx.browser.customtabs.extra.ENABLE_EPHEMERAL_BROWSING"
     private const val EXTRA_SESSION = "android.support.customtabs.extra.SESSION"
     private const val EXTRA_TOOLBAR_COLOR = "android.support.customtabs.extra.TOOLBAR_COLOR"
 
