@@ -4,6 +4,9 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
+import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -137,6 +140,22 @@ private fun CardBody(card: Card, nav: Nav) {
             }
         }
         TextButton(onClick = { all = true }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.all_steps)) }
+    } else if (card.id.startsWith("kid-")) {
+        // A child hears praise at the end (guide 5.5: only praise, never scolding)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Sunny(96.dp, happy = true)
+            Spacer(Modifier.width(16.dp))
+            Column {
+                Text(
+                    stringResource(R.string.kid_well_done),
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.semantics { heading(); liveRegion = LiveRegionMode.Polite },
+                )
+                Text(stringResource(R.string.kid_well_done_hint), style = MaterialTheme.typography.titleMedium)
+            }
+        }
+        OutlinedButton(onClick = { step = 0 }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.again)) }
     } else {
         Text(
             stringResource(R.string.all_done),

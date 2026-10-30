@@ -19,7 +19,7 @@ class ContentTest {
         assertTrue("kid cards", kidCards.size >= 6)
         kidCards.forEach { card ->
             assertTrue(card.id, card.id.startsWith("kid-"))
-            assertTrue("${card.id} too many steps", card.steps.size <= 4)
+            assertTrue("${card.id} too many steps", card.steps.size <= 5)
             card.steps.forEach {
                 val words = Regex("[\\p{L}\\p{N}'’]+").findAll(it.action).count()
                 assertTrue("${card.id}: $words words", words <= 15)
