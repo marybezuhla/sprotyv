@@ -72,6 +72,12 @@ fun SituationScreen(content: Content?, nav: Nav) {
             Text(stringResource(links.first().groupTitle), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 8.dp).semantics { heading() })
             links.forEach { link -> LinkRow(link) { openLink(context, link, toolbar) } }
         }
+        // Said plainly: whether this phone's browser keeps a trace of the pages
+        val traceless = androidx.compose.runtime.remember { Reach.opensWithoutTrace(context) }
+        Text(
+            stringResource(if (traceless) R.string.situation_no_trace else R.string.situation_trace),
+            style = MaterialTheme.typography.bodyMedium,
+        )
         Text(stringResource(R.string.situation_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
