@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -360,9 +362,49 @@ private fun Progress(total: Int, current: Int) {
 /** The guide's own picture for a step, if the section has one. */
 @Composable
 private fun StepFigure(content: Content, num: String) {
-    val figure = content.guide.section(num)?.second?.blocks?.filterIsInstance<Block.Figure>()?.firstOrNull() ?: return
-    FigureView(figure)
+    val guideFigure = content.guide.section(num)?.second?.blocks?.filterIsInstance<Block.Figure>()?.firstOrNull()
+    val f = CARD_FIGURES[num]
+    if (f == null) {
+        guideFigure?.let { FigureView(it) }
+        return
+    }
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        // Layers tinted by the theme: the drawing, what is safe, what is dangerous (red only for danger)
+        Box(
+            Modifier.fillMaxWidth().aspectRatio(2f).clip(RoundedCornerShape(12.dp))
+                .background(MaterialTheme.colorScheme.surfaceVariant).padding(12.dp),
+        ) {
+            Icon(androidx.compose.ui.res.painterResource(f.base), contentDescription = null, tint = MaterialTheme.colorScheme.onSurface, modifier = Modifier.fillMaxSize())
+            f.safe?.let { Icon(androidx.compose.ui.res.painterResource(it), contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.fillMaxSize()) }
+            f.danger?.let { Icon(androidx.compose.ui.res.painterResource(it), contentDescription = null, tint = DangerRed, modifier = Modifier.fillMaxSize()) }
+        }
+        // The words of the picture, as text: large, translated, read aloud
+        val lines = androidx.compose.ui.res.stringArrayResource(f.legend)
+        if (f.columns) {
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                lines.forEach { Text(it, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f)) }
+            }
+        } else {
+            lines.forEach { Text("• $it", style = MaterialTheme.typography.bodyMedium) }
+        }
+        guideFigure?.caption?.takeIf { it.isNotBlank() }?.let {
+            Text(stringResource(R.string.figure_after, it.replace("**", "")), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
 }
+
+/** A card's picture, redrawn from the guide's figure (scripts/pictograms/figures.py). */
+private class CardFigure(val base: Int, val safe: Int?, val danger: Int?, val legend: Int, val columns: Boolean = false)
+
+/** By the guide section whose figure each one redraws. */
+private val CARD_FIGURES = mapOf(
+    "3.1" to CardFigure(R.drawable.fig_prone, null, R.drawable.fig_prone_danger, R.array.fig_prone),
+    "3.2" to CardFigure(R.drawable.fig_two_walls, R.drawable.fig_two_walls_safe, R.drawable.fig_two_walls_danger, R.array.fig_two_walls),
+    "5.2" to CardFigure(R.drawable.fig_mine_marks, null, R.drawable.fig_mine_marks_danger, R.array.fig_mine_marks, columns = true),
+    "7.2" to CardFigure(R.drawable.fig_tourniquet, R.drawable.fig_tourniquet_safe, R.drawable.fig_tourniquet_danger, R.array.fig_tourniquet),
+    "7.4" to CardFigure(R.drawable.fig_recovery, null, null, R.array.fig_recovery),
+    "7.7" to CardFigure(R.drawable.fig_cpr, null, R.drawable.fig_cpr_danger, R.array.fig_cpr),
+)
 
 @Composable
 fun Source(card: Card) {
