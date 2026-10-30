@@ -27,6 +27,8 @@ object HomePrefs {
         /** The readiness shares last seen in "Mine" ("2/4,1/2,…"), shown on the full home screen; no records. */
         val readiness: String = "",
         val readinessHidden: Boolean = false,
+        /** Trip mode: the owner's data and sensitive sources are off every screen (see [Trip]). */
+        val trip: Boolean = false,
     )
 
     private const val FILE = "home"
@@ -39,6 +41,7 @@ object HomePrefs {
     private const val SCREENSHOTS = "screenshots"
     private const val READINESS = "readiness"
     private const val READINESS_HIDDEN = "readiness_hidden"
+    private const val TRIP = "trip"
 
     private val flow = MutableStateFlow<State?>(null)
     val state: StateFlow<State?> = flow.asStateFlow()
@@ -56,6 +59,7 @@ object HomePrefs {
             screenshots = p.getBoolean(SCREENSHOTS, false),
             readiness = p.getString(READINESS, null).orEmpty().take(100),
             readinessHidden = p.getBoolean(READINESS_HIDDEN, false),
+            trip = p.getBoolean(TRIP, false),
         )
         flow.value = s
         return s
@@ -74,6 +78,7 @@ object HomePrefs {
             .putBoolean(SCREENSHOTS, next.screenshots)
             .putString(READINESS, next.readiness)
             .putBoolean(READINESS_HIDDEN, next.readinessHidden)
+            .putBoolean(TRIP, next.trip)
             .apply()
     }
 }

@@ -48,6 +48,22 @@ object Guard {
             run(then)
             return
         }
+        prompt(activity, title, then)
+    }
+
+    /**
+     * Always asks for the phone's PIN, even with settings already open (turning trip mode off).
+     * Without a screen lock there is nothing to ask for, and [then] runs at once.
+     */
+    fun confirm(activity: Activity, title: String, then: String, run: (String) -> Unit) {
+        if (!available(activity)) {
+            run(then)
+            return
+        }
+        prompt(activity, title, then)
+    }
+
+    private fun prompt(activity: Activity, title: String, then: String) {
         val prompt = BiometricPrompt.Builder(activity)
             .setTitle(title)
             .setAllowedAuthenticators(BiometricManager.Authenticators.DEVICE_CREDENTIAL)

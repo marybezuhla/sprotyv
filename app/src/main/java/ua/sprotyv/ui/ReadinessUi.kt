@@ -141,7 +141,7 @@ private val READY_PARTS = listOf(R.string.ready_short_medical, R.string.ready_sh
 fun ReadinessStrip(nav: Nav) {
     val context = androidx.compose.ui.platform.LocalContext.current
     val prefs = HomePrefs.state.collectAsStateWithLifecycle().value ?: return
-    if (prefs.readinessHidden) return
+    if (prefs.readinessHidden || prefs.trip) return
     val parts = prefs.readiness.split(",").mapNotNull { p ->
         p.split("/").takeIf { it.size == 2 }?.let { (d, t) -> d.toIntOrNull()?.let { dd -> t.toIntOrNull()?.let { tt -> Progress(dd, tt) } } }
     }
