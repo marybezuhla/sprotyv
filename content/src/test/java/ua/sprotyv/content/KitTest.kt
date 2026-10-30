@@ -40,4 +40,12 @@ class KitTest {
         val twoPeople = Supplies.food(guide, 2, 14).first { it.what.startsWith("Крупи") }
         assertEquals("8–10 кг", twoPeople.amount)
     }
+
+    @Test fun piecesAreWholeWithTheRightWord() {
+        // 10–14 cans for two weeks, one person, three days: 2,1–3 → 3
+        assertEquals("3 банки", Supplies.scale("10–14 банок", 3 / 14.0))
+        assertEquals("1 упаковка", Supplies.scale("1 упаковка", 3 / 14.0))
+        assertEquals("5 упаковок", Supplies.scale("1 упаковка", 5.0))
+        assertEquals("21–30 банок", Supplies.scale("7–10 банок", 3.0))
+    }
 }

@@ -5,11 +5,16 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import java.io.File
 
 /** How opening the owner's data went. */
@@ -28,6 +33,12 @@ sealed interface Opened {
      * aside and start fresh, as with a lost key; nothing is ever deleted.
      */
     data object Damaged : Opened
+
+    /**
+     * This version of the app cannot bring the data to its layout (a missing or failed update
+     * step). Nothing is deleted and no fresh start is offered: a fixed update opens it again.
+     */
+    data object NeedsUpdate : Opened
 
     /** Could not open for a reason that may pass. Nothing is judged or changed. */
     data object TryAgain : Opened
@@ -59,8 +70,14 @@ object Personal {
                 Opened.TryAgain
             } catch (e: android.database.sqlite.SQLiteDatabaseLockedException) {
                 Opened.TryAgain
-            } catch (e: Exception) {
+            } catch (e: IllegalStateException) {
+                // Room's way of saying a layout update is missing or failed
+                Opened.NeedsUpdate
+            } catch (e: android.database.SQLException) {
+                // The key fits, the file itself is damaged
                 Opened.Damaged
+            } catch (e: Exception) {
+                Opened.TryAgain
             }
         }
     }
@@ -93,19 +110,28 @@ object Personal {
 }
 
 /**
- * The one open copy of the owner's data for the whole app. Opened only when the owner's section
- * is entered, closed when the app leaves the screen, so data is not kept open in the background.
+ * The one open copy of the owner's data for the whole app. Opened only when the owner's screens
+ * are entered, closed when the app leaves the screen, so data is not kept open in the background.
+ *
+ * Screens never touch the database directly: they read through [observe] and [read], which stop
+ * quietly when the data is closed, and change it through [save], which runs in order with opening
+ * and closing. A change that could not be saved is never silent: [saveFailed] turns on.
  */
+@OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 object PersonalStore {
     private val mutex = Mutex()
-    // One worker, so open, close and fresh start always run in the order they were asked for
-    private val scope = CoroutineScope(
-        SupervisorJob() + Dispatchers.IO.limitedParallelism(1) + CoroutineExceptionHandler { _, _ -> },
-    )
+    // One worker, so open, close, changes and fresh start always run in the order they were asked for
+    private val worker = Dispatchers.IO.limitedParallelism(1)
+    private val scope = CoroutineScope(SupervisorJob() + worker + CoroutineExceptionHandler { _, _ -> })
     private val _state = MutableStateFlow<Opened?>(null)
+    private val _saveFailed = MutableStateFlow(false)
+    private val pending = LinkedHashMap<String, suspend (PersonalDb) -> Unit>()
 
     /** null while opening or closed. */
     val state: StateFlow<Opened?> = _state
+
+    /** True when the last change could not be saved; the screens say so plainly. */
+    val saveFailed: StateFlow<Boolean> = _saveFailed
 
     fun open(context: Context) {
         val app = context.applicationContext
@@ -123,6 +149,8 @@ object PersonalStore {
             mutex.withLock {
                 try {
                     (_state.value as? Opened.Ready)?.db?.close()
+                } catch (e: Exception) {
+                    // Closing is best effort; the state is cleared either way
                 } finally {
                     _state.value = null
                 }
@@ -131,15 +159,52 @@ object PersonalStore {
     }
 
     /**
-     * Runs a change on the owner's data, in order with opening and closing, and only while it is
-     * open. Screens never write to the database themselves, so nothing is written to a closed one.
+     * Saves a change. Changes with the same [key] are folded together: while one is waiting, a
+     * newer one replaces it, so typing a word is one write, not one per letter. A change is saved
+     * only while the data is open and before any later close; otherwise [saveFailed] turns on.
      */
-    fun write(block: suspend (PersonalDb) -> Unit) {
+    fun save(key: String, block: suspend (PersonalDb) -> Unit) {
+        val schedule = synchronized(pending) {
+            val waiting = key in pending
+            pending[key] = block
+            !waiting
+        }
+        if (!schedule) return
         scope.launch {
             mutex.withLock {
-                val db = (_state.value as? Opened.Ready)?.db ?: return@withLock
-                block(db)
+                val latest = synchronized(pending) { pending.remove(key) } ?: return@withLock
+                val db = (_state.value as? Opened.Ready)?.db
+                if (db == null) {
+                    _saveFailed.value = true
+                    return@withLock
+                }
+                try {
+                    latest(db)
+                    _saveFailed.value = false
+                } catch (e: kotlinx.coroutines.CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    _saveFailed.value = true
+                }
             }
+        }
+    }
+
+    /**
+     * Live data from the open database, or nothing while it is closed. Errors (a database closed
+     * under a running query) end the stream quietly instead of crashing the app.
+     */
+    fun <T> observe(query: (PersonalDb) -> Flow<T>): Flow<T> =
+        _state.flatMapLatest { s ->
+            val db = (s as? Opened.Ready)?.db ?: return@flatMapLatest emptyFlow()
+            query(db).catch { }
+        }
+
+    /** One read, in order with opening and closing; null if the data is not open or the read failed. */
+    suspend fun <T> read(query: suspend (PersonalDb) -> T): T? = withContext(worker) {
+        mutex.withLock {
+            val db = (_state.value as? Opened.Ready)?.db ?: return@withLock null
+            try { query(db) } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (e: Exception) { null }
         }
     }
 
