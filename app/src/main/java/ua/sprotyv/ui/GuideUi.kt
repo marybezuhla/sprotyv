@@ -235,7 +235,7 @@ private fun TableView(t: Block.Table) {
 
 /** Figures are drawings on white; they stay on white in the dark theme too, so they read the same. */
 @Composable
-private fun FigureView(f: Block.Figure) {
+fun FigureView(f: Block.Figure) {
     val context = LocalContext.current
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         f.pictures.forEach { name ->

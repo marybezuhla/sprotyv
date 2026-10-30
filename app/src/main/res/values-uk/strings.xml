@@ -357,4 +357,6 @@
     <string name="service_name_gas">Аварійна газова служба</string>
     <string name="call_bar_toggle">Кнопки дзвінка внизу екрана</string>
     <string name="call_bar_hint">Вимкнено — 112 та інші служби відкриває червона слухавка вгорі кожного екрана.</string>
+    <string name="step_by_step">Іти крок за кроком</string>
+    <string name="next_step">Далі: %1$s</string>
 </resources>
