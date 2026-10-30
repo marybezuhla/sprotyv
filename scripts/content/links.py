@@ -11,7 +11,10 @@ import json, os, re
 
 CHECKED = "2026-10-30"
 
-def link(id, group, kind, title, note, url="", app="", phone=""):
+FLAGS = {"unknown_author", "ads", "beta", "collects_data"}
+
+def link(id, group, kind, title, note, url="", app="", phone="", flags=()):
+    assert set(flags) <= FLAGS, id
     assert kind in ("official", "volunteer", "independent"), id
     assert re.fullmatch(r"[a-z0-9-]{1,40}", id), id
     assert (url and re.fullmatch(r"https://[a-z0-9-]+(\.[a-z0-9-]+)+(/[A-Za-z0-9._~/?=&%-]*)?", url)) or (not url and phone), id
@@ -19,7 +22,7 @@ def link(id, group, kind, title, note, url="", app="", phone=""):
     assert not phone or re.fullmatch(r"[0-9]{3,4}", phone), id
     assert 0 < len(title) <= 80 and 0 < len(note) <= 200, id
     return {"id": id, "group": group, "kind": kind, "title": title, "note": note,
-            "url": url, "app": app, "phone": phone, "checkedOn": CHECKED}
+            "url": url, "app": app, "phone": phone, "checkedOn": CHECKED, "flags": list(flags)}
 
 LINKS = [
     # Air threats
@@ -30,8 +33,11 @@ LINKS = [
          "Попередження про напрямки ракет і дронів. Канал також пише про збиті цілі — нам важливі лише попередження.",
          url="https://t.me/kpszsu"),
     link("monitor", "threats", "volunteer", "monitor: мапа дронів",
-         "Приблизне положення дронів з відкритих даних, оновлення кожні 20 секунд. Бета-версія, команда не названа, не офіційне оповіщення.",
-         url="https://map.war-monitor.org"),
+         "Приблизне положення дронів з відкритих даних, оновлення кожні 20 секунд. Не офіційне оповіщення.",
+         url="https://map.war-monitor.org", flags=("unknown_author", "beta")),
+    link("kyivsafety", "threats", "volunteer", "KyivSafety: ризик за адресою в Києві",
+         "Оцінка 0–100 для адреси за історією влучань і прольотів з відкритих джерел; дослідницький інструмент. Висока оцінка — не безпека: тривога означає укриття.",
+         url="https://kyivsafety.com", flags=("unknown_author",)),
     link("alerts-in-ua", "threats", "volunteer", "alerts.in.ua",
          "Мапа тривог за областями й громадами з офіційних каналів.",
          url="https://alerts.in.ua"),
