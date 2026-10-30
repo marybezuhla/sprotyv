@@ -11,7 +11,8 @@ package ua.sprotyv.home
  * The person decides what is where; the app never moves tiles by itself, so a tile is found in the
  * same place every time (adaptable, not adaptive: Findlater & McGrenere 2004).
  */
-enum class Mode { SIMPLE, FULL }
+/** KID: a child's phone (6-10 years): six pictures, a call to family and 112. */
+enum class Mode { SIMPLE, FULL, KID }
 
 /** Parts of the app that can be a tile. */
 enum class Tool {

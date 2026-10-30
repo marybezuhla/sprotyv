@@ -118,6 +118,7 @@ fun App() {
     when (prefs.mode) {
         null -> WelcomeScreen(nav)
         Mode.SIMPLE -> SimpleHome(content, prefs.pins, nav, onSettings = { guarded(ACTION_SETTINGS) })
+        Mode.KID -> KidHome(content, nav, onGrownUp = { guarded(ACTION_SETTINGS) })
         Mode.FULL -> Column(Modifier.fillMaxSize()) {
             Box(Modifier.weight(1f)) {
                 CompositionLocalProvider(LocalInTab provides true) {
@@ -174,6 +175,7 @@ private fun Screen(
             MinePart.BACKUP -> Personal(R.string.backup_title, personal, nav) { BackupScreen() }
             MinePart.PLAN_QR -> Personal(R.string.plan_code_title, personal, nav) { PlanCodeScreen() }
             MinePart.PLAN_IMPORT -> Personal(R.string.plan_code_import_title, personal, nav) { PlanImportScreen(nav) }
+            MinePart.KID_CALL -> Personal(R.string.kid_call_family, personal, nav) { KidCallScreen() }
         }
         Route.Scan -> ScanScreen(nav)
         Route.SuppliesRoute -> SuppliesScreen(content, nav)

@@ -331,4 +331,18 @@
     <string name="backup_delete_by_hand">Не вдалося. Недописаний файл копії лишився — видаліть його вручну.</string>
     <string name="plan_code_show_password">Показати пароль ще раз</string>
     <string name="plan_code_said">Пароль сказано — показати код</string>
+    <string name="mode_kid">Дитячий</string>
+    <string name="mode_kid_hint">Для дитини 6–10 років: картинки, дзвінок своїм і 112</string>
+    <string name="kid_lock_advice">На телефоні дитини радимо ввімкнути захист налаштувань, щоб вигляд не змінили випадково.</string>
+    <string name="kid_setup_title">Телефон для дитини</string>
+    <string name="kid_setup_text">Дитина бачитиме шість картинок із короткими порадами, кнопку «Подзвонити своїм» і 112. Номери своїх додайте в «Довірені люди» в повному вигляді. Радимо захистити налаштування PIN-кодом телефону.</string>
+    <string name="kid_setup_lock">Готово, захистити PIN-кодом</string>
+    <string name="kid_setup_later">Готово, без захисту</string>
+    <string name="kid_title">Що робити?</string>
+    <string name="kid_grown_up">Для дорослих</string>
+    <string name="kid_call_family">Подзвонити своїм</string>
+    <string name="kid_call_112">112</string>
+    <string name="kid_call_none">Тут ще немає номерів. Попроси дорослого додати їх.</string>
+    <string name="kid_call_intro">Кому подзвонити?</string>
+    <string name="kid_call_112_hint">Сталася біда, а свої не відповідають, — дзвони 112. Скажи своє ім\'я, адресу і що сталося.</string>
 </resources>
