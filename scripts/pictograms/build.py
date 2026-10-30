@@ -16,24 +16,25 @@ C = 960  # canvas, the glyphs' own grid
 
 # Each glyph's drawn bounds (x, y, w, h) on its 960 grid, measured once in a browser
 BOUNDS = {
-    "call": (120, 120, 720, 720), "do_not_touch": (38, 40, 826, 880), "steps": (84, 90, 796, 790),
-    "door_front": (120, 120, 720, 720), "airline_seat_flat": (80, 280, 800, 400), "pan_tool": (64, 40, 777, 880),
-    "heat": (200, 119, 560, 720), "man": (340, 80, 280, 800), "valve": (160, 120, 640, 711),
-    "block": (80, 80, 800, 800), "window": (120, 120, 720, 720), "directions_walk": (232, 60, 521, 860),
-    "house": (52, 135, 856, 665),
+    "block": (80, 80, 800, 800), "call": (120, 120, 720, 720), "cloud": (40, 161, 880, 639),
+    "destruction": (105, 83, 735, 797), "directions_run": (125, 60, 635, 860), "directions_walk": (232, 60, 521, 860),
+    "do_not_touch": (38, 40, 826, 880), "door_front": (120, 120, 720, 720), "door_open": (120, 130, 720, 710), "house": (52, 135, 856, 665),
+    "man": (340, 80, 280, 800), "pan_tool": (64, 40, 777, 880), "steps": (84, 90, 796, 790),
+    "valve": (160, 120, 640, 711), "window": (120, 120, 720, 720),
 }
 
 def glyph_path(name):
     svg = open(os.path.join(HERE, "material", name + ".svg"), encoding="utf-8").read()
     return re.search(r' d="([^"]+)"', svg).group(1)
 
-def g(name, box, flip=False):
-    """A glyph fitted into box (x, y, w, h), centred, keeping its shape."""
+def g(name, box, rot=0, flip=False):
+    """A glyph fitted into box (x, y, w, h), centred, keeping its shape; turned by rot (0, 90, 180, 270)."""
     bx, by, bw, bh = BOUNDS[name]
+    nw, nh = (bh, bw) if rot in (90, 270) else (bw, bh)
     x, y, w, h = box
-    s = min(w / bw, h / bh)
-    ox, oy = x + (w - bw * s) / 2, y + (h - bh * s) / 2
-    return ("glyph", glyph_path(name), ox, oy, s, bx, by, flip, bw)
+    s = min(w / nw, h / nh)
+    ox, oy = x + (w - nw * s) / 2, y + (h - nh * s) / 2
+    return ("glyph", glyph_path(name), dict(ox=ox, oy=oy, s=s, bx=bx, by=by, bw=bw, bh=bh, nw=nw, nh=nh, rot=rot, flip=flip))
 
 def rect(x, y, w, h, r):
     return ("path", f"M{x+r} {y}H{x+w-r}A{r} {r} 0 0 1 {x+w} {y+r}V{y+h-r}A{r} {r} 0 0 1 {x+w-r} {y+h}H{x+r}A{r} {r} 0 0 1 {x} {y+h-r}V{y+r}A{r} {r} 0 0 1 {x+r} {y}Z", None)
@@ -41,37 +42,49 @@ def rect(x, y, w, h, r):
 def line(d, width=64):
     return ("path", d, width)
 
-DOWN = lambda x: line(f"M{x} 100V420M{x-80} 340L{x} 420L{x+80} 340")
+def arrow_down(x, y0, y1):
+    return line(f"M{x} {y0}V{y1}M{x-90} {y1-90}L{x} {y1}L{x+90} {y1-90}", 72)
+
+GROUND = rect(40, 880, 880, 50, 25)
 
 PICTOGRAMS = {
     "call": [g("call", (40, 40, 880, 880))],
     "no_touch": [g("do_not_touch", (40, 40, 880, 880))],
     "shoes": [g("steps", (40, 40, 880, 880))],
-    "close_door": [g("door_front", (60, 60, 840, 840))],
-    "lie_down": [g("airline_seat_flat", (40, 200, 880, 560))],
-    # A hand pressing down on a limb
-    "press": [g("pan_tool", (250, 20, 460, 580)), DOWN(130), DOWN(830), rect(40, 680, 880, 170, 85)],
+    # Push the door shut: the arrow comes from the open side
+    "close_door": [g("door_open", (100, 220, 760, 720)), line("M200 170A420 300 0 0 1 760 170M650 70L760 170L640 250", 64)],
+    # A hand, palm down, pressing on a limb from above
+    "press": [arrow_down(480, 30, 260), g("pan_tool", (170, 330, 620, 420), rot=90), rect(40, 730, 880, 170, 85)],
     # The blast outside, two walls, then the person
-    "two_walls": [g("heat", (0, 220, 210, 520)), rect(280, 100, 96, 760, 32), rect(440, 100, 96, 760, 32), g("man", (610, 100, 320, 760))],
-    # Walk in under a roof
-    "shelter": [g("directions_walk", (0, 260, 330, 600)), g("house", (350, 150, 610, 720))],
-    # Below the smoke
-    "stay_low": [line("M80 190Q180 110 280 190T480 190T680 190T880 190"), line("M80 350Q180 270 280 350T480 350T680 350T880 350"),
-                 g("airline_seat_flat", (40, 480, 880, 440))],
+    "two_walls": [g("destruction", (0, 260, 260, 620)), rect(300, 100, 90, 780, 30), rect(450, 100, 90, 780, 30), g("man", (610, 100, 320, 780))],
+    # Flat on the ground, the blast nearby
+    "lie_down": [g("man", (60, 640, 840, 230), rot=270), GROUND, g("destruction", (600, 40, 320, 360))],
+    # Smoke above, the person low beneath it
+    "stay_low": [g("cloud", (120, 40, 720, 420)), g("man", (60, 640, 840, 230), rot=270), GROUND],
+    # Run in under a roof
+    "shelter": [g("directions_run", (0, 260, 340, 600)), g("house", (350, 150, 610, 720))],
     # Walk back the way you came
     "step_back": [g("directions_walk", (360, 40, 560, 880), flip=True), line("M300 820H70M170 720L70 820L170 920")],
-    "gas_off": [g("valve", (0, 0, 560, 560)), g("block", (580, 580, 380, 380))],
+    # Turn the valve shut
+    "gas_off": [g("valve", (160, 360, 640, 580)), line("M250 230A280 160 0 0 1 710 230M610 130L710 230L590 300", 64)],
     "no_window": [g("window", (0, 0, 560, 560)), g("block", (580, 580, 380, 380))],
 }
+
+def placement(p):
+    """The glyph's transform: fit, then turn or mirror inside its own box."""
+    t = p
+    inner = f"translate({-t['bx']} {C - t['by']})"
+    turn = ""
+    if t["rot"]:
+        turn = f"translate({t['nw']/2} {t['nh']/2}) rotate({t['rot']}) translate({-t['bw']/2} {-t['bh']/2}) "
+    mirror = f"translate({t['nw']} 0) scale(-1 1) " if t["flip"] else ""
+    return f"translate({t['ox']:.1f} {t['oy']:.1f}) scale({t['s']:.4f}) {mirror}{turn}{inner}"
 
 def svg(parts):
     out = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {C} {C}">']
     for p in parts:
         if p[0] == "glyph":
-            _, d, ox, oy, s, bx, by, flip, bw = p
-            sx = -s if flip else s
-            ox2 = ox + bw * s if flip else ox
-            out.append(f'<path transform="translate({ox2:.1f} {oy:.1f}) scale({sx:.4f} {s:.4f}) translate({-bx} {C-by})" d="{d}"/>')
+            out.append(f'<path transform="{placement(p[2])}" d="{p[1]}"/>')
         else:
             _, d, width = p
             if width:
@@ -88,14 +101,25 @@ def vector(name, parts):
            f'<vector {a} android:width="48dp" android:height="48dp" android:viewportWidth="{C}" android:viewportHeight="{C}">']
     for p in parts:
         if p[0] == "glyph":
-            _, d, ox, oy, s, bx, by, flip, bw = p
-            sx = -s if flip else s
-            ox2 = ox + bw * s if flip else ox
-            out += [f'    <group android:translateX="{ox2:.1f}" android:translateY="{oy:.1f}">',
-                    f'        <group android:scaleX="{sx:.4f}" android:scaleY="{s:.4f}">',
-                    f'            <group android:translateX="{-bx}" android:translateY="{C-by}">',
-                    f'                <path android:fillColor="#FF000000" android:pathData="{d}"/>',
-                    '            </group>', '        </group>', '    </group>']
+            t = p[2]
+            # The same chain as placement(), one group per step, outermost first
+            groups = [f'android:translateX="{t["ox"]:.1f}" android:translateY="{t["oy"]:.1f}"',
+                      f'android:scaleX="{t["s"]:.4f}" android:scaleY="{t["s"]:.4f}"']
+            if t["flip"]:
+                groups += [f'android:translateX="{t["nw"]}"', 'android:scaleX="-1"']
+            if t["rot"]:
+                groups += [f'android:translateX="{t["nw"]/2}" android:translateY="{t["nh"]/2}"',
+                           f'android:rotation="{t["rot"]}"',
+                           f'android:translateX="{-t["bw"]/2}" android:translateY="{-t["bh"]/2}"']
+            groups.append(f'android:translateX="{-t["bx"]}" android:translateY="{C - t["by"]}"')
+            ind = "    "
+            for gr in groups:
+                out.append(f"{ind}<group {gr}>")
+                ind += "    "
+            out.append(f'{ind}<path android:fillColor="#FF000000" android:pathData="{p[1]}"/>')
+            for _ in groups:
+                ind = ind[:-4]
+                out.append(f"{ind}</group>")
         else:
             _, d, width = p
             if width:
