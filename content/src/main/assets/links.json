@@ -1,0 +1,167 @@
+[
+ {
+  "id": "air-alert",
+  "group": "threats",
+  "kind": "official",
+  "title": "Повітряна тривога: тривоги й рух цілей",
+  "note": "Офіційні тривоги й приблизний рух крилатих ракет і шахедів від Повітряних сил. Балістики не показує, дані із затримкою.",
+  "url": "https://map.ukrainealarm.com",
+  "app": "com.ukrainealarm",
+  "phone": "",
+  "checkedOn": "2026-10-30"
+ },
+ {
+  "id": "air-force",
+  "group": "threats",
+  "kind": "official",
+  "title": "Повітряні сили ЗСУ",
+  "note": "Попередження про напрямки ракет і дронів. Канал також пише про збиті цілі — нам важливі лише попередження.",
+  "url": "https://t.me/kpszsu",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30"
+ },
+ {
+  "id": "monitor",
+  "group": "threats",
+  "kind": "volunteer",
+  "title": "monitor: мапа дронів",
+  "note": "Приблизне положення дронів з відкритих даних, оновлення кожні 20 секунд. Бета-версія, команда не названа, не офіційне оповіщення.",
+  "url": "https://map.war-monitor.org",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30"
+ },
+ {
+  "id": "alerts-in-ua",
+  "group": "threats",
+  "kind": "volunteer",
+  "title": "alerts.in.ua",
+  "note": "Мапа тривог за областями й громадами з офіційних каналів.",
+  "url": "https://alerts.in.ua",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30"
+ },
+ {
+  "id": "deepstate",
+  "group": "front",
+  "kind": "volunteer",
+  "title": "DeepState: лінія фронту",
+  "note": "Лінія фронту й окуповані території, із затримкою в кілька днів. Відкривайте лише цю адресу: є клони.",
+  "url": "https://deepstatemap.live",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30"
+ },
+ {
+  "id": "isw",
+  "group": "front",
+  "kind": "independent",
+  "title": "ISW: аналітичні мапи",
+  "note": "Щоденні мапи й огляди американського аналітичного центру, англійською.",
+  "url": "https://understandingwar.org",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30"
+ },
+ {
+  "id": "app-112",
+  "group": "help",
+  "kind": "official",
+  "title": "112 Ukraine (МВС)",
+  "note": "Виклик 112 через інтернет, коли немає мобільного зв'язку. Увійдіть через Дію заздалегідь.",
+  "url": "https://play.google.com/store/apps/details?id=ua.gov.mvs.service112",
+  "app": "ua.gov.mvs.service112",
+  "phone": "",
+  "checkedOn": "2026-10-30"
+ },
+ {
+  "id": "evacuation",
+  "group": "help",
+  "kind": "official",
+  "title": "Лінія евакуації 1548",
+  "note": "Цілодобова державна лінія з питань евакуації.",
+  "url": "",
+  "app": "",
+  "phone": "1548",
+  "checkedOn": "2026-10-30"
+ },
+ {
+  "id": "diia",
+  "group": "help",
+  "kind": "official",
+  "title": "Дія: укриття й Пункти незламності",
+  "note": "У застосунку Дія є мапа укриттів і Пунктів незламності.",
+  "url": "https://diia.gov.ua",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30"
+ },
+ {
+  "id": "mines",
+  "group": "help",
+  "kind": "official",
+  "title": "ДСНС: мапа мінної небезпеки",
+  "note": "Території, де можуть бути міни й вибухонебезпечні предмети.",
+  "url": "https://mine.dsns.gov.ua",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30"
+ },
+ {
+  "id": "cpd",
+  "group": "facts",
+  "kind": "official",
+  "title": "Центр протидії дезінформації",
+  "note": "Спростування фейків і попередження про ворожі канали та боти.",
+  "url": "https://cpd.gov.ua",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30"
+ },
+ {
+  "id": "perevirka",
+  "group": "facts",
+  "kind": "independent",
+  "title": "Бот «Перевірка»",
+  "note": "Надішліть текст, фото чи посилання — фактчекери скажуть, чи це правда.",
+  "url": "https://t.me/perevir_bot",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30"
+ },
+ {
+  "id": "voxcheck",
+  "group": "facts",
+  "kind": "independent",
+  "title": "VoxCheck",
+  "note": "Фактчекінг заяв і фейків від VoxUkraine.",
+  "url": "https://voxukraine.org",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30"
+ },
+ {
+  "id": "stopfake",
+  "group": "facts",
+  "kind": "independent",
+  "title": "StopFake",
+  "note": "Спростування російських фейків з 2014 року.",
+  "url": "https://www.stopfake.org",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30"
+ },
+ {
+  "id": "detector",
+  "group": "facts",
+  "kind": "independent",
+  "title": "Детектор медіа: дезінформація",
+  "note": "Розбори пропаганди й фейків, зокрема про тривоги.",
+  "url": "https://disinfo.detector.media",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30"
+ }
+]

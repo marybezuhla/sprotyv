@@ -99,6 +99,20 @@ class ContentTest {
         }
     }
 
+    @Test fun situationLinksAreSafeToOpen() {
+        val links = LinksReader.parse(File(assets, "links.json").readText())
+        assertTrue(links.size >= 10)
+        Link.GROUPS.forEach { g -> assertTrue(g, links.any { it.group == g }) }
+        // Official sources are present in every group but the front line, which has none
+        assertTrue(links.count { it.kind == Link.OFFICIAL } >= 5)
+        assertTrue(links.all { it.url.isEmpty() || it.url.startsWith("https://") })
+        try {
+            LinksReader.parse("""[{"id":"x","group":"threats","kind":"official","title":"t","note":"n","url":"http://a.b","checkedOn":"d"}]""")
+            throw AssertionError("plain http must be refused")
+        } catch (e: IllegalArgumentException) {
+        }
+    }
+
     @Test fun cardsAreUnreviewedUntilSomeoneReviews() {
         // Nothing may claim a review that did not happen: the field is filled by hand only after one
         cards.forEach { assertEquals("${it.id} claims a review", "", it.reviewedBy) }

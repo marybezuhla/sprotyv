@@ -23,6 +23,8 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -127,6 +129,8 @@ private fun CardBody(card: Card, content: Content, nav: Nav) {
         }
     }
 
+    if (card.id == "bleeding") TourniquetTime()
+
     if (all) {
         card.steps.forEachIndexed { i, s ->
             Row(verticalAlignment = Alignment.Top) {
@@ -215,6 +219,50 @@ private fun CardBody(card: Card, content: Content, nav: Nav) {
         }
     }
     Source(card)
+}
+
+/**
+ * The tourniquet time (guide 7.2: write it on the tourniquet or the forehead, "Т 14:25", for the
+ * medics; never loosen it). One tap keeps the time and shows it large, with how long it has been.
+ * Only a time is kept, on this phone, until reset; nothing about the person.
+ */
+@Composable
+private fun TourniquetTime() {
+    val context = LocalContext.current
+    val prefs = remember { context.applicationContext.getSharedPreferences("tourniquet", android.content.Context.MODE_PRIVATE) }
+    var at by remember { mutableStateOf(prefs.getLong("at", 0L).takeIf { it > 0 && System.currentTimeMillis() - it < 24 * 3600_000L }) }
+    var now by remember { mutableStateOf(System.currentTimeMillis()) }
+    LaunchedEffect(at) {
+        while (at != null) {
+            now = System.currentTimeMillis()
+            kotlinx.coroutines.delay(15_000)
+        }
+    }
+    val time = at
+    if (time == null) {
+        OutlinedButton(onClick = {
+            val t = System.currentTimeMillis()
+            prefs.edit().putLong("at", t).apply()
+            at = t
+            now = t
+        }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+            Text(stringResource(R.string.tourniquet_on), style = MaterialTheme.typography.titleMedium)
+        }
+        return
+    }
+    val clock = java.time.Instant.ofEpochMilli(time).atZone(java.time.ZoneId.systemDefault()).toLocalTime()
+    val label = stringResource(R.string.tourniquet_mark, String.format(java.util.Locale.ROOT, "%02d:%02d", clock.hour, clock.minute))
+    val minutes = ((now - time) / 60_000).coerceAtLeast(0)
+    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer), modifier = Modifier.fillMaxWidth()) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Text(label, style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.tourniquet_since, minutes / 60, minutes % 60), style = MaterialTheme.typography.titleMedium)
+            Text(stringResource(R.string.tourniquet_write), style = MaterialTheme.typography.bodyLarge)
+            TextButton(onClick = { prefs.edit().remove("at").apply(); at = null }, modifier = Modifier.heightIn(min = 48.dp)) {
+                Text(stringResource(R.string.tourniquet_reset))
+            }
+        }
+    }
 }
 
 /** "Why" folded under a step, opened on request: the second level never crowds the first. */

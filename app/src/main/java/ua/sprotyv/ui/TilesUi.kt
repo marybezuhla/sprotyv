@@ -39,6 +39,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
@@ -151,6 +152,7 @@ private val Tool.title: Int get() = when (this) {
     Tool.NOW -> R.string.tile_now
     Tool.SAFE -> R.string.tile_safe
     Tool.ALARM -> R.string.tile_alarm
+    Tool.SITUATION -> R.string.situation_title
     Tool.HOME_LIFE -> R.string.tile_home_life
     Tool.GUIDE -> R.string.tile_guide
     Tool.SEARCH -> R.string.search_guide
@@ -169,6 +171,7 @@ private val Tool.hint: Int get() = when (this) {
     Tool.NOW -> R.string.tile_now_hint
     Tool.SAFE -> R.string.tile_safe_hint
     Tool.ALARM -> R.string.tile_alarm_hint
+    Tool.SITUATION -> R.string.situation_hint
     Tool.HOME_LIFE -> R.string.tile_home_life_hint
     Tool.GUIDE -> R.string.tile_guide_hint
     Tool.SEARCH -> R.string.search_tile_hint
@@ -187,6 +190,7 @@ private val Tool.icon: ImageVector? get() = when (this) {
     Tool.NOW -> Icons.Filled.Warning
     Tool.SAFE -> Icons.AutoMirrored.Filled.Send
     Tool.ALARM -> Icons.Filled.Notifications
+    Tool.SITUATION -> Icons.Filled.LocationOn
     Tool.SEARCH -> Icons.Filled.Search
     Tool.MEDICAL -> Icons.Filled.Favorite
     Tool.PEOPLE -> Icons.Filled.Person
@@ -199,6 +203,7 @@ val Tool.route: Route get() = when (this) {
     Tool.NOW -> Route.Open(Section.NOW)
     Tool.SAFE -> Route.Open(Section.SAFE)
     Tool.ALARM -> Route.Open(Section.ALARM)
+    Tool.SITUATION -> Route.Situation
     Tool.HOME_LIFE -> Route.Open(Section.HOME_LIFE)
     Tool.GUIDE -> Route.Open(Section.GUIDE)
     Tool.SEARCH -> Route.Search
@@ -217,7 +222,7 @@ val Tool.route: Route get() = when (this) {
 fun groupOf(id: String): Group = when (id) {
     Tiles.tool(Tool.NOW) -> Group.DANGER
     Tiles.tool(Tool.SAFE) -> Group.FAMILY
-    else -> Group.entries.firstOrNull { id in it.tiles } ?: Group.GUIDE
+    else -> if (id.startsWith("link:")) Group.SAFETY else Group.entries.firstOrNull { id in it.tiles } ?: Group.GUIDE
 }
 
 /** Null for an id that is not (or no longer) in the app; such a tile is simply not shown. */
@@ -233,6 +238,9 @@ fun tileInfo(id: String, content: Content?): TileInfo? {
             val title = ch.title.substringBefore(':').trim()
             val hint = if (':' in ch.title) ch.title.substringAfter(':').trim().replaceFirstChar { it.uppercase() } else ""
             TileInfo(id, title, hint, group.icon, group, Route.ChapterRoute(value))
+        }
+        "link" -> content?.links?.firstOrNull { it.id == value }?.let { l ->
+            TileInfo(id, l.title, l.note, Icons.Filled.LocationOn, group, Route.External(l.id))
         }
         "tool" -> Tool.entries.firstOrNull { it.name == value }?.let { tool ->
             TileInfo(id, stringResource(tool.title), stringResource(tool.hint), tool.icon ?: group.icon, group, tool.route)
@@ -377,7 +385,9 @@ fun SectionsList(content: Content?, pins: List<String>, nav: Nav, onPin: (String
     if (content.guideBroken || content.cardsBroken) Broken()
     val full = pins.size >= Tiles.MAX_PINS
     if (full) Text(stringResource(R.string.pins_full), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    val lists = Group.entries.map { it.title to it.tiles } + (R.string.group_rest to Group.rest(content.guide.chapters.map { it.id }))
+    val lists = Group.entries.map { it.title to it.tiles } +
+        (R.string.situation_title to content.links.map { Tiles.link(it.id) }) +
+        (R.string.group_rest to Group.rest(content.guide.chapters.map { it.id }))
     lists.forEach { (title, ids) ->
         val infos = ids.mapNotNull { tileInfo(it, content) }
         if (infos.isEmpty()) return@forEach

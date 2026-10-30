@@ -19,6 +19,9 @@ sealed interface Route {
     data object EditTiles : Route
     data object Sections : Route
     data object Presets : Route
+    data object Situation : Route
+    /** Opens an outside source from "Situation" and comes straight back. */
+    data class External(val id: String) : Route
 
     /** Screens that show the owner's data: opened only with the data, kept off screenshots. */
     val personal: Boolean get() = this is Mine || this == Open(Section.MINE) || this == Open(Section.SAFE)
@@ -40,6 +43,8 @@ sealed interface Route {
         EditTiles -> "edit-tiles"
         Sections -> "sections"
         Presets -> "presets"
+        Situation -> "situation"
+        is External -> "external:$id"
     }
 
     companion object {
@@ -59,6 +64,9 @@ sealed interface Route {
                 "edit-tiles" -> EditTiles
                 "sections" -> Sections
                 "presets" -> Presets
+                "situation" -> Situation
+                // Never reopened after the app is restored: that would open a page unasked
+                "external" -> null
                 else -> null
             }
         }
