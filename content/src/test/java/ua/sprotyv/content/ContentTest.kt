@@ -11,7 +11,23 @@ class ContentTest {
     // Unit tests run with the module folder as the working directory
     private val assets = File("src/main/assets")
     private val guide by lazy { GuideReader.parse(File(assets, "guide.json").readText()) }
-    private val cards by lazy { CardsReader.parse(File(assets, "cards.json").readText()) }
+    private val adultCards by lazy { CardsReader.parse(File(assets, "cards.json").readText()) }
+    private val kidCards by lazy { CardsReader.parse(File(assets, "kid_cards.json").readText()) }
+    private val cards by lazy { adultCards + kidCards }
+
+    @Test fun childCardsAreShortAndApart() {
+        assertTrue("kid cards", kidCards.size >= 6)
+        kidCards.forEach { card ->
+            assertTrue(card.id, card.id.startsWith("kid-"))
+            assertTrue("${card.id} too many steps", card.steps.size <= 4)
+            card.steps.forEach {
+                val words = Regex("[\\p{L}\\p{N}'’]+").findAll(it.action).count()
+                assertTrue("${card.id}: $words words", words <= 15)
+            }
+        }
+        assertTrue(adultCards.none { it.id.startsWith("kid-") })
+        assertEquals(cards.size, cards.map { it.id }.toSet().size)
+    }
 
     @Test fun guideIsComplete() {
         assertTrue("chapters", guide.chapters.size >= 30)
