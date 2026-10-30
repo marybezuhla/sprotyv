@@ -386,5 +386,7 @@
     <string name="situation_rules_source">Sources: Ministry of Defence (17.10.2026), Kyiv City Administration, Survival guide 3.3. Checked 30.10.2026.</string>
     <string name="situation_note">Sprotyv itself downloads nothing: pages open in the browser or in the source\'s own app. List checked 30.10.2026.</string>
     <string name="situation_no_trace">Chrome on this phone opens these pages in a separate tab: after closing it keeps no history, cookies or cache. The site and the mobile operator still see the visit. Telegram and the sources\' own apps keep their data as usual.</string>
-    <string name="situation_trace">Your browser keeps these pages in its history, like any others. If that is a concern, open them in the browser\'s private mode, update Chrome or make it the default browser.</string>
+    <string name="situation_trace">Your browser keeps these pages in its history, like any others. If that is a concern, install Firefox Focus (Sprotyv will then open pages in it) or use the browser\'s private mode.</string>
+    <string name="situation_focus">Pages open in Firefox Focus: it erases history and cookies when you close it or tap Erase. The site and the mobile operator still see the visit.</string>
+    <string name="situation_get_focus">Firefox Focus on Google Play</string>
 </resources>

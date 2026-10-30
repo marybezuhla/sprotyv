@@ -20,6 +20,9 @@
         <!-- "Situation" opens these official apps when installed: the air alert app and 112 Ukraine -->
         <package android:name="com.ukrainealarm" />
         <package android:name="ua.gov.mvs.service112" />
+        <!-- Firefox Focus erases pages on closing: used for "Situation" when installed -->
+        <package android:name="org.mozilla.focus" />
+        <package android:name="org.mozilla.klar" />
         <!-- To tell the phone's browsers apart (pages without a trace, Telegram links); browsers only -->
         <intent>
             <action android:name="android.intent.action.VIEW" />

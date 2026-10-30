@@ -28,6 +28,8 @@ import ua.sprotyv.content.Content
 import ua.sprotyv.content.Link
 import ua.sprotyv.reach.Reach
 
+private const val FOCUS_PAGE = "https://play.google.com/store/apps/details?id=org.mozilla.focus"
+
 /** Opens a source: a phone number in the dialler, an address in its own app or a Custom Tab. */
 fun openLink(context: Context, link: Link, toolbar: Int? = null) {
     if (link.url.isEmpty() && link.phone.isNotEmpty()) Reach.dial(context, link.phone)
@@ -73,11 +75,24 @@ fun SituationScreen(content: Content?, nav: Nav) {
             links.forEach { link -> LinkRow(link) { openLink(context, link, toolbar) } }
         }
         // Said plainly: whether this phone's browser keeps a trace of the pages
-        val traceless = androidx.compose.runtime.remember { Reach.opensWithoutTrace(context) }
+        val trace = androidx.compose.runtime.remember { Reach.trace(context) }
         Text(
-            stringResource(if (traceless) R.string.situation_no_trace else R.string.situation_trace),
+            stringResource(
+                when (trace) {
+                    Reach.Trace.FOCUS -> R.string.situation_focus
+                    Reach.Trace.CHROME_TAB -> R.string.situation_no_trace
+                    Reach.Trace.BROWSER -> R.string.situation_trace
+                },
+            ),
             style = MaterialTheme.typography.bodyMedium,
         )
+        if (trace != Reach.Trace.FOCUS) {
+            // Any phone, any main browser: Firefox Focus erases pages on closing
+            androidx.compose.material3.TextButton(
+                onClick = { Reach.open(context, FOCUS_PAGE, toolbarColor = toolbar) },
+                modifier = Modifier.heightIn(min = 48.dp),
+            ) { Text(stringResource(R.string.situation_get_focus)) }
+        }
         Text(stringResource(R.string.situation_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
