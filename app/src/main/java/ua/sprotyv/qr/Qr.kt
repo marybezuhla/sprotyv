@@ -19,8 +19,11 @@ object Qr {
     /** UTF-8 text a phone camera reads easily, also from paper or a lock screen in poor light. */
     const val MAX_BYTES = 400
 
-    fun encode(text: String, size: Int): BitMatrix {
-        require(text.toByteArray(Charsets.UTF_8).size <= MAX_BYTES) { "Too long for a QR code" }
+    /** Room for the encrypted family plan, read from a phone screen (about version 30). */
+    const val MAX_PLAN_BYTES = 1200
+
+    fun encode(text: String, size: Int, maxBytes: Int = MAX_BYTES): BitMatrix {
+        require(maxBytes <= MAX_PLAN_BYTES && text.toByteArray(Charsets.UTF_8).size <= maxBytes) { "Too long for a QR code" }
         val hints = mapOf(
             EncodeHintType.CHARACTER_SET to "UTF-8",
             EncodeHintType.ERROR_CORRECTION to ErrorCorrectionLevel.M,

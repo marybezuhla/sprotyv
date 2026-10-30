@@ -104,6 +104,8 @@ fun MineHub(nav: Nav, content: ua.sprotyv.content.Content?) {
     NavRow(stringResource(R.string.rescuer_screen), stringResource(R.string.rescuer_hint)) { nav.go(Route.Mine(MinePart.RESCUER)) }
     NavRow(stringResource(R.string.print_title), stringResource(R.string.print_hint)) { nav.go(Route.Mine(MinePart.PRINT)) }
     NavRow(stringResource(R.string.scan_title), stringResource(R.string.scan_hint)) { nav.go(Route.Scan) }
+    NavRow(stringResource(R.string.plan_code_title), stringResource(R.string.plan_code_hint)) { nav.go(Route.Mine(MinePart.PLAN_QR)) }
+    NavRow(stringResource(R.string.backup_title), stringResource(R.string.backup_hint)) { nav.go(Route.Mine(MinePart.BACKUP)) }
 }
 
 /** A text field that saves on every change. */

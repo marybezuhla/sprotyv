@@ -170,6 +170,9 @@ private fun Screen(
             MinePart.KIT -> Personal(R.string.kit, personal, nav) { KitScreen(content, nav) }
             MinePart.PRINT -> Personal(R.string.print_title, personal, nav) { PrintScreen() }
             MinePart.RESCUER -> Personal(R.string.rescuer_screen, personal, nav) { RescuerQrScreen(nav) }
+            MinePart.BACKUP -> Personal(R.string.backup_title, personal, nav) { BackupScreen() }
+            MinePart.PLAN_QR -> Personal(R.string.plan_code_title, personal, nav) { PlanCodeScreen() }
+            MinePart.PLAN_IMPORT -> Personal(R.string.plan_code_import_title, personal, nav) { PlanImportScreen(nav) }
         }
         Route.Scan -> ScanScreen(nav)
         Route.SuppliesRoute -> SuppliesScreen(content, nav)
