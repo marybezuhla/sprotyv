@@ -28,6 +28,13 @@ data class Link(
 object LinksReader {
     private val PACKAGE = Regex("^[a-z][a-z0-9_]*(\\.[a-z0-9_]+)+$")
     private val PHONE = Regex("^[0-9]{3,4}$")
+    private val ID = Regex("^[a-z0-9-]{1,40}$")
+    private val DATE = Regex("^\\d{4}-\\d{2}-\\d{2}$")
+    // https://host[/path]: no user part, no port, no odd characters, so the host shown is the host opened
+    private val URL = Regex("^https://([a-z0-9-]+(\\.[a-z0-9-]+)+)(/[A-Za-z0-9._~/?=&%-]*)?$")
+
+    /** The host of a checked address, shown to the person as where the link leads. */
+    fun host(url: String): String = URL.matchEntire(url)?.groupValues?.get(1) ?: ""
 
     /** Strict: only https addresses, known groups and kinds, plain package names, short numbers. */
     fun parse(json: String): List<Link> {
@@ -43,7 +50,9 @@ object LinksReader {
             ).also { l ->
                 require(l.group in Link.GROUPS) { "Unknown group" }
                 require(l.kind in setOf(Link.OFFICIAL, Link.VOLUNTEER, Link.INDEPENDENT)) { "Unknown kind" }
-                require(l.url.isEmpty() || (l.url.startsWith("https://") && l.url.none { it.isWhitespace() })) { "Only https" }
+                require(ID.matches(l.id) && DATE.matches(l.checkedOn)) { "Bad id or date" }
+                require(l.title.length in 1..80 && l.note.length in 1..200) { "Bad text" }
+                require(l.url.isEmpty() || URL.matches(l.url)) { "Only plain https addresses" }
                 require(l.url.isNotEmpty() || l.phone.isNotEmpty()) { "Nothing to open" }
                 require(l.app.isEmpty() || PACKAGE.matches(l.app)) { "Bad package" }
                 require(l.phone.isEmpty() || PHONE.matches(l.phone)) { "Bad number" }

@@ -367,7 +367,7 @@
     <string name="safe_quiet_message">I can\'t talk, but I\'m reachable. Write, don\'t call.</string>
     <string name="tourniquet_on">⏱ Tourniquet on — keep the time</string>
     <string name="tourniquet_since">Since then: %1$d h %2$02d min</string>
-    <string name="tourniquet_write">Write this time with a marker on the tourniquet or the casualty\'s forehead. Never loosen it: only a medic removes it. Tell the medics the time.</string>
+    <string name="tourniquet_write">Write this time with a marker on the tourniquet or the casualty\'s forehead. Never loosen it: only a medic removes it. Tell the medics the time. Several casualties: write the time on each.</string>
     <string name="tourniquet_reset">Reset the time</string>
     <string name="tourniquet_mark">T %1$s</string>
     <string name="situation_title">Situation</string>
