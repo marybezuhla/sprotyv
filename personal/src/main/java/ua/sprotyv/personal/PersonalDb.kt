@@ -31,6 +31,12 @@ interface SettingDao {
 
     @Query("SELECT value FROM settings WHERE `key` = :key")
     fun observe(key: String): kotlinx.coroutines.flow.Flow<String?>
+
+    @Query("SELECT * FROM settings")
+    suspend fun all(): List<Setting>
+
+    @Query("DELETE FROM settings")
+    suspend fun clear()
 }
 
 /**

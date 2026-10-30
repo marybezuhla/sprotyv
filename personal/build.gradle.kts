@@ -36,5 +36,10 @@ dependencies {
     implementation("androidx.sqlite:sqlite:2.5.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
 
+    // Argon2id for password backups and the family plan code (a reviewed version, its checksum pinned)
+    implementation("org.bouncycastle:bcprov-jdk18on:1.79")
+
     testImplementation("junit:junit:4.13.2")
+    // Real org.json for unit tests (Android provides it on the phone)
+    testImplementation("org.json:json:20240303")
 }

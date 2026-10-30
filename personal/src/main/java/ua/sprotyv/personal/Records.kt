@@ -91,6 +91,9 @@ interface MedicalDao {
 
     @Upsert
     suspend fun save(card: MedicalCard)
+
+    @Query("DELETE FROM medical")
+    suspend fun clear()
 }
 
 @Dao
@@ -103,6 +106,12 @@ interface PeopleDao {
 
     @Delete
     suspend fun delete(person: Person)
+
+    @Query("SELECT * FROM people ORDER BY id")
+    suspend fun all(): List<Person>
+
+    @Query("DELETE FROM people")
+    suspend fun clear()
 }
 
 @Dao
@@ -124,6 +133,15 @@ interface PlanDao {
 
     @Delete
     suspend fun deleteRow(row: PlanRow)
+
+    @Query("SELECT * FROM plan_rows ORDER BY kind, sort, id")
+    suspend fun allRows(): List<PlanRow>
+
+    @Query("DELETE FROM plan")
+    suspend fun clear()
+
+    @Query("DELETE FROM plan_rows")
+    suspend fun clearRows()
 }
 
 @Dao
@@ -136,4 +154,7 @@ interface KitDao {
 
     @Query("DELETE FROM kit")
     suspend fun clear()
+
+    @Query("SELECT * FROM kit")
+    suspend fun all(): List<KitCheck>
 }
