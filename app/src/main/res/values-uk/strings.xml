@@ -335,7 +335,7 @@
     <string name="mode_kid_hint">Для дитини 6–10 років: картинки, дзвінок своїм і 112</string>
     <string name="kid_lock_advice">На телефоні дитини радимо ввімкнути захист налаштувань, щоб вигляд не змінили випадково.</string>
     <string name="kid_setup_title">Телефон для дитини</string>
-    <string name="kid_setup_text">Дитина бачитиме шість картинок із короткими порадами, кнопку «Подзвонити своїм» і 112. Номери своїх додайте в «Довірені люди» в повному вигляді. Радимо захистити налаштування PIN-кодом телефону.</string>
+    <string name="kid_setup_text">Дитина бачитиме сім картинок із короткими порадами, кнопку «Подзвонити своїм» і 112. Номери своїх додайте в «Довірені люди» в повному вигляді. Радимо захистити налаштування PIN-кодом телефону.</string>
     <string name="kid_setup_lock">Готово, захистити PIN-кодом</string>
     <string name="kid_setup_later">Готово, без захисту</string>
     <string name="kid_title">Що робити?</string>
@@ -345,4 +345,8 @@
     <string name="kid_call_none">Тут ще немає номерів. Попроси дорослого додати їх.</string>
     <string name="kid_call_intro">Кому подзвонити?</string>
     <string name="kid_call_112_hint">Сталася біда, а свої не відповідають, — дзвони 112. Скажи своє ім\'я, адресу і що сталося.</string>
+    <string name="kid_hello">Привіт!</string>
+    <string name="kid_hello_hint">Я Соняшник. Натисни на картинку — я підкажу, що робити.</string>
+    <string name="kid_well_done">Молодець! 🌟</string>
+    <string name="kid_well_done_hint">Тепер ти знаєш, що робити.</string>
 </resources>

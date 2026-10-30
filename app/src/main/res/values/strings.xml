@@ -335,7 +335,7 @@
     <string name="mode_kid_hint">For a child aged 6–10: pictures, a call to family and 112</string>
     <string name="kid_lock_advice">On a child\'s phone, turn on the settings lock so the look is not changed by accident.</string>
     <string name="kid_setup_title">A phone for a child</string>
-    <string name="kid_setup_text">The child will see six pictures with short tips, a “Call my family” button and 112. Add family numbers in “Trusted people” in the full look. Locking the settings with the phone\'s PIN is advised.</string>
+    <string name="kid_setup_text">The child will see seven pictures with short tips, a “Call my family” button and 112. Add family numbers in “Trusted people” in the full look. Locking the settings with the phone\'s PIN is advised.</string>
     <string name="kid_setup_lock">Done, lock with the PIN</string>
     <string name="kid_setup_later">Done, no lock</string>
     <string name="kid_title">What to do?</string>
@@ -345,4 +345,8 @@
     <string name="kid_call_none">No numbers here yet. Ask a grown-up to add them.</string>
     <string name="kid_call_intro">Who do you want to call?</string>
     <string name="kid_call_112_hint">Something bad happened and your family does not answer: call 112. Say your name, your address and what happened.</string>
+    <string name="kid_hello">Hi there!</string>
+    <string name="kid_hello_hint">I\'m Sunny. Tap a picture and I\'ll tell you what to do.</string>
+    <string name="kid_well_done">Well done! 🌟</string>
+    <string name="kid_well_done_hint">Now you know what to do.</string>
 </resources>

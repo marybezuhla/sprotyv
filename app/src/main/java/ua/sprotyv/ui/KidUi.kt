@@ -1,6 +1,14 @@
 package ua.sprotyv.ui
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.unit.Dp
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -45,7 +53,7 @@ import ua.sprotyv.home.Group
 import ua.sprotyv.reach.Reach
 
 // The child's look (6-10 years). Built on what helps young children act in an emergency: one
-// picture per situation (a child reads the picture before the word), six choices at most, very
+// picture per situation (a child reads the picture before the word), seven choices at most, very
 // short steps one at a time, the same rules they practise as a game (guide 22.1), a calm tone and
 // a grown-up always one tap away. No settings within reach: those sit behind the phone's PIN.
 
@@ -57,11 +65,12 @@ private fun picture(id: String): String = when (id) {
     "kid-lost" -> "🧍"
     "kid-fire" -> "🔥"
     "kid-scared" -> "🧸"
+    "kid-code" -> "🔑"
     else -> "⭐"
 }
 
 /** Soft colours from the group palette, one per tile, so each is found by colour too. */
-private val KID_COLOURS = listOf(Group.DANGER, Group.HOME_LIFE, Group.FAMILY, Group.LEAVE, Group.PREPARE, Group.FIRST_AID)
+private val KID_COLOURS = listOf(Group.DANGER, Group.HOME_LIFE, Group.FAMILY, Group.LEAVE, Group.PREPARE, Group.FIRST_AID, Group.MINE)
 
 @Composable
 fun KidHome(content: Content?, nav: Nav, onGrownUp: () -> Unit) {
@@ -75,14 +84,22 @@ fun KidHome(content: Content?, nav: Nav, onGrownUp: () -> Unit) {
             modifier = Modifier.weight(1f),
         ) {
             item(span = { GridItemSpan(maxLineSpan) }) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(stringResource(R.string.kid_title), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
+                Column {
                     // Small and plain on purpose: for the grown-up, behind the phone's PIN
-                    TextButton(onClick = onGrownUp, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.kid_grown_up)) }
+                    TextButton(onClick = onGrownUp, modifier = Modifier.align(Alignment.End).heightIn(min = 48.dp)) { Text(stringResource(R.string.kid_grown_up)) }
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Sunny(64.dp)
+                        Spacer(Modifier.width(12.dp))
+                        Column(Modifier.weight(1f)) {
+                            Text(stringResource(R.string.kid_hello), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
+                            Text(stringResource(R.string.kid_hello_hint), style = MaterialTheme.typography.bodyLarge)
+                        }
+                    }
                 }
             }
             if (content != null && content.kidCardsBroken) item(span = { GridItemSpan(maxLineSpan) }) { Broken() }
-            items(cards.take(6), key = { it.id }) { card ->
+            // Seven situations; the last one spans the row, so nothing looks missing
+            items(cards.take(7), key = { it.id }, span = { c -> GridItemSpan(if (cards.indexOf(c) == 6) maxLineSpan else 1) }) { card ->
                 val i = cards.indexOf(card)
                 KidTile(card, KID_COLOURS[i % KID_COLOURS.size].tint()) { nav.go(Route.CardRoute(card.id)) }
             }
@@ -96,15 +113,47 @@ private fun KidTile(card: ActionCard, tint: Tint, onClick: () -> Unit) {
     Card(
         onClick = onClick,
         colors = CardDefaults.cardColors(containerColor = tint.container, contentColor = tint.ink),
+        // Round, soft shapes: friendly to a child's eye, and large enough for a small finger
+        shape = RoundedCornerShape(28.dp),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-        modifier = Modifier.fillMaxWidth().heightIn(min = 140.dp),
+        modifier = Modifier.fillMaxWidth().heightIn(min = 148.dp),
     ) {
         Column(Modifier.fillMaxWidth().padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             // The picture is for the eye; TalkBack reads the words
-            Text(picture(card.id), fontSize = 48.sp, modifier = Modifier.clearAndSetSemantics { })
+            Text(picture(card.id), fontSize = 56.sp, modifier = Modifier.clearAndSetSemantics { })
             Spacer(Modifier.size(8.dp))
             Text(card.title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center)
         }
+    }
+}
+
+/**
+ * Sunny, the child's little helper: an original smiling sunflower drawn here, with no picture
+ * files. Calm, still and warm; it never moves, so it never pulls attention from the steps.
+ */
+@Composable
+fun Sunny(size: Dp, happy: Boolean = false) {
+    Canvas(Modifier.size(size).clearAndSetSemantics { }) {
+        val c = center
+        val r = this.size.minDimension / 2
+        val petal = Color(0xFFFFC928)
+        // Twelve petals around the middle
+        repeat(12) { i ->
+            rotate(i * 30f, c) {
+                drawOval(petal, topLeft = Offset(c.x - r * 0.18f, c.y - r), size = Size(r * 0.36f, r * 0.62f))
+            }
+        }
+        drawCircle(Color(0xFF7A4E2D), radius = r * 0.5f, center = c)
+        // Eyes and a smile; a wider smile when a card is done
+        val eye = Color(0xFFFFF3D6)
+        drawCircle(eye, radius = r * 0.07f, center = Offset(c.x - r * 0.18f, c.y - r * 0.1f))
+        drawCircle(eye, radius = r * 0.07f, center = Offset(c.x + r * 0.18f, c.y - r * 0.1f))
+        val sweep = if (happy) 160f else 120f
+        drawArc(
+            eye, startAngle = 90f - sweep / 2, sweepAngle = sweep, useCenter = false,
+            topLeft = Offset(c.x - r * 0.24f, c.y - r * 0.12f), size = Size(r * 0.48f, r * 0.4f),
+            style = Stroke(width = r * 0.07f, cap = StrokeCap.Round),
+        )
     }
 }
 
