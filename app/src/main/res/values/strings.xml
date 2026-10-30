@@ -528,9 +528,9 @@
     <string name="wait_done">%1$d minutes have passed. A repeated strike can come even after 1–2 hours: take care, listen for the all-clear.</string>
     <string name="wait_reset">Reset the count</string>
     <string name="screenshots_allow">Allow screenshots in “Mine”</string>
-    <string name="screenshots_hint">Off by default: the medical card, people, plan and supplies cannot be photographed or recorded. Cards and the guide can always be captured. Turn on only to show the app to testers.</string>
+    <string name="screenshots_hint">Off by default: the medical card, people, plan and supplies do not show in screenshots, screen recordings, casting or the recent apps list (another phone’s camera is not stopped). Cards and the guide can always be captured. Turn on only to show the app to testers; it turns itself off when the app restarts.</string>
     <string name="screenshots_confirm_title">Allow screenshots?</string>
-    <string name="screenshots_confirm_text">Screenshots and screen recordings are saved to the gallery unencrypted and may end up in a cloud backup or other apps. Assistants, on-screen search, casting and screen sharing can also see and record the screen, and some send it to the internet. Turn this off again when done: while it is on, a strip at the top of every “Mine” screen says so.</string>
+    <string name="screenshots_confirm_text">Screenshots and screen recordings are saved to the gallery unencrypted and may end up in a cloud backup or other apps. Assistants, on-screen search, casting and screen sharing can also see and record the screen, and some send it to the internet; the recent apps list will show your data too. Turn this off again when done: while it is on, a strip at the top of every “Mine” screen says so.</string>
     <string name="screenshots_confirm_yes">Allow</string>
     <string name="screenshots_banner">Screenshots are allowed</string>
     <string name="screenshots_turn_off">Turn off</string>

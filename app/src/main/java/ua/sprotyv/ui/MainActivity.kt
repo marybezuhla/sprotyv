@@ -15,6 +15,8 @@ class MainActivity : ComponentActivity() {
         // photo just taken may be waiting to be read
         if (savedInstanceState == null) clearScans(this)
         HomePrefs.load(this)
+        // Screenshots of "Mine" are for showing the app to testers: off again at every fresh start
+        if (savedInstanceState == null && HomePrefs.load(this).screenshots) HomePrefs.update(this) { it.copy(screenshots = false) }
         setContent {
             val prefs = HomePrefs.state.collectAsState().value ?: HomePrefs.load(this)
             SprotyvTheme(prefs.theme, prefs.dynamic) {
