@@ -1,0 +1,23 @@
+<svg width="470" height="180" viewBox="0 0 470 180" xmlns="http://www.w3.org/2000/svg">
+  
+  <rect x="40" y="70" width="330" height="52" rx="26" fill="#e8c9a8" stroke="#b08a5f" stroke-width="2"/>
+  
+  <rect x="10" y="40" width="60" height="110" rx="18" fill="#9aa77f"/>
+  
+  <circle cx="290" cy="96" r="13" fill="#c0392b"/>
+  <path d="M290 109 q6 18 2 34" stroke="#c0392b" stroke-width="5" fill="none"/>
+  <text x="300" y="138" font-family="DejaVu Sans" font-size="10" fill="#c0392b">рана</text>
+  
+  <rect x="150" y="62" width="26" height="68" rx="4" fill="#333"/>
+  <rect x="140" y="30" width="46" height="14" rx="4" fill="#555"/>
+  <line x1="163" y1="44" x2="163" y2="62" stroke="#555" stroke-width="6"/>
+  <text x="120" y="20" font-family="DejaVu Sans" font-size="10" fill="#333">вороток (закрутка)</text>
+  
+  <line x1="176" y1="140" x2="277" y2="140" stroke="#2e7d32" stroke-width="2" marker-end="url(#ga)" marker-start="url(#ga)"/>
+  <defs><marker id="ga" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><circle cx="4" cy="4" r="3" fill="#2e7d32"/></marker></defs>
+  <text x="180" y="156" font-family="DejaVu Sans" font-size="10" fill="#2e7d32">5–8 см вище рани (ближче до тулуба)</text>
+  <text x="392" y="80" font-family="DejaVu Sans" font-size="10" fill="#333">НЕ на суглоб,</text>
+  <text x="392" y="94" font-family="DejaVu Sans" font-size="10" fill="#333">НЕ поверх</text>
+  <text x="392" y="108" font-family="DejaVu Sans" font-size="10" fill="#333">предметів</text>
+  <text x="14" y="170" font-family="DejaVu Sans" font-size="10" fill="#333">Затягувати до ПОВНОЇ зупинки кровотечі (буде дуже боляче — це нормально)</text>
+</svg>

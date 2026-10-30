@@ -1,0 +1,15 @@
+<svg width="420" height="150" viewBox="0 0 420 150" xmlns="http://www.w3.org/2000/svg">
+  
+  <g transform="translate(80,75)">
+    <ellipse cx="0" cy="0" rx="52" ry="62" fill="#9aa3ad"/>
+    <ellipse cx="0" cy="0" rx="40" ry="50" fill="#d98f4a"/>
+    <ellipse cx="0" cy="0" rx="28" ry="38" fill="#7ab3d9"/>
+    <ellipse cx="0" cy="0" rx="16" ry="26" fill="#e8c9a8"/>
+  </g>
+  <line x1="96" y1="45" x2="180" y2="30" stroke="#7ab3d9" stroke-width="2"/>
+  <text x="185" y="34" font-family="DejaVu Sans" font-size="11" fill="#333"><tspan font-weight="bold">1. Базовий:</tspan> відводить піт</text>
+  <line x1="112" y1="70" x2="180" y2="70" stroke="#d98f4a" stroke-width="2"/>
+  <text x="185" y="74" font-family="DejaVu Sans" font-size="11" fill="#333"><tspan font-weight="bold">2. Утеплення:</tspan> тримає повітря</text>
+  <line x1="126" y1="100" x2="180" y2="110" stroke="#9aa3ad" stroke-width="2"/>
+  <text x="185" y="114" font-family="DejaVu Sans" font-size="11" fill="#333"><tspan font-weight="bold">3. Захисний:</tspan> вітер і вода</text>
+</svg>

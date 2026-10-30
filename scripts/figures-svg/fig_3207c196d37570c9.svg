@@ -1,0 +1,20 @@
+<svg width="380" height="170" viewBox="0 0 380 170" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="140" width="380" height="8" fill="#7a6a4f"/>
+  
+  <rect x="40" y="30" width="10" height="112" fill="#6b4a26"/>
+  <rect x="300" y="30" width="10" height="112" fill="#6b4a26"/>
+  
+  <line x1="50" y1="55" x2="300" y2="55" stroke="#333" stroke-width="2"/>
+  
+  <polygon points="55,55 295,55 335,130 95,130" fill="#4a7a5a" opacity="0.85"/>
+  
+  <line x1="95" y1="130" x2="88" y2="145" stroke="#333" stroke-width="3"/>
+  <line x1="335" y1="130" x2="342" y2="145" stroke="#333" stroke-width="3"/>
+  
+  <rect x="120" y="120" width="150" height="12" rx="5" fill="#c9b380"/>
+  
+  <path d="M65 132 q-9 -14 0 -24 q9 10 0 24" fill="#e0821a"/>
+  <text x="30" y="165" font-family="DejaVu Sans" font-size="10" fill="#333">багаття перед входом</text>
+  <text x="140" y="115" font-family="DejaVu Sans" font-size="10" fill="#333">настил з лапника 20+ см</text>
+  <text x="40" y="20" font-family="DejaVu Sans" font-size="10" fill="#333">мотузка між деревами + тент під 45° спиною до вітру</text>
+</svg>

@@ -1,0 +1,15 @@
+<svg width="470" height="150" viewBox="0 0 470 150" xmlns="http://www.w3.org/2000/svg">
+  
+  <line x1="245" y1="76" x2="372" y2="78" stroke="#2f4f2f" stroke-width="14" stroke-linecap="round"/>
+  <path d="M245 68 L272 112 L328 118" fill="none" stroke="#557a55" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="144" y1="76" x2="152" y2="124" stroke="#2f4f2f" stroke-width="10" stroke-linecap="round"/>
+  <line x1="132" y1="70" x2="245" y2="70" stroke="#3d6b3d" stroke-width="26" stroke-linecap="round"/>
+  <path d="M150 66 L128 100 L108 82" fill="none" stroke="#557a55" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="106" cy="70" r="13" fill="#2f4f2f"/>
+  <text x="20" y="20" font-family="DejaVu Sans" font-size="11" fill="#333">Голова закинута, рот донизу —</text>
+  <text x="20" y="35" font-family="DejaVu Sans" font-size="11" fill="#333">язик і блювота не перекриють дихання</text>
+  <text x="20" y="142" font-family="DejaVu Sans" font-size="10" fill="#555">вид згори: рука під щокою, друга — вперед</text>
+  <text x="340" y="102" font-family="DejaVu Sans" font-size="10" fill="#333">Верхнє коліно зігнуте,</text>
+  <text x="340" y="116" font-family="DejaVu Sans" font-size="10" fill="#333">упирається в землю —</text>
+  <text x="340" y="130" font-family="DejaVu Sans" font-size="10" fill="#333">тіло не перекотиться</text>
+</svg>

@@ -15,6 +15,10 @@ data class Card(
     val source: String,
     val checkedOn: String,
     val reviewedBy: String,
+    /** Guide sections this card comes from ("30.5", "7.2"), first is opened by "In detail". */
+    val guide: List<String> = emptyList(),
+    /** The service to call from this card, or null. Always one of [Service]. */
+    val call: Service? = null,
 ) {
     init {
         require(id.matches(ID)) { "Bad card id" }
@@ -22,11 +26,13 @@ data class Card(
         require(steps.isNotEmpty()) { "A card needs steps" }
         require(source.isNotBlank()) { "A card needs a source" }
         require(checkedOn.matches(DATE)) { "Bad check date" }
+        guide.forEach { require(it.matches(SECTION)) { "Bad guide reference" } }
     }
 
     companion object {
         private val ID = Regex("[a-z0-9-]{1,40}")
         private val DATE = Regex("\\d{4}-\\d{2}-\\d{2}")
+        private val SECTION = Regex("[0-9А-ЯҐЄІЇ]{1,3}(\\.[0-9]{1,3})?")
     }
 }
 
@@ -65,6 +71,8 @@ object CardsReader {
             val s = stepsJson.getJSONObject(it)
             Step(s.getString("action"), s.optString("why", ""))
         }
+        val guideJson = o.optJSONArray("guide") ?: JSONArray()
+        val call = o.optString("call", "")
         return Card(
             id = o.getString("id"),
             title = o.getString("title"),
@@ -72,6 +80,8 @@ object CardsReader {
             source = o.getString("source"),
             checkedOn = o.getString("checkedOn"),
             reviewedBy = o.optString("reviewedBy", ""),
+            guide = (0 until guideJson.length()).map { guideJson.getString(it) },
+            call = if (call.isEmpty()) null else requireNotNull(Service.entries.firstOrNull { it.number == call }) { "Unknown service" },
         )
     }
 }

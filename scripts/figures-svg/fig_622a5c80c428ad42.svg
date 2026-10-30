@@ -1,0 +1,21 @@
+<svg width="300" height="290" viewBox="0 0 300 290" xmlns="http://www.w3.org/2000/svg">
+  
+  <path d="M70 20 L190 20 L190 200 L150 240 L110 240 L70 200 Z" fill="#eef4f8" stroke="#345" stroke-width="3"/>
+  <rect x="110" y="240" width="40" height="18" fill="#eef4f8" stroke="#345" stroke-width="3"/>
+  
+  <rect x="74" y="30" width="112" height="34" fill="#b9b9b9"/>
+  <text x="196" y="52" font-family="DejaVu Sans" font-size="10" fill="#333">дрібні камінці</text>
+  <rect x="74" y="64" width="112" height="34" fill="#e2d3a8"/>
+  <text x="196" y="86" font-family="DejaVu Sans" font-size="10" fill="#333">пісок крупний</text>
+  <rect x="74" y="98" width="112" height="34" fill="#f0e6c8"/>
+  <text x="196" y="120" font-family="DejaVu Sans" font-size="10" fill="#333">пісок дрібний</text>
+  <rect x="74" y="132" width="112" height="34" fill="#3a3a3a"/>
+  <text x="196" y="154" font-family="DejaVu Sans" font-size="10" fill="#fff" stroke="#333" stroke-width="0.01"></text>
+  <text x="196" y="154" font-family="DejaVu Sans" font-size="10" fill="#333">товчене вугілля</text>
+  <rect x="74" y="166" width="112" height="26" fill="#fff" stroke="#bbb"/>
+  <text x="196" y="184" font-family="DejaVu Sans" font-size="10" fill="#333">тканина/вата</text>
+  
+  <path d="M120 6 q6 6 0 12 M140 4 q6 6 0 14" stroke="#4a90c2" stroke-width="3" fill="none"/>
+  <path d="M128 262 q4 8 0 14 M134 262 q4 8 0 14" stroke="#4a90c2" stroke-width="3" fill="none"/>
+  <text x="30" y="285" font-family="DejaVu Sans" font-size="10" fill="#333">Пляшка з відрізаним дном, шари по 5–7 см</text>
+</svg>

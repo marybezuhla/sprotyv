@@ -1,0 +1,19 @@
+<svg width="420" height="150" viewBox="0 0 420 150" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="128" width="420" height="6" fill="#7a6a4f"/>
+  <rect x="90" y="55" width="150" height="12" fill="#8f5a28"/>
+  <rect x="100" y="67" width="10" height="61" fill="#8f5a28"/>
+  <rect x="220" y="67" width="10" height="61" fill="#8f5a28"/>
+  
+  <path d="M196 110 L170 121 L206 123" fill="none" stroke="#2f4f2f" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="162" y1="100" x2="196" y2="110" stroke="#3d6b3d" stroke-width="17" stroke-linecap="round"/>
+  <line x1="160" y1="103" x2="112" y2="104" stroke="#557a55" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="148" cy="94" r="10" fill="#2f4f2f"/>
+  <path d="M164 97 Q156 78 142 84" fill="none" stroke="#557a55" stroke-width="7" stroke-linecap="round"/>
+  <rect x="60" y="18" width="14" height="10" fill="#a33" transform="rotate(18 60 18)"/>
+  <rect x="300" y="12" width="16" height="10" fill="#a33" transform="rotate(-14 300 12)"/>
+  <line x1="66" y1="34" x2="70" y2="50" stroke="#a33" stroke-width="2" stroke-dasharray="3 3"/>
+  <line x1="306" y1="28" x2="302" y2="46" stroke="#a33" stroke-width="2" stroke-dasharray="3 3"/>
+  <text x="255" y="95" font-family="DejaVu Sans" font-size="11" fill="#333">ПРИГНИСЬ —</text>
+  <text x="255" y="110" font-family="DejaVu Sans" font-size="11" fill="#333">ЗАКРИЙСЯ (під стіл) —</text>
+  <text x="255" y="125" font-family="DejaVu Sans" font-size="11" fill="#333">ТРИМАЙСЯ за ніжку</text>
+</svg>
