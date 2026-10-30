@@ -540,4 +540,14 @@
     <string name="screenshots_confirm_yes">Дозволити</string>
     <string name="screenshots_banner">Знімки екрана дозволено</string>
     <string name="screenshots_turn_off">Вимкнути</string>
+    <string name="feedback">Написати відгук</string>
+    <string name="feedback_title">Відгук</string>
+    <string name="feedback_body">Версія: %1$s\n\nЩо сталося або що хотілося б:\n\n</string>
+    <string name="feedback_hint">Відкриється сторінка «Спротиву» на GitHub (потрібен акаунт). Текст відгуку передається туди вже під час відкриття сторінки й лишається в історії браузера; опубліковано буде лише після вашого підтвердження, і там видно ім’я вашого акаунта. Ваші дані з «Мого» туди не потрапляють. Якщо для вас небезпечно, щоб вас пов’язали із застосунком, не надсилайте.</string>
+    <string name="crash_title">Минулого разу «Спротив» закрився з помилкою</string>
+    <string name="crash_text">Можна надіслати технічний опис помилки — це допоможе її виправити. У ньому лише назва помилки, місця в коді й версії застосунку та Android, ваших даних немає. Текст передається на публічну сторінку GitHub уже під час її відкриття; опубліковано буде лише після вашого підтвердження.</string>
+    <string name="crash_send">Надіслати опис</string>
+    <string name="crash_no">Видалити опис</string>
+    <string name="crash_issue_title">Помилка в застосунку</string>
+    <string name="crash_issue_body">Що відбувалося перед цим (за бажанням):</string>
 </resources>

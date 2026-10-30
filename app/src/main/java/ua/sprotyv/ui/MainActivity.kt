@@ -10,6 +10,7 @@ import ua.sprotyv.personal.PersonalStore
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        CrashLog.install(this)
         enableEdgeToEdge()
         // A QR photo left from an earlier run goes. Not when Android restores the app, because a
         // photo just taken may be waiting to be read

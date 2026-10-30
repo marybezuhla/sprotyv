@@ -73,6 +73,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -682,7 +683,35 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
             )
         }
         NavRow(stringResource(R.string.about_guide)) { nav.go(Route.About) }
+        FeedbackBlock()
     }
+}
+
+/** Feedback, and the last crash's technical description if there is one: shown in full, sent only by tap. */
+@Composable
+private fun FeedbackBlock() {
+    val context = LocalContext.current
+    var crash by remember { mutableStateOf(CrashLog.pending(context)) }
+    Text(stringResource(R.string.feedback_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+    crash?.let { t ->
+        Text(stringResource(R.string.crash_title), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
+        Text(stringResource(R.string.crash_text), style = MaterialTheme.typography.bodyMedium)
+        Text(t, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            OutlinedButton(onClick = {
+                Feedback.open(context, context.getString(R.string.crash_issue_title), context.getString(R.string.crash_issue_body) + "\n\n```\n" + t + "\n```")
+                CrashLog.clear(context)
+                crash = null
+            }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.crash_send)) }
+            androidx.compose.material3.TextButton(onClick = { CrashLog.clear(context); crash = null }, modifier = Modifier.heightIn(min = 48.dp)) {
+                Text(stringResource(R.string.crash_no))
+            }
+        }
+    }
+    OutlinedButton(onClick = {
+        Feedback.open(context, context.getString(R.string.feedback_title), context.getString(R.string.feedback_body, Feedback.version(context)))
+    }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.feedback)) }
+    Text(stringResource(R.string.feedback_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
 }
 
 /**
