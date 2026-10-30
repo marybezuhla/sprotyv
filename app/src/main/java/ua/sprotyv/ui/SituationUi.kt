@@ -14,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -86,7 +87,8 @@ fun SituationScreen(content: Content?, nav: Nav) {
         if (content.linksBroken) return@Frame Broken()
         // Power cuts have their own screen: one row per oblast would crowd this one
         NavRow(stringResource(R.string.power_title), stringResource(R.string.power_hint)) { nav.go(Route.Power) }
-        content.links.filter { it.group != Link.POWER && it.group !in Link.DIRECTORY }.groupBy { it.group }.forEach { (_, links) ->
+        val trip = HomePrefs.state.collectAsState().value?.trip == true
+        content.links.filter { it.group != Link.POWER && it.group !in Link.DIRECTORY && !(trip && Trip.hides(it)) }.groupBy { it.group }.forEach { (_, links) ->
             Text(stringResource(links.first().groupTitle), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 8.dp).semantics { heading() })
             links.forEach { link -> LinkRow(link) { openLink(context, link, toolbar) } }
         }
@@ -200,7 +202,8 @@ fun DirectoryScreen(content: Content?, nav: Nav) {
         Text(stringResource(R.string.dir_intro), style = MaterialTheme.typography.bodyLarge)
         if (content == null) return@Frame Loading()
         if (content.linksBroken) return@Frame Broken()
-        val entries = content.links.filter { it.group in Link.DIRECTORY }
+        val trip = HomePrefs.state.collectAsState().value?.trip == true
+        val entries = content.links.filter { it.group in Link.DIRECTORY && !(trip && Trip.hides(it)) }
         if (entries.isEmpty()) Text(stringResource(R.string.dir_empty), style = MaterialTheme.typography.bodyLarge)
         Link.DIRECTORY.forEach { g ->
             val links = entries.filter { it.group == g }

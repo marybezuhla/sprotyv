@@ -69,6 +69,7 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
@@ -247,6 +248,12 @@ fun groupOf(id: String): Group = when (id) {
 /** Null for an id that is not (or no longer) in the app; such a tile is simply not shown. */
 @Composable
 fun tileInfo(id: String, content: Content?): TileInfo? {
+    // Trip mode: what it hides is not a tile anywhere
+    val trip = HomePrefs.state.collectAsState().value?.trip == true
+    if (trip) {
+        if (id.startsWith("link:") && content?.links?.firstOrNull { it.id == id.substringAfter(':') }?.let(Trip::hides) == true) return null
+        if (id.startsWith("tool:") && Tool.entries.firstOrNull { it.name == id.substringAfter(':') }?.route?.let(Trip::hides) == true) return null
+    }
     val kind = id.substringBefore(':')
     val value = id.substringAfter(':', "")
     val group = groupOf(id)
@@ -686,6 +693,7 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
                 dismissButton = { androidx.compose.material3.TextButton(onClick = { askScreenshots = false }) { Text(stringResource(R.string.cancel)) } },
             )
         }
+        TripToggle(prefs.trip)
         NeutralToggle()
         NavRow(stringResource(R.string.about_guide)) { nav.go(Route.About) }
         FeedbackBlock()
@@ -787,6 +795,45 @@ private fun NeutralToggle() {
                     ask = false
                     Neutral.set(context, true); on = true; activity?.let(Neutral::applyToTask)
                 }) { Text(stringResource(R.string.neutral_confirm_yes)) }
+            },
+            dismissButton = { androidx.compose.material3.TextButton(onClick = { ask = false }) { Text(stringResource(R.string.cancel)) } },
+        )
+    }
+}
+
+/**
+ * Trip mode: on in one tap after reading what it does; off only with the phone's PIN, asked every
+ * time. Needs a screen lock, or anyone could turn it off.
+ */
+@Composable
+private fun TripToggle(on: Boolean) {
+    val context = LocalContext.current
+    val activity = context as? android.app.Activity
+    var ask by rememberSaveable { mutableStateOf(false) }
+    val canLock = Guard.available(context)
+    Text(stringResource(R.string.trip_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+    val prompt = stringResource(R.string.trip_off_prompt)
+    Toggle(stringResource(R.string.trip_toggle), on) { want ->
+        when {
+            want && canLock -> ask = true
+            !want && activity != null -> Guard.confirm(activity, prompt, ACTION_TRIP_OFF) { HomePrefs.update(context) { it.copy(trip = false) } }
+        }
+    }
+    Text(
+        stringResource(if (canLock) R.string.trip_hint else R.string.trip_no_lock),
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+    if (ask) {
+        androidx.compose.material3.AlertDialog(
+            onDismissRequest = { ask = false },
+            title = { Text(stringResource(R.string.trip_confirm_title)) },
+            text = { Text(stringResource(R.string.trip_confirm_text)) },
+            confirmButton = {
+                androidx.compose.material3.TextButton(onClick = {
+                    ask = false
+                    HomePrefs.update(context) { it.copy(trip = true) }
+                }) { Text(stringResource(R.string.trip_confirm_yes)) }
             },
             dismissButton = { androidx.compose.material3.TextButton(onClick = { ask = false }) { Text(stringResource(R.string.cancel)) } },
         )

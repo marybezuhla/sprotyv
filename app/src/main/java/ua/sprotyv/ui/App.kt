@@ -65,10 +65,15 @@ fun App() {
     val tab = Tab.entries.firstOrNull { it.name == tabName } ?: Tab.HOME
     // Settings screens stay only while settings are open; after leaving the app they are gone
     val settingsOpen = !prefs.locked || unlocked || !Guard.available(context)
-    val stack = saved.mapNotNull(Route::restore).filter { settingsOpen || !it.settings }
+    val trip = prefs.trip
+    val stack = saved.mapNotNull(Route::restore).filter { (settingsOpen || !it.settings) && !(trip && Trip.hides(it)) }
     // Drop them from the saved stack too, so they do not come back with the next PIN
-    LaunchedEffect(settingsOpen) {
+    LaunchedEffect(settingsOpen, trip) {
         if (!settingsOpen) saved = saved.filter { s -> Route.restore(s)?.settings != true }
+        if (trip) {
+            saved = saved.filter { s -> Route.restore(s)?.let(Trip::hides) != true }
+            if (tabName == Tab.MINE.name) tabName = Tab.HOME.name
+        }
     }
     val top = stack.lastOrNull()
     val full = prefs.mode == Mode.FULL
@@ -82,9 +87,11 @@ fun App() {
         override fun go(route: Route) {
             // An outside source opens outside Sprotyv; nothing is added to the back stack
             if (route is Route.External) {
-                content?.links?.firstOrNull { it.id == route.id }?.let { openLink(context, it) }
+                content?.links?.firstOrNull { it.id == route.id }?.takeIf { !(trip && Trip.hides(it)) }?.let { openLink(context, it) }
                 return
             }
+            // Trip mode: what it hides does not open, whatever leads there
+            if (trip && Trip.hides(route)) return
             saved = stack.map(Route::save) + route.save()
         }
         // Built from what could be read, so an unreadable entry never makes Back look stuck
@@ -98,6 +105,7 @@ fun App() {
         when {
             action == ACTION_SETTINGS -> nav.go(Route.Settings)
             action == ACTION_EDIT -> nav.go(Route.EditTiles)
+            action == ACTION_TRIP_OFF -> HomePrefs.update(context) { it.copy(trip = false) }
             action.startsWith(ACTION_PIN) -> HomePrefs.update(context) { it.copy(pins = Pins.pin(it.pins, action.removePrefix(ACTION_PIN))) }
             action.startsWith(ACTION_UNPIN) -> HomePrefs.update(context) { it.copy(pins = Pins.unpin(it.pins, action.removePrefix(ACTION_UNPIN))) }
         }
@@ -110,7 +118,7 @@ fun App() {
     }
 
     // On entering the owner's screens and on every return to the screen (leaving it closed the data)
-    val personalNow = top?.personal ?: (full && tab == Tab.MINE)
+    val personalNow = !trip && (top?.personal ?: (full && tab == Tab.MINE))
     LifecycleStartEffect(personalNow) {
         if (personalNow) PersonalStore.open(context) else PersonalStore.close()
         onStopOrDispose { }
@@ -140,13 +148,13 @@ fun App() {
                             SectionsList(content, prefs.pins, nav) { id, on -> guarded((if (on) ACTION_PIN else ACTION_UNPIN) + id) }
                         }
                         Tab.GUIDE -> GuideScreen(content, nav)
-                        Tab.MINE -> Personal(R.string.tile_mine, personal, nav) { MineHub(nav, content) }
+                        Tab.MINE -> if (!trip) Personal(R.string.tile_mine, personal, nav) { MineHub(nav, content) }
                     }
                 }
             }
             CallBar(edge = false)
             NavigationBar {
-                Tab.entries.forEach { t ->
+                Tab.entries.filter { !(trip && it == Tab.MINE) }.forEach { t ->
                     NavigationBarItem(
                         selected = t == tab,
                         onClick = { tabName = t.name },
@@ -214,6 +222,7 @@ private fun Screen(
 
 private const val ACTION_SETTINGS = "settings"
 private const val ACTION_EDIT = "edit"
+const val ACTION_TRIP_OFF = "trip_off"
 private const val ACTION_PIN = "pin:"
 private const val ACTION_UNPIN = "unpin:"
 
