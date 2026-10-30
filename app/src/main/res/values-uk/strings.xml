@@ -160,9 +160,9 @@
     <string name="person_phone_format">Запишіть номер з кодом країни, наприклад +380…, або як 0XXXXXXXXX — інакше WhatsApp може відкрити не той чат.</string>
     <string name="safe_each">Кожному окремо</string>
     <string name="rescuer_screen">Код для рятувальників</string>
-    <string name="rescuer_hint">Група крові, алергії, контакт у QR-коді</string>
-    <string name="rescuer_title">МЕДКАРТКА («Спротив»)</string>
-    <string name="rescuer_intro">Лише те, що допоможе в перші хвилини. Цей код прочитає камера будь-якого телефона, застосунок не потрібен.</string>
+    <string name="rescuer_hint">Група крові, алергії, ліки, контакт у QR-коді</string>
+    <string name="rescuer_title">МЕДИЧНІ ДАНІ</string>
+    <string name="rescuer_intro">Лише те, що допоможе в перші хвилини, без імені й дати народження. Цей код прочитає камера будь-якого телефона, застосунок не потрібен.</string>
     <string name="rescuer_qr_desc">QR-код із головними медичними даними</string>
     <string name="rescuer_warning">Код може прочитати будь-хто, хто його побачить. Показуйте й тримайте його лише там, де ви з цим згодні.</string>
     <string name="rescuer_save">Зберегти як зображення</string>
@@ -176,7 +176,7 @@
     <string name="print_private">Особисте. Тримайте там, де не побачать чужі.</string>
     <string name="print_services">Телефони служб</string>
     <string name="print_warning_title">Файл не зашифрований</string>
-    <string name="print_warning">Будь-хто, хто отримає файл, прочитає вашу медкартку й план. Зберігайте його лише там, де вирішите самі, і видаліть після друку, якщо він більше не потрібен.</string>
+    <string name="print_warning">Будь-хто, хто отримає файл, прочитає вашу медкартку й план. Якщо зберегти його в папку, що синхронізується з хмарою, він потрапить і туди. Зберігайте лише там, де вирішите самі, і видаліть після друку, якщо він більше не потрібен.</string>
     <string name="print_continue">Зрозуміло, зберегти</string>
     <string name="print_saved">Збережено.</string>
     <string name="print_failed">Не вдалося зберегти. Спробуйте інше місце.</string>
@@ -184,10 +184,10 @@
     <string name="print_cards_button">Зберегти картки в PDF для друку</string>
     <string name="scan_title">Зчитати QR-код</string>
     <string name="scan_hint">Камерою телефона, без дозволу на камеру</string>
-    <string name="scan_intro">Фото робить системна камера, «Спротив» читає код на телефоні й одразу видаляє фото. Нічого не відкривається без вашого рішення.</string>
+    <string name="scan_intro">Фото робить системна камера, «Спротив» читає код на телефоні й видаляє свою копію. Деякі камери зберігають ще й копію в галереї — перевірте й видаліть її там, якщо треба. Нічого не відкривається без вашого рішення.</string>
     <string name="scan_camera">Сфотографувати код</string>
     <string name="scan_picture">Вибрати зображення</string>
-    <string name="scan_none">QR-код не знайдено. Сфотографуйте ближче й при доброму світлі.</string>
+    <string name="scan_none">QR-код не знайдено. Сфотографуйте ближче й за доброго світла.</string>
     <string name="scan_link_to">Посилання веде на:</string>
     <string name="scan_link_note">Підроблені коди наклеюють поверх справжніх. Відкривайте, лише якщо довіряєте адресі.</string>
     <string name="scan_open">Відкрити</string>
@@ -195,8 +195,10 @@
     <string name="scan_open_text">Відкриється в іншому застосунку: %1$s. Не вводьте там паролі й дані картки, якщо не впевнені.</string>
     <string name="scan_copy">Скопіювати</string>
     <string name="scan_warn_not_https">З’єднання не захищене (немає https).</string>
-    <string name="scan_warn_hidden">Адреса ховає іншу адресу перед «@».</string>
+    <string name="scan_warn_hidden">Перед «@» — підставна адреса, справжня — після нього.</string>
     <string name="scan_warn_lookalike">В адресі є схожі літери з інших абеток.</string>
     <string name="scan_warn_numbers">Замість назви — лише цифри.</string>
     <string name="scan_warn_many_parts">Адреса з багатьох частин; перевірте її справжнє закінчення.</string>
+    <string name="rescuer_cut">Частина тексту не вмістилася й скорочена. Пишіть коротше.</string>
+    <string name="scan_no_camera">На телефоні не знайдено застосунку камери. Виберіть зображення.</string>
 </resources>

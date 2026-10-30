@@ -10,6 +10,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        // A QR photo left from an earlier run goes. Not when Android restores the app, because a
+        // photo just taken may be waiting to be read
+        if (savedInstanceState == null) clearScans(this)
         setContent {
             SprotyvTheme {
                 App()

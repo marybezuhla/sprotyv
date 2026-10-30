@@ -110,14 +110,13 @@ fun Personal(title: Int, state: Opened?, nav: Nav, content: @Composable () -> Un
         if (saveFailed) {
             Text(stringResource(R.string.save_failed), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.error)
         }
+        if (state is Opened.Ready && state.softwareKey) {
+            Text(stringResource(R.string.software_key_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.error)
+        }
+        // One call site for the content: while the data closes and reopens (a file picker, a
+        // camera), the screen and everything it remembers stays as it is
         when {
-            state is Opened.Ready -> {
-                if (state.softwareKey) {
-                    Text(stringResource(R.string.software_key_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.error)
-                }
-                content()
-            }
-            state == null && wasReady -> content()
+            state is Opened.Ready || (state == null && wasReady) -> content()
             state == null -> Loading()
             state == Opened.TryAgain -> Problem(R.string.try_again_title, R.string.try_again_text) { PersonalStore.close(); PersonalStore.open(context) }
             state == Opened.NeedsUpdate -> {

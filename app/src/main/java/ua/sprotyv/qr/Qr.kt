@@ -16,8 +16,8 @@ import ua.sprotyv.personal.Person
 
 /** Making and reading QR codes. Plain Java parts only, so it can be checked without a phone. */
 object Qr {
-    /** UTF-8 text a phone camera reads easily; longer text makes the code too dense to scan. */
-    const val MAX_BYTES = 900
+    /** UTF-8 text a phone camera reads easily, also from paper or a lock screen in poor light. */
+    const val MAX_BYTES = 400
 
     fun encode(text: String, size: Int): BitMatrix {
         require(text.toByteArray(Charsets.UTF_8).size <= MAX_BYTES) { "Too long for a QR code" }
@@ -58,7 +58,8 @@ sealed interface Scanned {
     data class Plain(override val text: String) : Scanned
 
     companion object {
-        private val URL = Regex("^(https?)://([^/?#\\s]+)(.*)$", RegexOption.IGNORE_CASE)
+        // A backslash ends the address for browsers, so it ends it here too: no look-alike host
+        private val URL = Regex("^(https?)://([^/?#\\s\\\\]+)(.*)$", RegexOption.IGNORE_CASE)
 
         fun of(raw: String): Scanned {
             val text = raw.trim()
@@ -76,6 +77,7 @@ sealed interface Scanned {
         fun warnings(scheme: String, authority: String, host: String): List<String> = buildList {
             if (scheme != "https") add(NOT_HTTPS)
             if ('@' in authority) add(HIDDEN_ADDRESS)
+            if ('%' in host || '\\' in host) add(LOOKALIKE_LETTERS)
             if (host.startsWith("xn--") || host.contains(".xn--") || host.any { it.code > 127 }) add(LOOKALIKE_LETTERS)
             if (Regex("^[0-9.]+$").matches(host) || host.startsWith("[")) add(BARE_NUMBERS)
             if (host.count { it == '.' } >= 4) add(MANY_PARTS)
@@ -91,20 +93,24 @@ sealed interface Scanned {
 
 /**
  * The rescuer's code: only what helps in the first minutes, as plain text any phone camera reads.
- * Long fields are cut so the code stays easy to scan. Nothing else from the card goes in.
+ * No name and no date of birth: on a lock screen they would tell a stranger who the owner is.
+ * Long fields are cut so the code stays easy to scan; [Result.cut] says when something did not fit.
  */
 object RescuerCode {
-    private const val FIELD = 160
+    private const val FIELD = 90
 
-    fun text(card: MedicalCard, ice: List<Person>, labels: Labels): String {
+    data class Result(val text: String, val cut: Boolean)
+
+    fun text(card: MedicalCard, ice: List<Person>, labels: Labels): Result {
+        var cut = false
         val lines = buildList {
             add(labels.title)
             fun line(label: String, value: String) {
                 val v = value.trim().replace('\n', ' ')
-                if (v.isNotEmpty()) add("$label: " + if (v.length > FIELD) v.take(FIELD - 1) + "…" else v)
+                if (v.isEmpty()) return
+                if (v.length > FIELD) cut = true
+                add("$label: " + if (v.length > FIELD) safeTake(v, FIELD - 1) + "…" else v)
             }
-            line(labels.name, card.name)
-            line(labels.birth, card.birthDate)
             line(labels.blood, card.bloodGroup)
             line(labels.allergies, card.allergies)
             line(labels.medicines, card.medicines)
@@ -113,15 +119,22 @@ object RescuerCode {
         }
         // Drop the last lines until it fits; the title and the first fields matter most
         var out = lines
-        while (out.joinToString("\n").toByteArray(Charsets.UTF_8).size > Qr.MAX_BYTES && out.size > 1) out = out.dropLast(1)
-        return out.joinToString("\n")
+        while (out.joinToString("\n").toByteArray(Charsets.UTF_8).size > Qr.MAX_BYTES && out.size > 1) {
+            out = out.dropLast(1)
+            cut = true
+        }
+        return Result(out.joinToString("\n"), cut)
+    }
+
+    /** Cuts without splitting a character made of two parts (an emoji, for example). */
+    private fun safeTake(s: String, n: Int): String {
+        val end = if (n > 0 && n < s.length && Character.isHighSurrogate(s[n - 1])) n - 1 else n
+        return s.take(end)
     }
 
     /** Labels come from the app's strings, so the code is in the app's language. */
     data class Labels(
         val title: String,
-        val name: String,
-        val birth: String,
         val blood: String,
         val allergies: String,
         val medicines: String,

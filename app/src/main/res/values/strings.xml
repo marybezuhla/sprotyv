@@ -160,9 +160,9 @@
     <string name="person_phone_format">Write the number with the country code, e.g. +380…, or as 0XXXXXXXXX: otherwise WhatsApp may open the wrong chat.</string>
     <string name="safe_each">To each person</string>
     <string name="rescuer_screen">Code for rescuers</string>
-    <string name="rescuer_hint">Blood group, allergies, contact as a QR code</string>
-    <string name="rescuer_title">MEDICAL CARD (Sprotyv)</string>
-    <string name="rescuer_intro">Only what helps in the first minutes. Any phone camera reads this code; no app is needed.</string>
+    <string name="rescuer_hint">Blood group, allergies, medicines, contact as a QR code</string>
+    <string name="rescuer_title">MEDICAL INFORMATION</string>
+    <string name="rescuer_intro">Only what helps in the first minutes, without your name or date of birth. Any phone camera reads this code; no app is needed.</string>
     <string name="rescuer_qr_desc">QR code with your key medical facts</string>
     <string name="rescuer_warning">Anyone who sees the code can read it. Show and keep it only where you are fine with that.</string>
     <string name="rescuer_save">Save as a picture</string>
@@ -176,7 +176,7 @@
     <string name="print_private">Personal. Keep it where strangers cannot see it.</string>
     <string name="print_services">Emergency numbers</string>
     <string name="print_warning_title">The file is not encrypted</string>
-    <string name="print_warning">Anyone who gets the file can read your medical data and plan. Save it only where you want and delete it after printing if it is not needed.</string>
+    <string name="print_warning">Anyone who gets the file can read your medical data and plan. If you save it to a folder that syncs to a cloud, it will be copied there too. Save it only where you decide, and delete it after printing if it is not needed.</string>
     <string name="print_continue">Understood, save</string>
     <string name="print_saved">Saved.</string>
     <string name="print_failed">Could not save. Try another place.</string>
@@ -184,7 +184,7 @@
     <string name="print_cards_button">Save the cards as a PDF for printing</string>
     <string name="scan_title">Read a QR code</string>
     <string name="scan_hint">With the phone camera, no permission needed</string>
-    <string name="scan_intro">The phone’s own camera takes the picture; Sprotyv reads the code on the phone and deletes the photo. Nothing opens without your choice.</string>
+    <string name="scan_intro">The phone’s own camera takes the picture; Sprotyv reads the code on the phone and deletes its copy. Some camera apps also keep a copy in the gallery: check and delete it there if needed. Nothing opens without your choice.</string>
     <string name="scan_camera">Take a photo of the code</string>
     <string name="scan_picture">Choose a picture</string>
     <string name="scan_none">No QR code found. Take the photo closer and in good light.</string>
@@ -195,8 +195,10 @@
     <string name="scan_open_text">It will open in another app: %1$s. Do not enter passwords or card numbers there unless you are sure.</string>
     <string name="scan_copy">Copy</string>
     <string name="scan_warn_not_https">The connection is not protected (no https).</string>
-    <string name="scan_warn_hidden">The address hides another one before “@”.</string>
+    <string name="scan_warn_hidden">Before “@” is a fake address; the real one comes after it.</string>
     <string name="scan_warn_lookalike">The address uses look-alike letters from other alphabets.</string>
     <string name="scan_warn_numbers">The address is bare numbers, not a name.</string>
     <string name="scan_warn_many_parts">The address has many parts; check its real end.</string>
+    <string name="rescuer_cut">Some text did not fit and was shortened. Keep the fields short.</string>
+    <string name="scan_no_camera">No camera app found on the phone. Choose a picture instead.</string>
 </resources>
