@@ -214,6 +214,12 @@ private fun CardBody(card: Card, content: Content, nav: Nav) {
     }
 
     HorizontalDivider()
+    // Practice sits below the card, never between the steps: a card is read in an emergency
+    if (content.practice.any { it.card == card.id }) {
+        OutlinedButton(onClick = { nav.go(Route.PracticeRoute(card.id)) }, modifier = Modifier.heightIn(min = 56.dp)) {
+            Text(stringResource(if (kid) R.string.practice_card_kid else R.string.practice_card))
+        }
+    }
     // A child's card has no "in detail": the guide is written for adults
     card.guide.firstOrNull()?.takeIf { !kid }?.let { num ->
         OutlinedButton(onClick = { nav.go(Route.GuideSection(num)) }, modifier = Modifier.heightIn(min = 56.dp)) {
