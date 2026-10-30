@@ -56,6 +56,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
@@ -517,6 +518,7 @@ fun ModeChoice(selected: Mode?, onPick: (Mode) -> Unit) {
     listOf(
         Triple(Mode.SIMPLE, R.string.mode_simple, R.string.mode_simple_hint),
         Triple(Mode.FULL, R.string.mode_full, R.string.mode_full_hint),
+        Triple(Mode.KID, R.string.mode_kid, R.string.mode_kid_hint),
     ).forEach { (mode, title, hint) ->
         val on = mode == selected
         Card(
@@ -550,6 +552,14 @@ private fun ModePicture(mode: Mode) {
         if (mode == Mode.SIMPLE) {
             repeat(3) { i -> Box(Modifier.fillMaxWidth().height(14.dp).clip(RoundedCornerShape(3.dp)).background(if (i == 0) accent else ink)) }
             Box(Modifier.fillMaxWidth().height(8.dp))
+        } else if (mode == Mode.KID) {
+            // Three rows of bright squares: pictures, not words
+            val colours = Group.entries.take(6).map { it.tint().ink }
+            repeat(3) { r ->
+                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    repeat(2) { j -> Box(Modifier.weight(1f).height(10.dp).clip(RoundedCornerShape(3.dp)).background(colours[r * 2 + j])) }
+                }
+            }
         } else {
             repeat(2) {
                 Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -589,9 +599,14 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
             Toggle(stringResource(R.string.theme_dynamic), prefs.dynamic) { on -> HomePrefs.update(context) { it.copy(dynamic = on) } }
             Text(stringResource(R.string.theme_dynamic_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
-        NavRow(stringResource(R.string.edit_tiles), stringResource(R.string.edit_tiles_hint)) { nav.go(Route.EditTiles) }
-        NavRow(stringResource(R.string.presets_title), stringResource(R.string.presets_hint)) { nav.go(Route.Presets) }
+        if (prefs.mode != Mode.KID) {
+            NavRow(stringResource(R.string.edit_tiles), stringResource(R.string.edit_tiles_hint)) { nav.go(Route.EditTiles) }
+            NavRow(stringResource(R.string.presets_title), stringResource(R.string.presets_hint)) { nav.go(Route.Presets) }
+        }
         Text(stringResource(R.string.lock_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+        if (prefs.mode == Mode.KID && !locked) {
+            Text(stringResource(R.string.kid_lock_advice), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
+        }
         if (canLock) {
             Toggle(stringResource(R.string.lock_toggle), locked) { on ->
                 // Settings are open now; turning the lock on does not shut them on the spot
@@ -626,6 +641,22 @@ fun WelcomeScreen(nav: Nav) {
             if (step == 0 || mode == null) {
                 Text(stringResource(R.string.welcome_mode_q), style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
                 ModeChoice(mode) { chosen = it.name; step = 1 }
+            } else if (mode == Mode.KID) {
+                // No tile sets for a child; the grown-up is asked once to lock the settings
+                Text(stringResource(R.string.kid_setup_title), style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
+                Text(stringResource(R.string.kid_setup_text), style = MaterialTheme.typography.bodyLarge)
+                val canLock = Guard.available(context)
+                if (canLock) {
+                    Button(onClick = { HomePrefs.update(context) { it.copy(mode = Mode.KID, locked = true) } }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+                        Text(stringResource(R.string.kid_setup_lock))
+                    }
+                } else {
+                    Text(stringResource(R.string.lock_no_screen_lock), style = MaterialTheme.typography.bodyLarge)
+                }
+                OutlinedButton(onClick = { HomePrefs.update(context) { it.copy(mode = Mode.KID) } }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+                    Text(stringResource(R.string.kid_setup_later))
+                }
+                TextButton(onClick = { step = 0 }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.back)) }
             } else {
                 Text(stringResource(R.string.welcome_preset_q), style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
                 PresetList { p -> HomePrefs.update(context) { it.copy(mode = mode, pins = p.pins) } }

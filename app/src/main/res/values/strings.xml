@@ -331,4 +331,18 @@
     <string name="backup_delete_by_hand">That did not work. An unfinished backup file was left; please delete it by hand.</string>
     <string name="plan_code_show_password">Show the password again</string>
     <string name="plan_code_said">Password said — show the code</string>
+    <string name="mode_kid">Child</string>
+    <string name="mode_kid_hint">For a child aged 6–10: pictures, a call to family and 112</string>
+    <string name="kid_lock_advice">On a child\'s phone, turn on the settings lock so the look is not changed by accident.</string>
+    <string name="kid_setup_title">A phone for a child</string>
+    <string name="kid_setup_text">The child will see six pictures with short tips, a “Call my family” button and 112. Add family numbers in “Trusted people” in the full look. Locking the settings with the phone\'s PIN is advised.</string>
+    <string name="kid_setup_lock">Done, lock with the PIN</string>
+    <string name="kid_setup_later">Done, no lock</string>
+    <string name="kid_title">What to do?</string>
+    <string name="kid_grown_up">For grown-ups</string>
+    <string name="kid_call_family">Call my family</string>
+    <string name="kid_call_112">112</string>
+    <string name="kid_call_none">No numbers here yet. Ask a grown-up to add them.</string>
+    <string name="kid_call_intro">Who do you want to call?</string>
+    <string name="kid_call_112_hint">Something bad happened and your family does not answer: call 112. Say your name, your address and what happened.</string>
 </resources>

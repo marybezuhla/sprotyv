@@ -150,7 +150,8 @@ private fun CardBody(card: Card, nav: Nav) {
     }
 
     HorizontalDivider()
-    card.guide.firstOrNull()?.let { num ->
+    // A child's card has no "in detail": the guide is written for adults
+    card.guide.firstOrNull()?.takeIf { !card.id.startsWith("kid-") }?.let { num ->
         OutlinedButton(onClick = { nav.go(Route.GuideSection(num)) }, modifier = Modifier.heightIn(min = 56.dp)) {
             Text(stringResource(R.string.in_detail))
         }
