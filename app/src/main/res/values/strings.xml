@@ -398,4 +398,8 @@
     <string name="power_hint">Official schedules by oblast</string>
     <string name="power_intro">Find your oblast and open your grid operator's site: the schedule for your queue is there. Emergency cuts can happen outside the schedule.</string>
     <string name="power_note">Addresses checked against Glavcom\'s list of 17.10.2026. Use schedule bots only from links on your operator\'s own site: fake bots are common.</string>
+    <string name="situation_evac">Evacuation and aid</string>
+    <string name="situation_search">Missing people and prisoners</string>
+    <string name="situation_mind">Psychological support</string>
+    <string name="situation_rights">Rights, war crimes, training</string>
 </resources>

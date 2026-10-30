@@ -19,7 +19,7 @@ def link(id, group, kind, title, note, url="", app="", phone="", flags=()):
     assert re.fullmatch(r"[a-z0-9-]{1,40}", id), id
     assert (url and re.fullmatch(r"https://[a-z0-9-]+(\.[a-z0-9-]+)+(/[A-Za-z0-9._~/?=&%-]*)?", url)) or (not url and phone), id
     assert not app or re.fullmatch(r"[a-z][a-z0-9_]*(\.[a-z0-9_]+)+", app), id
-    assert not phone or re.fullmatch(r"[0-9]{3,4}", phone), id
+    assert not phone or re.fullmatch(r"[0-9]{3,10}", phone), id
     assert 0 < len(title) <= 80 and 0 < len(note) <= 200, id
     return {"id": id, "group": group, "kind": kind, "title": title, "note": note,
             "url": url, "app": app, "phone": phone, "checkedOn": CHECKED, "flags": list(flags)}
@@ -93,6 +93,67 @@ LINKS = [
     link("power-cherkasy", "power", "official", "Черкаська область", "Черкасиобленерго: графік відключень за чергами.", url="https://www.cherkasyoblenergo.com/off"),
     link("power-chernivtsi", "power", "official", "Чернівецька область", "Чернівціобленерго: графік відключень за чергами.", url="https://oblenergo.cv.ua/shutdowns/"),
     link("power-chernihiv", "power", "official", "Чернігівська область", "Чернігівобленерго: графік відключень за чергами.", url="https://chernihivoblenergo.com.ua/blackouts"),
+    # Evacuation and humanitarian help
+    link("shid-sos", "evac", "volunteer", "Схід SOS: евакуація",
+         "Вивозять дітей, тяжкохворих і маломобільних людей, допомагають із розселенням. Пн–Сб, 8:00–18:00.",
+         phone="0800332614"),
+    link("angels", "evac", "volunteer", "Янголи Спасіння: евакуація",
+         "Евакуація з медичним супроводом і за потреби з розселенням.",
+         phone="0800334620"),
+    link("helping-to-leave", "evac", "volunteer", "Helping to Leave",
+         "Допомагають виїхати з окупованих територій; публікують річні звіти.",
+         url="https://helpingtoleave.org"),
+    link("unhcr", "evac", "independent", "УВКБ ООН: довідник для українців",
+         "Допомога для переміщених людей, контакти, права.",
+         url="https://help.unhcr.org/ukraine/uk/"),
+    link("uanimals", "evac", "volunteer", "UAnimals: тварини",
+         "Евакуація тварин із прифронтових районів. Прийом заявок буває призупинено — перевірте на сайті.",
+         url="https://uanimals.org"),
+    # Missing people and prisoners
+    link("koordshtab", "search", "official", "Координаційний штаб: полонені",
+         "Заява про полоненого й стан розгляду; гаряча лінія 0 800 300 529. Шахраї беруть гроші «за інформацію» — не платіть.",
+         url="https://cabinet.koordshtab.gov.ua"),
+    link("missing-registry", "search", "official", "Реєстр зниклих безвісти (МВС)",
+         "Внести людину до реєстру й отримати витяг; лінія 1698.",
+         url="https://znykli-bezvisti.mvs.gov.ua"),
+    link("nib", "search", "official", "Національне інформаційне бюро",
+         "Розшук цивільних і військових, зниклих через війну.",
+         phone="1648"),
+    link("icrc-family", "search", "independent", "Червоний Хрест: пошук рідних",
+         "Розшук родичів і відновлення зв'язку, безкоштовно; лінія 0 800 300 155.",
+         url="https://familylinks.icrc.org"),
+    # Psychological support
+    link("lifeline", "mind", "volunteer", "Lifeline Ukraine: 7333",
+         "Цілодобова лінія запобігання самогубствам (за переліком Нацполіції, 07.2025).",
+         phone="7333"),
+    link("howareu", "mind", "official", "«Ти як?»",
+         "Державна програма психічного здоров'я: вправи, курси й куди звернутися по допомогу.",
+         url="https://howareu.com"),
+    link("la-strada", "mind", "volunteer", "La Strada: 116 123",
+         "Цілодобово й безкоштовно: насильство, торгівля людьми. Для дітей і молоді — 116 111.",
+         phone="116123"),
+    link("gov-1547", "mind", "official", "Урядова лінія 1547",
+         "Цілодобово: домашнє насильство, торгівля людьми, насильство щодо дітей.",
+         phone="1547"),
+    link("teenergizer", "mind", "volunteer", "Teenergizer",
+         "Безкоштовні консультації психолога для підлітків і молоді.",
+         url="https://teenergizer.org"),
+    # Rights and help
+    link("legal-aid", "rights", "official", "Безоплатна правнича допомога",
+         "Безкоштовна консультація юриста, зокрема для постраждалих від війни; 0 800 213 103.",
+         url="https://legalaid.gov.ua"),
+    link("warcrimes", "rights", "official", "Повідомити про воєнний злочин",
+         "Офіс Генерального прокурора: розповісти про злочин і передати докази.",
+         url="https://warcrimes.gov.ua"),
+    link("helsinki", "rights", "independent", "Українська Гельсінська спілка",
+         "Правова допомога постраждалим від війни, зокрема з Реєстром збитків.",
+         url="https://www.helsinki.org.ua"),
+    link("redcross", "rights", "independent", "Червоний Хрест України: курси першої допомоги",
+         "Курси першої допомоги для цивільних; розклад — у своїй області.",
+         url="https://redcross.org.ua"),
+    link("lun-shelters", "help", "independent", "LUN Місто: відгуки про укриття",
+         "Мешканці пишуть, чи відчинене укриття. Не офіційне: перевірки знаходили укриття, яких насправді немає.",
+         url="https://lun.ua/misto/monitoring-shelters"),
     # Fakes
     link("cpd", "facts", "official", "Центр протидії дезінформації",
          "Спростування фейків і попередження про ворожі канали та боти.",
@@ -115,7 +176,7 @@ if __name__ == "__main__":
     out = os.path.join(os.path.dirname(__file__), "..", "..", "content", "src", "main", "assets", "links.json")
     assert len({l["id"] for l in LINKS}) == len(LINKS)
     for l in LINKS:
-        assert l["group"] in ("threats", "front", "help", "facts", "power"), l["id"]
+        assert l["group"] in ("threats", "front", "help", "evac", "search", "mind", "rights", "facts", "power"), l["id"]
         assert len(l["note"]) <= 200, l["id"]
     with open(out, "w", encoding="utf-8") as f:
         json.dump(LINKS, f, ensure_ascii=False, indent=1)
