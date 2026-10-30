@@ -486,4 +486,40 @@
     <string name="supplies_until">Good until %1$s</string>
     <string name="supplies_pick_month">Good until which month?</string>
     <string name="supplies_clear_until">Remove</string>
+    <string name="power_schedules">Schedules by oblast</string>
+    <string name="blackout_title">Power gone?</string>
+    <string name="blackout_hint">Tap, and Sprotyv will count the time and tell you how long the fridge and freezer still keep cold.</string>
+    <string name="blackout_start">Power gone — start counting</string>
+    <string name="blackout_for">No power for %1$s (since %2$s)</string>
+    <string name="blackout_fridge">Fridge, kept shut: ~%1$d h</string>
+    <string name="blackout_freezer_full">Full freezer: ~%1$d h</string>
+    <string name="blackout_freezer_half">Half-full freezer: ~%1$d h</string>
+    <string name="blackout_left">%1$s left</string>
+    <string name="blackout_up">time is up</string>
+    <string name="blackout_fridge_over">Over 4 hours without power: throw away meat, fish, eggs and milk from the fridge.</string>
+    <string name="blackout_freezer_over">The freezer no longer keeps cold: check the food before eating it.</string>
+    <string name="blackout_closed">Keep the fridge and freezer shut unless needed: the cold lasts longer.</string>
+    <string name="blackout_back">Power is back</string>
+    <string name="blackout_source">Source: %1$s, checked %2$s</string>
+    <string name="minutes_short">%1$d min</string>
+    <string name="hours_minutes_short">%1$d h %2$d min</string>
+    <string name="charge_title">My charge</string>
+    <string name="charge_bank">Power bank</string>
+    <string name="charge_station">Charging station</string>
+    <string name="charge_mah">%1$s mAh</string>
+    <string name="charge_wh">%1$s Wh</string>
+    <string name="charge_phone">Phone</string>
+    <string name="charge_router">Router (%1$d W)</string>
+    <string name="charge_lamp">LED lamp (%1$d W)</string>
+    <string name="charge_laptop">Laptop (%1$d W)</string>
+    <string name="charge_under_hour">under an hour</string>
+    <string name="charge_note">Rough figures. The real power of a device is on its label or charger. In the cold and with an old battery there is less charge.</string>
+    <plurals name="charge_charges">
+        <item quantity="one">%1$d charge</item>
+        <item quantity="other">%1$d charges</item>
+    </plurals>
+    <plurals name="charge_hours">
+        <item quantity="one">%1$d hour</item>
+        <item quantity="other">%1$d hours</item>
+    </plurals>
 </resources>

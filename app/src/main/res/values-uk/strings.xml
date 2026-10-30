@@ -488,4 +488,44 @@
     <string name="supplies_until">Придатне до %1$s</string>
     <string name="supplies_pick_month">До якого місяця придатне?</string>
     <string name="supplies_clear_until">Прибрати</string>
+    <string name="power_schedules">Графіки за областями</string>
+    <string name="blackout_title">Світло зникло?</string>
+    <string name="blackout_hint">Натисніть, і «Спротив» рахуватиме час та підкаже, скільки ще тримають холод холодильник і морозилка.</string>
+    <string name="blackout_start">Світло зникло — почати відлік</string>
+    <string name="blackout_for">Світла немає %1$s (з %2$s)</string>
+    <string name="blackout_fridge">Холодильник, закритий: ~%1$d год</string>
+    <string name="blackout_freezer_full">Морозилка повна: ~%1$d год</string>
+    <string name="blackout_freezer_half">Морозилка наполовину: ~%1$d год</string>
+    <string name="blackout_left">ще %1$s</string>
+    <string name="blackout_up">час минув</string>
+    <string name="blackout_fridge_over">Понад 4 год без світла: м’ясо, рибу, яйця, молоко з холодильника краще викинути.</string>
+    <string name="blackout_freezer_over">Морозилка вже не тримає холод: перевірте продукти, перш ніж їсти.</string>
+    <string name="blackout_closed">Не відчиняйте холодильник і морозилку без потреби: так холод тримається довше.</string>
+    <string name="blackout_back">Світло з’явилося</string>
+    <string name="blackout_source">Джерело: %1$s, перевірено %2$s</string>
+    <string name="minutes_short">%1$d хв</string>
+    <string name="hours_minutes_short">%1$d год %2$d хв</string>
+    <string name="charge_title">Мій заряд</string>
+    <string name="charge_bank">Павербанк</string>
+    <string name="charge_station">Зарядна станція</string>
+    <string name="charge_mah">%1$s мА·год</string>
+    <string name="charge_wh">%1$s Вт·год</string>
+    <string name="charge_phone">Телефон</string>
+    <string name="charge_router">Роутер (%1$d Вт)</string>
+    <string name="charge_lamp">LED-лампа (%1$d Вт)</string>
+    <string name="charge_laptop">Ноутбук (%1$d Вт)</string>
+    <string name="charge_under_hour">менше години</string>
+    <string name="charge_note">Орієнтовно. Справжня потужність приладу — на наліпці чи блоці живлення. На морозі й зі старим акумулятором заряду менше.</string>
+    <plurals name="charge_charges">
+        <item quantity="one">%1$d зарядка</item>
+        <item quantity="few">%1$d зарядки</item>
+        <item quantity="many">%1$d зарядок</item>
+        <item quantity="other">%1$d зарядки</item>
+    </plurals>
+    <plurals name="charge_hours">
+        <item quantity="one">%1$d година</item>
+        <item quantity="few">%1$d години</item>
+        <item quantity="many">%1$d годин</item>
+        <item quantity="other">%1$d години</item>
+    </plurals>
 </resources>
