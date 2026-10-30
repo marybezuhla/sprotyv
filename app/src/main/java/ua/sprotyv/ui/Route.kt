@@ -15,9 +15,16 @@ sealed interface Route {
     data class Mine(val part: MinePart) : Route
     data object SuppliesRoute : Route
     data object Scan : Route
+    data object Settings : Route
+    data object EditTiles : Route
+    data object Sections : Route
+    data object Presets : Route
 
     /** Screens that show the owner's data: opened only with the data, kept off screenshots. */
     val personal: Boolean get() = this is Mine || this == Open(Section.MINE) || this == Open(Section.SAFE)
+
+    /** Screens that change settings: behind the PIN when settings are locked. */
+    val settings: Boolean get() = this == Settings || this == EditTiles || this == Sections || this == Presets
 
     fun save(): String = when (this) {
         is Open -> "open:" + section.name
@@ -29,6 +36,10 @@ sealed interface Route {
         is Mine -> "mine:" + part.name
         SuppliesRoute -> "supplies"
         Scan -> "scan"
+        Settings -> "settings"
+        EditTiles -> "edit-tiles"
+        Sections -> "sections"
+        Presets -> "presets"
     }
 
     companion object {
@@ -44,6 +55,10 @@ sealed interface Route {
                 "mine" -> MinePart.entries.firstOrNull { it.name == value }?.let(::Mine)
                 "supplies" -> SuppliesRoute
                 "scan" -> Scan
+                "settings" -> Settings
+                "edit-tiles" -> EditTiles
+                "sections" -> Sections
+                "presets" -> Presets
                 else -> null
             }
         }

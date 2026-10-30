@@ -46,62 +46,15 @@ import ua.sprotyv.R
 import ua.sprotyv.content.Service
 import ua.sprotyv.reach.Reach
 
-/** Home: six large sections and the "Call" bar, which is also on every other screen. */
-@Composable
-fun HomeScreen(onOpen: (Section) -> Unit) {
-    Column(Modifier.fillMaxSize().statusBarsPadding()) {
-        Text(
-            stringResource(R.string.app_name),
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp),
-        )
-        // Two columns on a phone; one column when the text is made large, so nothing is cut off
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 160.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.weight(1f),
-        ) {
-            items(Section.entries) { s -> SectionTile(s, onClick = { onOpen(s) }) }
-        }
-        CallBar()
-    }
-}
-
-@Composable
-private fun SectionTile(section: Section, onClick: () -> Unit) {
-    val colors = if (section.marked) {
-        CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
-    } else {
-        CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-    }
-    Card(
-        onClick = onClick,
-        colors = colors,
-        border = if (section.marked) BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
-        else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-        modifier = Modifier.fillMaxWidth().heightIn(min = 112.dp),
-    ) {
-        Column(Modifier.padding(16.dp)) {
-            // The icon only supports the words; the title alone says what the section is
-            Icon(section.icon, contentDescription = null, modifier = Modifier.size(28.dp))
-            Spacer(Modifier.size(8.dp))
-            Text(stringResource(section.title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-            Text(stringResource(section.hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        }
-    }
-}
-
 /** "Call 112" at once; the other services one tap further. On every screen. */
 @Composable
-fun CallBar() {
+fun CallBar(edge: Boolean = true) {
     val context = LocalContext.current
     var others by rememberSaveable { mutableStateOf(false) }
     Surface(tonalElevation = 3.dp, modifier = Modifier.fillMaxWidth()) {
         Row(
-            Modifier.navigationBarsPadding().padding(horizontal = 16.dp, vertical = 12.dp),
+            // At the screen's edge it keeps clear of the system bar; above the tabs it does not need to
+            (if (edge) Modifier.navigationBarsPadding() else Modifier).padding(horizontal = 16.dp, vertical = 12.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {

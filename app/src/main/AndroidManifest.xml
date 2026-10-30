@@ -8,6 +8,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" tools:node="remove" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" tools:node="remove" />
 
+    <!-- The settings lock asks for the phone's own PIN in Android's own window. An ordinary
+         permission with no prompt; the app never sees the PIN -->
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+
     <!-- Opening WhatsApp, Signal and the SMS app by name needs Android to tell they are installed -->
     <queries>
         <package android:name="com.whatsapp" />

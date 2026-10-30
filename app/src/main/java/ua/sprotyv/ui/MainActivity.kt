@@ -20,9 +20,13 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    /** Leaving the screen closes the owner's data; it is opened again on entering the section. */
+    /** Leaving the screen closes the owner's data and the settings; both open again when asked for. */
     override fun onStop() {
         super.onStop()
-        if (!isChangingConfigurations) PersonalStore.close()
+        if (!isChangingConfigurations) {
+            PersonalStore.close()
+            // Settings lock again; not while Android's own PIN window is what covers the app
+            Guard.close()
+        }
     }
 }
