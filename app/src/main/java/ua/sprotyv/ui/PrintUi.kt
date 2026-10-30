@@ -100,7 +100,7 @@ private suspend fun readOwner(): OwnerData? = PersonalStore.read { db ->
 }
 
 private fun ownerPdf(context: Context, d: OwnerData): ByteArray {
-    val s = context::getString
+    val s: (Int) -> String = { context.getString(it) }
     val pdf = Pdf(s(R.string.app_name) + " · " + LocalDate.now())
     pdf.title(s(R.string.print_owner_title))
     pdf.text(s(R.string.print_private), bold = true)
@@ -152,7 +152,7 @@ private fun servicesLines(context: Context): List<String> = Service.entries.map 
 
 /** The action cards on paper: nothing personal, for the fridge, the bag and the shelter wall. */
 fun cardsPdf(context: Context, content: Content): ByteArray {
-    val s = context::getString
+    val s: (Int) -> String = { context.getString(it) }
     val pdf = Pdf(s(R.string.app_name) + " · " + LocalDate.now())
     pdf.title(s(R.string.print_cards_title))
     pdf.heading(s(R.string.print_services))
