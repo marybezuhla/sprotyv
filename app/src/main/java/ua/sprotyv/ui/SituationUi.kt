@@ -105,8 +105,16 @@ fun SituationScreen(content: Content?, nav: Nav) {
     }
 }
 
+private fun flagTitle(flag: String): Int = when (flag) {
+    Link.UNKNOWN_AUTHOR -> R.string.flag_unknown_author
+    Link.ADS -> R.string.flag_ads
+    Link.BETA -> R.string.flag_beta
+    else -> R.string.flag_collects_data
+}
+
 @Composable
 private fun LinkRow(link: Link, onClick: () -> Unit) {
+    val context = LocalContext.current
     val official = link.kind == Link.OFFICIAL
     Card(
         onClick = onClick,
@@ -126,6 +134,14 @@ private fun LinkRow(link: Link, onClick: () -> Unit) {
                 }
             }
             Text(link.note, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            // Warnings in words: who runs it, ads, beta, data collection
+            if (link.flags.isNotEmpty()) {
+                Text(
+                    link.flags.joinToString(" · ") { "⚠ " + context.getString(flagTitle(it)) },
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.error,
+                )
+            }
             Text(
                 if (link.phone.isNotEmpty() && link.url.isEmpty()) stringResource(R.string.call_number, link.phone) else ua.sprotyv.content.LinksReader.host(link.url),
                 style = MaterialTheme.typography.labelLarge,

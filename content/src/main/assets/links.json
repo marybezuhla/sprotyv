@@ -8,7 +8,8 @@
   "url": "https://map.ukrainealarm.com",
   "app": "com.ukrainealarm",
   "phone": "",
-  "checkedOn": "2026-10-30"
+  "checkedOn": "2026-10-30",
+  "flags": []
  },
  {
   "id": "air-force",
@@ -19,18 +20,37 @@
   "url": "https://t.me/kpszsu",
   "app": "",
   "phone": "",
-  "checkedOn": "2026-10-30"
+  "checkedOn": "2026-10-30",
+  "flags": []
  },
  {
   "id": "monitor",
   "group": "threats",
   "kind": "volunteer",
   "title": "monitor: мапа дронів",
-  "note": "Приблизне положення дронів з відкритих даних, оновлення кожні 20 секунд. Бета-версія, команда не названа, не офіційне оповіщення.",
+  "note": "Приблизне положення дронів з відкритих даних, оновлення кожні 20 секунд. Не офіційне оповіщення.",
   "url": "https://map.war-monitor.org",
   "app": "",
   "phone": "",
-  "checkedOn": "2026-10-30"
+  "checkedOn": "2026-10-30",
+  "flags": [
+   "unknown_author",
+   "beta"
+  ]
+ },
+ {
+  "id": "kyivsafety",
+  "group": "threats",
+  "kind": "volunteer",
+  "title": "KyivSafety: ризик за адресою в Києві",
+  "note": "Оцінка 0–100 для адреси за історією влучань і прольотів з відкритих джерел; дослідницький інструмент. Висока оцінка — не безпека: тривога означає укриття.",
+  "url": "https://kyivsafety.com",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": [
+   "unknown_author"
+  ]
  },
  {
   "id": "alerts-in-ua",
@@ -41,7 +61,8 @@
   "url": "https://alerts.in.ua",
   "app": "",
   "phone": "",
-  "checkedOn": "2026-10-30"
+  "checkedOn": "2026-10-30",
+  "flags": []
  },
  {
   "id": "deepstate",
@@ -52,7 +73,8 @@
   "url": "https://deepstatemap.live",
   "app": "",
   "phone": "",
-  "checkedOn": "2026-10-30"
+  "checkedOn": "2026-10-30",
+  "flags": []
  },
  {
   "id": "isw",
@@ -63,7 +85,8 @@
   "url": "https://understandingwar.org",
   "app": "",
   "phone": "",
-  "checkedOn": "2026-10-30"
+  "checkedOn": "2026-10-30",
+  "flags": []
  },
  {
   "id": "app-112",
@@ -74,7 +97,8 @@
   "url": "https://play.google.com/store/apps/details?id=ua.gov.mvs.service112",
   "app": "ua.gov.mvs.service112",
   "phone": "",
-  "checkedOn": "2026-10-30"
+  "checkedOn": "2026-10-30",
+  "flags": []
  },
  {
   "id": "evacuation",
@@ -85,7 +109,8 @@
   "url": "",
   "app": "",
   "phone": "1548",
-  "checkedOn": "2026-10-30"
+  "checkedOn": "2026-10-30",
+  "flags": []
  },
  {
   "id": "diia",
@@ -96,7 +121,8 @@
   "url": "https://diia.gov.ua",
   "app": "",
   "phone": "",
-  "checkedOn": "2026-10-30"
+  "checkedOn": "2026-10-30",
+  "flags": []
  },
  {
   "id": "mines",
@@ -107,7 +133,8 @@
   "url": "https://mine.dsns.gov.ua",
   "app": "",
   "phone": "",
-  "checkedOn": "2026-10-30"
+  "checkedOn": "2026-10-30",
+  "flags": []
  },
  {
   "id": "cpd",
@@ -118,7 +145,8 @@
   "url": "https://cpd.gov.ua",
   "app": "",
   "phone": "",
-  "checkedOn": "2026-10-30"
+  "checkedOn": "2026-10-30",
+  "flags": []
  },
  {
   "id": "perevirka",
@@ -129,7 +157,8 @@
   "url": "https://t.me/perevir_bot",
   "app": "",
   "phone": "",
-  "checkedOn": "2026-10-30"
+  "checkedOn": "2026-10-30",
+  "flags": []
  },
  {
   "id": "voxcheck",
@@ -140,7 +169,8 @@
   "url": "https://voxukraine.org",
   "app": "",
   "phone": "",
-  "checkedOn": "2026-10-30"
+  "checkedOn": "2026-10-30",
+  "flags": []
  },
  {
   "id": "stopfake",
@@ -151,7 +181,8 @@
   "url": "https://www.stopfake.org",
   "app": "",
   "phone": "",
-  "checkedOn": "2026-10-30"
+  "checkedOn": "2026-10-30",
+  "flags": []
  },
  {
   "id": "detector",
@@ -162,6 +193,7 @@
   "url": "https://disinfo.detector.media",
   "app": "",
   "phone": "",
-  "checkedOn": "2026-10-30"
+  "checkedOn": "2026-10-30",
+  "flags": []
  }
 ]

@@ -16,12 +16,19 @@ data class Link(
     val app: String,
     val phone: String,
     val checkedOn: String,
+    /** Plain warnings shown with the link: [UNKNOWN_AUTHOR], [ADS], [BETA], [COLLECTS_DATA]. */
+    val flags: List<String> = emptyList(),
 ) {
     companion object {
         const val OFFICIAL = "official"
         const val VOLUNTEER = "volunteer"
         const val INDEPENDENT = "independent"
         val GROUPS = listOf("threats", "front", "help", "facts")
+        const val UNKNOWN_AUTHOR = "unknown_author"
+        const val ADS = "ads"
+        const val BETA = "beta"
+        const val COLLECTS_DATA = "collects_data"
+        val FLAGS = setOf(UNKNOWN_AUTHOR, ADS, BETA, COLLECTS_DATA)
     }
 }
 
@@ -47,7 +54,9 @@ object LinksReader {
                 title = o.getString("title"), note = o.getString("note"),
                 url = o.optString("url", ""), app = o.optString("app", ""), phone = o.optString("phone", ""),
                 checkedOn = o.getString("checkedOn"),
+                flags = o.optJSONArray("flags")?.let { f -> (0 until f.length()).map { f.getString(it) } } ?: emptyList(),
             ).also { l ->
+                require(l.flags.all { it in Link.FLAGS } && l.flags.size <= 4) { "Unknown flag" }
                 require(l.group in Link.GROUPS) { "Unknown group" }
                 require(l.kind in setOf(Link.OFFICIAL, Link.VOLUNTEER, Link.INDEPENDENT)) { "Unknown kind" }
                 require(ID.matches(l.id) && DATE.matches(l.checkedOn)) { "Bad id or date" }
