@@ -1,0 +1,13 @@
+<svg width="150" height="140" viewBox="0 0 150 140" xmlns="http://www.w3.org/2000/svg">
+  <rect x="40" y="88" width="70" height="9" fill="#7a4a1f"/>
+  <rect x="40" y="70" width="70" height="9" fill="#8f5a28" transform="rotate(0)"/>
+  <rect x="46" y="79" width="9" height="9" fill="#6b3f18"/>
+  <rect x="95" y="79" width="9" height="9" fill="#6b3f18"/>
+  <rect x="46" y="61" width="9" height="9" fill="#6b3f18"/>
+  <rect x="95" y="61" width="9" height="9" fill="#6b3f18"/>
+  <rect x="40" y="52" width="70" height="9" fill="#8f5a28"/>
+  <path d="M75 52 q-12 -16 0 -30 q12 14 0 30" fill="#e0821a"/>
+  <path d="M75 49 q-6 -9 0 -16 q6 7 0 16" fill="#f5c542"/>
+  <text x="26" y="125" font-family="DejaVu Sans" font-size="11" fill="#333">«Колодязь» — жар для</text>
+  <text x="26" y="138" font-family="DejaVu Sans" font-size="11" fill="#333">готування, стійкий</text>
+</svg>

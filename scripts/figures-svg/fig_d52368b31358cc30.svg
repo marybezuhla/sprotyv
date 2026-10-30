@@ -1,0 +1,17 @@
+<svg width="440" height="130" viewBox="0 0 440 130" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="100" width="440" height="6" fill="#7a6a4f"/>
+  
+  <line x1="205" y1="92" x2="278" y2="94" stroke="#2f4f2f" stroke-width="12" stroke-linecap="round"/>
+  <line x1="134" y1="91" x2="205" y2="91" stroke="#3d6b3d" stroke-width="17" stroke-linecap="round"/>
+  <circle cx="116" cy="89" r="10" fill="#2f4f2f"/>
+  
+  <path d="M138 86 L100 82 L120 75" fill="none" stroke="#557a55" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <g transform="translate(370,55)">
+    <polygon points="0,-38 9,-12 34,-20 16,0 38,12 10,10 14,36 -2,14 -22,30 -12,4 -36,2 -12,-8 -26,-30 -4,-14" fill="#e0821a"/>
+    <polygon points="0,-20 5,-7 18,-11 9,0 20,7 5,5 7,19 -1,8 -12,16 -6,2 -19,1 -6,-4 -14,-16 -2,-8" fill="#f5c542"/>
+  </g>
+  <text x="20" y="22" font-family="DejaVu Sans" font-size="12" fill="#333">Ноги — в бік вибуху,</text>
+  <text x="20" y="38" font-family="DejaVu Sans" font-size="12" fill="#333">руки закривають голову й шию,</text>
+  <text x="20" y="54" font-family="DejaVu Sans" font-size="12" fill="#333">рот трохи відкритий</text>
+</svg>

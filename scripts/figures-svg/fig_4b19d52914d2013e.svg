@@ -1,0 +1,17 @@
+<svg width="360" height="130" viewBox="0 0 360 130" xmlns="http://www.w3.org/2000/svg">
+  <defs><marker id="ta" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L7,4 L0,8 z" fill="#2e7d32"/></marker></defs>
+  <rect x="0" y="95" width="360" height="30" fill="#e8c9a8"/>
+  
+  <ellipse cx="80" cy="88" rx="14" ry="9" fill="#5a3b1e"/>
+  <rect x="76" y="93" width="8" height="8" fill="#3a2410"/>
+  <line x1="60" y1="20" x2="78" y2="94" stroke="#666" stroke-width="4" stroke-linecap="round"/>
+  <line x1="100" y1="20" x2="82" y2="94" stroke="#666" stroke-width="4" stroke-linecap="round"/>
+  <line x1="80" y1="60" x2="80" y2="22" stroke="#2e7d32" stroke-width="2.5" marker-end="url(#ta)"/>
+  
+  <ellipse cx="250" cy="88" rx="14" ry="9" fill="#5a3b1e"/>
+  <rect x="246" y="93" width="8" height="8" fill="#3a2410"/>
+  <path d="M232 96 q18 -8 36 0" fill="none" stroke="#c0392b" stroke-width="2"/>
+  <line x1="232" y1="96" x2="212" y2="22" stroke="#c0392b" stroke-width="2"/>
+  <line x1="268" y1="96" x2="288" y2="22" stroke="#c0392b" stroke-width="2"/>
+  <line x1="250" y1="60" x2="250" y2="22" stroke="#2e7d32" stroke-width="2.5" marker-end="url(#ta)"/>
+</svg>

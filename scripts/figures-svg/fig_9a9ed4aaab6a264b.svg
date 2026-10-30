@@ -1,0 +1,24 @@
+<svg width="470" height="170" viewBox="0 0 470 170" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="140" width="470" height="6" fill="#7a6a4f"/>
+  
+  <ellipse cx="90" cy="126" rx="13" ry="12" fill="#c9a689"/>
+  <rect x="104" y="118" width="150" height="20" rx="10" fill="#8fa3b8"/>
+  <rect x="252" y="121" width="120" height="9" rx="4" fill="#5d7185"/>
+  <rect x="252" y="130" width="125" height="9" rx="4" fill="#5d7185"/>
+  
+  <line x1="160" y1="122" x2="185" y2="55" stroke="#2f4f2f" stroke-width="10" stroke-linecap="round"/>
+  <line x1="166" y1="122" x2="190" y2="55" stroke="#2f4f2f" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="195" cy="42" r="16" fill="#2f4f2f"/>
+  <rect x="185" y="55" width="55" height="24" rx="10" fill="#3d6b3d" transform="rotate(20 185 55)"/>
+  
+  <circle cx="163" cy="122" r="6" fill="#c0392b"/>
+  <line x1="163" y1="100" x2="163" y2="114" stroke="#c0392b" stroke-width="2" marker-end="url(#ra)"/>
+  <defs><marker id="ra" markerWidth="8" markerHeight="8" refX="4" refY="7" orient="auto"><path d="M0,0 L8,0 L4,8 z" fill="#c0392b"/></marker></defs>
+  <text x="20" y="24" font-family="DejaVu Sans" font-size="11" fill="#333">Руки прямі в ліктях,</text>
+  <text x="20" y="40" font-family="DejaVu Sans" font-size="11" fill="#333">тиснути вагою тіла.</text>
+  <text x="20" y="56" font-family="DejaVu Sans" font-size="11" fill="#333">Точка — центр грудей</text>
+  <text x="20" y="72" font-family="DejaVu Sans" font-size="11" fill="#333">(нижня половина грудини)</text>
+  <text x="290" y="40" font-family="DejaVu Sans" font-size="12" fill="#b0121a" font-weight="bold">Глибина 5–6 см</text>
+  <text x="290" y="58" font-family="DejaVu Sans" font-size="12" fill="#b0121a" font-weight="bold">Темп 100–120/хв</text>
+  <text x="290" y="76" font-family="DejaVu Sans" font-size="11" fill="#333">30 натискань : 2 вдихи</text>
+</svg>
