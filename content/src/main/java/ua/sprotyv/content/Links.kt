@@ -23,9 +23,9 @@ data class Link(
         const val OFFICIAL = "official"
         const val VOLUNTEER = "volunteer"
         const val INDEPENDENT = "independent"
-        val GROUPS = listOf("threats", "front", "help", "evac", "search", "mind", "rights", "facts", "power") + DIRECTORY
         /** "Where to turn": help services for everyday life after and around the war. */
         val DIRECTORY = listOf("idp", "money", "docs", "kids", "veterans", "health", "care")
+        val GROUPS = listOf("threats", "front", "help", "evac", "search", "mind", "rights", "facts", "power") + DIRECTORY
         const val POWER = "power"
         const val UNKNOWN_AUTHOR = "unknown_author"
         const val ADS = "ads"
