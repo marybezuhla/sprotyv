@@ -63,8 +63,17 @@ object Guard {
 
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                 prompting = false
+                // Cancelled by the person: nothing to say. Anything else is said, never silent
+                if (errorCode != BiometricPrompt.BIOMETRIC_ERROR_USER_CANCELED && errorCode != BiometricPrompt.BIOMETRIC_ERROR_CANCELED) {
+                    android.widget.Toast.makeText(activity.applicationContext, errString, android.widget.Toast.LENGTH_LONG).show()
+                }
             }
         })
+    }
+
+    /** Turning the lock on from open settings keeps them open until the app leaves the screen. */
+    fun keepOpen() {
+        open.value = true
     }
 
     /** The screen has done what was waiting. */
