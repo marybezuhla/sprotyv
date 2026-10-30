@@ -433,4 +433,5 @@
     <string name="practice_note">Це навчання. У справжній біді відкривайте картку.</string>
     <string name="practice_card">Перевірити себе: що зробиш?</string>
     <string name="practice_card_kid">Пограймо: що зробиш?</string>
+    <string name="pin_legend">＋ — додати на головну, ✓ — уже на головній.</string>
 </resources>
