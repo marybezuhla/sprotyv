@@ -140,6 +140,7 @@ private fun CardBody(card: Card, content: Content, nav: Nav) {
                     Text(s.action, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                     Why(s.why, "${card.id}:$i")
                 }
+                Pictogram(s.icon, 44.dp)
             }
             if (s.figure.isNotEmpty()) StepFigure(content, s.figure)
         }
@@ -154,6 +155,7 @@ private fun CardBody(card: Card, content: Content, nav: Nav) {
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        Pictogram(s.icon, 88.dp)
         // Read out by TalkBack whenever the step changes
         Text(
             s.action,
@@ -270,6 +272,36 @@ private fun TourniquetTime() {
         }
     }
 }
+
+/**
+ * The step's pictogram: one action in the same simple line style, always next to the words that
+ * say it (a picture alone is often misread). Decorative for TalkBack, which reads the words.
+ */
+@Composable
+private fun Pictogram(name: String, size: androidx.compose.ui.unit.Dp) {
+    val res = PICTOGRAMS[name] ?: return
+    Icon(
+        androidx.compose.ui.res.painterResource(res),
+        contentDescription = null,
+        tint = MaterialTheme.colorScheme.onSurface,
+        modifier = Modifier.size(size),
+    )
+}
+
+private val PICTOGRAMS = mapOf(
+    "call" to R.drawable.pict_call,
+    "close_door" to R.drawable.pict_close_door,
+    "gas_off" to R.drawable.pict_gas_off,
+    "lie_down" to R.drawable.pict_lie_down,
+    "no_touch" to R.drawable.pict_no_touch,
+    "no_window" to R.drawable.pict_no_window,
+    "press" to R.drawable.pict_press,
+    "shelter" to R.drawable.pict_shelter,
+    "shoes" to R.drawable.pict_shoes,
+    "stay_low" to R.drawable.pict_stay_low,
+    "step_back" to R.drawable.pict_step_back,
+    "two_walls" to R.drawable.pict_two_walls,
+)
 
 /** "Why" folded under a step, opened on request: the second level never crowds the first. */
 @Composable

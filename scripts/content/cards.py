@@ -253,7 +253,39 @@ KID_CARDS = [
     ]),
 ]
 
+# Pictograms (app/src/main/res/drawable/pict_*.xml, drawn in scripts/pictograms): one action each,
+# always shown with the step's words. Matched by the start of the step.
+ICONS = {
+    ("air-alert", 0): "two_walls", ("air-alert", 1): "shoes", ("air-alert", 2): "gas_off",
+    ("air-alert", 3): "two_walls", ("air-alert", 5): "no_window",
+    ("ballistic", 0): "two_walls", ("ballistic", 1): "no_window", ("ballistic", 2): "lie_down", ("ballistic", 3): "no_window",
+    ("drone", 1): "shelter",
+    ("bleeding", 0): "press", ("bleeding", 2): "press",
+    ("unconscious", 2): "call",
+    ("home-fire", 1): "close_door", ("home-fire", 3): "stay_low", ("home-fire", 4): "close_door",
+    ("suspicious", 0): "no_touch", ("suspicious", 1): "step_back", ("suspicious", 2): "step_back",
+    ("kid-siren", 0): "shoes", ("kid-siren", 1): "two_walls", ("kid-siren", 2): "no_window",
+    ("kid-buzz", 0): "shelter", ("kid-buzz", 2): "close_door", ("kid-buzz", 3): "call",
+    ("kid-strange", 0): "no_touch", ("kid-strange", 1): "step_back",
+    ("kid-fire", 1): "stay_low", ("kid-fire", 2): "close_door", ("kid-fire", 4): "call",
+    ("kid-lost", 2): "call",
+}
+
+def apply_icons(cards):
+    for (cid, i) in ICONS:
+        card = next((c for c in CARDS + KID_CARDS if c["id"] == cid), None)
+        assert card and i < len(card["steps"]), (cid, i)
+    known = {f[5:-4] for f in os.listdir(os.path.join(os.path.dirname(__file__), "..", "..", "app", "src", "main", "res", "drawable")) if f.startswith("pict_")}
+    for c in cards:
+        for i, st in enumerate(c["steps"]):
+            icon = ICONS.get((c["id"], i))
+            if icon:
+                assert icon in known, icon
+                st["icon"] = icon
+
 if __name__ == "__main__":
+    apply_icons(CARDS)
+    apply_icons(KID_CARDS)
     out = os.path.join(os.path.dirname(__file__), "..", "..", "content", "src", "main", "assets", "cards.json")
     for c in CARDS:
         assert c["call"] in ("", "101", "102", "103", "104", "112"), c["id"]

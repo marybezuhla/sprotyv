@@ -120,6 +120,13 @@ class ContentTest {
         assertEquals("deepstatemap.live", LinksReader.host("https://deepstatemap.live"))
     }
 
+    @Test fun stepPictogramsExist() {
+        val drawn = File("../app/src/main/res/drawable").list()!!.filter { it.startsWith("pict_") }.map { it.removePrefix("pict_").removeSuffix(".xml") }.toSet()
+        val used = cards.flatMap { it.steps }.map { it.icon }.filter { it.isNotEmpty() }
+        assertTrue(used.size >= 20)
+        used.forEach { assertTrue("no pictogram $it", it in drawn) }
+    }
+
     @Test fun cardsAreUnreviewedUntilSomeoneReviews() {
         // Nothing may claim a review that did not happen: the field is filled by hand only after one
         cards.forEach { assertEquals("${it.id} claims a review", "", it.reviewedBy) }

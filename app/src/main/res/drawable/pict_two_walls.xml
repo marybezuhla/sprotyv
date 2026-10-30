@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sprotyv pictogram "two_walls": always shown with its words; CC BY-SA 4.0 like the content -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="48dp" android:height="48dp" android:viewportWidth="48" android:viewportHeight="48">
+    <path android:pathData="M8 6v36M14 6v36M34 6v36M40 6v36" android:strokeColor="#FF000000" android:strokeWidth="3" android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000"/>
+    <path android:pathData="M20.5,14.0a3.5,3.5 0 1,0 7.0,0a3.5,3.5 0 1,0 -7.0,0z" android:fillColor="#FF000000"/>
+    <path android:pathData="M24 19v11M24 30l-4 9M24 30l4 9M19 23h10" android:strokeColor="#FF000000" android:strokeWidth="3" android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000"/>
+</vector>
