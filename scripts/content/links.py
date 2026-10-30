@@ -61,6 +61,38 @@ LINKS = [
     link("mines", "help", "official", "ДСНС: мапа мінної небезпеки",
          "Території, де можуть бути міни й вибухонебезпечні предмети.",
          url="https://mine.dsns.gov.ua"),
+    # Power cuts: each oblast's own grid operator (addresses checked against Glavcom's list of 17.10.2026)
+    link("ukrenergo", "power", "official", "Укренерго: стан енергосистеми",
+         "Загальний режим відключень на добу для всієї країни. Графік своєї черги — на сайті обленерго.",
+         url="https://t.me/Ukrenergo"),
+    link("dtek", "power", "official", "ДТЕК: офіційний канал",
+         "Єдиний офіційний канал групи ДТЕК; є десятки фейкових з такою назвою.",
+         url="https://t.me/dtek_ua"),
+    link("power-kyiv-city", "power", "official", "Київ", "ДТЕК Київські електромережі: графік відключень за чергами.", url="https://www.dtek-kem.com.ua/ua/shutdowns"),
+    link("power-kyiv-oblast", "power", "official", "Київська область", "ДТЕК Київські регіональні електромережі: графік відключень за чергами.", url="https://www.dtek-krem.com.ua/ua/shutdowns"),
+    link("power-vinnytsia", "power", "official", "Вінницька область", "Вінницяобленерго: графік відключень за чергами.", url="https://www.voe.com.ua/disconnection"),
+    link("power-volyn", "power", "official", "Волинська область", "Волиньобленерго: графік відключень за чергами.", url="https://energy.volyn.ua/spozhyvacham/perervy-u-elektropostachanni/hrafik-vidkliuchen/"),
+    link("power-dnipro", "power", "official", "Дніпропетровська область", "ДТЕК Дніпровські електромережі: графік відключень за чергами.", url="https://www.dtek-dnem.com.ua/ua/shutdowns"),
+    link("power-dnipro-cek", "power", "official", "Дніпропетровська область (ЦЕК)", "ЦЕК, частина області: графік відключень за чергами.", url="https://cek.dp.ua/index.php/cpojivaham/vidkliuchennia.html"),
+    link("power-donetsk", "power", "official", "Донецька область", "ДТЕК Донецькі електромережі: графік відключень за чергами.", url="https://www.dtek-dem.com.ua/ua/shutdowns"),
+    link("power-zhytomyr", "power", "official", "Житомирська область", "Житомиробленерго: графік відключень за чергами.", url="https://www.ztoe.com.ua/unhooking-search.php"),
+    link("power-zakarpattia", "power", "official", "Закарпатська область", "Закарпаттяобленерго: графік відключень за чергами.", url="https://zakarpat.energy/customers/break-in-electricity-supply/schedule/"),
+    link("power-zaporizhzhia", "power", "official", "Запорізька область", "Запоріжжяобленерго: сайт оператора; графік — у розділі про відключення.", url="https://www.zoe.com.ua"),
+    link("power-ivano-frankivsk", "power", "official", "Івано-Франківська область", "Прикарпаттяобленерго: графік відключень за чергами.", url="https://svitlo.oe.if.ua"),
+    link("power-kirovohrad", "power", "official", "Кіровоградська область", "Кіровоградобленерго: графік відключень за чергами.", url="https://kiroe.com.ua/electricity-blackout"),
+    link("power-lviv", "power", "official", "Львівська область", "Львівобленерго: графік відключень за чергами.", url="https://poweron.loe.lviv.ua"),
+    link("power-mykolaiv", "power", "official", "Миколаївська область", "Миколаївобленерго: графік відключень за чергами.", url="https://off.energy.mk.ua"),
+    link("power-odesa", "power", "official", "Одеська область", "ДТЕК Одеські електромережі: графік відключень за чергами.", url="https://www.dtek-oem.com.ua/ua/shutdowns"),
+    link("power-poltava", "power", "official", "Полтавська область", "Полтаваобленерго: графік відключень за чергами.", url="https://www.poe.pl.ua/disconnection/povidomlennia/"),
+    link("power-rivne", "power", "official", "Рівненська область", "Рівнеобленерго: графік відключень за чергами.", url="https://www.roe.vsei.ua/disconnections"),
+    link("power-sumy", "power", "official", "Сумська область", "Сумиобленерго: графік відключень за чергами.", url="https://www.soe.com.ua/consumers/shutdowns"),
+    link("power-ternopil", "power", "official", "Тернопільська область", "Тернопільобленерго: сайт оператора; графік — у розділі про відключення.", url="https://www.toe.com.ua"),
+    link("power-kharkiv", "power", "official", "Харківська область", "Харківобленерго: графік відключень за чергами.", url="https://www.oblenergo.kharkov.ua/uk/gaoinfo"),
+    link("power-kherson", "power", "official", "Херсонська область", "Херсонобленерго: сайт оператора; графік — у розділі про відключення.", url="https://ksoe.com.ua"),
+    link("power-khmelnytskyi", "power", "official", "Хмельницька область", "Хмельницькобленерго: графік відключень за чергами.", url="https://hoe.com.ua/page/informatsija-vidkljuchennja"),
+    link("power-cherkasy", "power", "official", "Черкаська область", "Черкасиобленерго: графік відключень за чергами.", url="https://www.cherkasyoblenergo.com/off"),
+    link("power-chernivtsi", "power", "official", "Чернівецька область", "Чернівціобленерго: графік відключень за чергами.", url="https://oblenergo.cv.ua/shutdowns/"),
+    link("power-chernihiv", "power", "official", "Чернігівська область", "Чернігівобленерго: графік відключень за чергами.", url="https://chernihivoblenergo.com.ua/blackouts"),
     # Fakes
     link("cpd", "facts", "official", "Центр протидії дезінформації",
          "Спростування фейків і попередження про ворожі канали та боти.",
@@ -83,7 +115,7 @@ if __name__ == "__main__":
     out = os.path.join(os.path.dirname(__file__), "..", "..", "content", "src", "main", "assets", "links.json")
     assert len({l["id"] for l in LINKS}) == len(LINKS)
     for l in LINKS:
-        assert l["group"] in ("threats", "front", "help", "facts"), l["id"]
+        assert l["group"] in ("threats", "front", "help", "facts", "power"), l["id"]
         assert len(l["note"]) <= 200, l["id"]
     with open(out, "w", encoding="utf-8") as f:
         json.dump(LINKS, f, ensure_ascii=False, indent=1)
