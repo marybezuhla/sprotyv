@@ -357,4 +357,6 @@
     <string name="service_name_gas">Gas emergency</string>
     <string name="call_bar_toggle">Call buttons at the bottom</string>
     <string name="call_bar_hint">Off: 112 and the other services open from the red phone at the top of every screen.</string>
+    <string name="step_by_step">Go step by step</string>
+    <string name="next_step">Next: %1$s</string>
 </resources>

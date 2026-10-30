@@ -38,9 +38,10 @@ data class Card(
 
 /**
  * One step. [action] starts with a verb and stays short (27/9/3 rule: about 27 words, one idea);
- * [why] is the second level, shown only when asked.
+ * [why] is the second level, shown only when asked. [figure] names a guide section whose picture
+ * shows the step (empty when none).
  */
-data class Step(val action: String, val why: String) {
+data class Step(val action: String, val why: String, val figure: String = "") {
     init {
         require(action.isNotBlank()) { "Empty step" }
         require(action.length <= MAX_ACTION) { "Step too long for a stressed reader" }
@@ -69,7 +70,7 @@ object CardsReader {
         require(stepsJson.length() <= MAX_STEPS) { "Too many steps" }
         val steps = (0 until stepsJson.length()).map {
             val s = stepsJson.getJSONObject(it)
-            Step(s.getString("action"), s.optString("why", ""))
+            Step(s.getString("action"), s.optString("why", ""), s.optString("figure", ""))
         }
         val guideJson = o.optJSONArray("guide") ?: JSONArray()
         val call = o.optString("call", "")

@@ -89,6 +89,16 @@ class ContentTest {
         }
     }
 
+    @Test fun stepFiguresPointToRealPictures() {
+        val withFigures = cards.flatMap { it.steps }.filter { it.figure.isNotEmpty() }
+        assertTrue(withFigures.size >= 7)
+        withFigures.forEach { st ->
+            val section = guide.section(st.figure)?.second
+            assertTrue("no section ${st.figure}", section != null)
+            assertTrue("no picture in ${st.figure}", section!!.blocks.any { it is Block.Figure })
+        }
+    }
+
     @Test fun cardsAreUnreviewedUntilSomeoneReviews() {
         // Nothing may claim a review that did not happen: the field is filled by hand only after one
         cards.forEach { assertEquals("${it.id} claims a review", "", it.reviewedBy) }

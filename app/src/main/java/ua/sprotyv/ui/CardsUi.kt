@@ -38,6 +38,18 @@ import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.text.style.TextOverflow
+import ua.sprotyv.content.Block
+import ua.sprotyv.home.Mode
 import ua.sprotyv.R
 import ua.sprotyv.content.Card
 import ua.sprotyv.content.Content
@@ -83,17 +95,26 @@ fun CardScreen(content: Content?, id: String, nav: Nav) {
         if (content == null) return@Frame Loading()
         if (content.cardsBroken) return@Frame Broken()
         if (card == null) return@Frame Text(stringResource(R.string.not_found))
-        CardBody(card, nav)
+        CardBody(card, content, nav)
     }
 }
 
+/**
+ * Two ways to read a card, and the person switches between them:
+ * - Overview: every step on one screen, numbered, with its picture. Seeing the whole and how far
+ *   it goes calms and helps planning ("overview first, details on demand").
+ * - Step by step: the current step large, a strip showing where you are and the next step in
+ *   small print, as in crisis checklists ("step at a glance"); fewer skipped steps under stress.
+ * The full look opens in overview; the simple and child looks step by step.
+ */
 @Composable
-private fun CardBody(card: Card, nav: Nav) {
+private fun CardBody(card: Card, content: Content, nav: Nav) {
     val context = LocalContext.current
+    val mode = HomePrefs.state.collectAsState().value?.mode
     var step by rememberSaveable(card.id) { mutableIntStateOf(0) }
-    var showWhy by rememberSaveable(card.id, step) { mutableStateOf(false) }
-    var all by rememberSaveable(card.id) { mutableStateOf(false) }
+    var all by rememberSaveable(card.id) { mutableStateOf(mode == Mode.FULL) }
     val done = step >= card.steps.size
+    val kid = card.id.startsWith("kid-")
 
     card.call?.let { service ->
         Button(
@@ -108,12 +129,22 @@ private fun CardBody(card: Card, nav: Nav) {
 
     if (all) {
         card.steps.forEachIndexed { i, s ->
-            Text("${i + 1}. ${s.action}", style = MaterialTheme.typography.titleMedium)
-            if (s.why.isNotBlank()) Text(s.why, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Row(verticalAlignment = Alignment.Top) {
+                StepNumber(i + 1, active = false)
+                Spacer(Modifier.width(12.dp))
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Text(s.action, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                    Why(s.why, "${card.id}:$i")
+                }
+            }
+            if (s.figure.isNotEmpty()) StepFigure(content, s.figure)
         }
-        OutlinedButton(onClick = { all = false }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.one_at_a_time)) }
+        Button(onClick = { all = false; step = 0 }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+            Text(stringResource(R.string.step_by_step), style = MaterialTheme.typography.titleMedium)
+        }
     } else if (!done) {
         val s = card.steps[step]
+        Progress(card.steps.size, step)
         Text(
             stringResource(R.string.step_of, step + 1, card.steps.size),
             style = MaterialTheme.typography.labelLarge,
@@ -126,11 +157,8 @@ private fun CardBody(card: Card, nav: Nav) {
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
         )
-        if (showWhy) {
-            Text(s.why, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        } else if (s.why.isNotBlank()) {
-            TextButton(onClick = { showWhy = true }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.why)) }
-        }
+        if (s.figure.isNotEmpty()) StepFigure(content, s.figure)
+        Why(s.why, "${card.id}:$step")
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
             if (step > 0) {
                 OutlinedButton(onClick = { step-- }, modifier = Modifier.heightIn(min = 64.dp)) { Text(stringResource(R.string.previous)) }
@@ -139,8 +167,18 @@ private fun CardBody(card: Card, nav: Nav) {
                 Text(stringResource(R.string.done_next), style = MaterialTheme.typography.titleMedium)
             }
         }
+        // The next step in small print: what comes is never a surprise
+        card.steps.getOrNull(step + 1)?.let { next ->
+            Text(
+                stringResource(R.string.next_step, next.action),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
         TextButton(onClick = { all = true }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.all_steps)) }
-    } else if (card.id.startsWith("kid-")) {
+    } else if (kid) {
         // A child hears praise at the end (guide 5.5: only praise, never scolding)
         Row(verticalAlignment = Alignment.CenterVertically) {
             Sunny(96.dp, happy = true)
@@ -157,6 +195,7 @@ private fun CardBody(card: Card, nav: Nav) {
         }
         OutlinedButton(onClick = { step = 0 }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.again)) }
     } else {
+        Progress(card.steps.size, card.steps.size)
         Text(
             stringResource(R.string.all_done),
             style = MaterialTheme.typography.headlineSmall,
@@ -170,7 +209,7 @@ private fun CardBody(card: Card, nav: Nav) {
 
     HorizontalDivider()
     // A child's card has no "in detail": the guide is written for adults
-    card.guide.firstOrNull()?.takeIf { !card.id.startsWith("kid-") }?.let { num ->
+    card.guide.firstOrNull()?.takeIf { !kid }?.let { num ->
         OutlinedButton(onClick = { nav.go(Route.GuideSection(num)) }, modifier = Modifier.heightIn(min = 56.dp)) {
             Text(stringResource(R.string.in_detail))
         }
@@ -178,7 +217,55 @@ private fun CardBody(card: Card, nav: Nav) {
     Source(card)
 }
 
-/** Where a card comes from and whether a specialist has checked it — always visible, never hidden. */
+/** "Why" folded under a step, opened on request: the second level never crowds the first. */
+@Composable
+private fun Why(why: String, key: String) {
+    if (why.isBlank()) return
+    var open by rememberSaveable(key) { mutableStateOf(false) }
+    if (open) {
+        Text(why, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    } else {
+        TextButton(onClick = { open = true }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.why)) }
+    }
+}
+
+/** A step number in a circle; filled for the current step. */
+@Composable
+private fun StepNumber(n: Int, active: Boolean) {
+    Box(
+        Modifier.size(36.dp).clip(CircleShape)
+            .background(if (active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primaryContainer),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            n.toString(),
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold,
+            color = if (active) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onPrimaryContainer,
+            modifier = Modifier.clearAndSetSemantics { },
+        )
+    }
+}
+
+/** Where you are: one segment per step, done ones filled. The words "Step 2 of 5" say the same. */
+@Composable
+private fun Progress(total: Int, current: Int) {
+    val done = MaterialTheme.colorScheme.primary
+    val todo = MaterialTheme.colorScheme.outlineVariant
+    Row(horizontalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.fillMaxWidth().clearAndSetSemantics { }) {
+        repeat(total) { i ->
+            Box(Modifier.weight(1f).height(8.dp).clip(RoundedCornerShape(4.dp)).background(if (i <= current) done else todo))
+        }
+    }
+}
+
+/** The guide's own picture for a step, if the section has one. */
+@Composable
+private fun StepFigure(content: Content, num: String) {
+    val figure = content.guide.section(num)?.second?.blocks?.filterIsInstance<Block.Figure>()?.firstOrNull() ?: return
+    FigureView(figure)
+}
+
 @Composable
 fun Source(card: Card) {
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
