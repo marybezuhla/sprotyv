@@ -80,6 +80,12 @@ fun ReadinessBlock(content: Content?, nav: Nav) {
         Triple(R.string.kit, kit, Route.Mine(MinePart.KIT)),
         Triple(R.string.supplies, supplies, Route.SuppliesRoute),
     )
+    // The shares only (no records) are kept for the strip on the full home screen
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val shares = if (rows.all { it.second != null }) rows.joinToString(",") { "${it.second!!.done}/${it.second!!.total}" } else null
+    androidx.compose.runtime.LaunchedEffect(shares) {
+        if (shares != null && HomePrefs.load(context).readiness != shares) HomePrefs.update(context) { it.copy(readiness = shares) }
+    }
     Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text(stringResource(R.string.ready_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
@@ -120,6 +126,63 @@ private fun ReadyRow(title: String, p: Progress?, onClick: () -> Unit) {
             drawRoundRect(track, cornerRadius = r)
             val f = p?.fraction ?: 0f
             if (f > 0f) drawRoundRect(if (p?.complete == true) done else going, size = Size(size.width * f, size.height), cornerRadius = r)
+        }
+    }
+}
+
+/** The parts of readiness, in the order the shares are kept. */
+private val READY_PARTS = listOf(R.string.ready_short_medical, R.string.ready_short_people, R.string.ready_short_plan, R.string.ready_short_kit, R.string.supplies)
+
+/**
+ * Readiness at a glance on the full home screen: five small bars on one scale, from what was last
+ * seen in "Mine" (the shares only). A tap opens "Mine"; it can be hidden, and shown again in settings.
+ */
+@Composable
+fun ReadinessStrip(nav: Nav) {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val prefs = HomePrefs.state.collectAsStateWithLifecycle().value ?: return
+    if (prefs.readinessHidden) return
+    val parts = prefs.readiness.split(",").mapNotNull { p ->
+        p.split("/").takeIf { it.size == 2 }?.let { (d, t) -> d.toIntOrNull()?.let { dd -> t.toIntOrNull()?.let { tt -> Progress(dd, tt) } } }
+    }
+    if (parts.size != READY_PARTS.size) return
+    val done = parts.count { it.complete }
+    val doneColour = if (LocalDark.current) Color(0xFF81C784) else Color(0xFF2E7D32)
+    val going = MaterialTheme.colorScheme.primary
+    val track = MaterialTheme.colorScheme.outlineVariant
+    Card(
+        onClick = { nav.go(Route.Open(Section.MINE)) },
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Column(Modifier.padding(start = 16.dp, end = 4.dp, top = 4.dp, bottom = 14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    stringResource(R.string.ready_strip, done, parts.size),
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.weight(1f),
+                )
+                androidx.compose.material3.TextButton(onClick = { HomePrefs.update(context) { it.copy(readinessHidden = true) } }, modifier = Modifier.heightIn(min = 48.dp)) {
+                    Text(stringResource(R.string.ready_hide))
+                }
+            }
+            Row(Modifier.padding(end = 12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                parts.forEachIndexed { i, p ->
+                    val name = stringResource(READY_PARTS[i])
+                    Column(
+                        Modifier.weight(1f).clearAndSetSemantics { contentDescription = "$name: ${p.done} / ${p.total}" },
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                    ) {
+                        Canvas(Modifier.fillMaxWidth().height(8.dp)) {
+                            val r = CornerRadius(size.height / 2)
+                            drawRoundRect(track, cornerRadius = r)
+                            if (p.fraction > 0f) drawRoundRect(if (p.complete) doneColour else going, size = Size(size.width * p.fraction, size.height), cornerRadius = r)
+                        }
+                        Text(name, style = MaterialTheme.typography.labelSmall, maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis)
+                    }
+                }
+            }
         }
     }
 }
