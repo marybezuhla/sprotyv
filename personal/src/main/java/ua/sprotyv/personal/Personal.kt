@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -200,12 +201,38 @@ object PersonalStore {
             query(db).catch { }
         }
 
-    /** One read, in order with opening and closing; null if the data is not open or the read failed. */
-    suspend fun <T> read(query: suspend (PersonalDb) -> T): T? = withContext(worker) {
-        mutex.withLock {
-            val db = (_state.value as? Opened.Ready)?.db ?: return@withLock null
-            try { query(db) } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (e: Exception) { null }
+    /**
+     * One read, in order with opening and closing. If the data is closed for a moment (the app left
+     * the screen and came back), it waits until the data is open again. Null only if the data
+     * cannot be opened or the read itself failed.
+     */
+    suspend fun <T> read(query: suspend (PersonalDb) -> T): T? {
+        while (true) {
+            // Waits while closed or opening; any other state ends the wait
+            val now = _state.first { it != null }
+            if (now !is Opened.Ready) return null
+            val result = withContext(worker) {
+                mutex.withLock {
+                    val db = (_state.value as? Opened.Ready)?.db ?: return@withLock Retry
+                    try { Got(query(db)) } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (e: Exception) { Failed }
+                }
+            }
+            when (result) {
+                is Got<*> -> @Suppress("UNCHECKED_CAST") return result.value as T
+                Failed -> return null
+                Retry -> continue
+            }
         }
+    }
+
+    private sealed interface ReadResult
+    private class Got<T>(val value: T) : ReadResult
+    private data object Failed : ReadResult
+    private data object Retry : ReadResult
+
+    /** Drops waiting changes whose key starts with [prefix] (before a change that replaces them all). */
+    fun dropPending(prefix: String) {
+        synchronized(pending) { pending.keys.removeAll { it.startsWith(prefix) } }
     }
 
     fun startFresh(context: Context) {

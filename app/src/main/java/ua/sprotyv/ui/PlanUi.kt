@@ -168,7 +168,12 @@ fun KitScreen(content: Content?, nav: Nav) {
             onDismissRequest = { confirmReset = false },
             text = { Text(stringResource(R.string.kit_reset_confirm)) },
             confirmButton = {
-                TextButton(onClick = { PersonalStore.save("delete:" + java.util.UUID.randomUUID()) { it.kit().clear() }; confirmReset = false }) { Text(stringResource(R.string.kit_reset)) }
+                TextButton(onClick = {
+                    // Ticks still waiting would land after the clear; they go too
+                    PersonalStore.dropPending("kit:")
+                    PersonalStore.save("delete:" + java.util.UUID.randomUUID()) { it.kit().clear() }
+                    confirmReset = false
+                }) { Text(stringResource(R.string.kit_reset)) }
             },
             dismissButton = { TextButton(onClick = { confirmReset = false }) { Text(stringResource(R.string.cancel)) } },
         )
