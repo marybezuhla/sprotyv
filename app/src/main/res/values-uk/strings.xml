@@ -394,4 +394,8 @@
     <string name="flag_ads">є реклама</string>
     <string name="flag_beta">бета-версія</string>
     <string name="flag_collects_data">збирає дані</string>
+    <string name="power_title">Світло: графіки відключень</string>
+    <string name="power_hint">Офіційні графіки за областями</string>
+    <string name="power_intro">Знайдіть свою область і відкрийте сайт свого оператора: там графік за вашою чергою. Аварійні відключення бувають і поза графіком.</string>
+    <string name="power_note">Адреси звірено з переліком Главкому від 17.10.2026. Ботами графіків користуйтеся лише з посилань на сайті свого оператора: фейкових ботів багато.</string>
 </resources>

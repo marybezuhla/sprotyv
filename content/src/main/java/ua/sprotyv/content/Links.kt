@@ -23,7 +23,8 @@ data class Link(
         const val OFFICIAL = "official"
         const val VOLUNTEER = "volunteer"
         const val INDEPENDENT = "independent"
-        val GROUPS = listOf("threats", "front", "help", "facts")
+        val GROUPS = listOf("threats", "front", "help", "facts", "power")
+        const val POWER = "power"
         const val UNKNOWN_AUTHOR = "unknown_author"
         const val ADS = "ads"
         const val BETA = "beta"

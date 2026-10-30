@@ -42,6 +42,7 @@ private val Link.groupTitle: Int get() = when (group) {
     "threats" -> R.string.situation_threats
     "front" -> R.string.situation_front
     "help" -> R.string.situation_help
+    Link.POWER -> R.string.power_title
     else -> R.string.situation_facts
 }
 
@@ -72,7 +73,9 @@ fun SituationScreen(content: Content?, nav: Nav) {
         }
         if (content == null) return@Frame Loading()
         if (content.linksBroken) return@Frame Broken()
-        content.links.groupBy { it.group }.forEach { (_, links) ->
+        // Power cuts have their own screen: one row per oblast would crowd this one
+        NavRow(stringResource(R.string.power_title), stringResource(R.string.power_hint)) { nav.go(Route.Power) }
+        content.links.filter { it.group != Link.POWER }.groupBy { it.group }.forEach { (_, links) ->
             Text(stringResource(links.first().groupTitle), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 8.dp).semantics { heading() })
             links.forEach { link -> LinkRow(link) { openLink(context, link, toolbar) } }
         }
@@ -148,5 +151,22 @@ private fun LinkRow(link: Link, onClick: () -> Unit) {
                 color = MaterialTheme.colorScheme.primary,
             )
         }
+    }
+}
+
+/**
+ * Power cuts: the national picture, then each oblast's own grid operator, where a person finds
+ * their queue. Official sites only; bots are not listed, because look-alike "schedule bots" are common.
+ */
+@Composable
+fun PowerScreen(content: Content?, nav: Nav) {
+    val context = LocalContext.current
+    val toolbar = MaterialTheme.colorScheme.surface.toArgb()
+    Frame(stringResource(R.string.power_title), nav::back) {
+        Text(stringResource(R.string.power_intro), style = MaterialTheme.typography.bodyLarge)
+        if (content == null) return@Frame Loading()
+        if (content.linksBroken) return@Frame Broken()
+        content.links.filter { it.group == Link.POWER }.forEach { link -> LinkRow(link) { openLink(context, link, toolbar) } }
+        Text(stringResource(R.string.power_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
