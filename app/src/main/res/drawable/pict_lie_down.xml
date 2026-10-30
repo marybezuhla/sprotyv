@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Sprotyv pictogram "lie_down": always shown with its words; CC BY-SA 4.0 like the content -->
-<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="48dp" android:height="48dp" android:viewportWidth="48" android:viewportHeight="48">
-    <path android:pathData="M2 44h44" android:strokeColor="#FF000000" android:strokeWidth="3" android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000"/>
-    <path android:pathData="M7.5,35.0a3.5,3.5 0 1,0 7.0,0a3.5,3.5 0 1,0 -7.0,0z" android:fillColor="#FF000000"/>
-    <path android:pathData="M16 38h18l10 2M34 38l9-3M16 37l-4-7-6 1" android:strokeColor="#FF000000" android:strokeWidth="3" android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000"/>
+<!-- Sprotyv pictogram "lie_down", built by scripts/pictograms/build.py from Material Symbols (Apache 2.0) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="48dp" android:height="48dp" android:viewportWidth="960" android:viewportHeight="960">
+    <group android:translateX="40.0" android:translateY="260.0">
+        <group android:scaleX="1.1000" android:scaleY="1.1000">
+            <group android:translateX="-80" android:translateY="680">
+                <path android:fillColor="#FF000000" android:pathData="M390-400q-12.75 0-21.37-8.63Q360-417.25 360-430v-190q0-24.75 17.63-42.38Q395.25-680 420-680h308q63 0 107 44t44 107v99q0 12.75-8.62 21.37Q861.75-400 849-400H390Zm460 120H110q-12.75 0-21.37-8.68-8.63-8.67-8.63-21.5 0-12.82 8.63-21.32Q97.25-340 110-340h740q12.75 0 21.38 8.68 8.62 8.67 8.62 21.5 0 12.82-8.62 21.32-8.63 8.5-21.38 8.5ZM200-400q-50 0-85-35t-35-85q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35Z"/>
+            </group>
+        </group>
+    </group>
 </vector>

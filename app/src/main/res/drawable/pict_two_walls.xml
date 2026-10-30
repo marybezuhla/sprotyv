@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Sprotyv pictogram "two_walls": always shown with its words; CC BY-SA 4.0 like the content -->
-<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="48dp" android:height="48dp" android:viewportWidth="48" android:viewportHeight="48">
-    <path android:pathData="M8 6v36M14 6v36M34 6v36M40 6v36" android:strokeColor="#FF000000" android:strokeWidth="3" android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000"/>
-    <path android:pathData="M20.5,14.0a3.5,3.5 0 1,0 7.0,0a3.5,3.5 0 1,0 -7.0,0z" android:fillColor="#FF000000"/>
-    <path android:pathData="M24 19v11M24 30l-4 9M24 30l4 9M19 23h10" android:strokeColor="#FF000000" android:strokeWidth="3" android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000"/>
+<!-- Sprotyv pictogram "two_walls", built by scripts/pictograms/build.py from Material Symbols (Apache 2.0) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="48dp" android:height="48dp" android:viewportWidth="960" android:viewportHeight="960">
+    <group android:translateX="0.0" android:translateY="345.0">
+        <group android:scaleX="0.3750" android:scaleY="0.3750">
+            <group android:translateX="-200" android:translateY="841">
+                <path android:fillColor="#FF000000" android:pathData="M526-129q-5 4-10.5 6t-10.5 2q-6 0-11-2t-10-7q-41-43-61-89t-20-96q0-36 11-76.5T453-501q26-60 35-92.5t9-59.5q0-38-16.5-71T429-789q-5-5-7-10.5t-2-11.5q0-5 1.5-10t5.5-10q5-5 10.5-7t11.5-2q5 0 10.5 2t10.5 6q44 41 65.5 85t21.5 94q0 34-10 71.5T509-478q-26 61-36 96.5T463-316q0 39 16 74.5t49 70.5q4 5 5.5 10t1.5 10q0 6-2 11.5t-7 10.5Zm203 1q-5 4-10 5.5t-10 1.5q-6 0-11.5-2t-10.5-7q-41-43-61-88.5T606-314q0-36 11-76.5T656-500q26-60 35-92.5t9-59.5q0-38-16.5-70.5T632-788q-5-5-6.5-10t-1.5-11q0-5 1.5-10.5T631-830q5-5 10.5-7t11.5-2q5 0 10 1.5t10 5.5q44 41 65.5 85t21.5 94q0 35-10.5 75T712-477q-26 60-36 95.5T666-316q0 39 16 75.5t49 70.5q4 5 5.5 10t1.5 10q0 6-2 11.5t-7 10.5Zm-406 0q-5 4-10 5.5t-10 1.5q-6 0-11.5-2t-10.5-7q-41-43-61-88.5T200-314q0-36 11-76.5T250-500q26-60 35-92.5t9-59.5q0-38-16.5-70.5T226-788q-5-5-7-10.5t-2-11.5q0-5 1.5-10.5T224-831q5-5 10.5-7.5T246-841q5 0 10.5 2t10.5 7q44 41 65.5 85t21.5 94q0 34-10.5 72.5T306-477q-25 60-35 95t-10 66q0 40 16 76t48 70q4 5 5.5 10t1.5 10q0 6-2 11.5t-7 10.5Z"/>
+            </group>
+        </group>
+    </group>
+    <path android:fillColor="#FF000000" android:pathData="M312 100H344A32 32 0 0 1 376 132V828A32 32 0 0 1 344 860H312A32 32 0 0 1 280 828V132A32 32 0 0 1 312 100Z"/>
+    <path android:fillColor="#FF000000" android:pathData="M472 100H504A32 32 0 0 1 536 132V828A32 32 0 0 1 504 860H472A32 32 0 0 1 440 828V132A32 32 0 0 1 472 100Z"/>
+    <group android:translateX="637.0" android:translateY="100.0">
+        <group android:scaleX="0.9500" android:scaleY="0.9500">
+            <group android:translateX="-340" android:translateY="880">
+                <path android:fillColor="#FF000000" android:pathData="M420-110v-250h-50q-12.75 0-21.37-8.63Q340-377.25 340-390v-223q0-24.75 17.63-42.38Q375.25-673 400-673h160q24.75 0 42.38 17.62Q620-637.75 620-613v223q0 12.75-8.62 21.37Q602.75-360 590-360h-50v250q0 12.75-8.65 21.37Q522.71-80 509.93-80h-60.15Q437-80 428.5-88.63 420-97.25 420-110Zm60.08-624q-30.08 0-51.58-21.42t-21.5-51.5q0-30.08 21.42-51.58t51.5-21.5q30.08 0 51.58 21.42t21.5 51.5q0 30.08-21.42 51.58t-51.5 21.5Z"/>
+            </group>
+        </group>
+    </group>
 </vector>
