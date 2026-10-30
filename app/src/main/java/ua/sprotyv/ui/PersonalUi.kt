@@ -38,6 +38,10 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import ua.sprotyv.R
 import ua.sprotyv.personal.MedicalCard
 import ua.sprotyv.personal.Person
@@ -260,15 +264,51 @@ fun SafeScreen(nav: Nav) {
         is Loaded.Value -> l.value
     }
     var text by remember(stored) { mutableStateOf(stored.ifBlank { defaultText }) }
+    // Three ready messages: "I am fine" (the owner's own words, saved), "I need help", "I can't talk"
+    var status by remember { mutableStateOf(SafeStatus.OK) }
+    val helpText = stringResource(R.string.safe_help_message)
+    val quietText = stringResource(R.string.safe_quiet_message)
 
     if (list.isEmpty()) {
         Text(stringResource(R.string.safe_no_people), style = MaterialTheme.typography.bodyLarge)
         Button(onClick = { nav.go(Route.Mine(MinePart.PEOPLE)) }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.add_person)) }
         return
     }
+    Text(stringResource(R.string.safe_status), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+    SafeStatus.entries.forEach { st ->
+        val on = st == status
+        Card(
+            onClick = {
+                status = st
+                text = when (st) {
+                    SafeStatus.OK -> stored.ifBlank { defaultText }
+                    SafeStatus.HELP -> helpText
+                    SafeStatus.QUIET -> quietText
+                }
+            },
+            colors = CardDefaults.cardColors(
+                containerColor = when {
+                    !on -> MaterialTheme.colorScheme.surface
+                    st == SafeStatus.HELP -> MaterialTheme.colorScheme.errorContainer
+                    else -> MaterialTheme.colorScheme.primaryContainer
+                },
+            ),
+            border = BorderStroke(if (on) 2.dp else 1.dp, if (on) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant),
+            modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).semantics { selected = on },
+        ) {
+            Row(Modifier.padding(horizontal = 16.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically) {
+                Text(st.mark, style = MaterialTheme.typography.titleLarge, modifier = Modifier.clearAndSetSemantics { })
+                Spacer(Modifier.width(12.dp))
+                Text(stringResource(st.title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+            }
+        }
+    }
     Field(stringResource(R.string.safe_message), text, {
         text = it
-        PersonalStore.save("setting:$KEY_SAFE_MESSAGE") { db -> db.settings().put(ua.sprotyv.personal.Setting(KEY_SAFE_MESSAGE, it)) }
+        // Only "I am fine" is kept as the owner's own words; the other two are written fresh each time
+        if (status == SafeStatus.OK) {
+            PersonalStore.save("setting:$KEY_SAFE_MESSAGE") { db -> db.settings().put(ua.sprotyv.personal.Setting(KEY_SAFE_MESSAGE, it)) }
+        }
     }, multiline = true)
     // One SMS to each person is the surest: several numbers in one go may be sent as an MMS, which needs mobile data
     Text(stringResource(R.string.safe_each), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
@@ -299,6 +339,13 @@ fun ReadFailed() {
 }
 
 const val KEY_SAFE_MESSAGE = "safe_message"
+
+/** The three ready messages for family; the mark is for the eye, the words say it. */
+enum class SafeStatus(val title: Int, val mark: String) {
+    OK(R.string.safe_status_ok, "✅"),
+    HELP(R.string.safe_status_help, "🆘"),
+    QUIET(R.string.safe_status_quiet, "🤫"),
+}
 
 @Composable
 fun CheckRow(text: String, checked: Boolean, onChange: (Boolean) -> Unit) {

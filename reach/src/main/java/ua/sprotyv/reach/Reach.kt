@@ -51,6 +51,29 @@ object Reach {
         if (!tryStart(context, intent)) notFound(context)
     }
 
+    /**
+     * Opens a trusted page outside Sprotyv: the source's own app when installed, else the phone's
+     * browser as a Custom Tab, which looks part of Sprotyv but loads the page itself (Sprotyv has
+     * no internet). Telegram links go to Telegram. Only https addresses from the built-in list.
+     */
+    fun open(context: Context, url: String, app: String = "", toolbarColor: Int? = null) {
+        if (app.isNotEmpty()) {
+            context.packageManager.getLaunchIntentForPackage(app)?.let { if (tryStart(context, it)) return }
+        }
+        if (!url.startsWith("https://")) return notFound(context)
+        val uri = Uri.parse(url)
+        val intent = Intent(Intent.ACTION_VIEW, uri).addCategory(Intent.CATEGORY_BROWSABLE)
+        if (uri.host != "t.me") {
+            // The Custom Tabs protocol by its documented extras, without an extra library
+            intent.putExtras(android.os.Bundle().apply { putBinder(EXTRA_SESSION, null) })
+            toolbarColor?.let { intent.putExtra(EXTRA_TOOLBAR_COLOR, it) }
+        }
+        start(context, intent)
+    }
+
+    private const val EXTRA_SESSION = "android.support.customtabs.extra.SESSION"
+    private const val EXTRA_TOOLBAR_COLOR = "android.support.customtabs.extra.TOOLBAR_COLOR"
+
     private fun start(context: Context, intent: Intent) {
         if (!tryStart(context, intent)) notFound(context)
     }

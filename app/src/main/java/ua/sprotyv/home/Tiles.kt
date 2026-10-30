@@ -16,7 +16,7 @@ enum class Mode { SIMPLE, FULL, KID }
 
 /** Parts of the app that can be a tile. */
 enum class Tool {
-    NOW, SAFE, ALARM, HOME_LIFE, GUIDE, SEARCH,
+    NOW, SAFE, ALARM, SITUATION, HOME_LIFE, GUIDE, SEARCH,
     MINE, MEDICAL, PEOPLE, PLAN, KIT, SUPPLIES, RESCUER, PRINT, SCAN,
 }
 
@@ -24,6 +24,8 @@ object Tiles {
     fun card(id: String) = "card:$id"
     fun chapter(id: String) = "chapter:$id"
     fun tool(t: Tool) = "tool:${t.name}"
+    /** A trusted outside source from "Situation", opened outside Sprotyv. */
+    fun link(id: String) = "link:$id"
 
     /** Always on the home screen, first, in both modes: what to do now, and "I am safe". 112 is the bar below. */
     val FIXED = listOf(tool(Tool.NOW), tool(Tool.SAFE))
@@ -34,11 +36,12 @@ object Tiles {
     /** Enough for anyone's own home screen, few enough to stay a home screen. */
     const val MAX_PINS = 16
 
-    fun isValid(id: String, cards: Set<String>, chapters: Set<String>): Boolean {
+    fun isValid(id: String, cards: Set<String>, chapters: Set<String>, links: Set<String> = emptySet()): Boolean {
         val (kind, value) = id.split(":", limit = 2).let { it[0] to it.getOrElse(1) { "" } }
         return when (kind) {
             "card" -> value in cards
             "chapter" -> value in chapters
+            "link" -> value in links
             "tool" -> Tool.entries.any { it.name == value } && id !in FIXED
             else -> false
         }
@@ -77,8 +80,8 @@ object Pins {
 enum class Preset(val pins: List<String>) {
     GENERAL(
         listOf(
-            Tiles.card("air-alert"), Tiles.card("bleeding"), Tiles.card("blackout"), Tiles.tool(Tool.MEDICAL),
-            Tiles.card("first-60"), Tiles.tool(Tool.KIT), Tiles.tool(Tool.SUPPLIES), Tiles.tool(Tool.GUIDE),
+            Tiles.card("air-alert"), Tiles.card("bleeding"), Tiles.tool(Tool.SITUATION), Tiles.card("blackout"),
+            Tiles.tool(Tool.MEDICAL), Tiles.card("first-60"), Tiles.tool(Tool.KIT), Tiles.tool(Tool.SUPPLIES), Tiles.tool(Tool.GUIDE),
         ),
     ),
     ELDER(
@@ -95,7 +98,7 @@ enum class Preset(val pins: List<String>) {
     ),
     FRONTLINE(
         listOf(
-            Tiles.card("air-alert"), Tiles.card("drone"), Tiles.card("bleeding"), Tiles.card("leave-home"),
+            Tiles.card("air-alert"), Tiles.tool(Tool.SITUATION), Tiles.card("drone"), Tiles.card("bleeding"), Tiles.card("leave-home"),
             Tiles.card("ballistic"), Tiles.card("suspicious"), Tiles.card("rubble"), Tiles.tool(Tool.KIT),
             Tiles.tool(Tool.PLAN),
         ),
@@ -117,7 +120,7 @@ enum class Group(val tiles: List<String>) {
         listOf(
             Tiles.card("first-60"), Tiles.card("air-alert"), Tiles.card("ballistic"), Tiles.card("drone"),
             Tiles.card("rubble"), Tiles.card("suspicious"), Tiles.card("home-fire"), Tiles.card("chemical"),
-            Tiles.card("radiation"), Tiles.tool(Tool.ALARM),
+            Tiles.card("radiation"), Tiles.tool(Tool.SITUATION), Tiles.tool(Tool.ALARM),
         ),
     ),
     FIRST_AID(

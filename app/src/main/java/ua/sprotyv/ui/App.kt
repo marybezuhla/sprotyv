@@ -79,7 +79,14 @@ fun App() {
     val personal by PersonalStore.state.collectAsState()
 
     val nav = object : Nav {
-        override fun go(route: Route) { saved = stack.map(Route::save) + route.save() }
+        override fun go(route: Route) {
+            // An outside source opens outside Sprotyv; nothing is added to the back stack
+            if (route is Route.External) {
+                content?.links?.firstOrNull { it.id == route.id }?.let { openLink(context, it) }
+                return
+            }
+            saved = stack.map(Route::save) + route.save()
+        }
         // Built from what could be read, so an unreadable entry never makes Back look stuck
         override fun back() { saved = stack.dropLast(1).map(Route::save) }
         override fun home() { saved = emptyList() }
@@ -194,6 +201,8 @@ private fun Screen(
         Route.Settings -> SettingsScreen(prefs, nav)
         Route.EditTiles -> EditTilesScreen(content, prefs.mode, prefs.pins, nav)
         Route.Presets -> PresetsScreen(nav)
+        Route.Situation -> SituationScreen(content, nav)
+        is Route.External -> {}
         Route.Sections -> Frame(stringResource(R.string.add_tile), nav::back) {
             SectionsList(content, prefs.pins, nav) { id, on -> guarded((if (on) ACTION_PIN else ACTION_UNPIN) + id) }
         }

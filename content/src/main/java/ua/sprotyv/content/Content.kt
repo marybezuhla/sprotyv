@@ -9,7 +9,12 @@ import android.graphics.BitmapFactory
  * The guide and the cards are read separately, so a fault in one never hides the other;
  * whatever could not be read is null and the screen says so.
  */
-class Content(private val guideOrNull: Guide?, private val cardsOrNull: List<Card>?, private val kidCardsOrNull: List<Card>? = null) {
+class Content(
+    private val guideOrNull: Guide?,
+    private val cardsOrNull: List<Card>?,
+    private val kidCardsOrNull: List<Card>? = null,
+    private val linksOrNull: List<Link>? = null,
+) {
     val guideBroken get() = guideOrNull == null
     val cardsBroken get() = cardsOrNull == null
     val guide: Guide get() = guideOrNull ?: EMPTY_GUIDE
@@ -18,6 +23,10 @@ class Content(private val guideOrNull: Guide?, private val cardsOrNull: List<Car
     /** The child's cards (6-10 years), kept apart so they never mix into the adult lists. */
     val kidCards: List<Card> get() = kidCardsOrNull ?: emptyList()
     val kidCardsBroken get() = kidCardsOrNull == null
+
+    /** "Situation": trusted places to look, opened outside Sprotyv. */
+    val links: List<Link> get() = linksOrNull ?: emptyList()
+    val linksBroken get() = linksOrNull == null
 
     fun card(id: String): Card? = cards.firstOrNull { it.id == id } ?: kidCards.firstOrNull { it.id == id }
 
@@ -43,7 +52,12 @@ class Content(private val guideOrNull: Guide?, private val cardsOrNull: List<Car
                 } catch (e: Exception) {
                     null
                 }
-                Content(guide, cards, kids).also { loaded = it }
+                val links = try {
+                    assets.open("links.json").bufferedReader().use { LinksReader.parse(it.readText()) }
+                } catch (e: Exception) {
+                    null
+                }
+                Content(guide, cards, kids, links).also { loaded = it }
             }
         }
 
