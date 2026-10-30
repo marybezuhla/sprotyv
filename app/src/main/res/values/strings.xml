@@ -481,7 +481,7 @@
     <string name="supplies_water_need">The goal needs %1$d l: 4 l per person per day.</string>
     <string name="supplies_water_have">At home:</string>
     <string name="supplies_litres">%1$d l</string>
-    <string name="supplies_have_hint">Tick what is already at home in the amount needed. Kept encrypted, on this phone only.</string>
+    <string name="supplies_have_hint">Tick what is already at home in the amount needed. Kept encrypted: on this phone and in your backup.</string>
     <string name="supplies_add_until">Add a use-by date</string>
     <string name="supplies_until">Good until %1$s</string>
     <string name="supplies_pick_month">Good until which month?</string>

@@ -48,26 +48,11 @@ def arrow_down(x, y0, y1):
 GROUND = rect(40, 880, 880, 50, 25)
 
 PICTOGRAMS = {
-    "call": [g("call", (40, 40, 880, 880))],
-    "no_touch": [g("do_not_touch", (40, 40, 880, 880))],
-    "shoes": [g("steps", (40, 40, 880, 880))],
-    # Push the door shut: the arrow comes from the open side
-    "close_door": [g("door_open", (100, 220, 760, 720)), line("M200 170A420 300 0 0 1 760 170M650 70L760 170L640 250", 64)],
     # A hand, palm down, pressing on a limb from above
     "press": [arrow_down(480, 30, 260), g("pan_tool", (170, 330, 620, 420), rot=90), rect(40, 730, 880, 170, 85)],
-    # The blast outside, two walls, then the person
-    "two_walls": [g("destruction", (0, 260, 260, 620)), rect(300, 100, 90, 780, 30), rect(450, 100, 90, 780, 30), g("man", (610, 100, 320, 780))],
-    # Flat on the ground, the blast nearby
-    "lie_down": [g("man", (60, 640, 840, 230), rot=270), GROUND, g("destruction", (600, 40, 320, 360))],
+    "no_touch": [g("do_not_touch", (40, 40, 880, 880))],
     # Smoke above, the person low beneath it
     "stay_low": [g("cloud", (120, 40, 720, 420)), g("man", (60, 640, 840, 230), rot=270), GROUND],
-    # Run in under a roof
-    "shelter": [g("directions_run", (0, 260, 340, 600)), g("house", (350, 150, 610, 720))],
-    # Walk back the way you came
-    "step_back": [g("directions_walk", (360, 40, 560, 880), flip=True), line("M300 820H70M170 720L70 820L170 920")],
-    # Turn the valve shut
-    "gas_off": [g("valve", (160, 360, 640, 580)), line("M250 230A280 160 0 0 1 710 230M610 130L710 230L590 300", 64)],
-    "no_window": [g("window", (0, 0, 560, 560)), g("block", (580, 580, 380, 380))],
 }
 
 def placement(p):

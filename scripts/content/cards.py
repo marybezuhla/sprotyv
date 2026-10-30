@@ -256,19 +256,11 @@ KID_CARDS = [
 # Pictograms (app/src/main/res/drawable/pict_*.xml, drawn in scripts/pictograms): one action each,
 # always shown with the step's words. Matched by the start of the step.
 ICONS = {
-    ("air-alert", 0): "two_walls", ("air-alert", 1): "shoes", ("air-alert", 2): "gas_off",
-    ("air-alert", 3): "two_walls", ("air-alert", 5): "no_window",
-    ("ballistic", 0): "two_walls", ("ballistic", 1): "no_window", ("ballistic", 2): "lie_down", ("ballistic", 3): "no_window",
-    ("drone", 1): "shelter",
-    ("bleeding", 0): "press", ("bleeding", 2): "press",
-    ("unconscious", 2): "call",
-    ("home-fire", 1): "close_door", ("home-fire", 3): "stay_low", ("home-fire", 4): "close_door",
-    ("suspicious", 0): "no_touch", ("suspicious", 1): "step_back", ("suspicious", 2): "step_back",
-    ("kid-siren", 0): "shoes", ("kid-siren", 1): "two_walls", ("kid-siren", 2): "no_window",
-    ("kid-buzz", 0): "shelter", ("kid-buzz", 2): "close_door", ("kid-buzz", 3): "call",
-    ("kid-strange", 0): "no_touch", ("kid-strange", 1): "step_back",
-    ("kid-fire", 1): "stay_low", ("kid-fire", 2): "close_door", ("kid-fire", 4): "call",
-    ("kid-lost", 2): "call",
+    # Only where the picture is needed: the first action is urgent, or it goes against instinct.
+    # Everywhere else the words (and the guide's picture, where there is one) say it better.
+    ("bleeding", 0): "press",
+    ("suspicious", 0): "no_touch", ("kid-strange", 0): "no_touch",
+    ("home-fire", 3): "stay_low", ("kid-fire", 1): "stay_low",
 }
 
 def apply_icons(cards):

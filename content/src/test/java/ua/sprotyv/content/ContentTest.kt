@@ -129,7 +129,8 @@ class ContentTest {
     @Test fun stepPictogramsExist() {
         val drawn = File("../app/src/main/res/drawable").list()!!.filter { it.startsWith("pict_") }.map { it.removePrefix("pict_").removeSuffix(".xml") }.toSet()
         val used = cards.flatMap { it.steps }.map { it.icon }.filter { it.isNotEmpty() }
-        assertTrue(used.size >= 20)
+        // Few on purpose: only where the picture is needed
+        assertTrue(used.size in 1..8)
         used.forEach { assertTrue("no pictogram $it", it in drawn) }
     }
 

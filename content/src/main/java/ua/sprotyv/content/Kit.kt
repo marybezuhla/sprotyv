@@ -149,7 +149,8 @@ data class MySupplies(
         }
 
         fun fromJson(s: String?): MySupplies {
-            if (s.isNullOrBlank()) return MySupplies()
+            // A few kilobytes at most; anything longer is not a value this app wrote
+            if (s.isNullOrBlank() || s.length > 8_000) return MySupplies()
             return try {
                 val o = org.json.JSONObject(s)
                 val have = o.optJSONArray("have")?.let { a -> (0 until minOf(a.length(), 200)).map { a.optString(it) } }
@@ -165,7 +166,8 @@ data class MySupplies(
                     have = have,
                     until = until,
                 )
-            } catch (e: Exception) {
+            } catch (e: Throwable) {
+                // Even a stack overflow from a crafted value only loses the value, never the screen
                 MySupplies()
             }
         }
