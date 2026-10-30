@@ -385,9 +385,9 @@
     <string name="situation_rule_3">Do not film or post air defence at work or strikes as they happen: it helps the enemy, and people have been convicted for it.</string>
     <string name="situation_rules_source">Sources: Ministry of Defence (17.10.2026), Kyiv City Administration, Survival guide 3.3. Checked 30.10.2026.</string>
     <string name="situation_note">Sprotyv itself downloads nothing: pages open in the browser or in the source\'s own app. List checked 30.10.2026.</string>
-    <string name="situation_no_trace">Chrome on this phone opens these pages in a separate tab: after closing it keeps no history, cookies or cache. The site and the mobile operator still see the visit. Telegram and the sources\' own apps keep their data as usual.</string>
+    <string name="situation_no_trace">Chrome on this phone opens these pages in a separate tab: after closing it keeps no history, cookies or cache. The site and the mobile operator still see the visit. The sources\' own apps keep their data as usual.</string>
     <string name="situation_trace">Your browser keeps these pages in its history, like any others. If that is a concern, install Firefox Focus (Sprotyv will then open pages in it) or use the browser\'s private mode.</string>
-    <string name="situation_focus">Pages open in Firefox Focus. When done, tap the bin (Erase) in it: until you do, the pages stay in Focus. The site and the mobile operator see the visit; Telegram and the sources\' own apps keep their data.</string>
+    <string name="situation_focus">Pages open in Firefox Focus. When done, tap the bin (Erase) in it: until you do, the pages stay in Focus. The site and the mobile operator see the visit; the sources\' own apps keep their data.</string>
     <string name="situation_get_focus">Firefox Focus on Google Play</string>
     <string name="situation_focus_other">Firefox Focus on this phone was not installed from Google Play, so Sprotyv does not use it: pages open in the main browser and stay in its history.</string>
     <string name="flag_unknown_author">author not named</string>

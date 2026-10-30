@@ -67,6 +67,8 @@ object LinksReader {
                 require(ID.matches(l.id) && DATE.matches(l.checkedOn)) { "Bad id or date" }
                 require(l.title.length in 1..80 && l.note.length in 1..200) { "Bad text" }
                 require(l.url.isEmpty() || URL.matches(l.url)) { "Only plain https addresses" }
+                // No Telegram links: a decision on record (the service is partly Russian)
+                require(host(l.url).let { it != "t.me" && !it.endsWith(".t.me") && !it.contains("telegram") }) { "No Telegram" }
                 require(l.url.isNotEmpty() || l.phone.isNotEmpty()) { "Nothing to open" }
                 require(l.app.isEmpty() || PACKAGE.matches(l.app)) { "Bad package" }
                 require(l.phone.isEmpty() || PHONE.matches(l.phone)) { "Bad number" }

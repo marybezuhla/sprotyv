@@ -25,7 +25,7 @@
         <package android:name="org.mozilla.klar" />
         <!-- Google Play: whether a link to Firefox Focus there can be offered -->
         <package android:name="com.android.vending" />
-        <!-- Apps that open https links: to tell browsers from Telegram and to find the main browser -->
+        <!-- Apps that open https links: to find the main browser -->
         <intent>
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.BROWSABLE" />
