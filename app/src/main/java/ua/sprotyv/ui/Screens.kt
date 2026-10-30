@@ -17,7 +17,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -38,9 +37,10 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.runtime.remember
 import ua.sprotyv.R
 import ua.sprotyv.personal.Opened
-import ua.sprotyv.personal.PersonalDb
 import ua.sprotyv.personal.PersonalStore
 
 /** The frame of every inner screen: "Back" always in the same place, the "Call" bar always below. */
@@ -96,24 +96,39 @@ fun SecureScreen() {
  * old data aside and deletes nothing, after one more confirmation.
  */
 @Composable
-fun Personal(title: Int, state: Opened?, nav: Nav, content: @Composable (PersonalDb) -> Unit) {
+fun Personal(title: Int, state: Opened?, nav: Nav, content: @Composable () -> Unit) {
     val context = LocalContext.current
+    val saveFailed by PersonalStore.saveFailed.collectAsStateWithLifecycle()
+    // Once open, the screen stays while the data closes and opens again (leaving the app and
+    // coming back), so a half-filled dialog is not lost
+    val seen = remember { BooleanArray(1) }
+    if (state is Opened.Ready) seen[0] = true
+    if (state != null && state !is Opened.Ready) seen[0] = false
+    val wasReady = seen[0]
     SecureScreen()
     Frame(stringResource(title), nav::back) {
-        when (state) {
-            null -> Loading()
-            is Opened.Ready -> {
+        if (saveFailed) {
+            Text(stringResource(R.string.save_failed), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.error)
+        }
+        when {
+            state is Opened.Ready -> {
                 if (state.softwareKey) {
                     Text(stringResource(R.string.software_key_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.error)
                 }
-                content(state.db)
+                content()
             }
-            Opened.TryAgain -> Problem(R.string.try_again_title, R.string.try_again_text) { PersonalStore.close(); PersonalStore.open(context) }
-            Opened.Damaged -> {
+            state == null && wasReady -> content()
+            state == null -> Loading()
+            state == Opened.TryAgain -> Problem(R.string.try_again_title, R.string.try_again_text) { PersonalStore.close(); PersonalStore.open(context) }
+            state == Opened.NeedsUpdate -> {
+                Text(stringResource(R.string.needs_update_title), style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(R.string.needs_update_text), style = MaterialTheme.typography.bodyLarge)
+            }
+            state == Opened.Damaged -> {
                 Problem(R.string.damaged_title, R.string.damaged_text) { PersonalStore.close(); PersonalStore.open(context) }
                 StartFresh { PersonalStore.startFresh(context) }
             }
-            Opened.KeyLost -> {
+            else -> {
                 Text(stringResource(R.string.key_lost_title), style = MaterialTheme.typography.titleMedium)
                 Text(stringResource(R.string.key_lost_text), style = MaterialTheme.typography.bodyLarge)
                 StartFresh { PersonalStore.startFresh(context) }

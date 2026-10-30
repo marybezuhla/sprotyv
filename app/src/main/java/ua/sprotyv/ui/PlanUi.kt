@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -34,7 +33,6 @@ import ua.sprotyv.content.Kit
 import ua.sprotyv.content.Supplies
 import ua.sprotyv.personal.FamilyPlan
 import ua.sprotyv.personal.KitCheck
-import ua.sprotyv.personal.PersonalDb
 import ua.sprotyv.personal.PersonalStore
 import ua.sprotyv.personal.PlanRow
 import ua.sprotyv.personal.Setting
@@ -48,14 +46,17 @@ import java.time.format.FormatStyle
  * rules, which people follow far more reliably than general intentions.
  */
 @Composable
-fun PlanScreen(db: PersonalDb) {
-    val loaded by produceState<FamilyPlan?>(null, db) { value = db.plan().get() ?: FamilyPlan() }
-    val start = loaded ?: return Loading()
+fun PlanScreen() {
+    val start = when (val l = rememberRead { it.plan().get() ?: FamilyPlan() }) {
+        Loaded.Waiting -> return Loading()
+        Loaded.Failed -> return ReadFailed()
+        is Loaded.Value -> l.value
+    }
     var plan by remember(start) { mutableStateOf(start) }
     fun change(next: FamilyPlan) {
         plan = next
         val saved = next.copy(updatedAt = System.currentTimeMillis())
-        PersonalStore.write { it.plan().save(saved) }
+        PersonalStore.save("plan") { it.plan().save(saved) }
     }
     Text(stringResource(R.string.plan_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     Heading(R.string.plan_points)
@@ -69,10 +70,10 @@ fun PlanScreen(db: PersonalDb) {
 
     Heading(R.string.plan_if_then)
     Text(stringResource(R.string.plan_if_then_hint), style = MaterialTheme.typography.bodyMedium)
-    Rows(db, PlanRow.KIND_IF_THEN, R.string.plan_if, R.string.plan_then, R.string.plan_if_example, R.string.plan_then_example)
+    Rows(PlanRow.KIND_IF_THEN, R.string.plan_if, R.string.plan_then, R.string.plan_if_example, R.string.plan_then_example)
 
     Heading(R.string.plan_roles)
-    Rows(db, PlanRow.KIND_ROLE, R.string.plan_who, R.string.plan_does, R.string.plan_who_example, R.string.plan_does_example)
+    Rows(PlanRow.KIND_ROLE, R.string.plan_who, R.string.plan_does, R.string.plan_who_example, R.string.plan_does_example)
 
     Heading(R.string.plan_notes)
     Field(stringResource(R.string.plan_notes), plan.notes, { change(plan.copy(notes = it)) }, multiline = true)
@@ -86,8 +87,9 @@ private fun Heading(text: Int) {
 }
 
 @Composable
-private fun Rows(db: PersonalDb, kind: String, firstLabel: Int, secondLabel: Int, firstHint: Int, secondHint: Int) {
-    val rows by db.plan().observeRows(kind).collectAsStateWithLifecycle(emptyList())
+private fun Rows(kind: String, firstLabel: Int, secondLabel: Int, firstHint: Int, secondHint: Int) {
+    val loaded by remember(kind) { PersonalStore.observe { it.plan().observeRows(kind) } }.collectAsStateWithLifecycle(null)
+    val rows = loaded ?: return Loading()
     var editing by remember { mutableStateOf<PlanRow?>(null) }
     rows.forEach { r ->
         NavRow(stringResource(firstLabel) + " " + r.first, stringResource(secondLabel) + " " + r.second) { editing = r }
@@ -106,7 +108,7 @@ private fun Rows(db: PersonalDb, kind: String, firstLabel: Int, secondLabel: Int
                     Field(stringResource(secondLabel), r.second, { r = r.copy(second = it) }, multiline = true, hint = stringResource(secondHint))
                     if (start.id != 0L) {
                         TextButton(onClick = {
-                            PersonalStore.write { it.plan().deleteRow(start) }
+                            PersonalStore.save("delete:" + java.util.UUID.randomUUID()) { it.plan().deleteRow(start) }
                             editing = null
                         }) { Text(stringResource(R.string.delete_row), color = MaterialTheme.colorScheme.error) }
                     }
@@ -115,7 +117,7 @@ private fun Rows(db: PersonalDb, kind: String, firstLabel: Int, secondLabel: Int
             confirmButton = {
                 TextButton(enabled = r.first.isNotBlank() && r.second.isNotBlank(), onClick = {
                     val saved = r.copy(first = r.first.trim(), second = r.second.trim())
-                    PersonalStore.write { it.plan().saveRow(saved) }
+                    PersonalStore.save("row:" + java.util.UUID.randomUUID()) { it.plan().saveRow(saved) }
                     editing = null
                 }) { Text(stringResource(R.string.save)) }
             },
@@ -126,12 +128,12 @@ private fun Rows(db: PersonalDb, kind: String, firstLabel: Int, secondLabel: Int
 
 /** The emergency kit list from the guide (2.2), ticked off by the owner, with a check every six months. */
 @Composable
-fun KitScreen(db: PersonalDb, content: Content?, nav: Nav) {
+fun KitScreen(content: Content?, nav: Nav) {
     if (content == null) return Loading()
     if (content.guideBroken) return Broken()
-    val checks by db.kit().observe().collectAsStateWithLifecycle(emptyList())
-    val checked = checks.filter { it.checked }.map { it.key }.toSet()
-    val reviewed by db.settings().observe(KEY_KIT_REVIEWED).collectAsStateWithLifecycle(null)
+    val checks by remember { PersonalStore.observe { it.kit().observe() } }.collectAsStateWithLifecycle(null)
+    val checked = (checks ?: return Loading()).filter { it.checked }.map { it.key }.toSet()
+    val reviewed by remember { PersonalStore.observe { it.settings().observe(KEY_KIT_REVIEWED) } }.collectAsStateWithLifecycle(null)
     val groups = Kit.groups(content.guide)
     val total = groups.sumOf { it.items.size }
     val done = groups.sumOf { g -> g.items.count { it.key in checked } }
@@ -143,7 +145,7 @@ fun KitScreen(db: PersonalDb, content: Content?, nav: Nav) {
         Text(g.title, style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
         g.items.forEach { item ->
             CheckRow(item.text, item.key in checked) { on ->
-                PersonalStore.write { it.kit().set(KitCheck(item.key, on, System.currentTimeMillis())) }
+                PersonalStore.save("kit:" + item.key) { it.kit().set(KitCheck(item.key, on, System.currentTimeMillis())) }
             }
         }
     }
@@ -156,7 +158,7 @@ fun KitScreen(db: PersonalDb, content: Content?, nav: Nav) {
         Text(stringResource(R.string.kit_next_check, Instant.ofEpochMilli(last).atZone(zone).plusMonths(6).format(fmt)), style = MaterialTheme.typography.bodyLarge)
     }
     Button(onClick = {
-        PersonalStore.write { it.settings().put(Setting(KEY_KIT_REVIEWED, System.currentTimeMillis().toString())) }
+        PersonalStore.save("setting:$KEY_KIT_REVIEWED") { it.settings().put(Setting(KEY_KIT_REVIEWED, System.currentTimeMillis().toString())) }
     }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.kit_mark_reviewed)) }
     Text(stringResource(R.string.kit_rotation), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     OutlinedButton(onClick = { nav.go(Route.GuideSection(Kit.SECTION)) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.in_detail)) }
@@ -166,7 +168,7 @@ fun KitScreen(db: PersonalDb, content: Content?, nav: Nav) {
             onDismissRequest = { confirmReset = false },
             text = { Text(stringResource(R.string.kit_reset_confirm)) },
             confirmButton = {
-                TextButton(onClick = { PersonalStore.write { it.kit().clear() }; confirmReset = false }) { Text(stringResource(R.string.kit_reset)) }
+                TextButton(onClick = { PersonalStore.save("delete:" + java.util.UUID.randomUUID()) { it.kit().clear() }; confirmReset = false }) { Text(stringResource(R.string.kit_reset)) }
             },
             dismissButton = { TextButton(onClick = { confirmReset = false }) { Text(stringResource(R.string.cancel)) } },
         )

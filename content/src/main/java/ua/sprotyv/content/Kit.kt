@@ -61,14 +61,42 @@ object Supplies {
 
     private val AMOUNT = Regex("^(\\d+(?:[.,]\\d+)?)(?:\\s*[–-]\\s*(\\d+(?:[.,]\\d+)?))?\\s+(.+)$")
 
-    /** "4–5 кг" × 2 → "8–10 кг"; "за звичкою" stays. Rounded up to one decimal. */
+    /**
+     * "4–5 кг" × 2 → "8–10 кг"; "за звичкою" stays. Weights and volumes are rounded up to one
+     * decimal; things counted in pieces (cans, packs) up to whole pieces, with the right word form.
+     */
     fun scale(amount: String, factor: Double): String {
         val m = AMOUNT.matchEntire(amount.trim()) ?: return amount
         val lo = m.groupValues[1].replace(',', '.').toDouble() * factor
         val hi = m.groupValues[2].takeIf { it.isNotEmpty() }?.replace(',', '.')?.toDouble()?.times(factor)
         val unit = m.groupValues[3]
+        val piece = PIECES.entries.firstOrNull { unit.startsWith(it.key) }?.value
+        if (piece != null) {
+            val a = ceil(lo - 1e-9).toLong().coerceAtLeast(1)
+            val b = hi?.let { ceil(it - 1e-9).toLong().coerceAtLeast(a) } ?: a
+            return if (b == a) "$a ${piece.form(a)}" else "$a–$b ${piece.form(b)}"
+        }
         return if (hi == null) "${fmt(lo)} $unit" else "${fmt(lo)}–${fmt(hi)} $unit"
     }
+
+    /** Ukrainian forms for counted things: 1 банка, 2 банки, 5 банок. */
+    class Forms(private val one: String, private val few: String, private val many: String) {
+        fun form(n: Long): String {
+            val d = n % 10
+            val dd = n % 100
+            return when {
+                d == 1L && dd != 11L -> one
+                d in 2..4 && dd !in 12..14 -> few
+                else -> many
+            }
+        }
+    }
+
+    private val PIECES = mapOf(
+        "бан" to Forms("банка", "банки", "банок"),
+        "упаков" to Forms("упаковка", "упаковки", "упаковок"),
+        "шт" to Forms("шт.", "шт.", "шт."),
+    )
 
     private fun fmt(x: Double): String {
         // The small margin keeps 8.0000001 (a rounding artefact) from becoming 8,1

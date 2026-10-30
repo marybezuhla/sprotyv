@@ -68,7 +68,7 @@
     <string name="about_license">Licence: %1$s. You may copy and change it with credit, under the same licence.</string>
     <string name="content_broken">This part of the built-in content could not be opened. Please update the app. Calls below still work.</string>
     <string name="figure">Figure</string>
-    <string name="mine_intro">Everything here is encrypted and stays on this phone. Nothing is sent anywhere.</string>
+    <string name="mine_intro">Everything here is encrypted and stays on this phone. Sprotyv sends nothing by itself.</string>
     <string name="medical_card">Medical card</string>
     <string name="medical_card_hint">Blood group, allergies, medicines</string>
     <string name="people">Trusted people</string>
@@ -110,11 +110,10 @@
     <string name="safe_no_people">First add the people who should get the message.</string>
     <string name="safe_message">Message</string>
     <string name="safe_sms_all">SMS to everyone (%1$d)</string>
-    <string name="safe_sms_note">SMS works without the internet. The SMS app opens; press Send there.</string>
+    <string name="safe_sms_note">SMS works without the internet. An SMS to one person is the surest: several numbers at once may go as an MMS, which needs mobile data. The app opens; press Send there.</string>
     <string name="safe_signal">Send in Signal</string>
-    <string name="safe_whatsapp_each">WhatsApp, one by one</string>
     <string name="safe_how">Sprotyv sends nothing itself: it only opens the app with the text ready.</string>
-    <string name="plan_intro">Make the plan together and print it: phones run out of power. Everyone should know it by heart.</string>
+    <string name="plan_intro">Make the plan together. Everyone should know it by heart; keep a paper copy too, as phones run out of power.</string>
     <string name="plan_points">Meeting points</string>
     <string name="plan_point1">1. Near home</string>
     <string name="plan_point1_hint">If you must leave the building</string>
@@ -125,7 +124,7 @@
     <string name="plan_go_between">Go-between</string>
     <string name="plan_go_between_hint">A relative in another town or country whom everyone calls when they cannot reach each other.</string>
     <string name="plan_if_then">If — then</string>
-    <string name="plan_if_then_hint">A clear “if… then…” is easier to follow in stress than a general intention.</string>
+    <string name="plan_if_then_hint">Write it plainly: “if… then…”. Such a plan is easier to remember and follow.</string>
     <string name="plan_if">If</string>
     <string name="plan_then">then</string>
     <string name="plan_if_example">e.g. an alert at night</string>
@@ -153,5 +152,11 @@
     <string name="supplies_water">Water: %1$d litres</string>
     <string name="supplies_water_note">4 litres a person a day: 2 to drink, 2 for cooking and washing.</string>
     <string name="supplies_food">Food</string>
-    <string name="supplies_rotation">Buy what you usually eat and put new stock at the back: then nothing expires.</string>
+    <string name="supplies_rotation">Buy what you usually eat, 20–30% more than the norm, and put new stock at the back: then nothing expires.</string>
+    <string name="save_failed">The last change could not be saved. Check that the phone has free space, then change it again.</string>
+    <string name="needs_update_title">Your data needs an app update</string>
+    <string name="needs_update_text">This version cannot open your saved data. Nothing was deleted. Install the next update; the guide, cards and calls work as usual.</string>
+    <string name="read_failed">Could not read your data. Nothing was changed. Go back and open it again.</string>
+    <string name="person_phone_format">Write the number with the country code, e.g. +380…, or as 0XXXXXXXXX: otherwise WhatsApp may open the wrong chat.</string>
+    <string name="safe_each">To each person</string>
 </resources>

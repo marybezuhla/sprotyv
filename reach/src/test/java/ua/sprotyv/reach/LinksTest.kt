@@ -35,4 +35,9 @@ class LinksTest {
     @Test fun refusesWhatsappWithoutNumber() {
         assertThrows(IllegalArgumentException::class.java) { Links.whatsapp("+", "text") }
     }
+
+    @Test fun whatsappTurnsLocalNumberInternational() {
+        assertEquals("https://wa.me/380501234567?text=OK", Links.whatsapp("050 123 45 67", "OK"))
+        assertEquals("https://wa.me/380501234567?text=OK", Links.whatsapp("+380501234567", "OK"))
+    }
 }

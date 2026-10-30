@@ -42,7 +42,7 @@ fun App() {
 
     // On entering the owner's screens and on every return to the screen (leaving it closed the data)
     LifecycleStartEffect(top) {
-        if (top?.personal == true) PersonalStore.open(context)
+        if (top?.personal == true) PersonalStore.open(context) else PersonalStore.close()
         onStopOrDispose { }
     }
 
@@ -50,13 +50,13 @@ fun App() {
 
     when (top) {
         null -> HomeScreen(onOpen = { nav.go(Route.Open(it)) })
-        Route.Open(Section.MINE) -> Personal(Section.MINE.title, personal, nav) { _ -> MineHub(nav) }
-        Route.Open(Section.SAFE) -> Personal(Section.SAFE.title, personal, nav) { db -> SafeScreen(db, nav) }
+        Route.Open(Section.MINE) -> Personal(Section.MINE.title, personal, nav) { MineHub(nav) }
+        Route.Open(Section.SAFE) -> Personal(Section.SAFE.title, personal, nav) { SafeScreen(nav) }
         is Route.Mine -> when (top.part) {
-            MinePart.MEDICAL -> Personal(R.string.medical_card, personal, nav) { db -> MedicalScreen(db) }
-            MinePart.PEOPLE -> Personal(R.string.people, personal, nav) { db -> PeopleScreen(db) }
-            MinePart.PLAN -> Personal(R.string.family_plan, personal, nav) { db -> PlanScreen(db) }
-            MinePart.KIT -> Personal(R.string.kit, personal, nav) { db -> KitScreen(db, content, nav) }
+            MinePart.MEDICAL -> Personal(R.string.medical_card, personal, nav) { MedicalScreen() }
+            MinePart.PEOPLE -> Personal(R.string.people, personal, nav) { PeopleScreen() }
+            MinePart.PLAN -> Personal(R.string.family_plan, personal, nav) { PlanScreen() }
+            MinePart.KIT -> Personal(R.string.kit, personal, nav) { KitScreen(content, nav) }
         }
         Route.SuppliesRoute -> SuppliesScreen(content, nav)
         is Route.Open -> when (top.section) {

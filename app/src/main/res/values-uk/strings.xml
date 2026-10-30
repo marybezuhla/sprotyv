@@ -68,7 +68,7 @@
     <string name="about_license">Ліцензія: %1$s. Можна копіювати й змінювати із зазначенням джерела, під тією ж ліцензією.</string>
     <string name="content_broken">Цю частину вбудованого вмісту не вдалося відкрити. Будь ласка, оновіть застосунок. Дзвінки внизу працюють.</string>
     <string name="figure">Рисунок</string>
-    <string name="mine_intro">Усе тут зашифровано й зберігається лише на цьому телефоні. Нічого нікуди не надсилається.</string>
+    <string name="mine_intro">Усе тут зашифровано й зберігається лише на цьому телефоні. «Спротив» сам нічого не надсилає.</string>
     <string name="medical_card">Медкартка</string>
     <string name="medical_card_hint">Група крові, алергії, ліки</string>
     <string name="people">Довірені люди</string>
@@ -110,11 +110,10 @@
     <string name="safe_no_people">Спершу додайте людей, які мають отримати повідомлення.</string>
     <string name="safe_message">Повідомлення</string>
     <string name="safe_sms_all">SMS усім (%1$d)</string>
-    <string name="safe_sms_note">SMS працює без інтернету. Відкриється застосунок SMS — натисніть там «Надіслати».</string>
+    <string name="safe_sms_note">SMS працює без інтернету. Найнадійніше — SMS кожному окремо: кілька номерів одразу телефон може надіслати як MMS, а для MMS потрібен мобільний інтернет. Відкриється застосунок — натисніть там «Надіслати».</string>
     <string name="safe_signal">Надіслати в Signal</string>
-    <string name="safe_whatsapp_each">WhatsApp, кожному окремо</string>
     <string name="safe_how">«Спротив» сам нічого не надсилає: лише відкриває застосунок із готовим текстом.</string>
-    <string name="plan_intro">Складіть план разом і роздрукуйте: телефони розряджаються. Кожен має знати його напам’ять.</string>
+    <string name="plan_intro">Складіть план разом. Кожен має знати його напам’ять; тримайте й паперову копію — телефони розряджаються.</string>
     <string name="plan_points">Точки збору</string>
     <string name="plan_point1">1. Біля дому</string>
     <string name="plan_point1_hint">Якщо треба покинути будівлю</string>
@@ -125,7 +124,7 @@
     <string name="plan_go_between">Контакт-посередник</string>
     <string name="plan_go_between_hint">Родич в іншому місті чи країні, якому всі дзвонять, коли не можуть додзвонитися одне одному.</string>
     <string name="plan_if_then">Якщо — то</string>
-    <string name="plan_if_then_hint">Чітке «якщо… то…» у стресі виконати легше, ніж загальний намір.</string>
+    <string name="plan_if_then_hint">Запишіть конкретно: «якщо… то…». Такий план легше згадати й виконати.</string>
     <string name="plan_if">Якщо</string>
     <string name="plan_then">то</string>
     <string name="plan_if_example">Наприклад: тривога вночі</string>
@@ -153,5 +152,11 @@
     <string name="supplies_water">Вода: %1$d л</string>
     <string name="supplies_water_note">4 л на людину на день: 2 л пити, 2 л на готування й гігієну.</string>
     <string name="supplies_food">Їжа</string>
-    <string name="supplies_rotation">Купуйте те, що зазвичай їсте, а нове ставте вглиб полиці — тоді нічого не протермінується.</string>
+    <string name="supplies_rotation">Купуйте те, що зазвичай їсте, на 20–30% понад норму, а нове ставте вглиб полиці — тоді нічого не протермінується.</string>
+    <string name="save_failed">Останню зміну не вдалося зберегти. Перевірте, чи є вільне місце на телефоні, і змініть ще раз.</string>
+    <string name="needs_update_title">Вашим даним потрібне оновлення застосунку</string>
+    <string name="needs_update_text">Ця версія не може відкрити ваші збережені дані. Нічого не видалено. Встановіть наступне оновлення; довідник, картки й дзвінки працюють як звичайно.</string>
+    <string name="read_failed">Не вдалося прочитати ваші дані. Нічого не змінено. Поверніться й відкрийте ще раз.</string>
+    <string name="person_phone_format">Запишіть номер з кодом країни, наприклад +380…, або як 0XXXXXXXXX — інакше WhatsApp може відкрити не той чат.</string>
+    <string name="safe_each">Кожному окремо</string>
 </resources>

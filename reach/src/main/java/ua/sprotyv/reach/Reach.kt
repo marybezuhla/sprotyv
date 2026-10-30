@@ -88,9 +88,14 @@ object Links {
         return "smsto:" + kept.joinToString(";")
     }
 
-    /** WhatsApp needs the international form without the +. An empty number would open a picker instead. */
+    /**
+     * WhatsApp needs the international form without the +. A Ukrainian local number (0XXXXXXXXX)
+     * becomes 380XXXXXXXXX; without that WhatsApp would open the wrong chat. An empty number would
+     * open a picker instead.
+     */
     fun whatsapp(phone: String, text: String): String {
-        val digits = clean(phone).removePrefix("+")
+        var digits = clean(phone).removePrefix("+")
+        if (!phone.trim().startsWith("+") && digits.length == 10 && digits.startsWith("0")) digits = "38$digits"
         require(digits.isNotEmpty()) { "No number" }
         return "https://wa.me/$digits?text=" + encode(text)
     }
