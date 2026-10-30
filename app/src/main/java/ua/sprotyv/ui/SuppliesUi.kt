@@ -36,6 +36,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.flow.map
 import ua.sprotyv.R
 import ua.sprotyv.content.Content
 import ua.sprotyv.content.Kit
@@ -47,6 +48,9 @@ import java.time.YearMonth
 
 const val KEY_SUPPLIES = "supplies"
 
+/** A value read from the store, possibly null; the wrapper itself is null only before the first read. */
+private class Read(val value: String?)
+
 /**
  * Home supplies: the guide's norms (2.5) for the household and goal, and what is already at home.
  * On top, one block answers one question, "how long will it last?": water in days, food as lines
@@ -57,10 +61,16 @@ const val KEY_SUPPLIES = "supplies"
 fun SuppliesScreen(content: Content?, nav: Nav) {
     if (content == null) return Loading()
     if (content.guideBroken) return Broken()
-    val stored by remember { PersonalStore.observe { it.settings().observe(KEY_SUPPLIES) } }.collectAsStateWithLifecycle(null)
-    val s = MySupplies.fromJson(stored)
-    fun change(next: MySupplies) {
-        PersonalStore.save("setting:$KEY_SUPPLIES") { it.settings().put(Setting(KEY_SUPPLIES, next.toJson())) }
+    // Wrapped, so "not read yet" (null) is told apart from "nothing saved yet": no tap before the first read
+    val stored by remember { PersonalStore.observe { db -> db.settings().observe(KEY_SUPPLIES).map { Read(it) } } }.collectAsStateWithLifecycle(null)
+    val s = MySupplies.fromJson((stored ?: return Loading()).value)
+    // Each change is applied to what is stored at the moment of writing, in order, under its own key:
+    // two quick taps both count, and none is written over by a copy that missed the other
+    fun change(edit: (MySupplies) -> MySupplies) {
+        PersonalStore.save("setting:$KEY_SUPPLIES:" + java.util.UUID.randomUUID()) { db ->
+            val now = MySupplies.fromJson(db.settings().get(KEY_SUPPLIES))
+            db.settings().put(Setting(KEY_SUPPLIES, edit(now).toJson()))
+        }
     }
     val lines = Supplies.food(content.guide, s.people, s.days)
     val keyed = lines.map { Kit.key(it.what) to it }
@@ -91,13 +101,13 @@ fun SuppliesScreen(content: Content?, nav: Nav) {
 
     // For whom and for how long
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        OutlinedButton(onClick = { if (s.people > 1) change(s.copy(people = s.people - 1)) }, modifier = Modifier.heightIn(min = 56.dp)) { Text("−") }
+        OutlinedButton(onClick = { if (s.people > 1) change { it.copy(people = (it.people - 1).coerceAtLeast(1)) } }, modifier = Modifier.heightIn(min = 56.dp)) { Text("−") }
         Text(stringResource(R.string.supplies_people, s.people), style = MaterialTheme.typography.titleMedium)
-        OutlinedButton(onClick = { if (s.people < 20) change(s.copy(people = s.people + 1)) }, modifier = Modifier.heightIn(min = 56.dp)) { Text("+") }
+        OutlinedButton(onClick = { if (s.people < 20) change { it.copy(people = (it.people + 1).coerceAtMost(20)) } }, modifier = Modifier.heightIn(min = 56.dp)) { Text("+") }
     }
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         Supplies.LEVELS.forEach { d ->
-            FilterChip(selected = s.days == d, onClick = { change(s.copy(days = d)) }, label = { Text(stringResource(R.string.supplies_days, d)) }, modifier = Modifier.heightIn(min = 48.dp))
+            FilterChip(selected = s.days == d, onClick = { change { it.copy(days = d) } }, label = { Text(stringResource(R.string.supplies_days, d)) }, modifier = Modifier.heightIn(min = 48.dp))
         }
     }
     Text(stringResource(R.string.supplies_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -108,10 +118,10 @@ fun SuppliesScreen(content: Content?, nav: Nav) {
     Text(stringResource(R.string.supplies_water_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(stringResource(R.string.supplies_water_have), style = MaterialTheme.typography.titleMedium)
-        OutlinedButton(onClick = { change(s.copy(water = (s.water - 1).coerceAtLeast(0))) }, modifier = Modifier.heightIn(min = 48.dp)) { Text("−1") }
+        OutlinedButton(onClick = { change { it.copy(water = (it.water - 1).coerceAtLeast(0)) } }, modifier = Modifier.heightIn(min = 48.dp)) { Text("−1") }
         Text(stringResource(R.string.supplies_litres, s.water), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-        OutlinedButton(onClick = { change(s.copy(water = (s.water + 1).coerceAtMost(2000))) }, modifier = Modifier.heightIn(min = 48.dp)) { Text("+1") }
-        OutlinedButton(onClick = { change(s.copy(water = (s.water + 5).coerceAtMost(2000))) }, modifier = Modifier.heightIn(min = 48.dp)) { Text("+5") }
+        OutlinedButton(onClick = { change { it.copy(water = (it.water + 1).coerceAtMost(2000)) } }, modifier = Modifier.heightIn(min = 48.dp)) { Text("+1") }
+        OutlinedButton(onClick = { change { it.copy(water = (it.water + 5).coerceAtMost(2000)) } }, modifier = Modifier.heightIn(min = 48.dp)) { Text("+5") }
     }
     UntilButton(MySupplies.month(s.waterUntil)) { picking = MySupplies.WATER }
 
@@ -122,7 +132,7 @@ fun SuppliesScreen(content: Content?, nav: Nav) {
         if (i > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         val have = key in s.have
         Row(Modifier.fillMaxWidth().heightIn(min = 56.dp), verticalAlignment = Alignment.Top) {
-            Checkbox(checked = have, onCheckedChange = { on -> change(s.copy(have = if (on) s.have + key else s.have - key)) })
+            Checkbox(checked = have, onCheckedChange = { on -> change { it.copy(have = if (on) it.have + key else it.have - key) } })
             Column(Modifier.weight(1f).padding(top = 12.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                 Row {
                     Text(line.what, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
@@ -140,10 +150,10 @@ fun SuppliesScreen(content: Content?, nav: Nav) {
         val current = if (key == MySupplies.WATER) MySupplies.month(s.waterUntil) else s.until[key]?.let(MySupplies::month)
         MonthDialog(current ?: now.plusMonths(6), onDone = { m ->
             val v = m?.toString().orEmpty()
-            change(
-                if (key == MySupplies.WATER) s.copy(waterUntil = v)
-                else s.copy(until = if (m == null) s.until - key else s.until + (key to v)),
-            )
+            change {
+                if (key == MySupplies.WATER) it.copy(waterUntil = v)
+                else it.copy(until = if (m == null) it.until - key else it.until + (key to v))
+            }
             picking = null
         }, onCancel = { picking = null })
     }

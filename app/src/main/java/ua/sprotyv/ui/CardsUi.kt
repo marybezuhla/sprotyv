@@ -303,18 +303,9 @@ private fun Pictogram(name: String, size: androidx.compose.ui.unit.Dp) {
 }
 
 private val PICTOGRAMS = mapOf(
-    "call" to R.drawable.pict_call,
-    "close_door" to R.drawable.pict_close_door,
-    "gas_off" to R.drawable.pict_gas_off,
-    "lie_down" to R.drawable.pict_lie_down,
     "no_touch" to R.drawable.pict_no_touch,
-    "no_window" to R.drawable.pict_no_window,
     "press" to R.drawable.pict_press,
-    "shelter" to R.drawable.pict_shelter,
-    "shoes" to R.drawable.pict_shoes,
     "stay_low" to R.drawable.pict_stay_low,
-    "step_back" to R.drawable.pict_step_back,
-    "two_walls" to R.drawable.pict_two_walls,
 )
 
 /** "Why" folded under a step, opened on request: the second level never crowds the first. */
