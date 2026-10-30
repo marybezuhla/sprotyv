@@ -60,6 +60,9 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.clickable
+import androidx.compose.material3.OutlinedIconButton
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.RadioButton
@@ -408,42 +411,46 @@ fun SectionsList(content: Content?, pins: List<String>, nav: Nav, onPin: (String
     lists.forEach { (title, ids) ->
         val infos = ids.mapNotNull { tileInfo(it, content) }
         if (infos.isEmpty()) return@forEach
-        Text(stringResource(title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 8.dp).semantics { heading() })
-        infos.forEach { info ->
-            val pinned = info.id in pins
-            Card(
-                onClick = { nav.go(info.route) },
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-                modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp),
-            ) {
-                Row(Modifier.padding(horizontal = 12.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
+        Text(
+            stringResource(title) + " · " + infos.size,
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(top = 8.dp).semantics { heading() },
+        )
+        // One frame per group, rows split by hairlines: the group is seen before its parts
+        Card(
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            infos.forEachIndexed { i, info ->
+                if (i > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                val pinned = info.id in pins
+                Row(
+                    Modifier.fillMaxWidth().heightIn(min = 64.dp).clickable { nav.go(info.route) }
+                        .padding(start = 12.dp, end = 4.dp, top = 8.dp, bottom = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
                     IconBadge(info.icon, info.group.tint(), 40.dp)
                     Spacer(Modifier.width(12.dp))
                     Column(Modifier.weight(1f)) {
                         Text(info.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                         if (info.hint.isNotBlank()) Text(info.hint, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
-                    Spacer(Modifier.width(8.dp))
+                    // A small round switch, not a wide button: the title keeps the whole line
                     if (pinned) {
-                        val say = stringResource(R.string.pin_remove_desc, info.title)
-                        FilledTonalButton(onClick = { onPin(info.id, false) }, modifier = Modifier.heightIn(min = 48.dp).clearAndSetSemantics { contentDescription = say; role = Role.Button }) {
-                            Icon(Icons.Filled.Check, contentDescription = null)
-                            Spacer(Modifier.width(4.dp))
-                            Text(stringResource(R.string.pin_added))
+                        FilledTonalIconButton(onClick = { onPin(info.id, false) }, modifier = Modifier.size(48.dp)) {
+                            Icon(Icons.Filled.Check, contentDescription = stringResource(R.string.pin_remove_desc, info.title))
                         }
                     } else {
-                        val say = stringResource(R.string.pin_add_desc, info.title)
-                        OutlinedButton(onClick = { onPin(info.id, true) }, enabled = !full, modifier = Modifier.heightIn(min = 48.dp).semantics(mergeDescendants = true) { contentDescription = say }) {
-                            Icon(Icons.Filled.Add, contentDescription = null)
-                            Spacer(Modifier.width(4.dp))
-                            Text(stringResource(R.string.pin_add))
+                        OutlinedIconButton(onClick = { onPin(info.id, true) }, enabled = !full, modifier = Modifier.size(48.dp)) {
+                            Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.pin_add_desc, info.title))
                         }
                     }
                 }
             }
         }
     }
+    Text(stringResource(R.string.pin_legend), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
 }
 
 /** The person's tiles in their order, moved with buttons. In simple mode a line shows where the screen ends. */

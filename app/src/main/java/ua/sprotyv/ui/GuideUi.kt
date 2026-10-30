@@ -19,6 +19,9 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -201,31 +204,57 @@ private fun ItemView(mark: String, item: Item, depth: Int = 0) {
 }
 
 /**
- * Tables read as one card per row with the column names inside: a phone is too narrow for
- * columns, and a screen reader reads each value with its name.
+ * Tables read as one framed list, a row per thing: its name first, a short value (an amount, a
+ * time) aligned on the right of the same line, longer columns below with a quiet column name.
+ * A phone is too narrow for columns; one frame with hairlines keeps the table seen as one whole,
+ * and the eye runs down one edge of names and one edge of values. Wide code tables stay a grid.
  */
 @Composable
 private fun TableView(t: Block.Table) {
     val head = t.rows.firstOrNull()?.takeIf { it.head }?.cells
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        t.rows.filter { !it.head }.forEach { row ->
-            Surface(
-                color = MaterialTheme.colorScheme.surface,
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-                shape = RoundedCornerShape(12.dp),
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    row.cells.forEachIndexed { i, cell ->
-                        if (cell.isBlank()) return@forEachIndexed
-                        val name = head?.getOrNull(i)
-                        if (i == 0) {
-                            RichText(cell, style = MaterialTheme.typography.titleSmall)
-                        } else if (name != null && name.isNotBlank()) {
-                            RichText("**${name.replace("**", "")}:** " + cell, style = MaterialTheme.typography.bodyMedium)
-                        } else {
-                            RichText(cell, style = MaterialTheme.typography.bodyMedium)
+    val rows = t.rows.filter { !it.head }
+    val columns = t.rows.maxOfOrNull { it.cells.size } ?: 0
+    Surface(
+        color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        shape = RoundedCornerShape(12.dp),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Column {
+            if (columns > 5) {
+                // A code table (letters and signs): a real grid reads best
+                (listOfNotNull(t.rows.firstOrNull()?.takeIf { it.head }) + rows).forEachIndexed { r, row ->
+                    if (r > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                    Row(Modifier.padding(horizontal = 8.dp, vertical = 6.dp)) {
+                        row.cells.forEach { cell ->
+                            RichText(cell, style = if (row.head) MaterialTheme.typography.labelMedium else MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
                         }
+                    }
+                }
+                return@Column
+            }
+            rows.forEachIndexed { r, row ->
+                if (r > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                val title = row.cells.firstOrNull().orEmpty()
+                val second = row.cells.getOrNull(1).orEmpty()
+                // A short second value (an amount, a time) goes on the title's line
+                val inline = second.isNotBlank() && second.length <= 22
+                Column(Modifier.padding(horizontal = 12.dp, vertical = 10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Row(verticalAlignment = Alignment.Top) {
+                        RichText(title, style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
+                        if (inline) {
+                            Spacer(Modifier.width(12.dp))
+                            RichText(second.replace("**", ""), style = MaterialTheme.typography.titleSmall)
+                        }
+                    }
+                    row.cells.drop(if (inline) 2 else 1).forEachIndexed { k, cell ->
+                        if (cell.isBlank()) return@forEachIndexed
+                        val name = head?.getOrNull(k + if (inline) 2 else 1)?.replace("**", "")
+                        // Column names only where there are several columns to tell apart
+                        if (columns >= 3 && !name.isNullOrBlank()) {
+                            Text(name, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        RichText(cell, style = MaterialTheme.typography.bodyMedium)
                     }
                 }
             }

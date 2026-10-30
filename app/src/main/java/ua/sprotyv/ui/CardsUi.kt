@@ -138,11 +138,17 @@ private fun CardBody(card: Card, content: Content, nav: Nav) {
                 Spacer(Modifier.width(12.dp))
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     Text(s.action, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                    Why(s.why, "${card.id}:$i")
+                    // The overview shows everything at once, so "why" is always there, quieter;
+                    // step by step keeps it folded, because that view is for acting
+                    if (s.why.isNotBlank()) {
+                        Text(s.why, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                    // The picture sits inside its own step, so it is never read as the next one's
+                    if (s.figure.isNotEmpty()) StepFigure(content, s.figure)
                 }
                 Pictogram(s.icon, 44.dp)
             }
-            if (s.figure.isNotEmpty()) StepFigure(content, s.figure)
+            if (i < card.steps.lastIndex) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant, modifier = Modifier.padding(start = 48.dp))
         }
         Button(onClick = { all = false; step = 0 }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
             Text(stringResource(R.string.step_by_step), style = MaterialTheme.typography.titleMedium)

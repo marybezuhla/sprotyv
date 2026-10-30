@@ -433,4 +433,5 @@
     <string name="practice_note">This is practice. In a real emergency, open the card.</string>
     <string name="practice_card">Test yourself: what would you do?</string>
     <string name="practice_card_kid">Let\'s play: what would you do?</string>
+    <string name="pin_legend">＋ adds to the home screen, ✓ is already there.</string>
 </resources>
