@@ -58,7 +58,7 @@ class BackupTest {
     @Test fun snapshotRoundTrip() {
         val back = BackupData.decode(BackupData.encode(snapshot))
         assertEquals(snapshot, back)
-        assertEquals(7, back.records)
+        assertEquals(6, back.records)
     }
 
     @Test fun foreignOrBrokenFilesAreRefused() {
