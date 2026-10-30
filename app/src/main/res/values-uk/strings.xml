@@ -270,4 +270,11 @@
     <string name="ready_count">%1$d з %2$d</string>
     <string name="ready_next">Наступний крок: %1$s</string>
     <string name="ready_all">Усе готово. Перевіряйте раз на пів року.</string>
+    <string name="theme_title">Тема</string>
+    <string name="theme_system">Як у телефоні</string>
+    <string name="theme_light">Світла</string>
+    <string name="theme_dark">Темна</string>
+    <string name="theme_contrast">Контрастна (найчіткіший текст; світла чи темна — як у телефоні)</string>
+    <string name="theme_dynamic">Кольори зі шпалер (Material You)</string>
+    <string name="theme_dynamic_hint">Акцентні кольори беруться зі шпалер телефона. Помаранчеве попередження й червона кнопка 112 не змінюються.</string>
 </resources>

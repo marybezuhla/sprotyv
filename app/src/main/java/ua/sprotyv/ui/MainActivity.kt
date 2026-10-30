@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.collectAsState
 import ua.sprotyv.personal.PersonalStore
 
 class MainActivity : ComponentActivity() {
@@ -13,8 +14,10 @@ class MainActivity : ComponentActivity() {
         // A QR photo left from an earlier run goes. Not when Android restores the app, because a
         // photo just taken may be waiting to be read
         if (savedInstanceState == null) clearScans(this)
+        HomePrefs.load(this)
         setContent {
-            SprotyvTheme {
+            val prefs = HomePrefs.state.collectAsState().value ?: HomePrefs.load(this)
+            SprotyvTheme(prefs.theme, prefs.dynamic) {
                 App()
             }
         }

@@ -86,7 +86,7 @@ fun ReadinessBlock(content: Content?, nav: Nav) {
 
 @Composable
 private fun ReadyRow(title: String, p: Progress?, onClick: () -> Unit) {
-    val done = if (isSystemInDarkTheme()) Color(0xFF81C784) else Color(0xFF2E7D32)
+    val done = if (LocalDark.current) Color(0xFF81C784) else Color(0xFF2E7D32)
     val going = MaterialTheme.colorScheme.primary
     val track = MaterialTheme.colorScheme.outlineVariant
     val words = if (p == null) "…" else stringResource(R.string.ready_count, p.done, p.total)
