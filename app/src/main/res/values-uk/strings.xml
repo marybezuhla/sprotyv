@@ -398,4 +398,8 @@
     <string name="power_hint">Офіційні графіки за областями</string>
     <string name="power_intro">Знайдіть свою область і відкрийте сайт свого оператора: там графік за вашою чергою. Аварійні відключення бувають і поза графіком.</string>
     <string name="power_note">Адреси звірено з переліком Главкому від 17.10.2026. Ботами графіків користуйтеся лише з посилань на сайті свого оператора: фейкових ботів багато.</string>
+    <string name="situation_evac">Евакуація й допомога</string>
+    <string name="situation_search">Зниклі безвісти й полонені</string>
+    <string name="situation_mind">Психологічна підтримка</string>
+    <string name="situation_rights">Права, злочини, навчання</string>
 </resources>

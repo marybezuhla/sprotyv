@@ -42,6 +42,10 @@ private val Link.groupTitle: Int get() = when (group) {
     "threats" -> R.string.situation_threats
     "front" -> R.string.situation_front
     "help" -> R.string.situation_help
+    "evac" -> R.string.situation_evac
+    "search" -> R.string.situation_search
+    "mind" -> R.string.situation_mind
+    "rights" -> R.string.situation_rights
     Link.POWER -> R.string.power_title
     else -> R.string.situation_facts
 }

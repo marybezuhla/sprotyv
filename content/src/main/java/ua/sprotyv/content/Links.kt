@@ -23,7 +23,7 @@ data class Link(
         const val OFFICIAL = "official"
         const val VOLUNTEER = "volunteer"
         const val INDEPENDENT = "independent"
-        val GROUPS = listOf("threats", "front", "help", "facts", "power")
+        val GROUPS = listOf("threats", "front", "help", "evac", "search", "mind", "rights", "facts", "power")
         const val POWER = "power"
         const val UNKNOWN_AUTHOR = "unknown_author"
         const val ADS = "ads"
@@ -35,7 +35,7 @@ data class Link(
 
 object LinksReader {
     private val PACKAGE = Regex("^[a-z][a-z0-9_]*(\\.[a-z0-9_]+)+$")
-    private val PHONE = Regex("^[0-9]{3,4}$")
+    private val PHONE = Regex("^[0-9]{3,10}$")
     private val ID = Regex("^[a-z0-9-]{1,40}$")
     private val DATE = Regex("^\\d{4}-\\d{2}-\\d{2}$")
     // https://host[/path]: no user part, no port, no odd characters, so the host shown is the host opened
