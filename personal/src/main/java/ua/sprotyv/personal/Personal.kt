@@ -130,6 +130,19 @@ object PersonalStore {
         }
     }
 
+    /**
+     * Runs a change on the owner's data, in order with opening and closing, and only while it is
+     * open. Screens never write to the database themselves, so nothing is written to a closed one.
+     */
+    fun write(block: suspend (PersonalDb) -> Unit) {
+        scope.launch {
+            mutex.withLock {
+                val db = (_state.value as? Opened.Ready)?.db ?: return@withLock
+                block(db)
+            }
+        }
+    }
+
     fun startFresh(context: Context) {
         val app = context.applicationContext
         scope.launch {

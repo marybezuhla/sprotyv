@@ -40,6 +40,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import ua.sprotyv.R
 import ua.sprotyv.personal.Opened
+import ua.sprotyv.personal.PersonalDb
+import ua.sprotyv.personal.PersonalStore
 
 /** The frame of every inner screen: "Back" always in the same place, the "Call" bar always below. */
 @Composable
@@ -88,34 +90,33 @@ fun SecureScreen() {
 }
 
 /**
- * The owner's section opens only when the encrypted data is ready. A passing failure or damaged
- * only offers to try again. A lost key or damaged data also offers a fresh start, which sets the
+ * Every screen with the owner's data goes through here: it opens only when the encrypted data is
+ * ready, is kept off screenshots, and on trouble shows what happened. A passing failure or damaged
+ * data offers to try again; a lost key or damaged data also offers a fresh start, which sets the
  * old data aside and deletes nothing, after one more confirmation.
  */
 @Composable
-fun PersonalGate(state: Opened?, onTryAgain: () -> Unit, onStartFresh: () -> Unit, onBack: () -> Unit) {
+fun Personal(title: Int, state: Opened?, nav: Nav, content: @Composable (PersonalDb) -> Unit) {
+    val context = LocalContext.current
     SecureScreen()
-    Frame(stringResource(Section.MINE.title), onBack) {
+    Frame(stringResource(title), nav::back) {
         when (state) {
-            null -> Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                CircularProgressIndicator()
-                Text(stringResource(R.string.opening))
-            }
+            null -> Loading()
             is Opened.Ready -> {
                 if (state.softwareKey) {
                     Text(stringResource(R.string.software_key_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.error)
                 }
-                Text(stringResource(R.string.coming_soon), style = MaterialTheme.typography.bodyLarge)
+                content(state.db)
             }
-            Opened.TryAgain -> Problem(R.string.try_again_title, R.string.try_again_text, onTryAgain)
+            Opened.TryAgain -> Problem(R.string.try_again_title, R.string.try_again_text) { PersonalStore.close(); PersonalStore.open(context) }
             Opened.Damaged -> {
-                Problem(R.string.damaged_title, R.string.damaged_text, onTryAgain)
-                StartFresh(onStartFresh)
+                Problem(R.string.damaged_title, R.string.damaged_text) { PersonalStore.close(); PersonalStore.open(context) }
+                StartFresh { PersonalStore.startFresh(context) }
             }
             Opened.KeyLost -> {
                 Text(stringResource(R.string.key_lost_title), style = MaterialTheme.typography.titleMedium)
                 Text(stringResource(R.string.key_lost_text), style = MaterialTheme.typography.bodyLarge)
-                StartFresh(onStartFresh)
+                StartFresh { PersonalStore.startFresh(context) }
             }
         }
     }
