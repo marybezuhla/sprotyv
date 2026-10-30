@@ -3,4 +3,5 @@
     <color name="background">#FFF7F6F2</color>
     <color name="icon_background">#FF0057B7</color>
     <color name="icon_foreground">#FFFFD700</color>
+    <color name="icon_neutral_bg">#FF5F6368</color>
 </resources>

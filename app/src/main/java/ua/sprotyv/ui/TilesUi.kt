@@ -686,6 +686,7 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
                 dismissButton = { androidx.compose.material3.TextButton(onClick = { askScreenshots = false }) { Text(stringResource(R.string.cancel)) } },
             )
         }
+        NeutralToggle()
         NavRow(stringResource(R.string.about_guide)) { nav.go(Route.About) }
         FeedbackBlock()
     }
@@ -762,5 +763,32 @@ fun WelcomeScreen(nav: Nav) {
             Text(stringResource(R.string.welcome_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         CallBar()
+    }
+}
+
+/** The neutral name and icon, turned on only after reading what it does and does not hide. */
+@Composable
+private fun NeutralToggle() {
+    val context = LocalContext.current
+    val activity = context as? android.app.Activity
+    var on by remember { mutableStateOf(Neutral.isOn(context)) }
+    var ask by rememberSaveable { mutableStateOf(false) }
+    Toggle(stringResource(R.string.neutral_toggle), on) { want ->
+        if (want) ask = true else { Neutral.set(context, false); on = false; activity?.let(Neutral::applyToTask) }
+    }
+    Text(stringResource(R.string.neutral_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    if (ask) {
+        androidx.compose.material3.AlertDialog(
+            onDismissRequest = { ask = false },
+            title = { Text(stringResource(R.string.neutral_confirm_title)) },
+            text = { Text(stringResource(R.string.neutral_confirm_text)) },
+            confirmButton = {
+                androidx.compose.material3.TextButton(onClick = {
+                    ask = false
+                    Neutral.set(context, true); on = true; activity?.let(Neutral::applyToTask)
+                }) { Text(stringResource(R.string.neutral_confirm_yes)) }
+            },
+            dismissButton = { androidx.compose.material3.TextButton(onClick = { ask = false }) { Text(stringResource(R.string.cancel)) } },
+        )
     }
 }

@@ -557,4 +557,10 @@
     <string name="ready_short_people">Люди</string>
     <string name="ready_short_plan">План</string>
     <string name="ready_short_kit">Валіза</string>
+    <string name="neutral_name">Нотатки</string>
+    <string name="neutral_toggle">Нейтральна назва й іконка</string>
+    <string name="neutral_hint">На головному екрані телефона й у списку недавніх застосунків «Спротив» зветься «Нотатки» з простою іконкою.</string>
+    <string name="neutral_confirm_title">Увімкнути «Нотатки»?</string>
+    <string name="neutral_confirm_text">Іконку на головному екрані, можливо, доведеться додати знову: шукайте «Нотатки». Запам’ятайте це — у небезпеці застосунок треба знайти швидко. Це не схованка: відкритий застосунок виглядає як «Спротив», а в налаштуваннях телефона назва лишається «Спротив».</string>
+    <string name="neutral_confirm_yes">Увімкнути</string>
 </resources>
