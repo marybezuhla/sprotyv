@@ -177,3 +177,49 @@ private fun Line(title: String, value: String) {
         Text("≈ $value", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
     }
 }
+
+/**
+ * "Wait at least 40 minutes": one tap starts the count, so no one has to watch the clock in the
+ * corridor. Ends with the card's own words: a repeated strike can come even later, so the all-clear
+ * decides. Only a time is kept, on this phone, like the tourniquet time; gone after three hours.
+ */
+@Composable
+fun WaitTimer(total: Int) {
+    val context = LocalContext.current
+    val prefs = remember { context.applicationContext.getSharedPreferences("wait", Context.MODE_PRIVATE) }
+    var since by remember {
+        val t = prefs.getLong("since", 0L)
+        val stale = t == 0L || System.currentTimeMillis() - t > 3 * 3600_000L || t > System.currentTimeMillis()
+        if (stale && t != 0L) prefs.edit().remove("since").apply()
+        mutableLongStateOf(if (stale) 0L else t)
+    }
+    var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
+    LaunchedEffect(since) {
+        while (since != 0L) {
+            now = System.currentTimeMillis()
+            delay(15_000)
+        }
+    }
+    if (since == 0L) {
+        OutlinedButton(onClick = {
+            val t = System.currentTimeMillis()
+            prefs.edit().putLong("since", t).apply()
+            now = t
+            since = t
+        }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.wait_start, total)) }
+        return
+    }
+    val gone = ((now - since) / 60_000).coerceAtLeast(0)
+    val left = (total - gone).coerceAtLeast(0)
+    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        if (left > 0) {
+            Meter(stringResource(R.string.wait_left, left), stringResource(R.string.wait_of, gone, total), gone.toFloat() / total)
+        } else {
+            Text(stringResource(R.string.wait_done, total), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
+        }
+        androidx.compose.material3.TextButton(onClick = {
+            prefs.edit().remove("since").apply()
+            since = 0L
+        }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.wait_reset)) }
+    }
+}

@@ -147,6 +147,7 @@ private fun CardBody(card: Card, content: Content, nav: Nav) {
                     }
                     // The picture sits inside its own step, so it is never read as the next one's
                     if (s.figure.isNotEmpty()) StepFigure(content, s.figure)
+                    if (s.wait > 0) WaitTimer(s.wait)
                 }
                 Pictogram(s.icon, 44.dp)
             }
@@ -173,6 +174,7 @@ private fun CardBody(card: Card, content: Content, nav: Nav) {
         )
         if (s.figure.isNotEmpty()) StepFigure(content, s.figure)
         Why(s.why, "${card.id}:$step")
+        if (s.wait > 0) WaitTimer(s.wait)
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
             if (step > 0) {
                 OutlinedButton(onClick = { step-- }, modifier = Modifier.heightIn(min = 64.dp)) { Text(stringResource(R.string.previous)) }

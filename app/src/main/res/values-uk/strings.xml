@@ -528,4 +528,9 @@
         <item quantity="many">%1$d годин</item>
         <item quantity="other">%1$d години</item>
     </plurals>
+    <string name="wait_start">Почати відлік %1$d хв</string>
+    <string name="wait_left">Чекайте ще %1$d хв</string>
+    <string name="wait_of">%1$d з %2$d хв</string>
+    <string name="wait_done">Минуло %1$d хв. Повторний удар буває й через 1–2 години: будьте обережні, слухайте відбій.</string>
+    <string name="wait_reset">Скинути відлік</string>
 </resources>

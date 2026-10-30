@@ -263,6 +263,17 @@ ICONS = {
     ("home-fire", 3): "stay_low", ("kid-fire", 1): "stay_low",
 }
 
+# Steps that say "wait at least N minutes" get a countdown button on the card
+WAITS = {("first-60", 3): 40, ("air-alert", 6): 40, ("drone", 6): 40}
+
+def apply_waits(cards):
+    for c in cards:
+        for i, st in enumerate(c["steps"]):
+            w = WAITS.get((c["id"], i))
+            if w:
+                assert str(w) in st["action"], (c["id"], i)
+                st["wait"] = w
+
 def apply_icons(cards):
     for (cid, i) in ICONS:
         card = next((c for c in CARDS + KID_CARDS if c["id"] == cid), None)
@@ -277,6 +288,7 @@ def apply_icons(cards):
 
 if __name__ == "__main__":
     apply_icons(CARDS)
+    apply_waits(CARDS)
     apply_icons(KID_CARDS)
     out = os.path.join(os.path.dirname(__file__), "..", "..", "content", "src", "main", "assets", "cards.json")
     for c in CARDS:

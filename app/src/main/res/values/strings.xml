@@ -522,4 +522,9 @@
         <item quantity="one">%1$d hour</item>
         <item quantity="other">%1$d hours</item>
     </plurals>
+    <string name="wait_start">Start a %1$d-minute count</string>
+    <string name="wait_left">Wait %1$d more min</string>
+    <string name="wait_of">%1$d of %2$d min</string>
+    <string name="wait_done">%1$d minutes have passed. A repeated strike can come even after 1–2 hours: take care, listen for the all-clear.</string>
+    <string name="wait_reset">Reset the count</string>
 </resources>
