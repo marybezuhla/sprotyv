@@ -23,7 +23,9 @@
         <!-- Firefox Focus erases pages on closing: used for "Situation" when installed -->
         <package android:name="org.mozilla.focus" />
         <package android:name="org.mozilla.klar" />
-        <!-- To tell the phone's browsers apart (pages without a trace, Telegram links); browsers only -->
+        <!-- Google Play: whether a link to Firefox Focus there can be offered -->
+        <package android:name="com.android.vending" />
+        <!-- Apps that open https links: to tell browsers from Telegram and to find the main browser -->
         <intent>
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.BROWSABLE" />
