@@ -14,6 +14,7 @@ import ua.sprotyv.personal.Setting
 class BackupTest {
     // Small settings keep the tests quick; the app always uses BackupCrypto.DEFAULT
     private val fast = BackupCrypto.KdfParams(memoryKiB = 1024, iterations = 1, parallelism = 1)
+    private val B = BackupCrypto.Purpose.BACKUP
     private val pw = "тест-пароль-для-копії".toCharArray()
 
     private val snapshot = BackupData.Snapshot(
@@ -28,31 +29,31 @@ class BackupTest {
 
     @Test fun encryptsAndOpensWithThePassword() {
         val plain = "Привіт, ґанок".toByteArray()
-        val sealed = BackupCrypto.encrypt(plain, pw, fast)
+        val sealed = BackupCrypto.encrypt(plain, pw, B, fast)
         assertEquals(plain.size + BackupCrypto.OVERHEAD, sealed.size)
-        assertArrayEquals(plain, BackupCrypto.decrypt(sealed, pw, listOf(fast)))
+        assertArrayEquals(plain, BackupCrypto.decrypt(sealed, pw, B, listOf(fast)))
     }
 
     @Test fun wrongPasswordAndAnyChangeAreRefused() {
-        val sealed = BackupCrypto.encrypt("дані".toByteArray(), pw, fast)
-        expect<BackupCrypto.WrongPasswordOrDamaged> { BackupCrypto.decrypt(sealed, "інший-пароль-зовсім".toCharArray(), listOf(fast)) }
+        val sealed = BackupCrypto.encrypt("дані".toByteArray(), pw, B, fast)
+        expect<BackupCrypto.WrongPasswordOrDamaged> { BackupCrypto.decrypt(sealed, "інший-пароль-зовсім".toCharArray(), B, listOf(fast)) }
         for (i in sealed.indices step 7) {
             val bad = sealed.copyOf().also { it[i] = (it[i].toInt() xor 1).toByte() }
-            expect<BackupCrypto.WrongPasswordOrDamaged> { BackupCrypto.decrypt(bad, pw, listOf(fast)) }
+            expect<BackupCrypto.WrongPasswordOrDamaged> { BackupCrypto.decrypt(bad, pw, B, listOf(fast)) }
         }
-        expect<BackupCrypto.NotABackup> { BackupCrypto.decrypt(ByteArray(10), pw, listOf(fast)) }
+        expect<BackupCrypto.NotABackup> { BackupCrypto.decrypt(ByteArray(10), pw, B, listOf(fast)) }
     }
 
     @Test fun sameFileTwiceLooksDifferent() {
-        val a = BackupCrypto.encrypt("x".toByteArray(), pw, fast)
-        val b = BackupCrypto.encrypt("x".toByteArray(), pw, fast)
+        val a = BackupCrypto.encrypt("x".toByteArray(), pw, B, fast)
+        val b = BackupCrypto.encrypt("x".toByteArray(), pw, B, fast)
         assertTrue(!a.contentEquals(b))
     }
 
     @Test fun composedAndDecomposedLettersGiveTheSameKey() {
         // "й" typed as one letter or as "и" + combining breve
-        val sealed = BackupCrypto.encrypt("x".toByteArray(), "мій-довгий-пароль-й".toCharArray(), fast)
-        assertArrayEquals("x".toByteArray(), BackupCrypto.decrypt(sealed, "мій-довгий-пароль-й".toCharArray(), listOf(fast)))
+        val sealed = BackupCrypto.encrypt("x".toByteArray(), "мій-довгий-пароль-й".toCharArray(), B, fast)
+        assertArrayEquals("x".toByteArray(), BackupCrypto.decrypt(sealed, "мій-довгий-пароль-й".toCharArray(), B, listOf(fast)))
     }
 
     @Test fun snapshotRoundTrip() {
@@ -81,7 +82,7 @@ class BackupTest {
 
     @Test fun planCodeFitsAndOpens() {
         val shared = BackupData.SharedPlan(snapshot.plan!!, snapshot.rows)
-        val words = (1..2000).map { "w$it" }
+        val words = (1..2000).map { n -> "w" + n.toString().map { d -> 'a' + (d - '0') }.joinToString("") }
         val password = BackupCrypto.suggestPassword(words, 4).toCharArray()
         val code = PlanCode.encode(shared, password)
         assertTrue(code.startsWith(PlanCode.PREFIX))
@@ -91,7 +92,35 @@ class BackupTest {
         expect<BackupData.Incompatible> { PlanCode.decode(PlanCode.PREFIX + "!!!", password) }
     }
 
+    @Test fun backupNeverOpensAsPlanCode() {
+        val sealed = BackupCrypto.encrypt("x".toByteArray(), pw, B, fast)
+        expect<BackupCrypto.WrongPasswordOrDamaged> { BackupCrypto.decrypt(sealed, pw, BackupCrypto.Purpose.PLAN, listOf(fast)) }
+    }
+
+    @Test fun deepNestingIsRefusedBeforeParsing() {
+        val deep = "{\"app\":\"sprotyv\",\"kind\":\"backup\",\"format\":1,\"x\":" + "[".repeat(100_000) + "]".repeat(100_000) + "}"
+        expect<BackupData.Incompatible> { BackupData.decode(deep.toByteArray()) }
+        assertTrue(BackupData.shallow(BackupData.encode(snapshot)))
+        // Brackets inside text do not count
+        assertTrue(BackupData.shallow("{\"a\":\"[[[[[[[[[[\\\"[[[[\"}".toByteArray()))
+    }
+
+    @Test fun duplicatesAndWrongShapesAreRefused() {
+        val two = snapshot.copy(people = snapshot.people + snapshot.people)
+        expect<BackupData.Incompatible> { BackupData.decode(BackupData.encode(two)) }
+        val medicalAsText = String(BackupData.encode(snapshot)).replaceFirst(Regex("\"medical\":\\{[^}]*\\}"), "\"medical\":\"x\"")
+        expect<BackupData.Incompatible> { BackupData.decode(medicalAsText.toByteArray()) }
+    }
+
+    @Test fun wordsAreReadHoweverTyped() {
+        assertEquals("cat-dog-sun-tree", String(BackupCrypto.asWords(" Cat dog-SUN  tree ".toCharArray())!!))
+        assertEquals(null, BackupCrypto.asWords("my-own-pass1-word".toCharArray()))
+        val list = (1..2000).map { "w" + "abcdefghij"[it % 10] + it.toString().map { d -> 'a' + (d - '0') }.joinToString("") } + listOf("t-shirt", "yo-yo")
+        repeat(50) { assertTrue(!BackupCrypto.suggestPassword(list, 4).contains("shirt")) }
+    }
+
     @Test fun weakPasswordsAreRefused() {
+        assertTrue(BackupCrypto.isTooSimple("kyiv2024kyiv2024".toCharArray()))
         assertTrue(BackupCrypto.isTooSimple("short".toCharArray()))
         assertTrue(BackupCrypto.isTooSimple("password12345678".toCharArray()))
         assertTrue(BackupCrypto.isTooSimple("1111111111111111".toCharArray()))

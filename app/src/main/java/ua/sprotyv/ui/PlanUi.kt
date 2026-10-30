@@ -108,7 +108,7 @@ private fun Rows(kind: String, firstLabel: Int, secondLabel: Int, firstHint: Int
                     Field(stringResource(secondLabel), r.second, { r = r.copy(second = it) }, multiline = true, hint = stringResource(secondHint))
                     if (start.id != 0L) {
                         TextButton(onClick = {
-                            PersonalStore.save("delete:" + java.util.UUID.randomUUID()) { it.plan().deleteRow(start) }
+                            PersonalStore.save("plan:delete:" + java.util.UUID.randomUUID()) { it.plan().deleteRow(start) }
                             editing = null
                         }) { Text(stringResource(R.string.delete_row), color = MaterialTheme.colorScheme.error) }
                     }
@@ -117,7 +117,7 @@ private fun Rows(kind: String, firstLabel: Int, secondLabel: Int, firstHint: Int
             confirmButton = {
                 TextButton(enabled = r.first.isNotBlank() && r.second.isNotBlank(), onClick = {
                     val saved = r.copy(first = r.first.trim(), second = r.second.trim())
-                    PersonalStore.save("row:" + java.util.UUID.randomUUID()) { it.plan().saveRow(saved) }
+                    PersonalStore.save("plan:row:" + java.util.UUID.randomUUID()) { it.plan().saveRow(saved) }
                     editing = null
                 }) { Text(stringResource(R.string.save)) }
             },

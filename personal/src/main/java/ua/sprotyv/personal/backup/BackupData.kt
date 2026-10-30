@@ -28,6 +28,9 @@ object BackupData {
     private const val MAX_TEXT = 20_000
     private const val MAX_ITEMS = 2_000
 
+    /** Our files nest four levels at most; anything deeper is refused before parsing. */
+    private const val MAX_DEPTH = 6
+
     /** The file does not fit this version of Sprotyv (or is not a Sprotyv file at all). */
     class Incompatible : Exception()
 
@@ -49,27 +52,32 @@ object BackupData {
 
     data class SharedPlan(val plan: FamilyPlan, val rows: List<PlanRow>)
 
-    suspend fun read(db: PersonalDb): Snapshot = Snapshot(
+    /**
+     * [settings]: the setting keys a backup carries (the "I am safe" text, the kit check date).
+     * Others stay on this phone: a backup never brings or changes anything else.
+     */
+    suspend fun read(db: PersonalDb, settings: Set<String>): Snapshot = Snapshot(
         created = System.currentTimeMillis(),
         medical = db.medical().get(),
         people = db.people().all(),
         plan = db.plan().get(),
         rows = db.plan().allRows(),
         kit = db.kit().all(),
-        settings = db.settings().all(),
+        settings = db.settings().all().filter { it.key in settings },
     )
 
-    /** Replaces all of the owner's data with [s], all or nothing. */
-    suspend fun replaceAll(db: PersonalDb, s: Snapshot) {
+    /** Replaces all of the owner's data with [s], all or nothing. Only the [settings] keys are touched. */
+    suspend fun replaceAll(db: PersonalDb, s: Snapshot, settings: Set<String>) {
         db.withTransaction {
             db.medical().clear(); db.people().clear(); db.plan().clear(); db.plan().clearRows()
-            db.kit().clear(); db.settings().clear()
+            db.kit().clear()
+            settings.forEach { db.settings().delete(it) }
             s.medical?.let { db.medical().save(it) }
             s.people.forEach { db.people().save(it) }
             s.plan?.let { db.plan().save(it) }
             s.rows.forEach { db.plan().saveRow(it) }
             s.kit.forEach { db.kit().set(it) }
-            s.settings.forEach { db.settings().put(it) }
+            s.settings.filter { it.key in settings }.forEach { db.settings().put(it) }
         }
     }
 
@@ -99,7 +107,7 @@ object BackupData {
         return guard {
             Snapshot(
                 created = root.getLong("created"),
-                medical = root.optJSONObject("medical")?.let { m ->
+                medical = objectOrNull(root, "medical")?.let { m ->
                     MedicalCard(
                         name = text(m, "name"), birthDate = text(m, "birthDate"), bloodGroup = text(m, "bloodGroup"),
                         allergies = text(m, "allergies"), medicines = text(m, "medicines"), conditions = text(m, "conditions"),
@@ -112,12 +120,26 @@ object BackupData {
                         relation = text(p, "relation"), safeList = p.getBoolean("safeList"), ice = p.getBoolean("ice"),
                     )
                 },
-                plan = root.optJSONObject("plan")?.let(::planOf),
+                plan = objectOrNull(root, "plan")?.let(::planOf),
                 rows = items(root.getJSONArray("rows")).map(::rowOf),
                 kit = items(root.getJSONArray("kit")).map { KitCheck(text(it, "key").also { k -> require(k.isNotEmpty()) }, it.getBoolean("checked"), it.getLong("at")) },
                 settings = items(root.getJSONArray("settings")).map { Setting(text(it, "key").also { k -> require(k.isNotEmpty()) }, text(it, "value")) },
-            )
+            ).also { s ->
+                // The same person, row, tick or setting twice: not a file Sprotyv wrote
+                require(s.people.map { it.id }.toSet().size == s.people.size)
+                require(s.rows.map { it.id }.filter { it > 0 }.let { it.toSet().size == it.size })
+                require(s.kit.map { it.key }.toSet().size == s.kit.size)
+                require(s.settings.map { it.key }.toSet().size == s.settings.size)
+            }
         }
+    }
+
+    /** A field that must be an object or null; anything else refuses the file instead of being dropped. */
+    private fun objectOrNull(o: JSONObject, name: String): JSONObject? {
+        val v = o.get(name)
+        if (v == JSONObject.NULL) return null
+        require(v is JSONObject)
+        return v
     }
 
     /** The family plan alone, compressed so the code stays small enough to scan. */
@@ -133,6 +155,8 @@ object BackupData {
     }
 
     private fun root(bytes: ByteArray, kind: String): JSONObject {
+        // org.json parses by recursion: a crafted file nested thousands deep would crash the app
+        if (!shallow(bytes)) throw Incompatible()
         val root = try {
             JSONObject(String(bytes, Charsets.UTF_8))
         } catch (e: Exception) {
@@ -143,6 +167,30 @@ object BackupData {
         if (format > FORMAT) throw FromNewer()
         if (format != FORMAT) throw Incompatible()
         return root
+    }
+
+    /** Counts brackets outside strings; true when nesting stays within [MAX_DEPTH]. */
+    internal fun shallow(bytes: ByteArray): Boolean {
+        var depth = 0
+        var inString = false
+        var escaped = false
+        for (b in bytes) {
+            val c = b.toInt().toChar()
+            if (inString) {
+                when {
+                    escaped -> escaped = false
+                    c == '\\' -> escaped = true
+                    c == '"' -> inString = false
+                }
+                continue
+            }
+            when (c) {
+                '"' -> inString = true
+                '{', '[' -> if (++depth > MAX_DEPTH) return false
+                '}', ']' -> depth--
+            }
+        }
+        return true
     }
 
     private inline fun <T> guard(block: () -> T): T = try {

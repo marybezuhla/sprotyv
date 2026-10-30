@@ -326,4 +326,9 @@
     <string name="plan_code_take">Зробити цей план моїм</string>
     <string name="plan_code_replace">Ваш теперішній сімейний план буде замінено цим. Продовжити?</string>
     <string name="plan_code_saved">План збережено.</string>
+    <string name="backup_no_memory">Телефону забракло пам\'яті. Закрийте інші застосунки й спробуйте ще раз.</string>
+    <string name="backup_again">Копію не збережено: екран перезапустився. Натисніть «Зберегти копію» ще раз.</string>
+    <string name="backup_delete_by_hand">Не вдалося. Недописаний файл копії лишився — видаліть його вручну.</string>
+    <string name="plan_code_show_password">Показати пароль ще раз</string>
+    <string name="plan_code_said">Пароль сказано — показати код</string>
 </resources>
