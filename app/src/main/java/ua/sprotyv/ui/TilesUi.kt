@@ -661,6 +661,26 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
             Text(stringResource(R.string.lock_no_screen_lock), style = MaterialTheme.typography.bodyLarge)
         }
         Text(stringResource(R.string.lock_explain), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        // Screenshots of the owner's screens: off by default, turned on only after reading what it means
+        var askScreenshots by rememberSaveable { mutableStateOf(false) }
+        Toggle(stringResource(R.string.screenshots_allow), prefs.screenshots) { on ->
+            if (on) askScreenshots = true else HomePrefs.update(context) { it.copy(screenshots = false) }
+        }
+        Text(stringResource(R.string.screenshots_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        if (askScreenshots) {
+            androidx.compose.material3.AlertDialog(
+                onDismissRequest = { askScreenshots = false },
+                title = { Text(stringResource(R.string.screenshots_confirm_title)) },
+                text = { Text(stringResource(R.string.screenshots_confirm_text)) },
+                confirmButton = {
+                    androidx.compose.material3.TextButton(onClick = {
+                        askScreenshots = false
+                        HomePrefs.update(context) { it.copy(screenshots = true) }
+                    }) { Text(stringResource(R.string.screenshots_confirm_yes)) }
+                },
+                dismissButton = { androidx.compose.material3.TextButton(onClick = { askScreenshots = false }) { Text(stringResource(R.string.cancel)) } },
+            )
+        }
         NavRow(stringResource(R.string.about_guide)) { nav.go(Route.About) }
     }
 }
