@@ -29,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -43,21 +44,32 @@ import ua.sprotyv.R
 import ua.sprotyv.personal.Opened
 import ua.sprotyv.personal.PersonalStore
 
+/** True inside a tab of full mode: the tabs draw the "Call" bar, and there is no "Back" to go to. */
+val LocalInTab = staticCompositionLocalOf { false }
+
 /** The frame of every inner screen: "Back" always in the same place, the "Call" bar always below. */
 @Composable
 fun Frame(title: String, onBack: () -> Unit, content: @Composable () -> Unit) {
+    val inTab = LocalInTab.current
     Column(Modifier.fillMaxSize().statusBarsPadding()) {
-        Row(Modifier.fillMaxWidth().padding(4.dp), verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = onBack, modifier = Modifier.heightIn(min = 48.dp)) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
+        Row(Modifier.fillMaxWidth().padding(4.dp).heightIn(min = 48.dp), verticalAlignment = Alignment.CenterVertically) {
+            if (!inTab) {
+                IconButton(onClick = onBack, modifier = Modifier.heightIn(min = 48.dp)) {
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
+                }
             }
-            Text(title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold, modifier = Modifier.semantics { heading() })
+            Text(
+                title,
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(start = if (inTab) 12.dp else 0.dp).semantics { heading() },
+            )
         }
         Column(
             Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) { content() }
-        CallBar()
+        if (!inTab) CallBar()
     }
 }
 

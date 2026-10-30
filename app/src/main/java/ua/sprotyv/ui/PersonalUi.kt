@@ -91,8 +91,10 @@ fun NavRow(title: String, hint: String = "", onClick: () -> Unit) {
 
 /** "Mine": the owner's own parts, all encrypted and on this phone only. */
 @Composable
-fun MineHub(nav: Nav) {
+fun MineHub(nav: Nav, content: ua.sprotyv.content.Content?) {
+    ReadinessBlock(content, nav)
     Text(stringResource(R.string.mine_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    NavRow(stringResource(R.string.tile_safe), stringResource(R.string.tile_safe_hint)) { nav.go(Route.Open(Section.SAFE)) }
     NavRow(stringResource(R.string.medical_card), stringResource(R.string.medical_card_hint)) { nav.go(Route.Mine(MinePart.MEDICAL)) }
     NavRow(stringResource(R.string.people), stringResource(R.string.people_hint)) { nav.go(Route.Mine(MinePart.PEOPLE)) }
     NavRow(stringResource(R.string.family_plan), stringResource(R.string.family_plan_hint)) { nav.go(Route.Mine(MinePart.PLAN)) }

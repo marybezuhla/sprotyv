@@ -146,8 +146,9 @@ jobs:
           # An empty or unreadable listing must stop the build, never pass as "nothing found"
           grep -q "^package:" permissions.txt || { echo "::error::Could not read the permissions"; exit 1; }
           # Every permission must be on this short list; anything else stops the build
-          # Release 1.0: no internet and no other permission yet. Each new one is added here on purpose.
-          ALLOWED="ua.sprotyv.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+          # Release 1.0: no internet. Each permission is added here on purpose:
+          # USE_BIOMETRIC: the settings lock opens Android's own PIN window (no prompt, PIN never seen)
+          ALLOWED="ua.sprotyv.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION android.permission.USE_BIOMETRIC"
           for p in $(grep -oE "name='[^']+'" permissions.txt | sed "s/name='//;s/'//"); do
             case " $ALLOWED " in
               *" $p "*) ;;

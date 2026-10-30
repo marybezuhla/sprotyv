@@ -1,32 +1,77 @@
 package ua.sprotyv.ui
 
+import android.app.Activity
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.LifecycleStartEffect
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import ua.sprotyv.content.Content
 import ua.sprotyv.R
+import ua.sprotyv.content.Content
+import ua.sprotyv.home.Mode
+import ua.sprotyv.home.Pins
 import ua.sprotyv.personal.PersonalStore
 
+/** The tabs of full mode. */
+enum class Tab(val title: Int, val icon: ImageVector) {
+    HOME(R.string.tab_home, Icons.Filled.Home),
+    SECTIONS(R.string.tab_sections, Icons.AutoMirrored.Filled.List),
+    GUIDE(R.string.tile_guide, Icons.Filled.Info),
+    MINE(R.string.tile_mine, Icons.Filled.Lock),
+}
+
 /**
- * The whole app: a back stack of screens over the home screen. The guide, cards and calls never
- * wait for the owner's data, which is opened only in the owner's section.
+ * The whole app: a back stack of screens over the home screen (simple mode) or over four tabs
+ * (full mode). The guide, cards and calls never wait for the owner's data, which is opened only on
+ * the owner's screens.
  */
 @Composable
 fun App() {
     val context = LocalContext.current
+    val activity = context as Activity
+    // Small and read once; the home screen needs it before anything is drawn
+    remember { HomePrefs.load(context) }
+    val prefs = HomePrefs.state.collectAsState().value ?: HomePrefs.load(context)
+    val unlocked by Guard.unlocked.collectAsState()
+
     // The back stack as plain text, so it survives rotation and the app going to the background
     var saved by rememberSaveable { mutableStateOf(listOf<String>()) }
-    val stack = saved.mapNotNull(Route::restore)
+    var tabName by rememberSaveable { mutableStateOf(Tab.HOME.name) }
+    val tab = Tab.entries.firstOrNull { it.name == tabName } ?: Tab.HOME
+    // Settings screens stay only while settings are open; after leaving the app they are gone
+    val settingsOpen = !prefs.locked || unlocked || !Guard.available(context)
+    val stack = saved.mapNotNull(Route::restore).filter { settingsOpen || !it.settings }
+    // Drop them from the saved stack too, so they do not come back with the next PIN
+    LaunchedEffect(settingsOpen) {
+        if (!settingsOpen) saved = saved.filter { s -> Route.restore(s)?.settings != true }
+    }
     val top = stack.lastOrNull()
+    val full = prefs.mode == Mode.FULL
 
     val content by produceState<Content?>(null) {
         value = withContext(Dispatchers.IO) { runCatching { Content.get(context) }.getOrElse { Content(null, null) } }
@@ -34,23 +79,89 @@ fun App() {
     val personal by PersonalStore.state.collectAsState()
 
     val nav = object : Nav {
-        override fun go(route: Route) { saved = saved + route.save() }
+        override fun go(route: Route) { saved = stack.map(Route::save) + route.save() }
         // Built from what could be read, so an unreadable entry never makes Back look stuck
         override fun back() { saved = stack.dropLast(1).map(Route::save) }
         override fun home() { saved = emptyList() }
     }
 
+    // What runs after the PIN (or at once when settings are not locked)
+    fun perform(action: String) {
+        when {
+            action == ACTION_SETTINGS -> nav.go(Route.Settings)
+            action == ACTION_EDIT -> nav.go(Route.EditTiles)
+            action.startsWith(ACTION_PIN) -> HomePrefs.update(context) { it.copy(pins = Pins.pin(it.pins, action.removePrefix(ACTION_PIN))) }
+            action.startsWith(ACTION_UNPIN) -> HomePrefs.update(context) { it.copy(pins = Pins.unpin(it.pins, action.removePrefix(ACTION_UNPIN))) }
+        }
+    }
+    val prompt = stringResource(R.string.lock_prompt)
+    fun guarded(action: String) = Guard.ask(activity, prefs.locked, prompt, action, ::perform)
+    val pending by Guard.pending.collectAsState()
+    LaunchedEffect(pending) {
+        pending?.let { Guard.done(); perform(it) }
+    }
+
     // On entering the owner's screens and on every return to the screen (leaving it closed the data)
-    LifecycleStartEffect(top) {
-        if (top?.personal == true) PersonalStore.open(context) else PersonalStore.close()
+    val personalNow = top?.personal ?: (full && tab == Tab.MINE)
+    LifecycleStartEffect(personalNow) {
+        if (personalNow) PersonalStore.open(context) else PersonalStore.close()
         onStopOrDispose { }
     }
 
     BackHandler(enabled = top != null) { nav.back() }
+    // Back from another tab first returns to "Home", then leaves the app
+    BackHandler(enabled = top == null && full && tab != Tab.HOME) { tabName = Tab.HOME.name }
 
+    if (top != null) return Screen(top, content, prefs, personal, nav, ::guarded)
+
+    when (prefs.mode) {
+        null -> WelcomeScreen(nav)
+        Mode.SIMPLE -> SimpleHome(content, prefs.pins, nav, onSettings = { guarded(ACTION_SETTINGS) })
+        Mode.FULL -> Column(Modifier.fillMaxSize()) {
+            Box(Modifier.weight(1f)) {
+                CompositionLocalProvider(LocalInTab provides true) {
+                    when (tab) {
+                        Tab.HOME -> FullHome(
+                            content, prefs.pins, nav,
+                            onSettings = { guarded(ACTION_SETTINGS) },
+                            onEdit = { guarded(ACTION_EDIT) },
+                            onAdd = { tabName = Tab.SECTIONS.name },
+                        )
+                        Tab.SECTIONS -> Frame(stringResource(R.string.tab_sections), {}) {
+                            SectionsList(content, prefs.pins, nav) { id, on -> guarded((if (on) ACTION_PIN else ACTION_UNPIN) + id) }
+                        }
+                        Tab.GUIDE -> GuideScreen(content, nav)
+                        Tab.MINE -> Personal(R.string.tile_mine, personal, nav) { MineHub(nav, content) }
+                    }
+                }
+            }
+            CallBar(edge = false)
+            NavigationBar {
+                Tab.entries.forEach { t ->
+                    NavigationBarItem(
+                        selected = t == tab,
+                        onClick = { tabName = t.name },
+                        icon = { Icon(t.icon, contentDescription = null) },
+                        label = { Text(stringResource(t.title)) },
+                        alwaysShowLabel = true,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun Screen(
+    top: Route,
+    content: Content?,
+    prefs: HomePrefs.State,
+    personal: ua.sprotyv.personal.Opened?,
+    nav: Nav,
+    guarded: (String) -> Unit,
+) {
     when (top) {
-        null -> HomeScreen(onOpen = { nav.go(Route.Open(it)) })
-        Route.Open(Section.MINE) -> Personal(Section.MINE.title, personal, nav) { MineHub(nav) }
+        Route.Open(Section.MINE) -> Personal(Section.MINE.title, personal, nav) { MineHub(nav, content) }
         Route.Open(Section.SAFE) -> Personal(Section.SAFE.title, personal, nav) { SafeScreen(nav) }
         is Route.Mine -> when (top.part) {
             MinePart.MEDICAL -> Personal(R.string.medical_card, personal, nav) { MedicalScreen() }
@@ -74,8 +185,19 @@ fun App() {
         is Route.GuideSection -> GuideSectionScreen(content, top.num, nav)
         Route.Search -> SearchScreen(content, nav)
         Route.About -> AboutScreen(content, nav)
+        Route.Settings -> SettingsScreen(prefs.mode, prefs.locked, nav)
+        Route.EditTiles -> EditTilesScreen(content, prefs.mode, prefs.pins, nav)
+        Route.Presets -> PresetsScreen(nav)
+        Route.Sections -> Frame(stringResource(R.string.add_tile), nav::back) {
+            SectionsList(content, prefs.pins, nav) { id, on -> guarded((if (on) ACTION_PIN else ACTION_UNPIN) + id) }
+        }
     }
 }
+
+private const val ACTION_SETTINGS = "settings"
+private const val ACTION_EDIT = "edit"
+private const val ACTION_PIN = "pin:"
+private const val ACTION_UNPIN = "unpin:"
 
 interface Nav {
     fun go(route: Route)
