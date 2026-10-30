@@ -534,4 +534,14 @@
     <string name="screenshots_confirm_yes">Allow</string>
     <string name="screenshots_banner">Screenshots are allowed</string>
     <string name="screenshots_turn_off">Turn off</string>
+    <string name="feedback">Send feedback</string>
+    <string name="feedback_title">Feedback</string>
+    <string name="feedback_body">Version: %1$s\n\nWhat happened or what you would like:\n\n</string>
+    <string name="feedback_hint">Sprotyv\'s GitHub page opens (an account is needed). The text is passed there when the page opens and stays in the browser history; it is published only after you confirm, and shows your account name. Nothing from “Mine” goes there. If being linked to the app could put you at risk, do not send.</string>
+    <string name="crash_title">Last time Sprotyv closed with an error</string>
+    <string name="crash_text">You can send a technical description of the error to help fix it. It holds only the error\'s name, places in the code and the app and Android versions, none of your data. The text is passed to a public GitHub page when it opens; it is published only after you confirm.</string>
+    <string name="crash_send">Send the description</string>
+    <string name="crash_no">Delete the description</string>
+    <string name="crash_issue_title">Error in the app</string>
+    <string name="crash_issue_body">What was happening before (optional):</string>
 </resources>
