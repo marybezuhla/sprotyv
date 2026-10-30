@@ -20,8 +20,7 @@
         <!-- "Situation" opens these official apps when installed: the air alert app and 112 Ukraine -->
         <package android:name="com.ukrainealarm" />
         <package android:name="ua.gov.mvs.service112" />
-        <!-- To tell whether the phone's browser can open pages without a trace (Chrome 137+) -->
-        <package android:name="com.android.chrome" />
+        <!-- To tell the phone's browsers apart (pages without a trace, Telegram links); browsers only -->
         <intent>
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.BROWSABLE" />
