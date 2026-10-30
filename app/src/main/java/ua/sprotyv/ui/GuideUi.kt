@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -80,6 +81,7 @@ fun GuideScreen(content: Content?, nav: Nav) {
             Text("  " + stringResource(R.string.search_guide))
         }
         if (content == null) return@Frame Loading()
+        if (content.guideBroken) return@Frame Broken()
         content.guide.chapters.forEach { ch -> ChapterRow(ch) { nav.go(Route.ChapterRoute(ch.id)) } }
         OutlinedButton(onClick = { nav.go(Route.About) }, modifier = Modifier.heightIn(min = 48.dp)) {
             Text(stringResource(R.string.about_guide))
@@ -93,6 +95,7 @@ fun ChapterScreen(content: Content?, id: String, nav: Nav) {
     val chapter = content?.guide?.chapters?.firstOrNull { it.id == id }
     Frame(chapter?.title ?: "", nav::back) {
         if (content == null) return@Frame Loading()
+        if (content.guideBroken) return@Frame Broken()
         if (chapter == null) return@Frame Text(stringResource(R.string.not_found))
         Blocks(chapter.intro)
         chapter.sections.forEach { s -> SectionRow(s) { nav.go(Route.GuideSection(s.num)) } }
@@ -125,6 +128,7 @@ fun GuideSectionScreen(content: Content?, num: String, nav: Nav) {
     }
     Frame(found?.second?.let { "${it.num}. ${it.title}" } ?: "", nav::back) {
         if (content == null) return@Frame Loading()
+        if (content.guideBroken) return@Frame Broken()
         if (found == null) return@Frame Text(stringResource(R.string.not_found))
         Text(found.first.title, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Blocks(found.second.blocks)
@@ -187,7 +191,8 @@ private fun BlockView(b: Block) {
 @Composable
 private fun ItemView(mark: String, item: Item, depth: Int = 0) {
     Row(Modifier.padding(start = (depth * 16).dp)) {
-        Text(mark, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.width(28.dp))
+        val markModifier = Modifier.width(28.dp).let { m -> if (mark.first().isDigit()) m else m.clearAndSetSemantics { } }
+        Text(mark, style = MaterialTheme.typography.bodyLarge, modifier = markModifier)
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
             RichText(item.text)
             item.sub.forEach { ItemView("–", it, depth + 1) }
@@ -240,7 +245,8 @@ private fun FigureView(f: Block.Figure) {
             bitmap?.let {
                 Image(
                     bitmap = it.asImageBitmap(),
-                    contentDescription = f.caption.ifBlank { null }?.replace("**", ""),
+                    // The caption below says what it shows; reading it twice helps no one
+                    contentDescription = if (f.caption.isBlank()) stringResource(R.string.figure) else null,
                     contentScale = ContentScale.FillWidth,
                     modifier = Modifier.fillMaxWidth().background(Color.White, RoundedCornerShape(8.dp)).padding(8.dp),
                 )
@@ -268,10 +274,12 @@ fun SearchScreen(content: Content?, nav: Nav) {
         )
         LaunchedEffect(Unit) { focus.requestFocus() }
         if (content == null) return@Frame Loading()
-        val hits by produceState(emptyList<ua.sprotyv.content.Hit>(), query) {
-            value = withContext(Dispatchers.Default) { GuideSearch.search(content.guide, query) }
+        if (content.guideBroken) return@Frame Broken()
+        val result by produceState(query to emptyList<ua.sprotyv.content.Hit>(), query) {
+            value = query to withContext(Dispatchers.Default) { GuideSearch.search(content.guide, query) }
         }
-        if (query.trim().length >= 2 && hits.isEmpty()) {
+        val hits = result.second
+        if (result.first == query && query.trim().length >= 2 && hits.isEmpty()) {
             Text(stringResource(R.string.search_none), style = MaterialTheme.typography.bodyLarge)
         }
         hits.forEach { h ->
@@ -295,8 +303,10 @@ fun SearchScreen(content: Content?, nav: Nav) {
 fun AboutScreen(content: Content?, nav: Nav) {
     Frame(stringResource(R.string.about_guide), nav::back) {
         if (content == null) return@Frame Loading()
+        if (content.guideBroken) return@Frame Broken()
         val g = content.guide
         Text("${g.title} ${g.version}", style = MaterialTheme.typography.titleMedium)
+        g.disclaimer.forEach { RichText(it) }
         Text(stringResource(R.string.about_source, g.source), style = MaterialTheme.typography.bodyLarge)
         Text(stringResource(R.string.about_license, g.license), style = MaterialTheme.typography.bodyLarge)
         Text(g.changes, style = MaterialTheme.typography.bodyLarge)

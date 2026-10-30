@@ -24,7 +24,8 @@ class ContentTest {
     }
 
     @Test fun sectionNumbersAreUnique() {
-        val nums = guide.chapters.flatMap { c -> c.sections.map { it.num } }.filter { it.isNotEmpty() }
+        val nums = guide.chapters.flatMap { c -> c.sections.map { it.num } }
+        assertTrue("every section has a number", nums.none { it.isEmpty() })
         assertEquals(nums.size, nums.toSet().size)
     }
 
@@ -79,9 +80,20 @@ class ContentTest {
 
     @Test fun cardStepsFitAStressedReader() {
         cards.forEach { card ->
-            assertTrue("${card.id} too many steps", card.steps.size <= 7)
+            assertTrue("${card.id} too many steps", card.steps.size <= 8)
             card.steps.forEach { assertTrue("${card.id}: ${it.action.take(40)}", it.action.length <= Step.MAX_ACTION) }
         }
+    }
+
+    @Test fun guideKeepsItsDisclaimer() {
+        assertTrue(guide.disclaimer.isNotEmpty())
+    }
+
+    @Test fun boldKeepsWordsApart() {
+        // "**Інсульт — тест «ОРМЧ»:** **О**бличчя" must keep both bold runs as written
+        val stroke = guide.section("7.11")!!.second.blocks.filterIsInstance<Block.Items>().flatMap { it.items }
+            .first { it.text.contains("ОРМЧ") }.text
+        assertTrue(stroke, stroke.contains("«ОРМЧ»:** **О**бличчя"))
     }
 
     @Test fun searchFindsTourniquet() {

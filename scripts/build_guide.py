@@ -118,9 +118,14 @@ def inline(node):
             if isinstance(c, str):
                 out.append(c)
             elif c.tag == "b":
-                inner = inline(c)
+                raw = inline_raw(c)
+                inner = raw.strip()
                 if inner:
-                    out.append("**" + inner + "**")
+                    lead = raw[: len(raw) - len(raw.lstrip())]
+                    trail = raw[len(raw.rstrip()):]
+                    out.append(lead + "**" + inner + "**" + trail)
+                else:
+                    out.append(raw)
             elif c.tag == "br":
                 out.append("\n")
             elif c.tag in ("span", "i", "em", "small"):
@@ -129,15 +134,28 @@ def inline(node):
                 raise ValueError(f"Unexpected <{c.tag}> inside text")
 
     walk(node)
-    text = "".join(out)
-    text = re.sub(r"[ \t\r\f\v]*\n[ \t\r\f\v]*", "\n", text)
-    text = re.sub(r"[ \t\r\f\v]+", " ", text)
-    text = text.replace("** **", " ").strip()
+    text = tidy("".join(out)).strip()
     if "***" in text:
         raise ValueError("Nested bold")
     if len(text) > MAX_TEXT:
         raise ValueError("Text too long")
     return text
+
+
+def tidy(text):
+    text = re.sub(r"[ \t\r\f\v]*\n[ \t\r\f\v]*", "\n", text)
+    return re.sub(r"[ \t\r\f\v]+", " ", text)
+
+
+def inline_raw(node):
+    """Inline text with its outer spaces kept (for bold runs)."""
+    holder = Node("span", [])
+    holder.children = list(node.children)
+    text = inline(holder)
+    kids = node.children
+    lead = " " if kids and isinstance(kids[0], str) and kids[0][:1].isspace() else ""
+    trail = " " if kids and isinstance(kids[-1], str) and kids[-1][-1:].isspace() else ""
+    return lead + text + trail
 
 
 def has_blocks(node):
@@ -154,9 +172,13 @@ def list_items(node):
         if li.tag != "li":
             raise ValueError(f"Unexpected <{li.tag}> in a list")
         if has_blocks(li):
-            # A list item with a nested list: its own text first, then the nested list
+            # A list item with a nested list: its own text first, then the nested list.
+            # Anything else inside an item would be lost, so it stops the build.
+            for c in li.children:
+                if not isinstance(c, str) and c.tag not in ("b", "br", "span", "i", "em", "small", "ul", "ol"):
+                    raise ValueError(f"Unexpected <{c.tag}> inside a list item")
             head = Node("li", [])
-            head.children = [c for c in li.children if isinstance(c, str) or c.tag in ("b", "br", "span", "i", "em")]
+            head.children = [c for c in li.children if isinstance(c, str) or c.tag not in ("ul", "ol")]
             sub = [c for c in li.children if not isinstance(c, str) and c.tag in ("ul", "ol")]
             items.append({"text": inline(head), "sub": [s for l in sub for s in list_items(l)]})
         else:
@@ -173,7 +195,15 @@ def table(node):
         if tr.tag != "tr":
             raise ValueError(f"Unexpected <{tr.tag}> in a table")
         cells = [c for c in tr.children if not isinstance(c, str)]
+        for c in cells:
+            if c.tag not in ("td", "th"):
+                raise ValueError(f"Unexpected <{c.tag}> in a table row")
+            if "colspan" in c.attrs or "rowspan" in c.attrs:
+                raise ValueError("Merged table cells are not supported")
         rows.append({"head": all(c.tag == "th" for c in cells), "cells": [inline(c) for c in cells]})
+    widths = {len(r["cells"]) for r in rows}
+    if len(widths) > 1:
+        raise ValueError("Table rows of different widths")
     return {"rows": rows}
 
 
@@ -190,13 +220,19 @@ class Builder:
             nonlocal caption
             for c in n.children:
                 if isinstance(c, str):
+                    if c.strip():
+                        raise ValueError("Loose text inside a figure")
                     continue
                 if c.tag == "svg":
                     svgs.append(c.svg)
                 elif c.tag == "figcaption":
+                    if caption:
+                        raise ValueError("A figure with two captions")
                     caption = inline(c)
-                else:
+                elif c.tag == "div":
                     walk(c)
+                else:
+                    raise ValueError(f"Unexpected <{c.tag}> inside a figure")
 
         walk(node)
         names = []
@@ -217,6 +253,8 @@ class Builder:
                     raise ValueError(f"Loose text: {c.strip()[:60]}")
                 continue
             if c.tag == "p":
+                if c.cls() not in ("", "chapter-intro"):
+                    raise ValueError(f"Unknown paragraph class '{c.cls()}'")
                 text = inline(c)
                 if text:
                     out.append({"t": "intro" if "chapter-intro" in c.cls() else "p", "text": text})
@@ -281,7 +319,13 @@ class Builder:
                     raise ValueError("A section before any chapter")
                 title = inline(c)
                 m = re.match(r"^([0-9А-ЯҐЄІЇ]+(?:\.[0-9]+)*)\.\s+(.*)$", title)
-                section = {"num": m.group(1) if m else "", "title": m.group(2) if m else title, "blocks": []}
+                if m:
+                    num, name = m.group(1), m.group(2)
+                else:
+                    # e.g. "Додаток А" weeks: numbered А.1, А.2 … so every section has its own address
+                    letter = current["label"].split()[-1] if current["label"] else "X"
+                    num, name = f"{letter}.{len(current['sections']) + 1}", title
+                section = {"num": num, "title": name, "blocks": []}
                 current["sections"].append(section)
             else:
                 loose.children.append(c)
@@ -320,8 +364,27 @@ def main():
         m = re.search(r"Версія\s+([0-9.]+)", f.read())
         version = m.group(1) if m else ""
 
+    cover = Tree()
+    with open(os.path.join(chapters_dir, "00_cover_toc.html"), encoding="utf-8") as f:
+        cover.feed(f.read())
+    disclaimer = []
+
+    def find_disclaimer(n):
+        for c in n.children:
+            if isinstance(c, str):
+                continue
+            if c.tag == "div" and "disclaimer" in c.cls():
+                disclaimer.extend(p.strip() for p in inline(c).split("\n\n") if p.strip())
+            else:
+                find_disclaimer(c)
+
+    find_disclaimer(cover.root)
+    if not disclaimer:
+        sys.exit("The cover disclaimer was not found")
+
     guide = {
         "title": "Довідник виживання",
+        "disclaimer": disclaimer,
         "version": version,
         "source": "https://github.com/snegireff/dovidnyk-vyzhyvannia",
         "commit": commit,
@@ -344,7 +407,11 @@ def main():
         with open(os.path.join(svg_dir, name + ".svg"), "w", encoding="utf-8") as f:
             f.write(svg)
 
-    sections = sum(len(c["sections"]) for c in chapters)
+    nums = [s["num"] for c in chapters for s in c["sections"]]
+    dup = {n for n in nums if nums.count(n) > 1}
+    if dup or "" in nums:
+        sys.exit(f"Section numbers must be unique and present: {sorted(dup)}")
+    sections = len(nums)
     print(f"Guide {version}: {len(chapters)} chapters, {sections} sections, {len(builder.figures)} figures")
 
 

@@ -63,6 +63,7 @@ fun CardRow(card: Card, onClick: () -> Unit) {
 fun NowScreen(content: Content?, nav: Nav) {
     Frame(stringResource(R.string.tile_now), nav::back) {
         if (content == null) return@Frame Loading()
+        if (content.cardsBroken) return@Frame Broken()
         content.cards.forEach { card -> CardRow(card) { nav.go(Route.CardRoute(card.id)) } }
     }
 }
@@ -76,6 +77,7 @@ fun CardScreen(content: Content?, id: String, nav: Nav) {
     val card = content?.card(id)
     Frame(card?.title ?: "", nav::back) {
         if (content == null) return@Frame Loading()
+        if (content.cardsBroken) return@Frame Broken()
         if (card == null) return@Frame Text(stringResource(R.string.not_found))
         CardBody(card, nav)
     }
@@ -175,6 +177,7 @@ fun AlarmScreen(content: Content?, nav: Nav) {
     Frame(stringResource(R.string.tile_alarm), nav::back) {
         Text(stringResource(R.string.alarm_not_yet), style = MaterialTheme.typography.bodyLarge)
         if (content == null) return@Frame Loading()
+        if (content.cardsBroken) return@Frame Broken()
         listOf("air-alert", "ballistic", "drone").mapNotNull(content::card).forEach { card ->
             CardRow(card) { nav.go(Route.CardRoute(card.id)) }
         }
@@ -186,6 +189,7 @@ fun AlarmScreen(content: Content?, nav: Nav) {
 fun HomeLifeScreen(content: Content?, nav: Nav) {
     Frame(stringResource(R.string.tile_home_life), nav::back) {
         if (content == null) return@Frame Loading()
+        if (content.cardsBroken || content.guideBroken) Broken()
         listOf("blackout", "leave-home").mapNotNull(content::card).forEach { card ->
             CardRow(card) { nav.go(Route.CardRoute(card.id)) }
         }

@@ -28,13 +28,14 @@ fun App() {
     val top = stack.lastOrNull()
 
     val content by produceState<Content?>(null) {
-        value = withContext(Dispatchers.IO) { runCatching { Content.get(context) }.getOrNull() }
+        value = withContext(Dispatchers.IO) { runCatching { Content.get(context) }.getOrElse { Content(null, null) } }
     }
     val personal by PersonalStore.state.collectAsState()
 
     val nav = object : Nav {
         override fun go(route: Route) { saved = saved + route.save() }
-        override fun back() { saved = saved.dropLast(1) }
+        // Built from what could be read, so an unreadable entry never makes Back look stuck
+        override fun back() { saved = stack.dropLast(1).map(Route::save) }
         override fun home() { saved = emptyList() }
     }
 
