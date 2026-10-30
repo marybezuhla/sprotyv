@@ -396,7 +396,7 @@
     <string name="flag_collects_data">collects data</string>
     <string name="power_title">Power cuts: schedules</string>
     <string name="power_hint">Official schedules by oblast</string>
-    <string name="power_intro">Find your oblast and open your grid operator's site: the schedule for your queue is there. Emergency cuts can happen outside the schedule.</string>
+    <string name="power_intro">Find your oblast and open your grid operator\'s site: the schedule for your queue is there. Emergency cuts can happen outside the schedule.</string>
     <string name="power_note">Addresses checked against Glavcom\'s list of 17.10.2026. Use schedule bots only from links on your operator\'s own site: fake bots are common.</string>
     <string name="situation_evac">Evacuation and aid</string>
     <string name="situation_search">Missing people and prisoners</string>
