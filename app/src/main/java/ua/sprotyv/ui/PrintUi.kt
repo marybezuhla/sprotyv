@@ -40,6 +40,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
@@ -77,8 +78,6 @@ fun qrBitmap(text: String, size: Int): Bitmap {
 
 private fun labels(context: Context) = RescuerCode.Labels(
     title = context.getString(R.string.rescuer_title),
-    name = context.getString(R.string.med_name),
-    birth = context.getString(R.string.med_birth),
     blood = context.getString(R.string.med_blood),
     allergies = context.getString(R.string.med_allergies),
     medicines = context.getString(R.string.med_medicines),
@@ -161,33 +160,61 @@ fun cardsPdf(context: Context, content: Content): ByteArray {
         pdf.heading(card.title)
         card.steps.forEachIndexed { i, step -> pdf.text("${i + 1}. ${step.action}") }
         pdf.add(Pdf.Part.Text(s(R.string.source_line).format(card.source) + " · " +
+            s(R.string.checked_on).format(card.checkedOn) + " · " +
             if (card.reviewedBy.isBlank()) s(R.string.not_reviewed) else s(R.string.reviewed_by).format(card.reviewedBy)))
     }
     return pdf.build()
 }
 
-private fun write(context: Context, uri: Uri, bytes: ByteArray): Boolean = try {
-    context.contentResolver.openOutputStream(uri, "wt")?.use { it.write(bytes) } != null
-} catch (e: Exception) {
-    false
+private fun write(context: Context, uri: Uri, bytes: ByteArray): Boolean {
+    for (mode in listOf("wt", "w")) {
+        try {
+            if (context.contentResolver.openOutputStream(uri, mode)?.use { it.write(bytes) } != null) return true
+        } catch (e: Exception) {
+            // Some providers do not know "wt"; the next mode is tried
+        }
+    }
+    return false
+}
+
+/**
+ * Saving runs outside any screen: choosing a place takes the app off the screen for a moment,
+ * which closes the owner's data and may rebuild the screen, and must not cancel the save.
+ * A file that could not be written is removed, so no empty file is left behind.
+ */
+object Exports {
+    private val scope = kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.SupervisorJob() + Dispatchers.IO)
+    private val _result = kotlinx.coroutines.flow.MutableStateFlow<Int?>(null)
+    val result: kotlinx.coroutines.flow.StateFlow<Int?> = _result
+
+    fun clear() { _result.value = null }
+
+    fun save(context: Context, uri: Uri, produce: suspend () -> ByteArray?) {
+        val app = context.applicationContext
+        scope.launch {
+            val ok = try {
+                val bytes = produce()
+                bytes != null && write(app, uri, bytes)
+            } catch (e: Exception) {
+                false
+            }
+            if (!ok) {
+                try { android.provider.DocumentsContract.deleteDocument(app.contentResolver, uri) } catch (e: Exception) { }
+            }
+            _result.value = if (ok) R.string.print_saved else R.string.print_failed
+        }
+    }
 }
 
 /** Printing the owner's plan and medical card. The file is not encrypted, and the screen says so first. */
 @Composable
 fun PrintScreen() {
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
     var confirm by remember { mutableStateOf(false) }
-    var result by remember { mutableStateOf<Int?>(null) }
+    val result by Exports.result.collectAsStateWithLifecycle()
     val save = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { uri ->
         if (uri == null) return@rememberLauncherForActivityResult
-        scope.launch {
-            val ok = withContext(Dispatchers.IO) {
-                val data = readOwner() ?: return@withContext false
-                write(context, uri, ownerPdf(context, data))
-            }
-            result = if (ok) R.string.print_saved else R.string.print_failed
-        }
+        Exports.save(context, uri) { readOwner()?.let { ownerPdf(context, it) } }
     }
     Text(stringResource(R.string.print_intro), style = MaterialTheme.typography.bodyLarge)
     Button(onClick = { confirm = true }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
@@ -200,7 +227,7 @@ fun PrintScreen() {
             title = { Text(stringResource(R.string.print_warning_title)) },
             text = { Text(stringResource(R.string.print_warning)) },
             confirmButton = {
-                TextButton(onClick = { confirm = false; result = null; save.launch("sprotyv-plan.pdf") }) { Text(stringResource(R.string.print_continue)) }
+                TextButton(onClick = { confirm = false; Exports.clear(); save.launch("plan.pdf") }) { Text(stringResource(R.string.print_continue)) }
             },
             dismissButton = { TextButton(onClick = { confirm = false }) { Text(stringResource(R.string.cancel)) } },
         )
@@ -211,16 +238,12 @@ fun PrintScreen() {
 @Composable
 fun CardsPdfButton(content: Content) {
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-    var result by remember { mutableStateOf<Int?>(null) }
+    val result by Exports.result.collectAsStateWithLifecycle()
     val save = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { uri ->
         if (uri == null) return@rememberLauncherForActivityResult
-        scope.launch {
-            val ok = withContext(Dispatchers.IO) { write(context, uri, cardsPdf(context, content)) }
-            result = if (ok) R.string.print_saved else R.string.print_failed
-        }
+        Exports.save(context, uri) { cardsPdf(context, content) }
     }
-    OutlinedButton(onClick = { result = null; save.launch("sprotyv-cards.pdf") }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+    OutlinedButton(onClick = { Exports.clear(); save.launch("cards.pdf") }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
         Text(stringResource(R.string.print_cards_button))
     }
     result?.let { Text(stringResource(it), style = MaterialTheme.typography.bodyMedium) }
@@ -233,7 +256,6 @@ fun CardsPdfButton(content: Content) {
 @Composable
 fun RescuerQrScreen(nav: Nav) {
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
     val people = rememberPeople() ?: return Loading()
     val card = when (val l = rememberRead { it.medical().get() ?: MedicalCard() }) {
         Loaded.Waiting -> return Loading()
@@ -245,17 +267,14 @@ fun RescuerQrScreen(nav: Nav) {
         Button(onClick = { nav.go(Route.Mine(MinePart.MEDICAL)) }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.medical_card)) }
         return
     }
-    val text = remember(card, people) { RescuerCode.text(card, people.filter { it.ice }, labels(context)) }
-    val bitmap = remember(text) { qrBitmap(text, 600) }
-    var result by remember { mutableStateOf<Int?>(null) }
+    val code = remember(card, people) { RescuerCode.text(card, people.filter { it.ice }, labels(context)) }
+    val text = code.text
+    val bitmap = remember(text) { qrBitmap(text, 640) }
+    val result by Exports.result.collectAsStateWithLifecycle()
     val save = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("image/png")) { uri ->
         if (uri == null) return@rememberLauncherForActivityResult
-        scope.launch {
-            val ok = withContext(Dispatchers.IO) {
-                val png = java.io.ByteArrayOutputStream().use { out -> rescuerPicture(text, bitmap).compress(Bitmap.CompressFormat.PNG, 100, out); out.toByteArray() }
-                write(context, uri, png)
-            }
-            result = if (ok) R.string.print_saved else R.string.print_failed
+        Exports.save(context, uri) {
+            java.io.ByteArrayOutputStream().use { out -> rescuerPicture(text, bitmap).compress(Bitmap.CompressFormat.PNG, 100, out); out.toByteArray() }
         }
     }
     Text(stringResource(R.string.rescuer_intro), style = MaterialTheme.typography.bodyLarge)
@@ -264,9 +283,11 @@ fun RescuerQrScreen(nav: Nav) {
         contentDescription = stringResource(R.string.rescuer_qr_desc),
         modifier = Modifier.widthIn(max = 320.dp).fillMaxWidth().background(androidx.compose.ui.graphics.Color.White).padding(8.dp),
     )
-    SelectionContainer { Text(text, style = MaterialTheme.typography.bodyLarge) }
+    // Plain text, not selectable: medical facts should not end up in the clipboard by accident
+    Text(text, style = MaterialTheme.typography.bodyLarge)
+    if (code.cut) Text(stringResource(R.string.rescuer_cut), style = MaterialTheme.typography.bodyMedium)
     Text(stringResource(R.string.rescuer_warning), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.error)
-    Button(onClick = { result = null; save.launch("sprotyv-rescuer.png") }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+    Button(onClick = { Exports.clear(); save.launch("medical.png") }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
         Text(stringResource(R.string.rescuer_save))
     }
     result?.let { Text(stringResource(it), style = MaterialTheme.typography.bodyMedium) }
@@ -276,18 +297,21 @@ fun RescuerQrScreen(nav: Nav) {
 /** A tall picture for the lock screen: the key facts in large letters and the code below. */
 private fun rescuerPicture(text: String, qr: Bitmap): Bitmap {
     val w = 1080
-    val h = 2160
+    // Tall enough for the text (at most ~400 bytes) and the code below it
+    val h = 2400
     val out = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
     val c = Canvas(out)
     c.drawColor(Color.WHITE)
     val paint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply { color = Color.BLACK; textSize = 44f; typeface = Typeface.DEFAULT_BOLD }
     val layout = StaticLayout.Builder.obtain(text, 0, text.length, paint, w - 160).setAlignment(Layout.Alignment.ALIGN_NORMAL).build()
+    // Below the lock screen clock; the code under the text, never over it
+    val textTop = 600f
     c.save()
-    c.translate(80f, 260f)
+    c.translate(80f, textTop)
     layout.draw(c)
     c.restore()
     val size = 640
-    val top = (260 + layout.height + 60).coerceAtMost(h - size - 80)
+    val top = (textTop.toInt() + layout.height + 60)
     c.drawBitmap(qr, null, android.graphics.Rect((w - size) / 2, top, (w + size) / 2, top + size), Paint())
     return out
 }
@@ -302,16 +326,25 @@ fun ScanScreen(nav: Nav) {
     val scope = rememberCoroutineScope()
     var scanned by remember { mutableStateOf<Scanned?>(null) }
     var notFound by remember { mutableStateOf(false) }
+    var noCamera by remember { mutableStateOf(false) }
     var openLink by remember { mutableStateOf<Scanned.Link?>(null) }
     val photo = remember { scanFile(context) }
 
     fun read(uri: Uri, delete: Boolean) {
         scope.launch {
-            val text = withContext(Dispatchers.Default) { decodeUri(context, uri) }
-            if (delete) withContext(Dispatchers.IO) { photo.delete() }
+            val text = try {
+                withContext(Dispatchers.Default) { decodeUri(context, uri) }
+            } finally {
+                // Deleted even if the screen is left while reading
+                if (delete) withContext(kotlinx.coroutines.NonCancellable + Dispatchers.IO) { photo.delete() }
+            }
             scanned = text?.let(Scanned::of)
             notFound = text == null
         }
+    }
+    // Leaving the screen removes any photo that is still there
+    androidx.compose.runtime.DisposableEffect(Unit) {
+        onDispose { clearScans(context) }
     }
 
     val camera = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { ok ->
@@ -325,14 +358,15 @@ fun ScanScreen(nav: Nav) {
     Frame(stringResource(R.string.scan_title), nav::back) {
         Text(stringResource(R.string.scan_intro), style = MaterialTheme.typography.bodyLarge)
         Button(onClick = {
-            scanned = null; notFound = false
-            try { camera.launch(photoUri(context, photo)) } catch (e: Exception) { notFound = true }
+            scanned = null; notFound = false; noCamera = false
+            try { camera.launch(photoUri(context, photo)) } catch (e: Exception) { noCamera = true }
         }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.scan_camera)) }
         OutlinedButton(onClick = {
             scanned = null; notFound = false
             pick.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.scan_picture)) }
         if (notFound) Text(stringResource(R.string.scan_none), style = MaterialTheme.typography.bodyLarge)
+        if (noCamera) Text(stringResource(R.string.scan_no_camera), style = MaterialTheme.typography.bodyLarge)
         scanned?.let { s -> ScanResult(s, onOpen = { openLink = it }) }
     }
     openLink?.let { link ->
@@ -343,7 +377,9 @@ fun ScanScreen(nav: Nav) {
             confirmButton = {
                 TextButton(onClick = {
                     openLink = null
-                    try { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link.text))) } catch (e: Exception) { }
+                    try {
+                        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link.text)).addCategory(Intent.CATEGORY_BROWSABLE))
+                    } catch (e: Exception) { }
                 }) { Text(stringResource(R.string.scan_open)) }
             },
             dismissButton = { TextButton(onClick = { openLink = null }) { Text(stringResource(R.string.cancel)) } },
@@ -367,8 +403,10 @@ private fun ScanResult(s: Scanned, onOpen: (Scanned.Link) -> Unit) {
                 OutlinedButton(onClick = { onOpen(s) }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.scan_open)) }
             }
             is Scanned.Phone -> {
-                Text(s.number, style = MaterialTheme.typography.headlineSmall)
-                Button(onClick = { Reach.dial(context, s.number) }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.call_number, s.number)) }
+                // The number shown is exactly the number that will be dialled
+                val number = ua.sprotyv.reach.Links.clean(s.number)
+                Text(number, style = MaterialTheme.typography.headlineSmall)
+                Button(onClick = { Reach.dial(context, number) }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.call_number, number)) }
             }
             is Scanned.Plain -> SelectionContainer { Text(s.text, style = MaterialTheme.typography.bodyLarge) }
         }
@@ -397,6 +435,11 @@ private fun copy(context: Context, text: String) {
 private fun scanFile(context: Context): File {
     val dir = File(context.cacheDir, "scan").apply { mkdirs() }
     return File(dir, "scan.jpg")
+}
+
+/** Removes every photo in the scan folder. */
+fun clearScans(context: Context) {
+    File(context.cacheDir, "scan").listFiles()?.forEach { it.delete() }
 }
 
 private fun photoUri(context: Context, file: File): Uri =

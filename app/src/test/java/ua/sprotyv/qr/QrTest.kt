@@ -48,17 +48,27 @@ class QrTest {
         assertTrue(Scanned.BARE_NUMBERS in (Scanned.of("https://192.168.0.1/") as Scanned.Link).suspicious)
     }
 
+    @Test fun backslashCannotHideTheRealHost() {
+        val link = Scanned.of("https://evil.example\\@good.example/") as Scanned.Link
+        assertEquals("evil.example", link.host)
+    }
+
     @Test fun plainTextAndPhones() {
         assertTrue(Scanned.of("Просто текст") is Scanned.Plain)
         assertEquals("+380501234567", (Scanned.of("tel:+380501234567") as Scanned.Phone).number)
     }
 
-    private val labels = RescuerCode.Labels("МЕДКАРТКА", "Ім'я", "Народження", "Група крові", "Алергії", "Ліки", "Стани", "Контакт")
+    private val labels = RescuerCode.Labels("МЕДКАРТКА", "Група крові", "Алергії", "Ліки", "Стани", "Контакт")
 
     @Test fun rescuerCodeHasOnlyTheEssentials() {
-        val card = MedicalCard(name = "Тест", bloodGroup = "O(I) Rh−", allergies = "немає", notes = "особисте, не для коду")
-        val text = RescuerCode.text(card, listOf(Person(name = "Олена", phone = "+380501234567", ice = true)), labels)
+        val card = MedicalCard(name = "Тест Тестович", birthDate = "1 березня 1950", bloodGroup = "O(I) Rh−", allergies = "немає", notes = "особисте, не для коду")
+        val r = RescuerCode.text(card, listOf(Person(name = "Олена", phone = "+380501234567", ice = true)), labels)
+        val text = r.text
+        assertTrue(!r.cut)
         assertTrue(text.startsWith("МЕДКАРТКА"))
+        // Nothing that tells a stranger who the owner is
+        assertTrue("Тест Тестович" !in text)
+        assertTrue("1950" !in text)
         assertTrue("Група крові: O(I) Rh−" in text)
         assertTrue("Контакт: Олена +380501234567" in text)
         assertTrue("особисте" !in text)
@@ -68,7 +78,9 @@ class QrTest {
     @Test fun rescuerCodeAlwaysFits() {
         val long = "дуже довгий опис ".repeat(200)
         val card = MedicalCard(name = long, allergies = long, medicines = long, conditions = long)
-        val text = RescuerCode.text(card, emptyList(), labels)
+        val r = RescuerCode.text(card, emptyList(), labels)
+        val text = r.text
+        assertTrue(r.cut)
         assertTrue(text.toByteArray(Charsets.UTF_8).size <= Qr.MAX_BYTES)
         assertEquals(text, roundTrip(text))
     }
