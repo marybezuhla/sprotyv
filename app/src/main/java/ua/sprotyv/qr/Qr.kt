@@ -63,6 +63,11 @@ sealed interface Scanned {
 
         fun of(raw: String): Scanned {
             val text = raw.trim()
+            // Tabs, line breaks and other control characters are dropped by browsers and can
+            // join two addresses into one: such a text is never offered as a link
+            if (text.any { it.code <= 0x20 && it != ' ' } || text.contains(' ')) {
+                if (URL.containsMatchIn(text)) return Plain(text)
+            }
             URL.matchEntire(text)?.let { m ->
                 val scheme = m.groupValues[1].lowercase()
                 val authority = m.groupValues[2]
@@ -74,20 +79,21 @@ sealed interface Scanned {
         }
 
         /** Plain signs of a trick link. Not proof either way; the person decides. */
-        fun warnings(scheme: String, authority: String, host: String): List<String> = buildList {
+        fun warnings(scheme: String, authority: String, host: String): List<String> = buildSet {
             if (scheme != "https") add(NOT_HTTPS)
             if ('@' in authority) add(HIDDEN_ADDRESS)
-            if ('%' in host || '\\' in host) add(LOOKALIKE_LETTERS)
+            if ('%' in host) add(ENCODED)
             if (host.startsWith("xn--") || host.contains(".xn--") || host.any { it.code > 127 }) add(LOOKALIKE_LETTERS)
             if (Regex("^[0-9.]+$").matches(host) || host.startsWith("[")) add(BARE_NUMBERS)
             if (host.count { it == '.' } >= 4) add(MANY_PARTS)
-        }
+        }.toList()
 
         const val NOT_HTTPS = "not_https"
         const val HIDDEN_ADDRESS = "hidden_address"
         const val LOOKALIKE_LETTERS = "lookalike_letters"
         const val BARE_NUMBERS = "bare_numbers"
         const val MANY_PARTS = "many_parts"
+        const val ENCODED = "encoded"
     }
 }
 
@@ -111,11 +117,13 @@ object RescuerCode {
                 if (v.length > FIELD) cut = true
                 add("$label: " + if (v.length > FIELD) safeTake(v, FIELD - 1) + "…" else v)
             }
+            // Most needed first: lines at the end are the ones dropped if it does not fit
             line(labels.blood, card.bloodGroup)
             line(labels.allergies, card.allergies)
+            ice.take(1).forEach { line(labels.contact, "${it.name} ${it.phone}") }
             line(labels.medicines, card.medicines)
             line(labels.conditions, card.conditions)
-            ice.take(2).forEach { line(labels.contact, "${it.name} ${it.phone}") }
+            ice.drop(1).take(1).forEach { line(labels.contact, "${it.name} ${it.phone}") }
         }
         // Drop the last lines until it fits; the title and the first fields matter most
         var out = lines
