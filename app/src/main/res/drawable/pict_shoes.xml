@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Sprotyv pictogram "shoes": always shown with its words; CC BY-SA 4.0 like the content -->
-<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="48dp" android:height="48dp" android:viewportWidth="48" android:viewportHeight="48">
-    <path android:pathData="M6 34V18h10l4 7 14 3c5 1 8 3 8 6v2H6z" android:strokeColor="#FF000000" android:strokeWidth="3" android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000"/>
-    <path android:pathData="M6 30h36M22 26l-2 4M28 27l-2 3" android:strokeColor="#FF000000" android:strokeWidth="3" android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000"/>
+<!-- Sprotyv pictogram "shoes", built by scripts/pictograms/build.py from Material Symbols (Apache 2.0) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="48dp" android:height="48dp" android:viewportWidth="960" android:viewportHeight="960">
+    <group android:translateX="40.0" android:translateY="43.3">
+        <group android:scaleX="1.1055" android:scaleY="1.1055">
+            <group android:translateX="-84" android:translateY="870">
+                <path android:fillColor="#FF000000" android:pathData="M216-570H86q4-17 10.5-32t17.5-29l154-206q17-23 45.5-30.5T368-861l28 14q21 11 32.5 30t11.5 42v84l74-19q30-8 58 7.5t38 44.5l65 196 170 170q20 20 27.5 43t7.5 49q0 40-23 70.5T798-87L347-518q-27-25-61-38.5T216-570ZM566-80q-30 0-57-11t-50-31L134-417q-21-19-33-43t-17-50h132q25 0 48.5 9.5T306-474L717-80H566Z"/>
+            </group>
+        </group>
+    </group>
 </vector>

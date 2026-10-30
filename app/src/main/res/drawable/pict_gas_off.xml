@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Sprotyv pictogram "gas_off": always shown with its words; CC BY-SA 4.0 like the content -->
-<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="48dp" android:height="48dp" android:viewportWidth="48" android:viewportHeight="48">
-    <path android:pathData="M4 28h40" android:strokeColor="#FF000000" android:strokeWidth="3" android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000"/>
-    <path android:pathData="M18.0,22.0h12.0v12.0h-12.0z" android:strokeColor="#FF000000" android:strokeWidth="3" android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000"/>
-    <path android:pathData="M24 22V12M16 12h16" android:strokeColor="#FF000000" android:strokeWidth="3" android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000"/>
-    <path android:pathData="M34 6l8 8M42 6l-8 8" android:strokeColor="#FF000000" android:strokeWidth="3" android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000"/>
+<!-- Sprotyv pictogram "gas_off", built by scripts/pictograms/build.py from Material Symbols (Apache 2.0) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="48dp" android:height="48dp" android:viewportWidth="960" android:viewportHeight="960">
+    <group android:translateX="28.0" android:translateY="0.0">
+        <group android:scaleX="0.7876" android:scaleY="0.7876">
+            <group android:translateX="-160" android:translateY="840">
+                <path android:fillColor="#FF000000" android:pathData="M450-780H320q-12.75 0-21.37-8.68-8.63-8.67-8.63-21.5 0-12.82 8.63-21.32 8.62-8.5 21.37-8.5h320q12.75 0 21.38 8.68 8.62 8.67 8.62 21.5 0 12.82-8.62 21.32-8.63 8.5-21.38 8.5H510v130q0 12.75-8.68 21.37-8.67 8.63-21.5 8.63-12.82 0-21.32-8.63-8.5-8.62-8.5-21.37v-130ZM160-159v-232q0-12.75 8.68-21.38 8.67-8.62 21.5-8.62 12.82 0 21.32 8.7 8.5 8.69 8.5 21.54v.76h150v-140h-1q-12.75 0-21.37-8.68-8.63-8.67-8.63-21.5 0-12.82 8.63-21.32 8.62-8.5 21.37-8.5h222q12.75 0 21.38 8.68 8.62 8.67 8.62 21.5 0 12.82-8.7 21.32-8.69 8.5-21.54 8.5H590v140h150v-1q0-12.75 8.68-21.38 8.67-8.62 21.5-8.62 12.82 0 21.32 8.62 8.5 8.63 8.5 21.38v232q0 12.75-8.68 21.37-8.67 8.63-21.5 8.63-12.82 0-21.32-8.7-8.5-8.69-8.5-21.54v-.76H220v.78q0 13.22-8.68 21.72-8.67 8.5-21.5 8.5-12.82 0-21.32-8.63-8.5-8.62-8.5-21.37Z"/>
+            </group>
+        </group>
+    </group>
+    <group android:translateX="580.0" android:translateY="580.0">
+        <group android:scaleX="0.4750" android:scaleY="0.4750">
+            <group android:translateX="-80" android:translateY="880">
+                <path android:fillColor="#FF000000" android:pathData="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-60q61.01 0 117.51-20.5Q654-181 699-220L220-699q-38 46-59 102.17T140-480q0 142.37 98.81 241.19Q337.63-140 480-140Zm259-121q37-45 59-101.49 22-56.5 22-117.51 0-142.38-98.81-241.19T480-820q-60.66 0-116.83 21T261-739l478 478Z"/>
+            </group>
+        </group>
+    </group>
 </vector>

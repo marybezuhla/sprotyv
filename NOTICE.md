@@ -18,5 +18,6 @@
 - `content/src/main/assets/cards.json` (written in `scripts/content/cards.py`) — action cards
   adapted from the same guide: steps shortened and reworded for quick reading. As an
   adaptation they are also under CC BY-SA 4.0, credited to the guide.
-- `app/src/main/res/drawable/pict_*.xml` (drawn in `scripts/pictograms/`) — Sprotyv's own pictograms
-  for card steps, under CC BY-SA 4.0 like the cards. Not yet tested with people.
+- `app/src/main/res/drawable/pict_*.xml` (built by `scripts/pictograms/build.py`) — pictograms for
+  card steps, composed from Material Symbols Rounded (Google, Apache License 2.0; the glyphs are in
+  `scripts/pictograms/material/` unchanged). Not yet tested with people.
