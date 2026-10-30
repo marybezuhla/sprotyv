@@ -1,0 +1,22 @@
+# Once a month: are the outside addresses in the app still alive and where they were?
+# Reads only the public list in the repository; builds and signs nothing.
+name: Check outside links
+
+on:
+  schedule:
+    - cron: "17 6 3 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - name: Check links
+        run: python3 scripts/check_links.py

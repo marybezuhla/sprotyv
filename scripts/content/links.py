@@ -11,7 +11,8 @@ import json, os, re
 
 CHECKED = "2026-10-30"
 
-FLAGS = {"unknown_author", "ads", "beta", "collects_data"}
+FLAGS = {"unknown_author", "ads", "beta", "collects_data", "paid", "paused"}
+DIRECTORY = ("idp", "money", "docs", "kids", "veterans", "health", "care")
 
 def link(id, group, kind, title, note, url="", app="", phone="", flags=()):
     assert set(flags) <= FLAGS, id
@@ -176,7 +177,7 @@ if __name__ == "__main__":
     out = os.path.join(os.path.dirname(__file__), "..", "..", "content", "src", "main", "assets", "links.json")
     assert len({l["id"] for l in LINKS}) == len(LINKS)
     for l in LINKS:
-        assert l["group"] in ("threats", "front", "help", "evac", "search", "mind", "rights", "facts", "power"), l["id"]
+        assert l["group"] in ("threats", "front", "help", "evac", "search", "mind", "rights", "facts", "power") + DIRECTORY, l["id"]
         assert len(l["note"]) <= 200, l["id"]
     with open(out, "w", encoding="utf-8") as f:
         json.dump(LINKS, f, ensure_ascii=False, indent=1)

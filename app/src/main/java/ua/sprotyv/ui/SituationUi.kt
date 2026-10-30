@@ -46,6 +46,13 @@ private val Link.groupTitle: Int get() = when (group) {
     "search" -> R.string.situation_search
     "mind" -> R.string.situation_mind
     "rights" -> R.string.situation_rights
+    "idp" -> R.string.dir_idp
+    "money" -> R.string.dir_money
+    "docs" -> R.string.dir_docs
+    "kids" -> R.string.dir_kids
+    "veterans" -> R.string.dir_veterans
+    "health" -> R.string.dir_health
+    "care" -> R.string.dir_care
     Link.POWER -> R.string.power_title
     else -> R.string.situation_facts
 }
@@ -79,7 +86,7 @@ fun SituationScreen(content: Content?, nav: Nav) {
         if (content.linksBroken) return@Frame Broken()
         // Power cuts have their own screen: one row per oblast would crowd this one
         NavRow(stringResource(R.string.power_title), stringResource(R.string.power_hint)) { nav.go(Route.Power) }
-        content.links.filter { it.group != Link.POWER }.groupBy { it.group }.forEach { (_, links) ->
+        content.links.filter { it.group != Link.POWER && it.group !in Link.DIRECTORY }.groupBy { it.group }.forEach { (_, links) ->
             Text(stringResource(links.first().groupTitle), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 8.dp).semantics { heading() })
             links.forEach { link -> LinkRow(link) { openLink(context, link, toolbar) } }
         }
@@ -116,6 +123,8 @@ private fun flagTitle(flag: String): Int = when (flag) {
     Link.UNKNOWN_AUTHOR -> R.string.flag_unknown_author
     Link.ADS -> R.string.flag_ads
     Link.BETA -> R.string.flag_beta
+    Link.PAID -> R.string.flag_paid
+    Link.PAUSED -> R.string.flag_paused
     else -> R.string.flag_collects_data
 }
 
@@ -172,5 +181,30 @@ fun PowerScreen(content: Content?, nav: Nav) {
         if (content.linksBroken) return@Frame Broken()
         content.links.filter { it.group == Link.POWER }.forEach { link -> LinkRow(link) { openLink(context, link, toolbar) } }
         Text(stringResource(R.string.power_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+}
+
+/**
+ * "Where to turn": help for everyday life around the war (displaced people, money, documents,
+ * children, veterans, health, care). One tile deeper than "Situation" on purpose: it is for
+ * calmer moments. Every entry says who runs it and when it was checked.
+ */
+@Composable
+fun DirectoryScreen(content: Content?, nav: Nav) {
+    val context = LocalContext.current
+    val toolbar = MaterialTheme.colorScheme.surface.toArgb()
+    Frame(stringResource(R.string.dir_title), nav::back) {
+        Text(stringResource(R.string.dir_intro), style = MaterialTheme.typography.bodyLarge)
+        if (content == null) return@Frame Loading()
+        if (content.linksBroken) return@Frame Broken()
+        val entries = content.links.filter { it.group in Link.DIRECTORY }
+        if (entries.isEmpty()) Text(stringResource(R.string.dir_empty), style = MaterialTheme.typography.bodyLarge)
+        Link.DIRECTORY.forEach { g ->
+            val links = entries.filter { it.group == g }
+            if (links.isEmpty()) return@forEach
+            Text(stringResource(links.first().groupTitle), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 8.dp).semantics { heading() })
+            links.forEach { link -> LinkRow(link) { openLink(context, link, toolbar) } }
+        }
+        Text(stringResource(R.string.dir_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }

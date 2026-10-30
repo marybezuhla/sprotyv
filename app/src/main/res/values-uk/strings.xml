@@ -402,4 +402,18 @@
     <string name="situation_search">Зниклі безвісти й полонені</string>
     <string name="situation_mind">Психологічна підтримка</string>
     <string name="situation_rights">Права, злочини, навчання</string>
+    <string name="flag_paid">платно</string>
+    <string name="flag_paused">зараз призупинено</string>
+    <string name="dir_title">Куди звернутися</string>
+    <string name="dir_hint">Житло, виплати, документи, ветерани, здоров\'я</string>
+    <string name="dir_intro">Перевірені служби й організації для життя під час і після війни. Біля кожної — хто її веде; телефони набираються одним дотиком.</string>
+    <string name="dir_empty">Список готується.</string>
+    <string name="dir_note">Список перевіряється щомісяця. Ніхто з офіційних служб не просить грошей за допомогу чи «інформацію» — це ознака шахраїв.</string>
+    <string name="dir_idp">Переселенцям: житло й робота</string>
+    <string name="dir_money">Гроші й виплати</string>
+    <string name="dir_docs">Документи</string>
+    <string name="dir_kids">Діти</string>
+    <string name="dir_veterans">Ветеранам і родинам</string>
+    <string name="dir_health">Здоров\'я й реабілітація</string>
+    <string name="dir_care">Літнім і людям з інвалідністю</string>
 </resources>

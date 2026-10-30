@@ -21,6 +21,7 @@ sealed interface Route {
     data object Presets : Route
     data object Situation : Route
     data object Power : Route
+    data object Directory : Route
     /** Opens an outside source from "Situation" and comes straight back. */
     data class External(val id: String) : Route
 
@@ -46,6 +47,7 @@ sealed interface Route {
         Presets -> "presets"
         Situation -> "situation"
         Power -> "power"
+        Directory -> "directory"
         is External -> "external:$id"
     }
 
@@ -68,6 +70,7 @@ sealed interface Route {
                 "presets" -> Presets
                 "situation" -> Situation
                 "power" -> Power
+                "directory" -> Directory
                 // Never reopened after the app is restored: that would open a page unasked
                 "external" -> null
                 else -> null

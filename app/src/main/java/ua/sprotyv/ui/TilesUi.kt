@@ -44,6 +44,7 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
@@ -155,6 +156,7 @@ private val Tool.title: Int get() = when (this) {
     Tool.ALARM -> R.string.tile_alarm
     Tool.SITUATION -> R.string.situation_title
     Tool.POWER -> R.string.power_title
+    Tool.DIRECTORY -> R.string.dir_title
     Tool.HOME_LIFE -> R.string.tile_home_life
     Tool.GUIDE -> R.string.tile_guide
     Tool.SEARCH -> R.string.search_guide
@@ -175,6 +177,7 @@ private val Tool.hint: Int get() = when (this) {
     Tool.ALARM -> R.string.tile_alarm_hint
     Tool.SITUATION -> R.string.situation_hint
     Tool.POWER -> R.string.power_hint
+    Tool.DIRECTORY -> R.string.dir_hint
     Tool.HOME_LIFE -> R.string.tile_home_life_hint
     Tool.GUIDE -> R.string.tile_guide_hint
     Tool.SEARCH -> R.string.search_tile_hint
@@ -195,6 +198,7 @@ private val Tool.icon: ImageVector? get() = when (this) {
     Tool.ALARM -> Icons.Filled.Notifications
     Tool.SITUATION -> Icons.Filled.LocationOn
     Tool.POWER -> Icons.Filled.DateRange
+    Tool.DIRECTORY -> Icons.Filled.Phone
     Tool.SEARCH -> Icons.Filled.Search
     Tool.MEDICAL -> Icons.Filled.Favorite
     Tool.PEOPLE -> Icons.Filled.Person
@@ -209,6 +213,7 @@ val Tool.route: Route get() = when (this) {
     Tool.ALARM -> Route.Open(Section.ALARM)
     Tool.SITUATION -> Route.Situation
     Tool.POWER -> Route.Power
+    Tool.DIRECTORY -> Route.Directory
     Tool.HOME_LIFE -> Route.Open(Section.HOME_LIFE)
     Tool.GUIDE -> Route.Open(Section.GUIDE)
     Tool.SEARCH -> Route.Search
@@ -391,8 +396,9 @@ fun SectionsList(content: Content?, pins: List<String>, nav: Nav, onPin: (String
     val full = pins.size >= Tiles.MAX_PINS
     if (full) Text(stringResource(R.string.pins_full), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     val lists = Group.entries.map { it.title to it.tiles } +
-        (R.string.situation_title to content.links.filter { it.group != ua.sprotyv.content.Link.POWER }.map { Tiles.link(it.id) }) +
+        (R.string.situation_title to content.links.filter { it.group != ua.sprotyv.content.Link.POWER && it.group !in ua.sprotyv.content.Link.DIRECTORY }.map { Tiles.link(it.id) }) +
         (R.string.power_title to content.links.filter { it.group == ua.sprotyv.content.Link.POWER }.map { Tiles.link(it.id) }) +
+        (R.string.dir_title to content.links.filter { it.group in ua.sprotyv.content.Link.DIRECTORY }.map { Tiles.link(it.id) }) +
         (R.string.group_rest to Group.rest(content.guide.chapters.map { it.id }))
     lists.forEach { (title, ids) ->
         val infos = ids.mapNotNull { tileInfo(it, content) }

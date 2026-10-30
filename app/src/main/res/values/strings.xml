@@ -402,4 +402,18 @@
     <string name="situation_search">Missing people and prisoners</string>
     <string name="situation_mind">Psychological support</string>
     <string name="situation_rights">Rights, war crimes, training</string>
+    <string name="flag_paid">paid</string>
+    <string name="flag_paused">paused for now</string>
+    <string name="dir_title">Where to turn</string>
+    <string name="dir_hint">Housing, payments, documents, veterans, health</string>
+    <string name="dir_intro">Checked services and organisations for life during and after the war. Each says who runs it; phone numbers dial in one tap.</string>
+    <string name="dir_empty">The list is being prepared.</string>
+    <string name="dir_note">The list is checked every month. No official service asks for money for help or \"information\": that is a sign of fraud.</string>
+    <string name="dir_idp">Displaced people: housing and work</string>
+    <string name="dir_money">Money and payments</string>
+    <string name="dir_docs">Documents</string>
+    <string name="dir_kids">Children</string>
+    <string name="dir_veterans">Veterans and families</string>
+    <string name="dir_health">Health and rehabilitation</string>
+    <string name="dir_care">Older people and people with disabilities</string>
 </resources>
