@@ -12,18 +12,6 @@
   "flags": []
  },
  {
-  "id": "air-force",
-  "group": "threats",
-  "kind": "official",
-  "title": "Повітряні сили ЗСУ",
-  "note": "Попередження про напрямки ракет і дронів. Канал також пише про збиті цілі — нам важливі лише попередження.",
-  "url": "https://t.me/kpszsu",
-  "app": "",
-  "phone": "",
-  "checkedOn": "2026-10-30",
-  "flags": []
- },
- {
   "id": "monitor",
   "group": "threats",
   "kind": "volunteer",
@@ -131,30 +119,6 @@
   "title": "ДСНС: мапа мінної небезпеки",
   "note": "Території, де можуть бути міни й вибухонебезпечні предмети.",
   "url": "https://mine.dsns.gov.ua",
-  "app": "",
-  "phone": "",
-  "checkedOn": "2026-10-30",
-  "flags": []
- },
- {
-  "id": "ukrenergo",
-  "group": "power",
-  "kind": "official",
-  "title": "Укренерго: стан енергосистеми",
-  "note": "Загальний режим відключень на добу для всієї країни. Графік своєї черги — на сайті обленерго.",
-  "url": "https://t.me/Ukrenergo",
-  "app": "",
-  "phone": "",
-  "checkedOn": "2026-10-30",
-  "flags": []
- },
- {
-  "id": "dtek",
-  "group": "power",
-  "kind": "official",
-  "title": "ДТЕК: офіційний канал",
-  "note": "Єдиний офіційний канал групи ДТЕК; є десятки фейкових з такою назвою.",
-  "url": "https://t.me/dtek_ua",
   "app": "",
   "phone": "",
   "checkedOn": "2026-10-30",
@@ -1001,18 +965,6 @@
   "title": "Центр протидії дезінформації",
   "note": "Спростування фейків і попередження про ворожі канали та боти.",
   "url": "https://cpd.gov.ua",
-  "app": "",
-  "phone": "",
-  "checkedOn": "2026-10-30",
-  "flags": []
- },
- {
-  "id": "perevirka",
-  "group": "facts",
-  "kind": "independent",
-  "title": "Бот «Перевірка»",
-  "note": "Надішліть текст, фото чи посилання — фактчекери скажуть, чи це правда.",
-  "url": "https://t.me/perevir_bot",
   "app": "",
   "phone": "",
   "checkedOn": "2026-10-30",

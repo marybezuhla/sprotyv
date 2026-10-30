@@ -54,7 +54,7 @@ object Reach {
     /**
      * Opens a trusted page outside Sprotyv: the source's own app when installed, else the phone's
      * browser as a Custom Tab, which looks part of Sprotyv but loads the page itself (Sprotyv has
-     * no internet). Telegram links open in Telegram when it handles them, else in the browser.
+     * no internet).
      * Only https addresses from the built-in list.
      */
     fun open(context: Context, url: String, app: String = "", toolbarColor: Int? = null) {
@@ -66,14 +66,10 @@ object Reach {
         if (!url.startsWith("https://")) return notFound(context)
         val uri = Uri.parse(url)
         val intent = Intent(Intent.ACTION_VIEW, uri).addCategory(Intent.CATEGORY_BROWSABLE)
-        if (uri.host == "t.me") {
-            // A Telegram app, named outright (an unverified one would otherwise send the link to a browser)
-            nonBrowser(context, intent)?.let { pkg -> if (tryStart(context, Intent(intent).setPackage(pkg))) return }
-        }
         // Firefox Focus, when the person has it from Google Play, opens every page, whatever the main
         // browser is: its Erase button removes history and cookies
         focus(context)?.let { pkg -> if (tryStart(context, Intent(intent).setPackage(pkg))) return }
-        // No Telegram app or Focus took it: a page like any other
+        // Focus did not take it: a Custom Tab in the main browser
         run {
             // The Custom Tabs protocol by its documented extras, without an extra library
             intent.putExtras(android.os.Bundle().apply { putBinder(EXTRA_SESSION, null) })
@@ -125,19 +121,6 @@ object Reach {
         pkg == CHROME && (context.packageManager.getPackageInfo(CHROME, 0).versionName?.substringBefore('.')?.toIntOrNull() ?: 0) >= 137
     } catch (e: Exception) {
         false
-    }
-
-    /** An app other than a web browser that opens this link (Telegram for t.me), or null. */
-    private fun nonBrowser(context: Context, intent: Intent): String? = try {
-        val pm = context.packageManager
-        val browsers = pm.queryIntentActivities(
-            Intent(Intent.ACTION_VIEW, Uri.parse("https://example.org")).addCategory(Intent.CATEGORY_BROWSABLE),
-            android.content.pm.PackageManager.MATCH_ALL,
-        ).map { it.activityInfo.packageName }.toSet()
-        // Every app that declares t.me, verified or not
-        pm.queryIntentActivities(intent, android.content.pm.PackageManager.MATCH_ALL).map { it.activityInfo.packageName }.firstOrNull { it !in browsers && it != "android" }
-    } catch (e: Exception) {
-        null
     }
 
     private const val CHROME = "com.android.chrome"

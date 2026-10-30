@@ -19,6 +19,8 @@ def link(id, group, kind, title, note, url="", app="", phone="", flags=()):
     assert kind in ("official", "volunteer", "independent"), id
     assert re.fullmatch(r"[a-z0-9-]{1,40}", id), id
     assert (url and re.fullmatch(r"https://[a-z0-9-]+(\.[a-z0-9-]+)+(/[A-Za-z0-9._~/?=&%-]*)?", url)) or (not url and phone), id
+    # No Telegram: the service is partly Russian, and channels can be faked or taken over
+    assert "t.me" not in url and "telegram" not in url, id
     assert not app or re.fullmatch(r"[a-z][a-z0-9_]*(\.[a-z0-9_]+)+", app), id
     assert not phone or re.fullmatch(r"[0-9]{3,10}", phone), id
     assert 0 < len(title) <= 80 and 0 < len(note) <= 200, id
@@ -30,9 +32,6 @@ LINKS = [
     link("air-alert", "threats", "official", "Повітряна тривога: тривоги й рух цілей",
          "Офіційні тривоги й приблизний рух крилатих ракет і шахедів від Повітряних сил. Балістики не показує, дані із затримкою.",
          url="https://map.ukrainealarm.com", app="com.ukrainealarm"),
-    link("air-force", "threats", "official", "Повітряні сили ЗСУ",
-         "Попередження про напрямки ракет і дронів. Канал також пише про збиті цілі — нам важливі лише попередження.",
-         url="https://t.me/kpszsu"),
     link("monitor", "threats", "volunteer", "monitor: мапа дронів",
          "Приблизне положення дронів з відкритих даних, оновлення кожні 20 секунд. Не офіційне оповіщення.",
          url="https://map.war-monitor.org", flags=("unknown_author", "beta")),
@@ -63,12 +62,6 @@ LINKS = [
          "Території, де можуть бути міни й вибухонебезпечні предмети.",
          url="https://mine.dsns.gov.ua"),
     # Power cuts: each oblast's own grid operator (addresses checked against Glavcom's list of 17.10.2026)
-    link("ukrenergo", "power", "official", "Укренерго: стан енергосистеми",
-         "Загальний режим відключень на добу для всієї країни. Графік своєї черги — на сайті обленерго.",
-         url="https://t.me/Ukrenergo"),
-    link("dtek", "power", "official", "ДТЕК: офіційний канал",
-         "Єдиний офіційний канал групи ДТЕК; є десятки фейкових з такою назвою.",
-         url="https://t.me/dtek_ua"),
     link("power-kyiv-city", "power", "official", "Київ", "ДТЕК Київські електромережі: графік відключень за чергами.", url="https://www.dtek-kem.com.ua/ua/shutdowns"),
     link("power-kyiv-oblast", "power", "official", "Київська область", "ДТЕК Київські регіональні електромережі: графік відключень за чергами.", url="https://www.dtek-krem.com.ua/ua/shutdowns"),
     link("power-vinnytsia", "power", "official", "Вінницька область", "Вінницяобленерго: графік відключень за чергами.", url="https://www.voe.com.ua/disconnection"),
@@ -242,9 +235,6 @@ LINKS = [
     link("cpd", "facts", "official", "Центр протидії дезінформації",
          "Спростування фейків і попередження про ворожі канали та боти.",
          url="https://cpd.gov.ua"),
-    link("perevirka", "facts", "independent", "Бот «Перевірка»",
-         "Надішліть текст, фото чи посилання — фактчекери скажуть, чи це правда.",
-         url="https://t.me/perevir_bot"),
     link("voxcheck", "facts", "independent", "VoxCheck",
          "Фактчекінг заяв і фейків від VoxUkraine.",
          url="https://voxukraine.org"),
