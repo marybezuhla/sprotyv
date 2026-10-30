@@ -11,6 +11,12 @@ sealed interface Route {
     data class GuideSection(val num: String) : Route
     data object Search : Route
     data object About : Route
+    /** A part of the owner's own section: medical card, people, plan, kit. */
+    data class Mine(val part: MinePart) : Route
+    data object SuppliesRoute : Route
+
+    /** Screens that show the owner's data: opened only with the data, kept off screenshots. */
+    val personal: Boolean get() = this is Mine || this == Open(Section.MINE) || this == Open(Section.SAFE)
 
     fun save(): String = when (this) {
         is Open -> "open:" + section.name
@@ -19,6 +25,8 @@ sealed interface Route {
         is GuideSection -> "section:$num"
         Search -> "search"
         About -> "about"
+        is Mine -> "mine:" + part.name
+        SuppliesRoute -> "supplies"
     }
 
     companion object {
@@ -31,8 +39,12 @@ sealed interface Route {
                 "section" -> GuideSection(value)
                 "search" -> Search
                 "about" -> About
+                "mine" -> MinePart.entries.firstOrNull { it.name == value }?.let(::Mine)
+                "supplies" -> SuppliesRoute
                 else -> null
             }
         }
     }
 }
+
+enum class MinePart { MEDICAL, PEOPLE, PLAN, KIT }

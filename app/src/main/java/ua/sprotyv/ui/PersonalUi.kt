@@ -1,0 +1,251 @@
+package ua.sprotyv.ui
+
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import ua.sprotyv.R
+import ua.sprotyv.personal.MedicalCard
+import ua.sprotyv.personal.Person
+import ua.sprotyv.personal.PersonalDb
+import ua.sprotyv.personal.PersonalStore
+import ua.sprotyv.reach.Reach
+
+// Personal data is held in plain `remember`, never `rememberSaveable`: Android's saved state lives
+// outside the encrypted database. Every change is written at once, through PersonalStore only.
+
+@Composable
+fun NavRow(title: String, hint: String = "", onClick: () -> Unit) {
+    Card(
+        onClick = onClick,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp),
+    ) {
+        Column(Modifier.padding(horizontal = 16.dp, vertical = 14.dp)) {
+            Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+            if (hint.isNotBlank()) Text(hint, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
+}
+
+/** "Mine": the owner's own parts, all encrypted and on this phone only. */
+@Composable
+fun MineHub(nav: Nav) {
+    Text(stringResource(R.string.mine_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    NavRow(stringResource(R.string.medical_card), stringResource(R.string.medical_card_hint)) { nav.go(Route.Mine(MinePart.MEDICAL)) }
+    NavRow(stringResource(R.string.people), stringResource(R.string.people_hint)) { nav.go(Route.Mine(MinePart.PEOPLE)) }
+    NavRow(stringResource(R.string.family_plan), stringResource(R.string.family_plan_hint)) { nav.go(Route.Mine(MinePart.PLAN)) }
+    NavRow(stringResource(R.string.kit), stringResource(R.string.kit_hint)) { nav.go(Route.Mine(MinePart.KIT)) }
+    NavRow(stringResource(R.string.supplies), stringResource(R.string.supplies_hint)) { nav.go(Route.SuppliesRoute) }
+}
+
+/** A text field that saves on every change. */
+@Composable
+fun Field(
+    label: String,
+    value: String,
+    onChange: (String) -> Unit,
+    multiline: Boolean = false,
+    phone: Boolean = false,
+    hint: String = "",
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = { onChange(it.take(if (multiline) MAX_LONG else MAX_SHORT)) },
+        label = { Text(label) },
+        placeholder = if (hint.isNotBlank()) ({ Text(hint) }) else null,
+        singleLine = !multiline,
+        minLines = if (multiline) 2 else 1,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = if (phone) KeyboardType.Phone else KeyboardType.Text,
+            capitalization = if (phone) KeyboardCapitalization.None else KeyboardCapitalization.Sentences,
+        ),
+        modifier = Modifier.fillMaxWidth(),
+    )
+}
+
+private const val MAX_SHORT = 200
+private const val MAX_LONG = 2000
+
+/** The medical card: what rescuers and doctors need to know when the owner cannot tell them. */
+@Composable
+fun MedicalScreen(db: PersonalDb) {
+    val loaded by produceState<MedicalCard?>(null, db) { value = db.medical().get() ?: MedicalCard() }
+    val start = loaded ?: return Loading()
+    var card by remember(start) { mutableStateOf(start) }
+    fun change(next: MedicalCard) {
+        card = next
+        val saved = next.copy(updatedAt = System.currentTimeMillis())
+        PersonalStore.write { it.medical().save(saved) }
+    }
+    Text(stringResource(R.string.medical_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    Field(stringResource(R.string.med_name), card.name, { change(card.copy(name = it)) })
+    Field(stringResource(R.string.med_birth), card.birthDate, { change(card.copy(birthDate = it)) }, hint = stringResource(R.string.med_birth_hint))
+    Field(stringResource(R.string.med_blood), card.bloodGroup, { change(card.copy(bloodGroup = it)) }, hint = stringResource(R.string.med_blood_hint))
+    Field(stringResource(R.string.med_allergies), card.allergies, { change(card.copy(allergies = it)) }, multiline = true)
+    Field(stringResource(R.string.med_medicines), card.medicines, { change(card.copy(medicines = it)) }, multiline = true, hint = stringResource(R.string.med_medicines_hint))
+    Field(stringResource(R.string.med_conditions), card.conditions, { change(card.copy(conditions = it)) }, multiline = true)
+    Field(stringResource(R.string.med_notes), card.notes, { change(card.copy(notes = it)) }, multiline = true)
+
+    val people by db.people().observe().collectAsStateWithLifecycle(emptyList())
+    val ice = people.filter { it.ice }
+    Text(stringResource(R.string.ice_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+    if (ice.isEmpty()) Text(stringResource(R.string.ice_none), style = MaterialTheme.typography.bodyMedium)
+    ice.forEach { Text("${it.name} · ${it.phone}", style = MaterialTheme.typography.bodyLarge) }
+    Text(stringResource(R.string.saved_automatically), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+}
+
+/** Trusted people: who gets "I am safe" and who is the emergency contact. */
+@Composable
+fun PeopleScreen(db: PersonalDb) {
+    val people by db.people().observe().collectAsStateWithLifecycle(emptyList())
+    var editing by remember { mutableStateOf<Person?>(null) }
+    Text(stringResource(R.string.people_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    Button(onClick = { editing = Person(name = "", phone = "") }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.add_person)) }
+    people.forEach { p ->
+        NavRow(p.name, listOfNotNull(p.phone, p.relation.ifBlank { null }, if (p.ice) stringResource(R.string.ice_short) else null).joinToString(" · ")) { editing = p }
+    }
+    editing?.let { PersonDialog(it, onDone = { editing = null }) }
+}
+
+@Composable
+private fun PersonDialog(start: Person, onDone: () -> Unit) {
+    var p by remember(start) { mutableStateOf(start) }
+    var confirmDelete by remember { mutableStateOf(false) }
+    val valid = p.name.isNotBlank() && p.phone.any { it.isDigit() }
+    AlertDialog(
+        onDismissRequest = onDone,
+        title = { Text(stringResource(if (start.id == 0L) R.string.add_person else R.string.edit_person)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Field(stringResource(R.string.person_name), p.name, { p = p.copy(name = it) })
+                Field(stringResource(R.string.person_phone), p.phone, { p = p.copy(phone = it) }, phone = true, hint = "+380…")
+                Field(stringResource(R.string.person_relation), p.relation, { p = p.copy(relation = it) })
+                Toggle(stringResource(R.string.person_safe_list), p.safeList) { p = p.copy(safeList = it) }
+                Toggle(stringResource(R.string.person_ice), p.ice) { p = p.copy(ice = it) }
+                if (start.id != 0L) {
+                    TextButton(onClick = { confirmDelete = true }) { Text(stringResource(R.string.delete_person), color = MaterialTheme.colorScheme.error) }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(enabled = valid, onClick = {
+                val saved = p.copy(name = p.name.trim(), phone = p.phone.trim(), relation = p.relation.trim())
+                PersonalStore.write { it.people().save(saved) }
+                onDone()
+            }) { Text(stringResource(R.string.save)) }
+        },
+        dismissButton = { TextButton(onClick = onDone) { Text(stringResource(R.string.cancel)) } },
+    )
+    if (confirmDelete) {
+        AlertDialog(
+            onDismissRequest = { confirmDelete = false },
+            text = { Text(stringResource(R.string.delete_person_confirm, start.name)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    PersonalStore.write { it.people().delete(start) }
+                    confirmDelete = false
+                    onDone()
+                }) { Text(stringResource(R.string.delete_person)) }
+            },
+            dismissButton = { TextButton(onClick = { confirmDelete = false }) { Text(stringResource(R.string.cancel)) } },
+        )
+    }
+}
+
+@Composable
+fun Toggle(label: String, checked: Boolean, onChange: (Boolean) -> Unit) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
+    ) {
+        Text(label, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+        Switch(checked = checked, onCheckedChange = onChange)
+    }
+}
+
+/**
+ * "I am safe": a ready message to the chosen people. Sprotyv only hands it to the SMS app or a
+ * messenger; the owner presses Send there. SMS works with no internet.
+ */
+@Composable
+fun SafeScreen(db: PersonalDb, nav: Nav) {
+    val context = LocalContext.current
+    val people by db.people().observe().collectAsStateWithLifecycle(emptyList())
+    val list = people.filter { it.safeList }
+    val defaultText = stringResource(R.string.safe_default_message)
+    val stored by produceState<String?>(null, db) { value = db.settings().get(KEY_SAFE_MESSAGE) ?: "" }
+    val start = stored ?: return Loading()
+    var text by remember(start) { mutableStateOf(start.ifBlank { defaultText }) }
+
+    if (list.isEmpty()) {
+        Text(stringResource(R.string.safe_no_people), style = MaterialTheme.typography.bodyLarge)
+        Button(onClick = { nav.go(Route.Mine(MinePart.PEOPLE)) }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.add_person)) }
+        return
+    }
+    Field(stringResource(R.string.safe_message), text, {
+        text = it
+        PersonalStore.write { db2 -> db2.settings().put(ua.sprotyv.personal.Setting(KEY_SAFE_MESSAGE, it)) }
+    }, multiline = true)
+    Button(
+        onClick = { Reach.sms(context, list.map { it.phone }, text) },
+        modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp),
+    ) { Text(stringResource(R.string.safe_sms_all, list.size), style = MaterialTheme.typography.titleMedium) }
+    Text(stringResource(R.string.safe_sms_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    OutlinedButton(onClick = { Reach.signal(context, text) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+        Text(stringResource(R.string.safe_signal))
+    }
+    HorizontalDivider()
+    Text(stringResource(R.string.safe_whatsapp_each), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+    list.forEach { p ->
+        OutlinedButton(onClick = { Reach.whatsapp(context, p.phone, text) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+            Text("WhatsApp · ${p.name}")
+        }
+    }
+    Text(stringResource(R.string.safe_how), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+}
+
+const val KEY_SAFE_MESSAGE = "safe_message"
+
+@Composable
+fun CheckRow(text: String, checked: Boolean, onChange: (Boolean) -> Unit) {
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
+        Checkbox(checked = checked, onCheckedChange = onChange)
+        RichText(text, modifier = Modifier.weight(1f))
+    }
+}

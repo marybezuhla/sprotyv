@@ -13,6 +13,7 @@ import androidx.lifecycle.compose.LifecycleStartEffect
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ua.sprotyv.content.Content
+import ua.sprotyv.R
 import ua.sprotyv.personal.PersonalStore
 
 /**
@@ -39,9 +40,9 @@ fun App() {
         override fun home() { saved = emptyList() }
     }
 
-    // On entering the owner's section and on every return to the screen (leaving it closed the data)
+    // On entering the owner's screens and on every return to the screen (leaving it closed the data)
     LifecycleStartEffect(top) {
-        if (top == Route.Open(Section.MINE)) PersonalStore.open(context)
+        if (top?.personal == true) PersonalStore.open(context)
         onStopOrDispose { }
     }
 
@@ -49,12 +50,15 @@ fun App() {
 
     when (top) {
         null -> HomeScreen(onOpen = { nav.go(Route.Open(it)) })
-        Route.Open(Section.MINE) -> PersonalGate(
-            state = personal,
-            onTryAgain = { PersonalStore.close(); PersonalStore.open(context) },
-            onStartFresh = { PersonalStore.startFresh(context) },
-            onBack = nav::back,
-        )
+        Route.Open(Section.MINE) -> Personal(Section.MINE.title, personal, nav) { _ -> MineHub(nav) }
+        Route.Open(Section.SAFE) -> Personal(Section.SAFE.title, personal, nav) { db -> SafeScreen(db, nav) }
+        is Route.Mine -> when (top.part) {
+            MinePart.MEDICAL -> Personal(R.string.medical_card, personal, nav) { db -> MedicalScreen(db) }
+            MinePart.PEOPLE -> Personal(R.string.people, personal, nav) { db -> PeopleScreen(db) }
+            MinePart.PLAN -> Personal(R.string.family_plan, personal, nav) { db -> PlanScreen(db) }
+            MinePart.KIT -> Personal(R.string.kit, personal, nav) { db -> KitScreen(db, content, nav) }
+        }
+        Route.SuppliesRoute -> SuppliesScreen(content, nav)
         is Route.Open -> when (top.section) {
             Section.NOW -> NowScreen(content, nav)
             Section.GUIDE -> GuideScreen(content, nav)

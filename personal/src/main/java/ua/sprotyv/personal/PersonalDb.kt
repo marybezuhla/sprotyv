@@ -1,6 +1,7 @@
 package ua.sprotyv.personal
 
 import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.Dao
 import androidx.room.Database
 import androidx.room.Entity
@@ -27,15 +28,28 @@ interface SettingDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun put(setting: Setting)
+
+    @Query("SELECT value FROM settings WHERE `key` = :key")
+    fun observe(key: String): kotlinx.coroutines.flow.Flow<String?>
 }
 
 /**
- * The owner's own data, always encrypted with SQLCipher. Medical card, family plan, kit and
- * trusted contacts arrive in stage 3; every layout change gets a migration, never a wipe.
+ * The owner's own data, always encrypted with SQLCipher. Every layout change gets a migration,
+ * never a wipe: version 2 only adds tables, so Room's automatic migration from the committed
+ * version 1 layout (personal/schemas) is exact.
  */
-@Database(entities = [Setting::class], version = 1, exportSchema = true)
+@Database(
+    entities = [Setting::class, MedicalCard::class, Person::class, FamilyPlan::class, PlanRow::class, KitCheck::class],
+    version = 2,
+    exportSchema = true,
+    autoMigrations = [AutoMigration(from = 1, to = 2)],
+)
 abstract class PersonalDb : RoomDatabase() {
     abstract fun settings(): SettingDao
+    abstract fun medical(): MedicalDao
+    abstract fun people(): PeopleDao
+    abstract fun plan(): PlanDao
+    abstract fun kit(): KitDao
 
     companion object {
         const val FILE_NAME = "personal.db"
