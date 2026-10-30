@@ -81,7 +81,12 @@ class ContentTest {
     @Test fun cardStepsFitAStressedReader() {
         cards.forEach { card ->
             assertTrue("${card.id} too many steps", card.steps.size <= 8)
-            card.steps.forEach { assertTrue("${card.id}: ${it.action.take(40)}", it.action.length <= Step.MAX_ACTION) }
+            card.steps.forEach {
+                assertTrue("${card.id}: ${it.action.take(40)}", it.action.length <= Step.MAX_ACTION)
+                // 27/9/3: about 27 words a step for a reader under stress
+                val words = Regex("[\\p{L}\\p{N}'’]+").findAll(it.action).count()
+                assertTrue("${card.id}: $words words in ${it.action.take(40)}", words <= 27)
+            }
         }
     }
 

@@ -261,6 +261,8 @@ class Builder:
             elif c.tag == "h3":
                 out.append({"t": "h", "text": inline(c)})
             elif c.tag in ("ul", "ol"):
+                if c.cls() not in ("", "steps", "checklist"):
+                    raise ValueError(f"Unknown list class '{c.cls()}'")
                 kind = "steps" if c.tag == "ol" else ("check" if "checklist" in c.cls() else "bullets")
                 out.append({"t": "list", "kind": kind, "items": list_items(c)})
             elif c.tag == "table":
@@ -323,7 +325,9 @@ class Builder:
                     num, name = m.group(1), m.group(2)
                 else:
                     # e.g. "Додаток А" weeks: numbered А.1, А.2 … so every section has its own address
-                    letter = current["label"].split()[-1] if current["label"] else "X"
+                    if not current["label"].startswith("ДОДАТОК"):
+                        raise ValueError(f"A section without a number outside an appendix: {title}")
+                    letter = current["label"].split()[-1]
                     num, name = f"{letter}.{len(current['sections']) + 1}", title
                 section = {"num": num, "title": name, "blocks": []}
                 current["sections"].append(section)
@@ -390,7 +394,8 @@ def main():
         "commit": commit,
         "license": "CC BY-SA 4.0",
         "changes": "Перетворено для показу в застосунку: розмітку змінено, рисунки збережено як зображення, "
-                   "обкладинку, зміст і бланки нотаток не включено. Текст не змінено.",
+                   "розділам Додатку А додано номери А.1–А.5, застереження з обкладинки перенесено в «Про довідник», "
+                   "решту обкладинки, зміст і бланки нотаток не включено. Текст розділів не змінено.",
         "chapters": chapters,
     }
     os.makedirs(args.out, exist_ok=True)
