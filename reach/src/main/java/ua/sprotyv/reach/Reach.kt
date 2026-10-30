@@ -66,6 +66,10 @@ object Reach {
         if (!url.startsWith("https://")) return notFound(context)
         val uri = Uri.parse(url)
         val intent = Intent(Intent.ACTION_VIEW, uri).addCategory(Intent.CATEGORY_BROWSABLE)
+        // Firefox Focus, when the person has it from Google Play, opens every page: it erases history
+        // and cookies when closed, whatever the phone's main browser is
+        val telegramApp = uri.host == "t.me" && !handledOnlyByBrowsers(context, intent)
+        focus(context)?.let { pkg -> if (!telegramApp && tryStart(context, Intent(intent).setPackage(pkg))) return }
         // Telegram links go to a Telegram app when one handles them; otherwise they are pages like any other
         if (uri.host != "t.me" || handledOnlyByBrowsers(context, intent)) {
             // The Custom Tabs protocol by its documented extras, without an extra library
@@ -84,11 +88,25 @@ object Reach {
         false
     }
 
+    /** How pages from Sprotyv are kept on this phone, said plainly on the screen. */
+    enum class Trace { FOCUS, CHROME_TAB, BROWSER }
+
+    fun trace(context: Context): Trace = when {
+        focus(context) != null -> Trace.FOCUS
+        chromeTraceless(context) -> Trace.CHROME_TAB
+        else -> Trace.BROWSER
+    }
+
+    /** Firefox Focus (or Klar) installed from Google Play, or null. */
+    private fun focus(context: Context): String? = FOCUS.firstOrNull { fromPlay(context, it) }
+
+    private val FOCUS = listOf("org.mozilla.focus", "org.mozilla.klar")
+
     /**
-     * Whether pages open without a trace on this phone: the default browser is Chrome 137 or newer
-     * (Ephemeral Custom Tabs). Other browsers are not assumed to support it.
+     * Whether the default browser is Chrome 137 or newer (Ephemeral Custom Tabs). Other browsers
+     * are not assumed to support it.
      */
-    fun opensWithoutTrace(context: Context): Boolean = try {
+    private fun chromeTraceless(context: Context): Boolean = try {
         val probe = Intent(Intent.ACTION_VIEW, Uri.parse("https://example.org")).addCategory(Intent.CATEGORY_BROWSABLE)
         val pkg = context.packageManager.resolveActivity(probe, android.content.pm.PackageManager.MATCH_DEFAULT_ONLY)?.activityInfo?.packageName
         pkg == CHROME && (context.packageManager.getPackageInfo(CHROME, 0).versionName?.substringBefore('.')?.toIntOrNull() ?: 0) >= 137
