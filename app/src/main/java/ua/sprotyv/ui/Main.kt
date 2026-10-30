@@ -7,7 +7,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.collectAsState
 import ua.sprotyv.personal.PersonalStore
 
-class MainActivity : ComponentActivity() {
+/**
+ * The one activity. Opened through two home-screen entries (aliases in the manifest): the usual
+ * "ua.sprotyv.ui.MainActivity", so existing home-screen icons keep working, and the neutral one.
+ */
+class Main : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         CrashLog.install(this)

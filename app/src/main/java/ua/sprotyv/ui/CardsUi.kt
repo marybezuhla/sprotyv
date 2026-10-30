@@ -434,7 +434,9 @@ fun HomeLifeScreen(content: Content?, nav: Nav) {
         listOf("blackout", "leave-home").mapNotNull(content::card).forEach { card ->
             CardRow(card) { nav.go(Route.CardRoute(card.id)) }
         }
-        NavRow(stringResource(R.string.supplies), stringResource(R.string.supplies_hint)) { nav.go(Route.SuppliesRoute) }
+        if (HomePrefs.state.collectAsState().value?.trip != true) {
+            NavRow(stringResource(R.string.supplies), stringResource(R.string.supplies_hint)) { nav.go(Route.SuppliesRoute) }
+        }
         Text(stringResource(R.string.in_the_guide), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
         // Blackout, water, food, warmth, hygiene, health
         listOf("ch20", "ch8", "ch9", "ch12", "ch16", "ch21").mapNotNull { id -> content.guide.chapters.firstOrNull { it.id == id } }

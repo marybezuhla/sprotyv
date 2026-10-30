@@ -559,10 +559,10 @@
     <string name="neutral_confirm_yes">Turn on</string>
     <string name="trip_title">Trip</string>
     <string name="trip_toggle">Trip mode</string>
-    <string name="trip_hint">For a checkpoint or a phone check. Hides “Mine” (medical card, people, plan, supplies), “I am safe”, front maps, the search for prisoners and the missing, veterans\' services and reporting war crimes. Turning it off needs the phone\'s PIN.</string>
+    <string name="trip_hint">For a checkpoint or a phone check. Hides “Mine” (medical card, people, plan, supplies), “I am safe”, front maps, the search for prisoners and the missing, veterans\' services, war crimes and human rights, deported children, papers from the occupied areas and care for the wounded. Turning it off needs the phone\'s PIN (or nothing, if the phone\'s screen lock is removed). The guide stays.</string>
     <string name="trip_no_lock">First set a screen lock on the phone (PIN or password): without it anyone could turn trip mode off.</string>
     <string name="trip_confirm_title">Turn on trip mode?</string>
-    <string name="trip_confirm_text">Nothing hidden is deleted: the data stays encrypted on the phone. Anyone who makes you unlock the phone and enter the PIN can turn the mode off and see it. Before a trip, think about what you really need to carry, and make a backup. Cards, the guide and 112 work as usual.</string>
+    <string name="trip_confirm_text">Nothing hidden is deleted: the data stays encrypted on the phone. Anyone who makes you unlock the phone and enter the PIN can turn the mode off and see it. Before a trip, think about what you really need to carry, and make a backup. Cards, the guide and 112 work as usual. Settings show the mode is on, so a careful look will tell something is hidden.</string>
     <string name="trip_confirm_yes">Turn on</string>
     <string name="trip_off_prompt">Turn off trip mode</string>
 </resources>
