@@ -86,6 +86,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import ua.sprotyv.R
 import ua.sprotyv.content.Content
 import ua.sprotyv.home.Group
@@ -271,8 +272,11 @@ fun TileCard(info: TileInfo, big: Boolean, onClick: () -> Unit) {
                 IconBadge(info.icon, info.group.tint(), 56.dp)
                 Spacer(Modifier.width(16.dp))
                 Column(Modifier.weight(1f)) {
-                    Text(info.title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
-                    if (info.hint.isNotBlank()) Text(info.hint, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    // Simple look: large print (24 and 18 sp), still growing with the phone's text size
+                    Text(info.title, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
+                    if (info.hint.isNotBlank()) {
+                        Text(info.hint, style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp, lineHeight = 24.sp), color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
                 }
             }
         } else {
@@ -297,8 +301,9 @@ fun SimpleHome(content: Content?, pins: List<String>, nav: Nav, onSettings: () -
             TextButton(onClick = onSettings, modifier = Modifier.heightIn(min = 48.dp)) {
                 Icon(Icons.Filled.Settings, contentDescription = null)
                 Spacer(Modifier.width(6.dp))
-                Text(stringResource(R.string.settings))
+                Text(stringResource(R.string.settings), style = MaterialTheme.typography.titleMedium)
             }
+            CornerCall()
         }
         Column(
             Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(16.dp),
@@ -329,6 +334,7 @@ fun FullHome(content: Content?, pins: List<String>, nav: Nav, onSettings: () -> 
         item(span = { GridItemSpan(maxLineSpan) }) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(stringResource(R.string.app_name), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
+                CornerCall()
                 IconButton(onClick = onSettings, modifier = Modifier.size(48.dp)) {
                     Icon(Icons.Filled.Settings, contentDescription = stringResource(R.string.settings))
                 }
@@ -582,6 +588,10 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
     Frame(stringResource(R.string.settings), nav::back) {
         Text(stringResource(R.string.mode_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
         ModeChoice(prefs.mode) { m -> HomePrefs.update(context) { it.copy(mode = m) } }
+        if (prefs.mode != Mode.KID) {
+            Toggle(stringResource(R.string.call_bar_toggle), prefs.callBar) { on -> HomePrefs.update(context) { it.copy(callBar = on) } }
+            Text(stringResource(R.string.call_bar_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
         Text(stringResource(R.string.theme_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
         ThemeChoice.entries.forEach { t ->
             val on = t == prefs.theme

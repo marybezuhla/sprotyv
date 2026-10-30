@@ -349,4 +349,12 @@
     <string name="kid_hello_hint">I\'m Sunny. Tap a picture and I\'ll tell you what to do.</string>
     <string name="kid_well_done">Well done! 🌟</string>
     <string name="kid_well_done_hint">Now you know what to do.</string>
+    <string name="call_services">Emergency services</string>
+    <string name="service_name_unified">Single emergency number</string>
+    <string name="service_name_rescue">Rescue, fire</string>
+    <string name="service_name_police">Police</string>
+    <string name="service_name_ambulance">Ambulance</string>
+    <string name="service_name_gas">Gas emergency</string>
+    <string name="call_bar_toggle">Call buttons at the bottom</string>
+    <string name="call_bar_hint">Off: 112 and the other services open from the red phone at the top of every screen.</string>
 </resources>

@@ -62,8 +62,9 @@ fun Frame(title: String, onBack: () -> Unit, content: @Composable () -> Unit) {
                 title,
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(start = if (inTab) 12.dp else 0.dp).semantics { heading() },
+                modifier = Modifier.weight(1f).padding(start = if (inTab) 12.dp else 0.dp).semantics { heading() },
             )
+            CornerCall()
         }
         Column(
             Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(16.dp),

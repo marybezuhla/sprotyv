@@ -31,6 +31,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.AlertDialog
 import androidx.compose.runtime.Composable
+import androidx.compose.material3.IconButton
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -46,11 +48,17 @@ import ua.sprotyv.R
 import ua.sprotyv.content.Service
 import ua.sprotyv.reach.Reach
 
-/** "Call 112" at once; the other services one tap further. On every screen. */
+/** "Call 112" at once; the other services one tap further. On every screen, unless turned off. */
 @Composable
 fun CallBar(edge: Boolean = true) {
-    val context = LocalContext.current
+    val shown = HomePrefs.state.collectAsState().value?.callBar ?: true
     var others by rememberSaveable { mutableStateOf(false) }
+    if (!shown) {
+        // No bar: the edge still keeps clear of the system bar
+        if (edge) Spacer(Modifier.navigationBarsPadding())
+        return
+    }
+    val context = LocalContext.current
     Surface(tonalElevation = 3.dp, modifier = Modifier.fillMaxWidth()) {
         Row(
             // At the screen's edge it keeps clear of the system bar; above the tabs it does not need to
@@ -65,35 +73,68 @@ fun CallBar(edge: Boolean = true) {
             ) {
                 Icon(Icons.Filled.Call, contentDescription = null)
                 Spacer(Modifier.width(8.dp))
-                Text(stringResource(R.string.call_112), fontWeight = FontWeight.SemiBold)
+                Text(stringResource(R.string.call_112), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
             }
             OutlinedButton(onClick = { others = true }, modifier = Modifier.heightIn(min = 56.dp)) {
-                Text(stringResource(R.string.call_others))
+                Text(stringResource(R.string.call_others), style = MaterialTheme.typography.titleMedium)
             }
         }
     }
-    if (others) {
-        AlertDialog(
-            onDismissRequest = { others = false },
-            confirmButton = { TextButton(onClick = { others = false }) { Text(stringResource(R.string.back)) } },
-            text = {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Service.entries.forEach { service ->
-                        OutlinedButton(
-                            onClick = { others = false; Reach.dial(context, service.number) },
-                            modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp),
-                        ) { Text(stringResource(service.label())) }
-                    }
-                }
-            },
-        )
-    }
+    if (others) ServicesDialog { others = false }
 }
 
-private fun Service.label(): Int = when (this) {
-    Service.UNIFIED -> R.string.service_unified
-    Service.RESCUE -> R.string.service_rescue
-    Service.POLICE -> R.string.service_police
-    Service.AMBULANCE -> R.string.service_ambulance
-    Service.GAS -> R.string.service_gas
+/**
+ * When the bar is turned off: a phone button in the corner of every screen opens the same list,
+ * so 112 is never more than two taps away.
+ */
+@Composable
+fun CornerCall() {
+    val shown = HomePrefs.state.collectAsState().value?.callBar ?: true
+    if (shown) return
+    var open by rememberSaveable { mutableStateOf(false) }
+    IconButton(onClick = { open = true }, modifier = Modifier.size(48.dp)) {
+        Icon(Icons.Filled.Call, contentDescription = stringResource(R.string.call_services), tint = DangerRed)
+    }
+    if (open) ServicesDialog { open = false }
+}
+
+/** The services as one even list: the number large on the left, the name beside it. */
+@Composable
+private fun ServicesDialog(onClose: () -> Unit) {
+    val context = LocalContext.current
+    AlertDialog(
+        onDismissRequest = onClose,
+        title = { Text(stringResource(R.string.call_services)) },
+        confirmButton = { TextButton(onClick = onClose) { Text(stringResource(R.string.back)) } },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Service.entries.forEach { service ->
+                    OutlinedButton(
+                        onClick = { onClose(); Reach.dial(context, service.number) },
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp),
+                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                    ) {
+                        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                service.number,
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Bold,
+                                color = if (service == Service.UNIFIED) DangerRed else MaterialTheme.colorScheme.onSurface,
+                                modifier = Modifier.width(56.dp),
+                            )
+                            Text(stringResource(service.name()), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f))
+                        }
+                    }
+                }
+            }
+        },
+    )
+}
+
+private fun Service.name(): Int = when (this) {
+    Service.UNIFIED -> R.string.service_name_unified
+    Service.RESCUE -> R.string.service_name_rescue
+    Service.POLICE -> R.string.service_name_police
+    Service.AMBULANCE -> R.string.service_name_ambulance
+    Service.GAS -> R.string.service_name_gas
 }
