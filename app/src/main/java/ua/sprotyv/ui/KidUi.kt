@@ -104,7 +104,9 @@ fun KidHome(content: Content?, nav: Nav, onGrownUp: () -> Unit) {
                 KidTile(card, KID_COLOURS[i % KID_COLOURS.size].tint()) { nav.go(Route.CardRoute(card.id)) }
             }
         }
-        KidCallBar(onFamily = { nav.go(Route.Mine(MinePart.KID_CALL)) })
+        // Trip mode hides the family numbers (encrypted data): then only 112, never a dead button
+        val trip = HomePrefs.state.collectAsStateWithLifecycle().value?.trip == true
+        KidCallBar(onFamily = if (trip) null else ({ nav.go(Route.Mine(MinePart.KID_CALL)) }))
     }
 }
 
@@ -159,22 +161,24 @@ fun Sunny(size: Dp, happy: Boolean = false) {
 
 /** Two large buttons always below: call family, and 112. No other services to choose from. */
 @Composable
-private fun KidCallBar(onFamily: () -> Unit) {
+private fun KidCallBar(onFamily: (() -> Unit)?) {
     val context = LocalContext.current
     Surface(tonalElevation = 3.dp, modifier = Modifier.fillMaxWidth()) {
         Row(
             Modifier.navigationBarsPadding().padding(horizontal = 16.dp, vertical = 12.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Button(onClick = onFamily, modifier = Modifier.weight(1f).heightIn(min = 64.dp)) {
-                Text("📞", modifier = Modifier.clearAndSetSemantics { })
-                Spacer(Modifier.width(8.dp))
-                Text(stringResource(R.string.kid_call_family), fontWeight = FontWeight.SemiBold)
+            if (onFamily != null) {
+                Button(onClick = onFamily, modifier = Modifier.weight(1f).heightIn(min = 64.dp)) {
+                    Text("📞", modifier = Modifier.clearAndSetSemantics { })
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.kid_call_family), fontWeight = FontWeight.SemiBold)
+                }
             }
             Button(
                 onClick = { Reach.dial(context, Service.UNIFIED.number) },
                 colors = ButtonDefaults.buttonColors(containerColor = DangerRed, contentColor = Color.White),
-                modifier = Modifier.heightIn(min = 64.dp),
+                modifier = (if (onFamily == null) Modifier.weight(1f) else Modifier).heightIn(min = 64.dp),
             ) { Text(stringResource(R.string.kid_call_112), fontWeight = FontWeight.SemiBold) }
         }
     }

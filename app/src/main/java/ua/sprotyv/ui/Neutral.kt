@@ -14,7 +14,7 @@ import ua.sprotyv.R
  */
 object Neutral {
     private fun entry(context: Context, neutral: Boolean) =
-        ComponentName(context, if (neutral) "ua.sprotyv.LauncherNeutral" else "ua.sprotyv.Launcher")
+        ComponentName(context, if (neutral) "ua.sprotyv.LauncherNeutral" else "ua.sprotyv.ui.MainActivity")
 
     fun isOn(context: Context): Boolean = try {
         context.packageManager.getComponentEnabledSetting(entry(context, true)) == PackageManager.COMPONENT_ENABLED_STATE_ENABLED
