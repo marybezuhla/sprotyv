@@ -2,6 +2,8 @@
 
 - SQLCipher for Android (Zetetic), AndroidX, Jetpack Compose, Material Components and Kotlin
   libraries are used as dependencies under their own licences.
+- ZXing core (https://github.com/zxing/zxing), Apache License 2.0, makes and reads QR codes on
+  the phone.
 - `content/src/main/assets/guide.json` and `content/src/main/assets/figures/` — the open
   "Довідник виживання" 2.3 (https://github.com/snegireff/dovidnyk-vyzhyvannia), licensed under
   CC BY-SA 4.0. Changes: converted for display in the app by `scripts/build_guide.py` (markup

@@ -1,0 +1,131 @@
+package ua.sprotyv.qr
+
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.BinaryBitmap
+import com.google.zxing.DecodeHintType
+import com.google.zxing.EncodeHintType
+import com.google.zxing.NotFoundException
+import com.google.zxing.RGBLuminanceSource
+import com.google.zxing.common.BitMatrix
+import com.google.zxing.common.HybridBinarizer
+import com.google.zxing.qrcode.QRCodeReader
+import com.google.zxing.qrcode.QRCodeWriter
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
+import ua.sprotyv.personal.MedicalCard
+import ua.sprotyv.personal.Person
+
+/** Making and reading QR codes. Plain Java parts only, so it can be checked without a phone. */
+object Qr {
+    /** UTF-8 text a phone camera reads easily; longer text makes the code too dense to scan. */
+    const val MAX_BYTES = 900
+
+    fun encode(text: String, size: Int): BitMatrix {
+        require(text.toByteArray(Charsets.UTF_8).size <= MAX_BYTES) { "Too long for a QR code" }
+        val hints = mapOf(
+            EncodeHintType.CHARACTER_SET to "UTF-8",
+            EncodeHintType.ERROR_CORRECTION to ErrorCorrectionLevel.M,
+            EncodeHintType.MARGIN to 2,
+        )
+        return QRCodeWriter().encode(text, BarcodeFormat.QR_CODE, size, size, hints)
+    }
+
+    /** Reads a QR code from pixels (ARGB). Null if there is none. */
+    fun decode(width: Int, height: Int, pixels: IntArray): String? {
+        val source = RGBLuminanceSource(width, height, pixels)
+        val hints = mapOf(
+            DecodeHintType.TRY_HARDER to true,
+            DecodeHintType.CHARACTER_SET to "UTF-8",
+            DecodeHintType.POSSIBLE_FORMATS to listOf(BarcodeFormat.QR_CODE),
+        )
+        return try {
+            QRCodeReader().decode(BinaryBitmap(HybridBinarizer(source)), hints).text
+        } catch (e: NotFoundException) {
+            null
+        } catch (e: Exception) {
+            // A damaged or unreadable code: same as none
+            null
+        }
+    }
+}
+
+/** What a scanned code holds, so the screen can show it plainly before anything is done with it. */
+sealed interface Scanned {
+    val text: String
+
+    /** A web link. [host] is shown large, because a look-alike address is the usual trick. */
+    data class Link(override val text: String, val host: String, val suspicious: List<String>) : Scanned
+    data class Phone(override val text: String, val number: String) : Scanned
+    data class Plain(override val text: String) : Scanned
+
+    companion object {
+        private val URL = Regex("^(https?)://([^/?#\\s]+)(.*)$", RegexOption.IGNORE_CASE)
+
+        fun of(raw: String): Scanned {
+            val text = raw.trim()
+            URL.matchEntire(text)?.let { m ->
+                val scheme = m.groupValues[1].lowercase()
+                val authority = m.groupValues[2]
+                val host = authority.substringAfterLast('@').substringBefore(':').lowercase()
+                return Link(text, host, warnings(scheme, authority, host))
+            }
+            if (text.startsWith("tel:", ignoreCase = true)) return Phone(text, text.substring(4))
+            return Plain(text)
+        }
+
+        /** Plain signs of a trick link. Not proof either way; the person decides. */
+        fun warnings(scheme: String, authority: String, host: String): List<String> = buildList {
+            if (scheme != "https") add(NOT_HTTPS)
+            if ('@' in authority) add(HIDDEN_ADDRESS)
+            if (host.startsWith("xn--") || host.contains(".xn--") || host.any { it.code > 127 }) add(LOOKALIKE_LETTERS)
+            if (Regex("^[0-9.]+$").matches(host) || host.startsWith("[")) add(BARE_NUMBERS)
+            if (host.count { it == '.' } >= 4) add(MANY_PARTS)
+        }
+
+        const val NOT_HTTPS = "not_https"
+        const val HIDDEN_ADDRESS = "hidden_address"
+        const val LOOKALIKE_LETTERS = "lookalike_letters"
+        const val BARE_NUMBERS = "bare_numbers"
+        const val MANY_PARTS = "many_parts"
+    }
+}
+
+/**
+ * The rescuer's code: only what helps in the first minutes, as plain text any phone camera reads.
+ * Long fields are cut so the code stays easy to scan. Nothing else from the card goes in.
+ */
+object RescuerCode {
+    private const val FIELD = 160
+
+    fun text(card: MedicalCard, ice: List<Person>, labels: Labels): String {
+        val lines = buildList {
+            add(labels.title)
+            fun line(label: String, value: String) {
+                val v = value.trim().replace('\n', ' ')
+                if (v.isNotEmpty()) add("$label: " + if (v.length > FIELD) v.take(FIELD - 1) + "…" else v)
+            }
+            line(labels.name, card.name)
+            line(labels.birth, card.birthDate)
+            line(labels.blood, card.bloodGroup)
+            line(labels.allergies, card.allergies)
+            line(labels.medicines, card.medicines)
+            line(labels.conditions, card.conditions)
+            ice.take(2).forEach { line(labels.contact, "${it.name} ${it.phone}") }
+        }
+        // Drop the last lines until it fits; the title and the first fields matter most
+        var out = lines
+        while (out.joinToString("\n").toByteArray(Charsets.UTF_8).size > Qr.MAX_BYTES && out.size > 1) out = out.dropLast(1)
+        return out.joinToString("\n")
+    }
+
+    /** Labels come from the app's strings, so the code is in the app's language. */
+    data class Labels(
+        val title: String,
+        val name: String,
+        val birth: String,
+        val blood: String,
+        val allergies: String,
+        val medicines: String,
+        val conditions: String,
+        val contact: String,
+    )
+}

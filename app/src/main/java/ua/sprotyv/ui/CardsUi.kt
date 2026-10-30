@@ -65,6 +65,7 @@ fun NowScreen(content: Content?, nav: Nav) {
         if (content == null) return@Frame Loading()
         if (content.cardsBroken) return@Frame Broken()
         content.cards.forEach { card -> CardRow(card) { nav.go(Route.CardRoute(card.id)) } }
+        CardsPdfButton(content)
     }
 }
 
