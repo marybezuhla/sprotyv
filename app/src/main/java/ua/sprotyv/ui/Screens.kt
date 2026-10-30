@@ -88,10 +88,13 @@ fun SectionScreen(section: Section, onBack: () -> Unit) {
 /**
  * No screenshots, screen recordings or app-switcher pictures while the owner's data is on screen.
  * Removed again on leaving, so the guide and cards can still be captured and shared.
+ * The owner may allow them in settings (off by default); a strip on every such screen says so.
  */
 @Composable
 fun SecureScreen() {
     val activity = LocalContext.current as? Activity ?: return
+    val allowed = HomePrefs.state.collectAsStateWithLifecycle().value?.screenshots == true
+    if (allowed) return
     DisposableEffect(activity) {
         activity.window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         if (Build.VERSION.SDK_INT >= 33) activity.setRecentsScreenshotEnabled(false)
@@ -120,6 +123,7 @@ fun Personal(title: Int, state: Opened?, nav: Nav, content: @Composable () -> Un
     val wasReady = seen[0]
     SecureScreen()
     Frame(stringResource(title), nav::back) {
+        ScreenshotsStrip()
         if (saveFailed) {
             Text(stringResource(R.string.save_failed), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.error)
         }
@@ -174,5 +178,28 @@ private fun StartFresh(onStartFresh: () -> Unit) {
                 TextButton(onClick = { confirm = false }) { Text(stringResource(R.string.key_lost_keep)) }
             },
         )
+    }
+}
+
+/** While screenshots of the owner's screens are allowed, every one of them says so, with a way to stop. */
+@Composable
+fun ScreenshotsStrip() {
+    val context = LocalContext.current
+    val allowed = HomePrefs.state.collectAsStateWithLifecycle().value?.screenshots == true
+    if (!allowed) return
+    androidx.compose.material3.Surface(
+        color = MaterialTheme.colorScheme.tertiaryContainer,
+        shape = MaterialTheme.shapes.medium,
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        androidx.compose.foundation.layout.Row(
+            Modifier.padding(start = 12.dp),
+            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+        ) {
+            Text(stringResource(R.string.screenshots_banner), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
+            TextButton(onClick = { HomePrefs.update(context) { it.copy(screenshots = false) } }, modifier = Modifier.heightIn(min = 48.dp)) {
+                Text(stringResource(R.string.screenshots_turn_off))
+            }
+        }
     }
 }

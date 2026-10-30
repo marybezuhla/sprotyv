@@ -22,6 +22,8 @@ object HomePrefs {
         val dynamic: Boolean = false,
         /** The call bar at the bottom; off, a phone button sits in the corner instead. */
         val callBar: Boolean = true,
+        /** Screenshots of the owner's screens allowed (off by default; for showing the app to testers). */
+        val screenshots: Boolean = false,
     )
 
     private const val FILE = "home"
@@ -31,6 +33,7 @@ object HomePrefs {
     private const val THEME = "theme"
     private const val DYNAMIC = "dynamic"
     private const val CALL_BAR = "call_bar"
+    private const val SCREENSHOTS = "screenshots"
 
     private val flow = MutableStateFlow<State?>(null)
     val state: StateFlow<State?> = flow.asStateFlow()
@@ -45,6 +48,7 @@ object HomePrefs {
             theme = ThemeChoice.entries.firstOrNull { it.name == p.getString(THEME, null) } ?: ThemeChoice.SYSTEM,
             dynamic = p.getBoolean(DYNAMIC, false),
             callBar = p.getBoolean(CALL_BAR, true),
+            screenshots = p.getBoolean(SCREENSHOTS, false),
         )
         flow.value = s
         return s
@@ -60,6 +64,7 @@ object HomePrefs {
             .putString(THEME, next.theme.name)
             .putBoolean(DYNAMIC, next.dynamic)
             .putBoolean(CALL_BAR, next.callBar)
+            .putBoolean(SCREENSHOTS, next.screenshots)
             .apply()
     }
 }
