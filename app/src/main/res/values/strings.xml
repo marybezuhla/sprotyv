@@ -544,4 +544,11 @@
     <string name="crash_no">Delete the description</string>
     <string name="crash_issue_title">Error in the app</string>
     <string name="crash_issue_body">What was happening before (optional):</string>
+    <string name="ready_strip">My readiness: %1$d of %2$d</string>
+    <string name="ready_hide">Hide</string>
+    <string name="ready_on_home">Show “My readiness” on the home screen</string>
+    <string name="ready_short_medical">Medical</string>
+    <string name="ready_short_people">People</string>
+    <string name="ready_short_plan">Plan</string>
+    <string name="ready_short_kit">Go-bag</string>
 </resources>

@@ -368,6 +368,7 @@ fun FullHome(content: Content?, pins: List<String>, nav: Nav, onSettings: () -> 
             }
         }
         items(fixed, key = { it.id }) { info -> TileCard(info, big = false) { nav.go(info.route) } }
+        item(span = { GridItemSpan(maxLineSpan) }) { ReadinessStrip(nav) }
         item(span = { GridItemSpan(maxLineSpan) }) {
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 8.dp)) {
                 Text(
@@ -626,6 +627,9 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
         if (prefs.mode != Mode.KID) {
             Toggle(stringResource(R.string.call_bar_toggle), prefs.callBar) { on -> HomePrefs.update(context) { it.copy(callBar = on) } }
             Text(stringResource(R.string.call_bar_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        if (prefs.mode == Mode.FULL) {
+            Toggle(stringResource(R.string.ready_on_home), !prefs.readinessHidden) { on -> HomePrefs.update(context) { it.copy(readinessHidden = !on) } }
         }
         Text(stringResource(R.string.theme_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
         ThemeChoice.entries.forEach { t ->

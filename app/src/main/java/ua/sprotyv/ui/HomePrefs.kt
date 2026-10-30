@@ -24,6 +24,9 @@ object HomePrefs {
         val callBar: Boolean = true,
         /** Screenshots of the owner's screens allowed (off by default; for showing the app to testers). */
         val screenshots: Boolean = false,
+        /** The readiness shares last seen in "Mine" ("2/4,1/2,…"), shown on the full home screen; no records. */
+        val readiness: String = "",
+        val readinessHidden: Boolean = false,
     )
 
     private const val FILE = "home"
@@ -34,6 +37,8 @@ object HomePrefs {
     private const val DYNAMIC = "dynamic"
     private const val CALL_BAR = "call_bar"
     private const val SCREENSHOTS = "screenshots"
+    private const val READINESS = "readiness"
+    private const val READINESS_HIDDEN = "readiness_hidden"
 
     private val flow = MutableStateFlow<State?>(null)
     val state: StateFlow<State?> = flow.asStateFlow()
@@ -49,6 +54,8 @@ object HomePrefs {
             dynamic = p.getBoolean(DYNAMIC, false),
             callBar = p.getBoolean(CALL_BAR, true),
             screenshots = p.getBoolean(SCREENSHOTS, false),
+            readiness = p.getString(READINESS, null).orEmpty().take(100),
+            readinessHidden = p.getBoolean(READINESS_HIDDEN, false),
         )
         flow.value = s
         return s
@@ -65,6 +72,8 @@ object HomePrefs {
             .putBoolean(DYNAMIC, next.dynamic)
             .putBoolean(CALL_BAR, next.callBar)
             .putBoolean(SCREENSHOTS, next.screenshots)
+            .putString(READINESS, next.readiness)
+            .putBoolean(READINESS_HIDDEN, next.readinessHidden)
             .apply()
     }
 }
