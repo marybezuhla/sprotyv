@@ -18,7 +18,7 @@ object PlanCode {
     fun isPlanCode(text: String): Boolean = text.startsWith(PREFIX)
 
     fun encode(plan: BackupData.SharedPlan, password: CharArray): String {
-        val sealed = BackupCrypto.encrypt(BackupData.encodePlan(plan), password)
+        val sealed = BackupCrypto.encrypt(BackupData.encodePlan(plan), password, BackupCrypto.Purpose.PLAN)
         val text = PREFIX + Base64.getUrlEncoder().withoutPadding().encodeToString(sealed)
         if (text.length > MAX_CHARS) throw TooLong()
         return text
@@ -33,7 +33,7 @@ object PlanCode {
             throw BackupData.Incompatible()
         }
         val plain = try {
-            BackupCrypto.decrypt(sealed, password)
+            BackupCrypto.decrypt(sealed, password, BackupCrypto.Purpose.PLAN)
         } catch (e: BackupCrypto.NotABackup) {
             throw BackupData.Incompatible()
         }

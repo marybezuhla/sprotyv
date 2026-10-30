@@ -83,6 +83,7 @@ fun App() {
         // Built from what could be read, so an unreadable entry never makes Back look stuck
         override fun back() { saved = stack.dropLast(1).map(Route::save) }
         override fun home() { saved = emptyList() }
+        override fun replace(route: Route) { saved = stack.dropLast(1).map(Route::save) + route.save() }
     }
 
     // What runs after the PIN (or at once when settings are not locked)
@@ -206,4 +207,6 @@ interface Nav {
     fun go(route: Route)
     fun back()
     fun home()
+    /** Swaps the current screen for [route], so Back does not return to it. */
+    fun replace(route: Route)
 }

@@ -35,8 +35,8 @@ interface SettingDao {
     @Query("SELECT * FROM settings")
     suspend fun all(): List<Setting>
 
-    @Query("DELETE FROM settings")
-    suspend fun clear()
+    @Query("DELETE FROM settings WHERE `key` = :key")
+    suspend fun delete(key: String)
 }
 
 /**

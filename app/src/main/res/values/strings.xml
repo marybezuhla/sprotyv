@@ -326,4 +326,9 @@
     <string name="plan_code_take">Make this plan mine</string>
     <string name="plan_code_replace">Your current family plan will be replaced by this one. Continue?</string>
     <string name="plan_code_saved">Plan saved.</string>
+    <string name="backup_no_memory">The phone ran out of memory. Close other apps and try again.</string>
+    <string name="backup_again">Not saved: the screen restarted. Press “Save backup” again.</string>
+    <string name="backup_delete_by_hand">That did not work. An unfinished backup file was left; please delete it by hand.</string>
+    <string name="plan_code_show_password">Show the password again</string>
+    <string name="plan_code_said">Password said — show the code</string>
 </resources>

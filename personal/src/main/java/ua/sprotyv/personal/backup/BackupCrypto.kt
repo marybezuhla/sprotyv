@@ -28,7 +28,8 @@ object BackupCrypto {
     internal val PROFILES = listOf(DEFAULT)
 
     const val MIN_PASSWORD_LENGTH = 16
-    const val MAX_FILE_BYTES = 16L * 1024 * 1024
+    /** Far above any real backup (no photos in it yet); keeps memory use safe on small phones. */
+    const val MAX_FILE_BYTES = 4L * 1024 * 1024
 
     private const val SALT_BYTES = 16
     private const val NONCE_BYTES = 12
@@ -41,8 +42,17 @@ object BackupCrypto {
     /** Too small or too large to be one of ours. */
     class NotABackup : Exception()
 
-    /** The password as characters, which the caller clears afterwards (no copy is kept as text). */
-    fun encrypt(plain: ByteArray, password: CharArray, params: KdfParams = DEFAULT): ByteArray {
+    /**
+     * What a file is for, bound into the encryption: a backup never opens as a plan code and the
+     * other way round, even with the same password.
+     */
+    enum class Purpose(val label: String) { BACKUP("sprotyv-backup-v1"), PLAN("sprotyv-plan-v1") }
+
+    /**
+     * The password as characters, which the caller clears afterwards. Clearing is best effort:
+     * the JVM and the cipher keep their own copies, so this is no promise that nothing remains.
+     */
+    fun encrypt(plain: ByteArray, password: CharArray, purpose: Purpose, params: KdfParams = DEFAULT): ByteArray {
         val random = SecureRandom()
         val salt = ByteArray(SALT_BYTES).also { random.nextBytes(it) }
         val nonce = ByteArray(NONCE_BYTES).also { random.nextBytes(it) }
@@ -52,13 +62,14 @@ object BackupCrypto {
             val cipher = Cipher.getInstance("AES/GCM/NoPadding")
             cipher.init(Cipher.ENCRYPT_MODE, SecretKeySpec(key, "AES"), GCMParameterSpec(TAG_BYTES * 8, nonce))
             cipher.updateAAD(header)
+            cipher.updateAAD(purpose.label.toByteArray(Charsets.US_ASCII))
             return header + cipher.doFinal(plain)
         } finally {
             key.fill(0)
         }
     }
 
-    fun decrypt(file: ByteArray, password: CharArray, profiles: List<KdfParams> = PROFILES): ByteArray {
+    fun decrypt(file: ByteArray, password: CharArray, purpose: Purpose, profiles: List<KdfParams> = PROFILES): ByteArray {
         val headerSize = SALT_BYTES + NONCE_BYTES
         if (file.size < headerSize + TAG_BYTES || file.size > MAX_FILE_BYTES) throw NotABackup()
         val salt = file.copyOfRange(0, SALT_BYTES)
@@ -69,6 +80,7 @@ object BackupCrypto {
                 val cipher = Cipher.getInstance("AES/GCM/NoPadding")
                 cipher.init(Cipher.DECRYPT_MODE, SecretKeySpec(key, "AES"), GCMParameterSpec(TAG_BYTES * 8, nonce))
                 cipher.updateAAD(file, 0, headerSize)
+                cipher.updateAAD(purpose.label.toByteArray(Charsets.US_ASCII))
                 return cipher.doFinal(file, headerSize, file.size - headerSize)
             } catch (e: AEADBadTagException) {
                 // Try the next profile
@@ -121,9 +133,22 @@ object BackupCrypto {
      * four for the family plan code, which is said aloud (about 52 bits).
      */
     fun suggestPassword(words: List<String>, count: Int): String {
-        require(words.size >= 1024 && count >= 4)
+        // Words with a dash ("t-shirt", "yo-yo") are easy to mishear or type without it
+        val plain = words.filter { w -> w.isNotEmpty() && w.all { it in 'a'..'z' } }
+        require(plain.size >= 1024 && count >= 4)
         val random = SecureRandom()
-        return (1..count).joinToString("-") { words[random.nextInt(words.size)] }
+        return (1..count).joinToString("-") { plain[random.nextInt(plain.size)] }
+    }
+
+    /**
+     * The same words however they were typed: spaces or dashes between them, capitals or not.
+     * Null when the text is not just words, so an own password is never changed.
+     */
+    fun asWords(typed: CharArray): CharArray? {
+        val text = String(typed).trim().lowercase()
+        val parts = text.split(Regex("[\\s\\-]+")).filter { it.isNotEmpty() }
+        if (parts.size < 4 || parts.any { p -> !p.all { it in 'a'..'z' } }) return null
+        return parts.joinToString("-").toCharArray()
     }
 
     /**
@@ -134,6 +159,9 @@ object BackupCrypto {
         if (password.size < MIN_PASSWORD_LENGTH) return true
         if (password.toSet().size < 6) return true
         if (password.all { it.isDigit() } && password.size < 24) return true
+        // One part said again and again ("kyiv2024kyiv2024") is as weak as the part
+        val n = password.size
+        if ((1..n / 2).any { k -> n % k == 0 && (k until n).all { password[it] == password[it - k] } }) return true
         val lower = String(password).lowercase()
         val withoutCommon = COMMON_PARTS.fold(lower) { acc, part -> acc.replace(part, "") }
         return withoutCommon.filterNot { it.isDigit() }.length < 8
