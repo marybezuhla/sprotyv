@@ -310,6 +310,5 @@ fun AboutScreen(content: Content?, nav: Nav) {
         Text(stringResource(R.string.about_source, g.source), style = MaterialTheme.typography.bodyLarge)
         Text(stringResource(R.string.about_license, g.license), style = MaterialTheme.typography.bodyLarge)
         Text(g.changes, style = MaterialTheme.typography.bodyLarge)
-        Text(stringResource(R.string.about_not_reviewed), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.error)
     }
 }
