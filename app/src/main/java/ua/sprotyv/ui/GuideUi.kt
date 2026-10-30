@@ -247,11 +247,12 @@ private fun TableView(t: Block.Table) {
                             RichText(second.replace("**", ""), style = MaterialTheme.typography.titleSmall)
                         }
                     }
-                    row.cells.drop(if (inline) 2 else 1).forEachIndexed { k, cell ->
+                    val rest = row.cells.drop(if (inline) 2 else 1)
+                    rest.forEachIndexed { k, cell ->
                         if (cell.isBlank()) return@forEachIndexed
                         val name = head?.getOrNull(k + if (inline) 2 else 1)?.replace("**", "")
-                        // Column names only where there are several columns to tell apart
-                        if (columns >= 3 && !name.isNullOrBlank()) {
+                        // Column names only where two or more texts sit under the title and must be told apart
+                        if (rest.size >= 2 && !name.isNullOrBlank()) {
                             Text(name, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                         RichText(cell, style = MaterialTheme.typography.bodyMedium)
