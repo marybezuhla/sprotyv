@@ -176,6 +176,9 @@ fun PowerScreen(content: Content?, nav: Nav) {
     val context = LocalContext.current
     val toolbar = MaterialTheme.colorScheme.surface.toArgb()
     Frame(stringResource(R.string.power_title), nav::back) {
+        BlackoutBlock()
+        ChargeBlock()
+        Text(stringResource(R.string.power_schedules), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 8.dp).semantics { heading() })
         Text(stringResource(R.string.power_intro), style = MaterialTheme.typography.bodyLarge)
         if (content == null) return@Frame Loading()
         if (content.linksBroken) return@Frame Broken()

@@ -161,8 +161,7 @@ fun SuppliesScreen(content: Content?, nav: Nav) {
 
 /** A labelled bar: the words and the numbers say it, the bar only shows it. */
 @Composable
-private fun Meter(title: String, numbers: String, fraction: Float) {
-    val fill = MaterialTheme.colorScheme.primary
+fun Meter(title: String, numbers: String, fraction: Float, fill: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.primary) {
     val track = MaterialTheme.colorScheme.outlineVariant
     Column(Modifier.fillMaxWidth().clearAndSetSemantics { contentDescription = "$title, $numbers" }, verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
