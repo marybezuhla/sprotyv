@@ -185,7 +185,7 @@ private fun Screen(
             MinePart.KID_CALL -> Personal(R.string.kid_call_family, personal, nav) { KidCallScreen() }
         }
         Route.Scan -> ScanScreen(nav)
-        Route.SuppliesRoute -> SuppliesScreen(content, nav)
+        Route.SuppliesRoute -> Personal(R.string.supplies, personal, nav) { SuppliesScreen(content, nav) }
         is Route.Open -> when (top.section) {
             Section.NOW -> NowScreen(content, nav)
             Section.GUIDE -> GuideScreen(content, nav)

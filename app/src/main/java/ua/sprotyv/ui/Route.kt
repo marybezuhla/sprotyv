@@ -28,7 +28,7 @@ sealed interface Route {
     data class External(val id: String) : Route
 
     /** Screens that show the owner's data: opened only with the data, kept off screenshots. */
-    val personal: Boolean get() = this is Mine || this == Open(Section.MINE) || this == Open(Section.SAFE)
+    val personal: Boolean get() = this is Mine || this == Open(Section.MINE) || this == Open(Section.SAFE) || this == SuppliesRoute
 
     /** Screens that change settings: behind the PIN when settings are locked. */
     val settings: Boolean get() = this == Settings || this == EditTiles || this == Sections || this == Presets

@@ -182,39 +182,3 @@ fun KitScreen(content: Content?, nav: Nav) {
 
 const val KEY_KIT_REVIEWED = "kit_reviewed_at"
 
-/**
- * Home supplies for the household and period, from the guide's norms (2.5). Starts small on
- * purpose: three days is a goal anyone can reach, then two weeks, then a month.
- * Nothing here is personal, so it works without opening the owner's data.
- */
-@Composable
-fun SuppliesScreen(content: Content?, nav: Nav) {
-    var people by rememberSaveable { mutableIntStateOf(1) }
-    var days by rememberSaveable { mutableIntStateOf(Supplies.LEVELS.first()) }
-    Frame(stringResource(R.string.supplies), nav::back) {
-        if (content == null) return@Frame Loading()
-        if (content.guideBroken) return@Frame Broken()
-        Text(stringResource(R.string.supplies_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            OutlinedButton(onClick = { if (people > 1) people-- }, modifier = Modifier.heightIn(min = 56.dp)) { Text("−") }
-            Text(stringResource(R.string.supplies_people, people), style = MaterialTheme.typography.titleMedium)
-            OutlinedButton(onClick = { if (people < 20) people++ }, modifier = Modifier.heightIn(min = 56.dp)) { Text("+") }
-        }
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Supplies.LEVELS.forEach { d ->
-                FilterChip(selected = days == d, onClick = { days = d }, label = { Text(stringResource(R.string.supplies_days, d)) }, modifier = Modifier.heightIn(min = 48.dp))
-            }
-        }
-        Text(stringResource(R.string.supplies_water, Supplies.waterLitres(people, days)), style = MaterialTheme.typography.headlineSmall)
-        Text(stringResource(R.string.supplies_water_note), style = MaterialTheme.typography.bodyMedium)
-        Heading(R.string.supplies_food)
-        Supplies.food(content.guide, people, days).forEach { line ->
-            Column(Modifier.fillMaxWidth()) {
-                Text("${line.what}: ${line.amount}", style = MaterialTheme.typography.bodyLarge)
-                if (line.note.isNotBlank()) Text(line.note, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-        }
-        Text(stringResource(R.string.supplies_rotation), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        OutlinedButton(onClick = { nav.go(Route.GuideSection(Supplies.SECTION)) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.in_detail)) }
-    }
-}

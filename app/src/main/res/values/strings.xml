@@ -467,4 +467,23 @@
         <item>An adult: 5–6 cm deep, 100–120 presses a minute</item>
         <item>30 presses : 2 breaths</item>
     </string-array>
+    <string name="supplies_dash_title">How long it lasts</string>
+    <string name="supplies_water_none">Water for less than a day</string>
+    <plurals name="supplies_water_days">
+        <item quantity="one">Water for %1$d day</item>
+        <item quantity="other">Water for %1$d days</item>
+    </plurals>
+    <string name="supplies_of_litres">%1$d of %2$d l</string>
+    <string name="supplies_food_have">Food</string>
+    <string name="supplies_of">%1$d of %2$d</string>
+    <string name="supplies_water_word">Water</string>
+    <string name="supplies_expiring">Replace soon: %1$s</string>
+    <string name="supplies_water_need">The goal needs %1$d l: 4 l per person per day.</string>
+    <string name="supplies_water_have">At home:</string>
+    <string name="supplies_litres">%1$d l</string>
+    <string name="supplies_have_hint">Tick what is already at home in the amount needed. Kept encrypted, on this phone only.</string>
+    <string name="supplies_add_until">Add a use-by date</string>
+    <string name="supplies_until">Good until %1$s</string>
+    <string name="supplies_pick_month">Good until which month?</string>
+    <string name="supplies_clear_until">Remove</string>
 </resources>
