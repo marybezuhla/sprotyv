@@ -14,12 +14,20 @@ import ua.sprotyv.home.Pins
  * and is never in Android backups (see data_extraction_rules.xml). The README says so.
  */
 object HomePrefs {
-    data class State(val mode: Mode?, val pins: List<String>, val locked: Boolean)
+    data class State(
+        val mode: Mode?,
+        val pins: List<String>,
+        val locked: Boolean,
+        val theme: ThemeChoice = ThemeChoice.SYSTEM,
+        val dynamic: Boolean = false,
+    )
 
     private const val FILE = "home"
     private const val MODE = "mode"
     private const val PINS = "pins"
     private const val LOCK = "lock"
+    private const val THEME = "theme"
+    private const val DYNAMIC = "dynamic"
 
     private val flow = MutableStateFlow<State?>(null)
     val state: StateFlow<State?> = flow.asStateFlow()
@@ -31,6 +39,8 @@ object HomePrefs {
             mode = Mode.entries.firstOrNull { it.name == p.getString(MODE, null) },
             pins = Pins.parse(p.getString(PINS, null)),
             locked = p.getBoolean(LOCK, false),
+            theme = ThemeChoice.entries.firstOrNull { it.name == p.getString(THEME, null) } ?: ThemeChoice.SYSTEM,
+            dynamic = p.getBoolean(DYNAMIC, false),
         )
         flow.value = s
         return s
@@ -43,6 +53,8 @@ object HomePrefs {
             .putString(MODE, next.mode?.name)
             .putString(PINS, Pins.write(next.pins))
             .putBoolean(LOCK, next.locked)
+            .putString(THEME, next.theme.name)
+            .putBoolean(DYNAMIC, next.dynamic)
             .apply()
     }
 }

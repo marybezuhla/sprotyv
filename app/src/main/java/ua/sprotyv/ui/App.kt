@@ -185,7 +185,7 @@ private fun Screen(
         is Route.GuideSection -> GuideSectionScreen(content, top.num, nav)
         Route.Search -> SearchScreen(content, nav)
         Route.About -> AboutScreen(content, nav)
-        Route.Settings -> SettingsScreen(prefs.mode, prefs.locked, nav)
+        Route.Settings -> SettingsScreen(prefs, nav)
         Route.EditTiles -> EditTilesScreen(content, prefs.mode, prefs.pins, nav)
         Route.Presets -> PresetsScreen(nav)
         Route.Sections -> Frame(stringResource(R.string.add_tile), nav::back) {

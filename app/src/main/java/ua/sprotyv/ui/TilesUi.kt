@@ -22,6 +22,7 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -56,6 +57,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -103,7 +105,9 @@ data class Tint(val container: Color, val ink: Color)
 
 @Composable
 fun Group.tint(): Tint {
-    val dark = isSystemInDarkTheme()
+    val dark = LocalDark.current
+    // High contrast: no pale fills, the plain text colours of the theme; icon and words still say the group
+    if (LocalContrast.current) return Tint(MaterialTheme.colorScheme.surfaceVariant, MaterialTheme.colorScheme.onSurface)
     return when (this) {
         Group.DANGER -> if (dark) Tint(Color(0xFF4A2A12), Color(0xFFFFC9A0)) else Tint(Color(0xFFFFE9D6), Color(0xFF8A3B00))
         Group.FIRST_AID -> if (dark) Tint(Color(0xFF103F3A), Color(0xFF9EE4D9)) else Tint(Color(0xFFD5F0EC), Color(0xFF00574E))
@@ -452,6 +456,13 @@ fun EditTilesScreen(content: Content?, mode: Mode?, pins: List<String>, nav: Nav
     }
 }
 
+private val ThemeChoice.title: Int get() = when (this) {
+    ThemeChoice.SYSTEM -> R.string.theme_system
+    ThemeChoice.LIGHT -> R.string.theme_light
+    ThemeChoice.DARK -> R.string.theme_dark
+    ThemeChoice.CONTRAST -> R.string.theme_contrast
+}
+
 val Preset.title: Int get() = when (this) {
     Preset.GENERAL -> R.string.preset_general
     Preset.ELDER -> R.string.preset_elder
@@ -554,12 +565,30 @@ private fun ModePicture(mode: Mode) {
 
 /** Settings: the look, the tiles and the lock. */
 @Composable
-fun SettingsScreen(mode: Mode?, locked: Boolean, nav: Nav) {
+fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
     val context = LocalContext.current
     val canLock = Guard.available(context)
+    val locked = prefs.locked
     Frame(stringResource(R.string.settings), nav::back) {
         Text(stringResource(R.string.mode_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
-        ModeChoice(mode) { m -> HomePrefs.update(context) { it.copy(mode = m) } }
+        ModeChoice(prefs.mode) { m -> HomePrefs.update(context) { it.copy(mode = m) } }
+        Text(stringResource(R.string.theme_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+        ThemeChoice.entries.forEach { t ->
+            val on = t == prefs.theme
+            Row(
+                Modifier.fillMaxWidth().heightIn(min = 48.dp)
+                    .selectable(selected = on, role = Role.RadioButton) { HomePrefs.update(context) { it.copy(theme = t) } },
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                RadioButton(selected = on, onClick = null)
+                Spacer(Modifier.width(12.dp))
+                Text(stringResource(t.title), style = MaterialTheme.typography.bodyLarge)
+            }
+        }
+        if (prefs.theme != ThemeChoice.CONTRAST) {
+            Toggle(stringResource(R.string.theme_dynamic), prefs.dynamic) { on -> HomePrefs.update(context) { it.copy(dynamic = on) } }
+            Text(stringResource(R.string.theme_dynamic_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
         NavRow(stringResource(R.string.edit_tiles), stringResource(R.string.edit_tiles_hint)) { nav.go(Route.EditTiles) }
         NavRow(stringResource(R.string.presets_title), stringResource(R.string.presets_hint)) { nav.go(Route.Presets) }
         Text(stringResource(R.string.lock_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })

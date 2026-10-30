@@ -270,4 +270,11 @@
     <string name="ready_count">%1$d of %2$d</string>
     <string name="ready_next">Next step: %1$s</string>
     <string name="ready_all">All done. Check again every six months.</string>
+    <string name="theme_title">Theme</string>
+    <string name="theme_system">As the phone</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_contrast">High contrast (sharpest text; light or dark as the phone)</string>
+    <string name="theme_dynamic">Colours from the wallpaper (Material You)</string>
+    <string name="theme_dynamic_hint">Accent colours come from the phone’s wallpaper. Orange warnings and the red 112 button stay as they are.</string>
 </resources>
