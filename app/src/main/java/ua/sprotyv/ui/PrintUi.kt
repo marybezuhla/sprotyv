@@ -70,8 +70,8 @@ import java.time.LocalDate
 import kotlinx.coroutines.flow.first
 
 /** A QR code as a black-and-white picture. */
-fun qrBitmap(text: String, size: Int): Bitmap {
-    val m = Qr.encode(text, size)
+fun qrBitmap(text: String, size: Int, maxBytes: Int = Qr.MAX_BYTES): Bitmap {
+    val m = Qr.encode(text, size, maxBytes)
     val pixels = IntArray(size * size) { i -> if (m[i % size, i / size]) Color.BLACK else Color.WHITE }
     return Bitmap.createBitmap(pixels, size, size, Bitmap.Config.ARGB_8888)
 }
@@ -373,7 +373,18 @@ fun ScanScreen(nav: Nav) {
         }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.scan_picture)) }
         if (notFound) Text(stringResource(R.string.scan_none), style = MaterialTheme.typography.bodyLarge)
         if (noCamera) Text(stringResource(R.string.scan_no_camera), style = MaterialTheme.typography.bodyLarge)
-        scanned?.let { s -> ScanResult(s, onOpen = { openLink = it }) }
+        scanned?.let { s ->
+            if (s is Scanned.Plain && ua.sprotyv.personal.backup.PlanCode.isPlanCode(s.text)) {
+                // A relative's family plan: opened on the owner's protected screen, with the spoken password
+                Text(stringResource(R.string.plan_code_found), style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(R.string.plan_code_found_hint), style = MaterialTheme.typography.bodyLarge)
+                Button(onClick = { PlanInbox.text = s.text; nav.go(Route.Mine(MinePart.PLAN_IMPORT)) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+                    Text(stringResource(R.string.plan_code_open))
+                }
+            } else {
+                ScanResult(s, onOpen = { openLink = it })
+            }
+        }
     }
     openLink?.let { link ->
         AlertDialog(
@@ -461,7 +472,8 @@ private fun decodeUri(context: Context, uri: Uri): String? = try {
     val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
     context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, bounds) }
     var sample = 1
-    while (maxOf(bounds.outWidth, bounds.outHeight) / sample > 1600) sample *= 2
+    // Large enough for the family plan code (about 137 squares a side) taken from a screen
+    while (maxOf(bounds.outWidth, bounds.outHeight) / sample > 2400) sample *= 2
     val bitmap = context.contentResolver.openInputStream(uri)?.use {
         BitmapFactory.decodeStream(it, null, BitmapFactory.Options().apply { inSampleSize = sample })
     }

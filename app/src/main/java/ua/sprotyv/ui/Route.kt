@@ -65,4 +65,4 @@ sealed interface Route {
     }
 }
 
-enum class MinePart { MEDICAL, PEOPLE, PLAN, KIT, PRINT, RESCUER }
+enum class MinePart { MEDICAL, PEOPLE, PLAN, KIT, PRINT, RESCUER, BACKUP, PLAN_QR, PLAN_IMPORT }
