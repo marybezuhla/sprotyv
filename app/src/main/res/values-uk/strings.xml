@@ -1116,4 +1116,8 @@
     <string name="blackout_of_hours">із ~%1$d год</string>
     <string name="heat_pipes_now">уже можуть замерзати</string>
     <string name="heat_leave_now">час вирішувати</string>
+    <string name="path_check">Перевірити себе</string>
+    <string name="path_tested">✓ Перевірено тестом</string>
+    <string name="path_check_passed">Усі відповіді правильні: %1$d з %2$d. Крок позначено як перевірений.</string>
+    <string name="path_check_again">Правильно %1$d з %2$d. Перегляньте картку й спробуйте ще: коли всі відповіді будуть правильні, крок позначиться.</string>
 </resources>

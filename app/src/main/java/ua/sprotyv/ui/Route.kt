@@ -42,11 +42,13 @@ sealed interface Route {
     data object Handover : Route
     /** "What would you do?" for one card, or for all adult cards when [card] is empty. */
     data class PracticeRoute(val card: String) : Route
+    /** "Check yourself" for one step of "My path": that step's situations; all right marks it as checked. */
+    data class PathCheck(val step: String) : Route
     /** Opens an outside source from "Situation" and comes straight back. */
     data class External(val id: String) : Route
 
     /** Screens that show the owner's data: opened only with the data, kept off screenshots. */
-    val personal: Boolean get() = this is Mine || this is NoteEdit || this == Open(Section.MINE) || this == Open(Section.SAFE) || this == SuppliesRoute
+    val personal: Boolean get() = this is Mine || this is NoteEdit || this == Open(Section.MINE) || this == Open(Section.SAFE) || this == SuppliesRoute || this is PathCheck
 
     /** Screens that change settings: behind the PIN when settings are locked. */
     val settings: Boolean get() = this == Settings || this == EditTiles || this == Sections || this == Presets
@@ -79,6 +81,7 @@ sealed interface Route {
         is Delegate -> "delegate:$n"
         Handover -> "handover"
         is PracticeRoute -> "practice:$card"
+        is PathCheck -> "pathcheck:$step"
         is External -> "external:$id"
     }
 
@@ -112,6 +115,7 @@ sealed interface Route {
                 "constitution" -> if (value.isEmpty()) ConstitutionRoute("") else value.takeIf { it.matches(Regex("^\\d{1,3}(-\\d)?$")) }?.let(::ConstitutionRoute)
                 "moz" -> if (value.isEmpty()) MozList else value.toIntOrNull()?.takeIf { it in 1..60 }?.let(::Moz)
                 "practice" -> PracticeRoute(value)
+                "pathcheck" -> value.takeIf { it in PATH_CHECKS }?.let(::PathCheck)
                 // Never reopened after the app is restored: that would open a page unasked
                 "external" -> null
                 else -> null

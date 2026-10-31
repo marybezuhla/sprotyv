@@ -1110,4 +1110,8 @@
     <string name="blackout_of_hours">of ~%1$d h</string>
     <string name="heat_pipes_now">may be freezing now</string>
     <string name="heat_leave_now">time to decide</string>
+    <string name="path_check">Check yourself</string>
+    <string name="path_tested">✓ Checked by a test</string>
+    <string name="path_check_passed">All answers right: %1$d of %2$d. The step is marked as checked.</string>
+    <string name="path_check_again">%1$d of %2$d right. Look through the card and try again: when all answers are right, the step is marked.</string>
 </resources>
