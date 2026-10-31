@@ -39,7 +39,7 @@ const val KEY_PATH = "path"
 private class PathStep(val key: String, val level: Int, val words: Int, val learn: Route?)
 
 /** Four levels, as in the concept: personal, family, civic, defence awareness. */
-private val PATH_LEVELS = listOf(R.string.path_level_personal, R.string.path_level_family, R.string.path_level_civic, R.string.path_level_defence)
+private val PATH_LEVELS = listOf(R.string.path_level_personal, R.string.path_level_family, R.string.path_level_civic, R.string.path_level_defence, R.string.path_level_medic)
 
 private val PATH = listOf(
     PathStep("bleed", 0, R.string.path_bleed, Route.Moz(4)),
@@ -56,6 +56,10 @@ private val PATH = listOf(
     PathStep("basics", 3, R.string.path_basics, Route.Resistance),
     PathStep("centre", 3, R.string.path_centre, Route.Resistance),
     PathStep("rights", 3, R.string.path_rights, Route.Resistance),
+    // Only with "I have medical training" on
+    PathStep("teach", 4, R.string.path_teach, null),
+    PathStep("refresh", 4, R.string.path_refresh, Route.Resistance),
+    PathStep("delegate", 4, R.string.path_delegate, Route.MozList),
 )
 
 /**
@@ -130,22 +134,25 @@ private fun LinkGroup(title: String, intro: String, links: List<Link>, toolbar: 
 fun PathScreen(nav: Nav) {
     val stored by remember { PersonalStore.observe { db -> db.settings().observe(KEY_PATH).map { listOf(it) } } }.collectAsStateWithLifecycle(null)
     val done = stored?.first()?.let(::parsePath) ?: return Loading()
+    val medic = HomePrefs.state.collectAsState().value?.medic == true
+    val path = if (medic) PATH else PATH.filter { it.level < 4 }
     fun change(key: String, on: Boolean) {
         PersonalStore.save("setting:$KEY_PATH:" + java.util.UUID.randomUUID()) { db ->
             val now = parsePath(db.settings().get(KEY_PATH))
             db.settings().put(Setting(KEY_PATH, org.json.JSONArray((if (on) now + key else now - key).sorted()).toString()))
         }
     }
-    val count = PATH.count { it.key in done }
+    val count = path.count { it.key in done }
     Block(
         stringResource(R.string.path_title), Group.PREPARE,
-        summary = stringResource(R.string.path_summary, count, PATH.size),
-        leading = { ReadyRing(count.toFloat() / PATH.size, "$count/${PATH.size}") },
+        summary = stringResource(R.string.path_summary, count, path.size),
+        leading = { ReadyRing(count.toFloat() / path.size, "$count/${path.size}") },
     ) {
         Text(stringResource(R.string.path_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
     PATH_LEVELS.forEachIndexed { level, title ->
-        val steps = PATH.filter { it.level == level }
+        val steps = path.filter { it.level == level }
+        if (steps.isEmpty()) return@forEachIndexed
         val got = steps.count { it.key in done }
         Block(stringResource(title), Group.PREPARE, padded = false, trailing = {
             Text((if (got == steps.size) "✓ " else "") + stringResource(R.string.ready_count, got, steps.size), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)

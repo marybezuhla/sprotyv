@@ -31,6 +31,10 @@ sealed interface Route {
     /** One of the owner's notes; 0 for a new one. */
     data class NoteEdit(val id: Long) : Route
     data class Moz(val n: Int) : Route
+    /** Hand out the steps of a procedure to people nearby. */
+    data class Delegate(val n: Int) : Route
+    /** What happened and what was done, for the ambulance crew; kept nowhere. */
+    data object Handover : Route
     /** "What would you do?" for one card, or for all adult cards when [card] is empty. */
     data class PracticeRoute(val card: String) : Route
     /** Opens an outside source from "Situation" and comes straight back. */
@@ -64,6 +68,8 @@ sealed interface Route {
         Resistance -> "resistance"
         is NoteEdit -> "note:$id"
         is Moz -> "moz:$n"
+        is Delegate -> "delegate:$n"
+        Handover -> "handover"
         is PracticeRoute -> "practice:$card"
         is External -> "external:$id"
     }
@@ -89,6 +95,8 @@ sealed interface Route {
                 "power" -> Power
                 "directory" -> Directory
                 "qr-text" -> QrText
+                "delegate" -> value.toIntOrNull()?.takeIf { it in 1..60 }?.let(::Delegate)
+                "handover" -> Handover
                 "resistance" -> Resistance
                 "note" -> value.toLongOrNull()?.takeIf { it >= 0 }?.let(::NoteEdit)
                 "moz" -> if (value.isEmpty()) MozList else value.toIntOrNull()?.takeIf { it in 1..60 }?.let(::Moz)
