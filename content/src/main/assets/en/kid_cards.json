@@ -1,0 +1,205 @@
+[
+ {
+  "id": "kid-siren",
+  "title": "Siren",
+  "guide": [
+   "22.1",
+   "3.3"
+  ],
+  "call": "",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 22.1, 3.3; English translation by Sprotyv",
+  "checkedOn": "2026-10-30",
+  "reviewedBy": "",
+  "steps": [
+   {
+    "action": "Hear a siren — put on shoes and go to a grown-up. No grown-up — go to the hallway right away.",
+    "why": ""
+   },
+   {
+    "action": "Go together to the hallway or a shelter.",
+    "why": "In the hallway, two walls are between you and the street.",
+    "figure": "3.2"
+   },
+   {
+    "action": "Do not go to the window, not even to look.",
+    "why": "The glass can break."
+   },
+   {
+    "action": "Come out only when a grown-up says so or you hear “All clear”.",
+    "why": ""
+   }
+  ]
+ },
+ {
+  "id": "kid-buzz",
+  "title": "Buzzing in the sky",
+  "guide": [
+   "22.1",
+   "4.3"
+  ],
+  "call": "",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 22.1, 4.3; English translation by Sprotyv",
+  "checkedOn": "2026-10-30",
+  "reviewedBy": "",
+  "steps": [
+   {
+    "action": "Hear buzzing in the sky — quickly get under a roof: a house, stairwell or shop.",
+    "why": "Do not look up and do not film it on a phone."
+   },
+   {
+    "action": "No roof — crawl deep into thick bushes, lie down and keep still.",
+    "why": ""
+   },
+   {
+    "action": "Shut the door behind you and go further inside, away from windows.",
+    "why": ""
+   },
+   {
+    "action": "Do not go out right away. Call your family and wait for what they say.",
+    "why": "Often a second one comes."
+   }
+  ]
+ },
+ {
+  "id": "kid-strange",
+  "title": "A strange thing",
+  "guide": [
+   "5.5"
+  ],
+  "call": "",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 5.5; English translation by Sprotyv",
+  "checkedOn": "2026-10-30",
+  "reviewedBy": "",
+  "steps": [
+   {
+    "action": "Not mine — I don't touch it.",
+    "why": "Even if it looks like a toy or it shines.",
+    "icon": "no_touch"
+   },
+   {
+    "action": "See a strange thing — quietly step back.",
+    "why": ""
+   },
+   {
+    "action": "Tell grown-ups. They will only praise you for it.",
+    "why": ""
+   },
+   {
+    "action": "Do not play in empty buildings, trenches or near military vehicles.",
+    "why": ""
+   }
+  ]
+ },
+ {
+  "id": "kid-lost",
+  "title": "I can't see my family",
+  "guide": [
+   "22.1"
+  ],
+  "call": "",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 22.1; English translation by Sprotyv",
+  "checkedOn": "2026-10-30",
+  "reviewedBy": "",
+  "steps": [
+   {
+    "action": "Stay where you are. Do not go anywhere with anyone.",
+    "why": "The older one does the looking, and you wait."
+   },
+   {
+    "action": "Shout Mum's or Dad's name loudly. Have a whistle — blow it.",
+    "why": ""
+   },
+   {
+    "action": "Have a phone — call your family.",
+    "why": ""
+   }
+  ]
+ },
+ {
+  "id": "kid-fire",
+  "title": "Smoke or fire",
+  "guide": [
+   "10.5",
+   "30.14"
+  ],
+  "call": "112",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 10.5, 30.14; English translation by Sprotyv",
+  "checkedOn": "2026-10-30",
+  "reviewedBy": "",
+  "steps": [
+   {
+    "action": "Shout “Fire!” and call grown-ups.",
+    "why": ""
+   },
+   {
+    "action": "Go out bending low, cover your nose and mouth with cloth. Do not take the lift.",
+    "why": "Smoke is more dangerous than fire, and there is less of it down low.",
+    "icon": "stay_low"
+   },
+   {
+    "action": "Hot door or thick smoke on the stairs — shut the door, stand by the window, call out.",
+    "why": "Do not jump: rescuers will come."
+   },
+   {
+    "action": "Clothes on fire — stop, drop, roll.",
+    "why": "Running makes the fire bigger."
+   },
+   {
+    "action": "Outside, call 112 or your family.",
+    "why": "112 works from any phone, even with no money on it."
+   }
+  ]
+ },
+ {
+  "id": "kid-scared",
+  "title": "I'm scared",
+  "guide": [
+   "22.2",
+   "1.2"
+  ],
+  "call": "",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 22.2, 1.2; English translation by Sprotyv",
+  "checkedOn": "2026-10-30",
+  "reviewedBy": "",
+  "steps": [
+   {
+    "action": "Are you in a safe place now? Sit next to a grown-up or hug your toy.",
+    "why": ""
+   },
+   {
+    "action": "Breathe in slowly, counting to 4. Breathe out, counting to 6. Do this 10 times.",
+    "why": "Slow breathing calms you down."
+   },
+   {
+    "action": "Ask for a job: hold the torch or count everyone.",
+    "why": "Doing a job makes you less scared."
+   }
+  ]
+ },
+ {
+  "id": "kid-code",
+  "title": "A call “from Mum”",
+  "guide": [
+   "22.1",
+   "18.3"
+  ],
+  "call": "",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 22.1, 18.3; English translation by Sprotyv",
+  "checkedOn": "2026-10-30",
+  "reviewedBy": "",
+  "steps": [
+   {
+    "action": "A stranger calls “from Mum” or “from Dad” — ask for the code word.",
+    "why": "Only your family knows the code word."
+   },
+   {
+    "action": "Doesn't know the word — hang up.",
+    "why": ""
+   },
+   {
+    "action": "Call Mum or Dad on their own number.",
+    "why": ""
+   }
+  ]
+ }
+]

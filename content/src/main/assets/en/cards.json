@@ -1,0 +1,588 @@
+[
+ {
+  "id": "first-60",
+  "title": "First 60 seconds",
+  "guide": [
+   "1.4",
+   "1.2",
+   "30.1"
+  ],
+  "call": "",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 1.4, 1.2, 30.1; English translation by Sprotyv",
+  "checkedOn": "2026-10-30",
+  "reviewedBy": "",
+  "steps": [
+   {
+    "action": "Threat now? Leave the area: from fire, smoke and gas — at a right angle to the wind; from water — uphill. Shelling — get down or into a shelter. Drone — get under a roof.",
+    "why": "Act first; think once you are safe."
+   },
+   {
+    "action": "Once you are safe, stop and take a few slow breaths out.",
+    "why": "Slow breathing lowers adrenaline and brings back the ability to think (the STOP method)."
+   },
+   {
+    "action": "Check people: bleeding, consciousness, breathing. Heavy bleeding — press on the wound at once.",
+    "why": "Massive bleeding kills within minutes."
+   },
+   {
+    "action": "Do not go back to the scene for at least 40 minutes.",
+    "why": "There may be a repeat strike, a collapse, a gas leak, downed wires — sometimes 1–2 hours later.",
+    "wait": 40
+   },
+   {
+    "action": "Send your family one SMS: “I am safe, I am at [place], going to [where].”",
+    "why": "SMS gets through when calls do not connect. Then save battery: power saving, minimal screen, no video."
+   },
+   {
+    "action": "Take water, medicines, warm clothes, documents only if it is safe. Go to your family's agreed meeting point.",
+    "why": ""
+   }
+  ]
+ },
+ {
+  "id": "air-alert",
+  "title": "Air raid alert",
+  "guide": [
+   "3.3",
+   "30.2"
+  ],
+  "call": "",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 3.3, 30.2; English translation by Sprotyv",
+  "checkedOn": "2026-10-30",
+  "reviewedBy": "",
+  "steps": [
+   {
+    "action": "Ballistic missiles, a “Kinzhal” launch or jet drones — put on shoes and go straight to the two-wall zone: hallway, bathroom. Do not gather anything else.",
+    "why": "Ballistic missiles give 1–3 minutes or no time at all; jet drones arrive within minutes.",
+    "figure": "3.2"
+   },
+   {
+    "action": "Otherwise dress for the weather, put on shoes, take your emergency bag. MiG-31K takeoff — do not wait for a launch, go to the shelter at once.",
+    "why": "This is while you still have a few minutes; once a launch is reported — straight to the two-wall zone."
+   },
+   {
+    "action": "Turn off gas, water and electrical appliances, close windows and curtains. Go to the shelter.",
+    "why": ""
+   },
+   {
+    "action": "Shelter is over 5 minutes away and you already hear explosions — stay in the two-wall zone.",
+    "why": "Crossing the city under fire is more dangerous."
+   },
+   {
+    "action": "In a frontline region under a guided bomb (KAB) threat — only a basement or underground parking.",
+    "why": "The two-wall rule does not protect against guided aerial bombs."
+   },
+   {
+    "action": "In the shelter, do not sit opposite the door; stay by load-bearing walls. Keep away from windows.",
+    "why": "A second missile or debris arrives within seconds."
+   },
+   {
+    "action": "Leave only after the all-clear. After explosions nearby, wait at least 40 minutes.",
+    "why": "A repeat strike on the same spot can come 10–40 minutes later, sometimes 1–2 hours later.",
+    "wait": 40
+   }
+  ]
+ },
+ {
+  "id": "ballistic",
+  "title": "Ballistic missile",
+  "guide": [
+   "3.3",
+   "3.1",
+   "3.2"
+  ],
+  "call": "",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 3.3, 3.1, 3.2; English translation by Sprotyv",
+  "checkedOn": "2026-10-30",
+  "reviewedBy": "",
+  "steps": [
+   {
+    "action": "Go to the two-wall zone at once: hallway, bathroom, space under concrete stairs. Do not run across the city.",
+    "why": "Ballistic missiles give 1–3 minutes or no time at all.",
+    "figure": "3.2"
+   },
+   {
+    "action": "Keep away from windows and glass.",
+    "why": "The blast wave and glass are the main killers in flats."
+   },
+   {
+    "action": "Outside, a whistle or a rising sound — do not look at the sky, drop: face down, feet toward the blast, hands on your head, mouth slightly open. Then crawl to shelter.",
+    "why": "An open mouth protects your eardrums and lungs from the blast wave.",
+    "figure": "3.1"
+   },
+   {
+    "action": "Stay where you are until the all-clear; do not go to the window.",
+    "why": "A second missile or debris arrives within seconds."
+   }
+  ]
+ },
+ {
+  "id": "drone",
+  "title": "Drone nearby",
+  "guide": [
+   "4.3",
+   "4.6",
+   "4.4",
+   "30.3"
+  ],
+  "call": "101",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 4.3, 4.6, 4.4, 30.3; English translation by Sprotyv",
+  "checkedOn": "2026-10-30",
+  "reviewedBy": "",
+  "steps": [
+   {
+    "action": "Heard or saw a drone — assume it sees you.",
+    "why": "Do not stare at it, do not film it, do not wave your arms."
+   },
+   {
+    "action": "Within 5–10 seconds — get under a roof: entrance hall, basement, shop. Do not stop in the doorway: shut the door, move deep inside, away from windows, and freeze.",
+    "why": "An FPV drone can fly in through an open door or window. This rule is for FPV and drop drones; for Shaheds and missiles — a basement or two walls."
+   },
+   {
+    "action": "No roof — get behind thick cover: concrete, brick, a tree trunk over 40 cm. The drone circles round — switch sides. Do not run in a straight line.",
+    "why": "A lone tree or a fence does not protect you. Dense bushes are better than open ground."
+   },
+   {
+    "action": "FPV diving at you — at the last second, move sharply aside and drop behind cover, face down, hands on your head.",
+    "why": "An FPV blast is relatively small — 30–50 cm of cover saves you."
+   },
+   {
+    "action": "Drop drone above you — do not stand still or look up: quickly get under a roof or dense tree canopy. No roof — move in a zigzag.",
+    "why": "Change direction every 7–10 m — this makes a drop harder to aim. A zigzag does not work against FPV."
+   },
+   {
+    "action": "In a car: stop, everyone get 30–50 metres away from the car, behind cover.",
+    "why": "The car is the target; while you are near it, you are a target too."
+   },
+   {
+    "action": "Afterwards, count to 60 and listen. Do not go near the strike site for at least 40 minutes.",
+    "why": "A second drone often comes when people gather at the site.",
+    "wait": 40
+   },
+   {
+    "action": "Downed drone — do not approach: at least 100 m away (Shahed, missile — 300 m), behind cover. Call 101 or 102 from there. Do not touch the fibre-optic line.",
+    "why": "Munitions may still be on board; a fibre-optic drone may come back."
+   }
+  ]
+ },
+ {
+  "id": "bleeding",
+  "title": "Severe bleeding",
+  "guide": [
+   "7.2",
+   "7.6",
+   "30.5"
+  ],
+  "call": "103",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 7.2, 7.6, 30.5; English translation by Sprotyv",
+  "checkedOn": "2026-10-30",
+  "reviewedBy": "",
+  "steps": [
+   {
+    "action": "Press on the wound with all your weight and do not let go. Tell a specific person to call 103.",
+    "why": "With a femoral artery bleed, a person dies in 2–4 minutes.",
+    "icon": "press"
+   },
+   {
+    "action": "Blood spurting from an arm or leg, or pressure does not help — tourniquet 5–8 cm above the wound, not on a joint, until bleeding fully stops. Write down the time.",
+    "why": "Wound location unclear — as high on the limb as possible. Never loosen a tourniquet — only a medic removes it.",
+    "figure": "7.2"
+   },
+   {
+    "action": "No tourniquet — a belt, shoelace or wire will not do. Keep pressing with all your weight or pack the wound with gauze.",
+    "why": "An improvised tourniquet without training usually does not stop the bleeding and wastes time."
+   },
+   {
+    "action": "Wound on the neck, groin, shoulder or buttock — pack gauze deep into the wound and press: plain gauze 10 minutes, hemostatic 3.",
+    "why": "A tourniquet is impossible there."
+   },
+   {
+    "action": "Put a tight bandage on top. Do not remove the packing.",
+    "why": "Packing is removed only in hospital."
+   },
+   {
+    "action": "Lay the person flat, keep them warm. No head, chest or belly injuries — raise the legs slightly.",
+    "why": "In shock, a person feels cold even in summer."
+   },
+   {
+    "action": "If an ambulance is on its way, give nothing to drink. Check their condition every 5 minutes.",
+    "why": "Surgery under anaesthesia may be needed. Shock: pale skin, cold sweat, fast weak pulse."
+   }
+  ]
+ },
+ {
+  "id": "unconscious",
+  "title": "Person unconscious",
+  "guide": [
+   "7.3",
+   "7.4",
+   "7.7",
+   "30.6"
+  ],
+  "call": "103",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 7.3, 7.4, 7.7, 30.6; English translation by Sprotyv",
+  "checkedOn": "2026-10-30",
+  "reviewedBy": "",
+  "steps": [
+   {
+    "action": "Look around: make sure nothing threatens you. Speak to them loudly, gently shake their shoulders.",
+    "why": "If you get hurt yourself, you cannot help anyone."
+   },
+   {
+    "action": "No response — tilt the head back, lift the chin and check breathing for 10 seconds.",
+    "why": "Watch the chest, listen, feel the breath on your cheek."
+   },
+   {
+    "action": "Tell a specific person to call 103: “You, in the blue jacket — call 103.”",
+    "why": ""
+   },
+   {
+    "action": "Breathing — put them on their side and check breathing every minute. Suspected spinal injury — leave them on their back, keep the head still, push the jaw forward.",
+    "why": "A spinal injury is possible after a fall from height, a road crash, a blow to the back.",
+    "figure": "7.4"
+   },
+   {
+    "action": "Not breathing or only occasional gasps — start CPR on a hard surface. Child or infant — give 5 breaths first.",
+    "why": ""
+   },
+   {
+    "action": "Press the centre of the chest: adult 5–6 cm, child ~5 cm, infant with two thumbs ~4 cm. 30 presses, 2 breaths, 100–120 per minute.",
+    "why": "Do not stop until breathing returns or medics arrive. Cannot give breaths — do presses only, that also saves lives. Swap every 2 minutes.",
+    "figure": "7.7"
+   }
+  ]
+ },
+ {
+  "id": "burn",
+  "title": "Burn",
+  "guide": [
+   "7.8",
+   "7.11"
+  ],
+  "call": "103",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 7.8, 7.11; English translation by Sprotyv",
+  "checkedOn": "2026-10-30",
+  "reviewedBy": "",
+  "steps": [
+   {
+    "action": "Electricity — first switch it off or push the wire away with a dry stick. Only then touch the person. High-voltage line — no closer than 8–10 m.",
+    "why": "After an electric shock, see a medic even if they seem “fine”: heart rhythm problems can start hours later."
+   },
+   {
+    "action": "Put out the flames: roll the person over or cover them with thick fabric. Remove smouldering clothes; if stuck to skin, do not pull off — cut around.",
+    "why": ""
+   },
+   {
+    "action": "Chemical burn — brush powder off dry first, then rinse with water for 20+ minutes.",
+    "why": ""
+   },
+   {
+    "action": "Cool any other burn under cool running water for at least 20 minutes. Not with ice.",
+    "why": ""
+   },
+   {
+    "action": "Remove rings and watch from the injured limb before swelling starts.",
+    "why": ""
+   },
+   {
+    "action": "Cover loosely with a clean lint-free cloth or cling film. Do not put anything on it, do not pop blisters.",
+    "why": "No oil, sour cream or toothpaste. For pain — paracetamol or ibuprofen; drink plenty."
+   },
+   {
+    "action": "Always see a doctor: burn larger than the person's palm, on the face, hands, genital area, joints, in children, electrical, chemical or deep.",
+    "why": "A deep burn may not hurt: white-grey or charred skin."
+   }
+  ]
+ },
+ {
+  "id": "home-fire",
+  "title": "Fire at home",
+  "guide": [
+   "10.5",
+   "30.4"
+  ],
+  "call": "101",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 10.5, 30.4; English translation by Sprotyv",
+  "checkedOn": "2026-10-30",
+  "reviewedBy": "",
+  "steps": [
+   {
+    "action": "Shout “Fire!”, wake everyone. Fight it only while the fire is smaller than a bucket and smoke does not stop you breathing: grease — cover it, no water; appliance — unplug it.",
+    "why": "Water on burning fat: a steam explosion throws the flames around."
+   },
+   {
+    "action": "Not out in 30 seconds or smoke gathers under the ceiling — get out. Shut the door to the room with the fire. Call 101 from outside or on the way.",
+    "why": "A closed door gives you 10–15 minutes."
+   },
+   {
+    "action": "Before opening any door, touch it with the back of your hand: hot — do not open it.",
+    "why": ""
+   },
+   {
+    "action": "Move crouching or crawling, wet cloth over nose and mouth, along the wall to the exit.",
+    "why": "Smoke kills: 2–3 breaths of hot smoke and a person passes out. The air is cleaner low down.",
+    "icon": "stay_low"
+   },
+   {
+    "action": "Never use the lift. Thick smoke on the stairs — back into the flat, shut the door.",
+    "why": ""
+   },
+   {
+    "action": "Exit cut off — block gaps with wet cloth, open a window, signal, call 101 with the exact address and floor. Above the 2nd floor, do not jump.",
+    "why": "In a closed room with a window you have 10–20 minutes."
+   },
+   {
+    "action": "Clothes on fire — stop, drop, roll.",
+    "why": "Running fans the flames."
+   }
+  ]
+ },
+ {
+  "id": "suspicious",
+  "title": "Suspicious object or mine",
+  "guide": [
+   "5.3",
+   "5.4",
+   "30.7"
+  ],
+  "call": "101",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 5.3, 5.4, 30.7; English translation by Sprotyv",
+  "checkedOn": "2026-10-30",
+  "reviewedBy": "",
+  "steps": [
+   {
+    "action": "Do not touch, do not approach, do not take close-up photos.",
+    "why": "An object that was not here yesterday, or looks military, is explosive.",
+    "icon": "no_touch"
+   },
+   {
+    "action": "Note landmarks and leave the way you came, stepping in your own footprints.",
+    "why": ""
+   },
+   {
+    "action": "Move at least 100 metres away (shell or aerial bomb — 300), and only then call 101 or 102.",
+    "why": "Phones and radios are not used near the object."
+   },
+   {
+    "action": "Mark the danger where you stopped and warn people.",
+    "why": "Bright cloth or a branch. Do not go to the object itself.",
+    "figure": "5.2"
+   },
+   {
+    "action": "Walked into a minefield — freeze, call for help and wait for deminers.",
+    "why": "Even hours of waiting are safer than trying to get out on your own."
+   },
+   {
+    "action": "Explosion nearby — do not run straight to the injured person. Call deminers; the injured person, if conscious, applies a tourniquet themselves as you instruct.",
+    "why": "The way to them may be mined too."
+   }
+  ]
+ },
+ {
+  "id": "chemical",
+  "title": "Chemical hazard",
+  "guide": [
+   "6.4",
+   "6.5"
+  ],
+  "call": "101",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 6.4, 6.5; English translation by Sprotyv",
+  "checkedOn": "2026-10-30",
+  "reviewedBy": "",
+  "steps": [
+   {
+    "action": "Hold your breath, cover nose and mouth with cloth, preferably damp.",
+    "why": ""
+   },
+   {
+    "action": "Move at a right angle to the wind and far away. Chlorine (“swimming pool” smell) — to higher ground, not a basement. Ammonia — the opposite, lower floors.",
+    "why": "Chlorine is heavier than air and spreads low. Unknown substance — just move at a right angle to the wind."
+   },
+   {
+    "action": "Indoors, close windows, turn off ventilation, block gaps with wet cloth. With chlorine, go to upper floors. Listen for alerts.",
+    "why": ""
+   },
+   {
+    "action": "Out of the zone — remove outer clothing without pulling it over your head; rinse skin and eyes with clean water for 10–15 minutes.",
+    "why": ""
+   },
+   {
+    "action": "Casualty — rest, fresh air, half-sitting if short of breath. Unknown substance — do not induce vomiting. Medical help — 103.",
+    "why": "Shortness of breath that does not pass within 30 minutes or comes back — to a medic at once: fluid in the lungs can appear hours later."
+   }
+  ]
+ },
+ {
+  "id": "radiation",
+  "title": "Radiation threat",
+  "guide": [
+   "6.1",
+   "6.2",
+   "6.6",
+   "6.5",
+   "30.8"
+  ],
+  "call": "",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 6.1, 6.2, 6.6, 6.5, 30.8; English translation by Sprotyv",
+  "checkedOn": "2026-10-30",
+  "reviewedBy": "",
+  "steps": [
+   {
+    "action": "Nuclear flash — do not look, drop face down with feet toward the flash. Lie there until the blast wave passes and debris falls.",
+    "why": "The blast wave comes in a few seconds; at 10–20 km away, up to 30–60 seconds."
+   },
+   {
+    "action": "After the flash, reach a basement or the middle of a large building within 10–15 minutes. Stay there at least 24 hours, better 48–72.",
+    "why": "Fallout is most dangerous in the first hours, and that is exactly what you can shelter from."
+   },
+   {
+    "action": "Accident or release — go indoors at once: basement or centre of a high-rise.",
+    "why": "Brick and concrete weaken radiation 10–100 times or more."
+   },
+   {
+    "action": "Close windows, doors, ventilation; tape up gaps or block them with wet cloth.",
+    "why": ""
+   },
+   {
+    "action": "Were outside — outer clothes in a bag outside the door, shower, wash hair without conditioner.",
+    "why": "Conditioner binds radioactive particles to hair."
+   },
+   {
+    "action": "Listen to a battery radio. Do not go out without an order from the authorities.",
+    "why": "No information at all — go out no earlier than after 48–72 hours."
+   },
+   {
+    "action": "Potassium iodide — only after an official announcement, doses in sec. 6.2. Not given to people aged 40 and over, except pregnant and breastfeeding women. Do not drink iodine tincture.",
+    "why": "Taken within 6 hours before or in the first hours after the cloud passes. Protects only the thyroid; not taken for a “dirty bomb”."
+   },
+   {
+    "action": "Eat and drink only from sealed containers.",
+    "why": "Boiling does not remove radioactive substances."
+   }
+  ]
+ },
+ {
+  "id": "rubble",
+  "title": "Strike on a building, rubble",
+  "guide": [
+   "3.5"
+  ],
+  "call": "101",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 3.5; English translation by Sprotyv",
+  "checkedOn": "2026-10-30",
+  "reviewedBy": "",
+  "steps": [
+   {
+    "action": "Check for a gas leak: smell, hissing. If leaking — do not switch on lights, do not light a flame, open windows and get out.",
+    "why": ""
+   },
+   {
+    "action": "Check yourself and your family for injuries.",
+    "why": "Under stress, wounds do not hurt."
+   },
+   {
+    "action": "Leave by the stairs, not the lift, and always with shoes on.",
+    "why": "There is glass everywhere."
+   },
+   {
+    "action": "Trapped under rubble — do not light a flame, breathe through cloth, do not move structures above you. Knock in series of 3, shout only when people are near.",
+    "why": "Rescuers call “minutes of silence” and listen. Your voice gives out within an hour; a whistle carries further."
+   },
+   {
+    "action": "Someone under rubble — mark the spot, call 101, talk to the person. Do not clear the rubble yourself.",
+    "why": "Structures can settle and hurt both you and the person beneath."
+   },
+   {
+    "action": "Limb trapped less than 10 minutes — free it at once. Longer or time unknown — do not free it yourself: call 103, do as the dispatcher says.",
+    "why": "Sudden release after long compression can cause fatal crush syndrome. If medics cannot be reached — details in sec. 3.5."
+   }
+  ]
+ },
+ {
+  "id": "blackout",
+  "title": "No power",
+  "guide": [
+   "20.1",
+   "7.11",
+   "2.5"
+  ],
+  "call": "",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 20.1, 7.11, 2.5; English translation by Sprotyv",
+  "checkedOn": "2026-10-30",
+  "reviewedBy": "",
+  "steps": [
+   {
+    "action": "Fill all containers and the bathtub with water.",
+    "why": "Water supply pumps will stop within a few hours."
+   },
+   {
+    "action": "Unplug sensitive electronics. Leave one lamp switched on — you will see when power comes back.",
+    "why": "A voltage surge when power comes back burns out appliances."
+   },
+   {
+    "action": "Do not open the fridge and freezer unless you must.",
+    "why": "A closed freezer stays cold for 24–48 hours."
+   },
+   {
+    "action": "Eat what spoils first: meat and dairy, then vegetables, tinned food last.",
+    "why": ""
+   },
+   {
+    "action": "Generator — only outdoors, at least 6 m from windows, doors and vents. Never on a balcony, in a garage, basement or stairwell. Barbecue — also outdoors only.",
+    "why": "Carbon monoxide kills silently: headache, nausea, “drunk” behaviour. Get the person into fresh air."
+   },
+   {
+    "action": "Gas burner indoors — only with a window open.",
+    "why": "Otherwise carbon monoxide builds up."
+   },
+   {
+    "action": "Do not use the lift. Stuck — press the call button or call 101; do not force the doors.",
+    "why": "A lift has ventilation — you cannot suffocate, but the shaft is deadly."
+   }
+  ]
+ },
+ {
+  "id": "leave-home",
+  "title": "Time to leave",
+  "guide": [
+   "17.6",
+   "26",
+   "18.6",
+   "30.10"
+  ],
+  "call": "",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 17.6, 26, 18.6, 30.10; English translation by Sprotyv",
+  "checkedOn": "2026-10-30",
+  "reviewedBy": "",
+  "steps": [
+   {
+    "action": "Confirm the evacuation order with two official sources.",
+    "why": "Fake orders and “corridors” do happen."
+   },
+   {
+    "action": "Take documents, copies, cash and medicines for 30 days.",
+    "why": ""
+   },
+   {
+    "action": "Take water (2 L), food for 3 days, warm clothes, comfortable shoes, phone, power bank, radio, torch.",
+    "why": ""
+   },
+   {
+    "action": "Shut off gas and water, switch off electricity, close windows.",
+    "why": ""
+   },
+   {
+    "action": "Leave a note for family at the agreed place. Tell the family member everyone calls when they cannot reach each other.",
+    "why": ""
+   },
+   {
+    "action": "Travel in daylight, with a full tank, by a checked route. Write the route down on paper.",
+    "why": "A convoy of several familiar cars is safer than a lone car."
+   },
+   {
+    "action": "Passing enemy checkpoints — prepare your phone in advance, 1–2 weeks ahead, and fill it again with ordinary content.",
+    "why": "Both a fresh reset and an empty phone raise suspicion. Details — sec. 18.6."
+   }
+  ]
+ }
+]

@@ -6,7 +6,7 @@
   "situation": "An explosion nearby. You are already safe, but calls to your family won't connect.",
   "options": [
    {
-    "text": "I'll send one SMS: \"I'm safe, I'm at [place], heading to [where]\".",
+    "text": "I'll send one SMS: “I'm safe, I'm at [place], heading to [where]”.",
     "right": true,
     "why": "An SMS gets through when calls don't connect. After that, save your battery."
    },
@@ -172,7 +172,7 @@
     "why": "A tourniquet is not loosened; only a medic removes it."
    },
    {
-    "text": "Loosen it a little so the leg can \"rest\".",
+    "text": "Loosen it a little so the leg can “rest”.",
     "right": false,
     "why": "A tourniquet is not loosened; only a medic removes it."
    },
@@ -394,17 +394,17 @@
   "id": "leave-fake",
   "card": "leave-home",
   "step": 0,
-  "situation": "In the building's chat, someone writes: \"Evacuation order, corridor at 6:00\".",
+  "situation": "In the building's chat, someone writes: “Evacuation order, corridor at 6:00”.",
   "options": [
    {
     "text": "I'll check the order with two official sources.",
     "right": true,
-    "why": "Fake orders and \"corridors\" do happen."
+    "why": "Fake orders and “corridors” do happen."
    },
    {
     "text": "I'll pack right away and leave at 6:00.",
     "right": false,
-    "why": "First check with two official sources: fake orders and \"corridors\" do happen."
+    "why": "First check with two official sources: fake orders and “corridors” do happen."
    },
    {
     "text": "I'll forward it to everyone I know.",
@@ -432,7 +432,7 @@
    {
     "text": "I'll go outside.",
     "right": false,
-    "why": "Go out only when a grown-up says so or you hear \"All clear\"."
+    "why": "Go out only when a grown-up says so or you hear “All clear”."
    }
   ]
  },
@@ -555,7 +555,7 @@
   "id": "kid-code-call",
   "card": "kid-code",
   "step": 0,
-  "situation": "A stranger calls: \"Your mum sent me, come outside to me\".",
+  "situation": "A stranger calls: “Your mum sent me, come outside to me”.",
   "options": [
    {
     "text": "I'll ask for the code word.",
