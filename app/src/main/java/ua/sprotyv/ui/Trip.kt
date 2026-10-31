@@ -3,7 +3,8 @@ package ua.sprotyv.ui
 import ua.sprotyv.content.Link
 
 /**
- * Trip mode, for a checkpoint or a phone check: the owner's data ("Mine" and everything that
+ * Trip mode, for when the phone may end up in the wrong hands (leaving occupied areas, a threat of
+ * capture or abduction, theft): the owner's data ("Mine" and everything that
  * opens it) and sources that could draw attention (front maps, the search for prisoners and the
  * missing, veterans' services, war crimes and human rights, deported children, papers from the
  * occupied areas, care for the war-wounded, the state's counter-disinformation centre) are off
