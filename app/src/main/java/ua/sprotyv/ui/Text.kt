@@ -130,11 +130,13 @@ fun Block(
             }
         }
         if (open) {
-            androidx.compose.foundation.layout.Column(
-                if (padded) Modifier.padding(16.dp) else Modifier.padding(vertical = 4.dp),
-                verticalArrangement = Arrangement.spacedBy(if (padded) 10.dp else 0.dp),
-                content = content,
-            )
+            androidx.compose.runtime.CompositionLocalProvider(LocalBlockTint provides tint) {
+                androidx.compose.foundation.layout.Column(
+                    if (padded) Modifier.padding(16.dp) else Modifier.padding(vertical = 4.dp),
+                    verticalArrangement = Arrangement.spacedBy(if (padded) 10.dp else 0.dp),
+                    content = content,
+                )
+            }
         }
     }
 }
@@ -194,20 +196,22 @@ val ReadingText: TextStyle
     )
 
 /**
- * Done, the same way everywhere: a ticked item is a "yes, it is there" — a green tick, a soft green
- * row, its words in green; never struck out. The block around it keeps its own group's colour.
+ * "Done" has no colour of its own (green already means first aid and the way out): a done row takes
+ * the colour of the block it sits in — the tick filled in that colour, a faint shade of it behind
+ * the row — and the words stay as they are. Nothing is struck out.
  */
+val LocalBlockTint = androidx.compose.runtime.staticCompositionLocalOf<Tint?> { null }
+
 @Composable
-fun doneTint(): Tint = ua.sprotyv.home.Group.FIRST_AID.tint()
+fun doneTint(): Tint = LocalBlockTint.current ?: ua.sprotyv.home.Group.MINE.tint()
 
 @Composable
 fun Modifier.doneRow(done: Boolean): Modifier =
-    if (done) this.then(Modifier.background(doneTint().container)) else this
+    if (done) this.then(Modifier.background(doneTint().container.copy(alpha = 0.55f))) else this
 
 @Composable
 fun doneCheckbox(): androidx.compose.material3.CheckboxColors =
-    androidx.compose.material3.CheckboxDefaults.colors(checkedColor = doneTint().ink, checkmarkColor = doneTint().container)
+    androidx.compose.material3.CheckboxDefaults.colors(checkedColor = doneTint().ink, checkmarkColor = MaterialTheme.colorScheme.surface)
 
 @Composable
-fun doneText(done: Boolean): androidx.compose.ui.graphics.Color =
-    if (done) doneTint().ink else MaterialTheme.colorScheme.onSurface
+fun doneText(@Suppress("UNUSED_PARAMETER") done: Boolean): androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.onSurface
