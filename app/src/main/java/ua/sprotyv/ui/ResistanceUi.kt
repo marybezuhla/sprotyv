@@ -102,7 +102,7 @@ fun ResistanceScreen(content: Content?, nav: Nav) {
             BlockRow(stringResource(R.string.role_truth), stringResource(R.string.role_truth_hint)) { nav.go(Route.ChapterRoute("ch18")) }
         }
         // What anyone can do: each with the place in Sprotyv where it starts
-        Block(stringResource(R.string.resist_roles_title), Group.PREPARE, tint = resist(), padded = false) {
+        Block(stringResource(R.string.resist_roles_title), Group.PREPARE, tint = resist(), padded = false, foldable = true) {
             BlockRow(stringResource(R.string.role_save), stringResource(R.string.role_save_hint), first = true) { nav.go(Route.MozList) }
             BlockRow(stringResource(R.string.role_ready), stringResource(R.string.role_ready_hint)) { nav.go(Route.Mine(MinePart.KIT)) }
             BlockRow(stringResource(R.string.role_family), stringResource(R.string.role_family_hint)) { nav.go(Route.Mine(MinePart.PLAN)) }
@@ -133,13 +133,16 @@ fun ResistanceScreen(content: Content?, nav: Nav) {
             Text(stringResource(R.string.service_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         if (prefs?.service == true) {
-            Block(stringResource(R.string.service_facts_title), Group.GUIDE) {
+            Block(stringResource(R.string.service_facts_title), Group.PREPARE, tint = resist(), foldable = true) {
                 listOf(R.string.service_fact_1, R.string.service_fact_2, R.string.service_fact_3, R.string.service_fact_4, R.string.service_fact_5).forEach {
                     Row { Text("•", modifier = Modifier.padding(end = 8.dp)); Text(stringResource(it), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f)) }
                 }
                 Text(stringResource(R.string.service_source), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
-            links.filter { it.group == "service" }.forEach { link -> LinkRow(link) { openLink(context, link, toolbar) } }
+            val service = links.filter { it.group == "service" }
+            if (service.isNotEmpty()) Block(stringResource(R.string.service_title), Group.PREPARE, tint = resist(), foldable = true, summary = stringResource(R.string.shelf_count, service.size)) {
+                service.forEach { link -> LinkRow(link) { openLink(context, link, toolbar) } }
+            }
         }
         Text(stringResource(R.string.resist_principles), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
@@ -148,9 +151,10 @@ fun ResistanceScreen(content: Content?, nav: Nav) {
 @Composable
 private fun LinkGroup(title: String, intro: String, links: List<Link>, toolbar: Int, context: android.content.Context) {
     if (links.isEmpty()) return
-    Text(title, style = BlockTitle, modifier = Modifier.padding(top = 8.dp))
-    Text(intro, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    links.forEach { link -> LinkRow(link) { openLink(context, link, toolbar) } }
+    // Folded, in resistance's khaki: open the one needed
+    Block(title, Group.PREPARE, tint = resist(), foldable = true, summary = intro) {
+        links.forEach { link -> LinkRow(link) { openLink(context, link, toolbar) } }
+    }
 }
 
 /**

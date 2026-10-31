@@ -122,7 +122,7 @@ enum class Group(val tiles: List<String>) {
             Tiles.card("rubble"), Tiles.card("suspicious"), Tiles.card("home-fire"), Tiles.card("chemical"),
             Tiles.card("radiation"), Tiles.tool(Tool.SITUATION), Tiles.tool(Tool.ALARM),
             // The guide's own chapters on the same dangers
-            Tiles.chapter("ch3"), Tiles.chapter("ch4"), Tiles.chapter("ch6"),
+            Tiles.chapter("ch3"), Tiles.chapter("ch4"), Tiles.chapter("ch6"), Tiles.chapter("ch5"), Tiles.chapter("ch19"),
         ),
     ),
     FIRST_AID(
@@ -148,7 +148,7 @@ enum class Group(val tiles: List<String>) {
             Tiles.chapter("ch11"), Tiles.chapter("ch13"), Tiles.chapter("ch14"), Tiles.chapter("ch15"),
         ),
     ),
-    SAFETY(listOf(Tiles.chapter("ch5"), Tiles.chapter("ch17"), Tiles.chapter("ch18"), Tiles.chapter("ch28"), Tiles.chapter("ch19"))),
+    SAFETY(listOf(Tiles.chapter("ch17"), Tiles.chapter("ch18"), Tiles.chapter("ch28"))),
     MINE(
         listOf(
             Tiles.tool(Tool.MINE), Tiles.tool(Tool.MEDICAL), Tiles.tool(Tool.RESCUER), Tiles.tool(Tool.PRINT),

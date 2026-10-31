@@ -121,9 +121,9 @@ fun HeatingBlock(nav: Nav) {
             modifier = Modifier.semantics { heading() },
         )
         // The guide's two time marks, shown as bars towards them
-        Meter(stringResource(R.string.heat_pipes), stringResource(R.string.heat_pipes_when), (minutes / (24 * 60f)).coerceAtMost(1f), if (minutes >= 24 * 60) ua.sprotyv.home.Group.DANGER.tint().ink else MaterialTheme.colorScheme.primary)
+        Meter(stringResource(R.string.heat_pipes), stringResource(R.string.heat_pipes_when), (minutes / (24 * 60f)).coerceAtMost(1f), if (minutes >= 24 * 60) ua.sprotyv.home.Group.DANGER.tint().ink else ua.sprotyv.home.Group.HOME_LIFE.tint().ink)
         Advice(stringResource(R.string.heat_pipes_do), minutes >= 24 * 60)
-        Meter(stringResource(R.string.heat_leave), stringResource(R.string.heat_leave_when), (minutes / (48 * 60f)).coerceAtMost(1f), if (minutes >= 48 * 60) ua.sprotyv.home.Group.DANGER.tint().ink else MaterialTheme.colorScheme.primary)
+        Meter(stringResource(R.string.heat_leave), stringResource(R.string.heat_leave_when), (minutes / (48 * 60f)).coerceAtMost(1f), if (minutes >= 48 * 60) ua.sprotyv.home.Group.DANGER.tint().ink else ua.sprotyv.home.Group.HOME_LIFE.tint().ink)
         Advice(stringResource(R.string.heat_leave_do), minutes >= 48 * 60)
         Advice(stringResource(R.string.heat_co), false)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {

@@ -76,24 +76,24 @@ fun PlanScreen() {
     }
     Text(stringResource(R.string.plan_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     // Each part of the plan in the blue of preparation
-    Block(stringResource(R.string.plan_points), ua.sprotyv.home.Group.PREPARE) {
+    Block(stringResource(R.string.plan_points), ua.sprotyv.home.Group.PREPARE, foldable = true) {
         Field(stringResource(R.string.plan_point1), plan.point1, { change(plan.copy(point1 = it)) }, hint = stringResource(R.string.plan_point1_hint))
         Field(stringResource(R.string.plan_point2), plan.point2, { change(plan.copy(point2 = it)) }, hint = stringResource(R.string.plan_point2_hint))
         Field(stringResource(R.string.plan_point3), plan.point3, { change(plan.copy(point3 = it)) }, hint = stringResource(R.string.plan_point3_hint))
     }
-    Block(stringResource(R.string.plan_go_between), ua.sprotyv.home.Group.PREPARE) {
+    Block(stringResource(R.string.plan_go_between), ua.sprotyv.home.Group.PREPARE, foldable = true) {
         Text(stringResource(R.string.plan_go_between_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Field(stringResource(R.string.person_name), plan.goBetweenName, { change(plan.copy(goBetweenName = it)) })
         Field(stringResource(R.string.person_phone), plan.goBetweenPhone, { change(plan.copy(goBetweenPhone = it)) }, phone = true)
     }
-    Block(stringResource(R.string.plan_if_then), ua.sprotyv.home.Group.PREPARE) {
+    Block(stringResource(R.string.plan_if_then), ua.sprotyv.home.Group.PREPARE, foldable = true) {
         Text(stringResource(R.string.plan_if_then_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Rows(PlanRow.KIND_IF_THEN, R.string.plan_if, R.string.plan_then, R.string.plan_if_example, R.string.plan_then_example)
     }
-    Block(stringResource(R.string.plan_roles), ua.sprotyv.home.Group.PREPARE) {
+    Block(stringResource(R.string.plan_roles), ua.sprotyv.home.Group.PREPARE, foldable = true) {
         Rows(PlanRow.KIND_ROLE, R.string.plan_who, R.string.plan_does, R.string.plan_who_example, R.string.plan_does_example)
     }
-    Block(stringResource(R.string.plan_notes), ua.sprotyv.home.Group.PREPARE) {
+    Block(stringResource(R.string.plan_notes), ua.sprotyv.home.Group.PREPARE, foldable = true) {
         Field(stringResource(R.string.plan_notes), plan.notes, { change(plan.copy(notes = it)) }, multiline = true)
     }
     Text(stringResource(R.string.plan_practice), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)

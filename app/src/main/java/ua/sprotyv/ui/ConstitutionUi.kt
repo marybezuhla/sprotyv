@@ -70,11 +70,11 @@ fun ConstitutionScreen(content: Content?, nav: Nav) {
                 BlockRow(stringResource(R.string.const_article, num), stringResource(topic), first = i == 0) { nav.go(Route.ConstitutionRoute(num)) }
             }
         }
-        Block(stringResource(R.string.const_preamble), Group.GUIDE, foldable = true, summary = stringResource(R.string.const_preamble_hint)) {
+        Block(stringResource(R.string.const_preamble), Group.PREPARE, tint = resist(), foldable = true, summary = stringResource(R.string.const_preamble_hint)) {
             SelectionContainer { Column(verticalArrangement = Arrangement.spacedBy(8.dp)) { c.preamble.forEach { Text(it, style = ReadingText) } } }
         }
         c.sections.forEach { s ->
-            Block(stringResource(R.string.const_section, s.num, s.title.lowercase().replaceFirstChar { it.uppercase() }), Group.GUIDE, padded = s.articles.isEmpty(), foldable = true,
+            Block(stringResource(R.string.const_section, s.num, s.title.lowercase().replaceFirstChar { it.uppercase() }), Group.PREPARE, tint = resist(), padded = s.articles.isEmpty(), foldable = true,
                 summary = if (s.articles.isEmpty()) null else stringResource(R.string.const_articles_count, s.articles.first().num, s.articles.last().num)) {
                 s.articles.forEachIndexed { i, a -> BlockRow(stringResource(R.string.const_article, a.num), a.snippet(), first = i == 0) { nav.go(Route.ConstitutionRoute(a.num)) } }
                 if (s.articles.isEmpty()) SelectionContainer { Column(verticalArrangement = Arrangement.spacedBy(8.dp)) { s.text.forEach { Text(it, style = ReadingText) } } }

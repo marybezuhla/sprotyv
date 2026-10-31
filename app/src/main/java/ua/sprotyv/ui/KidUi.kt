@@ -73,7 +73,7 @@ import ua.sprotyv.reach.Reach
 /** A picture for each card: emoji are colourful, known to children and drawn by the phone itself. */
 internal fun picture(id: String): String = when (id) {
     "kid-siren" -> "🚨"
-    "kid-buzz" -> "🏠"
+    "kid-buzz" -> "🛸"
     "kid-strange" -> "✋"
     "kid-lost" -> "🧍"
     "kid-fire" -> "🔥"
@@ -85,7 +85,7 @@ internal fun picture(id: String): String = when (id) {
 /** The same pictures drawn by OpenMoji (CC BY-SA 4.0): the same look on every phone. */
 internal fun pictureRes(id: String): Int = when (id) {
     "kid-siren" -> R.drawable.om_siren
-    "kid-buzz" -> R.drawable.om_house
+    "kid-buzz" -> R.drawable.hi_drone
     "kid-strange" -> R.drawable.om_hand
     "kid-lost" -> R.drawable.om_person
     "kid-fire" -> R.drawable.om_fire
@@ -95,7 +95,12 @@ internal fun pictureRes(id: String): Int = when (id) {
 }
 
 /** Soft colours from the group palette, one per tile, so each is found by colour too. */
-private val KID_COLOURS = listOf(Group.DANGER, Group.HOME_LIFE, Group.FAMILY, Group.LEAVE, Group.PREPARE, Group.FIRST_AID, Group.MINE)
+/** Each card's colour by what it is about: danger orange, family blue, comfort green. */
+private fun kidColour(id: String): Group = when (id) {
+    "kid-siren", "kid-buzz", "kid-strange", "kid-fire" -> Group.DANGER
+    "kid-scared" -> Group.FIRST_AID
+    else -> Group.FAMILY
+}
 
 @Composable
 fun KidHome(content: Content?, nav: Nav, onGrownUp: () -> Unit) {
@@ -126,7 +131,7 @@ fun KidHome(content: Content?, nav: Nav, onGrownUp: () -> Unit) {
             // Seven situations; the last one spans the row, so nothing looks missing
             items(cards.take(7), key = { it.id }, span = { c -> GridItemSpan(if (cards.indexOf(c) == 6) maxLineSpan else 1) }) { card ->
                 val i = cards.indexOf(card)
-                KidTile(card, KID_COLOURS[i % KID_COLOURS.size].tint()) { nav.go(Route.CardRoute(card.id)) }
+                KidTile(card, kidColour(card.id).tint()) { nav.go(Route.CardRoute(card.id)) }
             }
         }
         // Trip mode hides the family numbers (encrypted data): then only 112, never a dead button
@@ -147,7 +152,7 @@ private fun KidTile(card: ActionCard, tint: Tint, onClick: () -> Unit) {
     ) {
         Column(Modifier.fillMaxWidth().padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             // The picture is for the eye; TalkBack reads the words
-            androidx.compose.foundation.Image(androidx.compose.ui.res.painterResource(pictureRes(card.id)), null, Modifier.size(56.dp))
+            androidx.compose.foundation.Image(androidx.compose.ui.res.painterResource(pictureRes(card.id)), null, Modifier.size(56.dp), colorFilter = if (card.id == "kid-buzz") androidx.compose.ui.graphics.ColorFilter.tint(Group.DANGER.tint().ink) else null)
             Spacer(Modifier.size(8.dp))
             Text(card.title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center)
         }
@@ -279,7 +284,7 @@ internal fun KidCardBody(card: ua.sprotyv.content.Card, content: ua.sprotyv.cont
     if (!done) {
         val s = card.steps[step]
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            androidx.compose.foundation.Image(androidx.compose.ui.res.painterResource(pictureRes(card.id)), null, Modifier.size(72.dp))
+            androidx.compose.foundation.Image(androidx.compose.ui.res.painterResource(pictureRes(card.id)), null, Modifier.size(72.dp), colorFilter = if (card.id == "kid-buzz") androidx.compose.ui.graphics.ColorFilter.tint(Group.DANGER.tint().ink) else null)
             Text(
                 s.action, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center,
                 modifier = Modifier.semantics { liveRegion = androidx.compose.ui.semantics.LiveRegionMode.Polite },
