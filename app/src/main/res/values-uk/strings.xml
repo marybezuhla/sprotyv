@@ -589,6 +589,6 @@
     <string name="lock_mine_toggle_pin">Відкривати «Моє» PIN-кодом</string>
     <string name="lock_mine_trouble">Ключ зараз не відповідає. Нічого не змінено; спробуйте ще раз за мить.</string>
     <string name="welcome_restore">Перенести з іншого телефона</string>
-    <string name="backup_replace_home">Вигляд, плитки на головній і налаштування теж буде перенесено.</string>
+    <string name="backup_replace_home">Вигляд, плитки на головній і налаштування теж буде перенесено, зокрема назву «Нотатки» замість «Спротив», якщо в копії так було.</string>
     <string name="backup_restored_lock">Відновлено. У копії «Моє» відкривалося відбитком або PIN-кодом: увімкніть це знову в налаштуваннях, бо на новому телефоні новий ключ.</string>
 </resources>

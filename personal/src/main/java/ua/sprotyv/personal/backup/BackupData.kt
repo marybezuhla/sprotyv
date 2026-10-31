@@ -144,16 +144,14 @@ object BackupData {
         }
     }
 
-    /** The look and set-up: a few short names and values; anything else refuses the file. */
-    private fun homeOf(o: JSONObject): Map<String, String> {
-        require(o.length() <= MAX_HOME)
-        return o.keys().asSequence().associateWith { k ->
-            require(HOME_KEY.matches(k))
-            val v = o.get(k)
-            require(v is String && v.length <= MAX_HOME_TEXT)
-            v
-        }
-    }
+    /**
+     * The look and set-up: a few short names and values. Unlike the data, an odd entry is skipped,
+     * never the whole file, so a copy from a newer version still brings everything it can.
+     */
+    private fun homeOf(o: JSONObject): Map<String, String> =
+        o.keys().asSequence().take(MAX_HOME * 4)
+            .mapNotNull { k -> (o.opt(k) as? String)?.takeIf { HOME_KEY.matches(k) && it.length <= MAX_HOME_TEXT }?.let { k to it } }
+            .take(MAX_HOME).toMap()
 
     /** A field that must be an object or null; anything else refuses the file instead of being dropped. */
     private fun objectOrNull(o: JSONObject, name: String): JSONObject? {

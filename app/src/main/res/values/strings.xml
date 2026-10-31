@@ -583,6 +583,6 @@
     <string name="lock_mine_toggle_pin">Open “Mine” with the PIN</string>
     <string name="lock_mine_trouble">The key is not answering right now. Nothing changed; try again in a moment.</string>
     <string name="welcome_restore">Move from another phone</string>
-    <string name="backup_replace_home">The look, home-screen tiles and settings come along too.</string>
+    <string name="backup_replace_home">The look, home-screen tiles and settings come along too, including the name “Notes” instead of Sprotyv if the copy had it.</string>
     <string name="backup_restored_lock">Restored. In the copy, “Mine” opened with a fingerprint or PIN: turn that on again in settings, as a new phone has a new key.</string>
 </resources>
