@@ -65,7 +65,7 @@ fun DelegateScreen(content: Content?, n: Int, nav: Nav) {
             Text(helperName(who), style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.SemiBold)
             steps.filter { (given[it.n] ?: 0) == who }.forEach { s ->
                 Card(colors = CardDefaults.cardColors(containerColor = Group.FIRST_AID.tint().container), modifier = Modifier.fillMaxWidth()) {
-                    Text(s.text, style = MaterialTheme.typography.headlineSmall.copy(fontSize = 24.sp, lineHeight = 32.sp), modifier = Modifier.padding(16.dp))
+                    Text(s.text.replaceFirstChar { it.uppercase() }, style = MaterialTheme.typography.headlineSmall.copy(fontSize = 24.sp, lineHeight = 32.sp), modifier = Modifier.padding(16.dp))
                 }
             }
             OutlinedButton(onClick = { showing = null }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.delegate_back)) }
@@ -73,11 +73,13 @@ fun DelegateScreen(content: Content?, n: Int, nav: Nav) {
         }
         Text(stringResource(R.string.delegate_intro, p.short), style = MaterialTheme.typography.bodyLarge)
         steps.forEach { s ->
-            Block("${s.n}.", Group.FIRST_AID) {
-                Text(s.text, style = MaterialTheme.typography.bodyLarge)
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Block(stringResource(R.string.delegate_step, s.n), Group.FIRST_AID) {
+                // The order's words; only the first letter made capital for reading
+                Text(s.text.replaceFirstChar { it.uppercase() }, style = MaterialTheme.typography.bodyLarge)
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Text(stringResource(R.string.delegate_who), style = MaterialTheme.typography.labelLarge)
                     HELPERS.forEach { h ->
-                        FilterChip(selected = (given[s.n] ?: 0) == h, onClick = { given[s.n] = h }, label = { Text(helperName(h)) }, modifier = Modifier.heightIn(min = 48.dp))
+                        FilterChip(selected = (given[s.n] ?: 0) == h, onClick = { given[s.n] = h }, label = { Text(if (h == 0) stringResource(R.string.delegate_me) else "$h") }, modifier = Modifier.heightIn(min = 48.dp))
                     }
                 }
             }
