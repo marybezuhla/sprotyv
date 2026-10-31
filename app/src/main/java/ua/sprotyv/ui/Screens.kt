@@ -99,7 +99,7 @@ fun SectionScreen(section: Section, onBack: () -> Unit) {
 /**
  * No screenshots, screen recordings or app-switcher pictures while the owner's data is on screen.
  * Removed again on leaving, so the guide and cards can still be captured and shared.
- * The owner may allow them in settings (off by default, off again at every fresh start); every
+ * The owner may allow them in settings (off by default, kept until changed); every
  * screen that calls this also shows [ScreenshotsStrip], so it is never allowed unseen.
  */
 @Composable

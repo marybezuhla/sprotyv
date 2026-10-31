@@ -114,6 +114,7 @@ fun HandoverScreen(nav: Nav) {
     val tourniquets = remember { Tourniquets.all(context) }
     SecureScreen()
     Frame(stringResource(R.string.handover_title), nav::back) {
+        ScreenshotsStrip()
         Text(stringResource(R.string.handover_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Block(stringResource(R.string.handover_when), Group.FIRST_AID) {
             Text(when_?.let(::clockOf) ?: "—", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)

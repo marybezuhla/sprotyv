@@ -41,6 +41,7 @@ fun QrTextScreen(nav: Nav) {
     val tooLong = bytes > Qr.MAX_PLAN_BYTES
     SecureScreen()
     Frame(stringResource(R.string.qr_text_title), nav::back) {
+        ScreenshotsStrip()
         Text(stringResource(R.string.qr_text_intro), style = MaterialTheme.typography.bodyLarge)
         OutlinedTextField(
             value = text,

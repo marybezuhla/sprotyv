@@ -27,7 +27,6 @@ class Main : ComponentActivity() {
         if (savedInstanceState == null) Opening.take(intent)
         Widgets.sync(this)
         Notify.sync(this)
-        // Screenshots of "Mine" are for showing the app to testers: off again at every fresh start
         // Screenshots: the owner's own choice, kept until changed (a strip on every "Mine" screen says so)
         setContent {
             val prefs = HomePrefs.state.collectAsState().value ?: HomePrefs.load(this)
