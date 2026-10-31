@@ -982,4 +982,23 @@
     <string name="notify_tourniquet_item">No. %1$d — %2$d h</string>
     <string name="active_tourniquets">Tourniquets: %1$d, longest %2$s</string>
     <string name="widget_tourniquets">Tourniquets: %1$d · first %2$s</string>
+    <string name="np_title">New place</string>
+    <string name="np_hint">After leaving home: step by step</string>
+    <string name="np_intro">You have left home — what next? Steps for the first days, week, month and after, in Ukrainian. Tick what is done: only you see it.</string>
+    <string name="np_progress_title">My way in the new place</string>
+    <string name="np_progress_hint">One step at a time. Skip what does not apply to you.</string>
+    <string name="np_days">First 3 days</string>
+    <string name="np_week">First week</string>
+    <string name="np_month">First month</string>
+    <string name="np_later">3–6 months: living on</string>
+    <string name="np_abroad">If you are abroad</string>
+    <string name="np_live_on">Living on is our resistance. A community not scattered is stronger than the enemy.</string>
+    <string name="np_abroad_intro">You are part of the resistance wherever you are: volunteering, children safe with Ukraine in their hearts, ties with home.</string>
+    <string name="np_more">More</string>
+    <string name="np_less">Less</string>
+    <string name="np_where">Where: %1$s</string>
+    <string name="np_open_in_app">Open in Sprotyv</string>
+    <string name="np_changing">Rules for displaced people are changing: a new law applies from 22.10.2026 and the application procedure is being updated. Check the official site before you go.</string>
+    <string name="np_live_on_title">Living on is our resistance</string>
+    <string name="np_live_on_hint">New place after leaving: steps, rights, community</string>
 </resources>

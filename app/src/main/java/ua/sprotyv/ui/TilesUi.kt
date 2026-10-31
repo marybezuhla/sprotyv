@@ -275,6 +275,7 @@ private val Tool.title: Int get() = when (this) {
     Tool.RESIST -> R.string.resist_title
     Tool.CONSTITUTION -> R.string.const_title
     Tool.HISTORY -> R.string.history_title
+    Tool.NEW_PLACE -> R.string.np_title
 }
 
 private val Tool.hint: Int get() = when (this) {
@@ -302,6 +303,7 @@ private val Tool.hint: Int get() = when (this) {
     Tool.RESIST -> R.string.resist_hint
     Tool.CONSTITUTION -> R.string.const_hint
     Tool.HISTORY -> R.string.history_hint
+    Tool.NEW_PLACE -> R.string.np_hint
 }
 
 /** Cards and tools with a picture of their own (Health Icons, public domain), clearer than the group's. */
@@ -350,6 +352,7 @@ private val TOOL_ICONS = mapOf(
     Tool.GUIDE to R.drawable.ocha_learning,
     Tool.CONSTITUTION to R.drawable.ocha_public_information,
     Tool.HISTORY to R.drawable.ocha_calendar,
+    Tool.NEW_PLACE to R.drawable.ocha_internally_displaced,
 )
 
 private val Tool.icon: ImageVector? get() = when (this) {
@@ -394,6 +397,7 @@ val Tool.route: Route get() = when (this) {
     Tool.RESIST -> Route.Resistance
     Tool.CONSTITUTION -> Route.ConstitutionRoute("")
     Tool.HISTORY -> Route.HistoryRoute
+    Tool.NEW_PLACE -> Route.Mine(MinePart.NEW_PLACE)
 }
 
 /** The group a tile belongs to: the first that names it. "What to do now" and "I am safe" have their own. */

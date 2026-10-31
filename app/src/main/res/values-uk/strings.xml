@@ -988,4 +988,23 @@
     <string name="notify_tourniquet_item">№%1$d — %2$d год</string>
     <string name="active_tourniquets">Турнікети: %1$d, найдовший — %2$s</string>
     <string name="widget_tourniquets">Турнікети: %1$d · перший %2$s</string>
+    <string name="np_title">Нове місце</string>
+    <string name="np_hint">Після виїзду: крок за кроком</string>
+    <string name="np_intro">Виїхали з дому — і що далі? Тут кроки на перші дні, тиждень, місяць і далі. Відмічайте зроблене: це видно лише вам.</string>
+    <string name="np_progress_title">Мій шлях на новому місці</string>
+    <string name="np_progress_hint">Один крок за раз. Що не стосується вас — пропускайте.</string>
+    <string name="np_days">Перші 3 дні</string>
+    <string name="np_week">Перший тиждень</string>
+    <string name="np_month">Перший місяць</string>
+    <string name="np_later">3–6 місяців: жити далі</string>
+    <string name="np_abroad">Якщо ви за кордоном</string>
+    <string name="np_live_on">Жити далі — наш спротив. Громада, яку не розсіяли, сильніша за ворога.</string>
+    <string name="np_abroad_intro">Ви — частина спротиву, де б не були: волонтерство, діти в безпеці з українською в серці, зв\'язок із домом.</string>
+    <string name="np_more">Детальніше</string>
+    <string name="np_less">Згорнути</string>
+    <string name="np_where">Куди: %1$s</string>
+    <string name="np_open_in_app">Відкрити в «Спротиві»</string>
+    <string name="np_changing">Правила для ВПО змінюються: з 22.10.2026 діє новий закон, порядок подання заяв оновлюється. Перед зверненням перевірте на офіційному сайті.</string>
+    <string name="np_live_on_title">Жити далі — наш спротив</string>
+    <string name="np_live_on_hint">Нове місце після виїзду: кроки, права, громада</string>
 </resources>
