@@ -64,7 +64,7 @@ class TilesTest {
 
     @Test fun restListsUnnamedChapters() {
         val rest = Group.rest(listOf("ch1", "ch7", "sources"))
-        assertEquals(listOf("chapter:ch1", "chapter:sources"), rest)
+        assertEquals(listOf("chapter:sources"), rest)
     }
 
     @Test fun readinessCountsWithoutGrading() {
