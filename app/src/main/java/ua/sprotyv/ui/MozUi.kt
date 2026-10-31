@@ -96,7 +96,8 @@ fun MozScreen(content: Content?, n: Int, nav: Nav) {
 @Composable
 private fun Steps(p: Moz441.Procedure) {
     val actions = p.actions
-    p.points.drop(2).forEach { point ->
+    // Action first (the app's rule): the sequence of actions leads, signs and notes follow
+    (listOfNotNull(actions) + p.points.drop(2).filter { it != actions }).forEach { point ->
         when {
             point == actions -> Block(stringResource(R.string.moz_what_to_do), Group.FIRST_AID) {
                 point.items.forEach { step -> StepLine(step) }
