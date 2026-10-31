@@ -9,6 +9,10 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -83,26 +87,49 @@ fun Block(
     modifier: Modifier = Modifier,
     padded: Boolean = true,
     trailing: (@Composable () -> Unit)? = null,
+    /** Folded until tapped; [summary] says in the header what is inside. */
+    foldable: Boolean = false,
+    summary: String? = null,
+    leading: (@Composable () -> Unit)? = null,
     content: @Composable androidx.compose.foundation.layout.ColumnScope.() -> Unit,
 ) {
     val tint = group.tint()
+    var open by androidx.compose.runtime.saveable.rememberSaveable(title) { androidx.compose.runtime.mutableStateOf(!foldable) }
     androidx.compose.material3.Card(
         colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         border = androidx.compose.foundation.BorderStroke(1.dp, tint.container),
         modifier = modifier.fillMaxWidth(),
     ) {
+        val header = Modifier.fillMaxWidth().background(tint.container)
         Row(
-            Modifier.fillMaxWidth().background(tint.container).padding(horizontal = 16.dp, vertical = 12.dp),
+            (if (foldable) header.clickable(onClickLabel = stringResource(if (open) R.string.shelf_fold else R.string.shelf_unfold)) { open = !open }.heightIn(min = 56.dp) else header)
+                .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(title, style = BlockTitle, color = tint.ink, modifier = Modifier.weight(1f).semantics { heading() })
+            if (leading != null) {
+                leading()
+                androidx.compose.foundation.layout.Spacer(Modifier.padding(start = 12.dp))
+            }
+            androidx.compose.foundation.layout.Column(Modifier.weight(1f).semantics(mergeDescendants = true) { heading() }) {
+                Text(title, style = BlockTitle, color = tint.ink)
+                if (summary != null) Text(summary, style = MaterialTheme.typography.bodyMedium, color = tint.ink)
+            }
             trailing?.invoke()
+            if (foldable) {
+                androidx.compose.material3.Icon(
+                    if (open) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
+                    contentDescription = null,
+                    tint = tint.ink,
+                )
+            }
         }
-        androidx.compose.foundation.layout.Column(
-            if (padded) Modifier.padding(16.dp) else Modifier.padding(vertical = 4.dp),
-            verticalArrangement = Arrangement.spacedBy(if (padded) 10.dp else 0.dp),
-            content = content,
-        )
+        if (open) {
+            androidx.compose.foundation.layout.Column(
+                if (padded) Modifier.padding(16.dp) else Modifier.padding(vertical = 4.dp),
+                verticalArrangement = Arrangement.spacedBy(if (padded) 10.dp else 0.dp),
+                content = content,
+            )
+        }
     }
 }
 

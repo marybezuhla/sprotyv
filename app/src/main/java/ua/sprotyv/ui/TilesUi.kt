@@ -117,21 +117,24 @@ data class TileInfo(val id: String, val title: String, val hint: String, val ico
 
 data class Tint(val container: Color, val ink: Color)
 
+/**
+ * Four colours only, each with one meaning, after the safety colours of ISO 3864-1 that people
+ * already know from signs: orange-red for danger, green for first aid and the way out (the green
+ * first-aid cross and exit signs), blue for things to do and keep (the "mandatory" blue), and a
+ * quiet neutral for everyday life and reading. Few categories are told apart at a glance (about
+ * five or six at most); the rest is said by the icon and the words. Soft fills, so a screen of
+ * blocks stays calm, and strong colour is left for what matters.
+ */
 @Composable
 fun Group.tint(): Tint {
     val dark = LocalDark.current
     // High contrast: no pale fills, the plain text colours of the theme; icon and words still say the group
     if (LocalContrast.current) return Tint(MaterialTheme.colorScheme.surfaceVariant, MaterialTheme.colorScheme.onSurface)
     return when (this) {
-        Group.DANGER -> if (dark) Tint(Color(0xFF4A2A12), Color(0xFFFFC9A0)) else Tint(Color(0xFFFFE9D6), Color(0xFF8A3B00))
-        Group.FIRST_AID -> if (dark) Tint(Color(0xFF103F3A), Color(0xFF9EE4D9)) else Tint(Color(0xFFD5F0EC), Color(0xFF00574E))
-        Group.FAMILY -> if (dark) Tint(Color(0xFF352552), Color(0xFFD9C6F5)) else Tint(Color(0xFFECE0F7), Color(0xFF4E2A84))
-        Group.HOME_LIFE -> if (dark) Tint(Color(0xFF45380A), Color(0xFFFFE08A)) else Tint(Color(0xFFFFF1C2), Color(0xFF6B4E00))
-        Group.PREPARE -> if (dark) Tint(Color(0xFF1F3D1A), Color(0xFFB7E3A8)) else Tint(Color(0xFFDDF0D8), Color(0xFF2E5E1F))
-        Group.LEAVE -> if (dark) Tint(Color(0xFF0F3550), Color(0xFFA9D6F7)) else Tint(Color(0xFFD8ECFA), Color(0xFF0B4F7A))
-        Group.SAFETY -> if (dark) Tint(Color(0xFF2C323B), Color(0xFFC9D1DC)) else Tint(Color(0xFFE4E7EC), Color(0xFF37404D))
-        Group.MINE -> if (dark) Tint(Color(0xFF00428C), Color(0xFFD6E6F8)) else Tint(Color(0xFFD6E6F8), Color(0xFF00214A))
-        Group.GUIDE -> if (dark) Tint(Color(0xFF2E2D2A), Color(0xFFD6D3CB)) else Tint(Color(0xFFEEECE6), Color(0xFF4A4945))
+        Group.DANGER -> if (dark) Tint(Color(0xFF3D2616), Color(0xFFFFC9A0)) else Tint(Color(0xFFFFE9D6), Color(0xFF8A3B00))
+        Group.FIRST_AID, Group.LEAVE -> if (dark) Tint(Color(0xFF17352B), Color(0xFFA8DCC4)) else Tint(Color(0xFFDDF0E6), Color(0xFF1E5B40))
+        Group.PREPARE, Group.MINE, Group.FAMILY -> if (dark) Tint(Color(0xFF1A2E45), Color(0xFFBFD6F2)) else Tint(Color(0xFFDCE8F7), Color(0xFF163E6E))
+        Group.HOME_LIFE, Group.SAFETY, Group.GUIDE -> if (dark) Tint(Color(0xFF2A2B2E), Color(0xFFD0D2D6)) else Tint(Color(0xFFECEBE7), Color(0xFF45464A))
     }
 }
 
@@ -418,6 +421,10 @@ fun FullHome(content: Content?, pins: List<String>, nav: Nav, onSettings: () -> 
         item(span = { GridItemSpan(maxLineSpan) }) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(stringResource(R.string.app_name), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
+                // Search the guide from anywhere on the home screen, one tap
+                IconButton(onClick = { nav.go(Route.Search) }, modifier = Modifier.size(48.dp)) {
+                    Icon(Icons.Filled.Search, contentDescription = stringResource(R.string.search_guide))
+                }
                 CornerCall()
                 IconButton(onClick = onSettings, modifier = Modifier.size(48.dp)) {
                     Icon(Icons.Filled.Settings, contentDescription = stringResource(R.string.settings))
@@ -695,7 +702,8 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
     val canLock = Guard.available(context)
     val locked = prefs.locked
     Frame(stringResource(R.string.settings), nav::back) {
-        Text(stringResource(R.string.mode_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+        // Settings in a few calm blocks, each answering one question
+        Block(stringResource(R.string.mode_title), ua.sprotyv.home.Group.GUIDE) {
         ModeChoice(prefs.mode) { m -> HomePrefs.update(context) { it.copy(mode = m) } }
         if (prefs.mode != Mode.KID) {
             Toggle(stringResource(R.string.call_bar_toggle), prefs.callBar) { on -> HomePrefs.update(context) { it.copy(callBar = on) } }
@@ -704,7 +712,8 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
         if (prefs.mode == Mode.FULL) {
             Toggle(stringResource(R.string.ready_on_home), !prefs.readinessHidden) { on -> HomePrefs.update(context) { it.copy(readinessHidden = !on) } }
         }
-        Text(stringResource(R.string.theme_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+        }
+        Block(stringResource(R.string.theme_title), ua.sprotyv.home.Group.GUIDE) {
         ThemeChoice.entries.forEach { t ->
             val on = t == prefs.theme
             Row(
@@ -721,11 +730,14 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
             Toggle(stringResource(R.string.theme_dynamic), prefs.dynamic) { on -> HomePrefs.update(context) { it.copy(dynamic = on) } }
             Text(stringResource(R.string.theme_dynamic_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
-        if (prefs.mode != Mode.KID) {
-            NavRow(stringResource(R.string.edit_tiles), stringResource(R.string.edit_tiles_hint)) { nav.go(Route.EditTiles) }
-            NavRow(stringResource(R.string.presets_title), stringResource(R.string.presets_hint)) { nav.go(Route.Presets) }
         }
-        Text(stringResource(R.string.lock_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+        if (prefs.mode != Mode.KID) {
+            Block(stringResource(R.string.my_home), ua.sprotyv.home.Group.GUIDE, padded = false) {
+                BlockRow(stringResource(R.string.edit_tiles), stringResource(R.string.edit_tiles_hint), first = true) { nav.go(Route.EditTiles) }
+                BlockRow(stringResource(R.string.presets_title), stringResource(R.string.presets_hint)) { nav.go(Route.Presets) }
+            }
+        }
+        Block(stringResource(R.string.lock_title), ua.sprotyv.home.Group.GUIDE) {
         if (prefs.mode == Mode.KID && !locked) {
             Text(stringResource(R.string.kid_lock_advice), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
         }
@@ -759,11 +771,16 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
                 dismissButton = { androidx.compose.material3.TextButton(onClick = { askScreenshots = false }) { Text(stringResource(R.string.cancel)) } },
             )
         }
-        LockMineSettings()
-        TripToggle(prefs.trip)
-        NeutralToggle()
-        NavRow(stringResource(R.string.about_guide)) { nav.go(Route.About) }
-        FeedbackBlock()
+        }
+        Block(stringResource(R.string.lock_mine_title), ua.sprotyv.home.Group.GUIDE) { LockMineSettings() }
+        Block(stringResource(R.string.settings_other_hands), ua.sprotyv.home.Group.GUIDE) {
+            TripToggle(prefs.trip)
+            NeutralToggle()
+        }
+        Block(stringResource(R.string.settings_about), ua.sprotyv.home.Group.GUIDE) {
+            BlockRow(stringResource(R.string.about_guide), first = true) { nav.go(Route.About) }
+            FeedbackBlock()
+        }
     }
 }
 
@@ -882,7 +899,6 @@ private fun TripToggle(on: Boolean) {
     val activity = context as? android.app.Activity
     var ask by rememberSaveable { mutableStateOf(false) }
     val canLock = Guard.available(context)
-    Text(stringResource(R.string.trip_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
     val prompt = stringResource(R.string.trip_off_prompt)
     Toggle(stringResource(R.string.trip_toggle), on) { want ->
         when {

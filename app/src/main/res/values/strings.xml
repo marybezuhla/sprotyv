@@ -258,7 +258,7 @@
     <string name="mode_simple_hint">Six large buttons, nothing else</string>
     <string name="mode_full">Full</string>
     <string name="mode_full_hint">Tabs, all sections, your own home screen</string>
-    <string name="lock_title">Settings lock</string>
+    <string name="lock_title">Protecting settings and screenshots</string>
     <string name="lock_toggle">Ask for the phone’s PIN</string>
     <string name="lock_explain">So the look and tiles are not changed by accident. The app never sees or keeps the PIN.</string>
     <string name="lock_no_screen_lock">To lock settings, first turn on a screen lock in the phone’s settings.</string>
@@ -565,7 +565,7 @@
     <string name="trip_confirm_text">Nothing hidden is deleted: the data stays encrypted on the phone. Anyone who makes you unlock the phone and enter the PIN can turn the mode off and see it. Before a trip, think about what you really need to carry, and make a backup. Cards, the guide and 112 work as usual. Settings show the mode is on, so a careful look will tell something is hidden.</string>
     <string name="trip_confirm_yes">Turn on</string>
     <string name="trip_off_prompt">Turn off trip mode</string>
-    <string name="lock_mine_title">Opening “Mine”</string>
+    <string name="lock_mine_title">Lock on “Mine”: fingerprint or PIN</string>
     <string name="lock_mine_toggle">Open “Mine” with a fingerprint or PIN</string>
     <string name="lock_mine_hint">Off by default, so the medical card and “I am safe” open at once in danger. When on, “Mine” opens only after the phone\'s fingerprint or PIN, every time; without it the key to the data does not work at all. Cards, the guide and 112 open as usual.</string>
     <string name="lock_mine_pin_only">PIN only</string>
@@ -661,4 +661,11 @@
     <string name="source_section">Source: “%1$s” %2$s, sec. %3$s</string>
     <string name="source_license">Licence: %1$s</string>
     <string name="about_icons">Icons: Health Icons (healthicons.org, public domain, CC0) and Material Symbols (Google, Apache 2.0).</string>
+    <string name="ready_summary">Parts done: %1$d of %2$d</string>
+    <string name="mine_block_trouble_desc">I am safe, medical card, trusted people, plan, screen for rescuers</string>
+    <string name="mine_block_home_desc">Emergency bag, supplies at home, bookmarks</string>
+    <string name="mine_block_copies_desc">Printing, plan code, scanning, backup</string>
+    <string name="lock_mine_unknown">The lock’s state could not be read just now. Open “Mine” once and come back here.</string>
+    <string name="settings_other_hands">If the phone is in the wrong hands</string>
+    <string name="settings_about">About and feedback</string>
 </resources>
