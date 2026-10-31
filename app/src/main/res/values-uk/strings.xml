@@ -52,7 +52,7 @@
     <string name="in_detail">Детально в довіднику</string>
     <string name="source_line">Джерело: %1$s</string>
     <string name="checked_on">Звірено з джерелом: %1$s</string>
-    <string name="not_reviewed">Ще не рецензовано фахівцем. Офіційні вказівки служб — найголовніші.</string>
+    <string name="not_reviewed">Укладено за наведеними джерелами. Вказівки рятувальників і медиків на місці — найголовніші.</string>
     <string name="reviewed_by">Рецензовано: %1$s</string>
     <string name="in_the_guide">У довіднику</string>
     <string name="search_guide">Пошук у довіднику</string>

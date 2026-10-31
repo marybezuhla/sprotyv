@@ -426,7 +426,7 @@ fun Source(card: Card) {
         Text(
             if (card.reviewedBy.isBlank()) stringResource(R.string.not_reviewed) else stringResource(R.string.reviewed_by, card.reviewedBy),
             style = MaterialTheme.typography.bodySmall,
-            color = if (card.reviewedBy.isBlank()) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }
