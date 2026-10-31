@@ -234,7 +234,7 @@ private fun TableView(t: Block.Table) {
                     if (r > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                     Row(Modifier.padding(horizontal = 8.dp, vertical = 6.dp)) {
                         row.cells.forEach { cell ->
-                            RichText(cell, style = if (row.head) MaterialTheme.typography.labelMedium else MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
+                            RichText(cell, style = if (row.head) MaterialTheme.typography.bodyMedium.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold) else MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
                         }
                     }
                 }
@@ -242,8 +242,12 @@ private fun TableView(t: Block.Table) {
             }
             rows.forEachIndexed { r, row ->
                 if (r > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-                val title = row.cells.firstOrNull().orEmpty()
-                val second = row.cells.getOrNull(1).orEmpty()
+                // A row that starts with its number ("1", "2") reads as "1. Shelter", not a lone digit
+                val numbered = row.cells.size >= 2 && row.cells[0].trim().replace("**", "").matches(Regex("\\d{1,2}"))
+                val cells = if (numbered) listOf(row.cells[0].trim().replace("**", "") + ". " + row.cells[1]) + row.cells.drop(2) else row.cells
+                val head2 = if (numbered && head != null) listOf("") + head.drop(2) else head
+                val title = cells.firstOrNull().orEmpty()
+                val second = cells.getOrNull(1).orEmpty()
                 // A short second value (an amount, a time) goes on the title's line
                 val inline = second.isNotBlank() && second.length <= 22
                 Column(Modifier.padding(horizontal = 12.dp, vertical = 10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -254,15 +258,15 @@ private fun TableView(t: Block.Table) {
                             RichText(second.replace("**", ""), style = MaterialTheme.typography.bodyLarge.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold))
                         }
                     }
-                    val rest = row.cells.drop(if (inline) 2 else 1)
+                    val rest = cells.drop(if (inline) 2 else 1)
                     rest.forEachIndexed { k, cell ->
                         if (cell.isBlank()) return@forEachIndexed
-                        val name = head?.getOrNull(k + if (inline) 2 else 1)?.replace("**", "")
+                        val name = head2?.getOrNull(k + if (inline) 2 else 1)?.replace("**", "")
                         // Column names only where two or more texts sit under the title and must be told apart
                         if (rest.size >= 2 && !name.isNullOrBlank()) {
-                            Text(name, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text(name, style = MaterialTheme.typography.bodyMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
-                        RichText(cell, style = MaterialTheme.typography.bodyMedium)
+                        RichText(cell, style = ReadingText)
                     }
                 }
             }
