@@ -303,7 +303,7 @@
     <string name="backup_saved">Копію збережено й перевірено.</string>
     <string name="backup_failed">Не вдалося. Нічого не змінено; спробуйте ще раз.</string>
     <string name="backup_existing">Цей файл уже щось містить. Виберіть нову назву — старі копії не перезаписуються.</string>
-    <string name="backup_wrong_password">Пароль не підходить або файл пошкоджено.</string>
+    <string name="backup_wrong_password">Пароль не підходить або файл пошкоджено. Перевірте розкладку клавіатури (латиниця), зайві літери й пробіли.</string>
     <string name="backup_from_newer">Цю копію зроблено новішою версією «Спротиву». Спершу оновіть застосунок.</string>
     <string name="backup_not_ours">Це не копія «Спротиву» або файл пошкоджено.</string>
     <string name="backup_restored">Дані відновлено.</string>
@@ -975,4 +975,7 @@
     <string name="history_prev">Попередня</string>
     <string name="history_next">Наступна</string>
     <string name="history_all">Усі історії</string>
+    <string name="ok">Гаразд</string>
+    <string name="backup_done_title">Готово</string>
+    <string name="backup_problem_title">Не вийшло</string>
 </resources>
