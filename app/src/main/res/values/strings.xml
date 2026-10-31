@@ -171,7 +171,7 @@
     <string name="print_title">Print (PDF)</string>
     <string name="print_hint">Plan, medical card and contacts on paper</string>
     <string name="print_intro">Phones run out of power. Keep a paper copy at home and in the bag.</string>
-    <string name="print_owner_button">Save the PDF: plan, medical card, contacts</string>
+    <string name="print_owner_button">Save PDF</string>
     <string name="print_owner_title">Family plan and medical card</string>
     <string name="print_private">Personal. Keep it where strangers cannot see it.</string>
     <string name="print_services">Emergency numbers</string>
@@ -871,4 +871,6 @@
     <string name="resist_all_desc">My path, first aid, the go-bag, the plan, rights, facts, from every section</string>
     <string name="resist_all_rights">Rights of service members and families, lawyers, veterans\' lines</string>
     <string name="shelf_resist_desc">Everyone\'s part, where to learn, supporting the country, resilience</string>
+    <string name="print_choose">What goes on paper</string>
+    <string name="lock_mine_112_hint">The medical card and «I am safe» are behind the lock too. Calling 112 always works.</string>
 </resources>
