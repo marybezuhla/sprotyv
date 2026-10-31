@@ -111,7 +111,7 @@ fun HandoverScreen(nav: Nav) {
     var what by remember { mutableStateOf("") }
     var notes by remember { mutableStateOf("") }
     val done = remember { mutableStateListOf<Pair<Int, Long>>() }
-    val tourniquet = remember { tourniquetAt(context) }
+    val tourniquets = remember { Tourniquets.all(context) }
     SecureScreen()
     Frame(stringResource(R.string.handover_title), nav::back) {
         Text(stringResource(R.string.handover_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -121,7 +121,7 @@ fun HandoverScreen(nav: Nav) {
         }
         OutlinedTextField(value = what, onValueChange = { what = it.take(500) }, label = { Text(stringResource(R.string.handover_what)) }, minLines = 2, modifier = Modifier.fillMaxWidth())
         Block(stringResource(R.string.handover_done), Group.FIRST_AID) {
-            if (tourniquet != null) Text(stringResource(R.string.handover_tourniquet, clockOf(tourniquet)), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
+            tourniquets.forEach { t -> Text(tourniquetLine(context, t, tourniquets.size), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold) }
             Text(stringResource(R.string.handover_tap), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 HANDOVER_ACTIONS.forEach { a ->
@@ -138,7 +138,7 @@ fun HandoverScreen(nav: Nav) {
             append(context.getString(R.string.handover_title)); append('\n')
             when_?.let { append(context.getString(R.string.handover_when)).append(": ").append(clockOf(it)).append('\n') }
             if (what.isNotBlank()) append(context.getString(R.string.handover_what)).append(": ").append(what.trim()).append('\n')
-            tourniquet?.let { append(context.getString(R.string.handover_tourniquet, clockOf(it))).append('\n') }
+            tourniquets.forEach { append(tourniquetLine(context, it, tourniquets.size)).append('\n') }
             done.forEach { (a, t) -> append(clockOf(t)).append(" — ").append(context.getString(a)).append('\n') }
             if (notes.isNotBlank()) append(notes.trim())
         }.trim()
@@ -164,8 +164,11 @@ private val HANDOVER_ACTIONS = listOf(
 
 private fun clockOf(t: Long): String = Instant.ofEpochMilli(t).atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("HH:mm"))
 
-/** The tourniquet time kept by the bleeding card (a day at most), or null. */
-private fun tourniquetAt(context: Context): Long? {
-    val t = context.applicationContext.getSharedPreferences("tourniquet", Context.MODE_PRIVATE).getLong("at", 0L)
-    return t.takeIf { it > 0 && System.currentTimeMillis() - it < 24 * 3600_000L }
+/** "№2 — girl, left arm — put on at 14:05 (1 h 40 min)": what the crew needs about each tourniquet. */
+private fun tourniquetLine(context: Context, t: Tourniquets.One, count: Int): String {
+    val minutes = ((System.currentTimeMillis() - t.at) / 60_000).coerceAtLeast(0)
+    val base = context.getString(R.string.handover_tourniquet_line, clockOf(t.at), minutes / 60, minutes % 60)
+    val who = t.note.takeIf { it.isNotBlank() }?.let { " — $it" }.orEmpty()
+    return (if (count > 1) "№${t.n}$who: " else if (who.isNotEmpty()) "${t.note}: " else "") + base
+}
 }

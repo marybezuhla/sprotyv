@@ -367,7 +367,7 @@
     <string name="safe_quiet_message">Не можу говорити, але я на зв\'язку. Пиши, не дзвони.</string>
     <string name="tourniquet_on">⏱ Турнікет накладено — засікти час</string>
     <string name="tourniquet_since">Минуло: %1$d год %2$02d хв</string>
-    <string name="tourniquet_write">Запишіть цей час маркером на турнікеті або на лобі пораненої людини. Не послаблюйте турнікет: знімає лише медик. Час скажіть медикам. Кілька поранених — пишіть час на кожному.</string>
+    <string name="tourniquet_write">Запишіть цей час маркером на турнікеті або на лобі пораненої людини. Не послаблюйте турнікет: знімає лише медик. Час скажіть медикам. Кілька поранених — пишіть час на кожному турнікеті: телефон може розрядитися.</string>
     <string name="tourniquet_reset">Скинути час</string>
     <string name="tourniquet_mark">Т %1$s</string>
     <string name="situation_title">Ситуація</string>
@@ -978,4 +978,15 @@
     <string name="ok">Гаразд</string>
     <string name="backup_done_title">Готово</string>
     <string name="backup_problem_title">Не вийшло</string>
+    <string name="tourniquets_count">Турнікети: %1$d</string>
+    <string name="tourniquet_note">Кому й куди</string>
+    <string name="tourniquet_note_hint">Напр.: дівчина, ліва рука</string>
+    <string name="tourniquet_earlier">−%1$d хв</string>
+    <string name="tourniquet_handed">Передали медикам</string>
+    <string name="tourniquet_another">＋ Ще один турнікет</string>
+    <string name="handover_tourniquet_line">турнікет накладено о %1$s (минуло %2$d год %3$02d хв)</string>
+    <string name="notify_tourniquets_on">Турнікети: %1$d · перший Т %2$s</string>
+    <string name="notify_tourniquet_title_many">Турнікет %1$s: минуло %2$d год</string>
+    <string name="active_tourniquets">Турнікети: %1$d, найдовший — %2$s</string>
+    <string name="widget_tourniquets">Турнікети: %1$d · перший %2$s</string>
 </resources>

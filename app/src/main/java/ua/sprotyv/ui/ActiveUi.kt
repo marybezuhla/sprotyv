@@ -86,8 +86,11 @@ private fun running(context: Context, now: Long): List<Running> {
     val out = ArrayList<Running>()
     fun prefs(name: String) = context.applicationContext.getSharedPreferences(name, Context.MODE_PRIVATE)
     // Tourniquet: a day at most, as on the card
-    prefs("tourniquet").getLong("at", 0L).takeIf { it > 0 && now - it in 0 until 24 * 3600_000L }?.let {
-        out += Running(stringResource(R.string.active_tourniquet, span((now - it) / 60_000)), Group.DANGER, Route.CardRoute("bleeding"))
+    Tourniquets.all(context, now).let { list ->
+        val first = list.firstOrNull() ?: return@let
+        val words = if (list.size == 1) stringResource(R.string.active_tourniquet, span((now - first.at) / 60_000))
+            else stringResource(R.string.active_tourniquets, list.size, span((now - first.at) / 60_000))
+        out += Running(words, Group.DANGER, Route.CardRoute("bleeding"))
     }
     // The wait after a strike: three hours at most, as on the card
     prefs("wait").let { p ->

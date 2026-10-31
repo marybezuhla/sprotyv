@@ -147,7 +147,7 @@ private fun CardBody(card: Card, content: Content, nav: Nav) {
         }
     }
 
-    if (card.id == "bleeding") TourniquetTime()
+    if (card.id == "bleeding") TourniquetTime(nav)
 
     if (all) {
         card.steps.forEachIndexed { i, s ->
@@ -262,59 +262,71 @@ private fun CardBody(card: Card, content: Content, nav: Nav) {
 }
 
 /**
- * The tourniquet time (guide 7.2: write it on the tourniquet or the forehead, "Т 14:25", for the
- * medics; never loosen it). One tap keeps the time and shows it large, with how long it has been.
- * Only a time is kept, on this phone, until reset or for a day; nothing about the person. Kept
- * outside the encrypted data on purpose, so it works at once on a card (a decision on record).
+ * The tourniquet times (guide 7.2: write the time on the tourniquet or the forehead, "Т 14:25", for
+ * the medics; never loosen it). One tap keeps the time; after a strike there may be several people,
+ * so each tourniquet has its number, how long it has been on and an optional short note to tell
+ * people apart ("girl, left arm"). Kept outside the encrypted data on purpose, so it works at once
+ * (a decision on record); see [Tourniquets].
  */
 @Composable
-private fun TourniquetTime() {
+private fun TourniquetTime(nav: Nav? = null) {
     val context = LocalContext.current
-    val prefs = remember { context.applicationContext.getSharedPreferences("tourniquet", android.content.Context.MODE_PRIVATE) }
-    var at by remember {
-        val kept = prefs.getLong("at", 0L)
-        // Older than a day: removed from the phone, not just hidden
-        if (kept > 0 && System.currentTimeMillis() - kept >= 24 * 3600_000L) prefs.edit().remove("at").apply()
-        mutableStateOf(kept.takeIf { it > 0 && System.currentTimeMillis() - it < 24 * 3600_000L })
-    }
+    var version by remember { mutableStateOf(0) }
     var now by remember { mutableStateOf(System.currentTimeMillis()) }
-    LaunchedEffect(at) {
-        while (at != null) {
-            now = System.currentTimeMillis()
+    val list = remember(version, now / 60_000) { Tourniquets.all(context, now) }
+    LaunchedEffect(list.isNotEmpty()) {
+        while (list.isNotEmpty()) {
             kotlinx.coroutines.delay(15_000)
+            now = System.currentTimeMillis()
         }
     }
-    val time = at
-    if (time == null) {
-        OutlinedButton(onClick = {
-            val t = System.currentTimeMillis()
-            prefs.edit().putLong("at", t).commit()
-            Notify.sync(context)
-            at = t
-            now = t
-        }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+    fun changed() { Notify.sync(context); version++; now = System.currentTimeMillis() }
+    if (list.isEmpty()) {
+        OutlinedButton(onClick = { Tourniquets.add(context); changed() }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
             Text(stringResource(R.string.tourniquet_on), style = MaterialTheme.typography.titleMedium)
         }
         return
     }
-    val clock = java.time.Instant.ofEpochMilli(time).atZone(java.time.ZoneId.systemDefault()).toLocalTime()
-    val label = stringResource(R.string.tourniquet_mark, String.format(java.util.Locale.ROOT, "%02d:%02d", clock.hour, clock.minute))
-    val minutes = ((now - time) / 60_000).coerceAtLeast(0)
     // Running now: the danger colour of the whole app, the same as on the home screen
     val tint = ua.sprotyv.home.Group.DANGER.tint()
-    Card(
-        colors = CardDefaults.cardColors(containerColor = tint.container, contentColor = tint.ink),
-        border = BorderStroke(2.dp, urgent().edge),
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(label, style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.Bold)
-            Text(stringResource(R.string.tourniquet_since, minutes / 60, minutes % 60), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-            Text(stringResource(R.string.tourniquet_write), style = MaterialTheme.typography.bodyLarge)
-            OutlinedButton(onClick = { prefs.edit().remove("at").commit(); Notify.sync(context); at = null }, modifier = Modifier.heightIn(min = 48.dp)) {
-                Text(stringResource(R.string.tourniquet_reset), color = tint.ink)
+    if (list.size > 1) Text(stringResource(R.string.tourniquets_count, list.size), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+    list.forEach { t ->
+        val clock = java.time.Instant.ofEpochMilli(t.at).atZone(java.time.ZoneId.systemDefault()).toLocalTime()
+        val mark = stringResource(R.string.tourniquet_mark, String.format(java.util.Locale.ROOT, "%02d:%02d", clock.hour, clock.minute))
+        val minutes = ((now - t.at) / 60_000).coerceAtLeast(0)
+        Card(
+            colors = CardDefaults.cardColors(containerColor = tint.container, contentColor = tint.ink),
+            border = BorderStroke(2.dp, urgent().edge),
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(if (list.size > 1) "№${t.n} · $mark" else mark, style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.tourniquet_since, minutes / 60, minutes % 60), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                // Who and where, in own words; not needed to start, written when there is a moment
+                var note by remember(t.n) { mutableStateOf(t.note) }
+                androidx.compose.material3.OutlinedTextField(
+                    value = note,
+                    onValueChange = { v -> note = v.take(Tourniquets.NOTE_MAX); Tourniquets.note(context, t.n, note) },
+                    label = { Text(stringResource(R.string.tourniquet_note)) },
+                    placeholder = { Text(stringResource(R.string.tourniquet_note_hint)) },
+                    singleLine = true, modifier = Modifier.fillMaxWidth(),
+                )
+                androidx.compose.foundation.layout.Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    // Put on before the tap: the time moved back
+                    OutlinedButton(onClick = { Tourniquets.shift(context, t.n, -5); changed() }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.tourniquet_earlier, 5), color = tint.ink) }
+                    OutlinedButton(onClick = { Tourniquets.remove(context, t.n); changed() }, modifier = Modifier.weight(1f).heightIn(min = 48.dp)) { Text(stringResource(R.string.tourniquet_handed), color = tint.ink) }
+                }
             }
         }
+    }
+    Text(stringResource(R.string.tourniquet_write), style = MaterialTheme.typography.bodyLarge)
+    if (list.size < Tourniquets.MAX) {
+        OutlinedButton(onClick = { Tourniquets.add(context); changed() }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+            Text(stringResource(R.string.tourniquet_another), style = MaterialTheme.typography.titleMedium)
+        }
+    }
+    nav?.let { n ->
+        OutlinedButton(onClick = { n.go(Route.Handover) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.handover_button)) }
     }
 }
 
