@@ -50,6 +50,7 @@ import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Warning
@@ -241,6 +242,7 @@ private val Tool.title: Int get() = when (this) {
     Tool.PRACTICE -> R.string.practice_title
     Tool.QR_TEXT -> R.string.qr_text_title
     Tool.MOZ -> R.string.moz_short
+    Tool.RESIST -> R.string.resist_title
 }
 
 private val Tool.hint: Int get() = when (this) {
@@ -265,6 +267,7 @@ private val Tool.hint: Int get() = when (this) {
     Tool.PRACTICE -> R.string.practice_hint
     Tool.QR_TEXT -> R.string.qr_text_hint
     Tool.MOZ -> R.string.moz_hint
+    Tool.RESIST -> R.string.resist_hint
 }
 
 /** Cards and tools with a picture of their own (Health Icons, public domain), clearer than the group's. */
@@ -296,6 +299,7 @@ private val Tool.icon: ImageVector? get() = when (this) {
     Tool.PEOPLE -> Icons.Filled.Person
     Tool.SUPPLIES -> Icons.Filled.ShoppingCart
     Tool.PRACTICE -> Icons.Filled.PlayArrow
+    Tool.RESIST -> Icons.Filled.Star
     Tool.PRINT, Tool.RESCUER, Tool.SCAN, Tool.QR_TEXT -> Icons.Filled.Share
     else -> null
 }
@@ -322,6 +326,7 @@ val Tool.route: Route get() = when (this) {
     Tool.PRACTICE -> Route.PracticeRoute("")
     Tool.QR_TEXT -> Route.QrText
     Tool.MOZ -> Route.MozList
+    Tool.RESIST -> Route.Resistance
 }
 
 /** The group a tile belongs to: the first that names it. "What to do now" and "I am safe" have their own. */
@@ -522,7 +527,7 @@ fun SectionsList(content: Content?, pins: List<String>, nav: Nav, onPin: (String
     if (full) Text(stringResource(R.string.pins_full), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     val links = content.links
     val lists = Group.entries.map { Shelf(it.title, it.desc, it, it.tiles) } +
-        Shelf(R.string.situation_title, R.string.shelf_situation_desc, Group.GUIDE, links.filter { it.group != ua.sprotyv.content.Link.POWER && it.group !in ua.sprotyv.content.Link.DIRECTORY }.map { Tiles.link(it.id) }) +
+        Shelf(R.string.situation_title, R.string.shelf_situation_desc, Group.GUIDE, links.filter { it.group != ua.sprotyv.content.Link.POWER && it.group !in ua.sprotyv.content.Link.DIRECTORY && it.group !in ua.sprotyv.content.Link.RESIST }.map { Tiles.link(it.id) }) +
         Shelf(R.string.power_title, R.string.shelf_power_desc, Group.HOME_LIFE, links.filter { it.group == ua.sprotyv.content.Link.POWER }.map { Tiles.link(it.id) }) +
         Shelf(R.string.dir_title, R.string.shelf_dir_desc, Group.GUIDE, links.filter { it.group in ua.sprotyv.content.Link.DIRECTORY }.map { Tiles.link(it.id) }) +
         Shelf(R.string.group_rest, R.string.shelf_rest_desc, Group.GUIDE, Group.rest(content.guide.chapters.map { it.id }))

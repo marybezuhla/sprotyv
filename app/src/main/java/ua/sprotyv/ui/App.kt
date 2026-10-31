@@ -207,6 +207,7 @@ private fun Screen(
             MinePart.KID_CALL -> Personal(R.string.kid_call_family, personal, nav) { KidCallScreen() }
             MinePart.BOOKMARKS -> Personal(R.string.bookmarks_title, personal, nav) { BookmarksScreen() }
             MinePart.NOTES -> Personal(R.string.notes_title_screen, personal, nav) { NotesScreen(nav) }
+            MinePart.PATH -> Personal(R.string.path_title, personal, nav) { PathScreen(nav) }
         }
         Route.Scan -> ScanScreen(nav)
         Route.SuppliesRoute -> Personal(R.string.supplies, personal, nav) { SuppliesScreen(content, nav) }
@@ -231,6 +232,7 @@ private fun Screen(
         Route.QrText -> QrTextScreen(nav)
         is Route.NoteEdit -> Personal(R.string.notes_title_screen, personal, nav) { NoteEditScreen(top.id, nav) }
         Route.MozList -> MozListScreen(content, nav)
+        Route.Resistance -> ResistanceScreen(content, nav)
         is Route.Moz -> MozScreen(content, top.n, nav)
         is Route.PracticeRoute -> PracticeScreen(content, top.card, nav)
         is Route.External -> {}
