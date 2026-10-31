@@ -53,6 +53,11 @@ fun MozListScreen(content: Content?, nav: Nav) {
         val moz = content.moz441 ?: return@Frame Broken()
         val medic = HomePrefs.state.collectAsState().value?.medic == true
         Text(stringResource(if (medic) R.string.moz_intro_medic else R.string.moz_intro), style = MaterialTheme.typography.bodyLarge)
+        if (medic) {
+            Block(stringResource(R.string.medic_tools), Group.FIRST_AID, padded = false) {
+                BlockRow(stringResource(R.string.handover_button), stringResource(R.string.handover_hint), first = true) { nav.go(Route.Handover) }
+            }
+        }
         // Search across all 29 procedures, word for word
         var query by rememberSaveable { mutableStateOf("") }
         androidx.compose.material3.OutlinedTextField(
@@ -122,6 +127,11 @@ fun MozScreen(content: Content?, n: Int, nav: Nav) {
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        // For someone who knows the procedure: hand its steps to people nearby; notes for the crew
+        if (p.actions != null) {
+            OutlinedButton(onClick = { nav.go(Route.Delegate(p.n)) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.delegate_button)) }
+        }
+        OutlinedButton(onClick = { nav.go(Route.Handover) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.handover_button)) }
         OutlinedButton(onClick = { nav.go(Route.MozList) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.moz_all)) }
     }
 }
