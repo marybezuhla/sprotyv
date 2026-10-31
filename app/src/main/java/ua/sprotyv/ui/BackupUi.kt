@@ -248,7 +248,8 @@ object BackupJobs {
             val ok = withTimeoutOrNull(20_000) { PersonalStore.read { BackupData.replaceAll(it, snap, BACKED_UP_SETTINGS); true } } == true
             if (!ok) return@job R.string.backup_restore_failed
             // The look and set-up too, so nothing has to be set up again on a new phone
-            withContext(Dispatchers.Main) { restoreHome(app, snap.home) }
+            // The data is back even if the look could not be set: never report that as a failure
+            runCatching { withContext(Dispatchers.Main) { restoreHome(app, snap.home) } }
             if (snap.home["lock_mine"] == "true" && PersonalStore.lockMode(app)?.locked != true) R.string.backup_restored_lock
             else R.string.backup_restored
         }

@@ -66,8 +66,11 @@ class BackupTest {
     @Test fun homeSetUpTravelsAndOlderCopiesStillOpen() {
         val older = org.json.JSONObject(String(BackupData.encode(snapshot))).apply { remove("home") }.toString()
         assertEquals(emptyMap<String, String>(), BackupData.decode(older.toByteArray()).home)
-        val bad = String(BackupData.encode(snapshot)).replace("\"mode\"", "\"Mode!\"")
-        expect<BackupData.Incompatible> { BackupData.decode(bad.toByteArray()) }
+        // Odd entries are skipped, the rest of the copy still opens
+        val odd = org.json.JSONObject(String(BackupData.encode(snapshot))).apply {
+            getJSONObject("home").put("Mode!", "x").put("long", "x".repeat(5000)).put("number", 5)
+        }.toString()
+        assertEquals(snapshot.home, BackupData.decode(odd.toByteArray()).home)
     }
 
     @Test fun foreignOrBrokenFilesAreRefused() {
