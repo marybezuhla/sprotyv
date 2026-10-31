@@ -254,6 +254,32 @@ fun NoteEditScreen(id: Long, nav: Nav) {
             Text(stringResource(R.string.delete_row), color = MaterialTheme.colorScheme.error)
         }
     }
+    // Sending openly: the text leaves the encryption, so the owner reads what that means first
+    var confirmSend by remember { mutableStateOf(false) }
+    OutlinedButton(enabled = whole.isNotBlank(), onClick = { confirmSend = true }, modifier = Modifier.heightIn(min = 48.dp)) {
+        Text(stringResource(R.string.notes_send_open))
+    }
+    if (confirmSend) {
+        AlertDialog(
+            onDismissRequest = { confirmSend = false },
+            title = { Text(stringResource(R.string.notes_send_title)) },
+            text = { Text(stringResource(R.string.notes_send_warning)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    confirmSend = false
+                    val send = android.content.Intent(android.content.Intent.ACTION_SEND).setType("text/plain")
+                        .putExtra(android.content.Intent.EXTRA_TEXT, whole)
+                    val chooser = android.content.Intent.createChooser(send, null)
+                        // Never back into Sprotyv's own "Share" entry (it keeps web pages)
+                        .putExtra(android.content.Intent.EXTRA_EXCLUDE_COMPONENTS, arrayOf(android.content.ComponentName(context, "ua.sprotyv.ShareIn")))
+                    // The chooser is our own window: "Mine" stays open behind it for a while
+                    Away.forOwnWindow()
+                    try { context.startActivity(chooser) } catch (e: Exception) { Away.back() }
+                }) { Text(stringResource(R.string.notes_send_yes)) }
+            },
+            dismissButton = { TextButton(onClick = { confirmSend = false }) { Text(stringResource(R.string.cancel)) } },
+        )
+    }
     if (whole.isNotBlank() && !fits) Text(stringResource(R.string.notes_too_long_for_qr), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     Text(stringResource(R.string.notes_saved_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     if (confirmDelete) {

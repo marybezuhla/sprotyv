@@ -859,4 +859,8 @@
     <string name="path_home_all">Мій шлях пройдено</string>
     <string name="resist_support_title">Підтримати країну</string>
     <string name="resist_support_intro">Гроші, кров, пильність. Донатьте лише через офіційні сайти: шахраї роблять копії відомих фондів.</string>
+    <string name="notes_send_open">Надіслати відкритим текстом…</string>
+    <string name="notes_send_title">Текст вийде з шифрування</string>
+    <string name="notes_send_warning">Застосунок, куди ви надсилаєте (пошта, месенджер), і його сервери бачитимуть цей текст, а копія лишиться там. Не надсилайте так паролі, номери документів чи карток. Для телефона поруч безпечніше показати QR-код.</string>
+    <string name="notes_send_yes">Надіслати</string>
 </resources>
