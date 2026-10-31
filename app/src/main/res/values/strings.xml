@@ -902,4 +902,24 @@
     <string name="widget_now_desc">One big button to the action cards</string>
     <string name="widget_running_desc">Tourniquet, the wait after a strike, shelter, power: a live count</string>
     <string name="widget_path_desc">The level of My path, without details</string>
+    <string name="widget_tile_label">Part of Sprotyv</string>
+    <string name="widget_tile_desc">Any card, guide chapter or tool</string>
+    <string name="widget_tile_choose">Tap to choose</string>
+    <string name="widget_tile_pick">What should the widget show?</string>
+    <string name="widget_tile_pick_hint">The widget shows only the name; a tap opens it.</string>
+    <string name="widget_services_label">Emergency numbers</string>
+    <string name="widget_services_desc">112, 101, 102, 103, 104: a tap opens the dialler</string>
+    <string name="widget_kid_label">For a child</string>
+    <string name="widget_kid_desc">Siren, fire, lost, call family</string>
+    <string name="widget_safe_desc">Straight to I am safe</string>
+    <string name="widget_kit_desc">How much of the go-bag is packed, numbers only</string>
+    <string name="widget_kit_open">Tap to open</string>
+    <string name="widget_kid_siren">Siren</string>
+    <string name="widget_kid_fire">Fire</string>
+    <string name="widget_kid_lost">Lost</string>
+    <string name="widget_kid_call">Family</string>
+    <string name="shortcut_now">What to do</string>
+    <string name="shortcut_safe">I am safe</string>
+    <string name="shortcut_tourniquet">Tourniquet</string>
+    <string name="shortcut_tourniquet_long">Bleeding: tourniquet and time</string>
 </resources>

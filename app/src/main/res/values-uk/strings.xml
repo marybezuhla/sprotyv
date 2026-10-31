@@ -908,4 +908,24 @@
     <string name="widget_now_desc">Одна велика кнопка до карток дій</string>
     <string name="widget_running_desc">Турнікет, очікування після удару, укриття, світло — живий відлік</string>
     <string name="widget_path_desc">Рівень «Мого шляху» без подробиць</string>
+    <string name="widget_tile_label">Частина «Спротиву»</string>
+    <string name="widget_tile_desc">Будь-яка картка, розділ довідника чи інструмент</string>
+    <string name="widget_tile_choose">Торкніться, щоб вибрати</string>
+    <string name="widget_tile_pick">Що показати на віджеті?</string>
+    <string name="widget_tile_pick_hint">Віджет показуватиме лише назву; дотик відкриє вибране.</string>
+    <string name="widget_services_label">Номери служб</string>
+    <string name="widget_services_desc">112, 101, 102, 103, 104: дотик відкриває набирач</string>
+    <string name="widget_kid_label">Для дитини</string>
+    <string name="widget_kid_desc">Сирена, вогонь, загубився, подзвонити своїм</string>
+    <string name="widget_safe_desc">Швидко до «Я в безпеці»</string>
+    <string name="widget_kit_desc">Скільки зібрано у валізі — лише числа</string>
+    <string name="widget_kit_open">Торкніться, щоб відкрити</string>
+    <string name="widget_kid_siren">Сирена</string>
+    <string name="widget_kid_fire">Вогонь</string>
+    <string name="widget_kid_lost">Загубився</string>
+    <string name="widget_kid_call">Своїм</string>
+    <string name="shortcut_now">Що робити</string>
+    <string name="shortcut_safe">Я в безпеці</string>
+    <string name="shortcut_tourniquet">Турнікет</string>
+    <string name="shortcut_tourniquet_long">Кровотеча: турнікет і час</string>
 </resources>

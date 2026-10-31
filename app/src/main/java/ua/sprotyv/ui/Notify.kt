@@ -372,7 +372,7 @@ object Opening {
         if (intent?.component?.className != Main::class.java.name) return
         val t = try { intent.getStringExtra(EXTRA) } catch (e: Exception) { null } ?: return
         intent.removeExtra(EXTRA)
-        if (t in FIXED || NOTE.matches(t)) _target.value = t
+        if (t in FIXED || NOTE.matches(t) || TILE.matches(t)) _target.value = t
     }
 
     fun clear() { _target.value = null }
@@ -386,9 +386,24 @@ object Opening {
         "supplies" -> Route.SuppliesRoute
         "kit" -> Route.Mine(MinePart.KIT)
         "path" -> Route.Mine(MinePart.PATH)
-        else -> t.removePrefix("note/").toLongOrNull()?.let { Route.NoteEdit(it) }
+        "safe" -> Route.Open(Section.SAFE)
+        "kidcall" -> Route.Mine(MinePart.KID_CALL)
+        else -> if (TILE.matches(t)) tileRoute(t.removePrefix("tile/")) else t.removePrefix("note/").toLongOrNull()?.let { Route.NoteEdit(it) }
     }
 
-    private val FIXED = setOf("bleeding", "now", "alarm", "power", "supplies", "kit", "path")
+    private val FIXED = setOf("bleeding", "now", "alarm", "power", "supplies", "kit", "path", "safe", "kidcall")
+    /** A tile the owner put on the home screen as a widget. */
+    private val TILE = Regex("^tile/(card|chapter|tool|link):[A-Za-z0-9_-]{1,40}$")
+
+    private fun tileRoute(id: String): Route? {
+        val (kind, value) = id.split(":", limit = 2)
+        return when (kind) {
+            "card" -> Route.CardRoute(value)
+            "chapter" -> Route.ChapterRoute(value)
+            "tool" -> ua.sprotyv.home.Tool.entries.firstOrNull { it.name == value }?.route
+            "link" -> Route.External(value)
+            else -> null
+        }
+    }
     private val NOTE = Regex("^note/[0-9]{1,18}$")
 }
