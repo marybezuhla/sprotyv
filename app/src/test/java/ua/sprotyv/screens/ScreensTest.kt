@@ -33,7 +33,10 @@ import ua.sprotyv.ui.GuideSectionScreen
 import ua.sprotyv.ui.HomePrefs
 import ua.sprotyv.ui.KidHome
 import ua.sprotyv.ui.Nav
+import ua.sprotyv.ui.MozListScreen
+import ua.sprotyv.ui.MozScreen
 import ua.sprotyv.ui.PowerScreen
+import ua.sprotyv.ui.QrTextScreen
 import ua.sprotyv.ui.PracticeScreen
 import ua.sprotyv.ui.Route
 import ua.sprotyv.ui.SectionsList
