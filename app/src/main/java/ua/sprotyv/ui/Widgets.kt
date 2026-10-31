@@ -25,6 +25,8 @@ object Widgets {
     fun update(context: Context) {
         val app = context.applicationContext
         val manager = AppWidgetManager.getInstance(app) ?: return
+        // Neutral icon: nothing that could name Sprotyv, even if a launcher still holds a widget
+        if (Neutral.isOn(app)) return blankAll(app, manager)
         try {
             ids(app, manager, NowWidget::class.java).forEach { manager.updateAppWidget(it, now(app)) }
             ids(app, manager, RunningWidget::class.java).forEach { manager.updateAppWidget(it, running(app)) }
@@ -34,9 +36,23 @@ object Widgets {
         }
     }
 
+    /** Every placed widget emptied: some launchers keep the last picture of a removed widget. */
+    private fun blankAll(app: Context, manager: AppWidgetManager) {
+        try {
+            PROVIDERS.forEach { cls -> ids(app, manager, cls).forEach { manager.updateAppWidget(it, RemoteViews(app.packageName, R.layout.widget_blank)) } }
+        } catch (e: Exception) { }
+    }
+
+    /** True when a "Running now" widget is on the home screen (its counts need redrawing on time). */
+    fun hasRunning(context: Context): Boolean = try {
+        (AppWidgetManager.getInstance(context.applicationContext)?.let { ids(context.applicationContext, it, RunningWidget::class.java) }?.size ?: 0) > 0
+    } catch (e: Exception) { false }
+
     /** Off the phone's widget list while the neutral icon is on: they would show the name Sprotyv. */
     fun sync(context: Context) {
         val app = context.applicationContext
+        // Emptied first, while they can still be reached
+        if (Neutral.isOn(app)) AppWidgetManager.getInstance(app)?.let { blankAll(app, it) }
         val want = if (Neutral.isOn(app)) PackageManager.COMPONENT_ENABLED_STATE_DISABLED else PackageManager.COMPONENT_ENABLED_STATE_ENABLED
         PROVIDERS.forEach { cls ->
             try {
@@ -51,7 +67,10 @@ object Widgets {
     private fun ids(context: Context, manager: AppWidgetManager, cls: Class<*>): IntArray =
         manager.getAppWidgetIds(ComponentName(context, cls)) ?: IntArray(0)
 
-    /** Opens Sprotyv at a fixed place; the same words a notification uses ([Opening]). */
+    /**
+     * Opens Sprotyv at a fixed place; the same words a notification uses ([Opening]). Request codes
+     * from 1000 up belong to widgets; notifications use those below 1000 ([Notify]).
+     */
     private fun open(context: Context, target: String, code: Int): PendingIntent =
         PendingIntent.getActivity(
             context, 1000 + code,
@@ -117,7 +136,8 @@ object Widgets {
         val names = listOf(R.string.path_level_personal, R.string.path_level_family, R.string.path_level_civic, R.string.path_level_defence, R.string.path_level_medic)
         val current = levels.indexOfFirst { it.first < it.second }
         val text = when {
-            prefs.trip -> context.getString(R.string.widget_path_trip)
+            // Trip mode: a neutral line, never a word that trip mode is on
+            prefs.trip -> context.getString(R.string.widget_path_start)
             levels.isEmpty() -> context.getString(R.string.widget_path_start)
             current < 0 -> context.getString(R.string.path_home_all)
             else -> context.getString(R.string.widget_path_level, context.getString(names.getOrElse(current) { names.last() }), levels[current].first, levels[current].second)

@@ -175,6 +175,9 @@ object Notify {
         if (w != null && w.first > now && shows(app, Kind.WAIT)) alarm(app, "wait", w.first) else unalarm(app, "wait")
         if (w == null || !shows(app, Kind.WAIT)) cancel(app, ID_WAIT)
 
+        // A "Running now" widget is redrawn when a wait ends or a count expires, notifications or not
+        plan(app, "widget", if (Widgets.hasRunning(app)) widgetDue(app, now) else null)
+
         val counts = shows(app, Kind.COUNTS)
         plan(app, "shelter", Since.SHELTER.get(app, now).takeIf { counts && it != 0L }?.let { nextMark(it, SHELTER_MARKS, now) })
         plan(app, "power", Since.POWER.get(app, now).takeIf { counts && it != 0L }?.let { nextMark(it, POWER_MARKS, now) })
@@ -204,6 +207,17 @@ object Notify {
             val due = if (at <= now && now - at < DAY) now + 30_000 else at
             plan(app, "note/$id", due.takeIf { notesOn && it > now })
         }
+    }
+
+    /** The next moment the widget's counts change by themselves: a wait ends, a count expires. */
+    private fun widgetDue(c: Context, now: Long): Long? {
+        val times = ArrayList<Long>()
+        other(c, "tourniquet").getLong("at", 0L).takeIf { it > 0 }?.let { times += it + DAY }
+        other(c, "wait").let { p -> p.getLong("since", 0L).takeIf { it > 0 }?.let { t -> times += t + p.getInt("total", 40).coerceIn(1, 180) * 60_000L; times += t + 3 * HOUR } }
+        Since.SHELTER.get(c, now).takeIf { it != 0L }?.let { times += it + 48 * HOUR }
+        Since.POWER.get(c, now).takeIf { it != 0L }?.let { times += it + 72 * HOUR }
+        Since.HEAT.get(c, now).takeIf { it != 0L }?.let { times += it + 30 * DAY }
+        return times.filter { it > now }.minOrNull()?.plus(30_000)
     }
 
     private fun plan(c: Context, name: String, at: Long?) = if (at != null) alarm(c, name, at) else unalarm(c, name)
@@ -265,6 +279,7 @@ object Notify {
                 prefs(app).edit().putLong("kit_next", now + KIT_EVERY).apply()
                 if (shows(app, Kind.KIT)) post(app, ID_KIT, REMINDERS, "kit", app.getString(R.string.notify_kit_title), app.getString(R.string.notify_kit_text), private = true)
             }
+            name == "widget" -> {}
             name.startsWith("note/") -> name.removePrefix("note/").toLongOrNull()?.let { id ->
                 notes(app).edit().remove(id.toString()).apply()
                 changed.value++

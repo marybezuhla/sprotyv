@@ -899,7 +899,6 @@
     <string name="widget_heat">No heating</string>
     <string name="widget_path_level">%1$s: %2$d of %3$d. Tap to see the step.</string>
     <string name="widget_path_start">Open My path to begin.</string>
-    <string name="widget_path_trip">Trip mode: tap to open the action cards.</string>
     <string name="widget_now_desc">One big button to the action cards</string>
     <string name="widget_running_desc">Tourniquet, the wait after a strike, shelter, power: a live count</string>
     <string name="widget_path_desc">The level of My path, without details</string>

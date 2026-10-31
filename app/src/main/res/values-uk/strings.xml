@@ -905,7 +905,6 @@
     <string name="widget_heat">Без тепла</string>
     <string name="widget_path_level">%1$s: %2$d з %3$d. Торкніться, щоб побачити крок.</string>
     <string name="widget_path_start">Відкрийте «Мій шлях», щоб почати.</string>
-    <string name="widget_path_trip">Режим поїздки: торкніться, щоб відкрити картки дій.</string>
     <string name="widget_now_desc">Одна велика кнопка до карток дій</string>
     <string name="widget_running_desc">Турнікет, очікування після удару, укриття, світло — живий відлік</string>
     <string name="widget_path_desc">Рівень «Мого шляху» без подробиць</string>
