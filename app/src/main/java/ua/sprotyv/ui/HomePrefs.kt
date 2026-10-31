@@ -22,7 +22,7 @@ object HomePrefs {
         val dynamic: Boolean = false,
         /** The call bar at the bottom; off, a phone button sits in the corner instead. */
         val callBar: Boolean = true,
-        /** Screenshots of the owner's screens allowed (off by default; for showing the app to testers). */
+        /** Screenshots of the owner's screens allowed (off by default; the owner's choice, kept until changed). */
         val screenshots: Boolean = false,
         /** The readiness shares last seen in "Mine" ("2/4,1/2,…"), shown on the full home screen; no records. */
         val readiness: String = "",

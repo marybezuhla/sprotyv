@@ -360,6 +360,8 @@ private fun readLimited(context: Context, uri: Uri): ByteArray {
 private fun PasswordField(label: String, value: String, onChange: (String) -> Unit) {
     // "Show" lets the owner see what was typed: a keyboard adding a letter or a capital is then seen
     var shown by remember { mutableStateOf(false) }
+    // Hidden again whenever the app leaves the screen, so a shown password never stays in recents
+    androidx.lifecycle.compose.LifecycleResumeEffect(Unit) { onPauseOrDispose { shown = false } }
     OutlinedTextField(
         value = value,
         onValueChange = onChange,
