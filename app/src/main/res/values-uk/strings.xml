@@ -657,8 +657,9 @@
     <string name="colour_title">Що означають кольори</string>
     <string name="colour_danger">Помаранчевий — небезпека, діяти зараз</string>
     <string name="colour_health">Зелений — безпека, здоров’я, перша допомога, порятунок і виїзд</string>
-    <string name="colour_prepare">Синій — підготовка: запаси, план, люди, тренування</string>
-    <string name="colour_calm">Сірий — побут, довідка, копії й налаштування</string>
+    <string name="colour_prepare">Синій — підготовка й своє: запаси, план, люди, захист даних, копії</string>
+    <string name="colour_calm">Фіолетовий — побут, довідка, налаштування</string>
+    <string name="colour_resist">Хакі — спротив: шлях, Конституція, історії</string>
     <string name="moz_title">Домедична допомога: порядки МОЗ</string>
     <string name="moz_short">Порядки МОЗ: домедична допомога</string>
     <string name="moz_hint">29 офіційних порядків, наказ № 441</string>

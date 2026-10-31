@@ -167,8 +167,9 @@ fun ColourLegend() {
         ua.sprotyv.home.Group.FIRST_AID to R.string.colour_health,
         ua.sprotyv.home.Group.PREPARE to R.string.colour_prepare,
         ua.sprotyv.home.Group.GUIDE to R.string.colour_calm,
+        null to R.string.colour_resist,
     ).forEach { (g, words) ->
-        val tint = g.tint()
+        val tint = g?.tint() ?: resist()
         Row(verticalAlignment = Alignment.CenterVertically) {
             androidx.compose.foundation.layout.Box(
                 Modifier.padding(end = 12.dp).size(28.dp)

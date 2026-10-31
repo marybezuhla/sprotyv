@@ -872,7 +872,7 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
     val locked = prefs.locked
     Frame(stringResource(R.string.settings), nav::back) {
         // Settings in a few calm blocks, each answering one question
-        Block(stringResource(R.string.mode_title), ua.sprotyv.home.Group.GUIDE) {
+        Block(stringResource(R.string.mode_title), ua.sprotyv.home.Group.PREPARE, foldable = true) {
         ModeChoice(prefs.mode) { m -> HomePrefs.update(context) { it.copy(mode = m) } }
         if (prefs.mode != Mode.KID) {
             Toggle(stringResource(R.string.call_bar_toggle), prefs.callBar) { on -> HomePrefs.update(context) { it.copy(callBar = on) } }
@@ -882,7 +882,7 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
             Toggle(stringResource(R.string.ready_on_home), !prefs.readinessHidden) { on -> HomePrefs.update(context) { it.copy(readinessHidden = !on) } }
         }
         }
-        Block(stringResource(R.string.theme_title), ua.sprotyv.home.Group.GUIDE) {
+        Block(stringResource(R.string.theme_title), ua.sprotyv.home.Group.GUIDE, foldable = true) {
         ThemeChoice.entries.forEach { t ->
             val on = t == prefs.theme
             Row(
@@ -901,12 +901,12 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
         }
         }
         if (prefs.mode != Mode.KID) {
-            Block(stringResource(R.string.my_home), ua.sprotyv.home.Group.GUIDE, padded = false) {
+            Block(stringResource(R.string.my_home), ua.sprotyv.home.Group.PREPARE, padded = false, foldable = true) {
                 BlockRow(stringResource(R.string.edit_tiles), stringResource(R.string.edit_tiles_hint), first = true) { nav.go(Route.EditTiles) }
                 BlockRow(stringResource(R.string.presets_title), stringResource(R.string.presets_hint)) { nav.go(Route.Presets) }
             }
         }
-        Block(stringResource(R.string.lock_title), ua.sprotyv.home.Group.GUIDE, foldable = true) {
+        Block(stringResource(R.string.lock_title), ua.sprotyv.home.Group.MINE, foldable = true) {
         if (prefs.mode == Mode.KID && !locked) {
             Text(stringResource(R.string.kid_lock_advice), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
         }
@@ -941,26 +941,26 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
             )
         }
         }
-        Block(stringResource(R.string.lock_mine_title), ua.sprotyv.home.Group.GUIDE, foldable = true) { LockMineSettings() }
-        Block(stringResource(R.string.notify_title), ua.sprotyv.home.Group.GUIDE, foldable = true) { NotifySettings() }
+        Block(stringResource(R.string.lock_mine_title), ua.sprotyv.home.Group.MINE, foldable = true) { LockMineSettings() }
+        Block(stringResource(R.string.notify_title), ua.sprotyv.home.Group.PREPARE, foldable = true) { NotifySettings() }
         // Backup and moving to a new phone, where people look for it;
         // the screen itself is in "Mine", so trip mode hides it here too
         if (!prefs.trip) {
-            Block(stringResource(R.string.backup_title), ua.sprotyv.home.Group.GUIDE, padded = false) {
+            Block(stringResource(R.string.backup_title), ua.sprotyv.home.Group.MINE, padded = false, foldable = true) {
                 BlockRow(stringResource(R.string.backup_settings_row), stringResource(R.string.backup_settings_hint), first = true) { nav.go(Route.Mine(MinePart.BACKUP)) }
             }
         }
-        Block(stringResource(R.string.settings_other_hands), ua.sprotyv.home.Group.GUIDE, foldable = true) {
+        Block(stringResource(R.string.settings_other_hands), ua.sprotyv.home.Group.DANGER, foldable = true) {
             TripToggle(prefs.trip)
             NeutralToggle()
         }
         // Medical training: first-aid procedures as the full official text instead of steps
-        Block(stringResource(R.string.medic_title), ua.sprotyv.home.Group.FIRST_AID) {
+        Block(stringResource(R.string.medic_title), ua.sprotyv.home.Group.FIRST_AID, foldable = true) {
             Toggle(stringResource(R.string.medic_toggle), prefs.medic) { on -> HomePrefs.update(context) { it.copy(medic = on) } }
             Text(stringResource(R.string.medic_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
-        Block(stringResource(R.string.colour_title), ua.sprotyv.home.Group.GUIDE) { ColourLegend() }
-        Block(stringResource(R.string.settings_about), ua.sprotyv.home.Group.GUIDE) {
+        Block(stringResource(R.string.colour_title), ua.sprotyv.home.Group.GUIDE, foldable = true) { ColourLegend() }
+        Block(stringResource(R.string.settings_about), ua.sprotyv.home.Group.GUIDE, foldable = true) {
             BlockRow(stringResource(R.string.about_guide), first = true) { nav.go(Route.About) }
             FeedbackBlock()
         }
