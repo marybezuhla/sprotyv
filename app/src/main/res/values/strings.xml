@@ -531,7 +531,7 @@
     <string name="trip_confirm_text">Nothing hidden is deleted: the data stays encrypted on the phone. Anyone who makes you unlock the phone and enter the PIN can turn the mode off and see it. Before a trip, think about what you really need to carry, and make a backup. Cards, the guide and 112 work as usual. Settings show the mode is on, so a careful look will tell something is hidden.</string>
     <string name="trip_confirm_yes">Turn on</string>
     <string name="trip_off_prompt">Turn off trip mode</string>
-    <string name="lock_mine_title">Lock on “Mine”: fingerprint or PIN</string>
+    <string name="lock_mine_title">Lock on “Mine”</string>
     <string name="lock_mine_toggle">Open “Mine” with a fingerprint or PIN</string>
     <string name="lock_mine_hint">Off by default, so the medical card and “I am safe” open at once in danger. When on, “Mine” opens only after the phone\'s fingerprint or PIN, every time; without it the key to the data does not work at all. Cards, the guide and 112 open as usual.</string>
     <string name="lock_mine_pin_only">PIN only</string>
@@ -1039,4 +1039,7 @@
     <string name="gart_why_2">One missed day hardly affects how a habit forms — so nothing is reset.</string>
     <string name="gart_why_3">An \"if — then\" plan tied to something you already do every day makes you noticeably more likely to actually do it.</string>
     <string name="gart_why_4">The first five groups follow the five supports that help people hold on after disasters: safety, calm, belief that you and your community can act, connection, and hope. The sixth is the body.</string>
+    <string name="password_show">Show</string>
+    <string name="password_hide">Hide</string>
+    <string name="password_length">Characters: %1$d</string>
 </resources>
