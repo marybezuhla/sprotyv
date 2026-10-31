@@ -415,8 +415,16 @@ fun BackupScreen() {
         val date = Instant.ofEpochMilli(at).atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
         Text(stringResource(R.string.backup_last, date), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
-    if (busy) Text(stringResource(R.string.backup_busy), style = MaterialTheme.typography.bodyLarge)
-    notice?.let { Text(stringResource(it), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold) }
+    // The result in a window over the screen: seen wherever the screen is scrolled to
+    notice?.let { n ->
+        val good = n in setOf(R.string.backup_saved, R.string.backup_restored, R.string.backup_restored_lock, R.string.backup_restored_notify)
+        AlertDialog(
+            onDismissRequest = { BackupJobs.clearNotice() },
+            title = { Text(stringResource(if (good) R.string.backup_done_title else R.string.backup_problem_title)) },
+            text = { Text(stringResource(n), style = MaterialTheme.typography.bodyLarge) },
+            confirmButton = { TextButton(onClick = { BackupJobs.clearNotice() }) { Text(stringResource(R.string.ok)) } },
+        )
+    }
 
     Heading(R.string.backup_save_title)
     val pw = if (own) ownText else suggested.orEmpty()
@@ -447,7 +455,7 @@ fun BackupScreen() {
         // A neutral name: the file does not say which app made it
         Away.forOwnWindow()
         save.launch("backup-" + LocalDate.now() + ".bin")
-    }, enabled = ready, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.backup_save)) }
+    }, enabled = ready, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(if (busy) R.string.backup_busy else R.string.backup_save)) }
     Text(stringResource(R.string.backup_save_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
     HorizontalDivider()
@@ -459,7 +467,7 @@ fun BackupScreen() {
     openUri?.let { uri ->
         PasswordField(stringResource(R.string.backup_password), openText) { openText = it }
         Button(onClick = { BackupJobs.open(context, uri, openText) }, enabled = openText.isNotEmpty() && !busy, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
-            Text(stringResource(R.string.backup_open))
+            Text(stringResource(if (busy) R.string.backup_busy else R.string.backup_open))
         }
     }
     pending?.let { snap ->

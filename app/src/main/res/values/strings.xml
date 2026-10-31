@@ -303,7 +303,7 @@
     <string name="backup_saved">Backup saved and checked.</string>
     <string name="backup_failed">That did not work. Nothing changed; please try again.</string>
     <string name="backup_existing">This file already holds something. Choose a new name: older backups are never written over.</string>
-    <string name="backup_wrong_password">Wrong password, or the file is damaged.</string>
+    <string name="backup_wrong_password">Wrong password, or the file is damaged. Check the keyboard layout and stray letters or spaces.</string>
     <string name="backup_from_newer">This backup was made by a newer Sprotyv. Update the app first.</string>
     <string name="backup_not_ours">This is not a Sprotyv backup, or the file is damaged.</string>
     <string name="backup_restored">Your data is restored.</string>
@@ -969,4 +969,7 @@
     <string name="history_prev">Previous</string>
     <string name="history_next">Next</string>
     <string name="history_all">All stories</string>
+    <string name="ok">OK</string>
+    <string name="backup_done_title">Done</string>
+    <string name="backup_problem_title">That did not work</string>
 </resources>
