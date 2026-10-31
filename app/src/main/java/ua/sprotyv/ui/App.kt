@@ -128,8 +128,16 @@ fun App() {
         onStopOrDispose { }
     }
 
+    // A notification's tap opens its screen (trip mode and set-up are checked as for any screen)
+    val opening by Opening.target.collectAsState()
+    LaunchedEffect(opening) {
+        val t = opening ?: return@LaunchedEffect
+        Opening.clear()
+        if (prefs.mode == Mode.FULL || prefs.mode == Mode.SIMPLE) Opening.route(t)?.let { if (top != it) nav.go(it) }
+    }
+
     // "Share → Sprotyv" follows the mode, trip mode and the neutral icon
-    LaunchedEffect(prefs.mode, trip) { ShareIn.sync(context) }
+    LaunchedEffect(prefs.mode, trip) { ShareIn.sync(context); Notify.sync(context) }
     // A page shared from a browser opens the bookmarks, where the owner names and keeps it.
     // Not in trip or kid mode, and not before set-up: then it is simply dropped
     val incoming by Incoming.state.collectAsState()

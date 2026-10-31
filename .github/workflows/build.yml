@@ -148,7 +148,9 @@ jobs:
           # Every permission must be on this short list; anything else stops the build
           # Release 1.0: no internet. Each permission is added here on purpose:
           # USE_BIOMETRIC: the settings lock opens Android's own PIN window (no prompt, PIN never seen)
-          ALLOWED="ua.sprotyv.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION android.permission.USE_BIOMETRIC"
+          # POST_NOTIFICATIONS: notifications the owner switches on (Android asks first)
+          # RECEIVE_BOOT_COMPLETED: alarms of those notifications planned again after a restart
+          ALLOWED="ua.sprotyv.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION android.permission.USE_BIOMETRIC android.permission.POST_NOTIFICATIONS android.permission.RECEIVE_BOOT_COMPLETED"
           for p in $(grep -oE "name='[^']+'" permissions.txt | sed "s/name='//;s/'//"); do
             case " $ALLOWED " in
               *" $p "*) ;;

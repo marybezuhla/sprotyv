@@ -70,7 +70,8 @@ fun BlackoutBlock() {
                 Text(stringResource(R.string.blackout_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Button(onClick = {
                     val t = System.currentTimeMillis()
-                    prefs.edit().putLong("since", t).apply()
+                    prefs.edit().putLong("since", t).commit()
+                    Notify.sync(context)
                     now = t
                     since = t
                 }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
@@ -91,7 +92,8 @@ fun BlackoutBlock() {
             Keep(R.string.blackout_freezer_half, Blackout.FREEZER_HALF_HOURS, minutes, R.string.blackout_freezer_over)
             Text(stringResource(R.string.blackout_closed), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             OutlinedButton(onClick = {
-                prefs.edit().remove("since").apply()
+                prefs.edit().remove("since").commit()
+                Notify.sync(context)
                 since = 0L
             }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.blackout_back)) }
             Text(
@@ -202,7 +204,8 @@ fun WaitTimer(total: Int) {
     if (since == 0L) {
         OutlinedButton(onClick = {
             val t = System.currentTimeMillis()
-            prefs.edit().putLong("since", t).putInt("total", total).apply()
+            prefs.edit().putLong("since", t).putInt("total", total).commit()
+            Notify.sync(context)
             now = t
             since = t
         }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.wait_start, total)) }
@@ -217,7 +220,8 @@ fun WaitTimer(total: Int) {
             Text(stringResource(R.string.wait_done, total), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
         }
         androidx.compose.material3.TextButton(onClick = {
-            prefs.edit().remove("since").apply()
+            prefs.edit().remove("since").commit()
+            Notify.sync(context)
             since = 0L
         }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.wait_reset)) }
     }

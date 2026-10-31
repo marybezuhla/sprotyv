@@ -12,6 +12,11 @@
          permission with no prompt; the app never sees the PIN -->
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
 
+    <!-- Notifications the owner switches on (all off by default): Android asks the owner first -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Alarms are lost when the phone restarts: planned again from what is on -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <!-- Opening WhatsApp, Signal and the SMS app by name needs Android to tell they are installed -->
     <queries>
         <package android:name="com.whatsapp" />
@@ -100,6 +105,13 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity-alias>
+        <!-- Alarms of the notifications; not reachable from other apps (their PendingIntents are the app's own) -->
+        <receiver android:name=".ui.Alarms" android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
         <!-- Lets the camera app write one photo into Sprotyv's cache; deleted right after reading -->
         <provider
             android:name="androidx.core.content.FileProvider"

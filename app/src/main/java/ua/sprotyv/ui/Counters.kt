@@ -52,8 +52,8 @@ class Since(private val name: String, private val maxHours: Int) {
         return t
     }
 
-    fun start(context: Context): Long = System.currentTimeMillis().also { prefs(context).edit().putLong("since", it).apply() }
-    fun stop(context: Context) = prefs(context).edit().remove("since").apply()
+    fun start(context: Context): Long = System.currentTimeMillis().also { prefs(context).edit().putLong("since", it).commit(); Notify.sync(context) }
+    fun stop(context: Context) { prefs(context).edit().remove("since").commit(); Notify.sync(context) }
 
     companion object {
         val POWER = Since("blackout", 72)
