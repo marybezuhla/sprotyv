@@ -221,6 +221,7 @@ private fun Screen(
             MinePart.BOOKMARKS -> Personal(R.string.bookmarks_title, personal, nav) { BookmarksScreen() }
             MinePart.NOTES -> Personal(R.string.notes_title_screen, personal, nav) { NotesScreen(nav) }
             MinePart.PATH -> Personal(R.string.path_title, personal, nav) { PathScreen(nav) }
+            MinePart.NEW_PLACE -> Personal(R.string.np_title, personal, nav) { NewPlaceScreen(content, nav) }
         }
         Route.Scan -> ScanScreen(nav)
         Route.SuppliesRoute -> Personal(R.string.supplies, personal, nav) { SuppliesScreen(content, nav) }

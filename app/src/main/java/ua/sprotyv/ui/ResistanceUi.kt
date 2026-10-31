@@ -82,6 +82,10 @@ fun ResistanceScreen(content: Content?, nav: Nav) {
             Text(stringResource(R.string.resist_hero_1), style = MaterialTheme.typography.bodyLarge)
             Text(stringResource(R.string.resist_hero_2), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
         }
+        // After leaving home: building life again is resistance too
+        Block(stringResource(R.string.np_live_on_title), Group.LEAVE, padded = false) {
+            BlockRow(stringResource(R.string.np_title), stringResource(R.string.np_live_on_hint), first = true) { nav.go(Route.Mine(MinePart.NEW_PLACE)) }
+        }
         // Why it matters, from history: one tap from the opening
         Block(stringResource(R.string.history_title), Group.PREPARE, tint = resist(), padded = false) {
             BlockRow(stringResource(R.string.history_title), stringResource(R.string.history_hint), first = true) { nav.go(Route.HistoryRoute) }

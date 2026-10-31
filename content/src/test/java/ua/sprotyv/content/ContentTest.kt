@@ -15,6 +15,13 @@ class ContentTest {
     private val kidCards by lazy { CardsReader.parse(File(assets, "kid_cards.json").readText()) }
     private val cards by lazy { adultCards + kidCards }
 
+    @Test fun newPlaceIsComplete() {
+        val n = NewPlaceReader.parse(File(assets, "new_place.json").readText())
+        assertEquals(n.steps.size, n.steps.map { it.id }.toSet().size)
+        NewPlace.Stage.entries.forEach { st -> assertTrue("stage $st", n.steps.any { it.stage == st }) }
+        n.steps.forEach { assertTrue("${it.id} checked", it.checked.matches(Regex("\\d{2}\\.\\d{2}\\.\\d{4}"))) }
+    }
+
     @Test fun historyHasSourcesAndDates() {
         val h = HistoryReader.parse(File(assets, "history.json").readText())
         assertTrue(h.stories.size >= 10)

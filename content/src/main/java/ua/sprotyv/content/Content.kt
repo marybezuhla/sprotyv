@@ -21,6 +21,8 @@ class Content(
     val constitution: Constitution? = null,
     /** "Why resist": stories from history; null if they could not be read. */
     val history: History? = null,
+    /** "New place": steps after leaving home; null if they could not be read. */
+    val newPlace: NewPlace? = null,
 ) {
     val guideBroken get() = guideOrNull == null
     val cardsBroken get() = cardsOrNull == null
@@ -87,7 +89,12 @@ class Content(
                 } catch (e: Exception) {
                     null
                 }
-                Content(guide, cards, kids, links, practice, moz, constitution, history).also { loaded = it }
+                val newPlace = try {
+                    assets.open("new_place.json").bufferedReader().use { NewPlaceReader.parse(it.readText()) }
+                } catch (e: Exception) {
+                    null
+                }
+                Content(guide, cards, kids, links, practice, moz, constitution, history, newPlace).also { loaded = it }
             }
         }
 
