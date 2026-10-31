@@ -796,4 +796,5 @@
     <string name="notes_read_failed">Нотатку зараз не вдалося прочитати. Поверніться й спробуйте ще раз.</string>
     <string name="notes_gone">Цієї нотатки вже немає.</string>
     <string name="notes_length">%1$d з %2$d знаків</string>
+    <string name="moz_compare_title">Офіційний порядок МОЗ на цю тему</string>
 </resources>

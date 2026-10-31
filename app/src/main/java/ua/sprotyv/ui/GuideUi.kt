@@ -141,6 +141,12 @@ fun GuideSectionScreen(content: Content?, num: String, nav: Nav) {
         if (found == null) return@Frame Text(stringResource(R.string.not_found))
         Text(found.first.title, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Blocks(found.second.blocks)
+        // The Ministry's official procedures on the same subject, one tap away
+        GUIDE_MOZ[found.second.num]?.mapNotNull { content.moz441?.procedure(it) }?.takeIf { it.isNotEmpty() }?.let { list ->
+            Block(stringResource(R.string.moz_compare_title), ua.sprotyv.home.Group.FIRST_AID, padded = false) {
+                list.forEachIndexed { i, pr -> BlockRow("${pr.n}. ${pr.short}", first = i == 0) { nav.go(Route.Moz(pr.n)) } }
+            }
+        }
         SourceBox(
             stringResource(R.string.source_section, content.guide.title, content.guide.version, found.second.num),
             content.guide.license,
@@ -370,3 +376,11 @@ fun SourceBox(source: String, license: String, reviewedBy: String = "") {
         }
     }
 }
+
+/** Guide sections and the Ministry's procedures (order No. 441) on the same subject. */
+private val GUIDE_MOZ = mapOf(
+    "7.1" to listOf(28, 29), "7.2" to listOf(4, 14), "7.3" to listOf(1), "7.4" to listOf(1),
+    "7.5" to listOf(7, 8, 9, 10), "7.6" to listOf(16), "7.7" to listOf(1, 2, 3), "7.8" to listOf(19),
+    "7.9" to listOf(13, 11), "7.10" to listOf(20, 23), "7.11" to listOf(21, 26, 27, 24, 25, 5, 6),
+    "7.12" to listOf(22), "7.13" to listOf(18, 17),
+)
