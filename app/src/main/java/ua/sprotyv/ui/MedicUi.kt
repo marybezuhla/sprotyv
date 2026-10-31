@@ -168,6 +168,7 @@ private fun clockOf(t: Long): String = Instant.ofEpochMilli(t).atZone(ZoneId.sys
 private fun tourniquetLine(context: Context, t: Tourniquets.One, count: Int): String {
     val minutes = ((System.currentTimeMillis() - t.at) / 60_000).coerceAtLeast(0)
     val base = context.getString(R.string.handover_tourniquet_line, clockOf(t.at), minutes / 60, minutes % 60)
-    val who = t.note.takeIf { it.isNotBlank() }?.let { " — $it" }.orEmpty()
-    return (if (count > 1) "№${t.n}$who: " else if (who.isNotEmpty()) "${t.note}: " else "") + base
+    val text = t.note
+    val who = text.takeIf { it.isNotBlank() }?.let { " — $it" }.orEmpty()
+    return (if (count > 1) "№${t.n}$who: " else if (who.isNotEmpty()) "$text: " else "") + base
 }
