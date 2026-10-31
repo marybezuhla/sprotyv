@@ -52,7 +52,7 @@
     <string name="in_detail">In detail in the guide</string>
     <string name="source_line">Source: %1$s</string>
     <string name="checked_on">Checked against the source: %1$s</string>
-    <string name="not_reviewed">Not yet reviewed by a specialist. Official instructions come first.</string>
+    <string name="not_reviewed">Put together from the sources shown. Instructions from rescuers and medics on the spot come first.</string>
     <string name="reviewed_by">Reviewed: %1$s</string>
     <string name="in_the_guide">In the guide</string>
     <string name="search_guide">Search the guide</string>
