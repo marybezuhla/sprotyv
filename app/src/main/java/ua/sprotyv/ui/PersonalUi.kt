@@ -171,6 +171,8 @@ fun MedicalScreen() {
         PersonalStore.save("medical") { it.medical().save(saved) }
     }
     Text(stringResource(R.string.medical_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    // The card in the green of health; the contacts below in the same green
+    Block(stringResource(R.string.medical_card), ua.sprotyv.home.Group.FIRST_AID) {
     Field(stringResource(R.string.med_name), card.name, { change(card.copy(name = it)) })
     Field(stringResource(R.string.med_birth), card.birthDate, { change(card.copy(birthDate = it)) }, hint = stringResource(R.string.med_birth_hint))
     Field(stringResource(R.string.med_blood), card.bloodGroup, { change(card.copy(bloodGroup = it)) }, hint = stringResource(R.string.med_blood_hint))
@@ -178,11 +180,13 @@ fun MedicalScreen() {
     Field(stringResource(R.string.med_medicines), card.medicines, { change(card.copy(medicines = it)) }, multiline = true, hint = stringResource(R.string.med_medicines_hint))
     Field(stringResource(R.string.med_conditions), card.conditions, { change(card.copy(conditions = it)) }, multiline = true)
     Field(stringResource(R.string.med_notes), card.notes, { change(card.copy(notes = it)) }, multiline = true)
+    }
 
     val ice = rememberPeople().orEmpty().filter { it.ice }
-    Text(stringResource(R.string.ice_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
-    if (ice.isEmpty()) Text(stringResource(R.string.ice_none), style = MaterialTheme.typography.bodyMedium)
-    ice.forEach { Text("${it.name} · ${it.phone}", style = MaterialTheme.typography.bodyLarge) }
+    Block(stringResource(R.string.ice_title), ua.sprotyv.home.Group.FIRST_AID) {
+        if (ice.isEmpty()) Text(stringResource(R.string.ice_none), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        ice.forEach { Text("${it.name} · ${it.phone}", style = MaterialTheme.typography.bodyLarge) }
+    }
     Text(stringResource(R.string.saved_automatically), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 }
 
@@ -192,9 +196,12 @@ fun PeopleScreen() {
     val people = rememberPeople() ?: return Loading()
     var editing by remember { mutableStateOf<Person?>(null) }
     Text(stringResource(R.string.people_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    Button(onClick = { editing = Person(name = "", phone = "") }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.add_person)) }
-    people.forEach { p ->
-        NavRow(p.name, listOfNotNull(p.phone, p.relation.ifBlank { null }, if (p.ice) stringResource(R.string.ice_short) else null).joinToString(" · ")) { editing = p }
+    Button(onClick = { editing = Person(name = "", phone = "") }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.add_person)) }
+    // People in one blue block of the family's preparation, a line each
+    if (people.isNotEmpty()) Block(stringResource(R.string.people), ua.sprotyv.home.Group.PREPARE, padded = false) {
+        people.forEachIndexed { i, p ->
+            BlockRow(p.name, listOfNotNull(p.phone, p.relation.ifBlank { null }, if (p.ice) stringResource(R.string.ice_short) else null).joinToString(" · "), first = i == 0) { editing = p }
+        }
     }
     editing?.let { PersonDialog(it, onDone = { editing = null }) }
 }
