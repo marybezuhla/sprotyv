@@ -225,7 +225,7 @@ private fun PersonDialog(start: Person, onDone: () -> Unit) {
                 Toggle(stringResource(R.string.person_safe_list), p.safeList) { p = p.copy(safeList = it) }
                 Toggle(stringResource(R.string.person_ice), p.ice) { p = p.copy(ice = it) }
                 if (start.id != 0L) {
-                    TextButton(onClick = { confirmDelete = true }) { Text(stringResource(R.string.delete_person), color = MaterialTheme.colorScheme.error) }
+                    TextButton(onClick = { confirmDelete = true }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.delete_person)) }
                 }
             }
         },

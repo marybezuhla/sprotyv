@@ -209,7 +209,7 @@ fun KitScreen(content: Content?, nav: Nav) {
     }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.kit_mark_reviewed)) }
     Text(stringResource(R.string.kit_rotation), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     OutlinedButton(onClick = { nav.go(Route.GuideSection(Kit.SECTION)) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.in_detail)) }
-    TextButton(onClick = { confirmReset = true }) { Text(stringResource(R.string.kit_reset)) }
+    TextButton(onClick = { confirmReset = true }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.kit_reset)) }
     if (confirmReset) {
         AlertDialog(
             onDismissRequest = { confirmReset = false },
