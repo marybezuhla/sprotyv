@@ -62,10 +62,10 @@ val ROLES: Map<String, Role> = listOf(
     Role(
         "dobro", Circle.DEFENCE, R.string.role_dobro, R.string.role_dobro_hint, R.string.role_dobro_affirm,
         factsTitle = R.string.service_facts_title,
-        facts = listOf(R.string.service_fact_1, R.string.service_fact_2, R.string.service_fact_3, R.string.service_fact_4, R.string.service_fact_5, R.string.role_dobro_tro),
+        facts = listOf(R.string.service_fact_1, R.string.role_dobro_contracts, R.string.role_dobro_tro, R.string.service_fact_3, R.string.service_fact_4, R.string.service_fact_5, R.string.role_dobro_rights),
         source = R.string.role_dobro_source,
         moreTitle = R.string.role_women_title,
-        more = listOf(R.string.role_women_1, R.string.role_women_2, R.string.role_women_3, R.string.role_women_4),
+        more = listOf(R.string.role_women_1, R.string.role_women_2, R.string.role_women_3, R.string.role_women_4, R.string.role_women_5),
         moreSource = R.string.role_women_source,
         links = listOf("service"),
         pathLevel = PATH_LEVEL_DOBRO,
@@ -73,7 +73,7 @@ val ROLES: Map<String, Role> = listOf(
     Role(
         "dftg", Circle.DEFENCE, R.string.role_dftg, R.string.role_dftg_hint, R.string.role_dftg_affirm,
         factsTitle = R.string.role_dftg_facts_title,
-        facts = listOf(R.string.role_dftg_1, R.string.role_dftg_2, R.string.role_dftg_3, R.string.role_dftg_4),
+        facts = listOf(R.string.role_dftg_1, R.string.role_dftg_2, R.string.role_dftg_3, R.string.role_dftg_4, R.string.role_dftg_5, R.string.role_dftg_6),
         source = R.string.role_dftg_source,
         links = listOf("service", "learn"),
         pathLevel = PATH_LEVEL_DFTG,

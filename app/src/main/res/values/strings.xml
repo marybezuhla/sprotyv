@@ -1154,4 +1154,23 @@
     <string name="path_dftg_where">I know whom to contact in my community to join</string>
     <string name="path_dftg_train">I take part in my formation’s training</string>
     <string name="path_dftg_family">My family knows what to do when I am called</string>
+    <string name="role_dobro_contracts">Since 15 June 2026 new contracts apply: 6 to 24 months. After that, guaranteed discharge and a deferment of at least 6 months. Questions: 1519.</string>
+    <string name="role_dobro_tro">The Territorial Defence Forces are a branch of the Armed Forces, with their own recruiting centre.</string>
+    <string name="role_dobro_rights">Rights violated? Write to the Military Ombudsman: skarha@milomb.gov.ua. The Defence Ministry hotline 1512 works around the clock.</string>
+    <string name="role_dobro_source">Sources: Ministry of Defence, “Conscious choice: how recruiting works in 2026” (04.03.2026) and “New contracts: answers to 10 questions” (18.06.2026); ArmyInform (10.01.2026, 15.06.2026). Checked 01.11.2026. Terms change — ask a recruiter.</string>
+    <string name="role_women_title">Women in the army</string>
+    <string name="role_women_1">More than 75,000 women are in the army, over 55,000 of them service members.</string>
+    <string name="role_women_2">All positions are open to women, combat ones too. Equal rights were set by law No. 2523-VIII (2018).</string>
+    <string name="role_women_3">Mobilisation of women is voluntary only. Women with medical or pharmaceutical education must register; for others registration is voluntary.</string>
+    <string name="role_women_4">The Defence Ministry and the Armed Forces have gender advisers. You can turn to them in confidence; pressure for doing so is forbidden.</string>
+    <string name="role_women_5">The Defence Ministry has begun supplying women’s body armour: the first 2,000 went to combat units.</string>
+    <string name="role_women_source">Sources: ArmyInform (08.03.2026); Fakty (28.05.2026); Coordination Centre for Legal Aid (22.12.2025); Ministry of Defence, “Gender advisers” (30.04.2026); Militarnyi (21.07.2026). Checked 01.11.2026.</string>
+    <string name="role_dftg_facts_title">What a DFTG is</string>
+    <string name="role_dftg_1">A DFTG is a community volunteer formation led by the Territorial Defence Forces. Residents set it up together with a Territorial Defence unit commander and the local authority.</string>
+    <string name="role_dftg_2">Any citizen aged 18+ living in the community can join after medical, professional and psychological selection. The volunteer contract is for 3 years, then the oath.</string>
+    <string name="role_dftg_3">To join: contact the DFTG commander in your community, or the local military administration if there is none. You need a passport, military registration document and tax number.</string>
+    <string name="role_dftg_4">Since 2025, DFTGs have air defence groups against drones. Only people not subject to mobilisation are taken; extra pay for duty is possible.</string>
+    <string name="role_dftg_5">Ordinary DFTG membership is unpaid. Those who carried out combat tasks on Territorial Defence orders can get combatant status.</string>
+    <string name="role_dftg_6">There is no official confirmation that DFTG membership gives a deferment from mobilisation.</string>
+    <string name="role_dftg_source">Sources: Ministry of Defence (14.03.2025, 10.07.2025); Suspilne (19.08.2025). Checked 01.11.2026. Terms change — ask the DFTG commander or the military administration.</string>
 </resources>
