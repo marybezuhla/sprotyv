@@ -206,14 +206,20 @@ fun ScreenshotsStrip() {
     val context = LocalContext.current
     val allowed = HomePrefs.state.collectAsStateWithLifecycle().value?.screenshots == true
     if (!allowed) return
-    // Quiet but always there, as in a reviewed app: one thin grey line; tapping it forbids screenshots again
-    androidx.compose.foundation.layout.Row(
-        Modifier.fillMaxWidth().heightIn(min = 36.dp)
-            .clickable { HomePrefs.update(context) { it.copy(screenshots = false) } }
-            .padding(vertical = 4.dp),
-        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+    // Always there while allowed, in the colour of "Mine": what is on, and a way to switch it off
+    val tint = ua.sprotyv.home.Group.MINE.tint()
+    androidx.compose.material3.Card(
+        colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = tint.container, contentColor = MaterialTheme.colorScheme.onSurface),
+        modifier = Modifier.fillMaxWidth(),
     ) {
-        Text("◉ " + stringResource(R.string.screenshots_banner), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1f))
-        Text(stringResource(R.string.screenshots_turn_off), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary)
+        androidx.compose.foundation.layout.Row(
+            Modifier.fillMaxWidth().heightIn(min = 48.dp).padding(start = 16.dp, end = 4.dp),
+            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+        ) {
+            Text(stringResource(R.string.screenshots_banner), style = MaterialTheme.typography.bodyLarge, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, color = tint.ink, modifier = Modifier.weight(1f))
+            androidx.compose.material3.TextButton(onClick = { HomePrefs.update(context) { it.copy(screenshots = false) } }, modifier = Modifier.heightIn(min = 48.dp)) {
+                Text(stringResource(R.string.screenshots_turn_off))
+            }
+        }
     }
 }
