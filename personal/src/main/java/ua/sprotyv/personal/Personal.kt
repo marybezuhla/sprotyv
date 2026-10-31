@@ -271,6 +271,7 @@ object PersonalStore {
      * is not in the open mode or anything is unclear (nothing changes then).
      */
     fun startLock(context: Context, pinOnly: Boolean): LockChange? = try {
+        lockTrouble = null
         val vault = KeyVault(context.applicationContext)
         val u = vault.unwrap()
         if (u !is KeyVault.Unwrapped.Ok) {
@@ -293,8 +294,16 @@ object PersonalStore {
     @Volatile var lockTrouble: String? = null
         private set
 
-    private fun describe(e: Throwable): String =
-        generateSequence(e) { it.cause }.take(3).joinToString(" ← ") { (it.javaClass.simpleName + ": " + (it.message ?: "")).take(160) }
+    internal fun describe(e: Throwable): String {
+        fun one(t: Throwable) = generateSequence(t) { it.cause }.take(3).joinToString(" ← ") { (it.javaClass.simpleName + ": " + (it.message ?: "")).take(160) }
+        return (listOf(one(e)) + e.suppressed.take(2).map { "також: " + one(it) }).joinToString(" | ")
+    }
+
+    /** Forgets an old reason before a new attempt, so the screen never shows a stale one. */
+    fun clearLockTrouble() { lockTrouble = null }
+
+    /** A reason from the app side (the confirmation window could not start). */
+    fun noteLockTrouble(e: Throwable) { lockTrouble = describe(e) }
 
     /**
      * Turning the lock off, or switching "PIN only": the owner first confirms [unlockCipher]; with
@@ -302,6 +311,7 @@ object PersonalStore {
      * confirmation of its own cipher.
      */
     fun startChange(context: Context, unlocking: KeyVault.Unlocking, confirmedUnlock: javax.crypto.Cipher, target: KeyVault.Mode): LockChange? = try {
+        lockTrouble = null
         val vault = KeyVault(context.applicationContext)
         val u = vault.finishUnlock(confirmedUnlock, unlocking.data)
         if (u !is KeyVault.Unwrapped.Ok) {
