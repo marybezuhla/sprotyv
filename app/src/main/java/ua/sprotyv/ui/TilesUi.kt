@@ -53,8 +53,8 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -127,15 +127,17 @@ data class TileInfo(val id: String, val title: String, val hint: String, val ico
  * - green ([Group.FIRST_AID]): safety, health and rescue: "I am safe", first aid, the medical card, the screen for rescuers,
  *   the Ministry's first-aid procedures, leaving for safety;
  * - blue ([Group.PREPARE]): preparing and keeping: readiness, the bag, supplies, people, the family plan, practice;
- * - neutral ([Group.GUIDE]): everyday life, reading, sources, copies and settings.
+ * - violet ([Group.GUIDE]): everyday life, reading, sources and settings; copies of one's own data are blue.
  * The [Group] carries the palette ([tint]); groups of the same meaning share a colour.
  */
 fun toneOf(id: String): Group = when (id) {
     Tiles.tool(Tool.NOW), Tiles.tool(Tool.ALARM) -> Group.DANGER
     // "I am safe" is green: the colour of a safe condition on safety signs
-    Tiles.tool(Tool.SAFE), Tiles.tool(Tool.MEDICAL), Tiles.tool(Tool.RESCUER) -> Group.FIRST_AID
-    Tiles.tool(Tool.MINE), Tiles.tool(Tool.PEOPLE), Tiles.tool(Tool.PLAN) -> Group.PREPARE
-    Tiles.tool(Tool.PRINT), Tiles.tool(Tool.SCAN), Tiles.tool(Tool.QR_TEXT), Tiles.tool(Tool.SITUATION), Tiles.tool(Tool.DIRECTORY) -> Group.GUIDE
+    Tiles.tool(Tool.SAFE), Tiles.tool(Tool.MEDICAL), Tiles.tool(Tool.RESCUER), Tiles.tool(Tool.DIRECTORY) -> Group.FIRST_AID
+    Tiles.tool(Tool.MINE), Tiles.tool(Tool.PEOPLE), Tiles.tool(Tool.PLAN), Tiles.tool(Tool.SUPPLIES) -> Group.PREPARE
+    // Copies of one's own data: blue, as "Mine"
+    Tiles.tool(Tool.PRINT), Tiles.tool(Tool.SCAN), Tiles.tool(Tool.QR_TEXT) -> Group.MINE
+    Tiles.tool(Tool.SITUATION) -> Group.GUIDE
     else -> if (id.startsWith("link:")) Group.GUIDE else groupOf(id)
 }
 
@@ -238,16 +240,17 @@ fun cardBadge(id: String): Pair<ImageVector, Tint> {
     return (CARD_ICONS[id]?.let { ImageVector.vectorResource(it) } ?: group.icon) to toneOf(Tiles.card(id)).tint()
 }
 
-private val Group.icon: ImageVector get() = when (this) {
+/** Each group's own humanitarian picture (OCHA), the same wherever the group is shown. */
+private val Group.icon: ImageVector @Composable get() = when (this) {
     Group.DANGER -> Icons.Filled.Warning
-    Group.FIRST_AID -> Icons.Filled.Favorite
-    Group.FAMILY -> Icons.Filled.Face
-    Group.HOME_LIFE -> Icons.Filled.Home
-    Group.PREPARE -> Icons.AutoMirrored.Filled.List
-    Group.LEAVE -> Icons.Filled.Place
-    Group.SAFETY -> Icons.Filled.Lock
+    Group.FIRST_AID -> ImageVector.vectorResource(R.drawable.ocha_health)
+    Group.FAMILY -> ImageVector.vectorResource(R.drawable.ocha_users)
+    Group.HOME_LIFE -> ImageVector.vectorResource(R.drawable.ocha_house)
+    Group.PREPARE -> ImageVector.vectorResource(R.drawable.ocha_preparedness)
+    Group.LEAVE -> ImageVector.vectorResource(R.drawable.ocha_internally_displaced)
+    Group.SAFETY -> ImageVector.vectorResource(R.drawable.ocha_security)
     Group.MINE -> Icons.Filled.AccountBox
-    Group.GUIDE -> Icons.Filled.Info
+    Group.GUIDE -> ImageVector.vectorResource(R.drawable.ocha_learning)
 }
 
 private val Tool.title: Int get() = when (this) {
@@ -328,7 +331,7 @@ private val CARD_ICONS = mapOf(
 private val CHAPTER_ICONS = mapOf(
     "ch1" to R.drawable.ocha_preparedness, "ch2" to R.drawable.ocha_non_food_items, "ch3" to R.drawable.ocha_shelter,
     "ch4" to R.drawable.hi_drone, "ch5" to R.drawable.ocha_mine, "ch6" to R.drawable.hi_hazardous, "ch7" to R.drawable.ocha_health,
-    "ch8" to R.drawable.ocha_potable_water, "ch9" to R.drawable.ocha_food, "ch10" to R.drawable.ocha_fire, "ch11" to R.drawable.ocha_tent,
+    "ch8" to R.drawable.ocha_potable_water, "ch9" to R.drawable.ocha_food, "ch10" to R.drawable.ocha_stove, "ch11" to R.drawable.ocha_tent,
     "ch12" to R.drawable.ocha_clothing, "ch13" to R.drawable.ocha_map, "ch14" to R.drawable.ocha_walkie_talkie,
     "ch15" to R.drawable.ocha_services_and_tools, "ch16" to R.drawable.ocha_handwashing, "ch17" to R.drawable.ocha_security,
     "ch18" to R.drawable.ocha_public_information, "ch19" to R.drawable.ocha_earthquake, "ch20" to R.drawable.ocha_power_outage,
@@ -353,11 +356,13 @@ private val TOOL_ICONS = mapOf(
     Tool.CONSTITUTION to R.drawable.ocha_public_information,
     Tool.HISTORY to R.drawable.ocha_calendar,
     Tool.NEW_PLACE to R.drawable.ocha_internally_displaced,
+    Tool.RESCUER to R.drawable.ocha_health,
+    Tool.PRINT to R.drawable.ocha_table,
 )
 
 private val Tool.icon: ImageVector? get() = when (this) {
     Tool.NOW -> Icons.Filled.Warning
-    Tool.SAFE -> Icons.AutoMirrored.Filled.Send
+    Tool.SAFE -> Icons.Filled.CheckCircle
     Tool.ALARM -> Icons.Filled.Notifications
     Tool.SITUATION -> Icons.Filled.LocationOn
     Tool.POWER -> Icons.Filled.DateRange
@@ -365,10 +370,10 @@ private val Tool.icon: ImageVector? get() = when (this) {
     Tool.SEARCH -> Icons.Filled.Search
     Tool.MEDICAL -> Icons.Filled.Favorite
     Tool.PEOPLE -> Icons.Filled.Person
-    Tool.SUPPLIES -> Icons.Filled.ShoppingCart
     Tool.PRACTICE -> Icons.Filled.PlayArrow
     Tool.RESIST -> Shield
-    Tool.PRINT, Tool.RESCUER, Tool.SCAN, Tool.QR_TEXT -> Icons.Filled.Share
+    Tool.SCAN -> Icons.Filled.Search
+    Tool.QR_TEXT -> Icons.Filled.Email
     else -> null
 }
 

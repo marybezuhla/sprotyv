@@ -450,7 +450,7 @@ fun BackupScreen() {
         )
     }
 
-    Heading(R.string.backup_save_title)
+    Block(stringResource(R.string.backup_save_title), ua.sprotyv.home.Group.MINE) {
     val pw = if (own) ownText else suggested.orEmpty()
     if (!own) {
         Text(stringResource(R.string.backup_suggested), style = MaterialTheme.typography.bodyLarge)
@@ -482,8 +482,8 @@ fun BackupScreen() {
     }, enabled = ready, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(if (busy) R.string.backup_busy else R.string.backup_save)) }
     Text(stringResource(R.string.backup_save_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
-    HorizontalDivider()
-    Heading(R.string.backup_restore_title)
+    }
+    Block(stringResource(R.string.backup_restore_title), ua.sprotyv.home.Group.MINE) {
     Text(stringResource(R.string.backup_restore_intro), style = MaterialTheme.typography.bodyMedium)
     OutlinedButton(onClick = { BackupJobs.clearNotice(); Away.forOwnWindow(); pick.launch(arrayOf("*/*")) }, enabled = !busy, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
         Text(stringResource(R.string.backup_choose_file))
@@ -511,6 +511,7 @@ fun BackupScreen() {
             },
             dismissButton = { TextButton(onClick = { BackupJobs.cancelRestore() }) { Text(stringResource(R.string.cancel)) } },
         )
+    }
     }
 }
 

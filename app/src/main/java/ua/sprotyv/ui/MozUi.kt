@@ -145,13 +145,14 @@ private fun Steps(p: Moz441.Procedure) {
             point == actions -> Block(stringResource(R.string.moz_what_to_do), Group.FIRST_AID) {
                 point.items.forEach { step -> StepLine(step) }
             }
-            point.items.isNotEmpty() -> Block(point.text.trimEnd(':'), Group.GUIDE) {
+            point.items.isNotEmpty() -> Block(point.text.trimEnd(':'), Group.FIRST_AID, foldable = true) {
                 point.items.forEach { item -> Bullet(item) }
             }
             else -> Card(
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                colors = CardDefaults.cardColors(containerColor = Group.FIRST_AID.tint().container, contentColor = MaterialTheme.colorScheme.onSurface),
+                border = androidx.compose.foundation.BorderStroke(1.dp, Group.FIRST_AID.tint().ink.copy(alpha = 0.35f)),
                 modifier = Modifier.fillMaxWidth(),
-            ) { Text(point.text, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(16.dp)) }
+            ) { Text(point.text, style = ReadingText, modifier = Modifier.padding(16.dp)) }
         }
     }
     // The scope and the meaning of the words: there for anyone who wants them, out of the way

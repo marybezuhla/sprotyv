@@ -122,7 +122,7 @@ fun SuppliesScreen(content: Content?, nav: Nav) {
     Text(stringResource(R.string.supplies_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
     // Water: how many litres there are
-    Block(stringResource(R.string.supplies_water_word), ua.sprotyv.home.Group.PREPARE) {
+    Block(stringResource(R.string.supplies_water_word), ua.sprotyv.home.Group.PREPARE, foldable = true) {
     Text(stringResource(R.string.supplies_water_need, s.waterGoal), style = MaterialTheme.typography.bodyLarge)
     Text(stringResource(R.string.supplies_water_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     Text(stringResource(R.string.supplies_water_have), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
@@ -137,7 +137,7 @@ fun SuppliesScreen(content: Content?, nav: Nav) {
 
     // Food: tick what is at home in the needed amount
     val haveCount = keyed.count { it.first in s.have }
-    Block(stringResource(R.string.supplies_food), ua.sprotyv.home.Group.PREPARE, foldable = true, startOpen = true, trailing = {
+    Block(stringResource(R.string.supplies_food), ua.sprotyv.home.Group.PREPARE, foldable = true, trailing = {
         Text(stringResource(R.string.supplies_of, haveCount, keyed.size), style = MaterialTheme.typography.labelLarge)
     }) {
     Text(stringResource(R.string.supplies_have_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)

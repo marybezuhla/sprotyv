@@ -135,7 +135,7 @@ private fun duration(minutes: Long): String {
 fun ChargeBlock() {
     var station by rememberSaveable { mutableStateOf(false) }
     var size by rememberSaveable { mutableIntStateOf(Charge.BANKS[1]) }
-    Block(stringResource(R.string.charge_title), ua.sprotyv.home.Group.HOME_LIFE) {
+    Block(stringResource(R.string.charge_title), ua.sprotyv.home.Group.HOME_LIFE, foldable = true) {
         run {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 FilterChip(selected = !station, onClick = { station = false; size = Charge.BANKS[1] }, label = { Text(stringResource(R.string.charge_bank)) }, modifier = Modifier.heightIn(min = 48.dp))

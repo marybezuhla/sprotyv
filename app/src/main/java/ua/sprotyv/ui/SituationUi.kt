@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import ua.sprotyv.R
 import ua.sprotyv.content.Content
 import ua.sprotyv.content.Link
+import ua.sprotyv.home.Group
 import ua.sprotyv.reach.Reach
 
 private const val FOCUS_PAGE = "https://play.google.com/store/apps/details?id=org.mozilla.focus"
@@ -38,6 +39,16 @@ private const val FOCUS_PAGE = "https://play.google.com/store/apps/details?id=or
 fun openLink(context: Context, link: Link, toolbar: Int? = null) {
     if (link.url.isEmpty() && link.phone.isNotEmpty()) Reach.dial(context, link.phone)
     else Reach.open(context, link.url, link.app, toolbar)
+}
+
+/** The colour of a kind of source, by what it is for. */
+internal fun linkGroupColour(g: String): Group = when (g) {
+    "threats" -> Group.DANGER
+    "evac", "idp" -> Group.LEAVE
+    "help", "mind", "health", "care" -> Group.FIRST_AID
+    "search", "kids" -> Group.FAMILY
+    Link.POWER -> Group.HOME_LIFE
+    else -> Group.GUIDE
 }
 
 private val Link.groupTitle: Int get() = when (group) {
@@ -88,11 +99,15 @@ fun SituationScreen(content: Content?, nav: Nav) {
         if (content == null) return@Frame Loading()
         if (content.linksBroken) return@Frame Broken()
         // Power cuts have their own screen: one row per oblast would crowd this one
-        NavRow(stringResource(R.string.power_title), stringResource(R.string.power_hint)) { nav.go(Route.Power) }
+        Block(stringResource(R.string.power_title), Group.HOME_LIFE, padded = false) {
+            BlockRow(stringResource(R.string.power_title), stringResource(R.string.power_hint), first = true) { nav.go(Route.Power) }
+        }
         val trip = HomePrefs.state.collectAsState().value?.trip == true
-        content.links.filter { it.group != Link.POWER && it.group !in Link.DIRECTORY && it.group !in Link.RESIST && !(trip && Trip.hides(it)) }.groupBy { it.group }.forEach { (_, links) ->
-            Text(stringResource(links.first().groupTitle), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 8.dp).semantics { heading() })
-            links.forEach { link -> LinkRow(link) { openLink(context, link, toolbar) } }
+        content.links.filter { it.group != Link.POWER && it.group !in Link.DIRECTORY && it.group !in Link.RESIST && !(trip && Trip.hides(it)) }.groupBy { it.group }.forEach { (g, links) ->
+            // Each kind of source in its colour, folded: open the one needed now
+            Block(stringResource(links.first().groupTitle), linkGroupColour(g), foldable = true, summary = stringResource(R.string.shelf_count, links.size)) {
+                links.forEach { link -> LinkRow(link) { openLink(context, link, toolbar) } }
+            }
         }
         // Said plainly: whether this phone's browser keeps a trace of the pages
         // Worked out again on every return, e.g. after installing Firefox Focus
@@ -161,7 +176,7 @@ internal fun LinkRow(link: Link, onClick: () -> Unit) {
             if (link.flags.isNotEmpty()) {
                 Text(
                     link.flags.joinToString(" · ") { "⚠ " + context.getString(flagTitle(it)) },
-                    style = MaterialTheme.typography.labelMedium,
+                    style = MaterialTheme.typography.bodyMedium,
                     // A caution, not danger now: red is kept for danger
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -187,11 +202,13 @@ fun PowerScreen(content: Content?, nav: Nav) {
         BlackoutBlock()
         HeatingBlock(nav)
         ChargeBlock()
-        Text(stringResource(R.string.power_schedules), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 8.dp).semantics { heading() })
-        Text(stringResource(R.string.power_intro), style = MaterialTheme.typography.bodyLarge)
         if (content == null) return@Frame Loading()
         if (content.linksBroken) return@Frame Broken()
-        content.links.filter { it.group == Link.POWER }.forEach { link -> LinkRow(link) { openLink(context, link, toolbar) } }
+        val schedules = content.links.filter { it.group == Link.POWER }
+        Block(stringResource(R.string.power_schedules), Group.HOME_LIFE, foldable = true, summary = stringResource(R.string.shelf_count, schedules.size)) {
+            Text(stringResource(R.string.power_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            schedules.forEach { link -> LinkRow(link) { openLink(context, link, toolbar) } }
+        }
         Text(stringResource(R.string.power_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
@@ -215,8 +232,9 @@ fun DirectoryScreen(content: Content?, nav: Nav) {
         Link.DIRECTORY.forEach { g ->
             val links = entries.filter { it.group == g }
             if (links.isEmpty()) return@forEach
-            Text(stringResource(links.first().groupTitle), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 8.dp).semantics { heading() })
-            links.forEach { link -> LinkRow(link) { openLink(context, link, toolbar) } }
+            Block(stringResource(links.first().groupTitle), linkGroupColour(g), foldable = true, summary = stringResource(R.string.shelf_count, links.size)) {
+                links.forEach { link -> LinkRow(link) { openLink(context, link, toolbar) } }
+            }
         }
         Text(stringResource(R.string.dir_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }

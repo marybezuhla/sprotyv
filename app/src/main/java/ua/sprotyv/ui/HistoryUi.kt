@@ -48,7 +48,7 @@ fun HistoryScreen(content: Content?, nav: Nav) {
         listOf(History.Kind.STOOD, History.Kind.LOST, History.Kind.WORD).forEach { kind ->
             val list = h.stories.filter { it.kind == kind }
             if (list.isEmpty()) return@forEach
-            Block(stringResource(kind.title), Group.PREPARE, tint = resist(), padded = false, foldable = true, startOpen = kind == History.Kind.STOOD,
+            Block(stringResource(kind.title), Group.PREPARE, tint = resist(), padded = false, foldable = true,
                 summary = stringResource(kind.hint)) {
                 list.forEachIndexed { i, s -> BlockRow(s.title, s.time, first = i == 0) { nav.go(Route.Story(s.id)) } }
             }
@@ -69,8 +69,8 @@ fun StoryScreen(content: Content?, id: String, nav: Nav) {
             Text(s.happened, style = ReadingText)
             Text(s.outcome, style = ReadingText)
         } else {
-            Block(stringResource(R.string.history_happened), Group.GUIDE) { Text(s.happened, style = ReadingText) }
-            Block(stringResource(R.string.history_outcome), Group.GUIDE) { Text(s.outcome, style = ReadingText) }
+            Block(stringResource(R.string.history_happened), Group.PREPARE, tint = resist()) { Text(s.happened, style = ReadingText) }
+            Block(stringResource(R.string.history_outcome), Group.PREPARE, tint = resist()) { Text(s.outcome, style = ReadingText) }
         }
         Block(stringResource(R.string.history_lesson), Group.PREPARE, tint = resist()) {
             Text(s.lesson, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)

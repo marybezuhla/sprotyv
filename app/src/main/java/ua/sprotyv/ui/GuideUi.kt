@@ -60,10 +60,12 @@ import ua.sprotyv.content.Section as GuideSection
 
 @Composable
 fun ChapterRow(chapter: Chapter, onClick: () -> Unit) {
+    // The whole row in its group's soft colour, as the tiles: the contents are read by colour
+    val tint = groupOf(ua.sprotyv.home.Tiles.chapter(chapter.id)).tint()
     Card(
         onClick = onClick,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        colors = CardDefaults.cardColors(containerColor = tint.container),
+        border = BorderStroke(1.dp, tint.ink.copy(alpha = 0.35f)),
         modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp),
     ) {
         // The chapter's colour and picture, the same as on its tile in "Sections"
@@ -112,26 +114,13 @@ fun ChapterScreen(content: Content?, id: String, nav: Nav) {
         if (content.guideBroken) return@Frame Broken()
         if (chapter == null) return@Frame Text(stringResource(R.string.not_found))
         Blocks(chapter.intro)
-        chapter.sections.forEach { s -> SectionRow(s) { nav.go(Route.GuideSection(s.num)) } }
+        // The sections in one plate of the chapter's colour
+        Block(stringResource(R.string.guide_sections), groupOf(ua.sprotyv.home.Tiles.chapter(chapter.id)), padded = false) {
+            chapter.sections.forEachIndexed { i, s -> BlockRow((if (s.num.isNotBlank()) s.num + ". " else "") + s.title, first = i == 0) { nav.go(Route.GuideSection(s.num)) } }
+        }
     }
 }
 
-@Composable
-private fun SectionRow(s: GuideSection, onClick: () -> Unit) {
-    Card(
-        onClick = onClick,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-        modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp),
-    ) {
-        Text(
-            (if (s.num.isNotBlank()) s.num + ". " else "") + s.title,
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
-        )
-    }
-}
 
 /** One section to read. A whole-chapter reference ("26") opens the chapter instead. */
 @Composable

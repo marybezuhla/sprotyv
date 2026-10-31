@@ -273,7 +273,7 @@ fun PrintScreen(content: Content?) {
         Exports.save(context, uri, KIND_OWNER) { app -> readOwner()?.let { ownerPdf(app, it, p, ids, content) } }
     }
     Text(stringResource(R.string.print_intro), style = MaterialTheme.typography.bodyLarge)
-    Block(stringResource(R.string.print_choose), ua.sprotyv.home.Group.GUIDE) {
+    Block(stringResource(R.string.print_choose), ua.sprotyv.home.Group.MINE) {
         listOf(
             PrintPart.MEDICAL to R.string.medical_card, PrintPart.PLAN to R.string.family_plan, PrintPart.PEOPLE to R.string.people,
             PrintPart.SERVICES to R.string.print_services, PrintPart.KIT to R.string.kit, PrintPart.NOTES to R.string.notes_title_screen,

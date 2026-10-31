@@ -1008,4 +1008,5 @@
     <string name="np_changing">Правила для ВПО змінюються: з 22.10.2026 діє новий закон, порядок подання заяв оновлюється. Перед зверненням перевірте на офіційному сайті.</string>
     <string name="np_live_on_title">Жити далі — наш спротив</string>
     <string name="np_live_on_hint">Нове місце після виїзду: кроки, права, громада</string>
+    <string name="guide_sections">Підрозділи</string>
 </resources>
