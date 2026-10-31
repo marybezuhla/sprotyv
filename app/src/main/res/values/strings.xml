@@ -565,4 +565,21 @@
     <string name="trip_confirm_text">Nothing hidden is deleted: the data stays encrypted on the phone. Anyone who makes you unlock the phone and enter the PIN can turn the mode off and see it. Before a trip, think about what you really need to carry, and make a backup. Cards, the guide and 112 work as usual. Settings show the mode is on, so a careful look will tell something is hidden.</string>
     <string name="trip_confirm_yes">Turn on</string>
     <string name="trip_off_prompt">Turn off trip mode</string>
+    <string name="lock_mine_title">Opening “Mine”</string>
+    <string name="lock_mine_toggle">Open “Mine” with a fingerprint or PIN</string>
+    <string name="lock_mine_hint">Off by default, so the medical card and “I am safe” open at once in danger. When on, “Mine” opens only after the phone\'s fingerprint or PIN, every time; without it the key to the data does not work at all. Cards, the guide and 112 open as usual.</string>
+    <string name="lock_mine_pin_only">PIN only</string>
+    <string name="lock_mine_pin_only_hint">A fingerprint does not work at all: a finger can be forced onto the sensor, a PIN has to be told.</string>
+    <string name="lock_mine_no_screen_lock">First set a screen lock on the phone (PIN or password).</string>
+    <string name="lock_mine_confirm_title">Protect “Mine”?</string>
+    <string name="lock_mine_confirm_text">Each time you open the medical card, people, plan or “I am safe”, you will confirm with a fingerprint or PIN. Important: if the phone\'s screen lock is removed, the key becomes unusable and the data will not open again. Make a backup first.</string>
+    <string name="lock_mine_confirm_yes">Protect</string>
+    <string name="lock_mine_change">Confirm to change the protection of “Mine”</string>
+    <string name="lock_mine_failed">Could not change the protection. Nothing changed.</string>
+    <string name="lock_mine_open">Open “Mine”</string>
+    <string name="lock_mine_locked">“Mine” is protected</string>
+    <string name="lock_mine_locked_text">Opens with the phone\'s fingerprint or PIN.</string>
+    <string name="lock_mine_locked_pin">Opens with the phone\'s PIN only.</string>
+    <string name="lock_mine_toggle_pin">Open “Mine” with the PIN</string>
+    <string name="lock_mine_trouble">The key is not answering right now. Nothing changed; try again in a moment.</string>
 </resources>

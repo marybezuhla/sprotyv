@@ -571,4 +571,21 @@
     <string name="trip_confirm_text">Сховане не видаляється: дані лишаються зашифрованими на телефоні. Хто змусить вас розблокувати телефон і ввести PIN, зможе вимкнути режим і побачити їх. Перед поїздкою подумайте, що вам справді потрібно мати з собою, і зробіть резервну копію. Картки, довідник і 112 працюють як завжди. У налаштуваннях видно, що режим увімкнено, тож уважний погляд зрозуміє, що щось сховано.</string>
     <string name="trip_confirm_yes">Увімкнути</string>
     <string name="trip_off_prompt">Вимкнути режим поїздки</string>
+    <string name="lock_mine_title">Вхід у «Моє»</string>
+    <string name="lock_mine_toggle">Відкривати «Моє» відбитком або PIN-кодом</string>
+    <string name="lock_mine_hint">Типово вимкнено, щоб у небезпеці медкартка й «Я в безпеці» відкривалися миттєво. Увімкнене, «Моє» відкривається лише після відбитка чи PIN-коду телефона, щоразу після повернення в застосунок; без цього ключ до даних не працює взагалі. Картки, довідник і 112 відкриваються як завжди.</string>
+    <string name="lock_mine_pin_only">Лише PIN</string>
+    <string name="lock_mine_pin_only_hint">Відбиток не підходить узагалі, лише PIN-код, графічний ключ чи пароль телефона: палець можна силою прикласти до сканера, а PIN треба назвати.</string>
+    <string name="lock_mine_no_screen_lock">Спершу встановіть блокування екрана телефона (PIN або пароль).</string>
+    <string name="lock_mine_confirm_title">Захистити «Моє»?</string>
+    <string name="lock_mine_confirm_text">Щоразу, відкриваючи медкартку, людей, план чи «Я в безпеці», треба буде підтвердити відбитком або PIN-кодом. Важливо: якщо з телефона зняти блокування екрана, ключ стане непридатним і дані більше не відкриються. Зробіть резервну копію перед цим.</string>
+    <string name="lock_mine_confirm_yes">Захистити</string>
+    <string name="lock_mine_change">Підтвердьте, щоб змінити захист «Мого»</string>
+    <string name="lock_mine_failed">Не вдалося змінити захист. Нічого не змінено.</string>
+    <string name="lock_mine_open">Відкрити «Моє»</string>
+    <string name="lock_mine_locked">«Моє» захищено</string>
+    <string name="lock_mine_locked_text">Відкривається відбитком або PIN-кодом телефона.</string>
+    <string name="lock_mine_locked_pin">Відкривається лише PIN-кодом телефона.</string>
+    <string name="lock_mine_toggle_pin">Відкривати «Моє» PIN-кодом</string>
+    <string name="lock_mine_trouble">Ключ зараз не відповідає. Нічого не змінено; спробуйте ще раз за мить.</string>
 </resources>

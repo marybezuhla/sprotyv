@@ -136,6 +136,7 @@ fun Personal(title: Int, state: Opened?, nav: Nav, content: @Composable () -> Un
         when {
             state is Opened.Ready || (state == null && wasReady) -> content()
             state == null -> Loading()
+            state is Opened.Locked -> LockedView(state.pinOnly)
             state == Opened.TryAgain -> Problem(R.string.try_again_title, R.string.try_again_text) { PersonalStore.close(); PersonalStore.open(context) }
             state == Opened.NeedsUpdate -> {
                 Text(stringResource(R.string.needs_update_title), style = MaterialTheme.typography.titleMedium)

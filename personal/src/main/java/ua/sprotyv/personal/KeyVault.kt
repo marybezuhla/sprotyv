@@ -29,10 +29,13 @@ import javax.crypto.spec.GCMParameterSpec
  *
  * The passphrase is 32 random bytes, stored only wrapped with an AES-256-GCM key in the phone's
  * keystore (StrongBox when available, otherwise the phone's secure hardware; [Unwrapped.Ok.softwareKey]
- * says when a phone has neither). Unlike a reviewed app the key needs no fingerprint or PIN per use, so
- * Sprotyv opens at once in an emergency. Limits, stated plainly in the README too:
- * - anyone holding the phone unlocked can open the data (including a phone that someone forces
- *   the owner to unlock); the optional app lock in stage 3 adds a second wrap, as in a reviewed app;
+ * says when a phone has neither). By default the key needs no fingerprint or PIN per use, so
+ * Sprotyv opens at once in an emergency. The owner may lock "Mine" ([Mode.locked]): the passphrase
+ * is then wrapped with a key that works only right after a fingerprint or the phone's PIN, once per
+ * use; with [Mode.pinOnly] the hardware refuses a fingerprint for it at all.
+ * Limits, stated plainly in the README too:
+ * - without the lock, anyone holding the phone unlocked can open the data (including a phone that
+ *   someone forces the owner to unlock);
  * - "only while unlocked" protects unwrapping the key, not data already open; Sprotyv closes the
  *   database when it leaves the screen;
  * - a phone with no screen lock, or kept unlocked by Smart Lock, gives no lock protection at all.
@@ -40,15 +43,26 @@ import javax.crypto.spec.GCMParameterSpec
  * Nothing here ever deletes a key or a file: a key judged lost is set aside, never erased, so a
  * wrong judgement can still be undone.
  *
- * File format 1: version, alias, IV, wrapped passphrase. Version and alias are bound to the
- * ciphertext as associated data, so any change to the header is detected.
+ * File format 2: version, flags (bit 0 locked, bit 1 PIN only), alias, IV, wrapped passphrase.
+ * Format 1 (older installs) has no flags. The header is bound to the ciphertext as associated
+ * data, so any change to it, the flags included, is detected.
  */
 class KeyVault(context: Context) {
 
     private val file = File(context.noBackupFilesDir, WRAPPED_FILE)
     private val tmp = File(context.noBackupFilesDir, "$WRAPPED_FILE.tmp")
 
-    private class Wrapped(val alias: String, val iv: ByteArray, val data: ByteArray)
+    private class Wrapped(val version: Int, val mode: Mode, val alias: String, val iv: ByteArray, val data: ByteArray)
+
+    /** How the passphrase is wrapped: [locked] needs the owner per use; [pinOnly] refuses a fingerprint. */
+    data class Mode(val locked: Boolean, val pinOnly: Boolean) {
+        val flags: Int get() = (if (locked) 1 else 0) or (if (pinOnly) 2 else 0)
+
+        companion object {
+            val OPEN = Mode(locked = false, pinOnly = false)
+            fun of(flags: Int): Mode = Mode(flags and 1 != 0, flags and 2 != 0)
+        }
+    }
 
     sealed interface Unwrapped {
         class Ok(val passphrase: ByteArray, val softwareKey: Boolean) : Unwrapped
@@ -58,7 +72,13 @@ class KeyVault(context: Context) {
 
         /** Could not tell (the keystore did not answer): nothing is judged, try again later. */
         data object Retry : Unwrapped
+
+        /** "Mine" is locked: [cipherForUnlock], confirmed by the owner, then [finishUnlock]. */
+        data class NeedsOwner(val pinOnly: Boolean) : Unwrapped
     }
+
+    /** The current mode, or null if the key file cannot be read. */
+    fun mode(): Mode? = try { if (file.exists()) readWrapped().mode else null } catch (e: Exception) { null }
 
     /** True when a wrapped passphrase exists, i.e. the app was set up before. */
     fun isSetUp(): Boolean = file.exists()
@@ -72,13 +92,13 @@ class KeyVault(context: Context) {
         check(!file.exists()) { "Already set up" }
         tmp.delete()
         val alias = KEY_PREFIX + randomHex(8)
-        val key = createKey(alias)
+        val key = createKey(alias, Mode.OPEN)
         val cipher = Cipher.getInstance(TRANSFORMATION).apply {
             init(Cipher.ENCRYPT_MODE, key)
-            updateAAD(header(alias))
+            updateAAD(header(FORMAT_VERSION, Mode.OPEN, alias))
         }
         val passphrase = ByteArray(PASSPHRASE_BYTES).also { SecureRandom().nextBytes(it) }
-        writeWrapped(Wrapped(alias, cipher.iv, cipher.doFinal(passphrase)))
+        writeWrapped(Wrapped(FORMAT_VERSION, Mode.OPEN, alias, cipher.iv, cipher.doFinal(passphrase)))
         return Unwrapped.Ok(passphrase, isSoftware(key))
     }
 
@@ -96,6 +116,8 @@ class KeyVault(context: Context) {
             // Damaged key file
             return Unwrapped.Lost
         }
+        // Locked: nothing is tried without the owner (an attempt would only fail)
+        if (w.mode.locked) return Unwrapped.NeedsOwner(w.mode.pinOnly)
         val key = try {
             keyStore().getKey(w.alias, null) as? SecretKey
         } catch (e: Exception) {
@@ -105,7 +127,7 @@ class KeyVault(context: Context) {
         return try {
             val cipher = Cipher.getInstance(TRANSFORMATION).apply {
                 init(Cipher.DECRYPT_MODE, key, GCMParameterSpec(GCM_TAG_BITS, w.iv))
-                updateAAD(header(w.alias))
+                updateAAD(header(w.version, w.mode, w.alias))
             }
             val passphrase = cipher.doFinal(w.data)
             if (passphrase.size != PASSPHRASE_BYTES) Unwrapped.Lost else Unwrapped.Ok(passphrase, isSoftware(key))
@@ -116,6 +138,86 @@ class KeyVault(context: Context) {
         } catch (e: Exception) {
             Unwrapped.Retry
         }
+    }
+
+    /**
+     * A cipher to unwrap a locked passphrase, for the owner to confirm (a fingerprint or the PIN).
+     * Null when the state is unclear (nothing is judged); [Unwrapped.Lost] cases are told by
+     * [finishUnlock] or by the key being gone.
+     */
+    fun cipherForUnlock(): Unlocking? = try {
+        val w = readWrapped()
+        val key = keyStore().getKey(w.alias, null) as? SecretKey
+        key?.let {
+            Unlocking(
+                Cipher.getInstance(TRANSFORMATION).apply {
+                    init(Cipher.DECRYPT_MODE, it, GCMParameterSpec(GCM_TAG_BITS, w.iv))
+                    updateAAD(header(w.version, w.mode, w.alias))
+                },
+                w.data,
+            )
+        }
+    } catch (e: KeyPermanentlyInvalidatedException) {
+        null
+    } catch (e: Exception) {
+        null
+    }
+
+    /** A cipher for the owner to confirm, and the wrapped passphrase it was made for. */
+    class Unlocking(val cipher: Cipher, internal val data: ByteArray)
+
+    /** True when a locked key is clearly gone or invalidated (the screen lock was removed, say). */
+    fun lockedKeyLost(): Boolean = try {
+        val w = readWrapped()
+        val key = keyStore().getKey(w.alias, null) as? SecretKey
+        if (key == null) keyIsGone(w.alias)
+        else try {
+            Cipher.getInstance(TRANSFORMATION).init(Cipher.DECRYPT_MODE, key, GCMParameterSpec(GCM_TAG_BITS, w.iv))
+            false
+        } catch (e: KeyPermanentlyInvalidatedException) {
+            true
+        } catch (e: Exception) {
+            false
+        }
+    } catch (e: Exception) {
+        false
+    }
+
+    /** After the owner confirmed [cipherForUnlock]: the passphrase, or a clear verdict. */
+    fun finishUnlock(confirmed: Cipher, data: ByteArray): Unwrapped = try {
+        // The data the cipher was made for, never a file read again later
+        val passphrase = confirmed.doFinal(data)
+        if (passphrase.size != PASSPHRASE_BYTES) Unwrapped.Lost else Unwrapped.Ok(passphrase, softwareKey = false)
+    } catch (e: AEADBadTagException) {
+        Unwrapped.Lost
+    } catch (e: Exception) {
+        Unwrapped.Retry
+    }
+
+    /**
+     * Step 1 of changing the mode: a new key for [mode] under a new alias and a cipher to wrap
+     * with it. A locked mode's cipher must be confirmed by the owner before [finishRewrap].
+     * Nothing stored changes until then.
+     */
+    fun cipherForRewrap(mode: Mode): Pair<Cipher, String> {
+        val alias = KEY_PREFIX + randomHex(8)
+        val key = createKey(alias, mode)
+        return Cipher.getInstance(TRANSFORMATION).apply {
+            init(Cipher.ENCRYPT_MODE, key)
+            updateAAD(header(FORMAT_VERSION, mode, alias))
+        } to alias
+    }
+
+    /**
+     * Step 2: the same passphrase is stored wrapped with the new key, atomically. The old key
+     * entry is kept (nothing here deletes a key); it no longer has anything to open.
+     */
+    @Synchronized
+    fun finishRewrap(confirmed: Cipher, alias: String, mode: Mode, passphrase: ByteArray) {
+        require(passphrase.size == PASSPHRASE_BYTES)
+        require(keyStore().containsAlias(alias)) { "New key missing" }
+        val data = confirmed.doFinal(passphrase)
+        writeWrapped(Wrapped(FORMAT_VERSION, mode, alias, confirmed.iv, data))
     }
 
     /**
@@ -159,10 +261,11 @@ class KeyVault(context: Context) {
         true
     }
 
-    private fun header(alias: String): ByteArray {
+    private fun header(version: Int, mode: Mode, alias: String): ByteArray {
         val bytes = ByteArrayOutputStream()
         DataOutputStream(bytes).apply {
-            writeByte(FORMAT_VERSION)
+            writeByte(version)
+            if (version >= 2) writeByte(mode.flags)
             writeUTF(alias)
             flush()
         }
@@ -173,7 +276,8 @@ class KeyVault(context: Context) {
         try {
             FileOutputStream(tmp).use { stream ->
                 val out = DataOutputStream(stream)
-                out.writeByte(FORMAT_VERSION)
+                out.writeByte(w.version)
+                if (w.version >= 2) out.writeByte(w.mode.flags)
                 out.writeUTF(w.alias)
                 out.writeByte(w.iv.size)
                 out.write(w.iv)
@@ -192,7 +296,12 @@ class KeyVault(context: Context) {
 
     private fun readWrapped(): Wrapped =
         DataInputStream(file.inputStream()).use { input ->
-            require(input.readUnsignedByte() == FORMAT_VERSION) { "Unknown key file format" }
+            val version = input.readUnsignedByte()
+            require(version == 1 || version == FORMAT_VERSION) { "Unknown key file format" }
+            val flags = if (version >= 2) input.readUnsignedByte() else 0
+            require(flags and 3.inv() == 0) { "Damaged key file" }
+            val mode = Mode.of(flags)
+            require(mode.locked || !mode.pinOnly) { "Damaged key file" }
             val alias = input.readUTF()
             require(alias.matches(ALIAS)) { "Damaged key file" }
             val ivSize = input.readUnsignedByte()
@@ -203,7 +312,7 @@ class KeyVault(context: Context) {
             val data = ByteArray(size).also { input.readFully(it) }
             // Nothing may follow the wrapped passphrase
             require(input.read() == -1) { "Damaged key file" }
-            Wrapped(alias, iv, data)
+            Wrapped(version, mode, alias, iv, data)
         }
 
     private fun syncDirectory(dir: File) {
@@ -215,27 +324,39 @@ class KeyVault(context: Context) {
         }
     }
 
-    private fun createKey(alias: String): SecretKey = try {
-        generate(alias, strongBox = true)
+    private fun createKey(alias: String, mode: Mode): SecretKey = try {
+        generate(alias, mode, strongBox = true)
     } catch (e: StrongBoxUnavailableException) {
-        generate(alias, strongBox = false)
+        generate(alias, mode, strongBox = false)
     } catch (e: Exception) {
         // Some phones report StrongBox but fail inside it: the regular secure hardware is used instead
-        generate(alias, strongBox = false)
+        generate(alias, mode, strongBox = false)
     }
 
-    private fun generate(alias: String, strongBox: Boolean): SecretKey {
-        val spec = KeyGenParameterSpec.Builder(
+    private fun generate(alias: String, mode: Mode, strongBox: Boolean): SecretKey {
+        val b = KeyGenParameterSpec.Builder(
             alias,
             KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT,
         )
             .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
             .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
             .setKeySize(256)
-            // Only while the phone is unlocked; no fingerprint or PIN per use (see the class comment)
+            // Only while the phone is unlocked (see the class comment)
             .setUnlockedDeviceRequired(true)
             .setIsStrongBoxBacked(strongBox)
-            .build()
+        if (mode.locked) {
+            b.setUserAuthenticationRequired(true)
+                // 0: the owner confirms every single use of the key
+                // "PIN only": the hardware itself refuses a fingerprint for this key
+                .setUserAuthenticationParameters(
+                    0,
+                    if (mode.pinOnly) KeyProperties.AUTH_DEVICE_CREDENTIAL
+                    else KeyProperties.AUTH_BIOMETRIC_STRONG or KeyProperties.AUTH_DEVICE_CREDENTIAL,
+                )
+                // A new fingerprint must not destroy the data; the PIN still protects it
+                .setInvalidatedByBiometricEnrollment(false)
+        }
+        val spec = b.build()
         return KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEYSTORE)
             .apply { init(spec) }
             .generateKey()
@@ -255,6 +376,6 @@ class KeyVault(context: Context) {
         private const val GCM_TAG_BITS = 128
         private const val GCM_IV_BYTES = 12
         private const val PASSPHRASE_BYTES = 32
-        private const val FORMAT_VERSION = 1
+        private const val FORMAT_VERSION = 2
     }
 }
