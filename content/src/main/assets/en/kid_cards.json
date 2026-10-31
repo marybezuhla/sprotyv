@@ -12,7 +12,7 @@
   "reviewedBy": "",
   "steps": [
    {
-    "action": "Hear a siren — put on shoes and go to a grown-up. No grown-up — go to the hallway right away.",
+    "action": "Siren? Put on shoes, go to a grown-up. No grown-up? Straight to the hallway.",
     "why": ""
    },
    {
@@ -43,7 +43,7 @@
   "reviewedBy": "",
   "steps": [
    {
-    "action": "Hear buzzing in the sky — quickly get under a roof: a house, stairwell or shop.",
+    "action": "Buzzing in the sky? Quickly get under a roof: house, stairwell or shop.",
     "why": "Do not look up and do not film it on a phone."
    },
    {
@@ -85,7 +85,7 @@
     "why": ""
    },
    {
-    "action": "Do not play in empty buildings, trenches or near military vehicles.",
+    "action": "Do not play in empty buildings, trenches or near broken machines.",
     "why": ""
    }
   ]
@@ -103,7 +103,7 @@
   "steps": [
    {
     "action": "Stay where you are. Do not go anywhere with anyone.",
-    "why": "The older one does the looking, and you wait."
+    "why": "A grown-up will look for you. You wait."
    },
    {
     "action": "Shout Mum's or Dad's name loudly. Have a whistle — blow it.",
@@ -132,12 +132,12 @@
     "why": ""
    },
    {
-    "action": "Go out bending low, cover your nose and mouth with cloth. Do not take the lift.",
+    "action": "Go out bending low, cloth over your nose and mouth. Don't take the lift.",
     "why": "Smoke is more dangerous than fire, and there is less of it down low.",
     "icon": "stay_low"
    },
    {
-    "action": "Hot door or thick smoke on the stairs — shut the door, stand by the window, call out.",
+    "action": "Door hot? Thick smoke on the stairs? Shut the door, stand at the window, shout.",
     "why": "Do not jump: rescuers will come."
    },
    {
@@ -163,7 +163,7 @@
   "reviewedBy": "",
   "steps": [
    {
-    "action": "Are you in a safe place now? Sit next to a grown-up or hug your toy.",
+    "action": "In a safe place now? Sit next to a grown-up or hug your toy.",
     "why": ""
    },
    {
