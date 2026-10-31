@@ -93,7 +93,8 @@ fun ResistanceScreen(content: Content?, nav: Nav) {
         val links = content.links
         // Where to learn: official, civic and volunteer side by side, each marked
         LinkGroup(stringResource(R.string.resist_learn_title), stringResource(R.string.resist_learn_intro), links.filter { it.group == "learn" }, toolbar, context)
-        LinkGroup(stringResource(R.string.resist_resilience_title), stringResource(R.string.resist_resilience_intro), links.filter { it.group == "resilience" }, toolbar, context)
+        // Resilience: its own entries, then fact-checkers from "Situation" (one list, never two copies)
+        LinkGroup(stringResource(R.string.resist_resilience_title), stringResource(R.string.resist_resilience_intro), links.filter { it.group == "resilience" || it.group == "facts" }, toolbar, context)
         // Military service: only for adults who choose to see it
         Block(stringResource(R.string.service_title), Group.PREPARE) {
             Toggle(stringResource(R.string.service_toggle), prefs?.service == true) { on -> HomePrefs.update(context) { it.copy(service = on) } }
