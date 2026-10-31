@@ -1207,6 +1207,18 @@
   "flags": []
  },
  {
+  "id": "sternenko-fund",
+  "group": "support",
+  "kind": "ngo",
+  "title": "Спільнота Стерненка",
+  "note": "Благодійний фонд: FPV-дрони й дрони-перехоплювачі для військ, щомісячні звіти про кожну закупівлю. Донатьте лише через офіційний сайт.",
+  "url": "https://www.sternenkofund.org",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
   "id": "war-bonds",
   "group": "support",
   "kind": "official",
