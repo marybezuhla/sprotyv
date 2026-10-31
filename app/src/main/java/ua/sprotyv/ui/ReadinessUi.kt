@@ -180,7 +180,7 @@ private fun ReadyRow(title: String, p: Progress?, detail: String? = null, onClic
 }
 
 /** The parts of readiness, in the order the shares are kept. */
-private val READY_PARTS = listOf(R.string.ready_short_medical, R.string.ready_short_people, R.string.ready_short_plan, R.string.ready_short_kit, R.string.supplies)
+private val READY_PARTS = listOf(R.string.ready_short_medical, R.string.ready_short_people, R.string.ready_short_plan, R.string.ready_short_kit, R.string.ready_short_supplies)
 
 /**
  * Readiness at a glance on the full home screen: five small bars on one scale, from what was last
@@ -216,20 +216,26 @@ fun ReadinessStrip(nav: Nav) {
                     Text(stringResource(R.string.ready_hide))
                 }
             }
-            Row(Modifier.padding(end = 12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                parts.forEachIndexed { i, p ->
-                    val name = stringResource(READY_PARTS[i])
-                    Column(
-                        Modifier.weight(1f).clearAndSetSemantics { contentDescription = "$name: ${p.done} / ${p.total}" },
-                        verticalArrangement = Arrangement.spacedBy(4.dp),
-                    ) {
-                        Canvas(Modifier.fillMaxWidth().height(8.dp)) {
-                            val r = CornerRadius(size.height / 2)
-                            drawRoundRect(track, cornerRadius = r)
-                            if (p.fraction > 0f) drawRoundRect(if (p.complete) doneColour else going, size = Size(size.width * p.fraction, size.height), cornerRadius = r)
-                        }
-                        Text(name, style = MaterialTheme.typography.labelSmall, maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis)
+            // What is ready, in one line of words; what is not, one row each: its name, a bar, the count.
+            // Names never squeezed under narrow bars, so nothing is cut off
+            val names = READY_PARTS.map { stringResource(it) }
+            val ready = parts.indices.filter { parts[it].complete }
+            if (ready.isNotEmpty()) {
+                Text(stringResource(R.string.ready_done_list, ready.joinToString(", ") { names[it] }), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(end = 12.dp))
+            }
+            parts.forEachIndexed { i, p ->
+                if (p.complete) return@forEachIndexed
+                Row(
+                    Modifier.padding(end = 12.dp).clearAndSetSemantics { contentDescription = "${names[i]}: ${p.done} / ${p.total}" },
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(names[i], style = MaterialTheme.typography.bodyMedium, modifier = Modifier.width(112.dp))
+                    Canvas(Modifier.weight(1f).height(8.dp)) {
+                        val r = CornerRadius(size.height / 2)
+                        drawRoundRect(track, cornerRadius = r)
+                        if (p.fraction > 0f) drawRoundRect(going, size = Size(size.width * p.fraction, size.height), cornerRadius = r)
                     }
+                    Text("${p.done}/${p.total}", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(start = 12.dp))
                 }
             }
             // "My path" with readiness: where the owner is and a calm word for the next level

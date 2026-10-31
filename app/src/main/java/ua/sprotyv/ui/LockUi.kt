@@ -210,7 +210,7 @@ fun LockMineSettings() {
     Text(stringResource(R.string.lock_mine_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     reason?.let { r ->
         androidx.compose.foundation.text.selection.SelectionContainer {
-            Text(stringResource(R.string.lock_mine_reason, r), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(stringResource(R.string.lock_mine_reason, r), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
     if (askOn) {

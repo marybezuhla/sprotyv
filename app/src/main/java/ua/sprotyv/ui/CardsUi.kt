@@ -405,11 +405,11 @@ private fun StepFigure(content: Content, num: String) {
 @Composable
 fun Source(card: Card) {
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Text(stringResource(R.string.source_line, card.source), style = MaterialTheme.typography.bodySmall)
-        Text(stringResource(R.string.checked_on, card.checkedOn), style = MaterialTheme.typography.bodySmall)
+        Text(stringResource(R.string.source_line, card.source), style = MaterialTheme.typography.bodyMedium)
+        Text(stringResource(R.string.checked_on, card.checkedOn), style = MaterialTheme.typography.bodyMedium)
         Text(
             if (card.reviewedBy.isBlank()) stringResource(R.string.not_reviewed) else stringResource(R.string.reviewed_by, card.reviewedBy),
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }

@@ -97,7 +97,7 @@ fun NewPlaceScreen(content: Content?, nav: Nav) {
             }
         }
     }
-    Text(stringResource(R.string.np_changing), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    Text(stringResource(R.string.np_changing), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 }
 
 @Composable
@@ -128,7 +128,7 @@ private fun StepRow(s: NewPlace.Step, on: Boolean, expanded: Boolean, onExpand: 
                 modifier = Modifier.fillMaxWidth().heightIn(min = 40.dp).padding(vertical = 4.dp).then(Modifier.toggleable(value = false, role = Role.Button) { Reach.open(context, src.url) }),
             )
         }
-        if (s.sources.isNotEmpty()) Text(stringResource(R.string.history_checked, s.checked), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        if (s.sources.isNotEmpty()) Text(stringResource(R.string.history_checked, s.checked), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 
