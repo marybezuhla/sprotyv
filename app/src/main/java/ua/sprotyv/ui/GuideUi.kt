@@ -66,11 +66,16 @@ fun ChapterRow(chapter: Chapter, onClick: () -> Unit) {
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp),
     ) {
-        Column(Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
-            if (chapter.label.isNotBlank()) {
-                Text(chapter.label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        // The chapter's colour and picture, the same as on its tile in "Sections"
+        androidx.compose.foundation.layout.Row(Modifier.padding(horizontal = 12.dp, vertical = 12.dp), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+            ChapterBadge(chapter.id, 40.dp)
+            androidx.compose.foundation.layout.Spacer(Modifier.width(12.dp))
+            Column {
+                if (chapter.label.isNotBlank()) {
+                    Text(chapter.label, style = MaterialTheme.typography.labelMedium, color = groupOf(ua.sprotyv.home.Tiles.chapter(chapter.id)).tint().ink)
+                }
+                Text(chapter.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
             }
-            Text(chapter.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
         }
     }
 }
