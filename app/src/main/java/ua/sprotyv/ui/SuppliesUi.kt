@@ -137,7 +137,7 @@ fun SuppliesScreen(content: Content?, nav: Nav) {
 
     // Food: tick what is at home in the needed amount
     val haveCount = keyed.count { it.first in s.have }
-    Block(stringResource(R.string.supplies_food), ua.sprotyv.home.Group.PREPARE, trailing = {
+    Block(stringResource(R.string.supplies_food), ua.sprotyv.home.Group.PREPARE, foldable = true, startOpen = true, trailing = {
         Text(stringResource(R.string.supplies_of, haveCount, keyed.size), style = MaterialTheme.typography.labelLarge)
     }) {
     Text(stringResource(R.string.supplies_have_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -158,7 +158,7 @@ fun SuppliesScreen(content: Content?, nav: Nav) {
     }
     }
     // Other things that run out: one date each, the soonest
-    Block(stringResource(R.string.supplies_other), ua.sprotyv.home.Group.PREPARE) {
+    Block(stringResource(R.string.supplies_other), ua.sprotyv.home.Group.PREPARE, foldable = true) {
     listOf(MySupplies.MEDS to R.string.supplies_meds, MySupplies.BATTERIES to R.string.supplies_batteries).forEach { (key, name) ->
         Row(Modifier.fillMaxWidth().heightIn(min = 48.dp), verticalAlignment = Alignment.CenterVertically) {
             Text(stringResource(name), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))

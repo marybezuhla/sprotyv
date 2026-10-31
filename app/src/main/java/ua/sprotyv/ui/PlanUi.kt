@@ -1,5 +1,17 @@
 package ua.sprotyv.ui
 
+import androidx.compose.ui.draw.clip
+
+import androidx.compose.foundation.layout.height
+
+import androidx.compose.foundation.layout.width
+
+import androidx.compose.foundation.layout.Spacer
+
+import androidx.compose.ui.semantics.clearAndSetSemantics
+
+import androidx.compose.ui.unit.sp
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -143,18 +155,36 @@ fun KitScreen(content: Content?, nav: Nav) {
     val done = groups.sumOf { g -> g.items.count { it.key in checked } }
     var confirmReset by remember { mutableStateOf(false) }
 
-    Text(stringResource(R.string.kit_progress, done, total), style = MaterialTheme.typography.titleMedium)
-    Text(stringResource(R.string.kit_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    // One frame per group with its own count, as in a reviewed app: the eye finds the group, then the item
-    groups.forEach { g ->
+    // The bag itself: how full it is, at a glance, before any list
+    val blue = ua.sprotyv.home.Group.PREPARE.tint()
+    androidx.compose.material3.Card(
+        colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = blue.container, contentColor = blue.ink),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text("🧳", fontSize = 48.sp, modifier = Modifier.clearAndSetSemantics { })
+            Spacer(Modifier.width(16.dp))
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                Text(stringResource(if (done == total) R.string.kit_full else R.string.kit_packed, done, total), style = MaterialTheme.typography.titleLarge, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
+                androidx.compose.material3.LinearProgressIndicator(
+                    progress = { if (total == 0) 0f else done.toFloat() / total }, color = blue.ink, trackColor = MaterialTheme.colorScheme.surface,
+                    modifier = Modifier.fillMaxWidth().height(10.dp).clip(androidx.compose.foundation.shape.RoundedCornerShape(5.dp)),
+                )
+                Text(stringResource(R.string.kit_intro), style = MaterialTheme.typography.bodyMedium)
+            }
+        }
+    }
+    // One folded pocket per group, with its own count; the first pocket not packed yet is open
+    val firstOpen = groups.indexOfFirst { g -> g.items.any { it.key !in checked } }
+    groups.forEachIndexed { gi, g ->
         val got = g.items.count { it.key in checked }
-        Block(g.title, ua.sprotyv.home.Group.PREPARE, padded = false, trailing = {
-            Text(
-                (if (got == g.items.size) "✓ " else "") + stringResource(R.string.ready_count, got, g.items.size),
-                style = MaterialTheme.typography.labelLarge,
-                fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
-            )
-        }) {
+        val title = g.title.substringBefore(" (").trim()
+        val note = g.title.substringAfter(" (", "").removeSuffix(")").trim()
+        Block(
+            title, ua.sprotyv.home.Group.PREPARE, padded = false, foldable = true, startOpen = gi == firstOpen,
+            summary = (if (got == g.items.size) "✓ " else "") + stringResource(R.string.ready_count, got, g.items.size) + if (note.isNotBlank()) " · $note" else "",
+            leading = { Text(kitIcon(title), fontSize = 28.sp, modifier = Modifier.clearAndSetSemantics { }) },
+        ) {
             g.items.forEachIndexed { i, item ->
                 if (i > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant, modifier = Modifier.padding(start = 56.dp))
                 KitRow(item.text, item.key in checked) { on ->
@@ -201,6 +231,21 @@ const val KEY_KIT_REVIEWED = "kit_reviewed_at"
  * One kit item: the thing itself first, in plain weight, and the guide's explanation after it,
  * smaller and quieter, so a long line still reads at a glance.
  */
+/** A picture for each pocket of the bag, by its name in the guide. */
+private fun kitIcon(title: String): String {
+    val t = title.lowercase()
+    return when {
+        "документ" in t -> "📄"
+        "вода" in t || "їжа" in t -> "🥫"
+        "аптечк" in t -> "🩹"
+        "одяг" in t -> "🧥"
+        "світло" in t || "зв'язок" in t || "зв’язок" in t -> "🔦"
+        "гігієн" in t -> "🧼"
+        "спальн" in t -> "🛏️"
+        else -> "🎒"
+    }
+}
+
 @Composable
 private fun KitRow(text: String, checked: Boolean, onChange: (Boolean) -> Unit) {
     val plain = text.replace("**", "")
@@ -216,8 +261,24 @@ private fun KitRow(text: String, checked: Boolean, onChange: (Boolean) -> Unit) 
     ) {
         Checkbox(checked = checked, onCheckedChange = null, modifier = Modifier.padding(horizontal = 12.dp, vertical = 2.dp))
         Column(Modifier.weight(1f).padding(top = 2.dp)) {
-            Text(head, style = MaterialTheme.typography.bodyLarge)
-            if (!tail.isNullOrBlank()) Text(tail, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            // The thing itself first; packed things step back
+            Text(
+                head, style = MaterialTheme.typography.bodyLarge, fontWeight = androidx.compose.ui.text.font.FontWeight.Medium,
+                color = if (checked) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface,
+                textDecoration = if (checked) androidx.compose.ui.text.style.TextDecoration.LineThrough else null,
+            )
+            // Long explanations stay folded to two lines until asked for
+            if (!tail.isNullOrBlank()) {
+                var more by androidx.compose.runtime.saveable.rememberSaveable(text) { mutableStateOf(false) }
+                val long = tail.length > 90
+                Text(
+                    tail, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = if (long && !more) 2 else Int.MAX_VALUE, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                )
+                if (long) TextButton(onClick = { more = !more }, modifier = Modifier.heightIn(min = 40.dp)) {
+                    Text(stringResource(if (more) R.string.kit_less else R.string.kit_more))
+                }
+            }
         }
     }
 }

@@ -193,11 +193,12 @@ fun PathScreen(nav: Nav) {
     ) {
         Text(stringResource(R.string.path_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
+    val firstLevel = path.firstOrNull { it.key !in done }?.level
     PATH_LEVELS.forEachIndexed { level, title ->
         val steps = path.filter { it.level == level }
         if (steps.isEmpty()) return@forEachIndexed
         val got = steps.count { it.key in done }
-        Block(stringResource(title), Group.PREPARE, tint = resist(), padded = false, trailing = {
+        Block(stringResource(title), Group.PREPARE, tint = resist(), padded = false, foldable = true, startOpen = level == firstLevel, trailing = {
             Text((if (got == steps.size) "✓ " else "") + stringResource(R.string.ready_count, got, steps.size), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
         }) {
             steps.forEachIndexed { i, s ->

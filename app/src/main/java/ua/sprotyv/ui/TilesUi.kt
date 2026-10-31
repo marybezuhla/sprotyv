@@ -853,7 +853,7 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
                 BlockRow(stringResource(R.string.presets_title), stringResource(R.string.presets_hint)) { nav.go(Route.Presets) }
             }
         }
-        Block(stringResource(R.string.lock_title), ua.sprotyv.home.Group.GUIDE) {
+        Block(stringResource(R.string.lock_title), ua.sprotyv.home.Group.GUIDE, foldable = true) {
         if (prefs.mode == Mode.KID && !locked) {
             Text(stringResource(R.string.kid_lock_advice), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
         }
@@ -888,8 +888,8 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
             )
         }
         }
-        Block(stringResource(R.string.lock_mine_title), ua.sprotyv.home.Group.GUIDE) { LockMineSettings() }
-        Block(stringResource(R.string.notify_title), ua.sprotyv.home.Group.GUIDE) { NotifySettings() }
+        Block(stringResource(R.string.lock_mine_title), ua.sprotyv.home.Group.GUIDE, foldable = true) { LockMineSettings() }
+        Block(stringResource(R.string.notify_title), ua.sprotyv.home.Group.GUIDE, foldable = true) { NotifySettings() }
         // Backup and moving to a new phone, where people look for it;
         // the screen itself is in "Mine", so trip mode hides it here too
         if (!prefs.trip) {
@@ -897,7 +897,7 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
                 BlockRow(stringResource(R.string.backup_settings_row), stringResource(R.string.backup_settings_hint), first = true) { nav.go(Route.Mine(MinePart.BACKUP)) }
             }
         }
-        Block(stringResource(R.string.settings_other_hands), ua.sprotyv.home.Group.GUIDE) {
+        Block(stringResource(R.string.settings_other_hands), ua.sprotyv.home.Group.GUIDE, foldable = true) {
             TripToggle(prefs.trip)
             NeutralToggle()
         }

@@ -873,4 +873,8 @@
     <string name="shelf_resist_desc">Everyone\'s part, where to learn, supporting the country, resilience</string>
     <string name="print_choose">What goes on paper</string>
     <string name="lock_mine_112_hint">The medical card and «I am safe» are behind the lock too. Calling 112 always works.</string>
+    <string name="kit_packed">Packed %1$d of %2$d</string>
+    <string name="kit_full">The bag is packed: %1$d of %2$d</string>
+    <string name="kit_more">More</string>
+    <string name="kit_less">Less</string>
 </resources>
