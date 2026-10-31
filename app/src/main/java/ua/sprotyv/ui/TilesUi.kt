@@ -1,5 +1,7 @@
 package ua.sprotyv.ui
 
+import androidx.compose.foundation.layout.fillMaxHeight
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -386,7 +388,7 @@ fun IconBadge(icon: ImageVector, tint: Tint, size: Dp) {
  * bottom); otherwise a card for the grid. "What to do now" is the one marked out.
  */
 @Composable
-fun TileCard(info: TileInfo, big: Boolean, status: String? = null, onClick: () -> Unit) {
+fun TileCard(info: TileInfo, big: Boolean, status: String? = null, modifier: Modifier = Modifier, onClick: () -> Unit) {
     val marked = info.id == Tiles.tool(Tool.NOW)
     // "I am safe" beside it in its own green, so the two ways in sit side by side in harmony
     val safe = info.id == Tiles.tool(Tool.SAFE)
@@ -403,7 +405,7 @@ fun TileCard(info: TileInfo, big: Boolean, status: String? = null, onClick: () -
             safe -> BorderStroke(2.dp, green.ink.copy(alpha = 0.6f))
             else -> BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
         },
-        modifier = Modifier.fillMaxWidth().heightIn(min = if (big) 88.dp else 76.dp),
+        modifier = modifier.fillMaxWidth().heightIn(min = if (big) 88.dp else 76.dp),
     ) {
         if (big) {
             Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -474,9 +476,11 @@ fun FullHome(content: Content?, pins: List<String>, nav: Nav, onSettings: () -> 
     LaunchedEffect(Unit) { while (true) { kotlinx.coroutines.delay(60_000); now = System.currentTimeMillis() } }
     val fixed = Tiles.FIXED.mapNotNull { tileInfo(it, content) }
     val mine = pins.mapNotNull { tileInfo(it, content) }
+    // Two columns on a phone; one when the text is made very large, so nothing is cut off
+    val cfg = androidx.compose.ui.platform.LocalConfiguration.current
+    val cols = (((cfg.screenWidthDp - 32 + 12) / (172 * cfg.fontScale.coerceAtLeast(1f))).toInt()).coerceIn(1, 3)
     LazyVerticalGrid(
-        // Two columns on a phone; one when the text is made large, so nothing is cut off
-        columns = GridCells.Adaptive(minSize = 160.dp),
+        columns = GridCells.Fixed(1),
         contentPadding = PaddingValues(16.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -497,7 +501,7 @@ fun FullHome(content: Content?, pins: List<String>, nav: Nav, onSettings: () -> 
         }
         // Counts running now come first, by themselves
         item(span = { GridItemSpan(maxLineSpan) }) { ActiveStrip(nav) }
-        items(fixed, key = { it.id }) { info -> TileCard(info, big = false) { nav.go(info.route) } }
+        tileRows(fixed, cols) { info, m -> TileCard(info, big = false, modifier = m) { nav.go(info.route) } }
         item(span = { GridItemSpan(maxLineSpan) }) { ReadinessStrip(nav) }
         item(span = { GridItemSpan(maxLineSpan) }) {
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 8.dp)) {
@@ -521,7 +525,24 @@ fun FullHome(content: Content?, pins: List<String>, nav: Nav, onSettings: () -> 
                 }
             }
         }
-        items(mine, key = { it.id }) { info -> TileCard(info, big = false, status = tileStatus(info.id, now)) { nav.go(info.route) } }
+        tileRows(mine, cols) { info, m -> TileCard(info, big = false, status = tileStatus(info.id, now), modifier = m) { nav.go(info.route) } }
+    }
+}
+
+/**
+ * Tiles side by side in rows of the same height, so a short tile never sits beside a tall one and
+ * the screen does not look scattered. Each row is one full-width item of the grid.
+ */
+private fun androidx.compose.foundation.lazy.grid.LazyGridScope.tileRows(
+    list: List<TileInfo>, cols: Int, tile: @Composable (TileInfo, Modifier) -> Unit,
+) {
+    list.chunked(cols).forEach { row ->
+        item(key = "row:" + row.joinToString(",") { it.id }, span = { GridItemSpan(maxLineSpan) }) {
+            Row(Modifier.fillMaxWidth().height(androidx.compose.foundation.layout.IntrinsicSize.Min), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                row.forEach { info -> Box(Modifier.weight(1f).fillMaxHeight()) { tile(info, Modifier.fillMaxHeight()) } }
+                repeat(cols - row.size) { Spacer(Modifier.weight(1f)) }
+            }
+        }
     }
 }
 
