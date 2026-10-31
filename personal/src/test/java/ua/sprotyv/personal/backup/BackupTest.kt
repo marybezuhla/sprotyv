@@ -25,6 +25,7 @@ class BackupTest {
         rows = listOf(PlanRow(id = 5, kind = PlanRow.KIND_IF_THEN, first = "Немає зв'язку", second = "Йдемо до точки 1", sort = 1)),
         kit = listOf(KitCheck("abc", true, 42)),
         settings = listOf(Setting("safe_message", "Я в безпеці")),
+        home = mapOf("mode" to "FULL", "pins" to "card:bleeding\ntool:KIT"),
     )
 
     @Test fun encryptsAndOpensWithThePassword() {
@@ -60,6 +61,13 @@ class BackupTest {
         val back = BackupData.decode(BackupData.encode(snapshot))
         assertEquals(snapshot, back)
         assertEquals(6, back.records)
+    }
+
+    @Test fun homeSetUpTravelsAndOlderCopiesStillOpen() {
+        val older = org.json.JSONObject(String(BackupData.encode(snapshot))).apply { remove("home") }.toString()
+        assertEquals(emptyMap<String, String>(), BackupData.decode(older.toByteArray()).home)
+        val bad = String(BackupData.encode(snapshot)).replace("\"mode\"", "\"Mode!\"")
+        expect<BackupData.Incompatible> { BackupData.decode(bad.toByteArray()) }
     }
 
     @Test fun foreignOrBrokenFilesAreRefused() {

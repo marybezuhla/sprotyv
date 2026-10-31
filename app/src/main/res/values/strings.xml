@@ -279,7 +279,7 @@
     <string name="theme_dynamic_hint">Accent colours come from the phone’s wallpaper. Orange warnings and the red 112 button stay as they are.</string>
     <string name="backup_title">Backup</string>
     <string name="backup_hint">All your data in one encrypted file</string>
-    <string name="backup_intro">A copy of all your data in one file, encrypted with a password. Without the password nobody can open it, not even us. Keep it apart from the phone: on a USB stick, a computer or in the cloud.</string>
+    <string name="backup_intro">A copy of all your data and settings (look, tiles, theme) in one file, encrypted with a password. On a new phone: “Move from another phone”, the file, the password — and all is as it was. Without the password nobody can open it, not even us. Keep it apart from the phone: on a USB stick, a computer or in the cloud.</string>
     <string name="backup_last">Last backup: %1$s</string>
     <string name="backup_busy">Working… This takes a few seconds.</string>
     <string name="backup_save_title">Save a backup</string>
@@ -582,4 +582,7 @@
     <string name="lock_mine_locked_pin">Opens with the phone\'s PIN only.</string>
     <string name="lock_mine_toggle_pin">Open “Mine” with the PIN</string>
     <string name="lock_mine_trouble">The key is not answering right now. Nothing changed; try again in a moment.</string>
+    <string name="welcome_restore">Move from another phone</string>
+    <string name="backup_replace_home">The look, home-screen tiles and settings come along too.</string>
+    <string name="backup_restored_lock">Restored. In the copy, “Mine” opened with a fingerprint or PIN: turn that on again in settings, as a new phone has a new key.</string>
 </resources>
