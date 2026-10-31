@@ -158,6 +158,9 @@ object BackupJobs {
                     ?.copy(home = homeForBackup(app))
                     ?: return@job removeNew(app, uri, R.string.backup_failed)
                 plain = BackupData.encode(snap)
+                // Never a copy that would not open again: it must read back, and fit the size a restore accepts
+                if (plain!!.size + BackupCrypto.OVERHEAD > BackupCrypto.MAX_FILE_BYTES) return@job removeNew(app, uri, R.string.backup_too_big)
+                if (runCatching { BackupData.decode(plain!!) }.isFailure) return@job removeNew(app, uri, R.string.backup_failed)
                 val file = withContext(Dispatchers.Default) { BackupCrypto.encrypt(plain!!, pw, BackupCrypto.Purpose.BACKUP) }
                 val out = app.contentResolver.openOutputStream(uri, "w") ?: return@job removeNew(app, uri, R.string.backup_failed)
                 out.use { it.write(file) }
@@ -457,7 +460,8 @@ fun BackupScreen() {
             text = {
                 Text(
                     stringResource(R.string.backup_replace_text, date, snap.people.size, snap.records) +
-                        if (snap.home.isNotEmpty()) " " + stringResource(R.string.backup_replace_home) else "",
+                        (if (snap.home.isNotEmpty()) " " + stringResource(R.string.backup_replace_home) else "") +
+                        " " + stringResource(R.string.backup_replace_notes, snap.notes.size),
                 )
             },
             confirmButton = {

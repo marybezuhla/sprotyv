@@ -784,4 +784,10 @@
     <string name="service_fact_5">Service means risk to life and health. If your rights are violated: the recruiter, the Ministry of Defence hotline 1512, the Office of the Military Ombudsman.</string>
     <string name="service_source">Source: Ministry of Defence, “A conscious choice: how recruitment works in 2026”, 04.03.2026. Checked 31.10.2026. Terms change: check with a recruiter.</string>
     <string name="resist_principles">No pressure, rankings or reminders. Nothing here is sent to anyone. Hidden in trip mode.</string>
+    <string name="backup_too_big">The copy is too large to restore: shorten or delete notes and try again.</string>
+    <string name="backup_replace_notes">Notes in the copy: %1$d.</string>
+    <string name="notes_full">There are very many notes: delete some so the backup keeps working.</string>
+    <string name="notes_read_failed">The note could not be read just now. Go back and try again.</string>
+    <string name="notes_gone">This note is no longer there.</string>
+    <string name="notes_length">%1$d of %2$d characters</string>
 </resources>
