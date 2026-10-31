@@ -1,0 +1,577 @@
+[
+ {
+  "id": "first-60-sms",
+  "card": "first-60",
+  "step": 4,
+  "situation": "An explosion nearby. You are already safe, but calls to your family won't connect.",
+  "options": [
+   {
+    "text": "I'll send one SMS: \"I'm safe, I'm at [place], heading to [where]\".",
+    "right": true,
+    "why": "An SMS gets through when calls don't connect. After that, save your battery."
+   },
+   {
+    "text": "I'll keep calling until I get through.",
+    "right": false,
+    "why": "An SMS gets through when calls don't connect, and it's better to save your battery."
+   },
+   {
+    "text": "I'll record a video for my family.",
+    "right": false,
+    "why": "Video drains the battery. One SMS, then save your battery."
+   }
+  ]
+ },
+ {
+  "id": "air-alert-ballistic",
+  "card": "air-alert",
+  "step": 0,
+  "situation": "Ballistic missile threat. You are at home, 7 minutes' walk from a shelter.",
+  "options": [
+   {
+    "text": "I'll put my shoes on and go straight to the two-wall zone.",
+    "right": true,
+    "why": "A ballistic missile gives 1–3 minutes, or no time at all."
+   },
+   {
+    "text": "I'll pack a suitcase and go to the shelter.",
+    "right": false,
+    "why": "There's no time to pack: a ballistic missile gives 1–3 minutes. Just put your shoes on and go to the two-wall zone."
+   },
+   {
+    "text": "I'll go to the window to look.",
+    "right": false,
+    "why": "A second missile or debris can arrive within seconds. Stay away from windows."
+   }
+  ]
+ },
+ {
+  "id": "air-alert-after",
+  "card": "air-alert",
+  "step": 6,
+  "situation": "After explosions nearby, the all-clear has sounded. A neighbour asks you to go and see what happened.",
+  "options": [
+   {
+    "text": "I'll wait at least 40 minutes.",
+    "right": true,
+    "why": "A repeat strike on the same place can come 10–40 minutes later, sometimes 1–2 hours later."
+   },
+   {
+    "text": "I'll go right away, but only briefly.",
+    "right": false,
+    "why": "A repeat strike on the same place can come 10–40 minutes later. Wait at least 40."
+   },
+   {
+    "text": "I'll go just to take photos.",
+    "right": false,
+    "why": "A repeat strike can come 10–40 minutes later, sometimes 1–2 hours later. Wait at least 40."
+   }
+  ]
+ },
+ {
+  "id": "ballistic-street",
+  "card": "ballistic",
+  "step": 2,
+  "situation": "You are outside and hear a rising whistle.",
+  "options": [
+   {
+    "text": "I'll drop face down, feet towards the blast, hands on my head, mouth slightly open.",
+    "right": true,
+    "why": "An open mouth protects your eardrums and lungs from the blast wave. Then crawl to shelter."
+   },
+   {
+    "text": "I'll look up to see where it's coming from.",
+    "right": false,
+    "why": "Don't look at the sky: drop at once."
+   },
+   {
+    "text": "I'll run across the road to the shelter.",
+    "right": false,
+    "why": "Get to the ground first, then crawl to shelter."
+   }
+  ]
+ },
+ {
+  "id": "drone-door",
+  "card": "drone",
+  "step": 1,
+  "situation": "You and a friend are outside and hear a drone. There is an open building entrance nearby.",
+  "options": [
+   {
+    "text": "We go in, shut the door, move deeper inside away from windows and stay still.",
+    "right": true,
+    "why": "An FPV drone can fly in through an open door or window, so don't stop in the doorway."
+   },
+   {
+    "text": "We stand in the doorway and watch where it's flying.",
+    "right": false,
+    "why": "Don't stop in the doorway: an FPV drone can fly in through an open door."
+   },
+   {
+    "text": "We'll film the drone on a phone.",
+    "right": false,
+    "why": "Assume it can see you: don't stare at it, don't film, don't wave."
+   }
+  ]
+ },
+ {
+  "id": "drone-downed",
+  "card": "drone",
+  "step": 7,
+  "situation": "A downed drone is lying in the yard. A neighbour wants to go up to it and take a photo.",
+  "options": [
+   {
+    "text": "We'll move at least 100 m away (300 for a Shahed), behind cover, and call 101 or 102.",
+    "right": true,
+    "why": "Explosives may still be on board."
+   },
+   {
+    "text": "We'll go up to it if it isn't smoking.",
+    "right": false,
+    "why": "Don't approach: explosives may still be on board. At least 100 m away, behind cover."
+   },
+   {
+    "text": "We'll drag it off the road.",
+    "right": false,
+    "why": "Don't touch it: explosives may still be on board. Move away and call 101 or 102."
+   }
+  ]
+ },
+ {
+  "id": "bleeding-belt",
+  "card": "bleeding",
+  "step": 2,
+  "situation": "A colleague's leg is wounded and blood is spurting. There's no tourniquet, but you have a belt.",
+  "options": [
+   {
+    "text": "Press on the wound with your full weight and don't let go.",
+    "right": true,
+    "why": "A belt won't do: an improvised tourniquet without training usually doesn't stop the bleeding and wastes time."
+   },
+   {
+    "text": "Tighten the belt above the wound.",
+    "right": false,
+    "why": "An improvised tourniquet without training usually doesn't stop the bleeding and wastes time. Press on the wound."
+   },
+   {
+    "text": "First look for a tourniquet at the neighbours'.",
+    "right": false,
+    "why": "Bleeding from the femoral artery kills in 2–4 minutes. Press at once and tell a specific person to call 103."
+   }
+  ]
+ },
+ {
+  "id": "bleeding-loosen",
+  "card": "bleeding",
+  "step": 1,
+  "situation": "You applied a tourniquet and the bleeding stopped. Half an hour has passed and the leg has turned blue.",
+  "options": [
+   {
+    "text": "Don't loosen it: only a medic removes it. The time must be written down.",
+    "right": true,
+    "why": "A tourniquet is not loosened; only a medic removes it."
+   },
+   {
+    "text": "Loosen it a little so the leg can \"rest\".",
+    "right": false,
+    "why": "A tourniquet is not loosened; only a medic removes it."
+   },
+   {
+    "text": "Take it off, since the bleeding has stopped.",
+    "right": false,
+    "why": "A tourniquet is not loosened or removed; only a medic does that."
+   }
+  ]
+ },
+ {
+  "id": "unconscious-gasps",
+  "card": "unconscious",
+  "step": 4,
+  "situation": "At a bus stop, a person collapsed and doesn't respond. With the head tilted back, they only gasp now and then.",
+  "options": [
+   {
+    "text": "Start CPR and tell a specific person to call 103.",
+    "right": true,
+    "why": "Occasional gasps are not breathing. Start CPR on a firm surface."
+   },
+   {
+    "text": "Put them on their side and wait for the ambulance.",
+    "right": false,
+    "why": "The recovery position is for a person who is breathing. Occasional gasps are not breathing: CPR is needed."
+   },
+   {
+    "text": "I can't give rescue breaths, so do nothing.",
+    "right": false,
+    "why": "If you can't give rescue breaths, do chest compressions only. That saves lives too."
+   }
+  ]
+ },
+ {
+  "id": "burn-child",
+  "card": "burn",
+  "step": 3,
+  "situation": "A child has scalded their hand with boiling water.",
+  "options": [
+   {
+    "text": "Cool it under cool running water for at least 20 minutes.",
+    "right": true,
+    "why": "No ice. A burn in a child always needs a doctor."
+   },
+   {
+    "text": "Put ice on it.",
+    "right": false,
+    "why": "No ice: cool running water for at least 20 minutes."
+   },
+   {
+    "text": "Spread oil or sour cream on it.",
+    "right": false,
+    "why": "Don't put anything on it: no oil, sour cream or toothpaste."
+   }
+  ]
+ },
+ {
+  "id": "fire-oil",
+  "card": "home-fire",
+  "step": 0,
+  "situation": "In the kitchen, oil in a pan has caught fire. The fire is small.",
+  "options": [
+   {
+    "text": "Cover the pan.",
+    "right": true,
+    "why": "Burning fat is covered, not doused with water."
+   },
+   {
+    "text": "Pour water on it.",
+    "right": false,
+    "why": "Water on burning fat: a burst of steam throws the flames around."
+   },
+   {
+    "text": "Keep fighting the fire, even though the smoke has reached the ceiling.",
+    "right": false,
+    "why": "If smoke is at the ceiling or it hasn't worked in 30 seconds, get out and close the door to the room with the fire."
+   }
+  ]
+ },
+ {
+  "id": "fire-stairs",
+  "card": "home-fire",
+  "step": 4,
+  "situation": "You are on the seventh floor, and the stairwell is full of thick smoke.",
+  "options": [
+   {
+    "text": "I'll go back into the flat, close the door and call 101.",
+    "right": true,
+    "why": "Seal the gaps with something wet, signal from the window, give the exact address and floor. Don't jump from above the 2nd floor."
+   },
+   {
+    "text": "I'll take the lift down.",
+    "right": false,
+    "why": "Never use the lift."
+   },
+   {
+    "text": "I'll run down the stairs through the smoke.",
+    "right": false,
+    "why": "Smoke kills: 2–3 breaths of hot smoke and a person passes out."
+   }
+  ]
+ },
+ {
+  "id": "suspicious-playground",
+  "card": "suspicious",
+  "step": 2,
+  "situation": "Near a playground there is a military-looking object that wasn't there yesterday.",
+  "options": [
+   {
+    "text": "Don't touch it, move at least 100 m away (300 for a shell or bomb) and call 101 or 102 from there.",
+    "right": true,
+    "why": "Don't use a phone near the object. Warn people."
+   },
+   {
+    "text": "Take a close-up photo for the police.",
+    "right": false,
+    "why": "Don't take close-up photos. Don't use a phone near the object."
+   },
+   {
+    "text": "Carry it away from the children.",
+    "right": false,
+    "why": "Don't touch it. Mark the danger from where you moved back to, and warn people."
+   }
+  ]
+ },
+ {
+  "id": "chemical-chlorine",
+  "card": "chemical",
+  "step": 1,
+  "situation": "After a strike on a factory, the street smells like a swimming pool.",
+  "options": [
+   {
+    "text": "Walk crosswise to the wind, towards higher ground.",
+    "right": true,
+    "why": "Chlorine is heavier than air and spreads low to the ground."
+   },
+   {
+    "text": "Hide in a basement.",
+    "right": false,
+    "why": "Chlorine spreads low to the ground: go to higher ground, not a basement."
+   },
+   {
+    "text": "Walk in the direction the wind is blowing.",
+    "right": false,
+    "why": "Walk crosswise to the wind and keep going further away."
+   }
+  ]
+ },
+ {
+  "id": "radiation-home",
+  "card": "radiation",
+  "step": 4,
+  "situation": "During a radiation accident you were outdoors and have just got home.",
+  "options": [
+   {
+    "text": "Outer clothes in a bag outside the door, a shower, hair washed without conditioner.",
+    "right": true,
+    "why": "Conditioner binds radioactive particles to the hair."
+   },
+   {
+    "text": "Take potassium iodide right away.",
+    "right": false,
+    "why": "Potassium iodide only after an official announcement."
+   },
+   {
+    "text": "Go out for news once things calm down a bit.",
+    "right": false,
+    "why": "Don't go out without an order from the authorities. Listen to a battery radio."
+   }
+  ]
+ },
+ {
+  "id": "rubble-crush",
+  "card": "rubble",
+  "step": 5,
+  "situation": "A neighbour's leg is pinned under a concrete slab, and no one knows how long it's been.",
+  "options": [
+   {
+    "text": "Don't free her yourselves: call 103 and do what the dispatcher says.",
+    "right": true,
+    "why": "Sudden release after long compression can cause fatal crush syndrome."
+   },
+   {
+    "text": "Lift the slab immediately.",
+    "right": false,
+    "why": "The time is unknown, so don't free her yourselves: fatal crush syndrome is possible. Call 103."
+   },
+   {
+    "text": "Clear the rubble around her.",
+    "right": false,
+    "why": "Don't clear rubble yourselves: the structure may shift and settle."
+   }
+  ]
+ },
+ {
+  "id": "blackout-generator",
+  "card": "blackout",
+  "step": 4,
+  "situation": "The power has been out for a second day. A neighbour wants to put a generator on the balcony.",
+  "options": [
+   {
+    "text": "Only outdoors, no closer than 6 m to windows, doors and vents.",
+    "right": true,
+    "why": "Carbon monoxide kills silently."
+   },
+   {
+    "text": "On the balcony, if the door is left open.",
+    "right": false,
+    "why": "Never on a balcony: carbon monoxide kills silently."
+   },
+   {
+    "text": "In the stairwell, where it doesn't get rained on.",
+    "right": false,
+    "why": "Never in a stairwell, garage or basement: carbon monoxide kills silently."
+   }
+  ]
+ },
+ {
+  "id": "leave-fake",
+  "card": "leave-home",
+  "step": 0,
+  "situation": "In the building's chat, someone writes: \"Evacuation order, corridor at 6:00\".",
+  "options": [
+   {
+    "text": "I'll check the order with two official sources.",
+    "right": true,
+    "why": "Fake orders and \"corridors\" do happen."
+   },
+   {
+    "text": "I'll pack right away and leave at 6:00.",
+    "right": false,
+    "why": "First check with two official sources: fake orders and \"corridors\" do happen."
+   },
+   {
+    "text": "I'll forward it to everyone I know.",
+    "right": false,
+    "why": "First check with two official sources: fake orders do happen."
+   }
+  ]
+ },
+ {
+  "id": "kid-siren-window",
+  "card": "kid-siren",
+  "step": 2,
+  "situation": "A siren. You're in the hallway, and something is humming outside the window.",
+  "options": [
+   {
+    "text": "I'll stay in the hallway.",
+    "right": true,
+    "why": "Don't go to the window: the glass could break."
+   },
+   {
+    "text": "I'll go to the window to look.",
+    "right": false,
+    "why": "Don't go to the window, not even to look: the glass could break."
+   },
+   {
+    "text": "I'll go outside.",
+    "right": false,
+    "why": "Go out only when a grown-up says so or you hear \"All clear\"."
+   }
+  ]
+ },
+ {
+  "id": "kid-buzz-sky",
+  "card": "kid-buzz",
+  "step": 0,
+  "situation": "You're in the yard and hear buzzing in the sky.",
+  "options": [
+   {
+    "text": "I'll quickly get under a roof.",
+    "right": true,
+    "why": "Into a house, building entrance or shop."
+   },
+   {
+    "text": "I'll look up.",
+    "right": false,
+    "why": "Don't look up: get under a roof quickly."
+   },
+   {
+    "text": "I'll film it on my phone.",
+    "right": false,
+    "why": "Don't film it: get under a roof quickly."
+   }
+  ]
+ },
+ {
+  "id": "kid-strange-toy",
+  "card": "kid-strange",
+  "step": 0,
+  "situation": "Something shiny that looks like a toy is lying in the grass.",
+  "options": [
+   {
+    "text": "I don't touch it, I step away and tell a grown-up.",
+    "right": true,
+    "why": "You'll only be praised for that."
+   },
+   {
+    "text": "I'll pick it up to look.",
+    "right": false,
+    "why": "Not mine, so I don't touch it. Even if it looks like a toy or it's shiny."
+   },
+   {
+    "text": "I'll call my friends to play with it.",
+    "right": false,
+    "why": "Not mine, so I don't touch it. Step away and tell a grown-up."
+   }
+  ]
+ },
+ {
+  "id": "kid-lost-shop",
+  "card": "kid-lost",
+  "step": 0,
+  "situation": "In a shop, you can't see your family.",
+  "options": [
+   {
+    "text": "I stay where I am and call out loudly.",
+    "right": true,
+    "why": "The older person does the searching, and you wait."
+   },
+   {
+    "text": "I'll go and look for them.",
+    "right": false,
+    "why": "Stay where you are: the older person does the searching, and you wait."
+   },
+   {
+    "text": "I'll go with a stranger who calls me.",
+    "right": false,
+    "why": "Don't go anywhere with anyone. If you have a phone, call your family."
+   }
+  ]
+ },
+ {
+  "id": "kid-fire-smoke",
+  "card": "kid-fire",
+  "step": 1,
+  "situation": "Smoke has appeared in the flat.",
+  "options": [
+   {
+    "text": "I call the grown-ups and go out bending low.",
+    "right": true,
+    "why": "There's less smoke lower down. Cover your nose and mouth with cloth."
+   },
+   {
+    "text": "I'll take the lift.",
+    "right": false,
+    "why": "Don't take the lift. Go out bending low."
+   },
+   {
+    "text": "I'll run without bending down.",
+    "right": false,
+    "why": "There's less smoke lower down: go out bending low."
+   }
+  ]
+ },
+ {
+  "id": "kid-scared-shelter",
+  "card": "kid-scared",
+  "step": 0,
+  "situation": "After a loud explosion you feel very scared. You're already in the shelter.",
+  "options": [
+   {
+    "text": "I'll sit next to a grown-up and breathe slowly.",
+    "right": true,
+    "why": "Slow breathing calms you down."
+   },
+   {
+    "text": "I'll run home.",
+    "right": false,
+    "why": "You're already in a safe place. Sit next to a grown-up."
+   },
+   {
+    "text": "I'll leave the shelter to look.",
+    "right": false,
+    "why": "You're already in a safe place. Sit next to a grown-up or hug your toy."
+   }
+  ]
+ },
+ {
+  "id": "kid-code-call",
+  "card": "kid-code",
+  "step": 0,
+  "situation": "A stranger calls: \"Your mum sent me, come outside to me\".",
+  "options": [
+   {
+    "text": "I'll ask for the code word.",
+    "right": true,
+    "why": "Only your family knows the code word."
+   },
+   {
+    "text": "I'll go out, since mum sent them.",
+    "right": false,
+    "why": "Ask for the code word. If they don't know it, hang up and call your mum."
+   },
+   {
+    "text": "I'll tell them the code word.",
+    "right": false,
+    "why": "Only your family knows the code word: you are the one who asks."
+   }
+  ]
+ }
+]

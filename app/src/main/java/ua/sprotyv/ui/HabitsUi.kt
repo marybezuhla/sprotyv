@@ -61,34 +61,34 @@ private enum class Pillar(val title: Int, val hint: Int, val group: Group, val r
 }
 
 /** One habit: what to do, and an "if — then" plan that ties it to something already done every day. */
-private class Habit(val id: String, val pillar: Pillar, val title: String, val plan: String, val route: Route? = null)
+private class Habit(val id: String, val pillar: Pillar, val title: Int, val plan: Int, val route: Route? = null)
 
 private val HABITS = listOf(
-    Habit("charge", Pillar.SAFETY, "Телефон і павербанк — на зарядку щовечора", "Коли чищу зуби ввечері — ставлю телефон і павербанк на зарядку.", Route.Power),
-    Habit("place", Pillar.SAFETY, "Документи й ключі — завжди на одному місці", "Коли приходжу додому — кладу документи й ключі на їхнє місце.", Route.Mine(MinePart.KIT)),
-    Habit("water", Pillar.SAFETY, "Пляшка води біля ліжка", "Коли вечеряю — наповнюю пляшку води й ставлю біля ліжка.", Route.SuppliesRoute),
-    Habit("night", Pillar.SAFETY, "Одяг і взуття поруч на ніч", "Коли лягаю спати — кладу поруч одяг, взуття й ліхтарик.", Route.CardRoute("air-alert")),
+    Habit("charge", Pillar.SAFETY, R.string.habit_charge, R.string.habit_charge_plan, Route.Power),
+    Habit("place", Pillar.SAFETY, R.string.habit_place, R.string.habit_place_plan, Route.Mine(MinePart.KIT)),
+    Habit("water", Pillar.SAFETY, R.string.habit_water, R.string.habit_water_plan, Route.SuppliesRoute),
+    Habit("night", Pillar.SAFETY, R.string.habit_night, R.string.habit_night_plan, Route.CardRoute("air-alert")),
 
-    Habit("news", Pillar.CALM, "Новини — двічі на день, не весь день", "Коли п'ю ранкову каву — 10 хвилин новин, далі до вечора ні. Сповіщення про тривогу лишаю ввімкненими.", Route.Situation),
-    Habit("breath", Pillar.CALM, "Дві хвилини повільного дихання", "Коли під час тривоги я вже в укритті — дихаю повільно дві хвилини.", Route.ChapterRoute("ch1")),
-    Habit("sleep", Pillar.CALM, "Лягати щодня в один час", "Коли настає мій час сну — вимикаю екран і кладу телефон на зарядку."),
+    Habit("news", Pillar.CALM, R.string.habit_news, R.string.habit_news_plan, Route.Situation),
+    Habit("breath", Pillar.CALM, R.string.habit_breath, R.string.habit_breath_plan, Route.ChapterRoute("ch1")),
+    Habit("sleep", Pillar.CALM, R.string.habit_sleep, R.string.habit_sleep_plan),
 
-    Habit("practice", Pillar.SKILL, "Одна ситуація «Що б ви зробили?»", "Коли їду в транспорті чи чекаю — проходжу одну ситуацію.", Route.PracticeRoute("")),
-    Habit("skill", Pillar.SKILL, "Повторити одну дію: турнікет, вузол, номер служби", "Коли дивлюся вечірні новини — повторюю одну дію з карток.", Route.MozList),
-    Habit("page", Pillar.SKILL, "Одна сторінка довідника", "Коли сідаю пити чай — читаю одну сторінку довідника.", Route.Open(Section.GUIDE)),
+    Habit("practice", Pillar.SKILL, R.string.habit_practice, R.string.habit_practice_plan, Route.PracticeRoute("")),
+    Habit("skill", Pillar.SKILL, R.string.habit_skill, R.string.habit_skill_plan, Route.MozList),
+    Habit("page", Pillar.SKILL, R.string.habit_page, R.string.habit_page_plan, Route.Open(Section.GUIDE)),
 
-    Habit("call", Pillar.BOND, "Подзвонити або написати рідним", "Коли обідаю — пишу комусь із рідних чи друзів.", Route.Mine(MinePart.PEOPLE)),
-    Habit("neighbour", Pillar.BOND, "Перемовитися з сусідами", "Коли виходжу з дому — вітаюся з сусідами й питаю, як справи."),
-    Habit("child", Pillar.BOND, "10 хвилин з дитиною без телефону", "Коли дитина вкладається спати — 10 хвилин розмови без екранів."),
+    Habit("call", Pillar.BOND, R.string.habit_call, R.string.habit_call_plan, Route.Mine(MinePart.PEOPLE)),
+    Habit("neighbour", Pillar.BOND, R.string.habit_neighbour, R.string.habit_neighbour_plan),
+    Habit("child", Pillar.BOND, R.string.habit_child, R.string.habit_child_plan),
 
-    Habit("good", Pillar.MEANING, "Одна добра справа для когось", "Коли бачу, що комусь важко, — допомагаю хоч трохи.", Route.Resistance),
-    Habit("support", Pillar.MEANING, "Підтримати країну: донат, кров, правда", "Коли отримую зарплату — частину відкладаю на підтримку.", Route.Resistance),
-    Habit("ukrainian", Pillar.MEANING, "Своє: книжка, пісня, історія", "Коли лягаю спати — читаю кілька сторінок української книжки чи історії.", Route.HistoryRoute),
+    Habit("good", Pillar.MEANING, R.string.habit_good, R.string.habit_good_plan, Route.Resistance),
+    Habit("support", Pillar.MEANING, R.string.habit_support, R.string.habit_support_plan, Route.Resistance),
+    Habit("ukrainian", Pillar.MEANING, R.string.habit_ukrainian, R.string.habit_ukrainian_plan, Route.HistoryRoute),
 
-    Habit("walk", Pillar.BODY, "Прогулянка 20–30 хвилин", "Коли повертаюся з роботи чи магазину — іду довшою дорогою.", null),
-    Habit("stairs", Pillar.BODY, "Сходи замість ліфта", "Коли заходжу в будинок — іду сходами, хоча б частину."),
-    Habit("strength", Pillar.BODY, "10 хвилин на силу й рівновагу", "Після ранкового вмивання — присідання, віджимання від стіни, стояння на одній нозі біля опори."),
-    Habit("carry", Pillar.BODY, "Пройтися з рюкзаком", "Коли йду в магазин — беру рюкзак, а не пакет, і несу покупки в ньому."),
+    Habit("walk", Pillar.BODY, R.string.habit_walk, R.string.habit_walk_plan, null),
+    Habit("stairs", Pillar.BODY, R.string.habit_stairs, R.string.habit_stairs_plan),
+    Habit("strength", Pillar.BODY, R.string.habit_strength, R.string.habit_strength_plan),
+    Habit("carry", Pillar.BODY, R.string.habit_carry, R.string.habit_carry_plan),
 )
 
 private const val MAX_ACTIVE = 5
@@ -134,9 +134,9 @@ private fun stage(days: Int): Int = when {
 }
 
 private val BODY_CHECKS = listOf(
-    "walk3" to "Пройду 3 км з рюкзаком",
-    "floors" to "Піднімуся на 5 поверхів без зупинки",
-    "drag" to "Протягну дорослу людину на ковдрі кілька метрів (за її згодою, спина рівна)",
+    "walk3" to R.string.body_walk3,
+    "floors" to R.string.body_floors,
+    "drag" to R.string.body_drag,
 )
 
 @Composable
@@ -176,8 +176,8 @@ fun GartScreen(nav: Nav) {
                 val on = h.id in g.active
                 Row(Modifier.fillMaxWidth().heightIn(min = 56.dp).padding(start = 16.dp, end = 8.dp, top = 8.dp, bottom = 8.dp), verticalAlignment = Alignment.CenterVertically) {
                     Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                        Text(h.title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
-                        Text(h.plan, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(stringResource(h.title), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
+                        Text(stringResource(h.plan), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                     TextButton(
                         onClick = { change { s -> s.copy(active = if (on) s.active - h.id else (s.active + h.id).take(MAX_ACTIVE)) } },
@@ -202,7 +202,7 @@ fun GartScreen(nav: Nav) {
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Checkbox(checked = on, onCheckedChange = null, modifier = Modifier.padding(horizontal = 12.dp))
-                        Text(words, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+                        Text(stringResource(words), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
                     }
                 }
                 Text(stringResource(R.string.gart_body_doctor), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(16.dp))
@@ -224,10 +224,10 @@ fun GartScreen(nav: Nav) {
 }
 
 private val SCIENCE = listOf(
-    "Lally P. та ін. (2010, онлайн 2009). Як формуються звички. European Journal of Social Psychology" to "https://doi.org/10.1002/ejsp.674",
-    "Gollwitzer P., Sheeran P. (2006). Плани «якщо — то» і досягнення цілей" to "https://doi.org/10.1016/S0065-2601(06)38002-1",
-    "Hobfoll S. та ін. (2007). П'ять основ допомоги після катастроф. Psychiatry" to "https://doi.org/10.1521/psyc.2007.70.4.283",
-    "ВООЗ (2020). Рекомендації щодо фізичної активності" to "https://www.who.int/publications/i/item/9789240015128",
+    "Lally P. et al. (2010, online 2009). How are habits formed. European Journal of Social Psychology" to "https://doi.org/10.1002/ejsp.674",
+    "Gollwitzer P., Sheeran P. (2006). Implementation intentions and goal achievement" to "https://doi.org/10.1016/S0065-2601(06)38002-1",
+    "Hobfoll S. et al. (2007). Five essential elements of immediate and mid-term mass trauma intervention. Psychiatry" to "https://doi.org/10.1521/psyc.2007.70.4.283",
+    "WHO (2020). Guidelines on physical activity and sedentary behaviour" to "https://www.who.int/publications/i/item/9789240015128",
 )
 
 @Composable
@@ -241,8 +241,8 @@ private fun ActiveHabit(h: Habit, done: Set<Long>, today: Long, nav: Nav, onTick
         ) {
             Checkbox(checked = on, onCheckedChange = null, modifier = Modifier.padding(horizontal = 12.dp))
             Column(Modifier.weight(1f)) {
-                Text(h.title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
-                Text(h.plan, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(h.title), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
+                Text(stringResource(h.plan), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
         // The last two weeks as dots: done is filled, missed is only empty, never red
