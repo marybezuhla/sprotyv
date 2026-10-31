@@ -56,25 +56,28 @@ fun ActiveStrip(nav: Nav) {
     val u = urgent()
     Card(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        border = BorderStroke(2.dp, u.edge),
+        border = BorderStroke(1.dp, u.edge.copy(alpha = 0.7f)),
         modifier = Modifier.fillMaxWidth(),
     ) {
         Text(
             stringResource(R.string.active_title), style = BlockTitle, color = u.ink,
-            modifier = Modifier.fillMaxWidth().background(u.container).padding(horizontal = 16.dp, vertical = 10.dp),
+            modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 2.dp),
         )
         // Each count on its own plate, so several running at once never read as one
         Column(Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             list.forEach { r ->
+                // Plain plates with the dot of their colour; only danger now has its shade and its words in colour
                 val t = r.tone.tint()
+                val now = r.tone == Group.DANGER
                 Row(
-                    Modifier.fillMaxWidth().heightIn(min = 56.dp).clip(RoundedCornerShape(12.dp)).background(t.container)
+                    Modifier.fillMaxWidth().heightIn(min = 56.dp).clip(RoundedCornerShape(12.dp))
+                        .background(if (now) t.container else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
                         .clickable { nav.go(r.route) }.padding(horizontal = 12.dp, vertical = 10.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Box(Modifier.size(12.dp).background(t.ink, CircleShape))
-                    Text(r.words, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, color = t.ink, modifier = Modifier.weight(1f).padding(start = 12.dp))
-                    Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, tint = t.ink)
+                    Text(r.words, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, color = if (now) t.ink else MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f).padding(start = 12.dp))
+                    Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, tint = if (now) t.ink else MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
         }
