@@ -111,7 +111,7 @@ private fun Rows(kind: String, firstLabel: Int, secondLabel: Int, firstHint: Int
     val rows = loaded ?: return Loading()
     var editing by remember { mutableStateOf<PlanRow?>(null) }
     rows.forEach { r ->
-        NavRow(stringResource(firstLabel) + " " + r.first, stringResource(secondLabel) + " " + r.second) { editing = r }
+        NavRow(stringResource(firstLabel) + " " + r.first, stringResource(secondLabel) + " " + r.second, ua.sprotyv.home.Group.PREPARE) { editing = r }
     }
     OutlinedButton(
         onClick = { editing = PlanRow(kind = kind, first = "", second = "", sort = (rows.maxOfOrNull { it.sort } ?: 0) + 1) },

@@ -136,7 +136,7 @@ fun ReadinessBlock(content: Content?, nav: Nav) {
 @Composable
 fun ReadyRing(fraction: Float, label: String) {
     val track = MaterialTheme.colorScheme.outlineVariant
-    val fill = if (fraction >= 1f) ua.sprotyv.home.Group.FIRST_AID.tint().ink else MaterialTheme.colorScheme.primary
+    val fill = if (fraction >= 1f) ua.sprotyv.home.Group.FIRST_AID.tint().ink else ua.sprotyv.home.Group.PREPARE.tint().ink
     androidx.compose.foundation.layout.Box(Modifier.size(52.dp).clearAndSetSemantics { }, contentAlignment = Alignment.Center) {
         Canvas(Modifier.size(52.dp)) {
             val stroke = androidx.compose.ui.graphics.drawscope.Stroke(width = 6.dp.toPx(), cap = androidx.compose.ui.graphics.StrokeCap.Round)
@@ -153,7 +153,7 @@ fun ReadyRing(fraction: Float, label: String) {
 @Composable
 private fun ReadyRow(title: String, p: Progress?, detail: String? = null, onClick: () -> Unit) {
     val done = ua.sprotyv.home.Group.FIRST_AID.tint().ink
-    val going = MaterialTheme.colorScheme.primary
+    val going = ua.sprotyv.home.Group.PREPARE.tint().ink
     val track = MaterialTheme.colorScheme.outlineVariant
     val words = if (p == null) "…" else stringResource(R.string.ready_count, p.done, p.total)
     Column(
@@ -197,11 +197,11 @@ fun ReadinessStrip(nav: Nav) {
     if (parts.size != READY_PARTS.size) return
     val done = parts.count { it.complete }
     val doneColour = ua.sprotyv.home.Group.FIRST_AID.tint().ink
-    val going = MaterialTheme.colorScheme.primary
+    val going = ua.sprotyv.home.Group.PREPARE.tint().ink
     val track = MaterialTheme.colorScheme.outlineVariant
     Card(
         onClick = { nav.go(Route.Open(Section.MINE)) },
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+        colors = CardDefaults.cardColors(containerColor = ua.sprotyv.home.Group.MINE.tint().container),
         modifier = Modifier.fillMaxWidth(),
     ) {
         Column(Modifier.padding(start = 16.dp, end = 4.dp, top = 4.dp, bottom = 14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {

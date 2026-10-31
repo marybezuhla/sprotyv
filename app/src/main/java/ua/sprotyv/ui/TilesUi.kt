@@ -778,7 +778,7 @@ private val Preset.hint: Int get() = when (this) {
 
 @Composable
 fun PresetList(onPick: (Preset) -> Unit) {
-    Preset.entries.forEach { p -> NavRow(stringResource(p.title), stringResource(p.hint)) { onPick(p) } }
+    Preset.entries.forEach { p -> NavRow(stringResource(p.title), stringResource(p.hint), ua.sprotyv.home.Group.PREPARE) { onPick(p) } }
 }
 
 /** Settings: a ready set replaces the tiles only after one more yes. */

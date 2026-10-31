@@ -69,10 +69,11 @@ fun CardRow(card: Card, onClick: () -> Unit) {
     Card(
         onClick = onClick,
         colors = CardDefaults.cardColors(
-            containerColor = if (first) u.container else MaterialTheme.colorScheme.surface,
+            // Each card in its group's soft colour, the same as its tile
+            containerColor = if (first) u.container else tint.container,
             contentColor = if (first) u.ink else MaterialTheme.colorScheme.onSurface,
         ),
-        border = if (first) BorderStroke(2.dp, u.edge) else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        border = if (first) BorderStroke(2.dp, u.edge) else BorderStroke(1.dp, tint.ink.copy(alpha = 0.35f)),
         modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp),
     ) {
         androidx.compose.foundation.layout.Row(
@@ -80,7 +81,7 @@ fun CardRow(card: Card, onClick: () -> Unit) {
             verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
         ) {
             // The same picture and colour as the card's tile on the home screen
-            IconBadge(icon, if (first) Tint(MaterialTheme.colorScheme.surface, u.edge) else tint, if (first) 48.dp else 40.dp)
+            IconBadge(icon, if (first) Tint(MaterialTheme.colorScheme.surface, u.edge) else Tint(MaterialTheme.colorScheme.surface, tint.ink), if (first) 48.dp else 40.dp)
             androidx.compose.foundation.layout.Spacer(Modifier.padding(start = 12.dp))
             Column(Modifier.weight(1f)) {
                 Text(card.title, style = if (first) MaterialTheme.typography.titleLarge else MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
@@ -436,7 +437,7 @@ fun HomeLifeScreen(content: Content?, nav: Nav) {
             CardRow(card) { nav.go(Route.CardRoute(card.id)) }
         }
         if (HomePrefs.state.collectAsState().value?.trip != true) {
-            NavRow(stringResource(R.string.supplies), stringResource(R.string.supplies_hint)) { nav.go(Route.SuppliesRoute) }
+            NavRow(stringResource(R.string.supplies), stringResource(R.string.supplies_hint), ua.sprotyv.home.Group.PREPARE) { nav.go(Route.SuppliesRoute) }
         }
         Text(stringResource(R.string.in_the_guide), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, modifier = Modifier.semantics { heading() })
         // Blackout, water, food, warmth, hygiene, health

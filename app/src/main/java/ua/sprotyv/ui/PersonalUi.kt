@@ -80,11 +80,13 @@ fun rememberPeople(): List<Person>? {
 }
 
 @Composable
-fun NavRow(title: String, hint: String = "", onClick: () -> Unit) {
+fun NavRow(title: String, hint: String = "", group: ua.sprotyv.home.Group = ua.sprotyv.home.Group.MINE, onClick: () -> Unit) {
+    // Never a plain grey card: always the colour of what it opens
+    val tint = group.tint()
     Card(
         onClick = onClick,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        colors = CardDefaults.cardColors(containerColor = tint.container, contentColor = MaterialTheme.colorScheme.onSurface),
+        border = BorderStroke(1.dp, tint.ink.copy(alpha = 0.35f)),
         modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp),
     ) {
         Column(Modifier.padding(horizontal = 16.dp, vertical = 14.dp)) {
