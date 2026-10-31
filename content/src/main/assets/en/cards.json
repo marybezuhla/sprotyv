@@ -13,7 +13,7 @@
   "reviewedBy": "",
   "steps": [
    {
-    "action": "Threat now? Leave the area: from fire, smoke and gas — at a right angle to the wind; from water — uphill. Shelling — get down or into a shelter. Drone — get under a roof.",
+    "action": "Threat now? Leave the area: from fire, smoke, gas — at right angles to the wind; from water — uphill. Shelling — get down or into shelter. Drone — under a roof.",
     "why": "Act first; think once you are safe."
    },
    {
@@ -135,11 +135,11 @@
     "why": "Do not stare at it, do not film it, do not wave your arms."
    },
    {
-    "action": "Within 5–10 seconds — get under a roof: entrance hall, basement, shop. Do not stop in the doorway: shut the door, move deep inside, away from windows, and freeze.",
+    "action": "Within 5–10 seconds, get under a roof: entrance, basement, shop. Don't stop in the doorway: shut the door, move deep inside, away from windows, freeze.",
     "why": "An FPV drone can fly in through an open door or window. This rule is for FPV and drop drones; for Shaheds and missiles — a basement or two walls."
    },
    {
-    "action": "No roof — get behind thick cover: concrete, brick, a tree trunk over 40 cm. The drone circles round — switch sides. Do not run in a straight line.",
+    "action": "No roof — get behind thick cover: concrete, brick, a tree trunk over 40 cm. Drone circles — switch sides. Don't run in a straight line.",
     "why": "A lone tree or a fence does not protect you. Dense bushes are better than open ground."
    },
    {
@@ -160,7 +160,7 @@
     "wait": 40
    },
    {
-    "action": "Downed drone — do not approach: at least 100 m away (Shahed, missile — 300 m), behind cover. Call 101 or 102 from there. Do not touch the fibre-optic line.",
+    "action": "Downed drone — don't approach: at least 100 m (Shahed, missile — 300 m), behind cover. Call 101 or 102 from there. Don't touch the fibre-optic line.",
     "why": "Munitions may still be on board; a fibre-optic drone may come back."
    }
   ]
@@ -184,7 +184,7 @@
     "icon": "press"
    },
    {
-    "action": "Blood spurting from an arm or leg, or pressure does not help — tourniquet 5–8 cm above the wound, not on a joint, until bleeding fully stops. Write down the time.",
+    "action": "Blood spurting from an arm or leg, or pressure fails — tourniquet 5–8 cm above the wound, not on a joint, until bleeding stops completely. Note the time.",
     "why": "Wound location unclear — as high on the limb as possible. Never loosen a tourniquet — only a medic removes it.",
     "figure": "7.2"
    },
@@ -237,7 +237,7 @@
     "why": ""
    },
    {
-    "action": "Breathing — put them on their side and check breathing every minute. Suspected spinal injury — leave them on their back, keep the head still, push the jaw forward.",
+    "action": "Breathing — turn them on their side, check breathing every minute. Suspected spine injury — keep them on their back, head still, push the jaw forward.",
     "why": "A spinal injury is possible after a fall from height, a road crash, a blow to the back.",
     "figure": "7.4"
    },
@@ -265,11 +265,11 @@
   "reviewedBy": "",
   "steps": [
    {
-    "action": "Electricity — first switch it off or push the wire away with a dry stick. Only then touch the person. High-voltage line — no closer than 8–10 m.",
+    "action": "Electricity — switch it off first or push the wire away with a dry stick. Only then touch the person. High-voltage line — stay at least 8–10 m away.",
     "why": "After an electric shock, see a medic even if they seem “fine”: heart rhythm problems can start hours later."
    },
    {
-    "action": "Put out the flames: roll the person over or cover them with thick fabric. Remove smouldering clothes; if stuck to skin, do not pull off — cut around.",
+    "action": "Put out the flames: roll the person or cover them with thick fabric. Remove smouldering clothes; if stuck, don't tear off — cut around it.",
     "why": ""
    },
    {
@@ -307,11 +307,11 @@
   "reviewedBy": "",
   "steps": [
    {
-    "action": "Shout “Fire!”, wake everyone. Fight it only while the fire is smaller than a bucket and smoke does not stop you breathing: grease — cover it, no water; appliance — unplug it.",
+    "action": "Shout “Fire!”, wake everyone. Fight it only while it's smaller than a bucket and smoke doesn't stop your breathing: grease — cover, no water; appliance — unplug.",
     "why": "Water on burning fat: a steam explosion throws the flames around."
    },
    {
-    "action": "Not out in 30 seconds or smoke gathers under the ceiling — get out. Shut the door to the room with the fire. Call 101 from outside or on the way.",
+    "action": "Not out in 30 seconds, or smoke gathers under the ceiling — get out. Shut the door to the fire room. Call 101 from outside or on the way.",
     "why": "A closed door gives you 10–15 minutes."
    },
    {
@@ -328,7 +328,7 @@
     "why": ""
    },
    {
-    "action": "Exit cut off — block gaps with wet cloth, open a window, signal, call 101 with the exact address and floor. Above the 2nd floor, do not jump.",
+    "action": "Exit cut off — block gaps with wet cloth, open a window, signal, call 101 with exact address and floor. Above the 2nd floor, don't jump.",
     "why": "In a closed room with a window you have 10–20 minutes."
    },
    {
@@ -395,8 +395,8 @@
     "why": ""
    },
    {
-    "action": "Move at a right angle to the wind and far away. Chlorine (“swimming pool” smell) — to higher ground, not a basement. Ammonia — the opposite, lower floors.",
-    "why": "Chlorine is heavier than air and spreads low. Unknown substance — just move at a right angle to the wind."
+    "action": "Move at right angles to the wind, far away. Chlorine (“swimming pool” smell) — to high ground, not a basement. Ammonia — the opposite: lower floors.",
+    "why": "Chlorine is heavier than air and spreads low. Unknown substance — just move at right angles to the wind."
    },
    {
     "action": "Indoors, close windows, turn off ventilation, block gaps with wet cloth. With chlorine, go to upper floors. Listen for alerts.",
