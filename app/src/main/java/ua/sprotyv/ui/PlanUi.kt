@@ -257,24 +257,22 @@ private fun KitRow(text: String, checked: Boolean, onChange: (Boolean) -> Unit) 
     val cut = listOf(" — ", ": ", " (").mapNotNull { sep -> plain.indexOf(sep).takeIf { it in 3..70 }?.let { it to sep } }.minByOrNull { it.first }
     val head = cut?.let { plain.substring(0, it.first) } ?: plain
     val tail = cut?.let { (at, sep) -> plain.substring(at + sep.length).let { if (sep == " (") "(" + it else it } }
-    // Packed is a "yes, it is there": the row turns green with a tick, nothing is struck out
-    val green = doneTint()
+    // Packed is a "yes, it is there": the tick and a faint shade in the block's colour, nothing struck out
     Row(
         Modifier.fillMaxWidth().heightIn(min = 48.dp)
-            .background(if (checked) green.container else androidx.compose.ui.graphics.Color.Transparent)
+            .doneRow(checked)
             .toggleable(value = checked, role = androidx.compose.ui.semantics.Role.Checkbox, onValueChange = onChange)
             .padding(end = 16.dp, top = 6.dp, bottom = 6.dp),
         verticalAlignment = Alignment.Top,
     ) {
         Checkbox(
             checked = checked, onCheckedChange = null, modifier = Modifier.padding(horizontal = 12.dp, vertical = 2.dp),
-            colors = androidx.compose.material3.CheckboxDefaults.colors(checkedColor = green.ink, checkmarkColor = green.container),
+            colors = doneCheckbox(),
         )
         Column(Modifier.weight(1f).padding(top = 2.dp)) {
             // The thing itself first; packed things step back
             Text(
-                (if (checked) "✓ " else "") + head, style = MaterialTheme.typography.bodyLarge, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
-                color = if (checked) green.ink else MaterialTheme.colorScheme.onSurface,
+                head, style = MaterialTheme.typography.bodyLarge, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
             )
             // Long explanations stay folded to two lines until asked for
             if (!tail.isNullOrBlank()) {

@@ -57,7 +57,7 @@ import ua.sprotyv.personal.PersonalStore
 /**
  * "How ready are we?": one block, one question, four bars on one common scale (position along a
  * common scale is read most exactly: Cleveland & McGill 1984), each with its count in words.
- * Blue while on the way, green with a tick when done. Never red: these are next steps, not marks.
+ * Blue all the way, with a tick when done (green means first aid here). Never red: these are next steps, not marks.
  * The first part not yet done is named as the next step, so the block always ends in an action.
  * Only on the owner's own screens, which are kept off screenshots.
  */
@@ -136,7 +136,7 @@ fun ReadinessBlock(content: Content?, nav: Nav) {
 @Composable
 fun ReadyRing(fraction: Float, label: String) {
     val track = MaterialTheme.colorScheme.outlineVariant
-    val fill = if (fraction >= 1f) ua.sprotyv.home.Group.FIRST_AID.tint().ink else ua.sprotyv.home.Group.PREPARE.tint().ink
+    val fill = if (fraction >= 1f) ua.sprotyv.home.Group.PREPARE.tint().ink else ua.sprotyv.home.Group.PREPARE.tint().ink
     androidx.compose.foundation.layout.Box(Modifier.size(52.dp).clearAndSetSemantics { }, contentAlignment = Alignment.Center) {
         Canvas(Modifier.size(52.dp)) {
             val stroke = androidx.compose.ui.graphics.drawscope.Stroke(width = 6.dp.toPx(), cap = androidx.compose.ui.graphics.StrokeCap.Round)
@@ -152,7 +152,7 @@ fun ReadyRing(fraction: Float, label: String) {
 
 @Composable
 private fun ReadyRow(title: String, p: Progress?, detail: String? = null, onClick: () -> Unit) {
-    val done = ua.sprotyv.home.Group.FIRST_AID.tint().ink
+    val done = ua.sprotyv.home.Group.PREPARE.tint().ink
     val going = ua.sprotyv.home.Group.PREPARE.tint().ink
     val track = MaterialTheme.colorScheme.outlineVariant
     val words = if (p == null) "…" else stringResource(R.string.ready_count, p.done, p.total)
@@ -196,7 +196,7 @@ fun ReadinessStrip(nav: Nav) {
     }
     if (parts.size != READY_PARTS.size) return
     val done = parts.count { it.complete }
-    val doneColour = ua.sprotyv.home.Group.FIRST_AID.tint().ink
+    val doneColour = ua.sprotyv.home.Group.PREPARE.tint().ink
     val going = ua.sprotyv.home.Group.PREPARE.tint().ink
     val track = MaterialTheme.colorScheme.outlineVariant
     Card(
