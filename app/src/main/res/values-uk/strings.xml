@@ -848,4 +848,5 @@
     <string name="notes_remind_change">Змінити час</string>
     <string name="notes_remind_off">Не нагадувати</string>
     <string name="notes_remind_next">Далі</string>
+    <string name="notify_trip_all">У режимі поїздки ховати всі сповіщення, і турнікет, і відліки</string>
 </resources>

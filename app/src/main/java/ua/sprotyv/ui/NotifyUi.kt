@@ -64,6 +64,8 @@ fun NotifySettings() {
         val on = remember(version, refresh) { Notify.isOn(context, kind) }
         Toggle(stringResource(label), on) { turn(kind, it) }
     }
+    val tripAll = remember(version, refresh) { Notify.hideAllInTrip(context) }
+    Toggle(stringResource(R.string.notify_trip_all), tripAll) { Notify.setHideAllInTrip(context, it) }
     if (neutral) Text(stringResource(R.string.notify_neutral), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.tertiary)
     val anyOn = remember(version, refresh) { Notify.Kind.entries.any { Notify.isOn(context, it) } }
     // Also after a "no" in Android: the switch alone would seem to do nothing

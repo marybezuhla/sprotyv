@@ -81,6 +81,15 @@ object Notify {
         sync(c)
     }
 
+    /** Trip mode hides every notification, not only the owner's reminders (the owner's choice; off by default). */
+    fun hideAllInTrip(c: Context): Boolean = prefs(c).getBoolean("trip_all", false)
+
+    fun setHideAllInTrip(c: Context, on: Boolean) {
+        prefs(c).edit().putBoolean("trip_all", on).apply()
+        changed.value++
+        sync(c)
+    }
+
     /** Android lets this app show notifications (the owner may have said no). */
     fun allowedBySystem(c: Context): Boolean = NotificationManagerCompat.from(c).areNotificationsEnabled()
 
@@ -88,7 +97,8 @@ object Notify {
     private fun shows(c: Context, kind: Kind): Boolean {
         if (!isOn(c, kind) || Neutral.isOn(c)) return false
         val personal = kind == Kind.SUPPLIES || kind == Kind.NOTES || kind == Kind.KIT
-        return !(personal && HomePrefs.load(c).trip)
+        val trip = HomePrefs.load(c).trip
+        return !(trip && (personal || hideAllInTrip(c)))
     }
 
     // ---- note reminders: only the note's number and a time
@@ -145,7 +155,7 @@ object Notify {
         channels(app)
         val now = System.currentTimeMillis()
         // Hidden at once: everything under the neutral icon, the owner's reminders in trip mode
-        if (Neutral.isOn(app)) NotificationManagerCompat.from(app).cancelAll()
+        if (Neutral.isOn(app) || (HomePrefs.load(app).trip && hideAllInTrip(app))) NotificationManagerCompat.from(app).cancelAll()
         else if (HomePrefs.load(app).trip) {
             cancel(app, ID_SUPPLIES); cancel(app, ID_KIT)
             app.getSystemService(NotificationManager::class.java)?.activeNotifications?.forEach { if (it.id >= ID_NOTE && it.id % 10 == ID_NOTE) cancel(app, it.id) }
