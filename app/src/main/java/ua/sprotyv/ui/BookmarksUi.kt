@@ -142,7 +142,7 @@ private fun SharedCard(shared: Incoming.Shared, onKeep: (String, String) -> Unit
                     Text(stringResource(R.string.bookmarks_keep_title), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, modifier = Modifier.semantics { heading() })
                     // The site first and large: a name suggested by another app cannot hide where it leads
                     Text(Bookmarks.host(c.url), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                    Text(c.url, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 3, overflow = TextOverflow.Ellipsis)
+                    Text(c.url, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 3, overflow = TextOverflow.Ellipsis)
                     Field(stringResource(R.string.bookmarks_name), name, { name = it })
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Button(onClick = { onKeep(c.url, name) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.save)) }

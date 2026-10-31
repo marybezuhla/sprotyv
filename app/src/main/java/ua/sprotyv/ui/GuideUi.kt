@@ -250,12 +250,12 @@ private fun TableView(t: Block.Table) {
                 val second = cells.getOrNull(1).orEmpty()
                 // A short second value (an amount, a time) goes on the title's line
                 val inline = second.isNotBlank() && second.length <= 22
-                Column(Modifier.padding(horizontal = 12.dp, vertical = 10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Column(Modifier.padding(horizontal = 16.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                     Row(verticalAlignment = Alignment.Top) {
-                        RichText(title, style = MaterialTheme.typography.bodyLarge.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold), modifier = Modifier.weight(1f))
+                        RichText(title, style = MaterialTheme.typography.titleMedium.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold), modifier = Modifier.weight(1f))
                         if (inline) {
                             Spacer(Modifier.width(12.dp))
-                            RichText(second.replace("**", ""), style = MaterialTheme.typography.bodyLarge.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold))
+                            RichText(second.replace("**", ""), style = MaterialTheme.typography.titleMedium.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold))
                         }
                     }
                     val rest = cells.drop(if (inline) 2 else 1)
@@ -264,7 +264,9 @@ private fun TableView(t: Block.Table) {
                         val name = head2?.getOrNull(k + if (inline) 2 else 1)?.replace("**", "")
                         // Column names only where two or more texts sit under the title and must be told apart
                         if (rest.size >= 2 && !name.isNullOrBlank()) {
-                            Text(name, style = MaterialTheme.typography.bodyMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            // The column's name, one step quieter than its text, with air above it after the first
+                            Text(name, style = MaterialTheme.typography.bodyMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(top = if (k > 0) 6.dp else 2.dp))
                         }
                         RichText(cell, style = ReadingText)
                     }
@@ -366,11 +368,11 @@ fun SourceBox(source: String, license: String, reviewedBy: String = "", note: St
         modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
     ) {
         Column(Modifier.padding(horizontal = 16.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-            Text(source, style = MaterialTheme.typography.bodySmall, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
-            Text(stringResource(R.string.source_license, license), style = MaterialTheme.typography.bodySmall)
+            Text(source, style = MaterialTheme.typography.bodyMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
+            Text(stringResource(R.string.source_license, license), style = MaterialTheme.typography.bodyMedium)
             Text(
                 note ?: if (reviewedBy.isBlank()) stringResource(R.string.not_reviewed) else stringResource(R.string.reviewed_by, reviewedBy),
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }

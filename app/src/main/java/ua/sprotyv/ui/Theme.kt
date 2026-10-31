@@ -168,7 +168,7 @@ fun SprotyvTheme(choice: ThemeChoice = ThemeChoice.SYSTEM, dynamic: Boolean = fa
         }
     }
     CompositionLocalProvider(LocalDark provides dark, LocalContrast provides contrast) {
-        MaterialTheme(colorScheme = scheme) {
+        MaterialTheme(colorScheme = scheme, typography = AppType) {
             // The base every screen draws on: its own background and, with it, a readable text colour
             Surface(modifier = Modifier.fillMaxSize(), color = scheme.background, contentColor = scheme.onBackground) {
                 content()
@@ -176,3 +176,40 @@ fun SprotyvTheme(choice: ThemeChoice = ThemeChoice.SYSTEM, dynamic: Boolean = fa
         }
     }
 }
+
+
+/**
+ * One type scale for the whole app, so every screen reads the same. Material's defaults spread the
+ * letters apart (up to 0.5 sp) and go down to 11 sp: here the letters sit at their natural spacing,
+ * nothing is smaller than 13 sp, lines get room in one ratio (about 1.4–1.5), and body text is
+ * left-aligned with whole words. Sizes still grow with the phone's text size.
+ */
+private fun style(size: Int, line: Int, weight: androidx.compose.ui.text.font.FontWeight, body: Boolean = false) =
+    androidx.compose.ui.text.TextStyle(
+        fontSize = androidx.compose.ui.unit.TextUnit(size.toFloat(), androidx.compose.ui.unit.TextUnitType.Sp),
+        lineHeight = androidx.compose.ui.unit.TextUnit(line.toFloat(), androidx.compose.ui.unit.TextUnitType.Sp),
+        letterSpacing = androidx.compose.ui.unit.TextUnit(0f, androidx.compose.ui.unit.TextUnitType.Sp),
+        fontWeight = weight,
+        textAlign = if (body) androidx.compose.ui.text.style.TextAlign.Start else androidx.compose.ui.text.style.TextAlign.Unspecified,
+        hyphens = if (body) androidx.compose.ui.text.style.Hyphens.None else androidx.compose.ui.text.style.Hyphens.Unspecified,
+        lineBreak = if (body) androidx.compose.ui.text.style.LineBreak.Paragraph else androidx.compose.ui.text.style.LineBreak.Unspecified,
+    )
+
+private val Regular = androidx.compose.ui.text.font.FontWeight.Normal
+private val Medium = androidx.compose.ui.text.font.FontWeight.Medium
+
+val AppType = androidx.compose.material3.Typography(
+    displaySmall = style(34, 42, Regular),
+    headlineLarge = style(30, 38, Regular),
+    headlineMedium = style(26, 34, Regular),
+    headlineSmall = style(22, 30, Regular),
+    titleLarge = style(21, 28, Regular),
+    titleMedium = style(17, 24, Medium),
+    titleSmall = style(15, 22, Medium),
+    bodyLarge = style(16, 24, Regular, body = true),
+    bodyMedium = style(15, 22, Regular, body = true),
+    bodySmall = style(14, 20, Regular, body = true),
+    labelLarge = style(15, 20, Medium),
+    labelMedium = style(14, 20, Medium),
+    labelSmall = style(13, 18, Medium),
+)

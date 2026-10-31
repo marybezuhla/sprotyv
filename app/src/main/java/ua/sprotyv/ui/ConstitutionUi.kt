@@ -98,7 +98,7 @@ fun ConstitutionArticleScreen(content: Content?, num: String, nav: Nav) {
                 article.parts.forEach { Text(it, style = ReadingText) }
             }
         }
-        article.notes.forEach { Text("{$it}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
+        article.notes.forEach { Text("{$it}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) }
         val all = c.sections.flatMap { it.articles }
         val at = all.indexOfFirst { it.num == num }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
@@ -119,6 +119,6 @@ private fun ConstitutionSource(c: Constitution) {
     SourceBox(c.act, c.license, note = stringResource(R.string.const_official))
     Text(
         listOf(c.edition, stringResource(R.string.const_retrieved, c.retrieved), stringResource(R.string.const_no_changes)).joinToString(" · "),
-        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+        style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
     )
 }

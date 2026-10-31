@@ -80,7 +80,7 @@ fun StoryScreen(content: Content?, id: String, nav: Nav) {
             Block(stringResource(R.string.history_sources), Group.GUIDE, padded = false) {
                 s.sources.forEachIndexed { i, src -> BlockRow(src.title, stringResource(R.string.history_source_open), first = i == 0) { Reach.open(context, src.url) } }
             }
-            Text(stringResource(R.string.history_checked, s.checked), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(stringResource(R.string.history_checked, s.checked), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         // The neighbours, so the stories read one after another
         val all = h.stories

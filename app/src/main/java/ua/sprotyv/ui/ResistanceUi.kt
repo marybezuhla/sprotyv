@@ -157,14 +157,14 @@ fun ResistanceScreen(content: Content?, nav: Nav) {
                 listOf(R.string.service_fact_1, R.string.service_fact_2, R.string.service_fact_3, R.string.service_fact_4, R.string.service_fact_5).forEach {
                     Row { Text("•", modifier = Modifier.padding(end = 8.dp)); Text(stringResource(it), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f)) }
                 }
-                Text(stringResource(R.string.service_source), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.service_source), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             val service = links.filter { it.group == "service" }
             if (service.isNotEmpty()) Block(stringResource(R.string.service_title), Group.PREPARE, tint = resist(), foldable = true, summary = stringResource(R.string.shelf_count, service.size)) {
                 service.forEach { link -> LinkRow(link) { openLink(context, link, toolbar) } }
             }
         }
-        Text(stringResource(R.string.resist_principles), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(stringResource(R.string.resist_principles), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 

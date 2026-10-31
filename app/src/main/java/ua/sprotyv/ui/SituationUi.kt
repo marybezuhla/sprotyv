@@ -94,7 +94,7 @@ fun SituationScreen(content: Content?, nav: Nav) {
                     Text(stringResource(r), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
                 }
             }
-            Text(stringResource(R.string.situation_rules_source), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(stringResource(R.string.situation_rules_source), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         if (content == null) return@Frame Loading()
         if (content.linksBroken) return@Frame Broken()

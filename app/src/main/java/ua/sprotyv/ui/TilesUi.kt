@@ -987,7 +987,7 @@ private fun FeedbackBlock() {
     crash?.let { t ->
         Text(stringResource(R.string.crash_title), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
         Text(stringResource(R.string.crash_text), style = MaterialTheme.typography.bodyMedium)
-        Text(t, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(t, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             OutlinedButton(onClick = {
                 Feedback.open(context, context.getString(R.string.crash_issue_title), context.getString(R.string.crash_issue_body) + "\n\n```\n" + t + "\n```")
