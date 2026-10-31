@@ -21,6 +21,10 @@
 - `app/src/main/res/drawable/pict_*.xml` (built by `scripts/pictograms/build.py`) — pictograms for
   card steps, composed from Material Symbols Rounded (Google, Apache License 2.0; the glyphs are in
   `scripts/pictograms/material/` unchanged). Not yet tested with people.
+- `app/src/main/res/drawable/ocha_*.xml` (built by `scripts/pictograms/ocha.py`) — OCHA Humanitarian Icons
+  by the UN Office for the Coordination of Humanitarian Affairs (https://brand.unocha.org/), freely
+  available and listed as public domain (CC0); the originals are kept unchanged in
+  `scripts/pictograms/ocha/` with their source. Icons: OCHA.
 - `app/src/main/res/drawable/hi_*.xml` (built by `scripts/pictograms/healthicons.py`) — icons from
   Health Icons (https://healthicons.org), CC0 1.0 (public domain); the originals are kept unchanged
   in `scripts/pictograms/healthicons/` with their licence.
