@@ -30,18 +30,21 @@ object Widgets {
         val manager = AppWidgetManager.getInstance(app) ?: return
         // Neutral icon: nothing that could name Sprotyv, even if a launcher still holds a widget
         if (Neutral.isOn(app)) return blankAll(app, manager)
-        try {
-            ids(app, manager, NowWidget::class.java).forEach { manager.updateAppWidget(it, now(app)) }
-            ids(app, manager, RunningWidget::class.java).forEach { manager.updateAppWidget(it, running(app)) }
-            ids(app, manager, PathWidget::class.java).forEach { manager.updateAppWidget(it, path(app)) }
-            ids(app, manager, TileWidget::class.java).forEach { manager.updateAppWidget(it, tile(app, it)) }
-            ids(app, manager, ServicesWidget::class.java).forEach { manager.updateAppWidget(it, services(app)) }
-            ids(app, manager, KidWidget::class.java).forEach { manager.updateAppWidget(it, kid(app)) }
-            ids(app, manager, SafeWidget::class.java).forEach { manager.updateAppWidget(it, safe(app)) }
-            ids(app, manager, KitWidget::class.java).forEach { manager.updateAppWidget(it, kit(app)) }
+        // Each kind on its own: one that fails keeps its last picture, the others are still drawn
+        fun each(cls: Class<*>, draw: (Int) -> RemoteViews) = try {
+            ids(app, manager, cls).forEach { manager.updateAppWidget(it, draw(it)) }
         } catch (e: Exception) {
-            // A launcher that refuses an update keeps the last picture; the app itself is unaffected
         }
+        each(NowWidget::class.java) { now(app) }
+        each(RunningWidget::class.java) { running(app) }
+        each(PathWidget::class.java) { path(app) }
+        each(TileWidget::class.java) { tile(app, it) }
+        each(ServicesWidget::class.java) { services(app) }
+        each(KidWidget::class.java) { kid(app) }
+        each(SafeWidget::class.java) { safe(app) }
+        each(KitWidget::class.java) { kit(app) }
+        // Choices left by widgets removed while nothing was told (the neutral icon)
+        try { TileWidgets.keepOnly(app, ids(app, manager, TileWidget::class.java)) } catch (e: Exception) { }
     }
 
     /** Every placed widget emptied: some launchers keep the last picture of a removed widget. */
@@ -177,6 +180,19 @@ object TileWidgets {
     }
 
     fun remove(c: Context, widgets: IntArray) = prefs(c).edit().apply { widgets.forEach { remove(it.toString()) } }.apply()
+
+    fun keepOnly(c: Context, widgets: IntArray) {
+        val keep = widgets.map { it.toString() }.toSet()
+        val gone = prefs(c).all.keys.filter { it !in keep }
+        if (gone.isNotEmpty()) prefs(c).edit().apply { gone.forEach { remove(it) } }.apply()
+    }
+
+    /** What trip mode keeps off the home screen: every link, and the tools it hides. */
+    fun tripHides(id: String): Boolean = when (id.substringBefore(':')) {
+        "link" -> true
+        "tool" -> ua.sprotyv.home.Tool.entries.firstOrNull { it.name == id.substringAfter(':') }?.route?.let(Trip::hides) ?: true
+        else -> false
+    }
 }
 
 private fun Widgets.layoutFor(tone: String) = when (tone) {
@@ -189,11 +205,12 @@ private fun Widgets.layoutFor(tone: String) = when (tone) {
 
 /** A part chosen by the owner: its name and a mark by its colour; a tap opens it. */
 internal fun Widgets.tile(c: Context, widget: Int): RemoteViews {
-    val chosen = TileWidgets.get(c, widget)
+    // Trip mode: what it hides is not named on the home screen either (links all, to be sure)
+    val chosen = TileWidgets.get(c, widget)?.takeUnless { HomePrefs.load(c).trip && TileWidgets.tripHides(it.id) }
     val v = RemoteViews(c.packageName, layoutFor(chosen?.tone ?: "plain"))
     v.setTextViewText(R.id.w_mark, when (chosen?.tone) { "urgent" -> "⚠"; "green" -> "✚"; "blue" -> "▣"; "khaki" -> "⛉"; else -> "📖" })
     v.setTextViewText(R.id.w_title, chosen?.title ?: c.getString(R.string.widget_tile_choose))
-    v.setOnClickPendingIntent(R.id.w_root, openFor(c, if (chosen != null) "tile/" + chosen.id else "now", 100 + (widget % 500)))
+    v.setOnClickPendingIntent(R.id.w_root, openFor(c, if (chosen != null) "tile/" + chosen.id else "now", 100, widget))
     return v
 }
 
@@ -230,7 +247,7 @@ internal fun Widgets.safe(c: Context): RemoteViews {
 internal fun Widgets.kit(c: Context): RemoteViews {
     val v = RemoteViews(c.packageName, R.layout.widget_kit)
     val prefs = HomePrefs.load(c)
-    val share = prefs.readiness.split(",").getOrNull(3)?.split("/")?.takeIf { it.size == 2 }?.let { (d, t) -> d.toIntOrNull()?.let { dd -> t.toIntOrNull()?.takeIf { it > 0 }?.let { dd to it } } }
+    val share = prefs.readiness.split(",").getOrNull(3)?.split("/")?.takeIf { it.size == 2 }?.let { (d, t) -> d.toIntOrNull()?.let { dd -> t.toIntOrNull()?.takeIf { it in 1..10_000 }?.let { dd.coerceIn(0, it) to it } } }
     if (prefs.trip || share == null) {
         v.setTextViewText(R.id.w_text, c.getString(R.string.widget_kit_open))
         v.setViewVisibility(R.id.w_bar, View.GONE)
@@ -244,10 +261,12 @@ internal fun Widgets.kit(c: Context): RemoteViews {
 }
 
 /** Widgets ask the same as notifications: a fixed word to [Opening]; request codes from 1000 up. */
-internal fun Widgets.openFor(c: Context, target: String, code: Int): PendingIntent =
+internal fun Widgets.openFor(c: Context, target: String, code: Int, widget: Int? = null): PendingIntent =
     PendingIntent.getActivity(
         c, 1000 + code,
-        Intent(c, Main::class.java).putExtra(Opening.EXTRA, target).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP),
+        Intent(c, Main::class.java).putExtra(Opening.EXTRA, target).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            // Each placed tile its own intent, so two tiles never open the same part
+            .apply { if (widget != null) data = android.net.Uri.parse("sprotyv-widget:tile/$widget") },
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
     )
 

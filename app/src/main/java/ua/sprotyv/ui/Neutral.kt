@@ -32,6 +32,7 @@ object Neutral {
         // A notification or a widget would name Sprotyv: none while the neutral icon is on
         Widgets.sync(context)
         Notify.sync(context)
+        Shortcuts.sync(context)
     }
 
     /** The recent apps list shows the neutral name too. */

@@ -133,11 +133,13 @@ fun App() {
     LaunchedEffect(opening) {
         val t = opening ?: return@LaunchedEffect
         Opening.clear()
-        if (prefs.mode == Mode.FULL || prefs.mode == Mode.SIMPLE) Opening.route(t)?.let { if (top != it) nav.go(it) }
+        // Kid mode: only the children's cards from the children's widget
+        val allowed = prefs.mode == Mode.FULL || prefs.mode == Mode.SIMPLE || (prefs.mode == Mode.KID && t.startsWith("tile/card:kid-"))
+        if (allowed) Opening.route(t)?.let { if (top != it) nav.go(it) }
     }
 
     // "Share → Sprotyv" follows the mode, trip mode and the neutral icon
-    LaunchedEffect(prefs.mode, trip) { ShareIn.sync(context); Notify.sync(context) }
+    LaunchedEffect(prefs.mode, trip) { ShareIn.sync(context); Notify.sync(context); Shortcuts.sync(context) }
     // A page shared from a browser opens the bookmarks, where the owner names and keeps it.
     // Not in trip or kid mode, and not before set-up: then it is simply dropped
     val incoming by Incoming.state.collectAsState()

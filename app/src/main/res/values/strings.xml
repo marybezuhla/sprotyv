@@ -522,7 +522,7 @@
     <string name="neutral_toggle">Neutral name and icon</string>
     <string name="neutral_hint">On the phone\'s home screen and in the recent apps list, Sprotyv is called “Notes” with a plain icon.</string>
     <string name="neutral_confirm_title">Turn on “Notes”?</string>
-    <string name="neutral_confirm_text">You may need to add the home-screen icon again: look for “Notes”. Remember this — in danger the app must be found fast. It is not a hiding place: the open app looks like Sprotyv, and the phone\'s settings still call it Sprotyv.</string>
+    <string name="neutral_confirm_text">You may need to add the home-screen icon again: look for “Notes”. Remember this — in danger the app must be found fast. It is not a hiding place: the open app looks like Sprotyv, and the phone\'s settings still call it Sprotyv. Remove Sprotyv\'s widgets and pinned shortcuts from the home screen, if there are any.</string>
     <string name="neutral_confirm_yes">Turn on</string>
     <string name="trip_title">Trip</string>
     <string name="trip_toggle">Trip mode</string>

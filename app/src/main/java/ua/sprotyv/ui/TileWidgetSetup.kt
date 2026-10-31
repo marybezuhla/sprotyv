@@ -51,7 +51,12 @@ class TileWidgetSetup : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setResult(Activity.RESULT_CANCELED)
-        val widget = intent?.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID) ?: AppWidgetManager.INVALID_APPWIDGET_ID
+        // A broken request from elsewhere simply closes this screen
+        val widget = try {
+            intent?.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID) ?: AppWidgetManager.INVALID_APPWIDGET_ID
+        } catch (e: Exception) {
+            AppWidgetManager.INVALID_APPWIDGET_ID
+        }
         val manager = AppWidgetManager.getInstance(this)
         // Only a widget of our own "part of Sprotyv" kind
         val ours = widget != AppWidgetManager.INVALID_APPWIDGET_ID &&
