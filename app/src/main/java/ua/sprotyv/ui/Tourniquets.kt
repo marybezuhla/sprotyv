@@ -66,8 +66,10 @@ object Tourniquets {
     fun note(c: Context, n: Int, text: String): Boolean {
         val words = clean(text)
         val sealed = seal(words)
+        // Not sealed: the note kept before stays as it was
+        if (words.isNotEmpty() && sealed.isEmpty()) return false
         write(c, all(c).map { if (it.n == n) it.copy(sealed = sealed) else it }, now = false)
-        return words.isEmpty() || sealed.isNotEmpty()
+        return true
     }
 
     /** Put on earlier than the tap: the time moved back (never into the future, never past a day). */
@@ -129,6 +131,8 @@ object Tourniquets {
 
     @Volatile private var cached: SecretKey? = null
 
+    @Synchronized private fun forget() { cached = null }
+
     /** The key, made once and kept in memory; one at a time, so two can never be made. */
     @Synchronized
     private fun key(): SecretKey {
@@ -155,6 +159,7 @@ object Tourniquets {
             val out = cipher.iv + cipher.doFinal(note.toByteArray(Charsets.UTF_8))
             "v1:" + Base64.encodeToString(out, Base64.NO_WRAP)
         } catch (e: Exception) {
+            forget()
             ""
         }
     }
