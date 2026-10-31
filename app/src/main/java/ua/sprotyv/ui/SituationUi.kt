@@ -143,16 +143,19 @@ internal fun LinkRow(link: Link, onClick: () -> Unit) {
         modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp),
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(link.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
-                // The kind in words, never by colour alone
-                Surface(
-                    color = if (official) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.tertiaryContainer,
-                    shape = MaterialTheme.shapes.small,
-                ) {
-                    Text(stringResource(link.kindTitle), style = MaterialTheme.typography.labelMedium, modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
-                }
+            // Who runs it, in words, on its own line above the name, so the name keeps the full width.
+            // A quiet label, not a colour: colours in Sprotyv say what a thing is for
+            Surface(
+                color = if (official) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.surface,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+                shape = MaterialTheme.shapes.small,
+            ) {
+                Text(
+                    (if (official) "✓ " else "") + stringResource(link.kindTitle), style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
+                )
             }
+            Text(link.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
             Text(link.note, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             // Warnings in words: who runs it, ads, beta, data collection
             if (link.flags.isNotEmpty()) {
