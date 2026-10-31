@@ -308,12 +308,41 @@ private val CARD_ICONS = mapOf(
     "radiation" to R.drawable.hi_hazardous,
     "drone" to R.drawable.hi_drone,
     "air-alert" to R.drawable.hi_megaphone,
+    // OCHA Humanitarian Icons (freely available / CC0)
+    "blackout" to R.drawable.ocha_power_outage,
+    "home-fire" to R.drawable.ocha_fire,
+    "leave-home" to R.drawable.ocha_internally_displaced,
+    "suspicious" to R.drawable.ocha_mine,
+    "rubble" to R.drawable.ocha_house_destroyed,
+    "ballistic" to R.drawable.ocha_attack,
+)
+
+/** Guide chapters with a picture of their own (OCHA and Health Icons), clearer than the group's. */
+private val CHAPTER_ICONS = mapOf(
+    "ch1" to R.drawable.ocha_preparedness, "ch2" to R.drawable.ocha_non_food_items, "ch3" to R.drawable.ocha_shelter,
+    "ch4" to R.drawable.hi_drone, "ch5" to R.drawable.ocha_mine, "ch6" to R.drawable.hi_hazardous, "ch7" to R.drawable.ocha_health,
+    "ch8" to R.drawable.ocha_potable_water, "ch9" to R.drawable.ocha_food, "ch10" to R.drawable.ocha_fire, "ch11" to R.drawable.ocha_tent,
+    "ch12" to R.drawable.ocha_clothing, "ch13" to R.drawable.ocha_map, "ch14" to R.drawable.ocha_walkie_talkie,
+    "ch15" to R.drawable.ocha_services_and_tools, "ch16" to R.drawable.ocha_handwashing, "ch17" to R.drawable.ocha_security,
+    "ch18" to R.drawable.ocha_public_information, "ch19" to R.drawable.ocha_earthquake, "ch20" to R.drawable.ocha_power_outage,
+    "ch21" to R.drawable.ocha_hospital, "ch22" to R.drawable.ocha_children, "ch23" to R.drawable.ocha_storm,
+    "ch24" to R.drawable.ocha_services_and_tools, "ch25" to R.drawable.ocha_agriculture, "ch26" to R.drawable.ocha_internally_displaced,
+    "ch27" to R.drawable.ocha_insect_infestation, "ch28" to R.drawable.ocha_group, "ch29" to R.drawable.ocha_table,
+    "ch30" to R.drawable.ocha_preparedness, "planA" to R.drawable.ocha_calendar, "abroad" to R.drawable.ocha_border_crossing,
 )
 private val TOOL_ICONS = mapOf(
     Tool.ALARM to R.drawable.hi_megaphone,
     Tool.MOZ to R.drawable.hi_cpr,
     Tool.KIT to R.drawable.hi_bandage_adhesive,
     Tool.SUPPLIES to R.drawable.hi_treated_water,
+    Tool.POWER to R.drawable.ocha_power_outage,
+    Tool.HOME_LIFE to R.drawable.ocha_house,
+    Tool.DIRECTORY to R.drawable.ocha_help,
+    Tool.SITUATION to R.drawable.ocha_map,
+    Tool.PEOPLE to R.drawable.ocha_users,
+    Tool.PLAN to R.drawable.ocha_assembly_point,
+    Tool.PRACTICE to R.drawable.ocha_training,
+    Tool.GUIDE to R.drawable.ocha_learning,
 )
 
 private val Tool.icon: ImageVector? get() = when (this) {
@@ -386,7 +415,8 @@ fun tileInfo(id: String, content: Content?): TileInfo? {
             // "Water: finding, cleaning..." becomes "Water" with the rest below it
             val title = ch.title.substringBefore(':').trim()
             val hint = if (':' in ch.title) ch.title.substringAfter(':').trim().replaceFirstChar { it.uppercase() } else ""
-            TileInfo(id, title, hint, group.icon, group, Route.ChapterRoute(value))
+            val own = CHAPTER_ICONS[value]?.let { ImageVector.vectorResource(it) }
+            TileInfo(id, title, hint, own ?: group.icon, group, Route.ChapterRoute(value))
         }
         "link" -> content?.links?.firstOrNull { it.id == value }?.let { l ->
             TileInfo(id, l.title, l.note, Icons.Filled.LocationOn, group, Route.External(l.id))
@@ -587,9 +617,9 @@ fun SectionsList(content: Content?, pins: List<String>, nav: Nav, onPin: (String
     val resistLinks = links.filter { it.group in ua.sprotyv.content.Link.RESIST && it.group != "service" }.map { Tiles.link(it.id) }
     val lists = listOf(Shelf(R.string.resist_title, R.string.shelf_resist_desc, Group.PREPARE, listOf(Tiles.tool(Tool.RESIST), Tiles.tool(Tool.MOZ), Tiles.tool(Tool.PRACTICE), Tiles.tool(Tool.KIT)) + resistLinks, resist = true)) +
         Group.entries.map { Shelf(it.title, it.desc, it, it.tiles) } +
-        Shelf(R.string.situation_title, R.string.shelf_situation_desc, Group.GUIDE, icon = Icons.Filled.LocationOn, ids = links.filter { it.group != ua.sprotyv.content.Link.POWER && it.group !in ua.sprotyv.content.Link.DIRECTORY && it.group !in ua.sprotyv.content.Link.RESIST }.map { Tiles.link(it.id) }) +
-        Shelf(R.string.power_title, R.string.shelf_power_desc, Group.HOME_LIFE, icon = Icons.Filled.DateRange, ids = links.filter { it.group == ua.sprotyv.content.Link.POWER }.map { Tiles.link(it.id) }) +
-        Shelf(R.string.dir_title, R.string.shelf_dir_desc, Group.FIRST_AID, icon = Icons.Filled.Phone, ids = links.filter { it.group in ua.sprotyv.content.Link.DIRECTORY }.map { Tiles.link(it.id) }) +
+        Shelf(R.string.situation_title, R.string.shelf_situation_desc, Group.GUIDE, icon = ImageVector.vectorResource(R.drawable.ocha_map), ids = links.filter { it.group != ua.sprotyv.content.Link.POWER && it.group !in ua.sprotyv.content.Link.DIRECTORY && it.group !in ua.sprotyv.content.Link.RESIST }.map { Tiles.link(it.id) }) +
+        Shelf(R.string.power_title, R.string.shelf_power_desc, Group.HOME_LIFE, icon = ImageVector.vectorResource(R.drawable.ocha_power_outage), ids = links.filter { it.group == ua.sprotyv.content.Link.POWER }.map { Tiles.link(it.id) }) +
+        Shelf(R.string.dir_title, R.string.shelf_dir_desc, Group.FIRST_AID, icon = ImageVector.vectorResource(R.drawable.ocha_help), ids = links.filter { it.group in ua.sprotyv.content.Link.DIRECTORY }.map { Tiles.link(it.id) }) +
         Shelf(R.string.group_rest, R.string.shelf_rest_desc, Group.GUIDE, Group.rest(content.guide.chapters.map { it.id }))
     lists.forEach { shelf ->
         val infos = shelf.ids.mapNotNull { tileInfo(it, content) }

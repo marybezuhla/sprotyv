@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- OCHA Humanitarian Icon "Hospital" (OCHA, freely available / CC0), built by scripts/pictograms/ocha.py -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="24dp" android:height="24dp" android:viewportWidth="32" android:viewportHeight="48">
+    <path android:fillColor="#FF000000" android:pathData="M28,0c-2.2,0-4,1.8-4,4c0,0,0,0,0,0v16H8V4c0-2.2-1.8-4-4-4S0,1.8,0,4v40c0,2.2,1.8,4,4,4s4-1.8,4-4V28h16v16 c0,2.2,1.8,4,4,4s4-1.8,4-4V4C32,1.8,30.2,0,28,0C28,0,28,0,28,0z"/>
+</vector>

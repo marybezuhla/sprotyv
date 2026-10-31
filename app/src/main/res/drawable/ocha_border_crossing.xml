@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- OCHA Humanitarian Icon "Border-crossing" (OCHA, freely available / CC0), built by scripts/pictograms/ocha.py -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="24dp" android:height="24dp" android:viewportWidth="48" android:viewportHeight="48">
+    <path android:fillColor="#FF000000" android:pathData="M40.0,19.0h8.0v9.0h-8.0Z"/>
+    <path android:fillColor="#FF000000" android:pathData="M20.0,19.0h8.0v9.0h-8.0Z"/>
+    <path android:fillColor="#FF000000" android:pathData="M0.0,19.0h8.0v9.0h-8.0Z"/>
+    <path android:fillColor="#FF000000" android:pathData="M40.9,14.1c1.2,1.2,3.1,1.2,4.2,0s1.2-3.1,0-4.2l0,0l-9-9c-0.1-0.1-0.3-0.3-0.5-0.4c-0.1,0-0.1-0.1-0.2-0.1 c-0.1-0.1-0.2-0.1-0.3-0.2c-0.1,0-0.2-0.1-0.3-0.1c-0.1,0-0.2-0.1-0.3-0.1c-0.4-0.1-0.8-0.1-1.2,0c-0.1,0-0.2,0.1-0.3,0.1 c-0.1,0-0.2,0.1-0.3,0.1c-0.1,0-0.2,0.1-0.3,0.2c-0.1,0-0.1,0.1-0.2,0.1c-0.2,0.1-0.3,0.2-0.5,0.4l-9,9c-1.2,1.2-1.2,3.1,0,4.2 s3.1,1.2,4.2,0l3.9-3.9V45c0,1.7,1.3,3,3,3s3-1.3,3-3V10.2L40.9,14.1z"/>
+    <path android:fillColor="#FF000000" android:pathData="M20.9,33.9L17,37.8V3c0-1.7-1.3-3-3-3s-3,1.3-3,3v34.8l-3.9-3.9c-1.2-1.2-3.1-1.2-4.2,0s-1.2,3.1,0,4.2l9,9 c0.1,0.1,0.3,0.3,0.5,0.4c0.1,0,0.1,0.1,0.2,0.1c0.1,0.1,0.2,0.1,0.3,0.2c0.1,0,0.2,0.1,0.3,0.1c0.1,0,0.2,0.1,0.3,0.1 c0.4,0.1,0.8,0.1,1.2,0c0.1,0,0.2-0.1,0.3-0.1c0.1,0,0.2-0.1,0.3-0.1c0.1,0,0.2-0.1,0.3-0.2c0.1,0,0.1-0.1,0.2-0.1 c0.2-0.1,0.3-0.2,0.5-0.4l9-9c1.2-1.2,1.2-3.1,0-4.2S22.1,32.7,20.9,33.9L20.9,33.9z"/>
+</vector>

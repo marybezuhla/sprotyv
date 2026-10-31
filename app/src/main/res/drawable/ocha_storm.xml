@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- OCHA Humanitarian Icon "Storm" (OCHA, freely available / CC0), built by scripts/pictograms/ocha.py -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="24dp" android:height="24dp" android:viewportWidth="48" android:viewportHeight="48">
+    <path android:fillColor="#FF000000" android:pathData="M39,9c-1.1,0-2.2,0.2-3.2,0.6l0,0c-1-6.3-7-10.5-13.2-9.4c-5.5,0.9-9.5,5.6-9.6,11.2 c-3.1-1.1-6.5,0.5-7.7,3.6C5,15.9,4.9,17,5.1,18l0,0c-0.2,0-0.4,0-0.6,0C2,18,0,20,0,22.5S2,27,4.5,27H39c4.3,0,8-3,8.8-7.2 c0.1-0.6,0.2-1.2,0.2-1.8C48,13,44,9,39,9C39,9,39,9,39,9z"/>
+    <path android:fillColor="#FF000000" android:pathData="M28.5,37h-6.3l3.6-5.7c0.4-0.7,0.2-1.6-0.5-2.1c-0.7-0.4-1.6-0.2-2.1,0.5l0,0l-5,8c-0.4,0.7-0.2,1.6,0.5,2.1 c0.2,0.1,0.5,0.2,0.8,0.2h6.3l-3.6,5.7c-0.4,0.7-0.2,1.6,0.5,2.1c0.7,0.4,1.6,0.2,2.1-0.5l0,0l5-8c0.4-0.7,0.2-1.6-0.5-2.1 C29,37.1,28.8,37,28.5,37z"/>
+</vector>
