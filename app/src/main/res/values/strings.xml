@@ -690,7 +690,7 @@
     <string name="moz_title">First aid: Ministry of Health procedures</string>
     <string name="moz_short">Ministry first-aid procedures</string>
     <string name="moz_hint">29 official procedures, order No. 441</string>
-    <string name="moz_intro">The Ministry of Health’s official procedures: what to do before the ambulance comes. Each can be read as steps or as the full text. The order’s words are not changed.</string>
+    <string name="moz_intro">The whole of Ministry of Health order No. 441 in one place: the order and its 29 official procedures, what to do before the ambulance comes. Each procedure reads as steps or as the full text. The order’s words are not changed.</string>
     <string name="moz_intro_medic">The full text of the 29 procedures of Ministry of Health order No. 441, in the order’s numbering. Each also opens as steps, to show people nearby.</string>
     <string name="moz_group_heart">Heart and breathing</string>
     <string name="moz_group_injury">Bleeding and injuries</string>
@@ -791,4 +791,7 @@
     <string name="notes_gone">This note is no longer there.</string>
     <string name="notes_length">%1$d of %2$d characters</string>
     <string name="moz_compare_title">The Ministry’s official procedure on this</string>
+    <string name="moz_search">Search all procedures</string>
+    <string name="moz_found">Procedures found: %1$d</string>
+    <string name="moz_order_text">Text of the order</string>
 </resources>

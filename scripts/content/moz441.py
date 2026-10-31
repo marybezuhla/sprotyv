@@ -19,7 +19,9 @@ SUB = re.compile(r"^(\d{1,2})\)\s+(.*)$")
 SUBSUB = re.compile(r"^([абвгґдеєжзиіїйклмнопрстуфхцчшщюя])\)\s+(.*)$")
 
 def norm(s):
-    return re.sub(r"\s+", " ", s.replace("’", "'").replace("`", "'")).strip()
+    # Private-use characters (icon fonts of the web page) are not text
+    s = re.sub("[\ue000-\uf8ff]", "", s)
+    return re.sub(r"[\s\u200b\u200e\u2009\u202f]+", " ", s.replace("’", "'").replace("`", "'")).strip()
 
 def parse(path):
     lines = open(path, encoding="utf-8").read().replace("\f", "\n").split("\n")
@@ -67,10 +69,28 @@ def parse(path):
         clean(p)
     return title, points
 
+def order_text():
+    """The order itself (moz441/order.txt, the moz.gov.ua page as printed): preamble and points 2-5.
+    Point 1 lists the 29 procedures, which the app shows from the procedures themselves."""
+    raw = open(os.path.join(HERE, "moz441", "order.txt"), encoding="utf-8").read()
+    # Drop the browser's page headers and footers
+    lines = [l for l in raw.split("\n") if not re.search(r"moz\.gov\.ua|\d+ of \d+|^\s*Наказ\s*$|Головна|Ця розсилка|Підписатися|Email|Карта сайту|змін в українській медицині", l)]
+    text = norm(" ".join(lines))
+    def between(a, b):
+        i = text.index(a); j = text.index(b, i)
+        return text[i:j].strip()
+    preamble = between("Відповідно до статті 6", "НАКАЗУЮ:")
+    p2 = between("2. Визнати таким", "3. Директорату")
+    p3 = between("3. Директорату", "4. Контроль")
+    p4 = between("4. Контроль", "Міністр Віктор")
+    p5 = text[text.index("5. Цей наказ"):].strip()
+    p5 = p5[: p5.index("опублікування.") + len("опублікування.")]
+    return {"preamble": preamble, "approve": "1. Затвердити такі, що додаються:", "points": [p2, p3, p4, p5], "signed": "Міністр Віктор ЛЯШКО"}
+
 def main():
     procedures = []
     for name in sorted(os.listdir(os.path.join(HERE, "moz441"))):
-        if not name.endswith(".txt"):
+        if not name.endswith(".txt") or not name[:-4].isdigit():
             continue
         n = int(name[:-4])
         title, points = parse(os.path.join(HERE, "moz441", name))
@@ -84,6 +104,7 @@ def main():
         # Checked by hand on zakon.rada.gov.ua (z0356-22): in force
         "status": "Чинний (перевірено на zakon.rada.gov.ua 31.10.2026)",
         "license": "Офіційний документ: не охороняється авторським правом (Закон № 2811-IX, ст. 8)",
+        "order": order_text(),
         "procedures": procedures,
     }
     with open(OUT, "w", encoding="utf-8") as f:
