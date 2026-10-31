@@ -98,19 +98,26 @@ fun NavRow(title: String, hint: String = "", onClick: () -> Unit) {
 @Composable
 fun MineHub(nav: Nav, content: ua.sprotyv.content.Content?) {
     ReadinessBlock(content, nav)
+    // Three themed blocks, each in the colour of its group on the home screen
+    Block(stringResource(R.string.mine_block_trouble), ua.sprotyv.home.Group.FAMILY, padded = false) {
+        BlockRow(stringResource(R.string.tile_safe), stringResource(R.string.tile_safe_hint), first = true) { nav.go(Route.Open(Section.SAFE)) }
+        BlockRow(stringResource(R.string.medical_card), stringResource(R.string.medical_card_hint)) { nav.go(Route.Mine(MinePart.MEDICAL)) }
+        BlockRow(stringResource(R.string.people), stringResource(R.string.people_hint)) { nav.go(Route.Mine(MinePart.PEOPLE)) }
+        BlockRow(stringResource(R.string.family_plan), stringResource(R.string.family_plan_hint)) { nav.go(Route.Mine(MinePart.PLAN)) }
+        BlockRow(stringResource(R.string.rescuer_screen), stringResource(R.string.rescuer_hint)) { nav.go(Route.Mine(MinePart.RESCUER)) }
+    }
+    Block(stringResource(R.string.mine_block_home), ua.sprotyv.home.Group.PREPARE, padded = false) {
+        BlockRow(stringResource(R.string.kit), stringResource(R.string.kit_hint), first = true) { nav.go(Route.Mine(MinePart.KIT)) }
+        BlockRow(stringResource(R.string.supplies), stringResource(R.string.supplies_hint)) { nav.go(Route.SuppliesRoute) }
+        BlockRow(stringResource(R.string.bookmarks_title), stringResource(R.string.bookmarks_hint)) { nav.go(Route.Mine(MinePart.BOOKMARKS)) }
+    }
+    Block(stringResource(R.string.mine_block_copies), ua.sprotyv.home.Group.GUIDE, padded = false) {
+        BlockRow(stringResource(R.string.print_title), stringResource(R.string.print_hint), first = true) { nav.go(Route.Mine(MinePart.PRINT)) }
+        BlockRow(stringResource(R.string.plan_code_title), stringResource(R.string.plan_code_hint)) { nav.go(Route.Mine(MinePart.PLAN_QR)) }
+        BlockRow(stringResource(R.string.scan_title), stringResource(R.string.scan_hint)) { nav.go(Route.Scan) }
+        BlockRow(stringResource(R.string.backup_title), stringResource(R.string.backup_hint)) { nav.go(Route.Mine(MinePart.BACKUP)) }
+    }
     Text(stringResource(R.string.mine_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    NavRow(stringResource(R.string.tile_safe), stringResource(R.string.tile_safe_hint)) { nav.go(Route.Open(Section.SAFE)) }
-    NavRow(stringResource(R.string.medical_card), stringResource(R.string.medical_card_hint)) { nav.go(Route.Mine(MinePart.MEDICAL)) }
-    NavRow(stringResource(R.string.people), stringResource(R.string.people_hint)) { nav.go(Route.Mine(MinePart.PEOPLE)) }
-    NavRow(stringResource(R.string.family_plan), stringResource(R.string.family_plan_hint)) { nav.go(Route.Mine(MinePart.PLAN)) }
-    NavRow(stringResource(R.string.kit), stringResource(R.string.kit_hint)) { nav.go(Route.Mine(MinePart.KIT)) }
-    NavRow(stringResource(R.string.supplies), stringResource(R.string.supplies_hint)) { nav.go(Route.SuppliesRoute) }
-    NavRow(stringResource(R.string.bookmarks_title), stringResource(R.string.bookmarks_hint)) { nav.go(Route.Mine(MinePart.BOOKMARKS)) }
-    NavRow(stringResource(R.string.rescuer_screen), stringResource(R.string.rescuer_hint)) { nav.go(Route.Mine(MinePart.RESCUER)) }
-    NavRow(stringResource(R.string.print_title), stringResource(R.string.print_hint)) { nav.go(Route.Mine(MinePart.PRINT)) }
-    NavRow(stringResource(R.string.scan_title), stringResource(R.string.scan_hint)) { nav.go(Route.Scan) }
-    NavRow(stringResource(R.string.plan_code_title), stringResource(R.string.plan_code_hint)) { nav.go(Route.Mine(MinePart.PLAN_QR)) }
-    NavRow(stringResource(R.string.backup_title), stringResource(R.string.backup_hint)) { nav.go(Route.Mine(MinePart.BACKUP)) }
 }
 
 /** A text field that saves on every change. */
