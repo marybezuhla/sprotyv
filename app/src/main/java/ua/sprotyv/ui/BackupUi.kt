@@ -281,7 +281,7 @@ private fun restoreHome(context: Context, home: Map<String, String>) {
 }
 
 /** The settings a backup carries; others (like the date of the last backup) stay on this phone. */
-val BACKED_UP_SETTINGS = setOf(KEY_SAFE_MESSAGE, KEY_KIT_REVIEWED, KEY_SUPPLIES)
+val BACKED_UP_SETTINGS = setOf(KEY_SAFE_MESSAGE, KEY_KIT_REVIEWED, KEY_SUPPLIES) + Bookmarks.KEYS
 
 const val KEY_BACKUP_AT = "backup_at"
 

@@ -63,11 +63,11 @@ fun BlackoutBlock() {
             delay(30_000)
         }
     }
-    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), modifier = Modifier.fillMaxWidth()) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    Block(stringResource(R.string.block_power), ua.sprotyv.home.Group.HOME_LIFE) {
+        run {
             if (since == 0L) {
-                Text(stringResource(R.string.blackout_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
-                Text(stringResource(R.string.blackout_hint), style = MaterialTheme.typography.bodyMedium)
+                Text(stringResource(R.string.blackout_title), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
+                Text(stringResource(R.string.blackout_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Button(onClick = {
                     val t = System.currentTimeMillis()
                     prefs.edit().putLong("since", t).apply()
@@ -76,7 +76,7 @@ fun BlackoutBlock() {
                 }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
                     Text(stringResource(R.string.blackout_start), style = MaterialTheme.typography.titleMedium)
                 }
-                return@Column
+                return@run
             }
             val minutes = ((now - since) / 60_000).coerceAtLeast(0)
             val at = Instant.ofEpochMilli(since).atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("HH:mm"))
@@ -89,7 +89,7 @@ fun BlackoutBlock() {
             Keep(R.string.blackout_fridge, Blackout.FRIDGE_HOURS, minutes, R.string.blackout_fridge_over)
             Keep(R.string.blackout_freezer_full, Blackout.FREEZER_FULL_HOURS, minutes, R.string.blackout_freezer_over)
             Keep(R.string.blackout_freezer_half, Blackout.FREEZER_HALF_HOURS, minutes, R.string.blackout_freezer_over)
-            Text(stringResource(R.string.blackout_closed), style = MaterialTheme.typography.bodyMedium)
+            Text(stringResource(R.string.blackout_closed), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             OutlinedButton(onClick = {
                 prefs.edit().remove("since").apply()
                 since = 0L
@@ -133,9 +133,8 @@ private fun duration(minutes: Long): String {
 fun ChargeBlock() {
     var station by rememberSaveable { mutableStateOf(false) }
     var size by rememberSaveable { mutableIntStateOf(Charge.BANKS[1]) }
-    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), modifier = Modifier.fillMaxWidth()) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text(stringResource(R.string.charge_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+    Block(stringResource(R.string.charge_title), ua.sprotyv.home.Group.HOME_LIFE) {
+        run {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 FilterChip(selected = !station, onClick = { station = false; size = Charge.BANKS[1] }, label = { Text(stringResource(R.string.charge_bank)) }, modifier = Modifier.heightIn(min = 48.dp))
                 FilterChip(selected = station, onClick = { station = true; size = Charge.STATIONS[1] }, label = { Text(stringResource(R.string.charge_station)) }, modifier = Modifier.heightIn(min = 48.dp))

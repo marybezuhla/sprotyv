@@ -5,6 +5,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -74,14 +75,14 @@ fun SituationScreen(content: Content?, nav: Nav) {
     val context = LocalContext.current
     val toolbar = MaterialTheme.colorScheme.surface.toArgb()
     Frame(stringResource(R.string.situation_title), nav::back) {
-        Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), modifier = Modifier.fillMaxWidth()) {
-            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(stringResource(R.string.situation_rules_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
-                listOf(R.string.situation_rule_1, R.string.situation_rule_2, R.string.situation_rule_3).forEachIndexed { i, r ->
-                    Text("${i + 1}. " + stringResource(r), style = MaterialTheme.typography.bodyLarge)
+        Block(stringResource(R.string.situation_rules_title), ua.sprotyv.home.Group.SAFETY) {
+            listOf(R.string.situation_rule_1, R.string.situation_rule_2, R.string.situation_rule_3).forEachIndexed { i, r ->
+                Row {
+                    Text("${i + 1}", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, modifier = Modifier.width(24.dp))
+                    Text(stringResource(r), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
                 }
-                Text(stringResource(R.string.situation_rules_source), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
+            Text(stringResource(R.string.situation_rules_source), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         if (content == null) return@Frame Loading()
         if (content.linksBroken) return@Frame Broken()
@@ -157,7 +158,8 @@ private fun LinkRow(link: Link, onClick: () -> Unit) {
                 Text(
                     link.flags.joinToString(" · ") { "⚠ " + context.getString(flagTitle(it)) },
                     style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.error,
+                    // A caution, not danger now: red is kept for danger
+                    color = MaterialTheme.colorScheme.tertiary,
                 )
             }
             Text(
@@ -179,6 +181,7 @@ fun PowerScreen(content: Content?, nav: Nav) {
     val toolbar = MaterialTheme.colorScheme.surface.toArgb()
     Frame(stringResource(R.string.power_title), nav::back) {
         BlackoutBlock()
+        HeatingBlock(nav)
         ChargeBlock()
         Text(stringResource(R.string.power_schedules), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 8.dp).semantics { heading() })
         Text(stringResource(R.string.power_intro), style = MaterialTheme.typography.bodyLarge)

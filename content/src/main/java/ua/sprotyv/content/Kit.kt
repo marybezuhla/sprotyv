@@ -129,7 +129,7 @@ data class MySupplies(
     fun expiring(now: java.time.YearMonth): List<Pair<String, java.time.YearMonth>> =
         (until + (if (waterUntil.isNotEmpty()) mapOf(WATER to waterUntil) else emptyMap()))
             .mapNotNull { (k, v) -> month(v)?.let { k to it } }
-            .filter { (k, m) -> (k == WATER || k in have) && !m.isAfter(now.plusMonths(1)) }
+            .filter { (k, m) -> (k == WATER || k in EXTRAS || k in have) && !m.isAfter(now.plusMonths(1)) }
             .sortedBy { it.second }
 
     fun toJson(): String = org.json.JSONObject()
@@ -140,6 +140,10 @@ data class MySupplies(
 
     companion object {
         const val WATER = "water"
+        /** Other things at home that run out: the soonest date of the medicines in the first-aid kit, batteries. */
+        const val MEDS = "meds"
+        const val BATTERIES = "batteries"
+        val EXTRAS = listOf(MEDS, BATTERIES)
         private val KEY = Regex("^[a-z0-9]{1,16}$")
 
         fun month(s: String): java.time.YearMonth? = try {
