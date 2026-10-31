@@ -961,6 +961,68 @@
   ]
  },
  {
+  "id": "kh-sprotyv",
+  "group": "learn",
+  "kind": "official",
+  "title": "Харківщина: центр підготовки до нацспротиву",
+  "note": "Обласний центр: загальновійськові курси 48 або 108 годин для цивільних 18–60 років, безкоштовно, зазвичай щосуботи.",
+  "url": "https://oblrada-kharkiv.gov.ua/oblasnyj-czentr-pidgotovky-naselennya-do-naczionalnogo-sprotyvu/",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
+  "id": "km-sprotyv",
+  "group": "learn",
+  "kind": "official",
+  "title": "Хмельниччина: центр підготовки до нацспротиву",
+  "note": "Обласний центр: 7 тижнів базової підготовки — тактика, медицина, топографія, зв'язок. Заняття безкоштовні.",
+  "url": "https://sprotyv.km.ua",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
+  "id": "pl-sprotyv",
+  "group": "learn",
+  "kind": "official",
+  "title": "Полтавщина: центр підготовки до нацспротиву",
+  "note": "Обласний центр: тактична медицина, безпека й евакуація, дії в надзвичайних ситуаціях, психологічна стійкість.",
+  "url": "https://sprotyv.pl.ua",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
+  "id": "prytula-readiness",
+  "group": "learn",
+  "kind": "ngo",
+  "title": "Фонд Притули: Центр готовності цивільних",
+  "note": "Тренінги для цивільних у різних містах: домедична допомога та інші навички. Участь за донат.",
+  "url": "https://prytulafoundation.org/help-army/direction/czentr-gotovnosti-czivilnih",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
+  "id": "medcat",
+  "group": "learn",
+  "kind": "ngo",
+  "title": "Солом'янські котики: MEDCAT",
+  "note": "Навчальний центр благодійного фонду в Києві: тактична медицина для цивільних.",
+  "url": "https://clxb.ee/medcat",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": [
+   "paid"
+  ]
+ },
+ {
   "id": "hospitallers",
   "group": "learn",
   "kind": "volunteer",
