@@ -165,8 +165,10 @@ fun PathScreen(nav: Nav) {
     val count = path.count { it.key in done }
     // Only the count leaves "Mine", for the home screen and "Resistance"
     val context = LocalContext.current
-    androidx.compose.runtime.LaunchedEffect(count, path.size) {
-        val share = "$count/${path.size}"
+    androidx.compose.runtime.LaunchedEffect(done, path.size) {
+        // Counts per level, in the order of the levels; nothing about which steps
+        val share = PATH_LEVELS.indices.map { l -> path.filter { it.level == l } }.filter { it.isNotEmpty() }
+            .joinToString(",") { steps -> "${steps.count { it.key in done }}/${steps.size}" }
         if (HomePrefs.load(context).path != share) HomePrefs.update(context) { it.copy(path = share) }
     }
     // This week's step: the first one not done yet, in the order of the path. One at a time, calmly

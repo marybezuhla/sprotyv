@@ -27,8 +27,10 @@ object HomePrefs {
         /** The readiness shares last seen in "Mine" ("2/4,1/2,…"), shown on the full home screen; no records. */
         val readiness: String = "",
         val readinessHidden: Boolean = false,
-        /** "My path" as last seen ("3/17"): only the count, for the home screen and "Resistance"; no steps. */
+        /** "My path" as last seen, per level ("4/4,2/3,0/4,0/3"): only counts, for the home screen and "Resistance"; no steps. */
         val path: String = "",
+        /** The last level of "My path" whose completion was already said on the home screen (-1: none). */
+        val pathCelebrated: Int = -1,
         /** Trip mode: the owner's data and sensitive sources are off every screen (see [Trip]). */
         val trip: Boolean = false,
         /** The owner has medical training: first-aid procedures open as the full official text. */
@@ -48,6 +50,7 @@ object HomePrefs {
     private const val READINESS = "readiness"
     private const val READINESS_HIDDEN = "readiness_hidden"
     private const val PATH = "path_share"
+    private const val PATH_CELEBRATED = "path_celebrated"
     private const val TRIP = "trip"
     private const val MEDIC = "medic"
     private const val SERVICE = "service"
@@ -68,7 +71,8 @@ object HomePrefs {
             screenshots = p.getBoolean(SCREENSHOTS, false),
             readiness = p.getString(READINESS, null).orEmpty().take(100),
             readinessHidden = p.getBoolean(READINESS_HIDDEN, false),
-            path = p.getString(PATH, null).orEmpty().take(10),
+            path = p.getString(PATH, null).orEmpty().take(40),
+            pathCelebrated = p.getInt(PATH_CELEBRATED, -1),
             trip = p.getBoolean(TRIP, false),
             medic = p.getBoolean(MEDIC, false),
             service = p.getBoolean(SERVICE, false),
@@ -130,6 +134,7 @@ object HomePrefs {
             .putString(READINESS, next.readiness)
             .putBoolean(READINESS_HIDDEN, next.readinessHidden)
             .putString(PATH, next.path)
+            .putInt(PATH_CELEBRATED, next.pathCelebrated)
             .putBoolean(TRIP, next.trip)
             .putBoolean(MEDIC, next.medic)
             .putBoolean(SERVICE, next.service)

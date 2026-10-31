@@ -879,4 +879,16 @@
     <string name="kit_less">Less</string>
     <string name="opening_slow_title">Opening takes longer than usual</string>
     <string name="opening_slow_text">Try again. If that does not help, close the app and open it again.</string>
+    <string name="inspire_0a">Start with yourself: one skill can save a life, yours or someone else\'s.</string>
+    <string name="inspire_0b">A few more steps and you will know what to do in the hardest minute.</string>
+    <string name="inspire_1a">You have looked after yourself. Now agree with your family where to meet and how to let each other know.</string>
+    <string name="inspire_1b">A family that knows the plan does not panic. The next step is together.</string>
+    <string name="inspire_2a">Your family is ready. Now neighbours and your community: together we are stronger.</string>
+    <string name="inspire_2b">A community holds on people who know each other. You are one of them.</string>
+    <string name="inspire_3a">You are already someone your community can lean on. Next: knowing how to defend the country.</string>
+    <string name="inspire_3b">Knowing your rights and duties is part of resistance too.</string>
+    <string name="inspire_4a">Your medical knowledge is strength for everyone around you. Share it.</string>
+    <string name="inspire_4b">Teach one person to stop bleeding, and two people can save a life.</string>
+    <string name="inspire_all">You have walked the whole path. Teach one person: that is how readiness grows.</string>
+    <string name="inspire_level_done">Level «%1$s» complete. It already helps your family.</string>
 </resources>

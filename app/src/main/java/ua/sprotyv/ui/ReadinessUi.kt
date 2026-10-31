@@ -1,5 +1,13 @@
 package ua.sprotyv.ui
 
+import androidx.compose.runtime.LaunchedEffect
+
+import androidx.compose.foundation.layout.Box
+
+import androidx.compose.ui.draw.clip
+
+import androidx.compose.foundation.background
+
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 
 import androidx.compose.foundation.Canvas
@@ -224,27 +232,77 @@ fun ReadinessStrip(nav: Nav) {
                     }
                 }
             }
-            // "My path": the count only, and one tap to this week's step
-            pathShare(prefs.path)?.let { (d, t) ->
-                Row(
-                    Modifier.fillMaxWidth().heightIn(min = 48.dp).clickable { nav.go(Route.Mine(MinePart.PATH)) }.padding(end = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        if (d >= t) stringResource(R.string.path_home_all) else stringResource(R.string.path_home, d, t),
-                        style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f),
-                    )
-                    androidx.compose.material3.Icon(androidx.compose.material.icons.Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null)
-                }
-            }
+            // "My path" with readiness: where the owner is and a calm word for the next level
+            pathLevels(prefs.path).takeIf { it.isNotEmpty() }?.let { Box(Modifier.padding(end = 12.dp)) { PathInspire(it, prefs.pathCelebrated, nav) } }
         }
     }
 }
 
-/** "3/17" as two numbers; null when not seen yet or odd. */
-fun pathShare(s: String): Pair<Int, Int>? {
-    val (d, t) = s.split("/").takeIf { it.size == 2 } ?: return null
-    val dd = d.toIntOrNull() ?: return null
-    val tt = t.toIntOrNull()?.takeIf { it in 1..100 } ?: return null
-    return if (dd in 0..tt) dd to tt else null
+/** "My path" per level ("4/4,2/3,0/4"): done and total of each; empty when not seen yet or odd. */
+fun pathLevels(s: String): List<Pair<Int, Int>> {
+    val parts = s.split(",").map { p ->
+        val (d, t) = p.split("/").takeIf { it.size == 2 } ?: return emptyList()
+        val dd = d.toIntOrNull() ?: return emptyList()
+        val tt = t.toIntOrNull()?.takeIf { it in 1..50 } ?: return emptyList()
+        if (dd !in 0..tt) return emptyList()
+        dd to tt
+    }
+    return if (parts.size in 1..6) parts else emptyList()
+}
+
+/** The whole path as two numbers; null when not seen yet or odd. */
+fun pathShare(s: String): Pair<Int, Int>? = pathLevels(s).takeIf { it.isNotEmpty() }?.let { l -> l.sumOf { it.first } to l.sumOf { it.second } }
+
+/** The levels of "My path", in order, for the home screen's words. */
+private val LEVEL_NAMES = listOf(R.string.path_level_personal, R.string.path_level_family, R.string.path_level_civic, R.string.path_level_defence, R.string.path_level_medic)
+/** Two calm phrases for each level being worked on; one is chosen by the day, so it changes now and then. */
+private val LEVEL_WORDS = listOf(
+    listOf(R.string.inspire_0a, R.string.inspire_0b), listOf(R.string.inspire_1a, R.string.inspire_1b),
+    listOf(R.string.inspire_2a, R.string.inspire_2b), listOf(R.string.inspire_3a, R.string.inspire_3b), listOf(R.string.inspire_4a, R.string.inspire_4b),
+)
+
+/**
+ * Readiness and the path as one story on the home screen: where the owner is, a calm line for the
+ * next level, and once, when a level is completed, a word that it already helps. No points, no
+ * streaks, nothing that scolds. A tap opens this week's step.
+ */
+@Composable
+private fun PathInspire(levels: List<Pair<Int, Int>>, celebrated: Int, nav: Nav) {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val current = levels.indexOfFirst { it.first < it.second }
+    val lastDone = (if (current < 0) levels.size else current) - 1
+    // A level just completed: said once, then the next level's words
+    val celebrate = lastDone >= 0 && lastDone > celebrated
+    LaunchedEffect(lastDone) {
+        if (lastDone != celebrated && !(lastDone < celebrated && lastDone >= 0)) HomePrefs.update(context) { it.copy(pathCelebrated = lastDone) }
+    }
+    val day = java.time.LocalDate.now().dayOfYear
+    Column(
+        Modifier.fillMaxWidth().clip(androidx.compose.foundation.shape.RoundedCornerShape(12.dp)).background(resist().container)
+            .clickable { nav.go(Route.Mine(MinePart.PATH)) }.padding(12.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        val ink = resist().ink
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(Shield, contentDescription = null, tint = ink, modifier = Modifier.size(20.dp))
+            Spacer(Modifier.width(8.dp))
+            // Levels done get a tick; the one in progress shows its count
+            val line = levels.mapIndexedNotNull { i, (d, t) ->
+                val name = context.getString(LEVEL_NAMES.getOrElse(i) { LEVEL_NAMES.last() })
+                when {
+                    d >= t -> "$name ✓"
+                    i == current -> "$name $d/$t"
+                    else -> null
+                }
+            }.joinToString(" · ")
+            Text(line, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = ink, modifier = Modifier.weight(1f))
+            Icon(androidx.compose.material.icons.Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, tint = ink)
+        }
+        val words = when {
+            celebrate -> stringResource(R.string.inspire_level_done, stringResource(LEVEL_NAMES.getOrElse(lastDone) { LEVEL_NAMES.last() }))
+            current < 0 -> stringResource(R.string.inspire_all)
+            else -> LEVEL_WORDS.getOrElse(current) { LEVEL_WORDS.last() }.let { stringResource(it[day % it.size]) }
+        }
+        Text(words, style = MaterialTheme.typography.bodyMedium, color = ink)
+    }
 }

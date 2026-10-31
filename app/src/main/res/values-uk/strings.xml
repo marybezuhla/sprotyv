@@ -885,4 +885,16 @@
     <string name="kit_less">Згорнути</string>
     <string name="opening_slow_title">Відкривається довше, ніж зазвичай</string>
     <string name="opening_slow_text">Спробуйте ще раз. Якщо не допоможе — закрийте застосунок і відкрийте знову.</string>
+    <string name="inspire_0a">Почніть із себе: одна навичка може врятувати життя — ваше чи чуже.</string>
+    <string name="inspire_0b">Ще кілька кроків — і ви знатимете, що робити в найважчу хвилину.</string>
+    <string name="inspire_1a">Ви вже подбали про себе. Тепер домовтеся з рідними, де зустрітися і як дати знати.</string>
+    <string name="inspire_1b">Родина, яка знає план, не панікує. Наступний крок — разом.</string>
+    <string name="inspire_2a">Ваша родина готова. Тепер сусіди й громада: разом ми сильніші.</string>
+    <string name="inspire_2b">Громада тримається на людях, які знають одне одного. Ви — одна з них.</string>
+    <string name="inspire_3a">Ви вже опора для громади. Наступне — знати, як захищати країну.</string>
+    <string name="inspire_3b">Знати свої права й обов’язки — теж частина спротиву.</string>
+    <string name="inspire_4a">Ваші знання медика — сила для всіх поруч. Поділіться ними.</string>
+    <string name="inspire_4b">Навчіть одну людину зупиняти кровотечу — і вже двоє врятують життя.</string>
+    <string name="inspire_all">Шлях пройдено. Навчіть когось одного — так готовність росте.</string>
+    <string name="inspire_level_done">Рівень «%1$s» пройдено. Це вже допомагає вашим рідним.</string>
 </resources>
