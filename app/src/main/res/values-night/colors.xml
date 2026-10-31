@@ -9,4 +9,9 @@
     <color name="w_muted">#FFA3ADA7</color>
     <color name="w_khaki_bg">#FF2F3021</color>
     <color name="w_khaki_ink">#FFD9D4A9</color>
+    <color name="w_green_bg">#FF17352B</color>
+    <color name="w_green_ink">#FFA8DCC4</color>
+    <color name="w_blue_bg">#FF1A2E45</color>
+    <color name="w_blue_ink">#FFBFD6F2</color>
+    <color name="w_red">#FFB3261E</color>
 </resources>

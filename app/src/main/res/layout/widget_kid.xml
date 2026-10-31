@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A child's widget: four big pictures; calling family opens the list of family numbers -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/w_root" android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@drawable/w_shape_blue" android:orientation="vertical" android:padding="6dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:orientation="horizontal">
+        <LinearLayout android:id="@+id/w_k1" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:layout_margin="4dp"
+            android:background="@drawable/w_shape_button" android:gravity="center" android:orientation="vertical">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🚨" android:textSize="30sp" android:importantForAccessibility="no" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/widget_kid_siren" android:textColor="@color/w_ink" android:textSize="14sp" android:textStyle="bold" android:maxLines="1" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/w_k2" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:layout_margin="4dp"
+            android:background="@drawable/w_shape_button" android:gravity="center" android:orientation="vertical">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🔥" android:textSize="30sp" android:importantForAccessibility="no" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/widget_kid_fire" android:textColor="@color/w_ink" android:textSize="14sp" android:textStyle="bold" android:maxLines="1" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:orientation="horizontal">
+        <LinearLayout android:id="@+id/w_k3" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:layout_margin="4dp"
+            android:background="@drawable/w_shape_button" android:gravity="center" android:orientation="vertical">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🧍" android:textSize="30sp" android:importantForAccessibility="no" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/widget_kid_lost" android:textColor="@color/w_ink" android:textSize="14sp" android:textStyle="bold" android:maxLines="1" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/w_k4" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:layout_margin="4dp"
+            android:background="@drawable/w_shape_button" android:gravity="center" android:orientation="vertical">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="📞" android:textSize="30sp" android:importantForAccessibility="no" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/widget_kid_call" android:textColor="@color/w_ink" android:textSize="14sp" android:textStyle="bold" android:maxLines="1" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

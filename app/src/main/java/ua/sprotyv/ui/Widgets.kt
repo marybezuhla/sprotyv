@@ -19,7 +19,10 @@ import ua.sprotyv.R
  * running counts are not shown. No permissions, no network; a tap opens Sprotyv at the right place.
  */
 object Widgets {
-    private val PROVIDERS = listOf(NowWidget::class.java, RunningWidget::class.java, PathWidget::class.java)
+    private val PROVIDERS = listOf(
+        NowWidget::class.java, RunningWidget::class.java, PathWidget::class.java, TileWidget::class.java,
+        ServicesWidget::class.java, KidWidget::class.java, SafeWidget::class.java, KitWidget::class.java,
+    )
 
     /** Draws every placed widget again (a count started or stopped, the path changed, trip mode). */
     fun update(context: Context) {
@@ -31,6 +34,11 @@ object Widgets {
             ids(app, manager, NowWidget::class.java).forEach { manager.updateAppWidget(it, now(app)) }
             ids(app, manager, RunningWidget::class.java).forEach { manager.updateAppWidget(it, running(app)) }
             ids(app, manager, PathWidget::class.java).forEach { manager.updateAppWidget(it, path(app)) }
+            ids(app, manager, TileWidget::class.java).forEach { manager.updateAppWidget(it, tile(app, it)) }
+            ids(app, manager, ServicesWidget::class.java).forEach { manager.updateAppWidget(it, services(app)) }
+            ids(app, manager, KidWidget::class.java).forEach { manager.updateAppWidget(it, kid(app)) }
+            ids(app, manager, SafeWidget::class.java).forEach { manager.updateAppWidget(it, safe(app)) }
+            ids(app, manager, KitWidget::class.java).forEach { manager.updateAppWidget(it, kit(app)) }
         } catch (e: Exception) {
             // A launcher that refuses an update keeps the last picture; the app itself is unaffected
         }
@@ -146,6 +154,127 @@ object Widgets {
         v.setOnClickPendingIntent(R.id.w_root, open(context, if (prefs.trip) "now" else "path", 3))
         return v
     }
+}
+
+// ---- more widgets
+
+/** The parts of Sprotyv the owner put on the home screen, by widget: the tile's id, its name, its colour. */
+object TileWidgets {
+    private fun prefs(c: Context) = c.applicationContext.getSharedPreferences("widget_tiles", Context.MODE_PRIVATE)
+    private val ID = Regex("^(card|chapter|tool|link):[A-Za-z0-9_-]{1,40}$")
+
+    class Chosen(val id: String, val title: String, val tone: String)
+
+    fun get(c: Context, widget: Int): Chosen? {
+        val v = prefs(c).getString(widget.toString(), null)?.split('\u0001') ?: return null
+        if (v.size != 3 || !ID.matches(v[0])) return null
+        return Chosen(v[0], v[1].take(80), v[2])
+    }
+
+    fun set(c: Context, widget: Int, id: String, title: String, tone: String) {
+        if (!ID.matches(id)) return
+        prefs(c).edit().putString(widget.toString(), listOf(id, title.take(80).replace('\u0001', ' '), tone).joinToString("\u0001")).apply()
+    }
+
+    fun remove(c: Context, widgets: IntArray) = prefs(c).edit().apply { widgets.forEach { remove(it.toString()) } }.apply()
+}
+
+private fun Widgets.layoutFor(tone: String) = when (tone) {
+    "urgent" -> R.layout.widget_tile_urgent
+    "green" -> R.layout.widget_tile_green
+    "blue" -> R.layout.widget_tile_blue
+    "khaki" -> R.layout.widget_tile_khaki
+    else -> R.layout.widget_tile_plain
+}
+
+/** A part chosen by the owner: its name and a mark by its colour; a tap opens it. */
+internal fun Widgets.tile(c: Context, widget: Int): RemoteViews {
+    val chosen = TileWidgets.get(c, widget)
+    val v = RemoteViews(c.packageName, layoutFor(chosen?.tone ?: "plain"))
+    v.setTextViewText(R.id.w_mark, when (chosen?.tone) { "urgent" -> "⚠"; "green" -> "✚"; "blue" -> "▣"; "khaki" -> "⛉"; else -> "📖" })
+    v.setTextViewText(R.id.w_title, chosen?.title ?: c.getString(R.string.widget_tile_choose))
+    v.setOnClickPendingIntent(R.id.w_root, openFor(c, if (chosen != null) "tile/" + chosen.id else "now", 100 + (widget % 500)))
+    return v
+}
+
+internal fun Widgets.services(c: Context): RemoteViews {
+    val v = RemoteViews(c.packageName, R.layout.widget_services)
+    listOf(R.id.w_s1 to "112", R.id.w_s2 to "101", R.id.w_s3 to "102", R.id.w_s4 to "103", R.id.w_s5 to "104").forEachIndexed { i, (id, number) ->
+        // The dialler with the number filled in; never a call by itself
+        v.setOnClickPendingIntent(id, PendingIntent.getActivity(
+            c, 1600 + i, Intent(Intent.ACTION_DIAL, android.net.Uri.parse("tel:$number")).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        ))
+    }
+    return v
+}
+
+internal fun Widgets.kid(c: Context): RemoteViews {
+    val v = RemoteViews(c.packageName, R.layout.widget_kid)
+    v.setOnClickPendingIntent(R.id.w_k1, openFor(c, "tile/card:kid-siren", 41))
+    v.setOnClickPendingIntent(R.id.w_k2, openFor(c, "tile/card:kid-fire", 42))
+    v.setOnClickPendingIntent(R.id.w_k3, openFor(c, "tile/card:kid-lost", 43))
+    v.setOnClickPendingIntent(R.id.w_k4, openFor(c, if (HomePrefs.load(c).trip) "now" else "kidcall", 44))
+    return v
+}
+
+internal fun Widgets.safe(c: Context): RemoteViews {
+    val v = RemoteViews(c.packageName, R.layout.widget_tile_green)
+    v.setTextViewText(R.id.w_mark, "➤")
+    v.setTextViewText(R.id.w_title, c.getString(R.string.tile_safe))
+    v.setOnClickPendingIntent(R.id.w_root, openFor(c, "safe", 45))
+    return v
+}
+
+/** The go-bag in counts, from what "Mine" last showed; none in trip mode. */
+internal fun Widgets.kit(c: Context): RemoteViews {
+    val v = RemoteViews(c.packageName, R.layout.widget_kit)
+    val prefs = HomePrefs.load(c)
+    val share = prefs.readiness.split(",").getOrNull(3)?.split("/")?.takeIf { it.size == 2 }?.let { (d, t) -> d.toIntOrNull()?.let { dd -> t.toIntOrNull()?.takeIf { it > 0 }?.let { dd to it } } }
+    if (prefs.trip || share == null) {
+        v.setTextViewText(R.id.w_text, c.getString(R.string.widget_kit_open))
+        v.setViewVisibility(R.id.w_bar, View.GONE)
+    } else {
+        v.setTextViewText(R.id.w_text, c.getString(R.string.kit_packed, share.first, share.second))
+        v.setViewVisibility(R.id.w_bar, View.VISIBLE)
+        v.setProgressBar(R.id.w_bar, 100, share.first * 100 / share.second, false)
+    }
+    v.setOnClickPendingIntent(R.id.w_root, openFor(c, if (prefs.trip) "now" else "kit", 46))
+    return v
+}
+
+/** Widgets ask the same as notifications: a fixed word to [Opening]; request codes from 1000 up. */
+internal fun Widgets.openFor(c: Context, target: String, code: Int): PendingIntent =
+    PendingIntent.getActivity(
+        c, 1000 + code,
+        Intent(c, Main::class.java).putExtra(Opening.EXTRA, target).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP),
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+    )
+
+/** Any part of Sprotyv, chosen when the widget is placed. */
+class TileWidget : AppWidgetProvider() {
+    override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) = Widgets.update(context)
+    override fun onDeleted(context: Context, ids: IntArray) = TileWidgets.remove(context, ids)
+}
+
+/** Emergency numbers: the dialler, never a call. */
+class ServicesWidget : AppWidgetProvider() {
+    override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) = Widgets.update(context)
+}
+
+/** A child's widget: four big pictures. */
+class KidWidget : AppWidgetProvider() {
+    override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) = Widgets.update(context)
+}
+
+/** "I am safe": the way to the message, never the message. */
+class SafeWidget : AppWidgetProvider() {
+    override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) = Widgets.update(context)
+}
+
+/** The go-bag in counts. */
+class KitWidget : AppWidgetProvider() {
+    override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) = Widgets.update(context)
 }
 
 /** "What to do now": a big orange way in. */

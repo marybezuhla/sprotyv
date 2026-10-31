@@ -77,6 +77,8 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!-- A long press on the icon: three ways in (the neutral icon has none) -->
+            <meta-data android:name="android.app.shortcuts" android:resource="@xml/shortcuts" />
         </activity-alias>
         <activity-alias
             android:name=".LauncherNeutral"
@@ -125,6 +127,31 @@
             <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_path_info" />
         </receiver>
+        <receiver android:name=".ui.TileWidget" android:exported="true" android:permission="android.permission.BIND_APPWIDGET" android:label="@string/widget_tile_label">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_tile_info" />
+        </receiver>
+        <receiver android:name=".ui.ServicesWidget" android:exported="true" android:permission="android.permission.BIND_APPWIDGET" android:label="@string/widget_services_label">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_services_info" />
+        </receiver>
+        <receiver android:name=".ui.KidWidget" android:exported="true" android:permission="android.permission.BIND_APPWIDGET" android:label="@string/widget_kid_label">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_kid_info" />
+        </receiver>
+        <receiver android:name=".ui.SafeWidget" android:exported="true" android:permission="android.permission.BIND_APPWIDGET" android:label="@string/tile_safe">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_safe_info" />
+        </receiver>
+        <receiver android:name=".ui.KitWidget" android:exported="true" android:permission="android.permission.BIND_APPWIDGET" android:label="@string/kit">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_kit_info" />
+        </receiver>
+        <!-- Choosing the part of Sprotyv a widget opens: reached by the launcher when the widget is placed;
+             it accepts only Sprotyv's own widgets -->
+        <activity android:name=".ui.TileWidgetSetup" android:exported="true" android:excludeFromRecents="true" android:taskAffinity="">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" /></intent-filter>
+        </activity>
         <!-- Lets the camera app write one photo into Sprotyv's cache; deleted right after reading -->
         <provider
             android:name="androidx.core.content.FileProvider"
