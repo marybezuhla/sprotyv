@@ -152,7 +152,8 @@ private fun LinkGroup(title: String, intro: String, links: List<Link>, toolbar: 
 @Composable
 fun PathScreen(nav: Nav) {
     val stored by remember { PersonalStore.observe { db -> db.settings().observe(KEY_PATH).map { listOf(it) } } }.collectAsStateWithLifecycle(null)
-    val done = stored?.first()?.let(::parsePath) ?: return Loading()
+    // Nothing ticked yet (no value stored) is an empty path, not "still reading"
+    val done = parsePath((stored ?: return Loading()).first())
     val medic = HomePrefs.state.collectAsState().value?.medic == true
     val path = if (medic) PATH else PATH.filter { it.level < 4 }
     fun change(key: String, on: Boolean) {
