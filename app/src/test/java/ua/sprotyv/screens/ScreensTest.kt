@@ -66,6 +66,7 @@ class ScreensTest {
     @Before fun setUp() {
         app = ApplicationProvider.getApplicationContext()
         content = Content.get(app)
+        HomePrefs.update(app) { it.copy(medic = false) }
         // The empty activity that hosts each screen (known only to this test)
         shadowOf(app.packageManager).addActivityIfNotPresent(ComponentName(app, ComponentActivity::class.java))
     }
@@ -115,4 +116,8 @@ class ScreensTest {
     @Test fun directory() = shot("14-directory") { DirectoryScreen(content, nav) }
     @Test fun guideTable() = shot("15-guide-2-5") { GuideSectionScreen(content, "2.5", nav) }
     @Test fun guidePower() = shot("16-guide-20-3") { GuideSectionScreen(content, "20.3", nav) }
+    @Test fun mozList() { mode(Mode.FULL); shot("17-moz-list") { MozListScreen(content, nav) } }
+    @Test fun mozSteps() { mode(Mode.FULL); shot("18-moz-bleeding-steps") { MozScreen(content, 4, nav) } }
+    @Test fun mozFull() { HomePrefs.update(app) { it.copy(mode = Mode.FULL, medic = true) }; shot("19-moz-bleeding-full", dark = true) { MozScreen(content, 4, nav) } }
+    @Test fun qrText() = shot("20-qr-text") { QrTextScreen(nav) }
 }
