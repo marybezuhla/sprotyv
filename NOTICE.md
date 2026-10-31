@@ -13,7 +13,9 @@
   "Довідник виживання" 2.3 (https://github.com/snegireff/dovidnyk-vyzhyvannia), licensed under
   CC BY-SA 4.0. Changes: converted for display in the app by `scripts/build_guide.py` (markup
   changed, figures rendered as pictures by `scripts/render_figures.js`, cover, table of contents
-  and blank note forms left out); the text itself is unchanged. This material stays under
+  and blank note forms left out); the text itself is unchanged. Three public-domain pictures
+  from Wikimedia Commons were added (figures 11.2, 15.5, 15.6; authors in the captions and in
+  `scripts/figures-extra/SOURCE.md`). This material stays under
   CC BY-SA 4.0 with its authorship kept, separate from the GPL-3.0 code.
 - `content/src/main/assets/cards.json` (written in `scripts/content/cards.py`) — action cards
   adapted from the same guide: steps shortened and reworded for quick reading. As an
