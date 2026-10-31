@@ -883,4 +883,6 @@
     <string name="kit_full">Валіза зібрана: %1$d з %2$d</string>
     <string name="kit_more">Детальніше</string>
     <string name="kit_less">Згорнути</string>
+    <string name="opening_slow_title">Відкривається довше, ніж зазвичай</string>
+    <string name="opening_slow_text">Спробуйте ще раз. Якщо не допоможе — закрийте застосунок і відкрийте знову.</string>
 </resources>

@@ -146,7 +146,13 @@ fun Personal(title: Int, state: Opened?, nav: Nav, content: @Composable () -> Un
         // camera), the screen and everything it remembers stays as it is
         when {
             state is Opened.Ready || (state == null && wasReady) -> content()
-            state == null -> Loading()
+            state == null -> {
+                // Opening never takes long: if it seems stuck, the owner can start it again
+                var slow by remember { androidx.compose.runtime.mutableStateOf(false) }
+                androidx.compose.runtime.LaunchedEffect(Unit) { kotlinx.coroutines.delay(6_000); slow = true }
+                Loading()
+                if (slow) Problem(R.string.opening_slow_title, R.string.opening_slow_text) { PersonalStore.close(); PersonalStore.open(context) }
+            }
             state is Opened.Locked -> LockedView(state.pinOnly)
             state == Opened.TryAgain -> Problem(R.string.try_again_title, R.string.try_again_text) { PersonalStore.close(); PersonalStore.open(context) }
             state == Opened.NeedsUpdate -> {
