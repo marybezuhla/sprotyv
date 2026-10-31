@@ -25,7 +25,7 @@
     "why": "The glass can break."
    },
    {
-    "action": "Come out only when a grown-up says so or you hear “All clear”.",
+    "action": "Come out only when a grown-up says so or you hear \"All clear\".",
     "why": ""
    }
   ]
@@ -85,7 +85,7 @@
     "why": ""
    },
    {
-    "action": "Do not play in empty buildings, trenches or near broken machines.",
+    "action": "Do not play in abandoned buildings, in trenches or near vehicles and machinery.",
     "why": ""
    }
   ]
@@ -128,7 +128,7 @@
   "reviewedBy": "",
   "steps": [
    {
-    "action": "Shout “Fire!” and call grown-ups.",
+    "action": "Shout \"Fire!\" and call grown-ups.",
     "why": ""
    },
    {
@@ -178,7 +178,7 @@
  },
  {
   "id": "kid-code",
-  "title": "A call “from Mum”",
+  "title": "A call \"from Mum\"",
   "guide": [
    "22.1",
    "18.3"
@@ -189,7 +189,7 @@
   "reviewedBy": "",
   "steps": [
    {
-    "action": "A stranger calls “from Mum” or “from Dad” — ask for the code word.",
+    "action": "A stranger calls \"from Mum\" or \"from Dad\" — ask for the code word.",
     "why": "Only your family knows the code word."
    },
    {
