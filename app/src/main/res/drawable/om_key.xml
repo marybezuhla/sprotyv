@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- OpenMoji "key" (openmoji.org, CC BY-SA 4.0), built by scripts/pictograms/openmoji.py -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="72dp" android:height="72dp" android:viewportWidth="72" android:viewportHeight="72">
+    <path android:fillColor="#FFF4AA41" android:pathData="M33.5357,31.9911c-1.4016-4.2877-0.2247-9.41,3.4285-13.0632c5.018-5.018,12.8077-5.3639,17.3989-0.7727 s4.2452,12.381-0.7728,17.3989c-4.057,4.057-10.4347,5.5131-14.2685,2.5888"/>
+    <path android:fillColor="#FFF4AA41" android:strokeColor="#FFF4AA41" android:strokeWidth="2" android:strokeLineCap="round" android:strokeLineJoin="round" android:strokeMiterLimit="10" android:pathData="M33.652,31.7364L31.2181,34.1872L14.6444,50.5142L14.6444,57.6603L21.0426,57.6603L21.0426,53.0835L26.0544,53.0835L26.0544,47.3024L32.04,47.3024L34.3913,44.9292L34.3913,40.6274L36.3618,40.6274L39.4524,37.5368"/>
+    <path android:fillColor="#FFE27022" android:pathData="M15.9847,53.3457L15.9857,51.4386L31.8977,35.8744L32.8505,36.8484Z"/>
+    <path android:fillColor="#FFE27022" android:pathData="M44.568,23.9982a3.9521,3.9521 0 1,0 7.9042,0a3.9521,3.9521 0 1,0 -7.9042,0Z"/>
+    <path android:strokeColor="#FF000000" android:strokeWidth="2" android:strokeLineCap="round" android:strokeLineJoin="round" android:strokeMiterLimit="10" android:pathData="M30.735,34.6557L14.3026,50.6814L14.3026,57.9214L21.868,57.9214L21.868,53.2845L26.9929,53.2845L26.9929,47.4274L32.0913,47.4274L34.4957,45.023L34.4957,40.6647L36.5107,40.6647"/>
+    <path android:strokeColor="#FF000000" android:strokeWidth="2" android:strokeLineCap="round" android:strokeLineJoin="round" android:strokeMiterLimit="10" android:pathData="M44.568,23.9982a3.9521,3.9521 0 1,0 7.9042,0a3.9521,3.9521 0 1,0 -7.9042,0Z"/>
+    <path android:strokeColor="#FF000000" android:strokeWidth="2" android:strokeLineCap="round" android:strokeLineJoin="round" android:strokeMiterLimit="10" android:pathData="M34.2256,31.1781c-1.4298-4.2383-0.3466-9.2209,3.1804-12.6947c4.8446-4.7715,12.4654-4.8894,17.0216-0.2634 s4.3223,12.2441-0.5223,17.0156c-3.9169,3.8577-9.6484,4.6736-14.1079,2.3998"/>
+</vector>

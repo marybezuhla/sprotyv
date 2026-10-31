@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- OpenMoji "house" (openmoji.org, CC BY-SA 4.0), built by scripts/pictograms/openmoji.py -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="72dp" android:height="72dp" android:viewportWidth="72" android:viewportHeight="72">
+    <path android:fillColor="#FFFFFFFF" android:pathData="M19.0,32.0h34.0v24.0h-34.0Z"/>
+    <path android:fillColor="#FFA57939" android:pathData="M25.0,40.0h9.0v16.0h-9.0Z"/>
+    <path android:fillColor="#FF92D3F5" android:pathData="M40.0,40.0h8.0v7.0h-8.0Z"/>
+    <path android:fillColor="#FFEA5A47" android:pathData="M53,32L19,32.0003L19,31L35,15L53,31Z"/>
+    <path android:fillColor="#FFEA5A47" android:pathData="M29,21L24,26L24,17L29,17Z"/>
+    <path android:strokeColor="#FF000000" android:strokeWidth="2" android:strokeLineCap="round" android:strokeLineJoin="round" android:strokeMiterLimit="10" android:pathData="M25.0,40.0h9.0v16.0h-9.0Z"/>
+    <path android:strokeColor="#FF000000" android:strokeWidth="2" android:strokeLineCap="round" android:strokeLineJoin="round" android:strokeMiterLimit="10" android:pathData="M40.0,40.0h8.0v7.0h-8.0Z"/>
+    <path android:strokeColor="#FF000000" android:strokeWidth="2" android:strokeLineCap="round" android:strokeLineJoin="round" android:strokeMiterLimit="10" android:pathData="M53,32L19,32.0003L19,31L35,15L53,31Z"/>
+    <path android:strokeColor="#FF000000" android:strokeWidth="2" android:strokeLineCap="round" android:strokeLineJoin="round" android:strokeMiterLimit="10" android:pathData="M19.0,32.0h34.0v24.0h-34.0Z"/>
+    <path android:strokeColor="#FF000000" android:strokeWidth="2" android:strokeLineCap="round" android:strokeLineJoin="round" android:strokeMiterLimit="10" android:pathData="M29,21L24,26L24,17L29,17Z"/>
+</vector>

@@ -82,6 +82,18 @@ internal fun picture(id: String): String = when (id) {
     else -> "⭐"
 }
 
+/** The same pictures drawn by OpenMoji (CC BY-SA 4.0): the same look on every phone. */
+internal fun pictureRes(id: String): Int = when (id) {
+    "kid-siren" -> R.drawable.om_siren
+    "kid-buzz" -> R.drawable.om_house
+    "kid-strange" -> R.drawable.om_hand
+    "kid-lost" -> R.drawable.om_person
+    "kid-fire" -> R.drawable.om_fire
+    "kid-scared" -> R.drawable.om_teddy
+    "kid-code" -> R.drawable.om_key
+    else -> R.drawable.om_star
+}
+
 /** Soft colours from the group palette, one per tile, so each is found by colour too. */
 private val KID_COLOURS = listOf(Group.DANGER, Group.HOME_LIFE, Group.FAMILY, Group.LEAVE, Group.PREPARE, Group.FIRST_AID, Group.MINE)
 
@@ -135,7 +147,7 @@ private fun KidTile(card: ActionCard, tint: Tint, onClick: () -> Unit) {
     ) {
         Column(Modifier.fillMaxWidth().padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             // The picture is for the eye; TalkBack reads the words
-            Text(picture(card.id), fontSize = 56.sp, modifier = Modifier.clearAndSetSemantics { })
+            androidx.compose.foundation.Image(androidx.compose.ui.res.painterResource(pictureRes(card.id)), null, Modifier.size(56.dp))
             Spacer(Modifier.size(8.dp))
             Text(card.title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center)
         }
@@ -267,7 +279,7 @@ internal fun KidCardBody(card: ua.sprotyv.content.Card, content: ua.sprotyv.cont
     if (!done) {
         val s = card.steps[step]
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            Text(picture(card.id), fontSize = 72.sp, modifier = Modifier.clearAndSetSemantics { })
+            androidx.compose.foundation.Image(androidx.compose.ui.res.painterResource(pictureRes(card.id)), null, Modifier.size(72.dp))
             Text(
                 s.action, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center,
                 modifier = Modifier.semantics { liveRegion = androidx.compose.ui.semantics.LiveRegionMode.Polite },

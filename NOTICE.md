@@ -21,6 +21,10 @@
 - `app/src/main/res/drawable/pict_*.xml` (built by `scripts/pictograms/build.py`) — pictograms for
   card steps, composed from Material Symbols Rounded (Google, Apache License 2.0; the glyphs are in
   `scripts/pictograms/material/` unchanged). Not yet tested with people.
+- `app/src/main/res/drawable/om_*.xml` (built by `scripts/pictograms/openmoji.py`) — emoji from OpenMoji
+  (https://openmoji.org) by the OpenMoji project, HfG Schwäbisch Gmünd, licensed CC BY-SA 4.0
+  (https://creativecommons.org/licenses/by-sa/4.0/); converted to Android vectors, otherwise unchanged;
+  the originals are kept in `scripts/pictograms/openmoji/`.
 - `app/src/main/res/drawable/ocha_*.xml` (built by `scripts/pictograms/ocha.py`) — OCHA Humanitarian Icons
   by the UN Office for the Coordination of Humanitarian Affairs (https://brand.unocha.org/), freely
   available and listed as public domain (CC0); the originals are kept unchanged in
