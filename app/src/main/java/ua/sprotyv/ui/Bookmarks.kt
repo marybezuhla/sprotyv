@@ -28,7 +28,10 @@ object Bookmarks {
     private const val MAX_TITLE = 150
 
     /** Telegram's own addresses, with any subdomain. */
-    private val TELEGRAM = listOf("t.me", "telegram.me", "telegram.org", "telegram.dog", "telegra.ph", "telesco.pe")
+    private val TELEGRAM = listOf(
+        "t.me", "telegram.me", "telegram.org", "telegram.dog", "telegra.ph", "telesco.pe",
+        "telegram.space", "tdesktop.com", "fragment.com",
+    )
     private val URL = Regex("""(?i)\b(?:https?|tg)://[^\s<>"'«»]+""")
 
     sealed interface Check {
@@ -43,9 +46,10 @@ object Bookmarks {
         val found = URL.find(raw.take(10_000)) ?: return Check.NoPage
         val url = found.value.trimEnd('.', ',', ')', ';', '!', '?', ':')
         if (url.startsWith("tg:", ignoreCase = true)) return Check.Telegram
-        if (url.length > MAX_URL) return Check.NoPage
+        val ascii = asciiHost(url) ?: return Check.NoPage
+        if (ascii.length > MAX_URL) return Check.NoPage
         val uri = try {
-            java.net.URI(url)
+            java.net.URI(ascii)
         } catch (e: Exception) {
             return Check.NoPage
         }
@@ -55,15 +59,33 @@ object Bookmarks {
         if (!uri.scheme.equals("https", ignoreCase = true)) return Check.NotSecure
         // "https://bank.example@other.example" shows one site and opens another: not kept
         if (uri.rawUserInfo != null) return Check.NoPage
-        return Check.Page("https://" + url.substring(url.indexOf("://") + 3))
+        return Check.Page("https://" + ascii.substring(ascii.indexOf("://") + 3))
+    }
+
+    /**
+     * The address with its host in plain Latin letters (Ukrainian domains such as .укр in their
+     * punycode form), so one parser sees the same host the browser will. Null if it cannot be done.
+     */
+    private fun asciiHost(url: String): String? {
+        val start = url.indexOf("://") + 3
+        if (start < 3) return null
+        val end = url.indexOfAny(charArrayOf('/', '?', '#'), start).let { if (it < 0) url.length else it }
+        val host = url.substring(start, end)
+        if (host.all { it.code < 128 }) return url
+        return try {
+            url.substring(0, start) + java.net.IDN.toASCII(host, java.net.IDN.USE_STD3_ASCII_RULES) + url.substring(end)
+        } catch (e: Exception) {
+            null
+        }
     }
 
     /** A name as typed or shared: no control or direction characters (they can make text lie), short. */
     fun cleanTitle(s: String): String =
         s.filter { !it.isISOControl() && Character.getType(it) != Character.FORMAT.toInt() }.trim().take(MAX_TITLE)
 
+    /** The site's name to show, in its own letters (a .укр domain reads as .укр). */
     fun host(url: String): String = try {
-        java.net.URI(url).host.orEmpty().removePrefix("www.")
+        java.net.IDN.toUnicode(java.net.URI(url).host.orEmpty()).removePrefix("www.")
     } catch (e: Exception) {
         ""
     }
@@ -117,11 +139,22 @@ object Incoming {
 
     fun take(intent: Intent?) {
         if (intent?.action != Intent.ACTION_SEND) return
-        val text = intent.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString().orEmpty()
-        val subject = intent.getStringExtra(Intent.EXTRA_SUBJECT).orEmpty()
-        _state.value = Shared(Bookmarks.check(text), Bookmarks.cleanTitle(subject))
+        // Reopened from the recent apps: the share was already handled (or dropped) then
+        if (intent.flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY != 0) {
+            intent.action = null
+            return
+        }
+        // Another app chose what is in the extras: anything odd is dropped, never a crash
+        val shared = try {
+            val text = intent.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString().orEmpty()
+            val subject = intent.getStringExtra(Intent.EXTRA_SUBJECT).orEmpty()
+            Shared(Bookmarks.check(text), Bookmarks.cleanTitle(subject))
+        } catch (t: Throwable) {
+            null
+        }
         // Taken once: rotating the screen or coming back does not bring it again
         intent.action = null
+        if (shared != null) _state.value = shared
     }
 
     fun clear() {

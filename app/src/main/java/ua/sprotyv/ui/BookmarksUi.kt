@@ -72,13 +72,16 @@ fun BookmarksScreen() {
             }
         }
     }
-    fun add(url: String, title: String) {
-        if (list.size >= Bookmarks.MAX && list.none { it.url == url }) { tooMany = true; return }
+    // False when it does not fit: the owner is told, and nothing is lost silently
+    fun add(url: String, title: String): Boolean {
         val name = Bookmarks.cleanTitle(title).ifBlank { Bookmarks.host(url) }
-        change { now -> listOf(Bookmark(url, name, System.currentTimeMillis())) + now.filter { it.url != url } }
+        val next = { now: List<Bookmark> -> listOf(Bookmark(url, name, System.currentTimeMillis())) + now.filter { it.url != url } }
+        if (Bookmarks.toPages(next(list)) == null) { tooMany = true; return false }
+        change(next)
+        return true
     }
 
-    incoming?.let { shared -> SharedCard(shared, onKeep = { url, title -> add(url, title); Incoming.clear() }, onDrop = Incoming::clear) }
+    incoming?.let { shared -> SharedCard(shared, onKeep = { url, title -> if (add(url, title)) Incoming.clear() }, onDrop = Incoming::clear) }
 
     Text(stringResource(R.string.bookmarks_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     PasteBlock { url -> add(url, "") }
@@ -137,7 +140,9 @@ private fun SharedCard(shared: Incoming.Shared, onKeep: (String, String) -> Unit
                 is Bookmarks.Check.Page -> {
                     var name by rememberSaveable(shared.id) { mutableStateOf(shared.title.ifBlank { Bookmarks.host(c.url) }) }
                     Text(stringResource(R.string.bookmarks_keep_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
-                    Text(c.url, style = MaterialTheme.typography.bodyMedium, maxLines = 3, overflow = TextOverflow.Ellipsis)
+                    // The site first and large: a name suggested by another app cannot hide where it leads
+                    Text(Bookmarks.host(c.url), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                    Text(c.url, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 3, overflow = TextOverflow.Ellipsis)
                     Field(stringResource(R.string.bookmarks_name), name, { name = it })
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Button(onClick = { onKeep(c.url, name) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.save)) }
@@ -164,14 +169,14 @@ private fun SharedCard(shared: Incoming.Shared, onKeep: (String, String) -> Unit
 
 /** Paste an address by hand: the same checks as a shared page. */
 @Composable
-private fun PasteBlock(onAdd: (String) -> Unit) {
+private fun PasteBlock(onAdd: (String) -> Boolean) {
     var text by rememberSaveable { mutableStateOf("") }
     var problem by remember { mutableStateOf<Int?>(null) }
     Field(stringResource(R.string.bookmarks_paste), text, { text = it; problem = null }, hint = "https://…")
     problem?.let { Text(stringResource(it), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.error) }
     OutlinedButton(enabled = text.isNotBlank(), onClick = {
         when (val c = Bookmarks.check(text)) {
-            is Bookmarks.Check.Page -> { onAdd(c.url); text = "" }
+            is Bookmarks.Check.Page -> if (onAdd(c.url)) text = ""
             Bookmarks.Check.Telegram -> problem = R.string.bookmarks_no_telegram
             Bookmarks.Check.NotSecure -> problem = R.string.bookmarks_not_secure
             Bookmarks.Check.NoPage -> problem = R.string.bookmarks_no_page

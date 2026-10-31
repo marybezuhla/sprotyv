@@ -19,7 +19,7 @@ class BookmarksTest {
     }
 
     @Test fun refusesTelegramInAnyForm() {
-        listOf("https://t.me/x", "https://www.t.me/x", "http://telegram.me/x", "tg://resolve?domain=x", "https://telegra.ph/a", "https://web.telegram.org/")
+        listOf("https://t.me/x", "https://www.t.me/x", "http://telegram.me/x", "tg://resolve?domain=x", "https://telegra.ph/a", "https://web.telegram.org/", "https://T.ME./x", "https://fragment.com/")
             .forEach { assertEquals(it, Bookmarks.Check.Telegram, Bookmarks.check(it)) }
     }
 
@@ -28,7 +28,14 @@ class BookmarksTest {
         assertEquals(Bookmarks.Check.NoPage, Bookmarks.check("javascript:alert(1)"))
         assertEquals(Bookmarks.Check.NoPage, Bookmarks.check("https://bank.example@other.example/"))
         assertEquals(Bookmarks.Check.NoPage, Bookmarks.check("no address here"))
+        assertEquals(Bookmarks.Check.NoPage, Bookmarks.check("https://a.example;@b.example/"))
         assertEquals(Bookmarks.Check.NoPage, Bookmarks.check("https://example.org/" + "a".repeat(3000)))
+    }
+
+    @Test fun ukrainianDomainsAreKeptInPunycodeAndShownInLetters() {
+        val url = page("https://тест.укр/сторінка")
+        assertTrue(url, url.startsWith("https://xn--"))
+        assertEquals("тест.укр", Bookmarks.host(url))
     }
 
     @Test fun namesLoseDirectionAndControlCharacters() {
