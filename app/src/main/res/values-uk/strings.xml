@@ -849,4 +849,14 @@
     <string name="notes_remind_off">Не нагадувати</string>
     <string name="notes_remind_next">Далі</string>
     <string name="notify_trip_all">У режимі поїздки ховати всі сповіщення, і турнікет, і відліки</string>
+    <string name="path_week_title">Крок цього тижня</string>
+    <string name="path_week_done">Зроблено</string>
+    <string name="path_week_hint">Один крок за раз. Без поспіху: зробите, коли буде змога.</string>
+    <string name="path_week_well_done">Чудово. Кожне вміння — це хтось, кому ви зможете допомогти.</string>
+    <string name="path_week_all">Ви пройшли весь шлях. Поділіться вміннями з іншими: навчіть когось одного.</string>
+    <string name="path_week_open">Крок тижня й мій шлях</string>
+    <string name="path_home">Мій шлях: %1$d з %2$d · крок тижня</string>
+    <string name="path_home_all">Мій шлях пройдено</string>
+    <string name="resist_support_title">Підтримати країну</string>
+    <string name="resist_support_intro">Гроші, кров, пильність. Донатьте лише через офіційні сайти: шахраї роблять копії відомих фондів.</string>
 </resources>

@@ -26,7 +26,7 @@ data class Link(
         /** A civic organisation (громадська організація), charity or cooperative. */
         const val NGO = "ngo"
         /** "Resistance": where to learn, service for adults, resilience. Shown only in that section. */
-        val RESIST = listOf("learn", "service", "resilience")
+        val RESIST = listOf("learn", "service", "resilience", "support")
         /** "Where to turn": help services for everyday life after and around the war. */
         val DIRECTORY = listOf("idp", "money", "docs", "kids", "veterans", "health", "care")
         val GROUPS = listOf("threats", "front", "help", "evac", "search", "mind", "rights", "facts", "power") + DIRECTORY + RESIST
