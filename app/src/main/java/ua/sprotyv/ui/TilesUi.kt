@@ -175,7 +175,7 @@ private val Group.title: Int get() = when (this) {
 }
 
 /** One folded group in "Sections": its name, a line on what is in it, its colour, its tiles. */
-private class Shelf(val title: Int, val desc: Int, val group: Group, val ids: List<String>, val resist: Boolean = false)
+private class Shelf(val title: Int, val desc: Int, val group: Group, val ids: List<String>, val resist: Boolean = false, val icon: ImageVector? = null)
 
 /**
  * Resistance runs through many sections, so it has its own quiet mark: a muted khaki and the
@@ -587,9 +587,9 @@ fun SectionsList(content: Content?, pins: List<String>, nav: Nav, onPin: (String
     val resistLinks = links.filter { it.group in ua.sprotyv.content.Link.RESIST && it.group != "service" }.map { Tiles.link(it.id) }
     val lists = listOf(Shelf(R.string.resist_title, R.string.shelf_resist_desc, Group.PREPARE, listOf(Tiles.tool(Tool.RESIST), Tiles.tool(Tool.MOZ), Tiles.tool(Tool.PRACTICE), Tiles.tool(Tool.KIT)) + resistLinks, resist = true)) +
         Group.entries.map { Shelf(it.title, it.desc, it, it.tiles) } +
-        Shelf(R.string.situation_title, R.string.shelf_situation_desc, Group.GUIDE, links.filter { it.group != ua.sprotyv.content.Link.POWER && it.group !in ua.sprotyv.content.Link.DIRECTORY && it.group !in ua.sprotyv.content.Link.RESIST }.map { Tiles.link(it.id) }) +
-        Shelf(R.string.power_title, R.string.shelf_power_desc, Group.HOME_LIFE, links.filter { it.group == ua.sprotyv.content.Link.POWER }.map { Tiles.link(it.id) }) +
-        Shelf(R.string.dir_title, R.string.shelf_dir_desc, Group.GUIDE, links.filter { it.group in ua.sprotyv.content.Link.DIRECTORY }.map { Tiles.link(it.id) }) +
+        Shelf(R.string.situation_title, R.string.shelf_situation_desc, Group.GUIDE, icon = Icons.Filled.LocationOn, ids = links.filter { it.group != ua.sprotyv.content.Link.POWER && it.group !in ua.sprotyv.content.Link.DIRECTORY && it.group !in ua.sprotyv.content.Link.RESIST }.map { Tiles.link(it.id) }) +
+        Shelf(R.string.power_title, R.string.shelf_power_desc, Group.HOME_LIFE, icon = Icons.Filled.DateRange, ids = links.filter { it.group == ua.sprotyv.content.Link.POWER }.map { Tiles.link(it.id) }) +
+        Shelf(R.string.dir_title, R.string.shelf_dir_desc, Group.FIRST_AID, icon = Icons.Filled.Phone, ids = links.filter { it.group in ua.sprotyv.content.Link.DIRECTORY }.map { Tiles.link(it.id) }) +
         Shelf(R.string.group_rest, R.string.shelf_rest_desc, Group.GUIDE, Group.rest(content.guide.chapters.map { it.id }))
     lists.forEach { shelf ->
         val infos = shelf.ids.mapNotNull { tileInfo(it, content) }
@@ -608,7 +608,7 @@ fun SectionsList(content: Content?, pins: List<String>, nav: Nav, onPin: (String
                     .heightIn(min = 64.dp).padding(start = 12.dp, end = 8.dp, top = 10.dp, bottom = 10.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                IconBadge(if (shelf.resist) Shield else shelf.group.icon, Tint(MaterialTheme.colorScheme.surface, tint.ink), 40.dp)
+                IconBadge(if (shelf.resist) Shield else shelf.icon ?: shelf.group.icon, Tint(MaterialTheme.colorScheme.surface, tint.ink), 40.dp)
                 Spacer(Modifier.width(12.dp))
                 Column(Modifier.weight(1f).semantics(mergeDescendants = true) { heading() }) {
                     Text(stringResource(shelf.title), style = BlockTitle, color = tint.ink)

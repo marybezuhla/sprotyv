@@ -121,6 +121,8 @@ enum class Group(val tiles: List<String>) {
             Tiles.card("first-60"), Tiles.card("air-alert"), Tiles.card("ballistic"), Tiles.card("drone"),
             Tiles.card("rubble"), Tiles.card("suspicious"), Tiles.card("home-fire"), Tiles.card("chemical"),
             Tiles.card("radiation"), Tiles.tool(Tool.SITUATION), Tiles.tool(Tool.ALARM),
+            // The guide's own chapters on the same dangers
+            Tiles.chapter("ch3"), Tiles.chapter("ch4"), Tiles.chapter("ch6"),
         ),
     ),
     FIRST_AID(
@@ -135,10 +137,17 @@ enum class Group(val tiles: List<String>) {
             Tiles.card("blackout"), Tiles.tool(Tool.POWER), Tiles.tool(Tool.HOME_LIFE), Tiles.tool(Tool.SUPPLIES), Tiles.chapter("ch20"),
             Tiles.chapter("ch8"), Tiles.chapter("ch9"), Tiles.chapter("ch12"), Tiles.chapter("ch10"),
             Tiles.chapter("ch16"),
+            Tiles.chapter("ch23"), Tiles.chapter("ch24"), Tiles.chapter("ch25"), Tiles.chapter("ch27"),
         ),
     ),
-    PREPARE(listOf(Tiles.tool(Tool.RESIST), Tiles.tool(Tool.PRACTICE), Tiles.tool(Tool.KIT), Tiles.chapter("ch2"), Tiles.chapter("ch30"), Tiles.chapter("planA"))),
-    LEAVE(listOf(Tiles.card("leave-home"), Tiles.chapter("ch26"), Tiles.chapter("abroad"))),
+    PREPARE(listOf(Tiles.tool(Tool.RESIST), Tiles.tool(Tool.PRACTICE), Tiles.tool(Tool.KIT), Tiles.chapter("ch1"), Tiles.chapter("ch2"), Tiles.chapter("ch30"), Tiles.chapter("planA"))),
+    LEAVE(
+        listOf(
+            Tiles.card("leave-home"), Tiles.chapter("ch26"), Tiles.chapter("abroad"),
+            // Out of the house: shelter for the night, the way, signals for rescue, knots
+            Tiles.chapter("ch11"), Tiles.chapter("ch13"), Tiles.chapter("ch14"), Tiles.chapter("ch15"),
+        ),
+    ),
     SAFETY(listOf(Tiles.chapter("ch5"), Tiles.chapter("ch17"), Tiles.chapter("ch18"), Tiles.chapter("ch28"), Tiles.chapter("ch19"))),
     MINE(
         listOf(
@@ -146,7 +155,7 @@ enum class Group(val tiles: List<String>) {
             Tiles.tool(Tool.SCAN), Tiles.tool(Tool.QR_TEXT),
         ),
     ),
-    GUIDE(listOf(Tiles.tool(Tool.GUIDE), Tiles.tool(Tool.SEARCH))),
+    GUIDE(listOf(Tiles.tool(Tool.GUIDE), Tiles.tool(Tool.SEARCH), Tiles.chapter("ch29"))),
     ;
 
     companion object {
