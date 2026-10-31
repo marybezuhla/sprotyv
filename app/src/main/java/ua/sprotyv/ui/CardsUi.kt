@@ -305,9 +305,11 @@ private fun TourniquetTime(nav: Nav? = null) {
                 Text(stringResource(R.string.tourniquet_since, minutes / 60, minutes % 60), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                 // Who and where, in own words; not needed to start, written when there is a moment
                 var note by remember(t.n) { mutableStateOf(t.note) }
+                var unsaved by remember(t.n) { mutableStateOf(false) }
                 androidx.compose.material3.OutlinedTextField(
                     value = note,
-                    onValueChange = { v -> note = v.take(Tourniquets.NOTE_MAX); Tourniquets.note(context, t.n, note) },
+                    onValueChange = { v -> note = v.take(Tourniquets.NOTE_MAX); unsaved = !Tourniquets.note(context, t.n, note) },
+                    supportingText = if (unsaved) { { Text(stringResource(R.string.tourniquet_note_unsaved)) } } else null,
                     label = { Text(stringResource(R.string.tourniquet_note)) },
                     placeholder = { Text(stringResource(R.string.tourniquet_note_hint)) },
                     singleLine = true, modifier = Modifier.fillMaxWidth(),
