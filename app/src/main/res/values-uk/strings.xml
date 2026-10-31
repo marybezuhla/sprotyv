@@ -1009,4 +1009,5 @@
     <string name="np_live_on_title">Жити далі — наш спротив</string>
     <string name="np_live_on_hint">Нове місце після виїзду: кроки, права, громада</string>
     <string name="guide_sections">Підрозділи</string>
+    <string name="tourniquet_note_unsaved">Не збережено. Запишіть це на турнікеті.</string>
 </resources>

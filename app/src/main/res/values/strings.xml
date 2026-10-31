@@ -1003,4 +1003,5 @@
     <string name="np_live_on_title">Living on is our resistance</string>
     <string name="np_live_on_hint">New place after leaving: steps, rights, community</string>
     <string name="guide_sections">Sections</string>
+    <string name="tourniquet_note_unsaved">Not saved. Write it on the tourniquet.</string>
 </resources>

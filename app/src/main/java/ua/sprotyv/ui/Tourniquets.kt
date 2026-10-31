@@ -23,7 +23,10 @@ import javax.crypto.spec.GCMParameterSpec
  * over, or after a day (an alarm clears them even when nothing is opened).
  */
 object Tourniquets {
-    data class One(val n: Int, val at: Long, val note: String, val told: Int = 0)
+    /** [sealed] is the note as kept on the phone; [note] opens it only when a screen needs the words. */
+    data class One(val n: Int, val at: Long, val sealed: String, val told: Int = 0) {
+        val note: String get() = open(sealed)
+    }
 
     private const val FILE = "tourniquet"
     private const val DAY = 24 * 3600_000L
@@ -59,9 +62,13 @@ object Tourniquets {
         return n
     }
 
-    /** Written while typing: saved without waiting for the disk. */
-    fun note(c: Context, n: Int, text: String) =
-        write(c, all(c).map { if (it.n == n) it.copy(note = clean(text)) else it }, now = false)
+    /** Written while typing: only this note is sealed again, saved without waiting for the disk. False if it could not be sealed. */
+    fun note(c: Context, n: Int, text: String): Boolean {
+        val words = clean(text)
+        val sealed = seal(words)
+        write(c, all(c).map { if (it.n == n) it.copy(sealed = sealed) else it }, now = false)
+        return words.isEmpty() || sealed.isNotEmpty()
+    }
 
     /** Put on earlier than the tap: the time moved back (never into the future, never past a day). */
     fun shift(c: Context, n: Int, minutes: Int, now: Long = System.currentTimeMillis()) =
@@ -89,15 +96,18 @@ object Tourniquets {
         val old = p.getLong("at", 0L)
         val raw = p.getString("list", null)
         if (raw == null) return if (old > 0) listOf(One(1, old, "")) else emptyList()
-        return try {
-            val a = JSONArray(raw)
-            (0 until minOf(a.length(), MAX)).map { i ->
+        val a = try { JSONArray(raw) } catch (e: Exception) { return emptyList() }
+        // One damaged entry is skipped; the others, and their times, stay
+        return (0 until minOf(a.length(), MAX)).mapNotNull { i ->
+            try {
                 val o = a.getJSONObject(i)
-                One(o.getInt("n").coerceIn(1, 9_999), o.getLong("at"), clean(open(o.optString("note"))), o.optInt("told", 0).coerceIn(0, 24))
-            }.distinctBy { it.n }
-        } catch (e: Exception) {
-            emptyList()
-        }
+                // A note kept in plain words (an early test build) is not kept
+                val sealed = o.optString("note").takeIf { it.startsWith("v1:") }.orEmpty()
+                One(o.getInt("n").coerceIn(1, 9_999), o.getLong("at"), sealed, o.optInt("told", 0).coerceIn(0, 24))
+            } catch (e: Exception) {
+                null
+            }
+        }.distinctBy { it.n }
     }
 
     private fun write(c: Context, list: List<One>, next: Int? = null, now: Boolean = true) {
@@ -106,7 +116,7 @@ object Tourniquets {
             e.clear()
         } else {
             val a = JSONArray()
-            list.take(MAX).forEach { a.put(JSONObject().put("n", it.n).put("at", it.at).put("note", seal(it.note)).put("told", it.told)) }
+            list.take(MAX).forEach { a.put(JSONObject().put("n", it.n).put("at", it.at).put("note", it.sealed).put("told", it.told)) }
             e.putString("list", a.toString())
             next?.let { e.putInt("next", it) }
         }
@@ -117,9 +127,14 @@ object Tourniquets {
 
     private const val KEY = "sprotyv_tourniquet_notes"
 
+    @Volatile private var cached: SecretKey? = null
+
+    /** The key, made once and kept in memory; one at a time, so two can never be made. */
+    @Synchronized
     private fun key(): SecretKey {
+        cached?.let { return it }
         val ks = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
-        (ks.getKey(KEY, null) as? SecretKey)?.let { return it }
+        (ks.getKey(KEY, null) as? SecretKey)?.let { cached = it; return it }
         val gen = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
         gen.init(
             KeyGenParameterSpec.Builder(KEY, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
@@ -128,7 +143,7 @@ object Tourniquets {
                 .setKeySize(256)
                 .build(),
         )
-        return gen.generateKey()
+        return gen.generateKey().also { cached = it }
     }
 
     /** Empty stays empty; otherwise "v1:" + base64(iv + ciphertext). A note that cannot be sealed is not kept. */
@@ -145,7 +160,7 @@ object Tourniquets {
     }
 
     /** A note that does not open (a new phone, a damaged file) is simply empty. */
-    private fun open(sealed: String): String {
+    internal fun open(sealed: String): String {
         if (!sealed.startsWith("v1:")) return ""
         return try {
             val bytes = Base64.decode(sealed.substring(3), Base64.NO_WRAP)
