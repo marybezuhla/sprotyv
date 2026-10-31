@@ -41,6 +41,22 @@ import ua.sprotyv.personal.Setting
 
 const val KEY_PATH = "path"
 
+/**
+ * Steps that can be checked with situations (the card they come from). All answered right marks
+ * the step done and "checked by a test", kept in the same encrypted path list as "<step>.test".
+ */
+val PATH_CHECKS = mapOf("bleed" to "bleeding", "cpr" to "unconscious")
+private const val TESTED = ".test"
+
+/** All situations of a step answered right: the step is done and checked. */
+fun markPathTested(step: String) {
+    if (step !in PATH_CHECKS) return
+    PersonalStore.save("setting:$KEY_PATH:" + java.util.UUID.randomUUID()) { db ->
+        val now = parsePath(db.settings().get(KEY_PATH))
+        db.settings().put(Setting(KEY_PATH, org.json.JSONArray((now + step + (step + TESTED)).sorted()).toString()))
+    }
+}
+
 /** A step of "My path": what it is, the level it belongs to, and where to learn it in Sprotyv. */
 private class PathStep(val key: String, val level: Int, val words: Int, val learn: Route?)
 
@@ -176,7 +192,8 @@ fun PathScreen(nav: Nav) {
     fun change(key: String, on: Boolean) {
         PersonalStore.save("setting:$KEY_PATH:" + java.util.UUID.randomUUID()) { db ->
             val now = parsePath(db.settings().get(KEY_PATH))
-            db.settings().put(Setting(KEY_PATH, org.json.JSONArray((if (on) now + key else now - key).sorted()).toString()))
+            // Unticked: the test mark goes too
+            db.settings().put(Setting(KEY_PATH, org.json.JSONArray((if (on) now + key else now - key - (key + TESTED)).sorted()).toString()))
         }
     }
     val count = path.count { it.key in done }
@@ -230,7 +247,19 @@ fun PathScreen(nav: Nav) {
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Checkbox(checked = on, onCheckedChange = null, modifier = Modifier.padding(horizontal = 12.dp), colors = doneCheckbox())
-                    Text(stringResource(s.words), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = doneText(on), modifier = Modifier.weight(1f))
+                    androidx.compose.foundation.layout.Column(Modifier.weight(1f)) {
+                        Text(stringResource(s.words), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = doneText(on))
+                        // A step that can be checked: the mark when passed, or the way to the check
+                        if (s.key in PATH_CHECKS) {
+                            if (s.key + TESTED in done) {
+                                Text(stringResource(R.string.path_tested), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            } else {
+                                androidx.compose.material3.TextButton(onClick = { nav.go(Route.PathCheck(s.key)) }, contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp), modifier = Modifier.heightIn(min = 40.dp)) {
+                                    Text(stringResource(R.string.path_check), style = MaterialTheme.typography.labelLarge)
+                                }
+                            }
+                        }
+                    }
                     // A small book: where to learn it, so the step's words keep the width
                     s.learn?.let { r ->
                         androidx.compose.material3.IconButton(onClick = { nav.go(r) }, modifier = Modifier.size(48.dp)) {
@@ -248,7 +277,7 @@ private fun parsePath(s: String?): Set<String> {
     if (s.isNullOrBlank() || s.length > 2_000) return emptySet()
     return try {
         val a = org.json.JSONArray(s)
-        (0 until minOf(a.length(), 50)).map { a.optString(it) }.filter { k -> PATH.any { it.key == k } }.toSet()
+        (0 until minOf(a.length(), 50)).map { a.optString(it) }.filter { k -> PATH.any { it.key == k } || k.removeSuffix(TESTED).let { b -> k != b && b in PATH_CHECKS } }.toSet()
     } catch (e: Exception) {
         emptySet()
     }

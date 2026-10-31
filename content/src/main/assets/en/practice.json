@@ -184,6 +184,98 @@
   ]
  },
  {
+  "id": "bleeding-where",
+  "card": "bleeding",
+  "step": 1,
+  "situation": "Blood is spurting from a forearm. You have a tourniquet.",
+  "options": [
+   {
+    "text": "5–8 cm above the wound, not on a joint, tightened until bleeding stops completely; note the time.",
+    "right": true,
+    "why": "Wound location unclear — as high on the limb as possible."
+   },
+   {
+    "text": "Right on the wound.",
+    "right": false,
+    "why": "A tourniquet goes 5–8 cm above the wound, not on a joint."
+   },
+   {
+    "text": "On the elbow, so it holds better.",
+    "right": false,
+    "why": "Not on a joint: 5–8 cm above the wound, until bleeding stops completely."
+   }
+  ]
+ },
+ {
+  "id": "bleeding-groin",
+  "card": "bleeding",
+  "step": 3,
+  "situation": "A deep wound in the groin is bleeding heavily.",
+  "options": [
+   {
+    "text": "Pack gauze deep into the wound and press: plain gauze 10 minutes, hemostatic gauze 3.",
+    "right": true,
+    "why": "On the neck, groin, shoulder or buttock a tourniquet is impossible."
+   },
+   {
+    "text": "Put a tourniquet on the groin.",
+    "right": false,
+    "why": "A tourniquet is impossible there. Pack gauze deep into the wound and press."
+   },
+   {
+    "text": "Lay a napkin on top and wait for the ambulance.",
+    "right": false,
+    "why": "Pack gauze deep into the wound and press: plain gauze 10 minutes, hemostatic gauze 3."
+   }
+  ]
+ },
+ {
+  "id": "bleeding-packed",
+  "card": "bleeding",
+  "step": 4,
+  "situation": "You packed the wound with gauze and the bleeding stopped.",
+  "options": [
+   {
+    "text": "A tight bandage on top; leave the packing in.",
+    "right": true,
+    "why": "Packing is removed only in hospital."
+   },
+   {
+    "text": "Take the packing out and look at the wound.",
+    "right": false,
+    "why": "Leave the packing in: only a hospital removes it. A tight bandage goes on top."
+   },
+   {
+    "text": "Do nothing more.",
+    "right": false,
+    "why": "Put a tight bandage on top and leave the packing in."
+   }
+  ]
+ },
+ {
+  "id": "bleeding-drink",
+  "card": "bleeding",
+  "step": 6,
+  "situation": "The wounded person asks for a drink. The ambulance is on its way.",
+  "options": [
+   {
+    "text": "Give nothing to drink, keep them warm, check their condition every 5 minutes.",
+    "right": true,
+    "why": "Surgery under anaesthesia may be needed."
+   },
+   {
+    "text": "Give as much water as they want.",
+    "right": false,
+    "why": "If an ambulance is on its way, give nothing to drink: surgery under anaesthesia may be needed."
+   },
+   {
+    "text": "Give hot sweet tea.",
+    "right": false,
+    "why": "If an ambulance is on its way, give nothing to drink: surgery under anaesthesia may be needed."
+   }
+  ]
+ },
+ {
   "id": "unconscious-gasps",
   "card": "unconscious",
   "step": 4,
@@ -203,6 +295,121 @@
     "text": "I can't give rescue breaths, so do nothing.",
     "right": false,
     "why": "If you can't give rescue breaths, do chest compressions only. That saves lives too."
+   }
+  ]
+ },
+ {
+  "id": "unconscious-first",
+  "card": "unconscious",
+  "step": 0,
+  "situation": "A person is lying motionless on the pavement.",
+  "options": [
+   {
+    "text": "Look around to make sure nothing threatens me, speak loudly, gently shake their shoulders.",
+    "right": true,
+    "why": "If you get hurt yourself, you cannot help anyone."
+   },
+   {
+    "text": "Start chest compressions straight away.",
+    "right": false,
+    "why": "First look around to make sure nothing threatens you, and check whether they respond and breathe."
+   },
+   {
+    "text": "Wait until someone else comes.",
+    "right": false,
+    "why": "Look around to make sure it is safe, speak loudly, gently shake their shoulders."
+   }
+  ]
+ },
+ {
+  "id": "unconscious-call",
+  "card": "unconscious",
+  "step": 2,
+  "situation": "The person is not breathing; people are gathering around.",
+  "options": [
+   {
+    "text": "Tell one person: “You, in the blue jacket — call 103” — and start CPR.",
+    "right": true,
+    "why": "Give the call to a specific person."
+   },
+   {
+    "text": "Shout: “Somebody call an ambulance!”",
+    "right": false,
+    "why": "Tell a specific person: “You, in the blue jacket — call 103.”"
+   },
+   {
+    "text": "First call the person's family.",
+    "right": false,
+    "why": "Tell a specific person to call 103 and start CPR."
+   }
+  ]
+ },
+ {
+  "id": "unconscious-breathes",
+  "card": "unconscious",
+  "step": 3,
+  "situation": "The person is unconscious but breathing. There was no fall or blow.",
+  "options": [
+   {
+    "text": "Turn them on their side and check breathing every minute.",
+    "right": true,
+    "why": "A spinal injury is possible after a fall from height, a road crash, a blow to the back."
+   },
+   {
+    "text": "Start chest compressions.",
+    "right": false,
+    "why": "Breathing — turn them on their side and check breathing every minute."
+   },
+   {
+    "text": "Sit them up and give water.",
+    "right": false,
+    "why": "Breathing — turn them on their side and check breathing every minute."
+   }
+  ]
+ },
+ {
+  "id": "unconscious-depth",
+  "card": "unconscious",
+  "step": 5,
+  "situation": "An adult is not breathing; you start CPR.",
+  "options": [
+   {
+    "text": "Press the centre of the chest 5–6 cm deep, 100–120 per minute: 30 compressions, 2 breaths.",
+    "right": true,
+    "why": "Do not stop until breathing returns or medics arrive."
+   },
+   {
+    "text": "Press gently so as not to hurt them.",
+    "right": false,
+    "why": "For an adult, press the centre of the chest 5–6 cm deep, 100–120 per minute."
+   },
+   {
+    "text": "Give breaths only.",
+    "right": false,
+    "why": "Compressions come first: 30 compressions, 2 breaths. Cannot give breaths — do compressions only."
+   }
+  ]
+ },
+ {
+  "id": "unconscious-tired",
+  "card": "unconscious",
+  "step": 5,
+  "situation": "You have been doing CPR for 2 minutes. Someone else is nearby.",
+  "options": [
+   {
+    "text": "Swap and keep going until breathing returns or medics arrive.",
+    "right": true,
+    "why": "Swap every 2 minutes."
+   },
+   {
+    "text": "Stop to rest for a few minutes.",
+    "right": false,
+    "why": "Do not stop until breathing returns or medics arrive. Swap every 2 minutes."
+   },
+   {
+    "text": "Stop if they are still not breathing.",
+    "right": false,
+    "why": "Do not stop until breathing returns or medics arrive."
    }
   ]
  },

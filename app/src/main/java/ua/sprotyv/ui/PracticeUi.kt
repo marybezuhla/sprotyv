@@ -40,15 +40,33 @@ import ua.sprotyv.content.Content
  * [cardId] empty: all adult cards in order; otherwise only that card's situations.
  */
 @Composable
-fun PracticeScreen(content: Content?, cardId: String, nav: Nav) {
-    Frame(stringResource(R.string.practice_title), nav::back) {
+fun PracticeScreen(content: Content?, cardId: String, nav: Nav, check: String? = null) {
+    Frame(stringResource(if (check != null) R.string.path_check else R.string.practice_title), nav::back) {
         if (content == null) return@Frame Loading()
         val list = content.practice.filter { if (cardId.isEmpty()) !it.card.startsWith("kid-") else it.card == cardId }
         if (list.isEmpty()) return@Frame Broken()
         val kid = cardId.startsWith("kid-")
         var index by rememberSaveable(cardId) { mutableIntStateOf(0) }
+        // Right at the first choice, for "check yourself"; nothing of it is kept
+        var rightCount by rememberSaveable(cardId) { mutableIntStateOf(0) }
 
         if (index >= list.size) {
+            if (check != null) {
+                val all = rightCount == list.size
+                if (all) androidx.compose.runtime.LaunchedEffect(check) { markPathTested(check) }
+                Text(
+                    stringResource(if (all) R.string.path_check_passed else R.string.path_check_again, rightCount, list.size),
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.semantics { heading(); liveRegion = LiveRegionMode.Polite },
+                )
+                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    if (!all) OutlinedButton(onClick = { index = 0; rightCount = 0 }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.again)) }
+                    Button(onClick = nav::back, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.practice_finish)) }
+                }
+                if (!all) TextButton(onClick = { nav.go(Route.CardRoute(cardId)) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.practice_open_card)) }
+                content.card(cardId)?.let { Source(it) }
+                return@Frame
+            }
             if (kid) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Sunny(96.dp, happy = true)
@@ -98,9 +116,9 @@ fun PracticeScreen(content: Content?, cardId: String, nav: Nav) {
                 else -> ""
             }
             OutlinedButton(
-                onClick = { if (!answered) chosen = i },
+                onClick = { if (!answered) { chosen = i; if (o.right) rightCount++ } },
                 colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = if (answered && o.right) ua.sprotyv.home.Group.FIRST_AID.tint().container else MaterialTheme.colorScheme.surface,
+                    containerColor = if (answered && o.right) doneTint().container else MaterialTheme.colorScheme.surface,
                     contentColor = MaterialTheme.colorScheme.onSurface,
                 ),
                 modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp),
