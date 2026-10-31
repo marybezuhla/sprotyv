@@ -227,6 +227,7 @@ private fun Screen(
         Route.Situation -> SituationScreen(content, nav)
         Route.Power -> PowerScreen(content, nav)
         Route.Directory -> DirectoryScreen(content, nav)
+        Route.QrText -> QrTextScreen(nav)
         is Route.PracticeRoute -> PracticeScreen(content, top.card, nav)
         is Route.External -> {}
         Route.Sections -> Frame(stringResource(R.string.add_tile), nav::back) {

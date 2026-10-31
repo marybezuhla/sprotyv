@@ -668,4 +668,13 @@
     <string name="lock_mine_unknown">The lock’s state could not be read just now. Open “Mine” once and come back here.</string>
     <string name="settings_other_hands">If the phone is in the wrong hands</string>
     <string name="settings_about">About and feedback</string>
+    <string name="qr_text_title">QR code from text</string>
+    <string name="qr_text_hint">Pass text to another phone with no connection</string>
+    <string name="qr_text_intro">Type an address, a number or a short note. The other person reads the code with their phone’s camera; no internet needed. The text is kept nowhere.</string>
+    <string name="qr_text_field">Text for the code</string>
+    <string name="qr_text_size">%1$d of %2$d bytes. The shorter the text, the easier to read.</string>
+    <string name="qr_text_too_long">Too long for a code: %1$d of %2$d bytes. Shorten the text.</string>
+    <string name="qr_text_code_desc">QR code with your text</string>
+    <string name="qr_text_bright">Turn the screen brightness up and hold the phone steady.</string>
+    <string name="qr_text_clear">Clear the text</string>
 </resources>
