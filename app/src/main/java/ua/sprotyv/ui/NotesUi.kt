@@ -272,9 +272,8 @@ fun NoteEditScreen(id: Long, nav: Nav) {
                     val chooser = android.content.Intent.createChooser(send, null)
                         // Never back into Sprotyv's own "Share" entry (it keeps web pages)
                         .putExtra(android.content.Intent.EXTRA_EXCLUDE_COMPONENTS, arrayOf(android.content.ComponentName(context, "ua.sprotyv.ShareIn")))
-                    // The chooser is our own window: "Mine" stays open behind it for a while
-                    Away.forOwnWindow()
-                    try { context.startActivity(chooser) } catch (e: Exception) { Away.back() }
+                    // No result comes back, so "Mine" closes as usual once another app takes over
+                    try { context.startActivity(chooser) } catch (e: Exception) { }
                 }) { Text(stringResource(R.string.notes_send_yes)) }
             },
             dismissButton = { TextButton(onClick = { confirmSend = false }) { Text(stringResource(R.string.cancel)) } },

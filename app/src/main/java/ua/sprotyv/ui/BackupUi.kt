@@ -253,8 +253,13 @@ object BackupJobs {
             // The look and set-up too, so nothing has to be set up again on a new phone
             // The data is back even if the look could not be set: never report that as a failure
             runCatching { withContext(Dispatchers.Main) { restoreHome(app, snap.home) } }
-            if (snap.home["lock_mine"] == "true" && PersonalStore.lockMode(app)?.locked != true) R.string.backup_restored_lock
-            else R.string.backup_restored
+            val notifyOff = Notify.Kind.entries.any { snap.home["notify_" + it.key] == "true" } && !Notify.allowedBySystem(app)
+            when {
+                snap.home["lock_mine"] == "true" && PersonalStore.lockMode(app)?.locked != true -> R.string.backup_restored_lock
+                // A tourniquet reminder that cannot sound must not look switched on
+                notifyOff -> R.string.backup_restored_notify
+                else -> R.string.backup_restored
+            }
         }
     }
 
@@ -283,7 +288,7 @@ private fun homeForBackup(context: Context): Map<String, String> = HomePrefs.exp
 private fun restoreHome(context: Context, home: Map<String, String>) {
     HomePrefs.import(context, home)
     home["neutral"]?.toBooleanStrictOrNull()?.let { want -> if (Neutral.isOn(context) != want) Neutral.set(context, want) }
-    // Notifications as they were; Android asks again for its permission when one is used
+    // Notifications as they were; Android's own permission is not carried: the owner is told to allow it
     Notify.Kind.entries.forEach { k -> home["notify_" + k.key]?.toBooleanStrictOrNull()?.let { if (Notify.isOn(context, k) != it) Notify.set(context, k, it) } }
     home["notify_trip_all"]?.toBooleanStrictOrNull()?.let { if (Notify.hideAllInTrip(context) != it) Notify.setHideAllInTrip(context, it) }
 }
