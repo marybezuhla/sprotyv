@@ -97,23 +97,24 @@ fun NavRow(title: String, hint: String = "", onClick: () -> Unit) {
 /** "Mine": the owner's own parts, all encrypted and on this phone only. */
 @Composable
 fun MineHub(nav: Nav, content: ua.sprotyv.content.Content?) {
-    ReadinessBlock(content, nav)
-    // Three themed blocks, folded, each saying in its header what is inside. Colours by meaning:
-    // green for help in trouble, blue for what to prepare and keep, neutral for copies
-    Block(stringResource(R.string.mine_block_trouble), ua.sprotyv.home.Group.FIRST_AID, padded = false, foldable = true, summary = stringResource(R.string.mine_block_trouble_desc)) {
+    // The colour code of the whole app: orange act now, green health, blue prepare, neutral copies
+    Block(stringResource(R.string.mine_block_now), ua.sprotyv.home.Group.DANGER, padded = false) {
         BlockRow(stringResource(R.string.tile_safe), stringResource(R.string.tile_safe_hint), first = true) { nav.go(Route.Open(Section.SAFE)) }
-        BlockRow(stringResource(R.string.medical_card), stringResource(R.string.medical_card_hint)) { nav.go(Route.Mine(MinePart.MEDICAL)) }
-        BlockRow(stringResource(R.string.people), stringResource(R.string.people_hint)) { nav.go(Route.Mine(MinePart.PEOPLE)) }
-        BlockRow(stringResource(R.string.family_plan), stringResource(R.string.family_plan_hint)) { nav.go(Route.Mine(MinePart.PLAN)) }
+    }
+    ReadinessBlock(content, nav)
+    Block(stringResource(R.string.mine_block_health), ua.sprotyv.home.Group.FIRST_AID, padded = false, foldable = true, summary = stringResource(R.string.mine_block_health_desc)) {
+        BlockRow(stringResource(R.string.medical_card), stringResource(R.string.medical_card_hint), first = true) { nav.go(Route.Mine(MinePart.MEDICAL)) }
         BlockRow(stringResource(R.string.rescuer_screen), stringResource(R.string.rescuer_hint)) { nav.go(Route.Mine(MinePart.RESCUER)) }
     }
-    Block(stringResource(R.string.mine_block_home), ua.sprotyv.home.Group.PREPARE, padded = false, foldable = true, summary = stringResource(R.string.mine_block_home_desc)) {
-        BlockRow(stringResource(R.string.kit), stringResource(R.string.kit_hint), first = true) { nav.go(Route.Mine(MinePart.KIT)) }
+    Block(stringResource(R.string.mine_block_prepare), ua.sprotyv.home.Group.PREPARE, padded = false, foldable = true, summary = stringResource(R.string.mine_block_prepare_desc)) {
+        BlockRow(stringResource(R.string.people), stringResource(R.string.people_hint), first = true) { nav.go(Route.Mine(MinePart.PEOPLE)) }
+        BlockRow(stringResource(R.string.family_plan), stringResource(R.string.family_plan_hint)) { nav.go(Route.Mine(MinePart.PLAN)) }
+        BlockRow(stringResource(R.string.kit), stringResource(R.string.kit_hint)) { nav.go(Route.Mine(MinePart.KIT)) }
         BlockRow(stringResource(R.string.supplies), stringResource(R.string.supplies_hint)) { nav.go(Route.SuppliesRoute) }
-        BlockRow(stringResource(R.string.bookmarks_title), stringResource(R.string.bookmarks_hint)) { nav.go(Route.Mine(MinePart.BOOKMARKS)) }
     }
     Block(stringResource(R.string.mine_block_copies), ua.sprotyv.home.Group.GUIDE, padded = false, foldable = true, summary = stringResource(R.string.mine_block_copies_desc)) {
-        BlockRow(stringResource(R.string.print_title), stringResource(R.string.print_hint), first = true) { nav.go(Route.Mine(MinePart.PRINT)) }
+        BlockRow(stringResource(R.string.bookmarks_title), stringResource(R.string.bookmarks_hint), first = true) { nav.go(Route.Mine(MinePart.BOOKMARKS)) }
+        BlockRow(stringResource(R.string.print_title), stringResource(R.string.print_hint)) { nav.go(Route.Mine(MinePart.PRINT)) }
         BlockRow(stringResource(R.string.plan_code_title), stringResource(R.string.plan_code_hint)) { nav.go(Route.Mine(MinePart.PLAN_QR)) }
         BlockRow(stringResource(R.string.scan_title), stringResource(R.string.scan_hint)) { nav.go(Route.Scan) }
         BlockRow(stringResource(R.string.qr_text_title), stringResource(R.string.qr_text_hint)) { nav.go(Route.QrText) }

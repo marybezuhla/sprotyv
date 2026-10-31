@@ -113,7 +113,27 @@ import ua.sprotyv.home.Tool
 // by colour before it is read (Treisman: colour is seen at a glance). Red is not among them.
 
 /** A tile ready to draw: what it says, how it looks and where it leads. */
-data class TileInfo(val id: String, val title: String, val hint: String, val icon: ImageVector, val group: Group, val route: Route)
+data class TileInfo(val id: String, val title: String, val hint: String, val icon: ImageVector, val group: Group, val route: Route) {
+    /** The colour it is drawn in: by what it is for, the same on every screen ([toneOf]). */
+    val tone: Group get() = toneOf(id)
+}
+
+/**
+ * One colour code for the whole app, by what a thing is for, wherever it is shown:
+ * - orange ([Group.DANGER]): danger, act now: what to do now, "I am safe", alerts, the danger cards, the shelter;
+ * - green ([Group.FIRST_AID]): health and rescue: first aid, the medical card, the screen for rescuers,
+ *   the Ministry's first-aid procedures, leaving for safety;
+ * - blue ([Group.PREPARE]): preparing and keeping: readiness, the bag, supplies, people, the family plan, practice;
+ * - neutral ([Group.GUIDE]): everyday life, reading, sources, copies and settings.
+ * The [Group] carries the palette ([tint]); groups of the same meaning share a colour.
+ */
+fun toneOf(id: String): Group = when (id) {
+    Tiles.tool(Tool.NOW), Tiles.tool(Tool.SAFE), Tiles.tool(Tool.ALARM) -> Group.DANGER
+    Tiles.tool(Tool.MEDICAL), Tiles.tool(Tool.RESCUER) -> Group.FIRST_AID
+    Tiles.tool(Tool.MINE), Tiles.tool(Tool.PEOPLE), Tiles.tool(Tool.PLAN) -> Group.PREPARE
+    Tiles.tool(Tool.PRINT), Tiles.tool(Tool.SCAN), Tiles.tool(Tool.QR_TEXT), Tiles.tool(Tool.SITUATION), Tiles.tool(Tool.DIRECTORY) -> Group.GUIDE
+    else -> if (id.startsWith("link:")) Group.GUIDE else groupOf(id)
+}
 
 data class Tint(val container: Color, val ink: Color)
 
@@ -183,7 +203,7 @@ fun urgent(): Urgent = when {
 @Composable
 fun cardBadge(id: String): Pair<ImageVector, Tint> {
     val group = groupOf(Tiles.card(id))
-    return (CARD_ICONS[id]?.let { ImageVector.vectorResource(it) } ?: group.icon) to group.tint()
+    return (CARD_ICONS[id]?.let { ImageVector.vectorResource(it) } ?: group.icon) to toneOf(Tiles.card(id)).tint()
 }
 
 private val Group.icon: ImageVector get() = when (this) {
@@ -302,7 +322,7 @@ val Tool.route: Route get() = when (this) {
 /** The group a tile belongs to: the first that names it. "What to do now" and "I am safe" have their own. */
 fun groupOf(id: String): Group = when (id) {
     Tiles.tool(Tool.NOW) -> Group.DANGER
-    Tiles.tool(Tool.SAFE) -> Group.FAMILY
+    Tiles.tool(Tool.SAFE) -> Group.DANGER
     else -> if (id.startsWith("link:")) Group.SAFETY else Group.entries.firstOrNull { id in it.tiles } ?: Group.GUIDE
 }
 
@@ -370,7 +390,7 @@ fun TileCard(info: TileInfo, big: Boolean, status: String? = null, onClick: () -
     ) {
         if (big) {
             Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                IconBadge(info.icon, if (marked) Tint(MaterialTheme.colorScheme.surface, u.edge) else info.group.tint(), 56.dp)
+                IconBadge(info.icon, if (marked) Tint(MaterialTheme.colorScheme.surface, u.edge) else info.tone.tint(), 56.dp)
                 Spacer(Modifier.width(16.dp))
                 Column(Modifier.weight(1f)) {
                     // Simple look: large print (24 and 18 sp), still growing with the phone's text size
@@ -386,7 +406,7 @@ fun TileCard(info: TileInfo, big: Boolean, status: String? = null, onClick: () -
             // Compact: icon beside the title, so more fits on the screen; a live status replaces the hint
             // Every line starts at the same edge, right of the icon; one size for titles, one for hints
             Row(Modifier.padding(horizontal = 12.dp, vertical = 12.dp), verticalAlignment = Alignment.Top) {
-                IconBadge(info.icon, if (marked) Tint(MaterialTheme.colorScheme.surface, u.edge) else info.group.tint(), 36.dp)
+                IconBadge(info.icon, if (marked) Tint(MaterialTheme.colorScheme.surface, u.edge) else info.tone.tint(), 36.dp)
                 Spacer(Modifier.width(10.dp))
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                     Text(info.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
@@ -497,9 +517,9 @@ fun SectionsList(content: Content?, pins: List<String>, nav: Nav, onPin: (String
     if (full) Text(stringResource(R.string.pins_full), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     val links = content.links
     val lists = Group.entries.map { Shelf(it.title, it.desc, it, it.tiles) } +
-        Shelf(R.string.situation_title, R.string.shelf_situation_desc, Group.SAFETY, links.filter { it.group != ua.sprotyv.content.Link.POWER && it.group !in ua.sprotyv.content.Link.DIRECTORY }.map { Tiles.link(it.id) }) +
+        Shelf(R.string.situation_title, R.string.shelf_situation_desc, Group.GUIDE, links.filter { it.group != ua.sprotyv.content.Link.POWER && it.group !in ua.sprotyv.content.Link.DIRECTORY }.map { Tiles.link(it.id) }) +
         Shelf(R.string.power_title, R.string.shelf_power_desc, Group.HOME_LIFE, links.filter { it.group == ua.sprotyv.content.Link.POWER }.map { Tiles.link(it.id) }) +
-        Shelf(R.string.dir_title, R.string.shelf_dir_desc, Group.FAMILY, links.filter { it.group in ua.sprotyv.content.Link.DIRECTORY }.map { Tiles.link(it.id) }) +
+        Shelf(R.string.dir_title, R.string.shelf_dir_desc, Group.GUIDE, links.filter { it.group in ua.sprotyv.content.Link.DIRECTORY }.map { Tiles.link(it.id) }) +
         Shelf(R.string.group_rest, R.string.shelf_rest_desc, Group.GUIDE, Group.rest(content.guide.chapters.map { it.id }))
     lists.forEach { shelf ->
         val infos = shelf.ids.mapNotNull { tileInfo(it, content) }
@@ -538,7 +558,7 @@ fun SectionsList(content: Content?, pins: List<String>, nav: Nav, onPin: (String
                         .padding(start = 12.dp, end = 4.dp, top = 8.dp, bottom = 8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    IconBadge(info.icon, info.group.tint(), 40.dp)
+                    IconBadge(info.icon, info.tone.tint(), 40.dp)
                     Spacer(Modifier.width(12.dp))
                     Column(Modifier.weight(1f)) {
                         Text(info.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
@@ -582,7 +602,7 @@ fun EditTilesScreen(content: Content?, mode: Mode?, pins: List<String>, nav: Nav
                 Text(stringResource(R.string.edit_simple_rest), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Row(Modifier.fillMaxWidth().heightIn(min = 56.dp), verticalAlignment = Alignment.CenterVertically) {
-                IconBadge(info.icon, info.group.tint(), 36.dp)
+                IconBadge(info.icon, info.tone.tint(), 36.dp)
                 Spacer(Modifier.width(12.dp))
                 Text(info.title, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
                 IconButton(onClick = { change(Pins.move(ids, info.id, -1)) }, enabled = i > 0, modifier = Modifier.size(48.dp)) {
@@ -803,6 +823,7 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
             TripToggle(prefs.trip)
             NeutralToggle()
         }
+        Block(stringResource(R.string.colour_title), ua.sprotyv.home.Group.GUIDE) { ColourLegend() }
         Block(stringResource(R.string.settings_about), ua.sprotyv.home.Group.GUIDE) {
             BlockRow(stringResource(R.string.about_guide), first = true) { nav.go(Route.About) }
             FeedbackBlock()
