@@ -843,4 +843,14 @@
     <string name="notes_remind_off">No reminder</string>
     <string name="notes_remind_next">Next</string>
     <string name="notify_trip_all">In trip mode hide all notifications, the tourniquet and counts too</string>
+    <string name="path_week_title">This week\'s step</string>
+    <string name="path_week_done">Done</string>
+    <string name="path_week_hint">One step at a time. No rush: do it when you can.</string>
+    <string name="path_week_well_done">Well done. Every skill is someone you will be able to help.</string>
+    <string name="path_week_all">You have walked the whole path. Share your skills: teach one person.</string>
+    <string name="path_week_open">This week\'s step and my path</string>
+    <string name="path_home">My path: %1$d of %2$d · this week\'s step</string>
+    <string name="path_home_all">My path is complete</string>
+    <string name="resist_support_title">Support the country</string>
+    <string name="resist_support_intro">Money, blood, vigilance. Donate only through official sites: scammers copy well-known funds.</string>
 </resources>

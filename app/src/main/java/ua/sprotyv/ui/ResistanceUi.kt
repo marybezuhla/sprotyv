@@ -1,5 +1,7 @@
 package ua.sprotyv.ui
 
+import androidx.compose.runtime.setValue
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -89,9 +91,14 @@ fun ResistanceScreen(content: Content?, nav: Nav) {
             BlockRow(stringResource(R.string.role_truth), stringResource(R.string.role_truth_hint)) { nav.go(Route.ChapterRoute("ch18")) }
             BlockRow(stringResource(R.string.role_learn), stringResource(R.string.role_learn_hint)) { nav.go(Route.Mine(MinePart.PATH)) }
         }
-        // My path: the owner's own ticks, private, in "Mine"
-        Block(stringResource(R.string.path_title), Group.PREPARE, padded = false) {
-            BlockRow(stringResource(R.string.path_open), stringResource(R.string.path_open_hint), first = true) { nav.go(Route.Mine(MinePart.PATH)) }
+        // My path: the owner's own ticks, private, in "Mine"; here only the count
+        val share = prefs?.path?.let(::pathShare)
+        Block(
+            stringResource(R.string.path_title), Group.PREPARE, padded = false,
+            summary = share?.let { (d, t) -> stringResource(R.string.path_summary, d, t) },
+            leading = share?.let { (d, t) -> { ReadyRing(d.toFloat() / t, "$d/$t") } },
+        ) {
+            BlockRow(stringResource(R.string.path_week_open), stringResource(R.string.path_open_hint), first = true) { nav.go(Route.Mine(MinePart.PATH)) }
         }
         if (content == null) return@Frame Loading()
         val links = content.links
@@ -99,6 +106,8 @@ fun ResistanceScreen(content: Content?, nav: Nav) {
         LinkGroup(stringResource(R.string.resist_learn_title), stringResource(R.string.resist_learn_intro), links.filter { it.group == "learn" }, toolbar, context)
         // Resilience: its own entries, then fact-checkers from "Situation" (one list, never two copies)
         LinkGroup(stringResource(R.string.resist_resilience_title), stringResource(R.string.resist_resilience_intro), links.filter { it.group == "resilience" || it.group == "facts" }, toolbar, context)
+        // Support the country: donations to the largest funds, bonds, blood, reporting
+        LinkGroup(stringResource(R.string.resist_support_title), stringResource(R.string.resist_support_intro), links.filter { it.group == "support" }, toolbar, context)
         // Military service: only for adults who choose to see it
         Block(stringResource(R.string.service_title), Group.PREPARE) {
             Toggle(stringResource(R.string.service_toggle), prefs?.service == true) { on -> HomePrefs.update(context) { it.copy(service = on) } }
@@ -143,6 +152,30 @@ fun PathScreen(nav: Nav) {
         }
     }
     val count = path.count { it.key in done }
+    // Only the count leaves "Mine", for the home screen and "Resistance"
+    val context = LocalContext.current
+    androidx.compose.runtime.LaunchedEffect(count, path.size) {
+        val share = "$count/${path.size}"
+        if (HomePrefs.load(context).path != share) HomePrefs.update(context) { it.copy(path = share) }
+    }
+    // This week's step: the first one not done yet, in the order of the path. One at a time, calmly
+    var justDone by androidx.compose.runtime.saveable.rememberSaveable { androidx.compose.runtime.mutableStateOf<String?>(null) }
+    val next = path.firstOrNull { it.key !in done }
+    Block(stringResource(R.string.path_week_title), Group.PREPARE) {
+        justDone?.let { Text(stringResource(R.string.path_week_well_done), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold) }
+        if (next == null) {
+            Text(stringResource(R.string.path_week_all), style = MaterialTheme.typography.bodyLarge)
+        } else {
+            Text(stringResource(next.words), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+            Row(horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)) {
+                androidx.compose.material3.Button(onClick = { change(next.key, true); justDone = next.key }, modifier = Modifier.heightIn(min = 48.dp)) {
+                    Text(stringResource(R.string.path_week_done))
+                }
+                next.learn?.let { r -> androidx.compose.material3.OutlinedButton(onClick = { nav.go(r) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.path_learn)) } }
+            }
+            Text(stringResource(R.string.path_week_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
     Block(
         stringResource(R.string.path_title), Group.PREPARE,
         summary = stringResource(R.string.path_summary, count, path.size),

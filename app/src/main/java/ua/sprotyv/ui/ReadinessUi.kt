@@ -1,5 +1,7 @@
 package ua.sprotyv.ui
 
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -222,6 +224,27 @@ fun ReadinessStrip(nav: Nav) {
                     }
                 }
             }
+            // "My path": the count only, and one tap to this week's step
+            pathShare(prefs.path)?.let { (d, t) ->
+                Row(
+                    Modifier.fillMaxWidth().heightIn(min = 48.dp).clickable { nav.go(Route.Mine(MinePart.PATH)) }.padding(end = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        if (d >= t) stringResource(R.string.path_home_all) else stringResource(R.string.path_home, d, t),
+                        style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f),
+                    )
+                    androidx.compose.material3.Icon(androidx.compose.material.icons.Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null)
+                }
+            }
         }
     }
+}
+
+/** "3/17" as two numbers; null when not seen yet or odd. */
+fun pathShare(s: String): Pair<Int, Int>? {
+    val (d, t) = s.split("/").takeIf { it.size == 2 } ?: return null
+    val dd = d.toIntOrNull() ?: return null
+    val tt = t.toIntOrNull()?.takeIf { it in 1..100 } ?: return null
+    return if (dd in 0..tt) dd to tt else null
 }

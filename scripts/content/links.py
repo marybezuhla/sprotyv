@@ -13,7 +13,7 @@ CHECKED = "2026-10-30"
 
 FLAGS = {"unknown_author", "ads", "beta", "collects_data", "paid", "paused"}
 DIRECTORY = ("idp", "money", "docs", "kids", "veterans", "health", "care")
-RESIST = ("learn", "service", "resilience")
+RESIST = ("learn", "service", "resilience", "support")
 
 def link(id, group, kind, title, note, url="", app="", phone="", flags=()):
     assert set(flags) <= FLAGS, id
@@ -213,6 +213,12 @@ LINKS = [
          "Психологічні та юридичні консультації для ветеранів і родин.",
          url="https://veteranhub.com.ua"),
     # Health and rehabilitation
+    link("pryncyp", "veterans", "ngo", "Принцип: правовий навігатор для військових",
+         "Покрокові поради про права під час служби, поранення й звільнення; правозахисний центр для військових і ветеранів.",
+         url="https://navigator.pryncyp.com"),
+    link("legal100", "veterans", "ngo", "Юридична сотня",
+         "Безоплатна правова допомога військовим, ветеранам, звільненим з полону та родинам. Гаряча лінія 0 800 308 100.",
+         url="https://legal100.org.ua"),
     link("nszu", "health", "official", "НСЗУ 16-77: безоплатна медицина",
          "Безоплатні послуги, аптеки з «Доступними ліками», скарги на відмову; психіатр без направлення.",
          phone="1677"),
@@ -277,6 +283,29 @@ LINKS = [
     link("mod-hotline", "service", "official", "Гаряча лінія Міноборони 1512",
          "Питання про службу й рекрутинг; також якщо порушено ваші права.",
          phone="1512"),
+    link("dftg-air", "service", "official", "Міноборони: захист неба в добровольчих формуваннях громад",
+         "Як долучитися до груп ППО в ДФТГ: зверніться до командира формування за місцем проживання або до військової адміністрації.",
+         url="https://mod.gov.ua/explanation/yak-doluchitisya-do-zahistu-neba-v-skladi-dftg"),
+    # ---- "Support the country": donations, bonds, blood, reporting. Checked 31.10.2026 ----
+    # The three largest funds by donations in 2025 (Opendatabot via Forbes Ukraine)
+    link("united24", "support", "official", "UNITED24: державна платформа зборів",
+         "Найбільша платформа пожертв: оборона, розмінування, медицина, відбудова. Донатьте лише через офіційний сайт.",
+         url="https://u24.gov.ua"),
+    link("savelife", "support", "ngo", "Повернись живим",
+         "Фонд компетентної допомоги армії, працює з 2014 року, публікує звіти. Бувають фейкові копії: лише офіційний сайт.",
+         url="https://savelife.in.ua"),
+    link("prytula-fund", "support", "ngo", "Фонд Сергія Притули",
+         "Допомога армії й цивільним, публічна звітність. Донатьте лише через офіційний сайт.",
+         url="https://prytulafoundation.org"),
+    link("war-bonds", "support", "official", "Військові облігації в Дії",
+         "Облігації внутрішньої держпозики Мінфіну: позичаєте державі гроші на оборону й отримуєте їх назад з відсотками. У Дії без комісії; також через банки.",
+         url="https://diia.gov.ua"),
+    link("blood", "support", "official", "Донорська платформа: здати кров",
+         "Центр трансплант-координації: хто може бути донором, де здати кров і якої групи зараз бракує в регіоні.",
+         url="https://donor.utcc.gov.ua"),
+    link("sbu-1516", "support", "official", "СБУ 1516: повідомити про підозріле",
+         "Підготовка підпалів чи диверсій, пропозиції «підзаробити», підозрілі люди й предмети. Безкоштовно; старий номер 0 800 501 482 теж працює.",
+         phone="1516"),
     link("howareu-resilience", "resilience", "official", "«Ти як?»: ментальне здоров’я",
          "Всеукраїнська програма ментального здоров’я: як підтримати себе й близьких і де знайти допомогу.",
          url="https://howareu.com"),

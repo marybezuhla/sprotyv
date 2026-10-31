@@ -27,6 +27,8 @@ object HomePrefs {
         /** The readiness shares last seen in "Mine" ("2/4,1/2,…"), shown on the full home screen; no records. */
         val readiness: String = "",
         val readinessHidden: Boolean = false,
+        /** "My path" as last seen ("3/17"): only the count, for the home screen and "Resistance"; no steps. */
+        val path: String = "",
         /** Trip mode: the owner's data and sensitive sources are off every screen (see [Trip]). */
         val trip: Boolean = false,
         /** The owner has medical training: first-aid procedures open as the full official text. */
@@ -45,6 +47,7 @@ object HomePrefs {
     private const val SCREENSHOTS = "screenshots"
     private const val READINESS = "readiness"
     private const val READINESS_HIDDEN = "readiness_hidden"
+    private const val PATH = "path_share"
     private const val TRIP = "trip"
     private const val MEDIC = "medic"
     private const val SERVICE = "service"
@@ -65,6 +68,7 @@ object HomePrefs {
             screenshots = p.getBoolean(SCREENSHOTS, false),
             readiness = p.getString(READINESS, null).orEmpty().take(100),
             readinessHidden = p.getBoolean(READINESS_HIDDEN, false),
+            path = p.getString(PATH, null).orEmpty().take(10),
             trip = p.getBoolean(TRIP, false),
             medic = p.getBoolean(MEDIC, false),
             service = p.getBoolean(SERVICE, false),
@@ -125,6 +129,7 @@ object HomePrefs {
             .putBoolean(SCREENSHOTS, next.screenshots)
             .putString(READINESS, next.readiness)
             .putBoolean(READINESS_HIDDEN, next.readinessHidden)
+            .putString(PATH, next.path)
             .putBoolean(TRIP, next.trip)
             .putBoolean(MEDIC, next.medic)
             .putBoolean(SERVICE, next.service)
