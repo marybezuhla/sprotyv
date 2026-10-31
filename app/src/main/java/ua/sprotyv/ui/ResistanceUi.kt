@@ -61,7 +61,12 @@ fun markPathTested(step: String) {
 private class PathStep(val key: String, val level: Int, val words: Int, val learn: Route?)
 
 /** Four levels, as in the concept: personal, family, civic, defence awareness. */
-private val PATH_LEVELS = listOf(R.string.path_level_personal, R.string.path_level_family, R.string.path_level_civic, R.string.path_level_defence, R.string.path_level_medic)
+private val PATH_LEVELS = listOf(R.string.path_level_personal, R.string.path_level_family, R.string.path_level_civic, R.string.path_level_defence, R.string.path_level_medic, R.string.path_level_dobro, R.string.path_level_dftg)
+
+/** The roles' own blocks of the path, shown only to those who picked the role. */
+const val PATH_LEVEL_MEDIC = 4
+const val PATH_LEVEL_DOBRO = 5
+const val PATH_LEVEL_DFTG = 6
 
 private val PATH = listOf(
     PathStep("bleed", 0, R.string.path_bleed, Route.Moz(4)),
@@ -82,6 +87,18 @@ private val PATH = listOf(
     PathStep("teach", 4, R.string.path_teach, null),
     PathStep("refresh", 4, R.string.path_refresh, Route.Resistance),
     PathStep("delegate", 4, R.string.path_delegate, Route.MozList),
+    // Volunteer for the army: only with that role picked
+    PathStep("dobro_ways", 5, R.string.path_dobro_ways, Route.RoleRoute("dobro")),
+    PathStep("dobro_post", 5, R.string.path_dobro_post, Route.RoleRoute("dobro")),
+    PathStep("dobro_fit", 5, R.string.path_dobro_fit, Route.Mine(MinePart.GART)),
+    PathStep("dobro_med", 5, R.string.path_dobro_med, Route.Resistance),
+    PathStep("dobro_family", 5, R.string.path_dobro_family, Route.Mine(MinePart.PLAN)),
+    PathStep("dobro_rights", 5, R.string.path_dobro_rights, Route.RoleRoute("dobro")),
+    // Community volunteer formation (DFTG): only with that role picked
+    PathStep("dftg_know", 6, R.string.path_dftg_know, Route.RoleRoute("dftg")),
+    PathStep("dftg_where", 6, R.string.path_dftg_where, Route.RoleRoute("dftg")),
+    PathStep("dftg_train", 6, R.string.path_dftg_train, null),
+    PathStep("dftg_family", 6, R.string.path_dftg_family, Route.Mine(MinePart.PLAN)),
 )
 
 /**
@@ -187,8 +204,12 @@ fun PathScreen(nav: Nav) {
     val stored by remember { PersonalStore.observe { db -> db.settings().observe(KEY_PATH).map { listOf(it) } } }.collectAsStateWithLifecycle(null)
     // Nothing ticked yet (no value stored) is an empty path, not "still reading"
     val done = parsePath((stored ?: return Loading()).first())
-    val medic = HomePrefs.state.collectAsState().value?.medic == true
-    val path = if (medic) PATH else PATH.filter { it.level < 4 }
+    // The base levels for all; each role's block only for those who picked it
+    val roles = rememberRoles() ?: return Loading()
+    val path = PATH.filter {
+        it.level < PATH_LEVEL_MEDIC || (it.level == PATH_LEVEL_MEDIC && ROLE_MEDIC in roles) ||
+            (it.level == PATH_LEVEL_DOBRO && "dobro" in roles) || (it.level == PATH_LEVEL_DFTG && "dftg" in roles)
+    }
     fun change(key: String, on: Boolean) {
         PersonalStore.save("setting:$KEY_PATH:" + java.util.UUID.randomUUID()) { db ->
             val now = parsePath(db.settings().get(KEY_PATH))
@@ -201,7 +222,8 @@ fun PathScreen(nav: Nav) {
     val context = LocalContext.current
     androidx.compose.runtime.LaunchedEffect(done, path.size) {
         // Counts per level, in the order of the levels; nothing about which steps
-        val share = PATH_LEVELS.indices.map { l -> path.filter { it.level == l } }.filter { it.isNotEmpty() }
+        // The roles' own blocks stay in "Mine": not even their counts leave it (the medic one did before roles)
+        val share = PATH_LEVELS.indices.filter { it <= PATH_LEVEL_MEDIC }.map { l -> path.filter { it.level == l } }.filter { it.isNotEmpty() }
             .joinToString(",") { steps -> "${steps.count { it.key in done }}/${steps.size}" }
         if (HomePrefs.load(context).path != share) { HomePrefs.update(context) { it.copy(path = share) }; Widgets.update(context) }
     }

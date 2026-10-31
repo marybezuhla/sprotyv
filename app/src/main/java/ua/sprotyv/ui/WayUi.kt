@@ -17,6 +17,10 @@ import ua.sprotyv.home.Group
 fun WayHub(nav: Nav) {
     val prefs = HomePrefs.state.collectAsState().value
     Text(stringResource(R.string.way_intro), style = MaterialTheme.typography.bodyLarge)
+    // "Who I am now": which roles, only inside "Mine"; here just the way in
+    Block(stringResource(R.string.roles_title), Group.PREPARE, tint = resist(), padded = false) {
+        BlockRow(stringResource(R.string.roles_title), stringResource(R.string.roles_hint), first = true) { nav.go(Route.Mine(MinePart.ROLES)) }
+    }
     Block(stringResource(R.string.gart_title), Group.PREPARE, padded = false) {
         BlockRow(stringResource(R.string.gart_title), stringResource(R.string.gart_hint), first = true) { nav.go(Route.Mine(MinePart.GART)) }
     }
