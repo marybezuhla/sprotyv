@@ -947,5 +947,5 @@
     <string name="const_all">The whole Constitution</string>
     <string name="const_retrieved">text retrieved %1$s</string>
     <string name="const_no_changes">text unchanged</string>
-    <string name="const_official">The official text, unchanged. Only the Constitutional Court interprets it; for help, ask a lawyer or free legal aid.</string>
+    <string name="const_official">The official text, unchanged. The official interpretation of the Constitution is given by the Constitutional Court (Article 147). For help, ask a lawyer or free legal aid.</string>
 </resources>
