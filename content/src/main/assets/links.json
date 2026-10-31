@@ -959,6 +959,108 @@
   "flags": []
  },
  {
+  "id": "redcross-fa",
+  "group": "learn",
+  "kind": "ngo",
+  "title": "Червоний Хрест України: курси першої допомоги",
+  "note": "Навчання першої допомоги для всіх охочих у багатьох містах; сертифікат. Ціну й розклад уточнюйте на сайті.",
+  "url": "https://redcross.org.ua/fat/",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": [
+   "paid"
+  ]
+ },
+ {
+  "id": "hospitallers",
+  "group": "learn",
+  "kind": "volunteer",
+  "title": "Госпітальєри: тактична медицина",
+  "note": "Добровольчий медичний батальйон навчає цивільних тактичної медицини в Києві, Львові, Дніпрі, Павлограді.",
+  "url": "https://hospitallers.life",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": [
+   "paid"
+  ]
+ },
+ {
+  "id": "urc",
+  "group": "learn",
+  "kind": "ngo",
+  "title": "Українська рада реанімації: курси",
+  "note": "Курси реанімації й першої допомоги за міжнародними настановами; для цивільних і медиків.",
+  "url": "https://urc.org.ua/course/",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": [
+   "paid"
+  ]
+ },
+ {
+  "id": "prometheus-fa",
+  "group": "learn",
+  "kind": "independent",
+  "title": "Prometheus: перша допомога під час війни",
+  "note": "Безкоштовний онлайн-курс для початку; навичку закріплюйте на очному тренуванні.",
+  "url": "https://prometheus.org.ua/prometheus-free/first-aid-during-war/",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
+  "id": "army-vacancies",
+  "group": "service",
+  "kind": "official",
+  "title": "Сили оборони: вакансії (army.gov.ua)",
+  "note": "Офіційний портал вакансій: обрати підрозділ і посаду, залишити номер для рекрутера.",
+  "url": "https://army.gov.ua",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
+  "id": "armyinform-jobs",
+  "group": "service",
+  "kind": "official",
+  "title": "АрміяInform: база вакансій",
+  "note": "Єдина база вакансій Сил оборони від інформагентства Міноборони.",
+  "url": "https://armyinform.com.ua/job_zsu/",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
+  "id": "mod-hotline",
+  "group": "service",
+  "kind": "official",
+  "title": "Гаряча лінія Міноборони 1512",
+  "note": "Питання про службу й рекрутинг; також якщо порушено ваші права.",
+  "url": "",
+  "app": "",
+  "phone": "1512",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
+  "id": "howareu-resilience",
+  "group": "resilience",
+  "kind": "official",
+  "title": "«Ти як?»: ментальне здоров’я",
+  "note": "Всеукраїнська програма ментального здоров’я: як підтримати себе й близьких і де знайти допомогу.",
+  "url": "https://howareu.com",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
   "id": "cpd",
   "group": "facts",
   "kind": "official",

@@ -13,6 +13,7 @@ CHECKED = "2026-10-30"
 
 FLAGS = {"unknown_author", "ads", "beta", "collects_data", "paid", "paused"}
 DIRECTORY = ("idp", "money", "docs", "kids", "veterans", "health", "care")
+RESIST = ("learn", "service", "resilience")
 
 def link(id, group, kind, title, note, url="", app="", phone="", flags=()):
     assert set(flags) <= FLAGS, id
@@ -231,6 +232,32 @@ LINKS = [
     link("proliska", "care", "volunteer", "Проліска: евакуація маломобільних",
          "Евакуація людей з інвалідністю, літніх і лежачих спецавтівками з медиками.",
          url="https://proliska.org"),
+    # Resistance: where to learn (state and civic side by side), service for adults, resilience.
+    # Checked 2026-10-31 against the organisations' own pages or official news; prices as published then
+    link("redcross-fa", "learn", "ngo", "Червоний Хрест України: курси першої допомоги",
+         "Навчання першої допомоги для всіх охочих у багатьох містах; сертифікат. Ціну й розклад уточнюйте на сайті.",
+         url="https://redcross.org.ua/fat/", flags=("paid",)),
+    link("hospitallers", "learn", "volunteer", "Госпітальєри: тактична медицина",
+         "Добровольчий медичний батальйон навчає цивільних тактичної медицини в Києві, Львові, Дніпрі, Павлограді.",
+         url="https://hospitallers.life", flags=("paid",)),
+    link("urc", "learn", "ngo", "Українська рада реанімації: курси",
+         "Курси реанімації й першої допомоги за міжнародними настановами; для цивільних і медиків.",
+         url="https://urc.org.ua/course/", flags=("paid",)),
+    link("prometheus-fa", "learn", "independent", "Prometheus: перша допомога під час війни",
+         "Безкоштовний онлайн-курс для початку; навичку закріплюйте на очному тренуванні.",
+         url="https://prometheus.org.ua/prometheus-free/first-aid-during-war/"),
+    link("army-vacancies", "service", "official", "Сили оборони: вакансії (army.gov.ua)",
+         "Офіційний портал вакансій: обрати підрозділ і посаду, залишити номер для рекрутера.",
+         url="https://army.gov.ua"),
+    link("armyinform-jobs", "service", "official", "АрміяInform: база вакансій",
+         "Єдина база вакансій Сил оборони від інформагентства Міноборони.",
+         url="https://armyinform.com.ua/job_zsu/"),
+    link("mod-hotline", "service", "official", "Гаряча лінія Міноборони 1512",
+         "Питання про службу й рекрутинг; також якщо порушено ваші права.",
+         phone="1512"),
+    link("howareu-resilience", "resilience", "official", "«Ти як?»: ментальне здоров’я",
+         "Всеукраїнська програма ментального здоров’я: як підтримати себе й близьких і де знайти допомогу.",
+         url="https://howareu.com"),
     # Fakes
     link("cpd", "facts", "official", "Центр протидії дезінформації",
          "Спростування фейків і попередження про ворожі канали та боти.",
@@ -250,7 +277,7 @@ if __name__ == "__main__":
     out = os.path.join(os.path.dirname(__file__), "..", "..", "content", "src", "main", "assets", "links.json")
     assert len({l["id"] for l in LINKS}) == len(LINKS)
     for l in LINKS:
-        assert l["group"] in ("threats", "front", "help", "evac", "search", "mind", "rights", "facts", "power") + DIRECTORY, l["id"]
+        assert l["group"] in ("threats", "front", "help", "evac", "search", "mind", "rights", "facts", "power") + DIRECTORY + RESIST, l["id"]
         assert len(l["note"]) <= 200, l["id"]
     with open(out, "w", encoding="utf-8") as f:
         json.dump(LINKS, f, ensure_ascii=False, indent=1)
