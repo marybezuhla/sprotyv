@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Everyday life, knowing and reading: the app's calm violet -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
-    <solid android:color="@color/w_bg" />
-    <stroke android:width="2dp" android:color="@color/w_muted" />
+    <solid android:color="@color/w_violet_bg" />
+    <stroke android:width="2dp" android:color="@color/w_violet_ink" />
     <corners android:radius="20dp" />
 </shape>
