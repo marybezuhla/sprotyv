@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
@@ -104,7 +105,13 @@ private fun StepRow(s: NewPlace.Step, on: Boolean, expanded: Boolean, onExpand: 
     ) {
         Checkbox(checked = on, onCheckedChange = null, modifier = Modifier.padding(horizontal = 12.dp))
         Text(s.title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
-        TextButton(onClick = onExpand, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(if (expanded) R.string.np_less else R.string.np_more)) }
+        // A small arrow, so the step's name keeps the width
+        androidx.compose.material3.IconButton(onClick = onExpand, modifier = Modifier.size(48.dp)) {
+            androidx.compose.material3.Icon(
+                if (expanded) androidx.compose.material.icons.Icons.Filled.KeyboardArrowUp else androidx.compose.material.icons.Icons.Filled.KeyboardArrowDown,
+                contentDescription = stringResource(if (expanded) R.string.np_less else R.string.np_more),
+            )
+        }
     }
     if (!expanded) return
     androidx.compose.foundation.layout.Column(Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp), verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)) {
