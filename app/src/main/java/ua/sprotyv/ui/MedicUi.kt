@@ -90,7 +90,7 @@ fun DelegateScreen(content: Content?, n: Int, nav: Nav) {
                 Button(onClick = { showing = h }, modifier = Modifier.heightIn(min = 56.dp)) { Text(helperName(h)) }
             }
         }
-        Text(stringResource(R.string.moz_layout_only), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(stringResource(R.string.moz_layout_only), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 
@@ -153,7 +153,7 @@ fun HandoverScreen(nav: Nav) {
             NoteInbox.text = summary
             nav.go(Route.Mine(MinePart.NOTES))
         }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.handover_to_notes)) }
-        Text(stringResource(R.string.handover_kept_nowhere), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(stringResource(R.string.handover_kept_nowhere), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 

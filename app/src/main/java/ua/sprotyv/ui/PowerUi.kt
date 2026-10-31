@@ -114,8 +114,8 @@ private fun Keep(title: Int, hours: Int, minutes: Long, over: Int) {
         Meter(name, stringResource(R.string.blackout_left, duration(left)), minutes.toFloat() / (hours * 60))
     } else {
         // Time is up: said in words, in the calm warning colour, never as an alarm
-        Meter(name, stringResource(R.string.blackout_up), 1f, MaterialTheme.colorScheme.tertiary)
-        Text(stringResource(over), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.tertiary, fontWeight = FontWeight.SemiBold)
+        Meter(name, stringResource(R.string.blackout_up), 1f, ua.sprotyv.home.Group.DANGER.tint().ink)
+        Text(stringResource(over), style = MaterialTheme.typography.bodyMedium, color = ua.sprotyv.home.Group.DANGER.tint().ink, fontWeight = FontWeight.SemiBold)
     }
 }
 
@@ -166,7 +166,7 @@ fun ChargeBlock() {
                 )
                 Line(title, if (h == 0) stringResource(R.string.charge_under_hour) else pluralStringResource(R.plurals.charge_hours, h, h))
             }
-            Text(stringResource(R.string.charge_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(stringResource(R.string.charge_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }

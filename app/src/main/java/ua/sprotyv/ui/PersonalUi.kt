@@ -183,7 +183,7 @@ fun MedicalScreen() {
     Text(stringResource(R.string.ice_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
     if (ice.isEmpty()) Text(stringResource(R.string.ice_none), style = MaterialTheme.typography.bodyMedium)
     ice.forEach { Text("${it.name} · ${it.phone}", style = MaterialTheme.typography.bodyLarge) }
-    Text(stringResource(R.string.saved_automatically), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    Text(stringResource(R.string.saved_automatically), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 }
 
 /** Trusted people: who gets "I am safe" and who is the emergency contact. */
@@ -300,13 +300,10 @@ fun SafeScreen(nav: Nav) {
                 }
             },
             colors = CardDefaults.cardColors(
-                containerColor = when {
-                    !on -> MaterialTheme.colorScheme.surface
-                    st == SafeStatus.HELP -> MaterialTheme.colorScheme.errorContainer
-                    else -> MaterialTheme.colorScheme.primaryContainer
-                },
+                // "All is well" green, "I need help" danger orange, "cannot talk" neutral
+                containerColor = if (!on) MaterialTheme.colorScheme.surface else safeTint(st).container,
             ),
-            border = BorderStroke(if (on) 2.dp else 1.dp, if (on) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant),
+            border = BorderStroke(if (on) 2.dp else 1.dp, if (on) safeTint(st).ink else MaterialTheme.colorScheme.outlineVariant),
             modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).semantics { selected = on },
         ) {
             Row(Modifier.padding(horizontal = 16.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -366,4 +363,11 @@ fun CheckRow(text: String, checked: Boolean, onChange: (Boolean) -> Unit) {
         Checkbox(checked = checked, onCheckedChange = onChange)
         RichText(text, modifier = Modifier.weight(1f))
     }
+}
+
+@Composable
+private fun safeTint(st: SafeStatus): Tint = when (st) {
+    SafeStatus.OK -> ua.sprotyv.home.Group.FIRST_AID.tint()
+    SafeStatus.HELP -> ua.sprotyv.home.Group.DANGER.tint()
+    SafeStatus.QUIET -> ua.sprotyv.home.Group.GUIDE.tint()
 }

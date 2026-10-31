@@ -181,9 +181,8 @@ fun ColourLegend() {
 }
 
 /**
- * Long reading text only (the guide, the Ministry's procedures): flush on both sides with
- * hyphenation, as the owner asked. Everything short (blocks, hints, buttons, lists of choices)
- * stays left-aligned: in a narrow column justified lines open gaps and odd breaks.
+ * Long reading text (the guide, the Ministry's procedures): left-aligned with whole words. Justified
+ * lines with hyphenation were tried and left gaps and broken words on a phone; not to be turned back on.
  */
 val ReadingText: TextStyle
     @Composable get() = MaterialTheme.typography.bodyLarge.copy(

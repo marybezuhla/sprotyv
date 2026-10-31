@@ -119,7 +119,7 @@ fun SituationScreen(content: Content?, nav: Nav) {
                 modifier = Modifier.heightIn(min = 48.dp),
             ) { Text(stringResource(R.string.situation_get_focus)) }
         }
-        Text(stringResource(R.string.situation_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(stringResource(R.string.situation_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 
@@ -163,7 +163,7 @@ internal fun LinkRow(link: Link, onClick: () -> Unit) {
                     link.flags.joinToString(" · ") { "⚠ " + context.getString(flagTitle(it)) },
                     style = MaterialTheme.typography.labelMedium,
                     // A caution, not danger now: red is kept for danger
-                    color = MaterialTheme.colorScheme.tertiary,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
             Text(
@@ -192,7 +192,7 @@ fun PowerScreen(content: Content?, nav: Nav) {
         if (content == null) return@Frame Loading()
         if (content.linksBroken) return@Frame Broken()
         content.links.filter { it.group == Link.POWER }.forEach { link -> LinkRow(link) { openLink(context, link, toolbar) } }
-        Text(stringResource(R.string.power_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(stringResource(R.string.power_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 
@@ -218,6 +218,6 @@ fun DirectoryScreen(content: Content?, nav: Nav) {
             Text(stringResource(links.first().groupTitle), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 8.dp).semantics { heading() })
             links.forEach { link -> LinkRow(link) { openLink(context, link, toolbar) } }
         }
-        Text(stringResource(R.string.dir_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(stringResource(R.string.dir_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }

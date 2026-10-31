@@ -279,8 +279,8 @@ fun NoteEditScreen(id: Long, nav: Nav) {
             dismissButton = { TextButton(onClick = { confirmSend = false }) { Text(stringResource(R.string.cancel)) } },
         )
     }
-    if (whole.isNotBlank() && !fits) Text(stringResource(R.string.notes_too_long_for_qr), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    Text(stringResource(R.string.notes_saved_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    if (whole.isNotBlank() && !fits) Text(stringResource(R.string.notes_too_long_for_qr), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    Text(stringResource(R.string.notes_saved_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     if (confirmDelete) {
         AlertDialog(
             onDismissRequest = { confirmDelete = false },

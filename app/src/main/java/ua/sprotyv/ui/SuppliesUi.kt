@@ -102,7 +102,7 @@ fun SuppliesScreen(content: Content?, nav: Nav) {
                     what?.let { "$it (${monthText(m)})" }
                 }.joinToString(", ")
                 if (names.isNotEmpty()) {
-                    Text(stringResource(R.string.supplies_expiring, names), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.tertiary, fontWeight = FontWeight.SemiBold)
+                    Text(stringResource(R.string.supplies_expiring, names), style = MaterialTheme.typography.bodyLarge, color = ua.sprotyv.home.Group.DANGER.tint().ink, fontWeight = FontWeight.SemiBold)
                 }
             }
         }

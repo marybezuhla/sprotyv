@@ -94,12 +94,12 @@ fun PlanScreen() {
     Heading(R.string.plan_notes)
     Field(stringResource(R.string.plan_notes), plan.notes, { change(plan.copy(notes = it)) }, multiline = true)
     Text(stringResource(R.string.plan_practice), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    Text(stringResource(R.string.saved_automatically), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    Text(stringResource(R.string.saved_automatically), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 }
 
 @Composable
 private fun Heading(text: Int) {
-    Text(stringResource(text), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+    Text(stringResource(text), style = BlockTitle, modifier = Modifier.padding(top = 8.dp).semantics { heading() })
 }
 
 @Composable

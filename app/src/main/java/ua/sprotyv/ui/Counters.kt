@@ -121,9 +121,9 @@ fun HeatingBlock(nav: Nav) {
             modifier = Modifier.semantics { heading() },
         )
         // The guide's two time marks, shown as bars towards them
-        Meter(stringResource(R.string.heat_pipes), stringResource(R.string.heat_pipes_when), (minutes / (24 * 60f)).coerceAtMost(1f), if (minutes >= 24 * 60) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.primary)
+        Meter(stringResource(R.string.heat_pipes), stringResource(R.string.heat_pipes_when), (minutes / (24 * 60f)).coerceAtMost(1f), if (minutes >= 24 * 60) ua.sprotyv.home.Group.DANGER.tint().ink else MaterialTheme.colorScheme.primary)
         Advice(stringResource(R.string.heat_pipes_do), minutes >= 24 * 60)
-        Meter(stringResource(R.string.heat_leave), stringResource(R.string.heat_leave_when), (minutes / (48 * 60f)).coerceAtMost(1f), if (minutes >= 48 * 60) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.primary)
+        Meter(stringResource(R.string.heat_leave), stringResource(R.string.heat_leave_when), (minutes / (48 * 60f)).coerceAtMost(1f), if (minutes >= 48 * 60) ua.sprotyv.home.Group.DANGER.tint().ink else MaterialTheme.colorScheme.primary)
         Advice(stringResource(R.string.heat_leave_do), minutes >= 48 * 60)
         Advice(stringResource(R.string.heat_co), false)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -147,7 +147,7 @@ fun ShelterBlock(nav: Nav) {
     CounterCard(stringResource(R.string.block_shelter), ua.sprotyv.home.Group.DANGER) {
         if (start == 0L) {
             Text(stringResource(R.string.shelter_title), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
-            OutlinedButton(onClick = { Since.SHELTER.start(context); gen++ }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+            Button(onClick = { Since.SHELTER.start(context); gen++ }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
                 Text(stringResource(R.string.shelter_start), style = MaterialTheme.typography.titleMedium)
             }
             return@CounterCard
@@ -187,7 +187,7 @@ private fun Advice(text: String, now: Boolean) {
         "• $text",
         style = MaterialTheme.typography.bodyMedium,
         fontWeight = if (now) FontWeight.SemiBold else FontWeight.Normal,
-        color = if (now) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.onSurface,
+        color = if (now) ua.sprotyv.home.Group.DANGER.tint().ink else MaterialTheme.colorScheme.onSurface,
     )
 }
 
