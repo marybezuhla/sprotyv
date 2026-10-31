@@ -25,6 +25,7 @@ GLYPHS = {
     "material/close": (219, -741, 522, 522),
     "material/skull": (80, -880, 800, 800),
     "material/flag": (200, -800, 600, 680),
+    "material/pan_tool": (64, -920, 777, 880),
 }
 
 def load(name):
@@ -88,17 +89,24 @@ FIGURES = {
         ],
         "danger": [stroke("M160 70L280 390H40Z", 36), g("material/skull", (110, 230, 100, 110))],
     },
-    # 7.2: the tourniquet, high on the limb, a hand's width above the wound
+    # 7.2: the tourniquet, high on the upper arm, a hand's width above the wound. A person's head
+    # and shoulder at the left and an open hand at the right, so the limb reads as an arm; the
+    # tourniquet itself is in the safe colour so it stands apart from the arm
     "tourniquet": {
         "base": [
-            rect(20, 120, 140, 240, 50),                 # shoulder
-            rect(170, 170, 162, 140, 0), rect(388, 170, 452, 140, 70),   # the arm, a gap each side of the band
-            circle(880, 240, 62),                        # the hand
-            rect(340, 140, 40, 200, 12),                 # the band
-            rect(300, 84, 120, 30, 15), rect(350, 110, 20, 34),   # the windlass
+            circle(100, 96, 64),                                          # head
+            shape("M30 470V230Q30 170 100 170H200Q240 170 240 215V470Z"),  # shoulder and chest
+            shape("M220 186L530 214Q560 220 560 258Q560 296 530 302L220 330Z"),   # upper arm
+            shape("M520 222L790 240Q800 260 790 282L520 296Z"),           # forearm
+            circle(530, 258, 44),                                         # elbow
+            g("material/pan_tool", (770, 150, 190, 230), rot=90),         # the open hand
         ],
-        "safe": [stroke("M380 410H640M380 380V440M640 380V440", 18)],
-        "danger": [circle(640, 230, 36), stroke("M640 264C648 300 660 330 652 372", 16)],
+        "safe": [
+            rect(318, 172, 40, 176, 12),                                  # the band, around the arm
+            stroke("M286 140L392 196", 26),                               # the windlass stick
+            stroke("M358 410H462M358 386V434M462 386V434", 16),           # a hand's width
+        ],
+        "danger": [circle(470, 262, 30), stroke("M470 292C476 320 486 340 478 372", 14)],
     },
     # 7.4: the recovery position, seen from above
     "recovery": {

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -189,19 +190,14 @@ fun ScreenshotsStrip() {
     val context = LocalContext.current
     val allowed = HomePrefs.state.collectAsStateWithLifecycle().value?.screenshots == true
     if (!allowed) return
-    androidx.compose.material3.Surface(
-        color = MaterialTheme.colorScheme.tertiaryContainer,
-        shape = MaterialTheme.shapes.medium,
-        modifier = Modifier.fillMaxWidth(),
+    // Quiet but always there, as in a reviewed app: one thin grey line; tapping it forbids screenshots again
+    androidx.compose.foundation.layout.Row(
+        Modifier.fillMaxWidth().heightIn(min = 36.dp)
+            .clickable { HomePrefs.update(context) { it.copy(screenshots = false) } }
+            .padding(vertical = 4.dp),
+        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
     ) {
-        androidx.compose.foundation.layout.Row(
-            Modifier.padding(start = 12.dp),
-            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
-        ) {
-            Text(stringResource(R.string.screenshots_banner), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
-            TextButton(onClick = { HomePrefs.update(context) { it.copy(screenshots = false) } }, modifier = Modifier.heightIn(min = 48.dp)) {
-                Text(stringResource(R.string.screenshots_turn_off))
-            }
-        }
+        Text("◉ " + stringResource(R.string.screenshots_banner), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1f))
+        Text(stringResource(R.string.screenshots_turn_off), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
     }
 }

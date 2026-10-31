@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Built by scripts/pictograms/figures.py; tinted by the app -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="240dp" android:height="120dp" android:viewportWidth="960" android:viewportHeight="480">
-    <path android:fillColor="#FF000000" android:fillAlpha="1.0" android:pathData="M70 120H110A50 50 0 0 1 160 170V310A50 50 0 0 1 110 360H70A50 50 0 0 1 20 310V170A50 50 0 0 1 70 120Z"/>
-    <path android:fillColor="#FF000000" android:fillAlpha="1.0" android:pathData="M170 170H332V310H170Z"/>
-    <path android:fillColor="#FF000000" android:fillAlpha="1.0" android:pathData="M458 170H770A70 70 0 0 1 840 240V240A70 70 0 0 1 770 310H458A70 70 0 0 1 388 240V240A70 70 0 0 1 458 170Z"/>
-    <path android:fillColor="#FF000000" android:fillAlpha="1.0" android:pathData="M818 240A62 62 0 1 0 942 240A62 62 0 1 0 818 240Z"/>
-    <path android:fillColor="#FF000000" android:fillAlpha="1.0" android:pathData="M352 140H368A12 12 0 0 1 380 152V328A12 12 0 0 1 368 340H352A12 12 0 0 1 340 328V152A12 12 0 0 1 352 140Z"/>
-    <path android:fillColor="#FF000000" android:fillAlpha="1.0" android:pathData="M315 84H405A15 15 0 0 1 420 99V99A15 15 0 0 1 405 114H315A15 15 0 0 1 300 99V99A15 15 0 0 1 315 84Z"/>
-    <path android:fillColor="#FF000000" android:fillAlpha="1.0" android:pathData="M350 110H370V144H350Z"/>
+    <path android:fillColor="#FF000000" android:fillAlpha="1.0" android:pathData="M36 96A64 64 0 1 0 164 96A64 64 0 1 0 36 96Z"/>
+    <path android:fillColor="#FF000000" android:fillAlpha="1.0" android:pathData="M30 470V230Q30 170 100 170H200Q240 170 240 215V470Z"/>
+    <path android:fillColor="#FF000000" android:fillAlpha="1.0" android:pathData="M220 186L530 214Q560 220 560 258Q560 296 530 302L220 330Z"/>
+    <path android:fillColor="#FF000000" android:fillAlpha="1.0" android:pathData="M520 222L790 240Q800 260 790 282L520 296Z"/>
+    <path android:fillColor="#FF000000" android:fillAlpha="1.0" android:pathData="M486 258A44 44 0 1 0 574 258A44 44 0 1 0 486 258Z"/>
+    <group android:translateX="770.0" android:translateY="181.1">
+        <group android:scaleX="0.2159" android:scaleY="0.2159">
+            <group android:translateX="440.0" android:translateY="388.5">
+                <group android:rotation="90">
+                    <group android:translateX="-388.5" android:translateY="-440.0">
+                        <group android:translateX="-64" android:translateY="920">
+                            <path android:fillColor="#FF000000" android:pathData="M402-40q-27 0-51.5-12.5T311-88L68-446q-6-9-4-20t10-18q17-15 39.5-19t44.57 13.19L280-397v-413q0-12.75 8.68-21.38 8.67-8.62 21.5-8.62 12.82 0 21.32 8.62 8.5 8.63 8.5 21.38v330h107v-410q0-12.75 8.68-21.38 8.67-8.62 21.5-8.62 12.82 0 21.32 8.62 8.5 8.63 8.5 21.38v410h107v-370q0-12.75 8.68-21.38 8.67-8.62 21.5-8.62 12.82 0 21.32 8.62 8.5 8.63 8.5 21.38v370h106v-290q0-12.75 8.68-21.38 8.67-8.62 21.5-8.62 12.82 0 21.32 8.62 8.5 8.63 8.5 21.38v580q0 63-43.5 106.5T690-40H402Z"/>
+                        </group>
+                    </group>
+                </group>
+            </group>
+        </group>
+    </group>
 </vector>

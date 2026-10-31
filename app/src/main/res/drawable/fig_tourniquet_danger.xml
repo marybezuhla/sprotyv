@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Built by scripts/pictograms/figures.py; tinted by the app -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="240dp" android:height="120dp" android:viewportWidth="960" android:viewportHeight="480">
-    <path android:fillColor="#FF000000" android:fillAlpha="1.0" android:pathData="M604 230A36 36 0 1 0 676 230A36 36 0 1 0 604 230Z"/>
-    <path android:pathData="M640 264C648 300 660 330 652 372" android:strokeColor="#FF000000" android:strokeWidth="16" android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000"/>
+    <path android:fillColor="#FF000000" android:fillAlpha="1.0" android:pathData="M440 262A30 30 0 1 0 500 262A30 30 0 1 0 440 262Z"/>
+    <path android:pathData="M470 292C476 320 486 340 478 372" android:strokeColor="#FF000000" android:strokeWidth="14" android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000"/>
 </vector>
