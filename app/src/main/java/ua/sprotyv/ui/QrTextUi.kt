@@ -36,7 +36,7 @@ import ua.sprotyv.qr.Qr
 @Composable
 fun QrTextScreen(nav: Nav) {
     // remember, not rememberSaveable: the text is never written into the saved screen state
-    var text by remember { mutableStateOf("") }
+    var text by remember { mutableStateOf(QrInbox.text.also { QrInbox.text = "" }) }
     val bytes = text.toByteArray(Charsets.UTF_8).size
     val tooLong = bytes > Qr.MAX_PLAN_BYTES
     SecureScreen()

@@ -663,14 +663,14 @@
     <string name="shelf_unfold">розгорнути</string>
     <string name="mine_block_trouble">На випадок біди</string>
     <string name="mine_block_home">Запаси й закладки</string>
-    <string name="mine_block_copies">Копії, коди й закладки</string>
+    <string name="mine_block_copies">Нотатки, закладки, друк, коди</string>
     <string name="source_section">Джерело: «%1$s» %2$s, п. %3$s</string>
     <string name="source_license">Ліцензія: %1$s</string>
     <string name="about_icons">Піктограми: Health Icons (healthicons.org, суспільне надбання, CC0) і Material Symbols (Google, Apache 2.0).</string>
     <string name="ready_summary">Готово частин: %1$d з %2$d</string>
     <string name="mine_block_trouble_desc">Я в безпеці, медкартка, довірені люди, план, екран для рятувальника</string>
     <string name="mine_block_home_desc">Тривожна валіза, запаси вдома, закладки</string>
-    <string name="mine_block_copies_desc">Закладки, друк, коди, резервна копія</string>
+    <string name="mine_block_copies_desc">Нотатки, закладки, друк, коди, резервна копія</string>
     <string name="lock_mine_unknown">Стан замка зараз не вдалося прочитати. Відкрийте «Моє» один раз і поверніться сюди.</string>
     <string name="settings_other_hands">Якщо телефон у чужих руках</string>
     <string name="settings_about">Про застосунок і відгук</string>
@@ -717,4 +717,19 @@
     <string name="medic_title">Медична освіта</string>
     <string name="medic_toggle">Маю медичну освіту</string>
     <string name="medic_hint">Порядки МОЗ відкриватимуться одразу повним текстом у нумерації наказу. Кроки для людей поруч лишаються на одну кнопку. Для решти — ті самі слова наказу, але кроками.</string>
+    <string name="notes_title_screen">Мої нотатки</string>
+    <string name="notes_hint">Будь-які записи, зашифровано</string>
+    <string name="notes_intro">Записи лише для вас: адреси, номери, домовленості. Зашифровані разом з «Моє», входять у резервну копію, у режимі поїздки сховані.</string>
+    <string name="notes_new">Нова нотатка</string>
+    <string name="notes_search">Знайти в нотатках</string>
+    <string name="notes_empty">Нотаток ще немає.</string>
+    <string name="notes_nothing_found">Нічого не знайдено.</string>
+    <string name="notes_untitled">Без назви</string>
+    <string name="notes_title">Назва</string>
+    <string name="notes_text">Текст</string>
+    <string name="notes_pin">Закріпити вгорі</string>
+    <string name="notes_as_qr">Показати QR-кодом</string>
+    <string name="notes_too_long_for_qr">Задовга для QR-коду: скоротіть, щоб передати.</string>
+    <string name="notes_saved_hint">Зберігається, поки ви пишете.</string>
+    <string name="notes_delete_confirm">Видалити цю нотатку?</string>
 </resources>

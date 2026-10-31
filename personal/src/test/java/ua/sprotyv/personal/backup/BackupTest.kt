@@ -26,6 +26,7 @@ class BackupTest {
         kit = listOf(KitCheck("abc", true, 42)),
         settings = listOf(Setting("safe_message", "Я в безпеці")),
         home = mapOf("mode" to "FULL", "pins" to "card:bleeding\ntool:KIT"),
+        notes = listOf(ua.sprotyv.personal.Note(id = 2, title = "Адреса", text = "вул. Вигадана, 1\nкв. 2", pinned = true, updatedAt = 9)),
     )
 
     @Test fun encryptsAndOpensWithThePassword() {
@@ -60,7 +61,17 @@ class BackupTest {
     @Test fun snapshotRoundTrip() {
         val back = BackupData.decode(BackupData.encode(snapshot))
         assertEquals(snapshot, back)
-        assertEquals(6, back.records)
+        assertEquals(7, back.records)
+    }
+
+    @Test fun copiesFromBeforeNotesStillOpen() {
+        val older = org.json.JSONObject(String(BackupData.encode(snapshot))).apply { remove("notes") }.toString()
+        assertEquals(emptyList<ua.sprotyv.personal.Note>(), BackupData.decode(older.toByteArray()).notes)
+        // The same note twice is not a file Sprotyv wrote
+        val twice = org.json.JSONObject(String(BackupData.encode(snapshot))).apply {
+            getJSONArray("notes").put(getJSONArray("notes").getJSONObject(0))
+        }.toString()
+        expect<BackupData.Incompatible> { BackupData.decode(twice.toByteArray()) }
     }
 
     @Test fun homeSetUpTravelsAndOlderCopiesStillOpen() {

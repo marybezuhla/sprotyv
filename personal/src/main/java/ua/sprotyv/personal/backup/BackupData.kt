@@ -6,6 +6,7 @@ import org.json.JSONObject
 import ua.sprotyv.personal.FamilyPlan
 import ua.sprotyv.personal.KitCheck
 import ua.sprotyv.personal.MedicalCard
+import ua.sprotyv.personal.Note
 import ua.sprotyv.personal.Person
 import ua.sprotyv.personal.PersonalDb
 import ua.sprotyv.personal.PlanRow
@@ -53,9 +54,11 @@ object BackupData {
          * values chosen by the app, so a new phone needs no setting up again. Empty in older copies.
          */
         val home: Map<String, String> = emptyMap(),
+        /** The owner's notes. Empty in copies made before notes existed. */
+        val notes: List<Note> = emptyList(),
     ) {
         /** For the "what is in it" line before anything is replaced. */
-        val records: Int get() = (if (medical != null) 1 else 0) + people.size + (if (plan != null) 1 else 0) + rows.size + kit.size + settings.size
+        val records: Int get() = (if (medical != null) 1 else 0) + people.size + (if (plan != null) 1 else 0) + rows.size + kit.size + settings.size + notes.size
     }
 
     data class SharedPlan(val plan: FamilyPlan, val rows: List<PlanRow>)
@@ -72,6 +75,7 @@ object BackupData {
         rows = db.plan().allRows(),
         kit = db.kit().all(),
         settings = db.settings().all().filter { it.key in settings },
+        notes = db.notes().all(),
     )
 
     /** Replaces all of the owner's data with [s], all or nothing. Only the [settings] keys are touched. */
@@ -79,6 +83,7 @@ object BackupData {
         db.withTransaction {
             db.medical().clear(); db.people().clear(); db.plan().clear(); db.plan().clearRows()
             db.kit().clear()
+            db.notes().clear()
             settings.forEach { db.settings().delete(it) }
             s.medical?.let { db.medical().save(it) }
             s.people.forEach { db.people().save(it) }
@@ -86,6 +91,7 @@ object BackupData {
             s.rows.forEach { db.plan().saveRow(it) }
             s.kit.forEach { db.kit().set(it) }
             s.settings.filter { it.key in settings }.forEach { db.settings().put(it) }
+            s.notes.forEach { db.notes().save(it) }
         }
     }
 
@@ -109,6 +115,7 @@ object BackupData {
         .put("kit", JSONArray().apply { s.kit.forEach { put(JSONObject().put("key", it.key).put("checked", it.checked).put("at", it.at)) } })
         .put("settings", JSONArray().apply { s.settings.forEach { put(JSONObject().put("key", it.key).put("value", it.value)) } })
         .put("home", JSONObject().apply { s.home.toSortedMap().forEach { (k, v) -> put(k, v) } })
+        .put("notes", JSONArray().apply { s.notes.forEach { put(JSONObject().put("id", it.id).put("title", it.title).put("text", it.text).put("pinned", it.pinned).put("updatedAt", it.updatedAt)) } })
         .toString().toByteArray(Charsets.UTF_8)
 
     fun decode(bytes: ByteArray): Snapshot {
@@ -134,12 +141,17 @@ object BackupData {
                 kit = items(root.getJSONArray("kit")).map { KitCheck(text(it, "key").also { k -> require(k.isNotEmpty()) }, it.getBoolean("checked"), it.getLong("at")) },
                 settings = items(root.getJSONArray("settings")).map { Setting(text(it, "key").also { k -> require(k.isNotEmpty()) }, text(it, "value")) },
                 home = root.optJSONObject("home")?.let(::homeOf) ?: emptyMap(),
+                // Optional: a copy from before notes simply has none
+                notes = root.optJSONArray("notes")?.let { a ->
+                    items(a).map { Note(it.getLong("id").also { id -> require(id > 0) }, text(it, "title"), text(it, "text"), it.getBoolean("pinned"), it.optLong("updatedAt", 0)) }
+                } ?: emptyList(),
             ).also { s ->
                 // The same person, row, tick or setting twice: not a file Sprotyv wrote
                 require(s.people.map { it.id }.toSet().size == s.people.size)
                 require(s.rows.map { it.id }.filter { it > 0 }.let { it.toSet().size == it.size })
                 require(s.kit.map { it.key }.toSet().size == s.kit.size)
                 require(s.settings.map { it.key }.toSet().size == s.settings.size)
+                require(s.notes.map { it.id }.toSet().size == s.notes.size)
             }
         }
     }

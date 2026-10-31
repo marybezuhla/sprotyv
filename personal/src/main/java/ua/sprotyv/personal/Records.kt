@@ -158,3 +158,35 @@ interface KitDao {
     @Query("SELECT * FROM kit")
     suspend fun all(): List<KitCheck>
 }
+
+/** A note of the owner's own: free text, kept encrypted with the rest of "Mine". */
+@Entity(tableName = "notes")
+data class Note(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val title: String = "",
+    val text: String = "",
+    /** Kept at the top of the list. */
+    val pinned: Boolean = false,
+    val updatedAt: Long = 0,
+)
+
+@Dao
+interface NoteDao {
+    @Query("SELECT * FROM notes ORDER BY pinned DESC, updatedAt DESC, id DESC")
+    fun observe(): Flow<List<Note>>
+
+    @Query("SELECT * FROM notes WHERE id = :id")
+    suspend fun get(id: Long): Note?
+
+    @Upsert
+    suspend fun save(note: Note): Long
+
+    @Query("DELETE FROM notes WHERE id = :id")
+    suspend fun delete(id: Long)
+
+    @Query("SELECT * FROM notes ORDER BY id")
+    suspend fun all(): List<Note>
+
+    @Query("DELETE FROM notes")
+    suspend fun clear()
+}

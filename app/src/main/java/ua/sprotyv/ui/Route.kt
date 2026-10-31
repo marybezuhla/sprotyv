@@ -26,6 +26,8 @@ sealed interface Route {
     data object QrText : Route
     /** The Ministry of Health's first-aid procedures (order No. 441), and one of them. */
     data object MozList : Route
+    /** One of the owner's notes; 0 for a new one. */
+    data class NoteEdit(val id: Long) : Route
     data class Moz(val n: Int) : Route
     /** "What would you do?" for one card, or for all adult cards when [card] is empty. */
     data class PracticeRoute(val card: String) : Route
@@ -33,7 +35,7 @@ sealed interface Route {
     data class External(val id: String) : Route
 
     /** Screens that show the owner's data: opened only with the data, kept off screenshots. */
-    val personal: Boolean get() = this is Mine || this == Open(Section.MINE) || this == Open(Section.SAFE) || this == SuppliesRoute
+    val personal: Boolean get() = this is Mine || this is NoteEdit || this == Open(Section.MINE) || this == Open(Section.SAFE) || this == SuppliesRoute
 
     /** Screens that change settings: behind the PIN when settings are locked. */
     val settings: Boolean get() = this == Settings || this == EditTiles || this == Sections || this == Presets
@@ -57,6 +59,7 @@ sealed interface Route {
         Directory -> "directory"
         QrText -> "qr-text"
         MozList -> "moz"
+        is NoteEdit -> "note:$id"
         is Moz -> "moz:$n"
         is PracticeRoute -> "practice:$card"
         is External -> "external:$id"
@@ -83,6 +86,7 @@ sealed interface Route {
                 "power" -> Power
                 "directory" -> Directory
                 "qr-text" -> QrText
+                "note" -> value.toLongOrNull()?.takeIf { it >= 0 }?.let(::NoteEdit)
                 "moz" -> if (value.isEmpty()) MozList else value.toIntOrNull()?.takeIf { it in 1..60 }?.let(::Moz)
                 "practice" -> PracticeRoute(value)
                 // Never reopened after the app is restored: that would open a page unasked
@@ -93,4 +97,4 @@ sealed interface Route {
     }
 }
 
-enum class MinePart { MEDICAL, PEOPLE, PLAN, KIT, PRINT, RESCUER, BACKUP, PLAN_QR, PLAN_IMPORT, KID_CALL, BOOKMARKS }
+enum class MinePart { MEDICAL, PEOPLE, PLAN, KIT, PRINT, RESCUER, BACKUP, PLAN_QR, PLAN_IMPORT, KID_CALL, BOOKMARKS, NOTES }
