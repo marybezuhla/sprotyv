@@ -59,7 +59,8 @@ private val Link.groupTitle: Int get() = when (group) {
     else -> R.string.situation_facts
 }
 
-private val Link.kindTitle: Int get() = when (kind) {
+internal val Link.kindTitle: Int get() = when (kind) {
+    Link.NGO -> R.string.kind_ngo
     Link.OFFICIAL -> R.string.kind_official
     Link.VOLUNTEER -> R.string.kind_volunteer
     else -> R.string.kind_independent
@@ -89,7 +90,7 @@ fun SituationScreen(content: Content?, nav: Nav) {
         // Power cuts have their own screen: one row per oblast would crowd this one
         NavRow(stringResource(R.string.power_title), stringResource(R.string.power_hint)) { nav.go(Route.Power) }
         val trip = HomePrefs.state.collectAsState().value?.trip == true
-        content.links.filter { it.group != Link.POWER && it.group !in Link.DIRECTORY && !(trip && Trip.hides(it)) }.groupBy { it.group }.forEach { (_, links) ->
+        content.links.filter { it.group != Link.POWER && it.group !in Link.DIRECTORY && it.group !in Link.RESIST && !(trip && Trip.hides(it)) }.groupBy { it.group }.forEach { (_, links) ->
             Text(stringResource(links.first().groupTitle), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 8.dp).semantics { heading() })
             links.forEach { link -> LinkRow(link) { openLink(context, link, toolbar) } }
         }
@@ -132,7 +133,7 @@ private fun flagTitle(flag: String): Int = when (flag) {
 }
 
 @Composable
-private fun LinkRow(link: Link, onClick: () -> Unit) {
+internal fun LinkRow(link: Link, onClick: () -> Unit) {
     val context = LocalContext.current
     val official = link.kind == Link.OFFICIAL
     Card(

@@ -23,9 +23,13 @@ data class Link(
         const val OFFICIAL = "official"
         const val VOLUNTEER = "volunteer"
         const val INDEPENDENT = "independent"
+        /** A civic organisation (громадська організація), charity or cooperative. */
+        const val NGO = "ngo"
+        /** "Resistance": where to learn, service for adults, resilience. Shown only in that section. */
+        val RESIST = listOf("learn", "service", "resilience")
         /** "Where to turn": help services for everyday life after and around the war. */
         val DIRECTORY = listOf("idp", "money", "docs", "kids", "veterans", "health", "care")
-        val GROUPS = listOf("threats", "front", "help", "evac", "search", "mind", "rights", "facts", "power") + DIRECTORY
+        val GROUPS = listOf("threats", "front", "help", "evac", "search", "mind", "rights", "facts", "power") + DIRECTORY + RESIST
         const val POWER = "power"
         const val UNKNOWN_AUTHOR = "unknown_author"
         const val ADS = "ads"
@@ -63,7 +67,7 @@ object LinksReader {
             ).also { l ->
                 require(l.flags.all { it in Link.FLAGS } && l.flags.size <= 4) { "Unknown flag" }
                 require(l.group in Link.GROUPS) { "Unknown group" }
-                require(l.kind in setOf(Link.OFFICIAL, Link.VOLUNTEER, Link.INDEPENDENT)) { "Unknown kind" }
+                require(l.kind in setOf(Link.OFFICIAL, Link.VOLUNTEER, Link.INDEPENDENT, Link.NGO)) { "Unknown kind" }
                 require(ID.matches(l.id) && DATE.matches(l.checkedOn)) { "Bad id or date" }
                 require(l.title.length in 1..80 && l.note.length in 1..200) { "Bad text" }
                 require(l.url.isEmpty() || URL.matches(l.url)) { "Only plain https addresses" }

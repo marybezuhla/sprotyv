@@ -26,6 +26,8 @@ sealed interface Route {
     data object QrText : Route
     /** The Ministry of Health's first-aid procedures (order No. 441), and one of them. */
     data object MozList : Route
+    /** "Resistance": what everyone can do, where to learn, service for adults. Hidden in trip mode. */
+    data object Resistance : Route
     /** One of the owner's notes; 0 for a new one. */
     data class NoteEdit(val id: Long) : Route
     data class Moz(val n: Int) : Route
@@ -59,6 +61,7 @@ sealed interface Route {
         Directory -> "directory"
         QrText -> "qr-text"
         MozList -> "moz"
+        Resistance -> "resistance"
         is NoteEdit -> "note:$id"
         is Moz -> "moz:$n"
         is PracticeRoute -> "practice:$card"
@@ -86,6 +89,7 @@ sealed interface Route {
                 "power" -> Power
                 "directory" -> Directory
                 "qr-text" -> QrText
+                "resistance" -> Resistance
                 "note" -> value.toLongOrNull()?.takeIf { it >= 0 }?.let(::NoteEdit)
                 "moz" -> if (value.isEmpty()) MozList else value.toIntOrNull()?.takeIf { it in 1..60 }?.let(::Moz)
                 "practice" -> PracticeRoute(value)
@@ -97,4 +101,4 @@ sealed interface Route {
     }
 }
 
-enum class MinePart { MEDICAL, PEOPLE, PLAN, KIT, PRINT, RESCUER, BACKUP, PLAN_QR, PLAN_IMPORT, KID_CALL, BOOKMARKS, NOTES }
+enum class MinePart { MEDICAL, PEOPLE, PLAN, KIT, PRINT, RESCUER, BACKUP, PLAN_QR, PLAN_IMPORT, KID_CALL, BOOKMARKS, NOTES, PATH }

@@ -21,7 +21,7 @@ object Trip {
         "bring-kids-back", "children-of-war", "minjust", "superhumans", "unbroken",
     )
 
-    fun hides(route: Route): Boolean = route.personal || route == Route.Scan
+    fun hides(route: Route): Boolean = route.personal || route == Route.Scan || route == Route.Resistance
 
     fun hides(link: Link): Boolean = link.group in HIDDEN_GROUPS || link.id in HIDDEN_LINKS
 }

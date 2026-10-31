@@ -16,7 +16,7 @@ DIRECTORY = ("idp", "money", "docs", "kids", "veterans", "health", "care")
 
 def link(id, group, kind, title, note, url="", app="", phone="", flags=()):
     assert set(flags) <= FLAGS, id
-    assert kind in ("official", "volunteer", "independent"), id
+    assert kind in ("official", "volunteer", "independent", "ngo"), id
     assert re.fullmatch(r"[a-z0-9-]{1,40}", id), id
     assert (url and re.fullmatch(r"https://[a-z0-9-]+(\.[a-z0-9-]+)+(/[A-Za-z0-9._~/?=&%-]*)?", url)) or (not url and phone), id
     # No Telegram: the service is partly Russian, and channels can be faked or taken over
