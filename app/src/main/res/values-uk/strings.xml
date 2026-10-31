@@ -1052,4 +1052,8 @@
     <string name="notes_kind_list">Список</string>
     <string name="notes_list_name">Назва списку</string>
     <string name="notes_list_add">＋ Пункт</string>
+    <string name="tab_know">Знання</string>
+    <string name="tab_way">Мій шлях</string>
+    <string name="way_intro">Як триматися й рости в довгій війні: щоденні звички, шлях спротиву, нове місце після виїзду, тренування.</string>
+    <string name="way_private">Ваші відмітки зберігаються зашифровано в «Моєму» і нікуди не надсилаються.</string>
 </resources>

@@ -83,7 +83,7 @@ fun BlackoutBlock() {
             val at = Instant.ofEpochMilli(since).atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("HH:mm"))
             Text(
                 stringResource(R.string.blackout_for, duration(minutes), at),
-                style = MaterialTheme.typography.headlineSmall,
+                style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.semantics { heading() },
             )
