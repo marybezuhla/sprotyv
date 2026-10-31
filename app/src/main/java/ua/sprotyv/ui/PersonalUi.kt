@@ -111,8 +111,7 @@ fun MineHub(nav: Nav, content: ua.sprotyv.content.Content?) {
         BlockRow(stringResource(R.string.rescuer_screen), stringResource(R.string.rescuer_hint)) { nav.go(Route.Mine(MinePart.RESCUER)) }
     }
     Block(stringResource(R.string.mine_block_prepare), ua.sprotyv.home.Group.PREPARE, padded = false, foldable = true, summary = stringResource(R.string.mine_block_prepare_desc)) {
-        BlockRow(stringResource(R.string.gart_title), stringResource(R.string.gart_hint), first = true) { nav.go(Route.Mine(MinePart.GART)) }
-        BlockRow(stringResource(R.string.people), stringResource(R.string.people_hint)) { nav.go(Route.Mine(MinePart.PEOPLE)) }
+        BlockRow(stringResource(R.string.people), stringResource(R.string.people_hint), first = true) { nav.go(Route.Mine(MinePart.PEOPLE)) }
         BlockRow(stringResource(R.string.family_plan), stringResource(R.string.family_plan_hint)) { nav.go(Route.Mine(MinePart.PLAN)) }
         BlockRow(stringResource(R.string.kit), stringResource(R.string.kit_hint)) { nav.go(Route.Mine(MinePart.KIT)) }
         BlockRow(stringResource(R.string.supplies), stringResource(R.string.supplies_hint)) { nav.go(Route.SuppliesRoute) }

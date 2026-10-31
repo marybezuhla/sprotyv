@@ -1046,4 +1046,8 @@
     <string name="notes_kind_list">List</string>
     <string name="notes_list_name">List name</string>
     <string name="notes_list_add">＋ Item</string>
+    <string name="tab_know">Knowledge</string>
+    <string name="tab_way">My way</string>
+    <string name="way_intro">How to hold on and grow in a long war: daily habits, the path of resistance, a new place after leaving, practice.</string>
+    <string name="way_private">Your ticks are kept encrypted in Mine and are sent nowhere.</string>
 </resources>

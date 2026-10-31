@@ -125,7 +125,7 @@ class ScreensTest {
     @Test fun kidCard() { mode(Mode.KID); shot("09-card-kid-fire") { CardScreen(content, "kid-fire", nav) } }
 
     @Test fun practice() { mode(Mode.FULL); shot("10-practice") { PracticeScreen(content, "", nav) } }
-    @Test fun sections() { mode(Mode.FULL); shot("11-sections") { Frame("Розділи", {}) { SectionsList(content, Preset.GENERAL.pins, nav) { _, _ -> } } } }
+    @Test fun sections() { mode(Mode.FULL); shot("11-sections") { Frame("Знання", {}) { SectionsList(content, Preset.GENERAL.pins, nav) { _, _ -> } } } }
     @Test fun power() = shot("12-power") { PowerScreen(content, nav) }
     @Test fun powerDark() = shot("12-power-dark", dark = true) { PowerScreen(content, nav) }
     @Test fun situation() = shot("13-situation") { SituationScreen(content, nav) }

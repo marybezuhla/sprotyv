@@ -116,7 +116,7 @@ fun HeatingBlock(nav: Nav) {
         val minutes = ((now - start) / 60_000).coerceAtLeast(0)
         Text(
             stringResource(R.string.heat_for, span(minutes), clock(start, true)),
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier.semantics { heading() },
         )
@@ -126,10 +126,8 @@ fun HeatingBlock(nav: Nav) {
         Meter(stringResource(R.string.heat_leave), stringResource(R.string.heat_leave_when), (minutes / (48 * 60f)).coerceAtMost(1f), if (minutes >= 48 * 60) ua.sprotyv.home.Group.DANGER.tint().ink else ua.sprotyv.home.Group.HOME_LIFE.tint().ink)
         Advice(stringResource(R.string.heat_leave_do), minutes >= 48 * 60)
         Advice(stringResource(R.string.heat_co), false)
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            OutlinedButton(onClick = { Since.HEAT.stop(context); gen++ }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.heat_back)) }
-            TextButton(onClick = { nav.go(Route.GuideSection("20.5")) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.in_detail)) }
-        }
+        OutlinedButton(onClick = { Since.HEAT.stop(context); gen++ }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.heat_back)) }
+        TextButton(onClick = { nav.go(Route.GuideSection("20.5")) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text(stringResource(R.string.in_detail)) }
         SourceLine("20.5")
     }
 }
@@ -155,7 +153,7 @@ fun ShelterBlock(nav: Nav) {
         val minutes = ((now - start) / 60_000).coerceAtLeast(0)
         Text(
             stringResource(R.string.shelter_for, span(minutes), clock(start, minutes >= 12 * 60)),
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier.semantics { heading() },
         )
@@ -167,10 +165,8 @@ fun ShelterBlock(nav: Nav) {
         } else {
             Text(stringResource(R.string.shelter_short), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            OutlinedButton(onClick = { Since.SHELTER.stop(context); gen++ }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.shelter_out)) }
-            TextButton(onClick = { nav.go(Route.GuideSection("3.7")) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.in_detail)) }
-        }
+        OutlinedButton(onClick = { Since.SHELTER.stop(context); gen++ }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.shelter_out)) }
+        TextButton(onClick = { nav.go(Route.GuideSection("3.7")) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text(stringResource(R.string.in_detail)) }
         SourceLine("3.7")
     }
 }
@@ -183,19 +179,24 @@ private fun CounterCard(title: String, group: ua.sprotyv.home.Group = ua.sprotyv
 /** One rule: bold when its time has come, in the calm warning colour; never red. */
 @Composable
 private fun Advice(text: String, now: Boolean) {
-    Text(
-        "• $text",
-        style = MaterialTheme.typography.bodyMedium,
-        fontWeight = if (now) FontWeight.SemiBold else FontWeight.Normal,
-        color = if (now) ua.sprotyv.home.Group.DANGER.tint().ink else MaterialTheme.colorScheme.onSurface,
-    )
+    // A bullet with the text hanging beside it, so every line starts at the same edge
+    Row {
+        Text("•", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(end = 8.dp))
+        Text(
+            text,
+            style = ReadingText,
+            fontWeight = if (now) FontWeight.SemiBold else FontWeight.Normal,
+            color = if (now) ua.sprotyv.home.Group.DANGER.tint().ink else MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.weight(1f),
+        )
+    }
 }
 
 @Composable
 private fun SourceLine(section: String) {
     Text(
         stringResource(R.string.counter_source, section) + " · " + stringResource(R.string.not_reviewed),
-        style = MaterialTheme.typography.bodySmall,
+        style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
     )
 }

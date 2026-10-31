@@ -1,5 +1,15 @@
 package ua.sprotyv.ui
 
+import androidx.compose.ui.res.vectorResource
+
+import androidx.compose.ui.unit.dp
+
+import androidx.compose.foundation.layout.heightIn
+
+import androidx.compose.foundation.layout.fillMaxWidth
+
+import androidx.compose.material.icons.filled.Search
+
 import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
@@ -38,12 +48,22 @@ import ua.sprotyv.home.Mode
 import ua.sprotyv.home.Pins
 import ua.sprotyv.personal.PersonalStore
 
-/** The tabs of full mode. */
-enum class Tab(val title: Int, val icon: ImageVector) {
-    HOME(R.string.tab_home, Icons.Filled.Home),
-    SECTIONS(R.string.tab_sections, Icons.AutoMirrored.Filled.List),
-    GUIDE(R.string.tile_guide, Icons.Filled.Info),
-    MINE(R.string.tile_mine, Icons.Filled.Lock),
+/**
+ * The tabs of full mode, each answering one question: what to do now (Home), where to read
+ * (Knowledge: everything by theme, one search), how to hold on and grow (My way), my own data (Mine).
+ */
+enum class Tab(val title: Int) {
+    HOME(R.string.tab_home),
+    KNOW(R.string.tab_know),
+    WAY(R.string.tab_way),
+    MINE(R.string.tile_mine),
+}
+
+private val Tab.icon: ImageVector @Composable get() = when (this) {
+    Tab.HOME -> Icons.Filled.Home
+    Tab.KNOW -> androidx.compose.ui.graphics.vector.ImageVector.vectorResource(R.drawable.ocha_learning)
+    Tab.WAY -> androidx.compose.ui.graphics.vector.ImageVector.vectorResource(R.drawable.ocha_training)
+    Tab.MINE -> Icons.Filled.Lock
 }
 
 /**
@@ -73,7 +93,7 @@ fun App() {
         if (!settingsOpen) saved = saved.filter { s -> Route.restore(s)?.settings != true }
         if (trip) {
             saved = saved.filter { s -> Route.restore(s)?.let(Trip::hides) != true }
-            if (tabName == Tab.MINE.name) tabName = Tab.HOME.name
+            if (tabName == Tab.MINE.name || tabName == Tab.WAY.name) tabName = Tab.HOME.name
         }
     }
     val top = stack.lastOrNull()
@@ -169,19 +189,24 @@ fun App() {
                             content, prefs.pins, nav,
                             onSettings = { guarded(ACTION_SETTINGS) },
                             onEdit = { guarded(ACTION_EDIT) },
-                            onAdd = { tabName = Tab.SECTIONS.name },
+                            onAdd = { tabName = Tab.KNOW.name },
                         )
-                        Tab.SECTIONS -> Frame(stringResource(R.string.tab_sections), {}) {
+                        Tab.KNOW -> Frame(stringResource(R.string.tab_know), {}) {
+                            // One search over the guide first, then everything by theme in coloured shelves
+                            androidx.compose.material3.OutlinedButton(onClick = { nav.go(Route.Search) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+                                Icon(Icons.Filled.Search, contentDescription = null)
+                                Text("  " + stringResource(R.string.search_guide))
+                            }
                             SectionsList(content, prefs.pins, nav) { id, on -> guarded((if (on) ACTION_PIN else ACTION_UNPIN) + id) }
                         }
-                        Tab.GUIDE -> GuideScreen(content, nav)
+                        Tab.WAY -> if (!trip) Frame(stringResource(R.string.tab_way), {}) { WayHub(nav) }
                         Tab.MINE -> if (!trip) Personal(R.string.tile_mine, personal, nav) { MineHub(nav, content) }
                     }
                 }
             }
             if (!typing) CallBar(edge = false)
             if (!typing) NavigationBar {
-                Tab.entries.filter { !(trip && it == Tab.MINE) }.forEach { t ->
+                Tab.entries.filter { !(trip && (it == Tab.MINE || it == Tab.WAY)) }.forEach { t ->
                     NavigationBarItem(
                         selected = t == tab,
                         onClick = { tabName = t.name },
