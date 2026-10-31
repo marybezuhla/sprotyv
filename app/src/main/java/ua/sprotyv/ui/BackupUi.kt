@@ -265,8 +265,29 @@ object BackupJobs {
 
     fun cancelRestore() { _pending.value = null }
 
+    /** The chosen copy, kept while the screen is drawn again (the data reopening after the picker, a lock). */
+    val openUri = MutableStateFlow<Uri?>(null)
+
+    /** Screens showing the backup now; when none is left for a moment, the screen was really left. */
+    @Volatile private var screens = 0
+
+    fun shown() { screens++ }
+
+    /**
+     * The screen went away. If it is not drawn again soon (it is redrawn when the data reopens or
+     * after unlocking), the owner left it: then nothing decrypted or secret stays waiting.
+     */
+    fun hidden() {
+        screens--
+        scope.launch {
+            kotlinx.coroutines.delay(3_000)
+            if (screens <= 0) { forget(); clearNotice() }
+        }
+    }
+
     /** The screen is gone for good (not turned): nothing decrypted or secret stays waiting. */
     fun forget() {
+        openUri.value = null
         generation++
         _pending.value = null
         password?.fill(' ')
@@ -398,16 +419,19 @@ fun BackupScreen() {
     var own by remember { mutableStateOf(false) }
     var ownText by remember { mutableStateOf("") }
     var ownAgain by remember { mutableStateOf("") }
-    var openUri by remember { mutableStateOf<Uri?>(null) }
+    val openUri by BackupJobs.openUri.collectAsStateWithLifecycle()
     var openText by remember { mutableStateOf("") }
-    OnLeave { BackupJobs.forget(); BackupJobs.clearNotice() }
+    DisposableEffect(Unit) {
+        BackupJobs.shown()
+        onDispose { BackupJobs.hidden() }
+    }
     val last by remember { PersonalStore.observe { it.settings().observe(KEY_BACKUP_AT) } }.collectAsStateWithLifecycle(null)
 
     val save = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/octet-stream")) { uri ->
         if (uri == null) BackupJobs.release() else BackupJobs.save(context, uri)
     }
     val pick = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-        if (uri != null) { openUri = uri; openText = "" }
+        if (uri != null) { BackupJobs.openUri.value = uri; openText = "" }
     }
 
     Text(stringResource(R.string.backup_intro), style = MaterialTheme.typography.bodyLarge)
@@ -483,7 +507,7 @@ fun BackupScreen() {
                 )
             },
             confirmButton = {
-                TextButton(onClick = { openUri = null; openText = ""; BackupJobs.confirmRestore(context) }) { Text(stringResource(R.string.replace)) }
+                TextButton(onClick = { BackupJobs.openUri.value = null; openText = ""; BackupJobs.confirmRestore(context) }) { Text(stringResource(R.string.replace)) }
             },
             dismissButton = { TextButton(onClick = { BackupJobs.cancelRestore() }) { Text(stringResource(R.string.cancel)) } },
         )
