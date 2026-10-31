@@ -860,4 +860,11 @@
     <string name="backup_restored_notify">Restored. Notifications from the copy are on, but Android does not allow them yet: open settings → Notifications.</string>
     <string name="backup_settings_row">Make a backup or restore</string>
     <string name="backup_settings_hint">All of Mine in one encrypted file. Use it to move to a new phone.</string>
+    <string name="kid_112_ask">Do you need help right now?</string>
+    <string name="kid_112_ask_hint">112 is for trouble: a fire, someone is hurt, you are lost and nobody is near. Say your name, where you are and what happened.</string>
+    <string name="kid_112_yes">Yes, call 112</string>
+    <string name="kid_112_no">No, by mistake</string>
+    <string name="kid_step_next">Next</string>
+    <string name="kid_step_last">Got it!</string>
+    <string name="kid_step_back">Back</string>
 </resources>

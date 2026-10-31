@@ -866,4 +866,11 @@
     <string name="backup_restored_notify">Відновлено. Сповіщення з копії ввімкнено, але Android ще не дозволив їх показувати: відкрийте налаштування → «Сповіщення».</string>
     <string name="backup_settings_row">Створити копію або відновити</string>
     <string name="backup_settings_hint">Усі дані з «Моє» в одному зашифрованому файлі. Через нього — перехід на новий телефон.</string>
+    <string name="kid_112_ask">Тобі зараз потрібна допомога?</string>
+    <string name="kid_112_ask_hint">112 — для біди: пожежа, хтось поранений, ти загубився і нікого немає поруч. Скажи своє ім\'я, де ти і що сталося.</string>
+    <string name="kid_112_yes">Так, дзвонити 112</string>
+    <string name="kid_112_no">Ні, помилково</string>
+    <string name="kid_step_next">Далі</string>
+    <string name="kid_step_last">Зрозуміло!</string>
+    <string name="kid_step_back">Назад</string>
 </resources>
