@@ -206,6 +206,7 @@ private fun Screen(
             MinePart.PLAN_IMPORT -> Personal(R.string.plan_code_import_title, personal, nav) { PlanImportScreen(nav) }
             MinePart.KID_CALL -> Personal(R.string.kid_call_family, personal, nav) { KidCallScreen() }
             MinePart.BOOKMARKS -> Personal(R.string.bookmarks_title, personal, nav) { BookmarksScreen() }
+            MinePart.NOTES -> Personal(R.string.notes_title_screen, personal, nav) { NotesScreen(nav) }
         }
         Route.Scan -> ScanScreen(nav)
         Route.SuppliesRoute -> Personal(R.string.supplies, personal, nav) { SuppliesScreen(content, nav) }
@@ -228,6 +229,7 @@ private fun Screen(
         Route.Power -> PowerScreen(content, nav)
         Route.Directory -> DirectoryScreen(content, nav)
         Route.QrText -> QrTextScreen(nav)
+        is Route.NoteEdit -> Personal(R.string.notes_title_screen, personal, nav) { NoteEditScreen(top.id, nav) }
         Route.MozList -> MozListScreen(content, nav)
         is Route.Moz -> MozScreen(content, top.n, nav)
         is Route.PracticeRoute -> PracticeScreen(content, top.card, nav)

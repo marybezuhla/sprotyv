@@ -657,14 +657,14 @@
     <string name="shelf_unfold">unfold</string>
     <string name="mine_block_trouble">In case of trouble</string>
     <string name="mine_block_home">Supplies and bookmarks</string>
-    <string name="mine_block_copies">Copies, codes and bookmarks</string>
+    <string name="mine_block_copies">Notes, bookmarks, printing, codes</string>
     <string name="source_section">Source: “%1$s” %2$s, sec. %3$s</string>
     <string name="source_license">Licence: %1$s</string>
     <string name="about_icons">Icons: Health Icons (healthicons.org, public domain, CC0) and Material Symbols (Google, Apache 2.0).</string>
     <string name="ready_summary">Parts done: %1$d of %2$d</string>
     <string name="mine_block_trouble_desc">I am safe, medical card, trusted people, plan, screen for rescuers</string>
     <string name="mine_block_home_desc">Emergency bag, supplies at home, bookmarks</string>
-    <string name="mine_block_copies_desc">Bookmarks, printing, codes, backup</string>
+    <string name="mine_block_copies_desc">Notes, bookmarks, printing, codes, backup</string>
     <string name="lock_mine_unknown">The lock’s state could not be read just now. Open “Mine” once and come back here.</string>
     <string name="settings_other_hands">If the phone is in the wrong hands</string>
     <string name="settings_about">About and feedback</string>
@@ -711,4 +711,19 @@
     <string name="medic_title">Medical training</string>
     <string name="medic_toggle">I have medical training</string>
     <string name="medic_hint">Ministry procedures open at once as the full text in the order’s numbering. Steps for people nearby stay one tap away. For everyone else: the same words of the order, as steps.</string>
+    <string name="notes_title_screen">My notes</string>
+    <string name="notes_hint">Anything you want to keep, encrypted</string>
+    <string name="notes_intro">Notes for you only: addresses, numbers, arrangements. Encrypted with “Mine”, in the backup, hidden in trip mode.</string>
+    <string name="notes_new">New note</string>
+    <string name="notes_search">Find in notes</string>
+    <string name="notes_empty">No notes yet.</string>
+    <string name="notes_nothing_found">Nothing found.</string>
+    <string name="notes_untitled">Untitled</string>
+    <string name="notes_title">Title</string>
+    <string name="notes_text">Text</string>
+    <string name="notes_pin">Pin to the top</string>
+    <string name="notes_as_qr">Show as a QR code</string>
+    <string name="notes_too_long_for_qr">Too long for a QR code: shorten it to pass on.</string>
+    <string name="notes_saved_hint">Saved as you type.</string>
+    <string name="notes_delete_confirm">Delete this note?</string>
 </resources>

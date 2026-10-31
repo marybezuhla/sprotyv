@@ -41,14 +41,14 @@ interface SettingDao {
 
 /**
  * The owner's own data, always encrypted with SQLCipher. Every layout change gets a migration,
- * never a wipe: version 2 only adds tables, so Room's automatic migration from the committed
- * version 1 layout (personal/schemas) is exact.
+ * never a wipe: versions 2 and 3 only add tables (3: notes), so Room's automatic migrations from
+ * the committed layouts (personal/schemas) are exact.
  */
 @Database(
-    entities = [Setting::class, MedicalCard::class, Person::class, FamilyPlan::class, PlanRow::class, KitCheck::class],
-    version = 2,
+    entities = [Setting::class, MedicalCard::class, Person::class, FamilyPlan::class, PlanRow::class, KitCheck::class, Note::class],
+    version = 3,
     exportSchema = true,
-    autoMigrations = [AutoMigration(from = 1, to = 2)],
+    autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3)],
 )
 abstract class PersonalDb : RoomDatabase() {
     abstract fun settings(): SettingDao
@@ -56,6 +56,7 @@ abstract class PersonalDb : RoomDatabase() {
     abstract fun people(): PeopleDao
     abstract fun plan(): PlanDao
     abstract fun kit(): KitDao
+    abstract fun notes(): NoteDao
 
     companion object {
         const val FILE_NAME = "personal.db"
