@@ -101,6 +101,15 @@ fun MineHub(nav: Nav, content: ua.sprotyv.content.Content?) {
     Block(stringResource(R.string.mine_block_now), ua.sprotyv.home.Group.FIRST_AID, padded = false) {
         BlockRow(stringResource(R.string.tile_safe), stringResource(R.string.tile_safe_hint), first = true) { nav.go(Route.Open(Section.SAFE)) }
     }
+    // Notes on their own, easy to find
+    val noteCount by androidx.compose.runtime.remember { PersonalStore.observe { it.notes().observe() } }.collectAsStateWithLifecycle(null)
+    Block(stringResource(R.string.notes_title_screen), ua.sprotyv.home.Group.GUIDE, padded = false) {
+        BlockRow(
+            stringResource(R.string.notes_open),
+            noteCount?.size?.let { if (it == 0) stringResource(R.string.notes_hint) else stringResource(R.string.notes_count, it) } ?: "",
+            first = true,
+        ) { nav.go(Route.Mine(MinePart.NOTES)) }
+    }
     ReadinessBlock(content, nav)
     Block(stringResource(R.string.mine_block_health), ua.sprotyv.home.Group.FIRST_AID, padded = false, foldable = true, summary = stringResource(R.string.mine_block_health_desc)) {
         BlockRow(stringResource(R.string.medical_card), stringResource(R.string.medical_card_hint), first = true) { nav.go(Route.Mine(MinePart.MEDICAL)) }
@@ -113,8 +122,7 @@ fun MineHub(nav: Nav, content: ua.sprotyv.content.Content?) {
         BlockRow(stringResource(R.string.supplies), stringResource(R.string.supplies_hint)) { nav.go(Route.SuppliesRoute) }
     }
     Block(stringResource(R.string.mine_block_copies), ua.sprotyv.home.Group.GUIDE, padded = false, foldable = true, summary = stringResource(R.string.mine_block_copies_desc)) {
-        BlockRow(stringResource(R.string.notes_title_screen), stringResource(R.string.notes_hint), first = true) { nav.go(Route.Mine(MinePart.NOTES)) }
-        BlockRow(stringResource(R.string.bookmarks_title), stringResource(R.string.bookmarks_hint)) { nav.go(Route.Mine(MinePart.BOOKMARKS)) }
+        BlockRow(stringResource(R.string.bookmarks_title), stringResource(R.string.bookmarks_hint), first = true) { nav.go(Route.Mine(MinePart.BOOKMARKS)) }
         BlockRow(stringResource(R.string.print_title), stringResource(R.string.print_hint)) { nav.go(Route.Mine(MinePart.PRINT)) }
         BlockRow(stringResource(R.string.plan_code_title), stringResource(R.string.plan_code_hint)) { nav.go(Route.Mine(MinePart.PLAN_QR)) }
         BlockRow(stringResource(R.string.scan_title), stringResource(R.string.scan_hint)) { nav.go(Route.Scan) }

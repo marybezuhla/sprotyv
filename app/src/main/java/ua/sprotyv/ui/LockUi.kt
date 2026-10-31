@@ -120,8 +120,11 @@ fun LockMineSettings() {
     val canLock = Guard.available(context)
     val title = stringResource(R.string.lock_mine_change)
     val failed = stringResource(R.string.lock_mine_failed)
+    // The technical reason of the last failure, shown so the owner can send it in feedback
+    var reason by remember { mutableStateOf<String?>(null) }
     fun fail() {
         busy = false
+        reason = PersonalStore.lockTrouble
         android.widget.Toast.makeText(context, failed, android.widget.Toast.LENGTH_LONG).show()
     }
 
@@ -130,6 +133,7 @@ fun LockMineSettings() {
         val store = {
             PersonalStore.finishLock(context, change) { ok ->
                 busy = false
+                reason = if (ok) null else PersonalStore.lockTrouble
                 if (!ok) android.widget.Toast.makeText(context, failed, android.widget.Toast.LENGTH_LONG).show()
                 PersonalStore.close()
                 refresh++
@@ -178,6 +182,11 @@ fun LockMineSettings() {
         Text(stringResource(R.string.lock_mine_pin_only_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
     Text(stringResource(R.string.lock_mine_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    reason?.let { r ->
+        androidx.compose.foundation.text.selection.SelectionContainer {
+            Text(stringResource(R.string.lock_mine_reason, r), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
+        }
+    }
     if (askOn) {
         AlertDialog(
             onDismissRequest = { askOn = false },

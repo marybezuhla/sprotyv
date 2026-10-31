@@ -42,6 +42,12 @@ object QrInbox {
     @Volatile var text: String = ""
 }
 
+/** A note to create when "My notes" opens (from the screen for the ambulance crew). In memory only. */
+object NoteInbox {
+    @Volatile var title: String = ""
+    @Volatile var text: String = ""
+}
+
 private const val MAX_NOTE = 20_000
 private const val MAX_NOTE_TITLE = 200
 private const val MAX_NOTES = 500
@@ -57,6 +63,19 @@ fun NotesScreen(nav: Nav) {
     val notes by androidx.compose.runtime.remember { PersonalStore.observe { it.notes().observe() } }.collectAsStateWithLifecycle(null)
     val list = notes ?: return Loading()
     var query by remember { mutableStateOf("") }
+    // A note handed over from another screen: created once, then opened
+    androidx.compose.runtime.LaunchedEffect(Unit) {
+        val t = NoteInbox.text
+        if (t.isNotBlank()) {
+            val title = NoteInbox.title
+            NoteInbox.text = ""; NoteInbox.title = ""
+            val main = android.os.Handler(android.os.Looper.getMainLooper())
+            PersonalStore.save("note-new:" + java.util.UUID.randomUUID()) { db ->
+                val id = db.notes().save(Note(title = title.take(MAX_NOTE_TITLE), text = t.take(MAX_NOTE), updatedAt = System.currentTimeMillis()))
+                if (id > 0) main.post { nav.go(Route.NoteEdit(id)) }
+            }
+        }
+    }
     Text(stringResource(R.string.notes_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     // Room for the encrypted copy: the whole of the notes stays well within what a restore accepts
     val total = list.sumOf { it.title.length + it.text.length }

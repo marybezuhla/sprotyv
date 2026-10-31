@@ -164,7 +164,7 @@ private fun BlockView(b: Block) {
     when (b) {
         is Block.Paragraph -> RichText(
             b.text,
-            style = if (b.intro) MaterialTheme.typography.titleMedium else MaterialTheme.typography.bodyLarge,
+            style = if (b.intro) MaterialTheme.typography.titleMedium else ReadingText,
         )
         is Block.Heading -> Text(
             rich(b.text),
@@ -208,7 +208,7 @@ private fun ItemView(mark: String, item: Item, depth: Int = 0) {
         val markModifier = Modifier.width(28.dp).let { m -> if (mark.first().isDigit()) m else m.clearAndSetSemantics { } }
         Text(mark, style = MaterialTheme.typography.bodyLarge, modifier = markModifier)
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            RichText(item.text)
+            RichText(item.text, style = ReadingText)
             item.sub.forEach { ItemView("–", it, depth + 1) }
         }
     }

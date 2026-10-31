@@ -175,3 +175,15 @@ fun ColourLegend() {
         }
     }
 }
+
+/**
+ * Long reading text only (the guide, the Ministry's procedures): flush on both sides with
+ * hyphenation, as the owner asked. Everything short (blocks, hints, buttons, lists of choices)
+ * stays left-aligned: in a narrow column justified lines open gaps and odd breaks.
+ */
+val ReadingText: TextStyle
+    @Composable get() = MaterialTheme.typography.bodyLarge.copy(
+        textAlign = androidx.compose.ui.text.style.TextAlign.Justify,
+        hyphens = androidx.compose.ui.text.style.Hyphens.Auto,
+        lineBreak = androidx.compose.ui.text.style.LineBreak.Paragraph,
+    )
