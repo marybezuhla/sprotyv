@@ -145,7 +145,7 @@ data class Tint(val container: Color, val ink: Color)
  * Four colours only, each with one meaning, after the safety colours of ISO 3864-1 that people
  * already know from signs: orange-red for danger, green for first aid and the way out (the green
  * first-aid cross and exit signs), blue for things to do and keep (the "mandatory" blue), and a
- * quiet neutral for everyday life and reading. Few categories are told apart at a glance (about
+ * calm violet for everyday life, knowing and reading (not a safety colour, so it never competes). Few categories are told apart at a glance (about
  * five or six at most); the rest is said by the icon and the words. Soft fills, so a screen of
  * blocks stays calm, and strong colour is left for what matters.
  */
@@ -158,7 +158,8 @@ fun Group.tint(): Tint {
         Group.DANGER -> if (dark) Tint(Color(0xFF3D2616), Color(0xFFFFC9A0)) else Tint(Color(0xFFFFE9D6), Color(0xFF8A3B00))
         Group.FIRST_AID, Group.LEAVE -> if (dark) Tint(Color(0xFF17352B), Color(0xFFA8DCC4)) else Tint(Color(0xFFDDF0E6), Color(0xFF1E5B40))
         Group.PREPARE, Group.MINE, Group.FAMILY -> if (dark) Tint(Color(0xFF1A2E45), Color(0xFFBFD6F2)) else Tint(Color(0xFFDCE8F7), Color(0xFF163E6E))
-        Group.HOME_LIFE, Group.SAFETY, Group.GUIDE -> if (dark) Tint(Color(0xFF2A2B2E), Color(0xFFD0D2D6)) else Tint(Color(0xFFECEBE7), Color(0xFF45464A))
+        // Knowing and everyday life: a calm violet, so no group is left without a colour
+        Group.HOME_LIFE, Group.SAFETY, Group.GUIDE -> if (dark) Tint(Color(0xFF2B2541), Color(0xFFD8CCF6)) else Tint(Color(0xFFEDE7F8), Color(0xFF47387A))
     }
 }
 

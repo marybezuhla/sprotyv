@@ -14,4 +14,6 @@
     <color name="w_blue_bg">#FF1A2E45</color>
     <color name="w_blue_ink">#FFBFD6F2</color>
     <color name="w_red">#FFB3261E</color>
+    <color name="w_violet_bg">#FF2B2541</color>
+    <color name="w_violet_ink">#FFD8CCF6</color>
 </resources>
