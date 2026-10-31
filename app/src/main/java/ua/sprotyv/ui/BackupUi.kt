@@ -358,12 +358,18 @@ private fun readLimited(context: Context, uri: Uri): ByteArray {
 /** A password field: hidden, no suggestions, no learning by the keyboard. */
 @Composable
 private fun PasswordField(label: String, value: String, onChange: (String) -> Unit) {
+    // "Show" lets the owner see what was typed: a keyboard adding a letter or a capital is then seen
+    var shown by remember { mutableStateOf(false) }
     OutlinedTextField(
         value = value,
         onValueChange = onChange,
         label = { Text(label) },
         singleLine = true,
-        visualTransformation = PasswordVisualTransformation(),
+        visualTransformation = if (shown) androidx.compose.ui.text.input.VisualTransformation.None else PasswordVisualTransformation(),
+        trailingIcon = {
+            TextButton(onClick = { shown = !shown }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(if (shown) R.string.password_hide else R.string.password_show)) }
+        },
+        supportingText = if (value.isNotEmpty()) { { Text(stringResource(R.string.password_length, value.length)) } } else null,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, autoCorrectEnabled = false),
         modifier = Modifier.fillMaxWidth(),
     )
