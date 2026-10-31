@@ -81,15 +81,10 @@ fun BlackoutBlock() {
             }
             val minutes = ((now - since) / 60_000).coerceAtLeast(0)
             val at = Instant.ofEpochMilli(since).atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("HH:mm"))
-            Text(
-                stringResource(R.string.blackout_for, duration(minutes), at),
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.semantics { heading() },
-            )
-            Keep(R.string.blackout_fridge, Blackout.FRIDGE_HOURS, minutes, R.string.blackout_fridge_over)
-            Keep(R.string.blackout_freezer_full, Blackout.FREEZER_FULL_HOURS, minutes, R.string.blackout_freezer_over)
-            Keep(R.string.blackout_freezer_half, Blackout.FREEZER_HALF_HOURS, minutes, R.string.blackout_freezer_over)
+            CountHead(minutes, stringResource(R.string.blackout_what), since, now, stringResource(R.string.blackout_for, duration(minutes), at))
+            Keep(R.string.blackout_fridge_name, Blackout.FRIDGE_HOURS, minutes, R.string.blackout_fridge_over)
+            Keep(R.string.blackout_freezer_full_name, Blackout.FREEZER_FULL_HOURS, minutes, R.string.blackout_freezer_over)
+            Keep(R.string.blackout_freezer_half_name, Blackout.FREEZER_HALF_HOURS, minutes, R.string.blackout_freezer_over)
             Text(stringResource(R.string.blackout_closed), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             OutlinedButton(onClick = {
                 prefs.edit().remove("since").commit()
@@ -98,7 +93,7 @@ fun BlackoutBlock() {
             }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.blackout_back)) }
             Text(
                 stringResource(R.string.blackout_source, Blackout.SOURCE, Blackout.CHECKED) + " · " + stringResource(R.string.not_reviewed),
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
@@ -109,14 +104,15 @@ fun BlackoutBlock() {
 @Composable
 private fun Keep(title: Int, hours: Int, minutes: Long, over: Int) {
     val left = Blackout.minutesLeft(minutes, hours)
-    val name = stringResource(title, hours)
-    if (left > 0) {
-        Meter(name, stringResource(R.string.blackout_left, duration(left)), minutes.toFloat() / (hours * 60))
-    } else {
-        // Time is up: said in words, in the calm warning colour, never as an alarm
-        Meter(name, stringResource(R.string.blackout_up), 1f, ua.sprotyv.home.Group.DANGER.tint().ink)
-        Text(stringResource(over), style = MaterialTheme.typography.bodyMedium, color = ua.sprotyv.home.Group.DANGER.tint().ink, fontWeight = FontWeight.SemiBold)
-    }
+    val up = left <= 0
+    TimeMark(
+        stringResource(title),
+        if (up) stringResource(R.string.blackout_up) else stringResource(R.string.blackout_left, duration(left)),
+        stringResource(R.string.blackout_of_hours, hours),
+        minutes.toFloat() / (hours * 60), up, ua.sprotyv.home.Group.HOME_LIFE.tint().ink,
+    )
+    // Time is up: said in words, in the calm warning colour, never as an alarm
+    if (up) Text(stringResource(over), style = ReadingText, color = ua.sprotyv.home.Group.DANGER.tint().ink, fontWeight = FontWeight.SemiBold)
 }
 
 @Composable

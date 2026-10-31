@@ -1105,4 +1105,15 @@
     <string name="body_walk3">Пройду 3 км з рюкзаком</string>
     <string name="body_floors">Піднімуся на 5 поверхів без зупинки</string>
     <string name="body_drag">Протягну дорослу людину на ковдрі кілька метрів (за її згодою, спина рівна)</string>
+    <string name="blackout_what">без світла</string>
+    <string name="heat_what">без опалення</string>
+    <string name="shelter_what">в укритті</string>
+    <string name="count_since">з %1$s</string>
+    <string name="count_since_yesterday">з учора, %1$s</string>
+    <string name="blackout_fridge_name">Холодильник, зачинений</string>
+    <string name="blackout_freezer_full_name">Морозилка, повна</string>
+    <string name="blackout_freezer_half_name">Морозилка, наполовину</string>
+    <string name="blackout_of_hours">із ~%1$d год</string>
+    <string name="heat_pipes_now">уже можуть замерзати</string>
+    <string name="heat_leave_now">час вирішувати</string>
 </resources>

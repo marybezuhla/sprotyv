@@ -6,6 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.height
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -93,6 +96,61 @@ private fun rememberSince(since: Since, tick: Long): Pair<Long, Long> {
 private fun clock(t: Long, withDate: Boolean): String =
     Instant.ofEpochMilli(t).atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern(if (withDate) "dd.MM HH:mm" else "HH:mm"))
 
+/** "Since" in the fewest words: the time today, "yesterday 23:10", or the date and time. */
+@Composable
+fun sinceText(t: Long, now: Long = System.currentTimeMillis()): String {
+    val zone = ZoneId.systemDefault()
+    val day = Instant.ofEpochMilli(t).atZone(zone).toLocalDate()
+    val today = Instant.ofEpochMilli(now).atZone(zone).toLocalDate()
+    return when (day) {
+        today -> stringResource(R.string.count_since, clock(t, false))
+        today.minusDays(1) -> stringResource(R.string.count_since_yesterday, clock(t, false))
+        else -> stringResource(R.string.count_since, clock(t, true))
+    }
+}
+
+/**
+ * The top of every counter, the same everywhere: how long, in big figures, and under it, calmly,
+ * what is counted and since when. TalkBack reads it as one sentence.
+ */
+@Composable
+fun CountHead(minutes: Long, what: String, start: Long, now: Long, spoken: String) {
+    Column(Modifier.fillMaxWidth().clearAndSetSemantics { heading(); contentDescription = spoken }) {
+        Text(span(minutes), style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.SemiBold)
+        Text("$what · " + sinceText(start, now), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+}
+
+/**
+ * One mark the time runs towards, the same on every counter: its name on its own line, a bar, then
+ * what is left on the left and the whole span on the right. Short lines, so nothing wraps unevenly.
+ * When the mark is passed, the words turn to the calm warning colour; never red.
+ */
+@Composable
+fun TimeMark(name: String, left: String, of: String, fraction: Float, over: Boolean, fill: androidx.compose.ui.graphics.Color) {
+    val warn = ua.sprotyv.home.Group.DANGER.tint().ink
+    Column(Modifier.fillMaxWidth().clearAndSetSemantics { contentDescription = "$name, $left, $of" }, verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Text(name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+        Bar(fraction, if (over) warn else fill)
+        Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+            Text(left, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = if (over) warn else MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f))
+            Text(of, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
+}
+
+/** A plain rounded bar; the words around it say the numbers. */
+@Composable
+fun Bar(fraction: Float, fill: androidx.compose.ui.graphics.Color) {
+    val track = MaterialTheme.colorScheme.surfaceVariant
+    androidx.compose.foundation.Canvas(Modifier.fillMaxWidth().height(12.dp)) {
+        val r = androidx.compose.ui.geometry.CornerRadius(size.height / 2)
+        drawRoundRect(track, cornerRadius = r)
+        val f = fraction.coerceIn(0f, 1f)
+        if (f > 0f) drawRoundRect(fill, size = androidx.compose.ui.geometry.Size(maxOf(size.width * f, size.height), size.height), cornerRadius = r)
+    }
+}
+
 /**
  * "No heating": counts the days and says what the guide says about them (20.5): pipes can freeze
  * in 1-3 days at -5...-10° outside, so get ready to drain them; below +5° indoors for more than two
@@ -114,17 +172,17 @@ fun HeatingBlock(nav: Nav) {
             return@CounterCard
         }
         val minutes = ((now - start) / 60_000).coerceAtLeast(0)
-        Text(
-            stringResource(R.string.heat_for, span(minutes), clock(start, true)),
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.semantics { heading() },
-        )
+        CountHead(minutes, stringResource(R.string.heat_what), start, now, stringResource(R.string.heat_for, span(minutes), clock(start, true)))
         // The guide's two time marks, shown as bars towards them
-        Meter(stringResource(R.string.heat_pipes), stringResource(R.string.heat_pipes_when), (minutes / (24 * 60f)).coerceAtMost(1f), if (minutes >= 24 * 60) ua.sprotyv.home.Group.DANGER.tint().ink else ua.sprotyv.home.Group.HOME_LIFE.tint().ink)
-        Advice(stringResource(R.string.heat_pipes_do), minutes >= 24 * 60)
-        Meter(stringResource(R.string.heat_leave), stringResource(R.string.heat_leave_when), (minutes / (48 * 60f)).coerceAtMost(1f), if (minutes >= 48 * 60) ua.sprotyv.home.Group.DANGER.tint().ink else ua.sprotyv.home.Group.HOME_LIFE.tint().ink)
-        Advice(stringResource(R.string.heat_leave_do), minutes >= 48 * 60)
+        val fill = ua.sprotyv.home.Group.HOME_LIFE.tint().ink
+        val pipes = minutes >= 24 * 60
+        TimeMark(stringResource(R.string.heat_pipes), if (pipes) stringResource(R.string.heat_pipes_now) else stringResource(R.string.blackout_left, span(24 * 60 - minutes)),
+            stringResource(R.string.heat_pipes_when), minutes / (24 * 60f), pipes, fill)
+        Advice(stringResource(R.string.heat_pipes_do), pipes)
+        val leave = minutes >= 48 * 60
+        TimeMark(stringResource(R.string.heat_leave), if (leave) stringResource(R.string.heat_leave_now) else stringResource(R.string.blackout_left, span(48 * 60 - minutes)),
+            stringResource(R.string.heat_leave_when), minutes / (48 * 60f), leave, fill)
+        Advice(stringResource(R.string.heat_leave_do), leave)
         Advice(stringResource(R.string.heat_co), false)
         OutlinedButton(onClick = { Since.HEAT.stop(context); gen++ }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.heat_back)) }
         TextButton(onClick = { nav.go(Route.GuideSection("20.5")) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text(stringResource(R.string.in_detail)) }
@@ -151,12 +209,7 @@ fun ShelterBlock(nav: Nav) {
             return@CounterCard
         }
         val minutes = ((now - start) / 60_000).coerceAtLeast(0)
-        Text(
-            stringResource(R.string.shelter_for, span(minutes), clock(start, minutes >= 12 * 60)),
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.semantics { heading() },
-        )
+        CountHead(minutes, stringResource(R.string.shelter_what), start, now, stringResource(R.string.shelter_for, span(minutes), clock(start, minutes >= 12 * 60)))
         // A longer stay: the guide's rules for it
         if (minutes >= 60) {
             Advice(stringResource(R.string.shelter_air), false)
