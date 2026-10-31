@@ -683,14 +683,14 @@
     <string name="qr_text_code_desc">QR-код із вашим текстом</string>
     <string name="qr_text_bright">Підвищіть яскравість екрана й тримайте телефон рівно.</string>
     <string name="qr_text_clear">Стерти текст</string>
-    <string name="mine_block_now">Якщо щось сталося</string>
+    <string name="mine_block_now">Повідомити своїх</string>
     <string name="mine_block_health">Здоров’я й порятунок</string>
     <string name="mine_block_health_desc">Медкартка, екран для рятувальника</string>
     <string name="mine_block_prepare">Підготовка</string>
     <string name="mine_block_prepare_desc">Довірені люди, план родини, валіза, запаси</string>
     <string name="colour_title">Що означають кольори</string>
     <string name="colour_danger">Помаранчевий — небезпека, діяти зараз</string>
-    <string name="colour_health">Зелений — здоров’я, перша допомога, порятунок і виїзд</string>
+    <string name="colour_health">Зелений — безпека, здоров’я, перша допомога, порятунок і виїзд</string>
     <string name="colour_prepare">Синій — підготовка: запаси, план, люди, тренування</string>
     <string name="colour_calm">Сірий — побут, довідка, копії й налаштування</string>
     <string name="moz_title">Домедична допомога: порядки МОЗ</string>

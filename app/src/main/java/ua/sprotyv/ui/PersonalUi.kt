@@ -97,8 +97,8 @@ fun NavRow(title: String, hint: String = "", onClick: () -> Unit) {
 /** "Mine": the owner's own parts, all encrypted and on this phone only. */
 @Composable
 fun MineHub(nav: Nav, content: ua.sprotyv.content.Content?) {
-    // The colour code of the whole app: orange act now, green health, blue prepare, neutral copies
-    Block(stringResource(R.string.mine_block_now), ua.sprotyv.home.Group.DANGER, padded = false) {
+    // The colour code of the whole app: green safety and health, blue prepare, neutral copies
+    Block(stringResource(R.string.mine_block_now), ua.sprotyv.home.Group.FIRST_AID, padded = false) {
         BlockRow(stringResource(R.string.tile_safe), stringResource(R.string.tile_safe_hint), first = true) { nav.go(Route.Open(Section.SAFE)) }
     }
     ReadinessBlock(content, nav)
