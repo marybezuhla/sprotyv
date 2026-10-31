@@ -34,8 +34,10 @@ fun NotifySettings() {
     var refresh by remember { mutableStateOf(0) }
     androidx.lifecycle.compose.LifecycleResumeEffect(Unit) { refresh++; onPauseOrDispose { } }
     var waiting by remember { mutableStateOf<Notify.Kind?>(null) }
+    var denied by remember { mutableStateOf(false) }
     val ask = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
         waiting?.let { if (granted) Notify.set(context, it, true) }
+        denied = !granted
         waiting = null
         refresh++
     }
@@ -64,7 +66,8 @@ fun NotifySettings() {
     }
     if (neutral) Text(stringResource(R.string.notify_neutral), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.tertiary)
     val anyOn = remember(version, refresh) { Notify.Kind.entries.any { Notify.isOn(context, it) } }
-    if (anyOn && !system) {
+    // Also after a "no" in Android: the switch alone would seem to do nothing
+    if ((anyOn || denied) && !system) {
         Text(stringResource(R.string.notify_blocked), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.tertiary)
         OutlinedButton(onClick = {
             runCatching {
