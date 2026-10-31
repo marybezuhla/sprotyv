@@ -225,12 +225,12 @@ fun PathScreen(nav: Nav) {
                 if (i > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                 val on = s.key in done
                 Row(
-                    Modifier.fillMaxWidth().heightIn(min = 56.dp).toggleable(value = on, role = Role.Checkbox) { change(s.key, it) }
+                    Modifier.fillMaxWidth().heightIn(min = 56.dp).doneRow(on).toggleable(value = on, role = Role.Checkbox) { change(s.key, it) }
                         .padding(end = 8.dp, top = 4.dp, bottom = 4.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Checkbox(checked = on, onCheckedChange = null, modifier = Modifier.padding(horizontal = 12.dp))
-                    Text(stringResource(s.words), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+                    Checkbox(checked = on, onCheckedChange = null, modifier = Modifier.padding(horizontal = 12.dp), colors = doneCheckbox())
+                    Text(stringResource(s.words), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = doneText(on), modifier = Modifier.weight(1f))
                     // A small book: where to learn it, so the step's words keep the width
                     s.learn?.let { r ->
                         androidx.compose.material3.IconButton(onClick = { nav.go(r) }, modifier = Modifier.size(48.dp)) {

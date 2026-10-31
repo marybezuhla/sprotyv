@@ -144,14 +144,14 @@ fun SuppliesScreen(content: Content?, nav: Nav) {
     keyed.forEachIndexed { i, (key, line) ->
         if (i > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         val have = key in s.have
-        Row(Modifier.fillMaxWidth().heightIn(min = 56.dp), verticalAlignment = Alignment.Top) {
-            Checkbox(checked = have, onCheckedChange = { on -> change { it.copy(have = if (on) it.have + key else it.have - key) } })
+        Row(Modifier.fillMaxWidth().heightIn(min = 56.dp).doneRow(have), verticalAlignment = Alignment.Top) {
+            Checkbox(checked = have, onCheckedChange = { on -> change { it.copy(have = if (on) it.have + key else it.have - key) } }, colors = doneCheckbox())
             Column(Modifier.weight(1f).padding(top = 12.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                 Row {
-                    Text(line.what, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+                    Text(line.what, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = doneText(have), modifier = Modifier.weight(1f))
                     Text(line.amount, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
                 }
-                if (line.note.isNotBlank()) Text(line.note, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                if (line.note.isNotBlank()) Text(line.note, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 if (have) UntilButton(s.until[key]?.let(MySupplies::month)) { picking = key }
             }
         }

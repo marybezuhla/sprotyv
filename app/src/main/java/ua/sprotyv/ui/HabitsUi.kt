@@ -196,13 +196,13 @@ fun GartScreen(nav: Nav) {
                 BODY_CHECKS.forEach { (key, words) ->
                     val on = key in got
                     Row(
-                        Modifier.fillMaxWidth().heightIn(min = 48.dp).toggleable(value = on, role = Role.Checkbox) { v ->
+                        Modifier.fillMaxWidth().heightIn(min = 48.dp).doneRow(on).toggleable(value = on, role = Role.Checkbox) { v ->
                             change { s -> val cur = if (s.bodyMonth == month) s.body else emptySet(); s.copy(body = if (v) cur + key else cur - key, bodyMonth = month) }
                         }.padding(end = 16.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Checkbox(checked = on, onCheckedChange = null, modifier = Modifier.padding(horizontal = 12.dp))
-                        Text(stringResource(words), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+                        Checkbox(checked = on, onCheckedChange = null, modifier = Modifier.padding(horizontal = 12.dp), colors = doneCheckbox())
+                        Text(stringResource(words), style = MaterialTheme.typography.bodyLarge, color = doneText(on), modifier = Modifier.weight(1f))
                     }
                 }
                 Text(stringResource(R.string.gart_body_doctor), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(16.dp))
@@ -236,12 +236,12 @@ private fun ActiveHabit(h: Habit, done: Set<Long>, today: Long, nav: Nav, onTick
     val tint = if (h.pillar.resist) resist() else h.pillar.group.tint()
     Column(Modifier.fillMaxWidth().padding(bottom = 8.dp)) {
         Row(
-            Modifier.fillMaxWidth().heightIn(min = 56.dp).toggleable(value = on, role = Role.Checkbox, onValueChange = onTick).padding(end = 8.dp),
+            Modifier.fillMaxWidth().heightIn(min = 56.dp).doneRow(on).toggleable(value = on, role = Role.Checkbox, onValueChange = onTick).padding(end = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Checkbox(checked = on, onCheckedChange = null, modifier = Modifier.padding(horizontal = 12.dp))
+            Checkbox(checked = on, onCheckedChange = null, modifier = Modifier.padding(horizontal = 12.dp), colors = doneCheckbox())
             Column(Modifier.weight(1f)) {
-                Text(stringResource(h.title), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
+                Text(stringResource(h.title), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = doneText(on))
                 Text(stringResource(h.plan), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }

@@ -104,11 +104,11 @@ fun NewPlaceScreen(content: Content?, nav: Nav) {
 private fun StepRow(s: NewPlace.Step, on: Boolean, expanded: Boolean, onExpand: () -> Unit, onTick: (Boolean) -> Unit, nav: Nav) {
     val context = LocalContext.current
     Row(
-        Modifier.fillMaxWidth().heightIn(min = 56.dp).toggleable(value = on, role = Role.Checkbox, onValueChange = onTick).padding(end = 8.dp, top = 4.dp, bottom = 4.dp),
+        Modifier.fillMaxWidth().heightIn(min = 56.dp).doneRow(on).toggleable(value = on, role = Role.Checkbox, onValueChange = onTick).padding(end = 8.dp, top = 4.dp, bottom = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Checkbox(checked = on, onCheckedChange = null, modifier = Modifier.padding(horizontal = 12.dp))
-        Text(s.title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
+        Checkbox(checked = on, onCheckedChange = null, modifier = Modifier.padding(horizontal = 12.dp), colors = doneCheckbox())
+        Text(s.title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = doneText(on), modifier = Modifier.weight(1f))
         // A small arrow, so the step's name keeps the width
         androidx.compose.material3.IconButton(onClick = onExpand, modifier = Modifier.size(48.dp)) {
             androidx.compose.material3.Icon(

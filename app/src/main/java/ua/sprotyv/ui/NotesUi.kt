@@ -293,13 +293,13 @@ fun NoteEditScreen(id: Long, nav: Nav) {
         order.forEach { i ->
             val it0 = items[i]
             androidx.compose.runtime.key(i) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    androidx.compose.material3.Checkbox(checked = it0.done, onCheckedChange = { v -> put(name, items.toMutableList().also { l -> l[i] = it0.copy(done = v) }) })
+                Row(Modifier.doneRow(it0.done), verticalAlignment = Alignment.CenterVertically) {
+                    androidx.compose.material3.Checkbox(colors = doneCheckbox(), checked = it0.done, onCheckedChange = { v -> put(name, items.toMutableList().also { l -> l[i] = it0.copy(done = v) }) })
                     androidx.compose.foundation.text.BasicTextField(
                         value = it0.text,
                         onValueChange = { v -> put(name, items.toMutableList().also { l -> l[i] = it0.copy(text = v.replace("\n", " ")) }) },
                         textStyle = MaterialTheme.typography.bodyLarge.copy(
-                            color = if (it0.done) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface,
+                            color = doneText(it0.done),
                         ),
                         cursorBrush = androidx.compose.ui.graphics.SolidColor(MaterialTheme.colorScheme.primary),
                         modifier = Modifier.weight(1f).heightIn(min = 48.dp).padding(vertical = 12.dp),

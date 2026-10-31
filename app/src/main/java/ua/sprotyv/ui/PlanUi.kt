@@ -258,7 +258,7 @@ private fun KitRow(text: String, checked: Boolean, onChange: (Boolean) -> Unit) 
     val head = cut?.let { plain.substring(0, it.first) } ?: plain
     val tail = cut?.let { (at, sep) -> plain.substring(at + sep.length).let { if (sep == " (") "(" + it else it } }
     // Packed is a "yes, it is there": the row turns green with a tick, nothing is struck out
-    val green = ua.sprotyv.home.Group.FIRST_AID.tint()
+    val green = doneTint()
     Row(
         Modifier.fillMaxWidth().heightIn(min = 48.dp)
             .background(if (checked) green.container else androidx.compose.ui.graphics.Color.Transparent)

@@ -192,3 +192,22 @@ val ReadingText: TextStyle
         hyphens = androidx.compose.ui.text.style.Hyphens.None,
         lineBreak = androidx.compose.ui.text.style.LineBreak.Paragraph,
     )
+
+/**
+ * Done, the same way everywhere: a ticked item is a "yes, it is there" — a green tick, a soft green
+ * row, its words in green; never struck out. The block around it keeps its own group's colour.
+ */
+@Composable
+fun doneTint(): Tint = ua.sprotyv.home.Group.FIRST_AID.tint()
+
+@Composable
+fun Modifier.doneRow(done: Boolean): Modifier =
+    if (done) this.then(Modifier.background(doneTint().container)) else this
+
+@Composable
+fun doneCheckbox(): androidx.compose.material3.CheckboxColors =
+    androidx.compose.material3.CheckboxDefaults.colors(checkedColor = doneTint().ink, checkmarkColor = doneTint().container)
+
+@Composable
+fun doneText(done: Boolean): androidx.compose.ui.graphics.Color =
+    if (done) doneTint().ink else MaterialTheme.colorScheme.onSurface
