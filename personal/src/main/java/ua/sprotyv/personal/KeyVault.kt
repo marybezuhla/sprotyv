@@ -149,12 +149,11 @@ class KeyVault(context: Context) {
         val w = readWrapped()
         val key = keyStore().getKey(w.alias, null) as? SecretKey
         key?.let {
+            // The header is bound only after the owner confirmed (see [Unlocking])
             Unlocking(
-                Cipher.getInstance(TRANSFORMATION).apply {
-                    init(Cipher.DECRYPT_MODE, it, GCMParameterSpec(GCM_TAG_BITS, w.iv))
-                    updateAAD(header(w.version, w.mode, w.alias))
-                },
+                Cipher.getInstance(TRANSFORMATION).apply { init(Cipher.DECRYPT_MODE, it, GCMParameterSpec(GCM_TAG_BITS, w.iv)) },
                 w.data,
+                header(w.version, w.mode, w.alias),
             )
         }
     } catch (e: KeyPermanentlyInvalidatedException) {
@@ -163,8 +162,13 @@ class KeyVault(context: Context) {
         null
     }
 
-    /** A cipher for the owner to confirm, and the wrapped passphrase it was made for. */
-    class Unlocking(val cipher: Cipher, internal val data: ByteArray)
+    /**
+     * A cipher for the owner to confirm, the wrapped passphrase it was made for and the header it
+     * must be bound to. A key that needs the owner refuses every step of its operation before the
+     * confirmation, the header too; the refusal only surfaces at the end, as an
+     * IllegalBlockSizeException. So the header is given to the cipher after the confirmation.
+     */
+    class Unlocking(val cipher: Cipher, internal val data: ByteArray, internal val aad: ByteArray)
 
     /** True when a locked key is clearly gone or invalidated (the screen lock was removed, say). */
     fun lockedKeyLost(): Boolean = try {
@@ -184,9 +188,10 @@ class KeyVault(context: Context) {
     }
 
     /** After the owner confirmed [cipherForUnlock]: the passphrase, or a clear verdict. */
-    fun finishUnlock(confirmed: Cipher, data: ByteArray): Unwrapped = try {
-        // The data the cipher was made for, never a file read again later
-        val passphrase = confirmed.doFinal(data)
+    fun finishUnlock(confirmed: Cipher, unlocking: Unlocking): Unwrapped = try {
+        // The data and header the cipher was made for, never a file read again later
+        confirmed.updateAAD(unlocking.aad)
+        val passphrase = confirmed.doFinal(unlocking.data)
         if (passphrase.size != PASSPHRASE_BYTES) Unwrapped.Lost else Unwrapped.Ok(passphrase, softwareKey = false)
     } catch (e: AEADBadTagException) {
         Unwrapped.Lost
@@ -196,18 +201,18 @@ class KeyVault(context: Context) {
 
     /**
      * Step 1 of changing the mode: a new key for [mode] under a new alias and a cipher to wrap
-     * with it. A locked mode's cipher must be confirmed by the owner before [finishRewrap].
+     * with it. A locked mode's cipher must be confirmed by the owner before [finishRewrap], which
+     * also binds the header (a key that needs the owner refuses it before the confirmation).
      * Nothing stored changes until then.
      */
-    fun cipherForRewrap(mode: Mode): Pair<Cipher, String> {
+    fun cipherForRewrap(mode: Mode, strongBox: Boolean = true): Pair<Cipher, String> {
         fun attempt(strongBox: Boolean?): Pair<Cipher, String> {
             val alias = KEY_PREFIX + randomHex(8)
             val key = if (strongBox == null) createKey(alias, mode) else generate(alias, mode, strongBox)
-            return Cipher.getInstance(TRANSFORMATION).apply {
-                init(Cipher.ENCRYPT_MODE, key)
-                updateAAD(header(FORMAT_VERSION, mode, alias))
-            } to alias
+            return Cipher.getInstance(TRANSFORMATION).apply { init(Cipher.ENCRYPT_MODE, key) } to alias
         }
+        // After a StrongBox key failed at the very end, the next try goes straight to the regular hardware
+        if (!strongBox) return attempt(strongBox = false)
         return try {
             attempt(null)
         } catch (e: Exception) {
@@ -235,6 +240,7 @@ class KeyVault(context: Context) {
     fun finishRewrap(confirmed: Cipher, alias: String, mode: Mode, passphrase: ByteArray) {
         require(passphrase.size == PASSPHRASE_BYTES)
         require(keyStore().containsAlias(alias)) { "New key missing" }
+        confirmed.updateAAD(header(FORMAT_VERSION, mode, alias))
         val data = confirmed.doFinal(passphrase)
         writeWrapped(Wrapped(FORMAT_VERSION, mode, alias, confirmed.iv, data))
     }

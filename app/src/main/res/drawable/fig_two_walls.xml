@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Built by scripts/pictograms/figures.py; tinted by the app -->
-<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="240dp" android:height="120dp" android:viewportWidth="960" android:viewportHeight="480">
-    <path android:pathData="M120 40H60V440H900V40H760M560 40H400M200 40H120" android:strokeColor="#FF000000" android:strokeWidth="28" android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000"/>
-    <path android:pathData="M200 40H400M560 40H760" android:strokeColor="#FF000000" android:strokeWidth="8" android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000"/>
-    <path android:pathData="M330 40V150M330 220V320M630 40V150M630 220V320M330 320H420M540 320H630V440M630 320H900" android:strokeColor="#FF000000" android:strokeWidth="24" android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000"/>
-</vector>

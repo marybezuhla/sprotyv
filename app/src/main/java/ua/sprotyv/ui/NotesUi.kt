@@ -12,7 +12,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -26,7 +25,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -71,7 +76,7 @@ fun NotesScreen(nav: Nav) {
             NoteInbox.text = ""; NoteInbox.title = ""
             val main = android.os.Handler(android.os.Looper.getMainLooper())
             PersonalStore.save("note-new:" + java.util.UUID.randomUUID()) { db ->
-                val id = db.notes().save(Note(title = title.take(MAX_NOTE_TITLE), text = t.take(MAX_NOTE), updatedAt = System.currentTimeMillis()))
+                val id = db.notes().save(Note(text = listOf(title.take(MAX_NOTE_TITLE), t).filter { it.isNotBlank() }.joinToString("\n").take(MAX_NOTE), updatedAt = System.currentTimeMillis()))
                 if (id > 0) main.post { nav.go(Route.NoteEdit(id)) }
             }
         }
@@ -103,29 +108,88 @@ fun NotesScreen(nav: Nav) {
     }
     if (shown.isEmpty()) Text(stringResource(R.string.notes_nothing_found), style = MaterialTheme.typography.bodyLarge)
     if (shown.isNotEmpty()) {
-        Card(
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            shown.forEachIndexed { i, n ->
-                if (i > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-                Column(
-                    Modifier.fillMaxWidth().heightIn(min = 64.dp).clickable { nav.go(Route.NoteEdit(n.id)) }.padding(horizontal = 16.dp, vertical = 10.dp),
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        if (n.pinned) Text("📌 ", style = MaterialTheme.typography.titleMedium)
-                        Text(
-                            n.title.ifBlank { n.text.lineSequence().firstOrNull().orEmpty() }.ifBlank { stringResource(R.string.notes_untitled) },
-                            style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis,
-                        )
-                    }
-                    if (n.text.isNotBlank()) {
-                        Text(
-                            n.text.replace('\n', ' '), maxLines = 2, overflow = TextOverflow.Ellipsis,
-                            style = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Start), color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                    }
+        val (top, rest) = shown.partition { it.pinned }
+        if (top.isNotEmpty()) {
+            Text(stringResource(R.string.notes_pinned), style = BlockTitle, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            top.forEach { NoteCard(it, pinned = true) { nav.go(Route.NoteEdit(it.id)) } }
+        }
+        if (rest.isNotEmpty() && top.isNotEmpty()) {
+            Text(stringResource(R.string.notes_others), style = BlockTitle, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        rest.forEach { NoteCard(it, pinned = false) { nav.go(Route.NoteEdit(it.id)) } }
+    }
+}
+
+/** A note's name in the list: its first line that has words (a title from older notes first). */
+fun Note.name(): String = title.ifBlank { text.lineSequence().firstOrNull { it.isNotBlank() }.orEmpty() }.trim()
+
+/** The rest of the note after its name, on one line. */
+fun Note.preview(): String {
+    val body = if (title.isNotBlank()) text else text.lineSequence().dropWhile { it.isBlank() }.drop(1).joinToString(" ")
+    return body.replace('\n', ' ').trim()
+}
+
+/** Paper: the light plate of notes, a neutral colour, a little lighter than the screen. */
+@Composable
+fun paper(): androidx.compose.ui.graphics.Color =
+    if (LocalContrast.current) MaterialTheme.colorScheme.surfaceVariant
+    else if (LocalDark.current) androidx.compose.ui.graphics.Color(0xFF3A3B40) else androidx.compose.ui.graphics.Color(0xFFFBF8EF)
+
+/** One note in the list: pinned ones on paper with a pin, the others plain with a thin border. */
+@Composable
+private fun NoteCard(n: Note, pinned: Boolean, onClick: () -> Unit) {
+    Card(
+        colors = CardDefaults.cardColors(containerColor = if (pinned) paper() else MaterialTheme.colorScheme.surface),
+        border = BorderStroke(if (pinned) 2.dp else 1.dp, if (pinned) MaterialTheme.colorScheme.outline else MaterialTheme.colorScheme.outlineVariant),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Column(Modifier.fillMaxWidth().heightIn(min = 64.dp).clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 12.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (pinned) Text("📌 ", style = MaterialTheme.typography.titleMedium)
+                Text(
+                    n.name().ifBlank { stringResource(R.string.notes_untitled) },
+                    style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                )
+            }
+            val more = n.preview()
+            if (more.isNotBlank()) {
+                Text(
+                    more, maxLines = 2, overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Start), color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+    }
+}
+
+/** "Mine": the notes on their own paper plate, with up to three pinned or newest names. */
+@Composable
+fun NotesPlate(nav: Nav) {
+    val notes by remember { PersonalStore.observe { it.notes().observe() } }.collectAsStateWithLifecycle(null)
+    val list = notes.orEmpty()
+    Card(
+        colors = CardDefaults.cardColors(containerColor = paper()),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Column(Modifier.fillMaxWidth().clickable { nav.go(Route.Mine(MinePart.NOTES)) }.padding(horizontal = 16.dp, vertical = 14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                androidx.compose.material3.Icon(Icons.Filled.Edit, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
+                Text(
+                    stringResource(R.string.notes_title_screen), style = BlockTitle,
+                    modifier = Modifier.weight(1f).padding(start = 12.dp).semantics { heading() },
+                )
+                Text(if (list.isEmpty()) "" else list.size.toString(), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                androidx.compose.material3.Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, modifier = Modifier.padding(start = 8.dp))
+            }
+            if (list.isEmpty()) {
+                Text(stringResource(R.string.notes_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            } else {
+                list.take(3).forEach { n ->
+                    Text(
+                        (if (n.pinned) "📌 " else "• ") + n.name().ifBlank { stringResource(R.string.notes_untitled) },
+                        style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                    )
                 }
             }
         }
@@ -148,13 +212,14 @@ fun NoteEditScreen(id: Long, nav: Nav) {
         Loaded.Failed -> return Text(stringResource(R.string.notes_read_failed), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.error)
         is Loaded.Value -> r.value ?: return Text(stringResource(R.string.notes_gone), style = MaterialTheme.typography.bodyLarge)
     }
-    var title by remember(first) { mutableStateOf(first.title) }
-    var text by remember(first) { mutableStateOf(first.text) }
+    // One field: the first line is what the list shows as the note's name. A note written before
+    // with a separate title shows it as its first line, and is kept so at the first change.
+    var text by remember(first) { mutableStateOf(listOf(first.title, first.text).filter { it.isNotBlank() }.joinToString("\n")) }
     var pinned by remember(first) { mutableStateOf(first.pinned) }
     var confirmDelete by remember { mutableStateOf(false) }
     val key = "note:${first.id}"
     fun save() {
-        val n = Note(first.id, title, text, pinned, System.currentTimeMillis())
+        val n = Note(first.id, "", text, pinned, System.currentTimeMillis())
         PersonalStore.save(key) { db -> if (db.notes().get(n.id) != null) db.notes().save(n) }
     }
     // A note left empty goes; decided on the worker, after every save before it
@@ -166,17 +231,18 @@ fun NoteEditScreen(id: Long, nav: Nav) {
             }
         }
     }
-    OutlinedTextField(
-        value = title, onValueChange = { title = it.take(MAX_NOTE_TITLE); save() },
-        label = { Text(stringResource(R.string.notes_title)) }, singleLine = true, modifier = Modifier.fillMaxWidth(),
-    )
+    // A new note starts with the cursor in it
+    val focus = remember { androidx.compose.ui.focus.FocusRequester() }
+    androidx.compose.runtime.LaunchedEffect(first.id) { if (text.isEmpty()) runCatching { focus.requestFocus() } }
     OutlinedTextField(
         value = text, onValueChange = { text = it.take(MAX_NOTE); save() },
-        label = { Text(stringResource(R.string.notes_text)) }, minLines = 8, modifier = Modifier.fillMaxWidth(),
+        placeholder = { Text(stringResource(R.string.notes_text_hint)) },
+        textStyle = MaterialTheme.typography.bodyLarge,
+        minLines = 6, modifier = Modifier.fillMaxWidth().focusRequester(focus),
         supportingText = if (text.length > MAX_NOTE - 2_000) ({ Text(stringResource(R.string.notes_length, text.length, MAX_NOTE)) }) else null,
     )
     Toggle(stringResource(R.string.notes_pin), pinned) { pinned = it; save() }
-    val whole = listOf(title, text).filter { it.isNotBlank() }.joinToString("\n")
+    val whole = text.trim()
     val fits = whole.isNotBlank() && whole.toByteArray(Charsets.UTF_8).size <= Qr.MAX_PLAN_BYTES
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         OutlinedButton(enabled = fits, onClick = { QrInbox.text = whole; nav.go(Route.QrText) }, modifier = Modifier.heightIn(min = 48.dp)) {

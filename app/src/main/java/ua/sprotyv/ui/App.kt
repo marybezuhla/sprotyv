@@ -5,6 +5,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Home
@@ -148,7 +149,9 @@ fun App() {
         null -> WelcomeScreen(nav)
         Mode.SIMPLE -> SimpleHome(content, prefs.pins, nav, onSettings = { guarded(ACTION_SETTINGS) })
         Mode.KID -> KidHome(content, nav, onGrownUp = { guarded(ACTION_SETTINGS) })
-        Mode.FULL -> Column(Modifier.fillMaxSize()) {
+        // While typing, the keyboard pushes the screen up instead of covering it; the bars step aside
+        Mode.FULL -> Column(Modifier.fillMaxSize().imePadding()) {
+            val typing = typing()
             Box(Modifier.weight(1f)) {
                 CompositionLocalProvider(LocalInTab provides true) {
                     when (tab) {
@@ -166,8 +169,8 @@ fun App() {
                     }
                 }
             }
-            CallBar(edge = false)
-            NavigationBar {
+            if (!typing) CallBar(edge = false)
+            if (!typing) NavigationBar {
                 Tab.entries.filter { !(trip && it == Tab.MINE) }.forEach { t ->
                     NavigationBarItem(
                         selected = t == tab,

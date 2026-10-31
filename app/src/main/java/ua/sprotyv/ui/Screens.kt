@@ -14,6 +14,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.AlertDialog
@@ -52,7 +55,9 @@ val LocalInTab = staticCompositionLocalOf { false }
 @Composable
 fun Frame(title: String, onBack: () -> Unit, content: @Composable () -> Unit) {
     val inTab = LocalInTab.current
-    Column(Modifier.fillMaxSize().statusBarsPadding()) {
+    // While typing, the keyboard pushes the screen up instead of covering what is typed
+    val typing = typing()
+    Column(Modifier.fillMaxSize().statusBarsPadding().imePadding()) {
         Row(Modifier.fillMaxWidth().padding(4.dp).heightIn(min = 48.dp), verticalAlignment = Alignment.CenterVertically) {
             if (!inTab) {
                 IconButton(onClick = onBack, modifier = Modifier.heightIn(min = 48.dp)) {
@@ -71,9 +76,14 @@ fun Frame(title: String, onBack: () -> Unit, content: @Composable () -> Unit) {
             Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) { content() }
-        if (!inTab) CallBar()
+        if (!inTab && !typing) CallBar()
     }
 }
+
+/** True while the on-screen keyboard is up. */
+@OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
+@Composable
+fun typing(): Boolean = WindowInsets.isImeVisible
 
 /** Sections not built yet say so plainly. */
 @Composable
