@@ -85,6 +85,12 @@ fun GuideScreen(content: Content?, nav: Nav) {
         }
         if (content == null) return@Frame Loading()
         if (content.guideBroken) return@Frame Broken()
+        // The official first-aid procedures first: a second source beside the guide
+        if (content.moz441 != null) {
+            Block(stringResource(R.string.moz_title), ua.sprotyv.home.Group.FIRST_AID, padded = false) {
+                BlockRow(stringResource(R.string.moz_short), stringResource(R.string.moz_hint), first = true) { nav.go(Route.MozList) }
+            }
+        }
         content.guide.chapters.forEach { ch -> ChapterRow(ch) { nav.go(Route.ChapterRoute(ch.id)) } }
         OutlinedButton(onClick = { nav.go(Route.About) }, modifier = Modifier.heightIn(min = 48.dp)) {
             Text(stringResource(R.string.about_guide))

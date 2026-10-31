@@ -27,3 +27,7 @@
 - `app/src/main/res/drawable/hi_*.xml` (built by `scripts/pictograms/healthicons.py`) — icons from
   Health Icons (https://healthicons.org), CC0 1.0 (public domain); the originals are kept unchanged
   in `scripts/pictograms/healthicons/` with their licence.
+- `content/src/main/assets/moz441.json` (built by `scripts/content/moz441.py` from the annex texts in
+  `scripts/content/moz441/`) — the 29 first-aid procedures of order No. 441 of the Ministry of Health of
+  Ukraine, 09.03.2022 (registered 28.03.2022, No. 356/37692), from moz.gov.ua, word for word. An
+  official document, not protected by copyright (Law of Ukraine No. 2811-IX, art. 8).

@@ -29,6 +29,8 @@ object HomePrefs {
         val readinessHidden: Boolean = false,
         /** Trip mode: the owner's data and sensitive sources are off every screen (see [Trip]). */
         val trip: Boolean = false,
+        /** The owner has medical training: first-aid procedures open as the full official text. */
+        val medic: Boolean = false,
     )
 
     private const val FILE = "home"
@@ -42,6 +44,7 @@ object HomePrefs {
     private const val READINESS = "readiness"
     private const val READINESS_HIDDEN = "readiness_hidden"
     private const val TRIP = "trip"
+    private const val MEDIC = "medic"
 
     private val flow = MutableStateFlow<State?>(null)
     val state: StateFlow<State?> = flow.asStateFlow()
@@ -60,6 +63,7 @@ object HomePrefs {
             readiness = p.getString(READINESS, null).orEmpty().take(100),
             readinessHidden = p.getBoolean(READINESS_HIDDEN, false),
             trip = p.getBoolean(TRIP, false),
+            medic = p.getBoolean(MEDIC, false),
         )
         flow.value = s
         return s
@@ -80,6 +84,7 @@ object HomePrefs {
             put("dynamic", s.dynamic.toString())
             put("call_bar", s.callBar.toString())
             put("readiness_hidden", s.readinessHidden.toString())
+            put("medic", s.medic.toString())
         }
     }
 
@@ -96,6 +101,7 @@ object HomePrefs {
                 dynamic = flag("dynamic", s.dynamic),
                 callBar = flag("call_bar", s.callBar),
                 readinessHidden = flag("readiness_hidden", s.readinessHidden),
+                medic = flag("medic", s.medic),
             )
         }
     }
@@ -114,6 +120,7 @@ object HomePrefs {
             .putString(READINESS, next.readiness)
             .putBoolean(READINESS_HIDDEN, next.readinessHidden)
             .putBoolean(TRIP, next.trip)
+            .putBoolean(MEDIC, next.medic)
             .apply()
     }
 }
