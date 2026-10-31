@@ -82,6 +82,10 @@ fun ResistanceScreen(content: Content?, nav: Nav) {
             Text(stringResource(R.string.resist_hero_1), style = MaterialTheme.typography.bodyLarge)
             Text(stringResource(R.string.resist_hero_2), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
         }
+        // Why it matters, from history: one tap from the opening
+        Block(stringResource(R.string.history_title), Group.PREPARE, tint = resist(), padded = false) {
+            BlockRow(stringResource(R.string.history_title), stringResource(R.string.history_hint), first = true) { nav.go(Route.HistoryRoute) }
+        }
         // Everything on resistance from other sections, in one plate that opens
         Block(stringResource(R.string.resist_all_title), Group.PREPARE, tint = resist(), padded = false, foldable = true, summary = stringResource(R.string.resist_all_desc),
             leading = { IconBadge(Shield, Tint(MaterialTheme.colorScheme.surface, resist().ink), 40.dp) }) {

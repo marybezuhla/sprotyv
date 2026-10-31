@@ -948,4 +948,25 @@
     <string name="const_retrieved">text retrieved %1$s</string>
     <string name="const_no_changes">text unchanged</string>
     <string name="const_official">The official text, unchanged. The official interpretation of the Constitution is given by the Constitutional Court (Article 147). For help, ask a lawyer or free legal aid.</string>
+    <string name="history_title">Why resist</string>
+    <string name="history_hint">Stories from the past: when people held and when they did not</string>
+    <string name="history_intro">True stories from Ukraine and the world, in Ukrainian. Each on one screen: what happened, how it ended and what it teaches. Sources and the date checked are under each.</string>
+    <string name="history_stood">When resistance held</string>
+    <string name="history_stood_hint">Unity and endurance</string>
+    <string name="history_lost">When resistance gave way or was left alone</string>
+    <string name="history_lost_hint">The price of discord and concessions</string>
+    <string name="history_word">Resistance where it seemed impossible</string>
+    <string name="history_word_hint">Camps, the word of truth</string>
+    <string name="history_summary">What follows from this</string>
+    <string name="history_summary_hint">Conclusion</string>
+    <string name="history_summary_open">Open the conclusion</string>
+    <string name="history_happened">What happened</string>
+    <string name="history_outcome">How it ended</string>
+    <string name="history_lesson">The lesson</string>
+    <string name="history_sources">Sources</string>
+    <string name="history_source_open">Opens outside Sprotyv</string>
+    <string name="history_checked">Facts checked %1$s. Written from the sources listed.</string>
+    <string name="history_prev">Previous</string>
+    <string name="history_next">Next</string>
+    <string name="history_all">All stories</string>
 </resources>

@@ -19,6 +19,8 @@ class Content(
     val moz441: Moz441? = null,
     /** The Constitution of Ukraine in full; null if it could not be read. */
     val constitution: Constitution? = null,
+    /** "Why resist": stories from history; null if they could not be read. */
+    val history: History? = null,
 ) {
     val guideBroken get() = guideOrNull == null
     val cardsBroken get() = cardsOrNull == null
@@ -80,7 +82,12 @@ class Content(
                 } catch (e: Exception) {
                     null
                 }
-                Content(guide, cards, kids, links, practice, moz, constitution).also { loaded = it }
+                val history = try {
+                    assets.open("history.json").bufferedReader().use { HistoryReader.parse(it.readText()) }
+                } catch (e: Exception) {
+                    null
+                }
+                Content(guide, cards, kids, links, practice, moz, constitution, history).also { loaded = it }
             }
         }
 
