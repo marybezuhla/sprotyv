@@ -44,10 +44,29 @@ class Content(
 
     companion object {
         @Volatile private var loaded: Content? = null
+        @Volatile private var loadedLang: String = ""
 
-        /** Reads the guide and cards once; call off the main thread. */
-        fun get(context: Context): Content = loaded ?: synchronized(this) {
-            loaded ?: run {
+        /** The app's language now: "en" reads the English files where there are any. */
+        private fun lang(context: Context): String = context.resources.configuration.locales[0].language
+
+        /**
+         * A content file in the app's language: assets/en/<name> for English when it exists,
+         * otherwise the Ukrainian original.
+         */
+        private fun open(context: Context, lang: String, name: String): java.io.InputStream {
+            val assets = context.applicationContext.assets
+            if (lang == "en") runCatching { return assets.open("en/$name") }
+            return assets.open(name)
+        }
+
+        /** Reads the guide and cards once per language; call off the main thread. */
+        fun get(context: Context): Content {
+            val lang = lang(context)
+            loaded?.takeIf { loadedLang == lang }?.let { return it }
+            return synchronized(this) { loaded?.takeIf { loadedLang == lang } ?: read(context, lang).also { loaded = it; loadedLang = lang } }
+        }
+
+        private fun read(context: Context, lang: String): Content = run {
                 val assets = context.applicationContext.assets
                 val guide = try {
                     assets.open("guide.json").bufferedReader().use { GuideReader.parse(it.readText()) }
@@ -55,12 +74,12 @@ class Content(
                     null
                 }
                 val cards = try {
-                    assets.open("cards.json").bufferedReader().use { CardsReader.parse(it.readText()) }
+                    open(context, lang, "cards.json").bufferedReader().use { CardsReader.parse(it.readText()) }
                 } catch (e: Exception) {
                     null
                 }
                 val kids = try {
-                    assets.open("kid_cards.json").bufferedReader().use { CardsReader.parse(it.readText()) }
+                    open(context, lang, "kid_cards.json").bufferedReader().use { CardsReader.parse(it.readText()) }
                 } catch (e: Exception) {
                     null
                 }
@@ -70,7 +89,7 @@ class Content(
                     null
                 }
                 val practice = try {
-                    assets.open("practice.json").bufferedReader().use { PracticeReader.parse(it.readText(), cards.orEmpty() + kids.orEmpty()) }
+                    open(context, lang, "practice.json").bufferedReader().use { PracticeReader.parse(it.readText(), cards.orEmpty() + kids.orEmpty()) }
                 } catch (e: Exception) {
                     null
                 }
@@ -85,18 +104,17 @@ class Content(
                     null
                 }
                 val history = try {
-                    assets.open("history.json").bufferedReader().use { HistoryReader.parse(it.readText()) }
+                    open(context, lang, "history.json").bufferedReader().use { HistoryReader.parse(it.readText()) }
                 } catch (e: Exception) {
                     null
                 }
                 val newPlace = try {
-                    assets.open("new_place.json").bufferedReader().use { NewPlaceReader.parse(it.readText()) }
+                    open(context, lang, "new_place.json").bufferedReader().use { NewPlaceReader.parse(it.readText()) }
                 } catch (e: Exception) {
                     null
                 }
-                Content(guide, cards, kids, links, practice, moz, constitution, history, newPlace).also { loaded = it }
+                Content(guide, cards, kids, links, practice, moz, constitution, history, newPlace)
             }
-        }
 
         private val EMPTY_GUIDE = Guide("", "", "", "", "", emptyList())
 
