@@ -1099,4 +1099,15 @@
     <string name="body_walk3">I can walk 3 km with a backpack</string>
     <string name="body_floors">I can climb 5 floors without stopping</string>
     <string name="body_drag">I can pull an adult on a blanket a few metres (with their consent, back straight)</string>
+    <string name="blackout_what">no power</string>
+    <string name="heat_what">no heating</string>
+    <string name="shelter_what">in the shelter</string>
+    <string name="count_since">since %1$s</string>
+    <string name="count_since_yesterday">since yesterday, %1$s</string>
+    <string name="blackout_fridge_name">Fridge, kept shut</string>
+    <string name="blackout_freezer_full_name">Freezer, full</string>
+    <string name="blackout_freezer_half_name">Freezer, half-full</string>
+    <string name="blackout_of_hours">of ~%1$d h</string>
+    <string name="heat_pipes_now">may be freezing now</string>
+    <string name="heat_leave_now">time to decide</string>
 </resources>

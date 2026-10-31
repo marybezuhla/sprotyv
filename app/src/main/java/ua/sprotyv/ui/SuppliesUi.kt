@@ -185,18 +185,12 @@ fun SuppliesScreen(content: Content?, nav: Nav) {
 /** A labelled bar: the words and the numbers say it, the bar only shows it. */
 @Composable
 fun Meter(title: String, numbers: String, fraction: Float, fill: androidx.compose.ui.graphics.Color = ua.sprotyv.home.Group.PREPARE.tint().ink) {
-    val track = MaterialTheme.colorScheme.outlineVariant
     Column(Modifier.fillMaxWidth().clearAndSetSemantics { contentDescription = "$title, $numbers" }, verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
             Text(numbers, style = MaterialTheme.typography.bodyLarge)
         }
-        Canvas(Modifier.fillMaxWidth().height(10.dp)) {
-            val r = CornerRadius(size.height / 2)
-            drawRoundRect(track, cornerRadius = r)
-            val f = fraction.coerceIn(0f, 1f)
-            if (f > 0f) drawRoundRect(fill, size = Size(size.width * f, size.height), cornerRadius = r)
-        }
+        Bar(fraction, fill)
     }
 }
 
