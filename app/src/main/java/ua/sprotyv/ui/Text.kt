@@ -95,10 +95,12 @@ fun Block(
     leading: (@Composable () -> Unit)? = null,
     /** Its own colours instead of the group's (resistance's khaki). */
     tint: Tint? = null,
+    /** A foldable block that starts open (the one to work on next). */
+    startOpen: Boolean = !foldable,
     content: @Composable androidx.compose.foundation.layout.ColumnScope.() -> Unit,
 ) {
     val tint = tint ?: group.tint()
-    var open by androidx.compose.runtime.saveable.rememberSaveable(title) { androidx.compose.runtime.mutableStateOf(!foldable) }
+    var open by androidx.compose.runtime.saveable.rememberSaveable(title) { androidx.compose.runtime.mutableStateOf(startOpen) }
     androidx.compose.material3.Card(
         colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         border = androidx.compose.foundation.BorderStroke(1.dp, tint.container),
