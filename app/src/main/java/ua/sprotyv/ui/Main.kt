@@ -28,7 +28,7 @@ class Main : ComponentActivity() {
         Widgets.sync(this)
         Notify.sync(this)
         // Screenshots of "Mine" are for showing the app to testers: off again at every fresh start
-        if (savedInstanceState == null && HomePrefs.load(this).screenshots) HomePrefs.update(this) { it.copy(screenshots = false) }
+        // Screenshots: the owner's own choice, kept until changed (a strip on every "Mine" screen says so)
         setContent {
             val prefs = HomePrefs.state.collectAsState().value ?: HomePrefs.load(this)
             SprotyvTheme(prefs.theme, prefs.dynamic) {
