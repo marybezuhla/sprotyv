@@ -427,7 +427,7 @@
  {
   "id": "shid-sos",
   "group": "evac",
-  "kind": "volunteer",
+  "kind": "ngo",
   "title": "Схід SOS: евакуація",
   "note": "Вивозять дітей, тяжкохворих і маломобільних людей, допомагають із розселенням. Пн–Сб, 8:00–18:00.",
   "url": "",
@@ -439,7 +439,7 @@
  {
   "id": "angels",
   "group": "evac",
-  "kind": "volunteer",
+  "kind": "ngo",
   "title": "Янголи Спасіння: евакуація",
   "note": "Евакуація з медичним супроводом і за потреби з розселенням.",
   "url": "",
@@ -451,7 +451,7 @@
  {
   "id": "helping-to-leave",
   "group": "evac",
-  "kind": "volunteer",
+  "kind": "ngo",
   "title": "Helping to Leave",
   "note": "Допомагають виїхати з окупованих територій; публікують річні звіти.",
   "url": "https://helpingtoleave.org",
@@ -475,7 +475,7 @@
  {
   "id": "uanimals",
   "group": "evac",
-  "kind": "volunteer",
+  "kind": "ngo",
   "title": "UAnimals: тварини",
   "note": "Евакуація тварин із прифронтових районів. Прийом заявок буває призупинено — перевірте на сайті.",
   "url": "https://uanimals.org",
@@ -547,7 +547,7 @@
  {
   "id": "la-strada",
   "group": "mind",
-  "kind": "volunteer",
+  "kind": "ngo",
   "title": "La Strada: 116 123",
   "note": "Цілодобово й безкоштовно: насильство, торгівля людьми. Для дітей і молоді — 116 111.",
   "url": "",
@@ -571,7 +571,7 @@
  {
   "id": "teenergizer",
   "group": "mind",
-  "kind": "volunteer",
+  "kind": "ngo",
   "title": "Teenergizer",
   "note": "Безкоштовні консультації психолога для підлітків і молоді.",
   "url": "https://teenergizer.org",
@@ -607,22 +607,10 @@
  {
   "id": "helsinki",
   "group": "rights",
-  "kind": "independent",
+  "kind": "ngo",
   "title": "Українська Гельсінська спілка",
   "note": "Правова допомога постраждалим від війни, зокрема з Реєстром збитків.",
   "url": "https://www.helsinki.org.ua",
-  "app": "",
-  "phone": "",
-  "checkedOn": "2026-10-30",
-  "flags": []
- },
- {
-  "id": "redcross",
-  "group": "rights",
-  "kind": "independent",
-  "title": "Червоний Хрест України: курси першої допомоги",
-  "note": "Курси першої допомоги для цивільних; розклад — у своїй області.",
-  "url": "https://redcross.org.ua",
   "app": "",
   "phone": "",
   "checkedOn": "2026-10-30",
@@ -803,7 +791,7 @@
  {
   "id": "kids-line",
   "group": "kids",
-  "kind": "volunteer",
+  "kind": "ngo",
   "title": "Дитяча лінія 116 111",
   "note": "Анонімно й безкоштовно: булінг, насильство, конфлікти. Також 0 800 500 225.",
   "url": "",
@@ -853,7 +841,7 @@
  {
   "id": "veteran-hub",
   "group": "veterans",
-  "kind": "volunteer",
+  "kind": "ngo",
   "title": "Veteran Hub",
   "note": "Психологічні та юридичні консультації для ветеранів і родин.",
   "url": "https://veteranhub.com.ua",
@@ -877,7 +865,7 @@
  {
   "id": "superhumans",
   "group": "health",
-  "kind": "volunteer",
+  "kind": "ngo",
   "title": "Superhumans",
   "note": "Протезування й реабілітація для військових і цивільних, дорослих і дітей; безоплатно.",
   "url": "https://superhumans.com",
@@ -949,7 +937,7 @@
  {
   "id": "proliska",
   "group": "care",
-  "kind": "volunteer",
+  "kind": "ngo",
   "title": "Проліска: евакуація маломобільних",
   "note": "Евакуація людей з інвалідністю, літніх і лежачих спецавтівками з медиками.",
   "url": "https://proliska.org",
@@ -959,7 +947,7 @@
   "flags": []
  },
  {
-  "id": "redcross-fa",
+  "id": "redcross",
   "group": "learn",
   "kind": "ngo",
   "title": "Червоний Хрест України: курси першої допомоги",

@@ -790,4 +790,5 @@
     <string name="notes_read_failed">The note could not be read just now. Go back and try again.</string>
     <string name="notes_gone">This note is no longer there.</string>
     <string name="notes_length">%1$d of %2$d characters</string>
+    <string name="moz_compare_title">The Ministry’s official procedure on this</string>
 </resources>
