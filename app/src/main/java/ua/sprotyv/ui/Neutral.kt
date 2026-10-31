@@ -28,6 +28,7 @@ object Neutral {
         val keep = PackageManager.DONT_KILL_APP
         pm.setComponentEnabledSetting(entry(context, neutral), PackageManager.COMPONENT_ENABLED_STATE_ENABLED, keep)
         pm.setComponentEnabledSetting(entry(context, !neutral), PackageManager.COMPONENT_ENABLED_STATE_DISABLED, keep)
+        ShareIn.sync(context)
     }
 
     /** The recent apps list shows the neutral name too. */

@@ -127,6 +127,17 @@ fun App() {
         onStopOrDispose { }
     }
 
+    // "Share → Sprotyv" follows the mode, trip mode and the neutral icon
+    LaunchedEffect(prefs.mode, trip) { ShareIn.sync(context) }
+    // A page shared from a browser opens the bookmarks, where the owner names and keeps it.
+    // Not in trip or kid mode, and not before set-up: then it is simply dropped
+    val incoming by Incoming.state.collectAsState()
+    LaunchedEffect(incoming?.id) {
+        if (incoming == null) return@LaunchedEffect
+        if (trip || (prefs.mode != Mode.FULL && prefs.mode != Mode.SIMPLE)) Incoming.clear()
+        else if (top != Route.Mine(MinePart.BOOKMARKS)) nav.go(Route.Mine(MinePart.BOOKMARKS))
+    }
+
     BackHandler(enabled = top != null) { nav.back() }
     // Back from another tab first returns to "Home", then leaves the app
     BackHandler(enabled = top == null && full && tab != Tab.HOME) { tabName = Tab.HOME.name }
@@ -194,6 +205,7 @@ private fun Screen(
             MinePart.PLAN_QR -> Personal(R.string.plan_code_title, personal, nav) { PlanCodeScreen() }
             MinePart.PLAN_IMPORT -> Personal(R.string.plan_code_import_title, personal, nav) { PlanImportScreen(nav) }
             MinePart.KID_CALL -> Personal(R.string.kid_call_family, personal, nav) { KidCallScreen() }
+            MinePart.BOOKMARKS -> Personal(R.string.bookmarks_title, personal, nav) { BookmarksScreen() }
         }
         Route.Scan -> ScanScreen(nav)
         Route.SuppliesRoute -> Personal(R.string.supplies, personal, nav) { SuppliesScreen(content, nav) }

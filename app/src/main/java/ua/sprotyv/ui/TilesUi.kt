@@ -866,11 +866,14 @@ private fun TripToggle(on: Boolean) {
 fun tileStatus(id: String, now: Long): String? {
     val context = LocalContext.current
     val prefs = HomePrefs.state.collectAsState().value
-    if (id == Tiles.tool(Tool.POWER) || id == Tiles.card("blackout")) {
-        val since = context.getSharedPreferences("blackout", android.content.Context.MODE_PRIVATE).getLong("since", 0L)
-        if (since == 0L || now - since > 72 * 3600_000L || since > now) return null
-        val min = (now - since) / 60_000
-        return stringResource(R.string.tile_power_out, (min / 60).toInt(), (min % 60).toInt())
+    // Running counts, from the moments kept on this phone
+    if (id == Tiles.tool(Tool.POWER) || id == Tiles.tool(Tool.HOME_LIFE) || id == Tiles.card("blackout")) {
+        val power = Since.POWER.get(context, now).takeIf { it != 0L }?.let { stringResource(R.string.tile_power_out, span((now - it) / 60_000)) }
+        val heat = Since.HEAT.get(context, now).takeIf { it != 0L }?.let { stringResource(R.string.tile_heat_out, span((now - it) / 60_000)) }
+        return listOfNotNull(power, heat).joinToString(" · ").ifEmpty { null }
+    }
+    if (id == Tiles.tool(Tool.ALARM) || id == Tiles.card("air-alert")) {
+        return Since.SHELTER.get(context, now).takeIf { it != 0L }?.let { stringResource(R.string.tile_shelter, span((now - it) / 60_000)) }
     }
     if (prefs == null || prefs.trip) return null
     val index = listOf(Tool.MEDICAL, Tool.PEOPLE, Tool.PLAN, Tool.KIT, Tool.SUPPLIES).indexOfFirst { Tiles.tool(it) == id }

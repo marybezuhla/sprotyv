@@ -1,6 +1,11 @@
 package ua.sprotyv.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.heading
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material3.CircularProgressIndicator
@@ -48,5 +53,52 @@ fun Loading() {
     ) {
         CircularProgressIndicator()
         Text(stringResource(R.string.opening))
+    }
+}
+
+/**
+ * The one style for a block's title on every screen: larger and bolder than anything inside the
+ * block, so the eye finds the block first and then reads it top down.
+ */
+val BlockTitle: androidx.compose.ui.text.TextStyle
+    @Composable get() = MaterialTheme.typography.titleMedium.copy(
+        fontSize = androidx.compose.ui.unit.TextUnit(18f, androidx.compose.ui.unit.TextUnitType.Sp),
+        lineHeight = androidx.compose.ui.unit.TextUnit(24f, androidx.compose.ui.unit.TextUnitType.Sp),
+        fontWeight = FontWeight.SemiBold,
+    )
+
+/**
+ * A block of one theme: a coloured header with the title (the colour of the theme's group on the
+ * home screen, so the same colour means the same theme everywhere), then the body on a plain
+ * surface. Inside: main lines in bodyLarge, explanations in bodyMedium, the source in bodySmall.
+ * [padded] false for lists that draw their own rows and dividers.
+ */
+@Composable
+fun Block(
+    title: String,
+    group: ua.sprotyv.home.Group,
+    modifier: Modifier = Modifier,
+    padded: Boolean = true,
+    trailing: (@Composable () -> Unit)? = null,
+    content: @Composable androidx.compose.foundation.layout.ColumnScope.() -> Unit,
+) {
+    val tint = group.tint()
+    androidx.compose.material3.Card(
+        colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        border = androidx.compose.foundation.BorderStroke(1.dp, tint.container),
+        modifier = modifier.fillMaxWidth(),
+    ) {
+        Row(
+            Modifier.fillMaxWidth().background(tint.container).padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(title, style = BlockTitle, color = tint.ink, modifier = Modifier.weight(1f).semantics { heading() })
+            trailing?.invoke()
+        }
+        androidx.compose.foundation.layout.Column(
+            if (padded) Modifier.padding(16.dp) else Modifier.padding(vertical = 4.dp),
+            verticalArrangement = Arrangement.spacedBy(if (padded) 10.dp else 0.dp),
+            content = content,
+        )
     }
 }

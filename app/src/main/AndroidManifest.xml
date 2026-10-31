@@ -85,6 +85,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
+        <!-- "Share → Sprotyv" from a browser keeps a page among the owner's bookmarks. Off until
+             set up, and off with the neutral icon, in trip mode and in kid mode (ShareIn) -->
+        <activity-alias
+            android:name=".ShareIn"
+            android:targetActivity=".ui.Main"
+            android:exported="true"
+            android:enabled="false"
+            android:label="@string/share_in_label"
+            android:icon="@mipmap/ic_launcher">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity-alias>
         <!-- Lets the camera app write one photo into Sprotyv's cache; deleted right after reading -->
         <provider
             android:name="androidx.core.content.FileProvider"

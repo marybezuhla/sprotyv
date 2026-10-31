@@ -148,19 +148,13 @@ fun KitScreen(content: Content?, nav: Nav) {
     // One frame per group with its own count, as in a reviewed app: the eye finds the group, then the item
     groups.forEach { g ->
         val got = g.items.count { it.key in checked }
-        androidx.compose.material3.Card(
-            colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-            border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Row(Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 4.dp), verticalAlignment = Alignment.Top) {
-                Text(g.title, style = MaterialTheme.typography.titleSmall, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, modifier = Modifier.weight(1f).semantics { heading() })
-                Text(
-                    stringResource(R.string.ready_count, got, g.items.size),
-                    style = MaterialTheme.typography.labelLarge,
-                    color = if (got == g.items.size) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
+        Block(g.title, ua.sprotyv.home.Group.PREPARE, padded = false, trailing = {
+            Text(
+                (if (got == g.items.size) "✓ " else "") + stringResource(R.string.ready_count, got, g.items.size),
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
+            )
+        }) {
             g.items.forEachIndexed { i, item ->
                 if (i > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant, modifier = Modifier.padding(start = 56.dp))
                 KitRow(item.text, item.key in checked) { on ->

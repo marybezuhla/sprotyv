@@ -417,6 +417,7 @@ fun Source(card: Card) {
 fun AlarmScreen(content: Content?, nav: Nav) {
     Frame(stringResource(R.string.tile_alarm), nav::back) {
         Text(stringResource(R.string.alarm_not_yet), style = MaterialTheme.typography.bodyLarge)
+        ShelterBlock(nav)
         if (content == null) return@Frame Loading()
         if (content.cardsBroken) return@Frame Broken()
         listOf("air-alert", "ballistic", "drone").mapNotNull(content::card).forEach { card ->

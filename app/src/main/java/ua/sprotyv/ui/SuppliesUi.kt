@@ -78,18 +78,24 @@ fun SuppliesScreen(content: Content?, nav: Nav) {
     var picking by remember { mutableStateOf<String?>(null) }
 
     // How long will it last
-    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), modifier = Modifier.fillMaxWidth()) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text(stringResource(R.string.supplies_dash_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+    Block(stringResource(R.string.supplies_dash_title), ua.sprotyv.home.Group.PREPARE) {
+        run {
             val waterWords = if (s.waterDays == 0) stringResource(R.string.supplies_water_none) else pluralStringResource(R.plurals.supplies_water_days, s.waterDays, s.waterDays)
             Meter(waterWords, stringResource(R.string.supplies_of_litres, s.water, s.waterGoal), s.water.toFloat() / s.waterGoal)
             val have = keyed.count { it.first in s.have }
             Meter(stringResource(R.string.supplies_food_have), stringResource(R.string.supplies_of, have, keyed.size), if (keyed.isEmpty()) 0f else have.toFloat() / keyed.size)
             val soon = s.expiring(now)
             val waterWord = stringResource(R.string.supplies_water_word)
+            val medsWord = stringResource(R.string.supplies_meds)
+            val batteriesWord = stringResource(R.string.supplies_batteries)
             if (soon.isNotEmpty()) {
                 val names = soon.mapNotNull { (k, m) ->
-                    val what = if (k == MySupplies.WATER) waterWord else keyed.firstOrNull { it.first == k }?.second?.what
+                    val what = when (k) {
+                        MySupplies.WATER -> waterWord
+                        MySupplies.MEDS -> medsWord
+                        MySupplies.BATTERIES -> batteriesWord
+                        else -> keyed.firstOrNull { it.first == k }?.second?.what
+                    }
                     what?.let { "$it (${monthText(m)})" }
                 }.joinToString(", ")
                 if (names.isNotEmpty()) {
@@ -113,20 +119,24 @@ fun SuppliesScreen(content: Content?, nav: Nav) {
     Text(stringResource(R.string.supplies_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
     // Water: how many litres there are
-    Heading(R.string.supplies_water_word)
+    Block(stringResource(R.string.supplies_water_word), ua.sprotyv.home.Group.PREPARE) {
     Text(stringResource(R.string.supplies_water_need, s.waterGoal), style = MaterialTheme.typography.bodyLarge)
     Text(stringResource(R.string.supplies_water_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    Text(stringResource(R.string.supplies_water_have), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(stringResource(R.string.supplies_water_have), style = MaterialTheme.typography.titleMedium)
         OutlinedButton(onClick = { change { it.copy(water = (it.water - 1).coerceAtLeast(0)) } }, modifier = Modifier.heightIn(min = 48.dp)) { Text("−1") }
         Text(stringResource(R.string.supplies_litres, s.water), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
         OutlinedButton(onClick = { change { it.copy(water = (it.water + 1).coerceAtMost(2000)) } }, modifier = Modifier.heightIn(min = 48.dp)) { Text("+1") }
         OutlinedButton(onClick = { change { it.copy(water = (it.water + 5).coerceAtMost(2000)) } }, modifier = Modifier.heightIn(min = 48.dp)) { Text("+5") }
     }
     UntilButton(MySupplies.month(s.waterUntil)) { picking = MySupplies.WATER }
+    }
 
     // Food: tick what is at home in the needed amount
-    Heading(R.string.supplies_food)
+    val haveCount = keyed.count { it.first in s.have }
+    Block(stringResource(R.string.supplies_food), ua.sprotyv.home.Group.PREPARE, trailing = {
+        Text(stringResource(R.string.supplies_of, haveCount, keyed.size), style = MaterialTheme.typography.labelLarge)
+    }) {
     Text(stringResource(R.string.supplies_have_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     keyed.forEachIndexed { i, (key, line) ->
         if (i > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
@@ -142,6 +152,16 @@ fun SuppliesScreen(content: Content?, nav: Nav) {
                 if (have) UntilButton(s.until[key]?.let(MySupplies::month)) { picking = key }
             }
         }
+    }
+    }
+    // Other things that run out: one date each, the soonest
+    Block(stringResource(R.string.supplies_other), ua.sprotyv.home.Group.PREPARE) {
+    listOf(MySupplies.MEDS to R.string.supplies_meds, MySupplies.BATTERIES to R.string.supplies_batteries).forEach { (key, name) ->
+        Row(Modifier.fillMaxWidth().heightIn(min = 48.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text(stringResource(name), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+            UntilButton(s.until[key]?.let(MySupplies::month)) { picking = key }
+        }
+    }
     }
     Text(stringResource(R.string.supplies_rotation), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     OutlinedButton(onClick = { nav.go(Route.GuideSection(Supplies.SECTION)) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.in_detail)) }
@@ -208,9 +228,4 @@ private fun MonthDialog(start: YearMonth, onDone: (YearMonth?) -> Unit, onCancel
             }
         },
     )
-}
-
-@Composable
-private fun Heading(text: Int) {
-    Text(stringResource(text), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 8.dp).semantics { heading() })
 }

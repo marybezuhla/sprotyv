@@ -87,9 +87,8 @@ fun ReadinessBlock(content: Content?, nav: Nav) {
     androidx.compose.runtime.LaunchedEffect(shares) {
         if (shares != null && HomePrefs.load(context).readiness != shares) HomePrefs.update(context) { it.copy(readiness = shares) }
     }
-    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), modifier = Modifier.fillMaxWidth()) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text(stringResource(R.string.ready_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+    Block(stringResource(R.string.ready_title), ua.sprotyv.home.Group.MINE) {
+        run {
             // People: two things, not two people, so they are said in words under the bar
             val yes = stringResource(R.string.ready_yes)
             val no = stringResource(R.string.ready_no)

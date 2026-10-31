@@ -21,6 +21,8 @@ class Main : ComponentActivity() {
         // photo just taken may be waiting to be read
         if (savedInstanceState == null) clearScans(this)
         HomePrefs.load(this)
+        // A page shared from a browser; only on a fresh start, never again when Android restores the app
+        if (savedInstanceState == null) Incoming.take(intent)
         // Screenshots of "Mine" are for showing the app to testers: off again at every fresh start
         if (savedInstanceState == null && HomePrefs.load(this).screenshots) HomePrefs.update(this) { it.copy(screenshots = false) }
         setContent {
@@ -38,8 +40,14 @@ class Main : ComponentActivity() {
         Guard.close()
     }
 
+    override fun onNewIntent(intent: android.content.Intent) {
+        super.onNewIntent(intent)
+        Incoming.take(intent)
+    }
+
     override fun onResume() {
         super.onResume()
+        ShareIn.sync(this)
         closeLater.removeCallbacks(closeNow)
         Away.back()
     }
