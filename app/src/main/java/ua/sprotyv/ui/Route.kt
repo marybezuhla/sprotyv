@@ -44,11 +44,13 @@ sealed interface Route {
     data class PracticeRoute(val card: String) : Route
     /** "Check yourself" for one step of "My path": that step's situations; all right marks it as checked. */
     data class PathCheck(val step: String) : Route
+    /** One role's page ("Who I am now"): kept in "Mine". */
+    data class RoleRoute(val id: String) : Route
     /** Opens an outside source from "Situation" and comes straight back. */
     data class External(val id: String) : Route
 
     /** Screens that show the owner's data: opened only with the data, kept off screenshots. */
-    val personal: Boolean get() = this is Mine || this is NoteEdit || this == Open(Section.MINE) || this == Open(Section.SAFE) || this == SuppliesRoute || this is PathCheck
+    val personal: Boolean get() = this is Mine || this is NoteEdit || this == Open(Section.MINE) || this == Open(Section.SAFE) || this == SuppliesRoute || this is PathCheck || this is RoleRoute
 
     /** Screens that change settings: behind the PIN when settings are locked. */
     val settings: Boolean get() = this == Settings || this == EditTiles || this == Sections || this == Presets
@@ -82,6 +84,7 @@ sealed interface Route {
         Handover -> "handover"
         is PracticeRoute -> "practice:$card"
         is PathCheck -> "pathcheck:$step"
+        is RoleRoute -> "role:$id"
         is External -> "external:$id"
     }
 
@@ -116,6 +119,7 @@ sealed interface Route {
                 "moz" -> if (value.isEmpty()) MozList else value.toIntOrNull()?.takeIf { it in 1..60 }?.let(::Moz)
                 "practice" -> PracticeRoute(value)
                 "pathcheck" -> value.takeIf { it in PATH_CHECKS }?.let(::PathCheck)
+                "role" -> value.takeIf { it in ROLES }?.let(::RoleRoute)
                 // Never reopened after the app is restored: that would open a page unasked
                 "external" -> null
                 else -> null
@@ -124,4 +128,4 @@ sealed interface Route {
     }
 }
 
-enum class MinePart { MEDICAL, PEOPLE, PLAN, KIT, PRINT, RESCUER, BACKUP, PLAN_QR, PLAN_IMPORT, KID_CALL, BOOKMARKS, NOTES, PATH, NEW_PLACE, GART }
+enum class MinePart { MEDICAL, PEOPLE, PLAN, KIT, PRINT, RESCUER, BACKUP, PLAN_QR, PLAN_IMPORT, KID_CALL, BOOKMARKS, NOTES, PATH, NEW_PLACE, GART, ROLES }
