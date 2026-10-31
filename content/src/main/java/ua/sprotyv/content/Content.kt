@@ -15,6 +15,8 @@ class Content(
     private val kidCardsOrNull: List<Card>? = null,
     private val linksOrNull: List<Link>? = null,
     private val practiceOrNull: List<Practice>? = null,
+    /** The Ministry of Health's first-aid procedures (order No. 441); null if they could not be read. */
+    val moz441: Moz441? = null,
 ) {
     val guideBroken get() = guideOrNull == null
     val cardsBroken get() = cardsOrNull == null
@@ -66,7 +68,12 @@ class Content(
                 } catch (e: Exception) {
                     null
                 }
-                Content(guide, cards, kids, links, practice).also { loaded = it }
+                val moz = try {
+                    assets.open("moz441.json").bufferedReader().use { Moz441Reader.parse(it.readText()) }
+                } catch (e: Exception) {
+                    null
+                }
+                Content(guide, cards, kids, links, practice, moz).also { loaded = it }
             }
         }
 

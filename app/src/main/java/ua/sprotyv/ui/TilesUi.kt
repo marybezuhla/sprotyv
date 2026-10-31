@@ -239,6 +239,7 @@ private val Tool.title: Int get() = when (this) {
     Tool.SCAN -> R.string.scan_title
     Tool.PRACTICE -> R.string.practice_title
     Tool.QR_TEXT -> R.string.qr_text_title
+    Tool.MOZ -> R.string.moz_short
 }
 
 private val Tool.hint: Int get() = when (this) {
@@ -262,6 +263,7 @@ private val Tool.hint: Int get() = when (this) {
     Tool.SCAN -> R.string.scan_hint
     Tool.PRACTICE -> R.string.practice_hint
     Tool.QR_TEXT -> R.string.qr_text_hint
+    Tool.MOZ -> R.string.moz_hint
 }
 
 /** Cards and tools with a picture of their own (Health Icons, public domain), clearer than the group's. */
@@ -276,6 +278,7 @@ private val CARD_ICONS = mapOf(
 )
 private val TOOL_ICONS = mapOf(
     Tool.ALARM to R.drawable.hi_megaphone,
+    Tool.MOZ to R.drawable.hi_cpr,
     Tool.KIT to R.drawable.hi_bandage_adhesive,
     Tool.SUPPLIES to R.drawable.hi_treated_water,
 )
@@ -317,6 +320,7 @@ val Tool.route: Route get() = when (this) {
     Tool.SCAN -> Route.Scan
     Tool.PRACTICE -> Route.PracticeRoute("")
     Tool.QR_TEXT -> Route.QrText
+    Tool.MOZ -> Route.MozList
 }
 
 /** The group a tile belongs to: the first that names it. "What to do now" and "I am safe" have their own. */
@@ -822,6 +826,11 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
         Block(stringResource(R.string.settings_other_hands), ua.sprotyv.home.Group.GUIDE) {
             TripToggle(prefs.trip)
             NeutralToggle()
+        }
+        // Medical training: first-aid procedures as the full official text instead of steps
+        Block(stringResource(R.string.medic_title), ua.sprotyv.home.Group.FIRST_AID) {
+            Toggle(stringResource(R.string.medic_toggle), prefs.medic) { on -> HomePrefs.update(context) { it.copy(medic = on) } }
+            Text(stringResource(R.string.medic_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         Block(stringResource(R.string.colour_title), ua.sprotyv.home.Group.GUIDE) { ColourLegend() }
         Block(stringResource(R.string.settings_about), ua.sprotyv.home.Group.GUIDE) {

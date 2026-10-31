@@ -249,6 +249,12 @@ private fun CardBody(card: Card, content: Content, nav: Nav) {
             Text(stringResource(R.string.in_detail))
         }
     }
+    // The Ministry's official procedure behind this card, word for word
+    CARD_MOZ[card.id]?.takeIf { !kid }?.let { n ->
+        OutlinedButton(onClick = { nav.go(Route.Moz(n)) }, modifier = Modifier.heightIn(min = 56.dp)) {
+            Text(stringResource(R.string.moz_card_button))
+        }
+    }
     Source(card)
 }
 

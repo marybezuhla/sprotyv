@@ -24,6 +24,9 @@ sealed interface Route {
     data object Directory : Route
     /** A QR code made from any text typed here; the text is kept nowhere. */
     data object QrText : Route
+    /** The Ministry of Health's first-aid procedures (order No. 441), and one of them. */
+    data object MozList : Route
+    data class Moz(val n: Int) : Route
     /** "What would you do?" for one card, or for all adult cards when [card] is empty. */
     data class PracticeRoute(val card: String) : Route
     /** Opens an outside source from "Situation" and comes straight back. */
@@ -53,6 +56,8 @@ sealed interface Route {
         Power -> "power"
         Directory -> "directory"
         QrText -> "qr-text"
+        MozList -> "moz"
+        is Moz -> "moz:$n"
         is PracticeRoute -> "practice:$card"
         is External -> "external:$id"
     }
@@ -78,6 +83,7 @@ sealed interface Route {
                 "power" -> Power
                 "directory" -> Directory
                 "qr-text" -> QrText
+                "moz" -> if (value.isEmpty()) MozList else value.toIntOrNull()?.takeIf { it in 1..60 }?.let(::Moz)
                 "practice" -> PracticeRoute(value)
                 // Never reopened after the app is restored: that would open a page unasked
                 "external" -> null
