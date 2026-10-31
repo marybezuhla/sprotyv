@@ -1,5 +1,9 @@
 package ua.sprotyv.ui
 
+import androidx.compose.material.icons.filled.Close
+
+import androidx.compose.foundation.layout.size
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -123,10 +127,31 @@ fun NotesScreen(nav: Nav) {
 /** A note's name in the list: its first line that has words (a title from older notes first). */
 fun Note.name(): String = title.ifBlank { text.lineSequence().firstOrNull { it.isNotBlank() }.orEmpty() }.trim()
 
-/** The rest of the note after its name, on one line. */
+/** The rest of the note after its name, on one line; list items with their boxes. */
 fun Note.preview(): String {
-    val body = if (title.isNotBlank()) text else text.lineSequence().dropWhile { it.isBlank() }.drop(1).joinToString(" ")
-    return body.replace('\n', ' ').trim()
+    val body = if (title.isNotBlank()) text else text.lineSequence().dropWhile { it.isBlank() }.drop(1).joinToString("\n")
+    return readable(body).replace('\n', ' ').trim()
+}
+
+// ---- Lists: a note whose lines are "[ ] item" / "[x] item", kept in the same encrypted text
+
+private const val BOX = "[ ] "
+private const val TICK = "[x] "
+
+/** One item of a list note. */
+private data class Item(val text: String, val done: Boolean)
+
+private fun isList(body: List<String>) = body.any { it.startsWith(BOX) || it.startsWith(TICK) }
+
+private fun itemsOf(body: List<String>): List<Item> =
+    body.filter { it.isNotBlank() }.map { l -> if (l.startsWith(TICK)) Item(l.removePrefix(TICK), true) else Item(l.removePrefix(BOX), false) }
+
+private fun listText(name: String, items: List<Item>) =
+    (listOf(name) + items.map { (if (it.done) TICK else BOX) + it.text }).joinToString("\n")
+
+/** For QR codes and sending: boxes people can read. */
+fun readable(text: String): String = text.lines().joinToString("\n") { l ->
+    when { l.startsWith(TICK) -> "☑ " + l.removePrefix(TICK); l.startsWith(BOX) -> "☐ " + l.removePrefix(BOX); else -> l }
 }
 
 /** Paper: the light plate of notes, a neutral colour, a little lighter than the screen. */
@@ -235,16 +260,61 @@ fun NoteEditScreen(id: Long, nav: Nav) {
     // A new note starts with the cursor in it
     val focus = remember { androidx.compose.ui.focus.FocusRequester() }
     androidx.compose.runtime.LaunchedEffect(first.id) { if (text.isEmpty()) runCatching { focus.requestFocus() } }
-    OutlinedTextField(
-        value = text, onValueChange = { text = it.take(MAX_NOTE); save() },
-        placeholder = { Text(stringResource(R.string.notes_text_hint)) },
-        textStyle = MaterialTheme.typography.bodyLarge,
-        minLines = 6, modifier = Modifier.fillMaxWidth().focusRequester(focus),
-        supportingText = if (text.length > MAX_NOTE - 2_000) ({ Text(stringResource(R.string.notes_length, text.length, MAX_NOTE)) }) else null,
-    )
+    // A plain note or a list with boxes, as the owner likes; switching keeps every word
+    val lines = text.lines()
+    val list = isList(lines.drop(1))
+    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        androidx.compose.material3.FilterChip(selected = !list, onClick = {
+            if (list) { text = (listOf(lines.first()) + itemsOf(lines.drop(1)).map { it.text }).joinToString("\n"); save() }
+        }, label = { Text(stringResource(R.string.notes_kind_text)) }, modifier = Modifier.heightIn(min = 48.dp))
+        androidx.compose.material3.FilterChip(selected = list, onClick = {
+            if (!list) { text = listText(lines.first(), lines.drop(1).filter { it.isNotBlank() }.map { Item(it, false) }.ifEmpty { listOf(Item("", false)) }); save() }
+        }, label = { Text(stringResource(R.string.notes_kind_list)) }, modifier = Modifier.heightIn(min = 48.dp))
+    }
+    if (!list) {
+        OutlinedTextField(
+            value = text, onValueChange = { text = it.take(MAX_NOTE); save() },
+            placeholder = { Text(stringResource(R.string.notes_text_hint)) },
+            textStyle = MaterialTheme.typography.bodyLarge,
+            minLines = 6, modifier = Modifier.fillMaxWidth().focusRequester(focus),
+            supportingText = if (text.length > MAX_NOTE - 2_000) ({ Text(stringResource(R.string.notes_length, text.length, MAX_NOTE)) }) else null,
+        )
+    } else {
+        val name = lines.first()
+        val items = itemsOf(lines.drop(1))
+        fun put(newName: String, newItems: List<Item>) { text = listText(newName, newItems).take(MAX_NOTE); save() }
+        OutlinedTextField(
+            value = name, onValueChange = { v -> put(v.replace("\n", " "), items) }, singleLine = true,
+            label = { Text(stringResource(R.string.notes_list_name)) }, textStyle = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.fillMaxWidth().focusRequester(focus),
+        )
+        // Not done first, done below, each keeping its own order
+        val order = items.indices.sortedBy { if (items[it].done) 1 else 0 }
+        order.forEach { i ->
+            val it0 = items[i]
+            androidx.compose.runtime.key(i) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    androidx.compose.material3.Checkbox(checked = it0.done, onCheckedChange = { v -> put(name, items.toMutableList().also { l -> l[i] = it0.copy(done = v) }) })
+                    androidx.compose.foundation.text.BasicTextField(
+                        value = it0.text,
+                        onValueChange = { v -> put(name, items.toMutableList().also { l -> l[i] = it0.copy(text = v.replace("\n", " ")) }) },
+                        textStyle = MaterialTheme.typography.bodyLarge.copy(
+                            color = if (it0.done) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface,
+                        ),
+                        cursorBrush = androidx.compose.ui.graphics.SolidColor(MaterialTheme.colorScheme.primary),
+                        modifier = Modifier.weight(1f).heightIn(min = 48.dp).padding(vertical = 12.dp),
+                    )
+                    androidx.compose.material3.IconButton(onClick = { put(name, items.filterIndexed { k, _ -> k != i }) }, modifier = Modifier.size(48.dp)) {
+                        androidx.compose.material3.Icon(Icons.Filled.Close, contentDescription = stringResource(R.string.delete_row))
+                    }
+                }
+            }
+        }
+        TextButton(onClick = { put(name, items + Item("", false)) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.notes_list_add)) }
+    }
     Toggle(stringResource(R.string.notes_pin), pinned) { pinned = it; save() }
     NoteReminder(first.id)
-    val whole = text.trim()
+    val whole = readable(text).trim()
     val fits = whole.isNotBlank() && whole.toByteArray(Charsets.UTF_8).size <= Qr.MAX_PLAN_BYTES
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         OutlinedButton(enabled = fits, onClick = { QrInbox.text = whole; nav.go(Route.QrText) }, modifier = Modifier.heightIn(min = 48.dp)) {

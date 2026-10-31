@@ -1042,4 +1042,8 @@
     <string name="password_show">Show</string>
     <string name="password_hide">Hide</string>
     <string name="password_length">Characters: %1$d</string>
+    <string name="notes_kind_text">Text</string>
+    <string name="notes_kind_list">List</string>
+    <string name="notes_list_name">List name</string>
+    <string name="notes_list_add">＋ Item</string>
 </resources>
