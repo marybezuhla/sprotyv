@@ -402,6 +402,14 @@ fun groupOf(id: String): Group = when (id) {
     else -> if (id.startsWith("link:")) Group.SAFETY else Group.entries.firstOrNull { id in it.tiles } ?: Group.GUIDE
 }
 
+/** A chapter's picture in its group's colours, as on its tile (the guide's contents, related chapters). */
+@Composable
+fun ChapterBadge(chapterId: String, size: Dp) {
+    val g = groupOf(Tiles.chapter(chapterId))
+    val icon = CHAPTER_ICONS[chapterId]?.let { ImageVector.vectorResource(it) } ?: g.icon
+    IconBadge(icon, g.tint(), size)
+}
+
 /** Null for an id that is not (or no longer) in the app; such a tile is simply not shown. */
 @Composable
 fun tileInfo(id: String, content: Content?): TileInfo? {
