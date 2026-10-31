@@ -132,7 +132,7 @@ fun MozScreen(content: Content?, n: Int, nav: Nav) {
             OutlinedButton(onClick = { nav.go(Route.Delegate(p.n)) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.delegate_button)) }
         }
         OutlinedButton(onClick = { nav.go(Route.Handover) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.handover_button)) }
-        OutlinedButton(onClick = { nav.go(Route.MozList) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.moz_all)) }
+        OutlinedButton(onClick = { nav.go(Route.MozList) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.moz_all)) }
     }
 }
 
