@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Built by scripts/pictograms/figures.py; tinted by the app -->
-<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="240dp" android:height="120dp" android:viewportWidth="960" android:viewportHeight="480">
-    <path android:fillColor="#FF000000" android:fillAlpha="1.0" android:pathData="M820 80L838 146L898 112L864 172L930 190L864 208L898 268L838 234L820 300L802 234L742 268L776 208L710 190L776 172L742 112L802 146Z"/>
-</vector>

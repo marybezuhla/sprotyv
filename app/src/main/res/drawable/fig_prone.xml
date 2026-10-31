@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Built by scripts/pictograms/figures.py; tinted by the app -->
-<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="240dp" android:height="120dp" android:viewportWidth="960" android:viewportHeight="480">
-    <path android:fillColor="#FF000000" android:fillAlpha="1.0" android:pathData="M154 360A46 46 0 1 0 246 360A46 46 0 1 0 154 360Z"/>
-    <path android:pathData="M290 372H620" android:strokeColor="#FF000000" android:strokeWidth="104" android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000"/>
-    <path android:pathData="M620 380L880 392" android:strokeColor="#FF000000" android:strokeWidth="64" android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000"/>
-    <path android:pathData="M300 340L220 280L150 320" android:strokeColor="#FF000000" android:strokeWidth="50" android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000"/>
-    <path android:fillColor="#FF000000" android:fillAlpha="1.0" android:pathData="M32 432H928A12 12 0 0 1 940 444V444A12 12 0 0 1 928 456H32A12 12 0 0 1 20 444V444A12 12 0 0 1 32 432Z"/>
-</vector>

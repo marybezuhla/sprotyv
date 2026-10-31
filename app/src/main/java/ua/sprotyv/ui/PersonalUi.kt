@@ -101,15 +101,8 @@ fun MineHub(nav: Nav, content: ua.sprotyv.content.Content?) {
     Block(stringResource(R.string.mine_block_now), ua.sprotyv.home.Group.FIRST_AID, padded = false) {
         BlockRow(stringResource(R.string.tile_safe), stringResource(R.string.tile_safe_hint), first = true) { nav.go(Route.Open(Section.SAFE)) }
     }
-    // Notes on their own, easy to find
-    val noteCount by androidx.compose.runtime.remember { PersonalStore.observe { it.notes().observe() } }.collectAsStateWithLifecycle(null)
-    Block(stringResource(R.string.notes_title_screen), ua.sprotyv.home.Group.GUIDE, padded = false) {
-        BlockRow(
-            stringResource(R.string.notes_open),
-            noteCount?.size?.let { if (it == 0) stringResource(R.string.notes_hint) else stringResource(R.string.notes_count, it) } ?: "",
-            first = true,
-        ) { nav.go(Route.Mine(MinePart.NOTES)) }
-    }
+    // Notes on their own, on a light "paper" plate, with the pinned and newest ones visible
+    NotesPlate(nav)
     ReadinessBlock(content, nav)
     Block(stringResource(R.string.mine_block_health), ua.sprotyv.home.Group.FIRST_AID, padded = false, foldable = true, summary = stringResource(R.string.mine_block_health_desc)) {
         BlockRow(stringResource(R.string.medical_card), stringResource(R.string.medical_card_hint), first = true) { nav.go(Route.Mine(MinePart.MEDICAL)) }

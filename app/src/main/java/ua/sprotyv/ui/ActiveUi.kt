@@ -1,5 +1,8 @@
 package ua.sprotyv.ui
 
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.layout.Arrangement
 import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -16,7 +19,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -61,15 +63,19 @@ fun ActiveStrip(nav: Nav) {
             stringResource(R.string.active_title), style = BlockTitle, color = u.ink,
             modifier = Modifier.fillMaxWidth().background(u.container).padding(horizontal = 16.dp, vertical = 10.dp),
         )
-        list.forEachIndexed { i, r ->
-            if (i > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-            Row(
-                Modifier.fillMaxWidth().heightIn(min = 56.dp).clickable { nav.go(r.route) }.padding(horizontal = 16.dp, vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Box(Modifier.size(12.dp).background(r.tone.tint().ink, CircleShape))
-                Text(r.words, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f).padding(start = 12.dp))
-                Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+        // Each count on its own plate, so several running at once never read as one
+        Column(Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            list.forEach { r ->
+                val t = r.tone.tint()
+                Row(
+                    Modifier.fillMaxWidth().heightIn(min = 56.dp).clip(RoundedCornerShape(12.dp)).background(t.container)
+                        .clickable { nav.go(r.route) }.padding(horizontal = 12.dp, vertical = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Box(Modifier.size(12.dp).background(t.ink, CircleShape))
+                    Text(r.words, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, color = t.ink, modifier = Modifier.weight(1f).padding(start = 12.dp))
+                    Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, tint = t.ink)
+                }
             }
         }
     }

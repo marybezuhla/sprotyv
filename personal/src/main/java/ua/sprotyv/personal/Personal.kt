@@ -257,7 +257,7 @@ object PersonalStore {
                 if (_state.value is Opened.Ready) return@withLock
                 _state.value = null
                 _state.value = try {
-                    Personal.withPassphrase(app, KeyVault(app).finishUnlock(confirmed, unlocking.data))
+                    Personal.withPassphrase(app, KeyVault(app).finishUnlock(confirmed, unlocking))
                 } catch (t: Throwable) {
                     Opened.TryAgain
                 }
@@ -279,8 +279,13 @@ object PersonalStore {
             null
         } else {
             val mode = KeyVault.Mode(locked = true, pinOnly = pinOnly)
-            val (cipher, alias) = vault.cipherForRewrap(mode)
-            LockChange(cipher, alias, mode, u.passphrase)
+            try {
+                val (cipher, alias) = vault.cipherForRewrap(mode, strongBox = !strongBoxFailed)
+                LockChange(cipher, alias, mode, u.passphrase)
+            } catch (e: Exception) {
+                u.passphrase.fill(0)
+                throw e
+            }
         }
     } catch (e: Exception) {
         lockTrouble = describe(e)
@@ -293,6 +298,9 @@ object PersonalStore {
      */
     @Volatile var lockTrouble: String? = null
         private set
+
+    /** Set when a new key failed after the owner confirmed it; in memory, for this run only. */
+    @Volatile private var strongBoxFailed = false
 
     internal fun describe(e: Throwable): String {
         fun one(t: Throwable) = generateSequence(t) { it.cause }.take(3).joinToString(" ← ") { (it.javaClass.simpleName + ": " + (it.message ?: "")).take(160) }
@@ -313,13 +321,18 @@ object PersonalStore {
     fun startChange(context: Context, unlocking: KeyVault.Unlocking, confirmedUnlock: javax.crypto.Cipher, target: KeyVault.Mode): LockChange? = try {
         lockTrouble = null
         val vault = KeyVault(context.applicationContext)
-        val u = vault.finishUnlock(confirmedUnlock, unlocking.data)
+        val u = vault.finishUnlock(confirmedUnlock, unlocking)
         if (u !is KeyVault.Unwrapped.Ok) {
             lockTrouble = "unlock: " + u.javaClass.simpleName
             null
         } else {
-            val (cipher, alias) = vault.cipherForRewrap(target)
-            LockChange(cipher, alias, target, u.passphrase)
+            try {
+                val (cipher, alias) = vault.cipherForRewrap(target, strongBox = !strongBoxFailed)
+                LockChange(cipher, alias, target, u.passphrase)
+            } catch (e: Exception) {
+                u.passphrase.fill(0)
+                throw e
+            }
         }
     } catch (e: Exception) {
         lockTrouble = describe(e)
@@ -337,6 +350,8 @@ object PersonalStore {
                     true
                 } catch (t: Throwable) {
                     lockTrouble = describe(t)
+                    // A key that failed at the very end: the next try uses the regular secure hardware
+                    strongBoxFailed = true
                     false
                 } finally {
                     change.passphrase.fill(0)
