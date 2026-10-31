@@ -1,5 +1,9 @@
 package ua.sprotyv.ui
 
+import androidx.compose.ui.res.vectorResource
+
+import androidx.compose.foundation.layout.size
+
 import androidx.compose.runtime.setValue
 
 import androidx.compose.foundation.layout.Arrangement
@@ -227,7 +231,12 @@ fun PathScreen(nav: Nav) {
                 ) {
                     Checkbox(checked = on, onCheckedChange = null, modifier = Modifier.padding(horizontal = 12.dp))
                     Text(stringResource(s.words), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
-                    s.learn?.let { r -> TextButton(onClick = { nav.go(r) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.path_learn)) } }
+                    // A small book: where to learn it, so the step's words keep the width
+                    s.learn?.let { r ->
+                        androidx.compose.material3.IconButton(onClick = { nav.go(r) }, modifier = Modifier.size(48.dp)) {
+                            androidx.compose.material3.Icon(androidx.compose.ui.graphics.vector.ImageVector.vectorResource(R.drawable.ocha_learning), contentDescription = stringResource(R.string.path_learn), tint = resist().ink)
+                        }
+                    }
                 }
             }
         }
