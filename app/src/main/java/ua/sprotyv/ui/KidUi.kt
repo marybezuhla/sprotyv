@@ -1,5 +1,17 @@
 package ua.sprotyv.ui
 
+import androidx.compose.runtime.setValue
+
+import androidx.compose.runtime.getValue
+
+import androidx.compose.ui.semantics.liveRegion
+
+import androidx.compose.ui.semantics.heading
+
+import androidx.compose.ui.semantics.semantics
+
+import androidx.compose.foundation.background
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -59,7 +71,7 @@ import ua.sprotyv.reach.Reach
 // a grown-up always one tap away. No settings within reach: those sit behind the phone's PIN.
 
 /** A picture for each card: emoji are colourful, known to children and drawn by the phone itself. */
-private fun picture(id: String): String = when (id) {
+internal fun picture(id: String): String = when (id) {
     "kid-siren" -> "🚨"
     "kid-buzz" -> "🏠"
     "kid-strange" -> "✋"
@@ -160,10 +172,34 @@ fun Sunny(size: Dp, happy: Boolean = false) {
     }
 }
 
-/** Two large buttons always below: call family, and 112. No other services to choose from. */
+/**
+ * Two large buttons always below: call family, and 112. No other services to choose from. 112
+ * asks once, in a child's words, before the dialler opens: a small finger often taps by chance.
+ */
 @Composable
-private fun KidCallBar(onFamily: (() -> Unit)?) {
+internal fun KidCallBar(onFamily: (() -> Unit)?) {
     val context = LocalContext.current
+    var ask by androidx.compose.runtime.saveable.rememberSaveable { androidx.compose.runtime.mutableStateOf(false) }
+    if (ask) {
+        androidx.compose.material3.AlertDialog(
+            onDismissRequest = { ask = false },
+            icon = { Sunny(56.dp) },
+            title = { Text(stringResource(R.string.kid_112_ask), textAlign = TextAlign.Center) },
+            text = { Text(stringResource(R.string.kid_112_ask_hint), style = MaterialTheme.typography.bodyLarge) },
+            confirmButton = {
+                Button(
+                    onClick = { ask = false; Reach.dial(context, Service.UNIFIED.number) },
+                    colors = ButtonDefaults.buttonColors(containerColor = DangerRed, contentColor = Color.White),
+                    modifier = Modifier.heightIn(min = 56.dp),
+                ) { Text(stringResource(R.string.kid_112_yes), fontWeight = FontWeight.SemiBold) }
+            },
+            dismissButton = {
+                androidx.compose.material3.OutlinedButton(onClick = { ask = false }, modifier = Modifier.heightIn(min = 56.dp)) {
+                    Text(stringResource(R.string.kid_112_no))
+                }
+            },
+        )
+    }
     Surface(tonalElevation = 3.dp, modifier = Modifier.fillMaxWidth()) {
         Row(
             Modifier.navigationBarsPadding().padding(horizontal = 16.dp, vertical = 12.dp),
@@ -177,7 +213,7 @@ private fun KidCallBar(onFamily: (() -> Unit)?) {
                 }
             }
             Button(
-                onClick = { Reach.dial(context, Service.UNIFIED.number) },
+                onClick = { ask = true },
                 colors = ButtonDefaults.buttonColors(containerColor = DangerRed, contentColor = Color.White),
                 modifier = (if (onFamily == null) Modifier.weight(1f) else Modifier).heightIn(min = 64.dp),
             ) { Text(stringResource(R.string.kid_call_112), fontWeight = FontWeight.SemiBold) }
@@ -207,4 +243,58 @@ fun KidCallScreen() {
         }
     }
     Text(stringResource(R.string.kid_call_112_hint), style = MaterialTheme.typography.bodyLarge)
+}
+
+/**
+ * A child's card, built on how children take things in under stress: one short step at a time,
+ * a big picture, big words, one big button. No sources, no "all steps", no preview of the next one;
+ * the small "why" is said plainly under the step. Praise at the end, never scolding (guide 5.5).
+ */
+@Composable
+internal fun KidCardBody(card: ua.sprotyv.content.Card, content: ua.sprotyv.content.Content, nav: Nav) {
+    var step by androidx.compose.runtime.saveable.rememberSaveable(card.id) { androidx.compose.runtime.mutableIntStateOf(0) }
+    val done = step >= card.steps.size
+    // Where you are: big dots, done ones filled
+    Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth().clearAndSetSemantics { }, verticalAlignment = Alignment.CenterVertically) {
+        card.steps.indices.forEach { i ->
+            androidx.compose.foundation.layout.Box(
+                Modifier.size(if (i == step) 18.dp else 14.dp).background(
+                    if (i <= step) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant, androidx.compose.foundation.shape.CircleShape,
+                ),
+            )
+        }
+    }
+    if (!done) {
+        val s = card.steps[step]
+        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            Text(picture(card.id), fontSize = 72.sp, modifier = Modifier.clearAndSetSemantics { })
+            Text(
+                s.action, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center,
+                modifier = Modifier.semantics { liveRegion = androidx.compose.ui.semantics.LiveRegionMode.Polite },
+            )
+            if (s.why.isNotBlank()) Text(s.why, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+        }
+        Button(onClick = { step++ }, modifier = Modifier.fillMaxWidth().heightIn(min = 72.dp)) {
+            Text(stringResource(if (step == card.steps.lastIndex) R.string.kid_step_last else R.string.kid_step_next), style = MaterialTheme.typography.titleLarge)
+        }
+        if (step > 0) {
+            androidx.compose.material3.TextButton(onClick = { step-- }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.kid_step_back)) }
+        }
+    } else {
+        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Sunny(120.dp, happy = true)
+            Text(
+                stringResource(R.string.kid_well_done), style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.semantics { heading(); liveRegion = androidx.compose.ui.semantics.LiveRegionMode.Polite },
+            )
+            Text(stringResource(R.string.kid_well_done_hint), style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center)
+        }
+        // A game only after the card, never between the steps
+        if (content.practice.any { it.card == card.id }) {
+            Button(onClick = { nav.go(Route.PracticeRoute(card.id)) }, modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp)) {
+                Text(stringResource(R.string.practice_card_kid), style = MaterialTheme.typography.titleMedium)
+            }
+        }
+        androidx.compose.material3.OutlinedButton(onClick = { step = 0 }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.again)) }
+    }
 }

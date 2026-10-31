@@ -108,11 +108,14 @@ fun NowScreen(content: Content?, nav: Nav) {
 @Composable
 fun CardScreen(content: Content?, id: String, nav: Nav) {
     val card = content?.card(id)
-    Frame(card?.title ?: "", nav::back) {
+    // A child's card: the child's own two buttons below (family, and 112 after a question)
+    val kid = id.startsWith("kid-")
+    val trip = HomePrefs.state.collectAsState().value?.trip == true
+    Frame(card?.title ?: "", nav::back, bottom = if (!kid) null else ({ KidCallBar(onFamily = if (trip) null else ({ nav.go(Route.Mine(MinePart.KID_CALL)) })) })) {
         if (content == null) return@Frame Loading()
         if (content.cardsBroken) return@Frame Broken()
         if (card == null) return@Frame Text(stringResource(R.string.not_found))
-        CardBody(card, content, nav)
+        if (kid) KidCardBody(card, content, nav) else CardBody(card, content, nav)
     }
 }
 
