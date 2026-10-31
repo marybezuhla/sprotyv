@@ -150,7 +150,7 @@ private fun Steps(p: Moz441.Procedure) {
             }
             else -> Card(
                 colors = CardDefaults.cardColors(containerColor = Group.FIRST_AID.tint().container, contentColor = MaterialTheme.colorScheme.onSurface),
-                border = androidx.compose.foundation.BorderStroke(1.dp, Group.FIRST_AID.tint().ink.copy(alpha = 0.35f)),
+                border = androidx.compose.foundation.BorderStroke(1.dp, Group.FIRST_AID.tint().ink.copy(alpha = 0.2f)),
                 modifier = Modifier.fillMaxWidth(),
             ) { Text(point.text, style = ReadingText, modifier = Modifier.padding(16.dp)) }
         }

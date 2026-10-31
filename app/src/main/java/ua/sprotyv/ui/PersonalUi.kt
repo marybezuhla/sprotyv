@@ -86,7 +86,7 @@ fun NavRow(title: String, hint: String = "", group: ua.sprotyv.home.Group = ua.s
     Card(
         onClick = onClick,
         colors = CardDefaults.cardColors(containerColor = tint.container, contentColor = MaterialTheme.colorScheme.onSurface),
-        border = BorderStroke(1.dp, tint.ink.copy(alpha = 0.35f)),
+        border = BorderStroke(1.dp, tint.ink.copy(alpha = 0.2f)),
         modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp),
     ) {
         Column(Modifier.padding(horizontal = 16.dp, vertical = 14.dp)) {

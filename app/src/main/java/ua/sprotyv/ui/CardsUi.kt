@@ -73,7 +73,7 @@ fun CardRow(card: Card, onClick: () -> Unit) {
             containerColor = if (first) u.container else tint.container,
             contentColor = if (first) u.ink else MaterialTheme.colorScheme.onSurface,
         ),
-        border = if (first) BorderStroke(2.dp, u.edge) else BorderStroke(1.dp, tint.ink.copy(alpha = 0.35f)),
+        border = if (first) BorderStroke(1.dp, u.edge.copy(alpha = 0.7f)) else BorderStroke(1.dp, tint.ink.copy(alpha = 0.2f)),
         modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp),
     ) {
         androidx.compose.foundation.layout.Row(

@@ -65,7 +65,7 @@ fun ChapterRow(chapter: Chapter, onClick: () -> Unit) {
     Card(
         onClick = onClick,
         colors = CardDefaults.cardColors(containerColor = tint.container),
-        border = BorderStroke(1.dp, tint.ink.copy(alpha = 0.35f)),
+        border = BorderStroke(1.dp, tint.ink.copy(alpha = 0.2f)),
         modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp),
     ) {
         // The chapter's colour and picture, the same as on its tile in "Sections"

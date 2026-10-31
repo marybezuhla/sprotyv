@@ -278,13 +278,13 @@ private fun PathInspire(levels: List<Pair<Int, Int>>, celebrated: Int, nav: Nav)
     }
     val day = java.time.LocalDate.now().dayOfYear
     Column(
-        Modifier.fillMaxWidth().clip(androidx.compose.foundation.shape.RoundedCornerShape(12.dp)).background(resist().container)
+        Modifier.fillMaxWidth().clip(androidx.compose.foundation.shape.RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.surface.copy(alpha = 0.6f))
             .clickable { nav.go(Route.Mine(MinePart.PATH)) }.padding(12.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        val ink = resist().ink
+        val ink = MaterialTheme.colorScheme.onSurface
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(Shield, contentDescription = null, tint = ink, modifier = Modifier.size(20.dp))
+            Icon(Shield, contentDescription = null, tint = resist().ink, modifier = Modifier.size(20.dp))
             Spacer(Modifier.width(8.dp))
             // Levels done get a tick; the one in progress shows its count
             val line = levels.mapIndexedNotNull { i, (d, t) ->

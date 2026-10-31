@@ -86,6 +86,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -157,11 +158,11 @@ fun Group.tint(): Tint {
     // High contrast: no pale fills, the plain text colours of the theme; icon and words still say the group
     if (LocalContrast.current) return Tint(MaterialTheme.colorScheme.surfaceVariant, MaterialTheme.colorScheme.onSurface)
     return when (this) {
-        Group.DANGER -> if (dark) Tint(Color(0xFF3D2616), Color(0xFFFFC9A0)) else Tint(Color(0xFFFFE9D6), Color(0xFF8A3B00))
-        Group.FIRST_AID, Group.LEAVE -> if (dark) Tint(Color(0xFF17352B), Color(0xFFA8DCC4)) else Tint(Color(0xFFDDF0E6), Color(0xFF1E5B40))
-        Group.PREPARE, Group.MINE, Group.FAMILY -> if (dark) Tint(Color(0xFF1A2E45), Color(0xFFBFD6F2)) else Tint(Color(0xFFDCE8F7), Color(0xFF163E6E))
+        Group.DANGER -> if (dark) Tint(Color(0xFF342318), Color(0xFFF5C39E)) else Tint(Color(0xFFFFE9D6), Color(0xFF8A3B00))
+        Group.FIRST_AID, Group.LEAVE -> if (dark) Tint(Color(0xFF182F28), Color(0xFFA3D3BD)) else Tint(Color(0xFFDDF0E6), Color(0xFF1E5B40))
+        Group.PREPARE, Group.MINE, Group.FAMILY -> if (dark) Tint(Color(0xFF1A2A3C), Color(0xFFBBD0EA)) else Tint(Color(0xFFDCE8F7), Color(0xFF163E6E))
         // Knowing and everyday life: a calm violet, so no group is left without a colour
-        Group.HOME_LIFE, Group.SAFETY, Group.GUIDE -> if (dark) Tint(Color(0xFF2B2541), Color(0xFFD8CCF6)) else Tint(Color(0xFFEDE7F8), Color(0xFF47387A))
+        Group.HOME_LIFE, Group.SAFETY, Group.GUIDE -> if (dark) Tint(Color(0xFF272339), Color(0xFFD2C7EE)) else Tint(Color(0xFFEDE7F8), Color(0xFF47387A))
     }
 }
 
@@ -188,7 +189,7 @@ private class Shelf(val title: Int, val desc: Int, val group: Group, val ids: Li
 @Composable
 fun resist(): Tint = when {
     LocalContrast.current -> Tint(MaterialTheme.colorScheme.surfaceVariant, MaterialTheme.colorScheme.onSurface)
-    LocalDark.current -> Tint(Color(0xFF2F3021), Color(0xFFD9D4A9))
+    LocalDark.current -> Tint(Color(0xFF2A2B21), Color(0xFFD3CEA6))
     else -> Tint(Color(0xFFECE9D5), Color(0xFF4B4921))
 }
 
@@ -229,8 +230,8 @@ data class Urgent(val container: Color, val ink: Color, val edge: Color)
 @Composable
 fun urgent(): Urgent = when {
     LocalContrast.current -> Urgent(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.onSurface, MaterialTheme.colorScheme.onSurface)
-    LocalDark.current -> Urgent(Color(0xFF5A2E0A), Color(0xFFFFE0C2), Color(0xFFFF9A4D))
-    else -> Urgent(Color(0xFFFFDDBF), Color(0xFF5C2600), Color(0xFFE8700F))
+    LocalDark.current -> Urgent(Color(0xFF3E2716), Color(0xFFFFD9B8), Color(0xFFC77A3E))
+    else -> Urgent(Color(0xFFFFE6D1), Color(0xFF5C2600), Color(0xFFD9772B))
 }
 
 /** A card's own picture and its group's colours, for lists of cards. */
@@ -486,13 +487,13 @@ fun TileCard(info: TileInfo, big: Boolean, status: String? = null, modifier: Mod
     Card(
         onClick = onClick,
         colors = CardDefaults.cardColors(
-            containerColor = when { marked -> u.container; safe -> green.container; else -> own.container },
+            containerColor = when { marked -> u.container; safe -> green.container; else -> own.container }.copy(alpha = 0.7f).compositeOver(MaterialTheme.colorScheme.surface),
             contentColor = when { marked -> u.ink; safe -> green.ink; else -> MaterialTheme.colorScheme.onSurface },
         ),
         border = when {
-            marked -> BorderStroke(2.dp, u.edge)
-            safe -> BorderStroke(2.dp, green.ink.copy(alpha = 0.6f))
-            else -> BorderStroke(1.dp, own.ink.copy(alpha = 0.35f))
+            marked -> BorderStroke(1.dp, u.edge.copy(alpha = 0.7f))
+            safe -> BorderStroke(1.dp, green.ink.copy(alpha = 0.3f))
+            else -> BorderStroke(1.dp, own.ink.copy(alpha = 0.2f))
         },
         modifier = modifier.fillMaxWidth().heightIn(min = if (big) 88.dp else 76.dp),
     ) {
