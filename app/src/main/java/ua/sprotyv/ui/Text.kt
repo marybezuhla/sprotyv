@@ -187,7 +187,8 @@ fun ColourLegend() {
  */
 val ReadingText: TextStyle
     @Composable get() = MaterialTheme.typography.bodyLarge.copy(
-        textAlign = androidx.compose.ui.text.style.TextAlign.Justify,
-        hyphens = androidx.compose.ui.text.style.Hyphens.Auto,
+        // Left-aligned, words whole: justified lines with hyphens left gaps and broken words on a phone
+        textAlign = androidx.compose.ui.text.style.TextAlign.Start,
+        hyphens = androidx.compose.ui.text.style.Hyphens.None,
         lineBreak = androidx.compose.ui.text.style.LineBreak.Paragraph,
     )
