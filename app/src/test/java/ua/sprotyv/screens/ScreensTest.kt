@@ -37,6 +37,7 @@ import ua.sprotyv.ui.MozListScreen
 import ua.sprotyv.ui.MozScreen
 import ua.sprotyv.ui.PowerScreen
 import ua.sprotyv.ui.QrTextScreen
+import ua.sprotyv.ui.ResistanceScreen
 import ua.sprotyv.ui.PracticeScreen
 import ua.sprotyv.ui.Route
 import ua.sprotyv.ui.SectionsList
@@ -69,7 +70,7 @@ class ScreensTest {
     @Before fun setUp() {
         app = ApplicationProvider.getApplicationContext()
         content = Content.get(app)
-        HomePrefs.update(app) { it.copy(medic = false) }
+        HomePrefs.update(app) { it.copy(medic = false, service = false) }
         // The empty activity that hosts each screen (known only to this test)
         shadowOf(app.packageManager).addActivityIfNotPresent(ComponentName(app, ComponentActivity::class.java))
     }
@@ -123,4 +124,5 @@ class ScreensTest {
     @Test fun mozSteps() { mode(Mode.FULL); shot("18-moz-bleeding-steps") { MozScreen(content, 4, nav) } }
     @Test fun mozFull() { HomePrefs.update(app) { it.copy(mode = Mode.FULL, medic = true) }; shot("19-moz-bleeding-full", dark = true) { MozScreen(content, 4, nav) } }
     @Test fun qrText() = shot("20-qr-text") { QrTextScreen(nav) }
+    @Test fun resistance() { HomePrefs.update(app) { it.copy(mode = Mode.FULL, service = true) }; shot("21-resistance") { ResistanceScreen(content, nav) } }
 }
