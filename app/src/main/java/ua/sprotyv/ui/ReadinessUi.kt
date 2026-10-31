@@ -87,7 +87,18 @@ fun ReadinessBlock(content: Content?, nav: Nav) {
     androidx.compose.runtime.LaunchedEffect(shares) {
         if (shares != null && HomePrefs.load(context).readiness != shares) HomePrefs.update(context) { it.copy(readiness = shares) }
     }
-    Block(stringResource(R.string.ready_title), ua.sprotyv.home.Group.MINE) {
+    // Folded: one ring for the whole (each part counts the same) and the next step in words
+    val known = rows.all { it.second != null }
+    val whole = if (known) rows.map { it.second!!.fraction }.average().toFloat() else 0f
+    val partsDone = rows.count { it.second?.complete == true }
+    val nextPart = rows.firstOrNull { it.second?.complete == false }
+    val summary = if (!known) null else stringResource(R.string.ready_summary, partsDone, rows.size) + " · " +
+        (if (nextPart == null) stringResource(R.string.ready_all) else stringResource(R.string.ready_next, stringResource(nextPart.first)))
+    Block(
+        stringResource(R.string.ready_title), ua.sprotyv.home.Group.MINE,
+        foldable = true, summary = summary,
+        leading = { ReadyRing(whole, "$partsDone/${rows.size}") },
+    ) {
         run {
             // People: two things, not two people, so they are said in words under the bar
             val yes = stringResource(R.string.ready_yes)
@@ -105,6 +116,27 @@ fun ReadinessBlock(content: Content?, nav: Nav) {
                 )
             }
         }
+    }
+}
+
+/**
+ * The whole at a glance: one ring, the share done, with the count in its middle. One ring only:
+ * parts are compared on the bars below, where lengths on one scale are read exactly.
+ */
+@Composable
+fun ReadyRing(fraction: Float, label: String) {
+    val track = MaterialTheme.colorScheme.outlineVariant
+    val fill = if (fraction >= 1f) (if (LocalDark.current) Color(0xFF81C784) else Color(0xFF2E7D32)) else MaterialTheme.colorScheme.primary
+    androidx.compose.foundation.layout.Box(Modifier.size(52.dp).clearAndSetSemantics { }, contentAlignment = Alignment.Center) {
+        Canvas(Modifier.size(52.dp)) {
+            val stroke = androidx.compose.ui.graphics.drawscope.Stroke(width = 6.dp.toPx(), cap = androidx.compose.ui.graphics.StrokeCap.Round)
+            val inset = 3.dp.toPx()
+            val box = Size(size.width - inset * 2, size.height - inset * 2)
+            val at = androidx.compose.ui.geometry.Offset(inset, inset)
+            drawArc(track, 0f, 360f, false, topLeft = at, size = box, style = stroke)
+            if (fraction > 0f) drawArc(fill, -90f, 360f * fraction.coerceIn(0f, 1f), false, topLeft = at, size = box, style = stroke)
+        }
+        Text(label, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold)
     }
 }
 

@@ -258,7 +258,7 @@
     <string name="mode_simple_hint">Шість великих кнопок, нічого зайвого</string>
     <string name="mode_full">Повний</string>
     <string name="mode_full_hint">Вкладки, усі розділи, власна головна</string>
-    <string name="lock_title">Захист налаштувань</string>
+    <string name="lock_title">Захист налаштувань і знімків екрана</string>
     <string name="lock_toggle">Питати PIN-код телефону</string>
     <string name="lock_explain">Щоб вигляд і плитки не змінили випадково. Застосунок PIN-код не бачить і не зберігає.</string>
     <string name="lock_no_screen_lock">Щоб захистити налаштування, спершу увімкніть блокування екрана в налаштуваннях телефону.</string>
@@ -571,7 +571,7 @@
     <string name="trip_confirm_text">Сховане не видаляється: дані лишаються зашифрованими на телефоні. Хто змусить вас розблокувати телефон і ввести PIN, зможе вимкнути режим і побачити їх. Перед поїздкою подумайте, що вам справді потрібно мати з собою, і зробіть резервну копію. Картки, довідник і 112 працюють як завжди. У налаштуваннях видно, що режим увімкнено, тож уважний погляд зрозуміє, що щось сховано.</string>
     <string name="trip_confirm_yes">Увімкнути</string>
     <string name="trip_off_prompt">Вимкнути режим поїздки</string>
-    <string name="lock_mine_title">Вхід у «Моє»</string>
+    <string name="lock_mine_title">Замок на «Моє»: відбиток або PIN</string>
     <string name="lock_mine_toggle">Відкривати «Моє» відбитком або PIN-кодом</string>
     <string name="lock_mine_hint">Типово вимкнено, щоб у небезпеці медкартка й «Я в безпеці» відкривалися миттєво. Якщо ввімкнути, «Моє» відкриватиметься лише після відбитка чи PIN-коду телефона, щоразу після повернення в застосунок; без цього ключ до даних не працює взагалі. Картки, довідник і 112 відкриваються як завжди.</string>
     <string name="lock_mine_pin_only">Лише PIN</string>
@@ -667,4 +667,11 @@
     <string name="source_section">Джерело: «%1$s» %2$s, п. %3$s</string>
     <string name="source_license">Ліцензія: %1$s</string>
     <string name="about_icons">Піктограми: Health Icons (healthicons.org, суспільне надбання, CC0) і Material Symbols (Google, Apache 2.0).</string>
+    <string name="ready_summary">Готово частин: %1$d з %2$d</string>
+    <string name="mine_block_trouble_desc">Я в безпеці, медкартка, довірені люди, план, екран для рятувальника</string>
+    <string name="mine_block_home_desc">Тривожна валіза, запаси вдома, закладки</string>
+    <string name="mine_block_copies_desc">Друк, код плану, сканування, резервна копія</string>
+    <string name="lock_mine_unknown">Стан замка зараз не вдалося прочитати. Відкрийте «Моє» один раз і поверніться сюди.</string>
+    <string name="settings_other_hands">Якщо телефон у чужих руках</string>
+    <string name="settings_about">Про застосунок і відгук</string>
 </resources>

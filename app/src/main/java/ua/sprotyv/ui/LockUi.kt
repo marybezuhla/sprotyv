@@ -156,13 +156,17 @@ fun LockMineSettings() {
         }
     }
 
-    Text(stringResource(R.string.lock_mine_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
     val m = mode
     if (!canLock && m?.locked != true) {
         Text(stringResource(R.string.lock_mine_no_screen_lock), style = MaterialTheme.typography.bodyMedium)
         return
     }
-    if (m == null) return
+    // Never an empty heading: if the key's state could not be read, say what to do
+    if (m == null) {
+        Text(stringResource(R.string.lock_mine_unknown), style = MaterialTheme.typography.bodyMedium)
+        androidx.lifecycle.compose.LifecycleResumeEffect(Unit) { refresh++; onPauseOrDispose { } }
+        return
+    }
     Toggle(stringResource(if (m.pinOnly) R.string.lock_mine_toggle_pin else R.string.lock_mine_toggle), m.locked) { on ->
         if (busy) return@Toggle
         if (on) askOn = true else changeFromLocked(m, KeyVault.Mode.OPEN)
