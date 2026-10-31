@@ -663,14 +663,14 @@
     <string name="shelf_unfold">розгорнути</string>
     <string name="mine_block_trouble">На випадок біди</string>
     <string name="mine_block_home">Запаси й закладки</string>
-    <string name="mine_block_copies">Копії й друк</string>
+    <string name="mine_block_copies">Копії, коди й закладки</string>
     <string name="source_section">Джерело: «%1$s» %2$s, п. %3$s</string>
     <string name="source_license">Ліцензія: %1$s</string>
     <string name="about_icons">Піктограми: Health Icons (healthicons.org, суспільне надбання, CC0) і Material Symbols (Google, Apache 2.0).</string>
     <string name="ready_summary">Готово частин: %1$d з %2$d</string>
     <string name="mine_block_trouble_desc">Я в безпеці, медкартка, довірені люди, план, екран для рятувальника</string>
     <string name="mine_block_home_desc">Тривожна валіза, запаси вдома, закладки</string>
-    <string name="mine_block_copies_desc">Друк, код плану, сканування, резервна копія</string>
+    <string name="mine_block_copies_desc">Закладки, друк, коди, резервна копія</string>
     <string name="lock_mine_unknown">Стан замка зараз не вдалося прочитати. Відкрийте «Моє» один раз і поверніться сюди.</string>
     <string name="settings_other_hands">Якщо телефон у чужих руках</string>
     <string name="settings_about">Про застосунок і відгук</string>
@@ -683,4 +683,14 @@
     <string name="qr_text_code_desc">QR-код із вашим текстом</string>
     <string name="qr_text_bright">Підвищіть яскравість екрана й тримайте телефон рівно.</string>
     <string name="qr_text_clear">Стерти текст</string>
+    <string name="mine_block_now">Якщо щось сталося</string>
+    <string name="mine_block_health">Здоров’я й порятунок</string>
+    <string name="mine_block_health_desc">Медкартка, екран для рятувальника</string>
+    <string name="mine_block_prepare">Підготовка</string>
+    <string name="mine_block_prepare_desc">Довірені люди, план родини, валіза, запаси</string>
+    <string name="colour_title">Що означають кольори</string>
+    <string name="colour_danger">Помаранчевий — небезпека, діяти зараз</string>
+    <string name="colour_health">Зелений — здоров’я, перша допомога, порятунок і виїзд</string>
+    <string name="colour_prepare">Синій — підготовка: запаси, план, люди, тренування</string>
+    <string name="colour_calm">Сірий — побут, довідка, копії й налаштування</string>
 </resources>

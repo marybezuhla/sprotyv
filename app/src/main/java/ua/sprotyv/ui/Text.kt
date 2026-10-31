@@ -2,6 +2,8 @@ package ua.sprotyv.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -150,5 +152,26 @@ fun BlockRow(title: String, hint: String = "", first: Boolean = false, onClick: 
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+    }
+}
+
+/** What the four colours mean: shown in settings, so the code is never a guess. */
+@Composable
+fun ColourLegend() {
+    listOf(
+        ua.sprotyv.home.Group.DANGER to R.string.colour_danger,
+        ua.sprotyv.home.Group.FIRST_AID to R.string.colour_health,
+        ua.sprotyv.home.Group.PREPARE to R.string.colour_prepare,
+        ua.sprotyv.home.Group.GUIDE to R.string.colour_calm,
+    ).forEach { (g, words) ->
+        val tint = g.tint()
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            androidx.compose.foundation.layout.Box(
+                Modifier.padding(end = 12.dp).size(28.dp)
+                    .background(tint.container, androidx.compose.foundation.shape.RoundedCornerShape(8.dp))
+                    .border(1.dp, tint.ink, androidx.compose.foundation.shape.RoundedCornerShape(8.dp)),
+            )
+            Text(stringResource(words), style = MaterialTheme.typography.bodyMedium.copy(textAlign = androidx.compose.ui.text.style.TextAlign.Start), modifier = Modifier.weight(1f))
+        }
     }
 }

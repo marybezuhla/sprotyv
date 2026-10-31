@@ -657,14 +657,14 @@
     <string name="shelf_unfold">unfold</string>
     <string name="mine_block_trouble">In case of trouble</string>
     <string name="mine_block_home">Supplies and bookmarks</string>
-    <string name="mine_block_copies">Copies and printing</string>
+    <string name="mine_block_copies">Copies, codes and bookmarks</string>
     <string name="source_section">Source: “%1$s” %2$s, sec. %3$s</string>
     <string name="source_license">Licence: %1$s</string>
     <string name="about_icons">Icons: Health Icons (healthicons.org, public domain, CC0) and Material Symbols (Google, Apache 2.0).</string>
     <string name="ready_summary">Parts done: %1$d of %2$d</string>
     <string name="mine_block_trouble_desc">I am safe, medical card, trusted people, plan, screen for rescuers</string>
     <string name="mine_block_home_desc">Emergency bag, supplies at home, bookmarks</string>
-    <string name="mine_block_copies_desc">Printing, plan code, scanning, backup</string>
+    <string name="mine_block_copies_desc">Bookmarks, printing, codes, backup</string>
     <string name="lock_mine_unknown">The lock’s state could not be read just now. Open “Mine” once and come back here.</string>
     <string name="settings_other_hands">If the phone is in the wrong hands</string>
     <string name="settings_about">About and feedback</string>
@@ -677,4 +677,14 @@
     <string name="qr_text_code_desc">QR code with your text</string>
     <string name="qr_text_bright">Turn the screen brightness up and hold the phone steady.</string>
     <string name="qr_text_clear">Clear the text</string>
+    <string name="mine_block_now">If something happened</string>
+    <string name="mine_block_health">Health and rescue</string>
+    <string name="mine_block_health_desc">Medical card, screen for rescuers</string>
+    <string name="mine_block_prepare">Preparation</string>
+    <string name="mine_block_prepare_desc">Trusted people, family plan, bag, supplies</string>
+    <string name="colour_title">What the colours mean</string>
+    <string name="colour_danger">Orange: danger, act now</string>
+    <string name="colour_health">Green: health, first aid, rescue and leaving</string>
+    <string name="colour_prepare">Blue: preparing: supplies, plan, people, practice</string>
+    <string name="colour_calm">Grey: everyday life, reading, copies and settings</string>
 </resources>

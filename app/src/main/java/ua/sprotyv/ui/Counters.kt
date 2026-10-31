@@ -144,7 +144,7 @@ fun ShelterBlock(nav: Nav) {
     val context = LocalContext.current
     var gen by remember { mutableLongStateOf(0L) }
     val (start, now) = androidx.compose.runtime.key(gen) { rememberSince(Since.SHELTER, 30_000) }
-    CounterCard(stringResource(R.string.block_shelter), ua.sprotyv.home.Group.SAFETY) {
+    CounterCard(stringResource(R.string.block_shelter), ua.sprotyv.home.Group.DANGER) {
         if (start == 0L) {
             Text(stringResource(R.string.shelter_title), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
             OutlinedButton(onClick = { Since.SHELTER.start(context); gen++ }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {

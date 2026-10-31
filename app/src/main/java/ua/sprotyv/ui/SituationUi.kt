@@ -75,7 +75,7 @@ fun SituationScreen(content: Content?, nav: Nav) {
     val context = LocalContext.current
     val toolbar = MaterialTheme.colorScheme.surface.toArgb()
     Frame(stringResource(R.string.situation_title), nav::back) {
-        Block(stringResource(R.string.situation_rules_title), ua.sprotyv.home.Group.SAFETY) {
+        Block(stringResource(R.string.situation_rules_title), ua.sprotyv.home.Group.GUIDE) {
             listOf(R.string.situation_rule_1, R.string.situation_rule_2, R.string.situation_rule_3).forEachIndexed { i, r ->
                 Row {
                     Text("${i + 1}", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, modifier = Modifier.width(24.dp))
