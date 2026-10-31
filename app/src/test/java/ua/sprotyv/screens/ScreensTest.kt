@@ -26,7 +26,9 @@ import ua.sprotyv.content.Content
 import ua.sprotyv.home.Mode
 import ua.sprotyv.home.Preset
 import ua.sprotyv.ui.CardScreen
+import ua.sprotyv.ui.DelegateScreen
 import ua.sprotyv.ui.DirectoryScreen
+import ua.sprotyv.ui.HandoverScreen
 import ua.sprotyv.ui.Frame
 import ua.sprotyv.ui.FullHome
 import ua.sprotyv.ui.GuideSectionScreen
@@ -124,5 +126,7 @@ class ScreensTest {
     @Test fun mozSteps() { mode(Mode.FULL); shot("18-moz-bleeding-steps") { MozScreen(content, 4, nav) } }
     @Test fun mozFull() { HomePrefs.update(app) { it.copy(mode = Mode.FULL, medic = true) }; shot("19-moz-bleeding-full", dark = true) { MozScreen(content, 4, nav) } }
     @Test fun qrText() = shot("20-qr-text") { QrTextScreen(nav) }
+    @Test fun delegate() = shot("22-delegate-bleeding") { DelegateScreen(content, 4, nav) }
+    @Test fun handover() = shot("23-handover") { HandoverScreen(nav) }
     @Test fun resistance() { HomePrefs.update(app) { it.copy(mode = Mode.FULL, service = true) }; shot("21-resistance") { ResistanceScreen(content, nav) } }
 }
