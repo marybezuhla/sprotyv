@@ -1048,4 +1048,8 @@
     <string name="password_show">Показати</string>
     <string name="password_hide">Сховати</string>
     <string name="password_length">Символів: %1$d</string>
+    <string name="notes_kind_text">Текст</string>
+    <string name="notes_kind_list">Список</string>
+    <string name="notes_list_name">Назва списку</string>
+    <string name="notes_list_add">＋ Пункт</string>
 </resources>
