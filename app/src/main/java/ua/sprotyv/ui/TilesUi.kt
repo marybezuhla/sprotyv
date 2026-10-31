@@ -459,22 +459,24 @@ fun TileCard(info: TileInfo, big: Boolean, status: String? = null, modifier: Mod
     val safe = info.id == Tiles.tool(Tool.SAFE)
     val u = urgent()
     val green = Group.FIRST_AID.tint()
+    // Each tile in its group's soft colour, so the home screen is read by colour at a glance
+    val own = info.badge()
     Card(
         onClick = onClick,
         colors = CardDefaults.cardColors(
-            containerColor = when { marked -> u.container; safe -> green.container; else -> MaterialTheme.colorScheme.surface },
+            containerColor = when { marked -> u.container; safe -> green.container; else -> own.container },
             contentColor = when { marked -> u.ink; safe -> green.ink; else -> MaterialTheme.colorScheme.onSurface },
         ),
         border = when {
             marked -> BorderStroke(2.dp, u.edge)
             safe -> BorderStroke(2.dp, green.ink.copy(alpha = 0.6f))
-            else -> BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+            else -> BorderStroke(1.dp, own.ink.copy(alpha = 0.35f))
         },
         modifier = modifier.fillMaxWidth().heightIn(min = if (big) 88.dp else 76.dp),
     ) {
         if (big) {
             Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                IconBadge(info.icon, if (marked) Tint(MaterialTheme.colorScheme.surface, u.edge) else if (safe) Tint(MaterialTheme.colorScheme.surface, green.ink) else info.badge(), 56.dp)
+                IconBadge(info.icon, if (marked) Tint(MaterialTheme.colorScheme.surface, u.edge) else if (safe) Tint(MaterialTheme.colorScheme.surface, green.ink) else Tint(MaterialTheme.colorScheme.surface, own.ink), 56.dp)
                 Spacer(Modifier.width(16.dp))
                 Column(Modifier.weight(1f)) {
                     // Simple look: large print (24 and 18 sp), still growing with the phone's text size
@@ -490,7 +492,7 @@ fun TileCard(info: TileInfo, big: Boolean, status: String? = null, modifier: Mod
             // Compact: icon beside the title, so more fits on the screen; a live status replaces the hint
             // Every line starts at the same edge, right of the icon; one size for titles, one for hints
             Row(Modifier.padding(horizontal = 12.dp, vertical = 12.dp), verticalAlignment = Alignment.Top) {
-                IconBadge(info.icon, if (marked) Tint(MaterialTheme.colorScheme.surface, u.edge) else if (safe) Tint(MaterialTheme.colorScheme.surface, green.ink) else info.badge(), 36.dp)
+                IconBadge(info.icon, if (marked) Tint(MaterialTheme.colorScheme.surface, u.edge) else if (safe) Tint(MaterialTheme.colorScheme.surface, green.ink) else Tint(MaterialTheme.colorScheme.surface, own.ink), 36.dp)
                 Spacer(Modifier.width(10.dp))
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                     Text(info.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
@@ -541,9 +543,9 @@ fun FullHome(content: Content?, pins: List<String>, nav: Nav, onSettings: () -> 
     LaunchedEffect(Unit) { while (true) { kotlinx.coroutines.delay(60_000); now = System.currentTimeMillis() } }
     val fixed = Tiles.FIXED.mapNotNull { tileInfo(it, content) }
     val mine = pins.mapNotNull { tileInfo(it, content) }
-    // Two columns on a phone; one when the text is made very large, so nothing is cut off
+    // Compact tiles two (or three) to a row, as before; one only when the text is made huge
     val cfg = androidx.compose.ui.platform.LocalConfiguration.current
-    val cols = (((cfg.screenWidthDp - 32 + 12) / (172 * cfg.fontScale.coerceAtLeast(1f))).toInt()).coerceIn(1, 3)
+    val cols = if (cfg.fontScale >= 1.6f) 1 else ((cfg.screenWidthDp - 20) / 160).coerceIn(2, 3)
     LazyVerticalGrid(
         columns = GridCells.Fixed(1),
         contentPadding = PaddingValues(16.dp),
