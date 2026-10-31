@@ -24,3 +24,6 @@
 - `app/src/main/res/drawable/fig_*.xml` (built by `scripts/pictograms/figures.py`) — the pictures in
   cards, redrawn from the guide's figures (same content, new drawing; CC BY-SA 4.0, credited to the
   guide), partly from Material Symbols (Apache License 2.0).
+- `app/src/main/res/drawable/hi_*.xml` (built by `scripts/pictograms/healthicons.py`) — icons from
+  Health Icons (https://healthicons.org), CC0 1.0 (public domain); the originals are kept unchanged
+  in `scripts/pictograms/healthicons/` with their licence.

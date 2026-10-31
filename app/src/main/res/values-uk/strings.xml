@@ -664,4 +664,7 @@
     <string name="mine_block_trouble">На випадок біди</string>
     <string name="mine_block_home">Запаси й закладки</string>
     <string name="mine_block_copies">Копії й друк</string>
+    <string name="source_section">Джерело: «%1$s» %2$s, п. %3$s</string>
+    <string name="source_license">Ліцензія: %1$s</string>
+    <string name="about_icons">Піктограми: Health Icons (healthicons.org, суспільне надбання, CC0) і Material Symbols (Google, Apache 2.0).</string>
 </resources>
