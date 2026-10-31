@@ -827,4 +827,6 @@
     <string name="path_teach">I teach first aid to people in my community</string>
     <string name="path_refresh">I refresh my skills on courses (resuscitation, tactical medicine)</string>
     <string name="path_delegate">I can share out steps among people nearby</string>
+    <string name="delegate_step">Step %1$s</string>
+    <string name="delegate_who">Who:</string>
 </resources>

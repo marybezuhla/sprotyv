@@ -833,4 +833,6 @@
     <string name="path_teach">Навчаю домедичної допомоги людей у своїй громаді</string>
     <string name="path_refresh">Оновлюю навички на курсах (реанімація, тактична медицина)</string>
     <string name="path_delegate">Вмію розподілити кроки між людьми поруч</string>
+    <string name="delegate_step">Крок %1$s</string>
+    <string name="delegate_who">Хто:</string>
 </resources>
