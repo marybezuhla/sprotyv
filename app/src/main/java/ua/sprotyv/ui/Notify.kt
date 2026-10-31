@@ -173,6 +173,8 @@ object Notify {
         } else {
             cancel(app, ID_TOURNIQUET_ON); cancel(app, ID_TOURNIQUET); unalarm(app, "tourniquet")
         }
+        // Whatever the notification settings: the notes about people never outlive their day
+        plan(app, "tourniquet-clean", Tourniquets.expires(app, now)?.plus(60_000))
 
         val w = waitEnd(app, now)
         if (w != null && w.first > now && shows(app, Kind.WAIT)) alarm(app, "wait", w.first) else unalarm(app, "wait")
@@ -250,20 +252,20 @@ object Notify {
         val app = c.applicationContext
         val now = System.currentTimeMillis()
         when {
-            name == "tourniquet" -> if (shows(app, Kind.TOURNIQUET)) {
-                // The ones whose full hour is now (the alarm may come a few minutes late); never their notes
-                val all = Tourniquets.all(app, now)
-                val due = all.filter { val since = now - it.at; since >= HOUR - 10 * 60_000 && since % HOUR < 15 * 60_000 }
-                due.firstOrNull()?.let { first ->
-                    val hours = ((now - first.at + 10 * 60_000) / HOUR).toInt().coerceAtLeast(1)
-                    val title = if (all.size == 1) app.getString(R.string.notify_tourniquet_title, hours)
-                        else app.getString(R.string.notify_tourniquet_title_many, due.joinToString(", ") { "№" + it.n }, hours)
-                    post(app, ID_TOURNIQUET, URGENT, "bleeding", title, app.getString(R.string.notify_tourniquet_text, due.joinToString(", ") { clock(it.at) }))
+            name == "tourniquet" -> {
+                // Each tourniquet's hours said once, however late the alarm; never their notes
+                val single = Tourniquets.all(app, now).size == 1
+                val due = Tourniquets.dueHours(app, now)
+                if (due.isNotEmpty() && shows(app, Kind.TOURNIQUET)) {
+                    val title = if (single) app.getString(R.string.notify_tourniquet_title, due.first().second)
+                        else app.getString(R.string.notify_tourniquet_title_many, due.joinToString(", ") { (t, h) -> app.getString(R.string.notify_tourniquet_item, t.n, h) })
+                    post(app, ID_TOURNIQUET, URGENT, "bleeding", title, app.getString(R.string.notify_tourniquet_text, due.joinToString(", ") { clock(it.first.at) }))
                 }
-                nextTourniquetHour(app, now + 60_000)?.let { alarm(app, "tourniquet", it) }
             }
-            // The running notice was swiped away while a tourniquet is still on: it comes back
-            name == "tourniquet-on" -> tourniquetAt(app, now)?.takeIf { shows(app, Kind.TOURNIQUET) }?.let { postTourniquetOn(app, it) }
+            // A day has passed: the times and notes are cleared, even if nothing else is on (sync below)
+            name == "tourniquet-clean" -> Tourniquets.all(app, now)
+            // The running notice was swiped away while a tourniquet is still on: put back by sync below
+            name == "tourniquet-on" -> Unit
             name == "wait" -> waitEnd(app, now)?.takeIf { shows(app, Kind.WAIT) && it.first <= now + 60_000 }?.let { (_, total) ->
                 post(app, ID_WAIT, URGENT, "now", app.getString(R.string.active_wait_done, total), app.getString(R.string.notify_wait_text))
             }
