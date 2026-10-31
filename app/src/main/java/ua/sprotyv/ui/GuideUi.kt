@@ -248,10 +248,10 @@ private fun TableView(t: Block.Table) {
                 val inline = second.isNotBlank() && second.length <= 22
                 Column(Modifier.padding(horizontal = 12.dp, vertical = 10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Row(verticalAlignment = Alignment.Top) {
-                        RichText(title, style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
+                        RichText(title, style = MaterialTheme.typography.bodyLarge.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold), modifier = Modifier.weight(1f))
                         if (inline) {
                             Spacer(Modifier.width(12.dp))
-                            RichText(second.replace("**", ""), style = MaterialTheme.typography.titleSmall)
+                            RichText(second.replace("**", ""), style = MaterialTheme.typography.bodyLarge.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold))
                         }
                     }
                     val rest = row.cells.drop(if (inline) 2 else 1)
@@ -290,7 +290,7 @@ fun FigureView(f: Block.Figure) {
             }
         }
         if (f.caption.isNotBlank()) {
-            RichText(f.caption, style = MaterialTheme.typography.bodySmall)
+            RichText(f.caption, style = MaterialTheme.typography.bodyMedium)
         }
     }
 }
@@ -342,7 +342,7 @@ fun AboutScreen(content: Content?, nav: Nav) {
         if (content == null) return@Frame Loading()
         if (content.guideBroken) return@Frame Broken()
         val g = content.guide
-        Text("${g.title} ${g.version}", style = MaterialTheme.typography.titleMedium)
+        Text("${g.title} ${g.version}", style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
         g.disclaimer.forEach { RichText(it) }
         Text(stringResource(R.string.about_source, g.source), style = MaterialTheme.typography.bodyLarge)
         Text(stringResource(R.string.about_license, g.license), style = MaterialTheme.typography.bodyLarge)

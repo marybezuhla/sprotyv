@@ -86,7 +86,7 @@ fun PracticeScreen(content: Content?, cardId: String, nav: Nav) {
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
         )
-        Text(stringResource(if (kid) R.string.practice_q_kid else R.string.practice_q), style = MaterialTheme.typography.titleMedium)
+        Text(stringResource(if (kid) R.string.practice_q_kid else R.string.practice_q), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
 
         order.forEach { i ->
             val o = p.options[i]

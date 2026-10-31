@@ -170,7 +170,7 @@ private fun CardBody(card: Card, content: Content, nav: Nav) {
             if (i < card.steps.lastIndex) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant, modifier = Modifier.padding(start = 48.dp))
         }
         Button(onClick = { all = false; step = 0 }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
-            Text(stringResource(R.string.step_by_step), style = MaterialTheme.typography.titleMedium)
+            Text(stringResource(R.string.step_by_step), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
         }
     } else if (!done) {
         val s = card.steps[step]
@@ -438,7 +438,7 @@ fun HomeLifeScreen(content: Content?, nav: Nav) {
         if (HomePrefs.state.collectAsState().value?.trip != true) {
             NavRow(stringResource(R.string.supplies), stringResource(R.string.supplies_hint)) { nav.go(Route.SuppliesRoute) }
         }
-        Text(stringResource(R.string.in_the_guide), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+        Text(stringResource(R.string.in_the_guide), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, modifier = Modifier.semantics { heading() })
         // Blackout, water, food, warmth, hygiene, health
         listOf("ch20", "ch8", "ch9", "ch12", "ch16", "ch21").mapNotNull { id -> content.guide.chapters.firstOrNull { it.id == id } }
             .forEach { ch -> ChapterRow(ch) { nav.go(Route.ChapterRoute(ch.id)) } }
