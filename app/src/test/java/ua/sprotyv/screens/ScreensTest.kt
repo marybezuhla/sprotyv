@@ -104,6 +104,16 @@ class ScreensTest {
     @Test fun homeSimple() { mode(Mode.SIMPLE); shot("01-home-simple") { SimpleHome(content, Preset.GENERAL.pins, nav) {} } }
     @Test fun homeFull() { mode(Mode.FULL); shot("02-home-full") { FullHome(content, Preset.GENERAL.pins, nav, {}, {}, {}) } }
     @Test fun homeFullDark() { mode(Mode.FULL); shot("02-home-full-dark", dark = true) { FullHome(content, Preset.GENERAL.pins, nav, {}, {}, {}) } }
+    @Test fun homeRunning() {
+        mode(Mode.FULL)
+        val now = System.currentTimeMillis()
+        app.getSharedPreferences("tourniquet", android.content.Context.MODE_PRIVATE).edit().putLong("at", now - 12 * 60_000).commit()
+        app.getSharedPreferences("wait", android.content.Context.MODE_PRIVATE).edit().putLong("since", now - 5 * 60_000).putInt("total", 40).commit()
+        try { shot("02-home-running-dark", dark = true) { FullHome(content, Preset.GENERAL.pins, nav, {}, {}, {}) } } finally {
+            app.getSharedPreferences("tourniquet", android.content.Context.MODE_PRIVATE).edit().clear().commit()
+            app.getSharedPreferences("wait", android.content.Context.MODE_PRIVATE).edit().clear().commit()
+        }
+    }
     @Test fun homeKid() { mode(Mode.KID); shot("03-home-kid") { KidHome(content, nav) {} } }
 
     @Test fun bleedingOverview() { mode(Mode.FULL); shot("04-card-bleeding") { CardScreen(content, "bleeding", nav) } }
