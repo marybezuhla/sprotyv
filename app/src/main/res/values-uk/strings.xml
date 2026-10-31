@@ -696,7 +696,7 @@
     <string name="moz_title">Домедична допомога: порядки МОЗ</string>
     <string name="moz_short">Порядки МОЗ: домедична допомога</string>
     <string name="moz_hint">29 офіційних порядків, наказ № 441</string>
-    <string name="moz_intro">Офіційні порядки Міністерства охорони здоров’я: що робити до приїзду швидкої. Кожен порядок можна читати кроками або повним текстом. Слова наказу не змінено.</string>
+    <string name="moz_intro">Увесь наказ МОЗ № 441 в одному місці: текст наказу й 29 офіційних порядків — що робити до приїзду швидкої. Кожен порядок можна читати кроками або повним текстом. Слова наказу не змінено.</string>
     <string name="moz_intro_medic">Повний текст 29 порядків наказу МОЗ № 441, у нумерації наказу. Кожен можна відкрити й кроками, щоб показати людям поруч.</string>
     <string name="moz_group_heart">Серце й дихання</string>
     <string name="moz_group_injury">Кровотеча й травми</string>
@@ -797,4 +797,7 @@
     <string name="notes_gone">Цієї нотатки вже немає.</string>
     <string name="notes_length">%1$d з %2$d знаків</string>
     <string name="moz_compare_title">Офіційний порядок МОЗ на цю тему</string>
+    <string name="moz_search">Знайти в усіх порядках</string>
+    <string name="moz_found">Знайдено порядків: %1$d</string>
+    <string name="moz_order_text">Текст наказу</string>
 </resources>

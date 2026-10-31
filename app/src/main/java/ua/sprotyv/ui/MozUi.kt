@@ -1,6 +1,7 @@
 package ua.sprotyv.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -52,10 +53,42 @@ fun MozListScreen(content: Content?, nav: Nav) {
         val moz = content.moz441 ?: return@Frame Broken()
         val medic = HomePrefs.state.collectAsState().value?.medic == true
         Text(stringResource(if (medic) R.string.moz_intro_medic else R.string.moz_intro), style = MaterialTheme.typography.bodyLarge)
+        // Search across all 29 procedures, word for word
+        var query by rememberSaveable { mutableStateOf("") }
+        androidx.compose.material3.OutlinedTextField(
+            value = query, onValueChange = { query = it.take(60) }, singleLine = true,
+            label = { Text(stringResource(R.string.moz_search)) }, modifier = Modifier.fillMaxWidth(),
+        )
+        val q = query.trim()
+        if (q.length >= 2) {
+            val found = moz.procedures.filter { it.allText.contains(q, ignoreCase = true) }
+            if (found.isEmpty()) Text(stringResource(R.string.notes_nothing_found), style = MaterialTheme.typography.bodyLarge)
+            else Block(stringResource(R.string.moz_found, found.size), Group.FIRST_AID, padded = false) {
+                found.forEachIndexed { i, p -> BlockRow("${p.n}. ${p.short}", first = i == 0) { nav.go(Route.Moz(p.n)) } }
+            }
+            return@Frame
+        }
         MOZ_GROUPS.forEach { (title, numbers) ->
             val list = numbers.mapNotNull(moz::procedure)
             Block(stringResource(title), Group.FIRST_AID, padded = false, foldable = true, summary = stringResource(R.string.shelf_count, list.size)) {
                 list.forEachIndexed { i, p -> BlockRow("${p.n}. ${p.short}", first = i == 0) { nav.go(Route.Moz(p.n)) } }
+            }
+        }
+        // The order itself, so the whole document is here in one place
+        moz.order?.let { o ->
+            Block(stringResource(R.string.moz_order_text), Group.GUIDE, foldable = true, summary = moz.act) {
+                Text(o.preamble, style = MaterialTheme.typography.bodyMedium)
+                Text("НАКАЗУЮ:", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
+                Text(o.approve, style = MaterialTheme.typography.bodyMedium)
+                moz.procedures.forEach { p ->
+                    Text(
+                        "${p.n}) Порядок ${p.title}",
+                        style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(start = 16.dp).heightIn(min = 32.dp).clickable { nav.go(Route.Moz(p.n)) },
+                    )
+                }
+                o.points.forEach { Text(it, style = MaterialTheme.typography.bodyMedium) }
+                Text(o.signed, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
             }
         }
         SourceBox(moz.act, moz.license, reviewedBy = "")
