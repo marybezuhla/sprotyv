@@ -1006,11 +1006,11 @@
     <string name="tourniquet_note_unsaved">Not saved. Write it on the tourniquet.</string>
     <string name="gart_title">Daily hardening</string>
     <string name="gart_hint">Small actions that hold you and your close ones</string>
-    <string name="gart_intro">Small actions that hold you and your close ones through a long war, in Ukrainian. Choose a few — up to five — and tick when done. A missed day resets nothing.</string>
+    <string name="gart_intro">Small actions that hold you and your close ones through a long war. Choose a few — up to five — and tick when done. A missed day resets nothing.</string>
     <string name="gart_today">My hardening today</string>
     <string name="gart_today_count">Today %1$d of %2$d</string>
     <string name="gart_none">Nothing chosen yet. Open a group below and take one or two habits.</string>
-    <string name="gart_full">%1$d chosen: habits take root better that way. To take a new one, put one aside.</string>
+    <string name="gart_full">%1$d chosen: a few habits are easier to keep than many. To take a new one, put one aside.</string>
     <string name="gart_take">Take</string>
     <string name="gart_drop">Put aside</string>
     <string name="gart_open">Open</string>
@@ -1032,11 +1032,11 @@
     <string name="gart_body_hint">Movement every day and a check once a month</string>
     <string name="gart_body_check">Is the body ready — once a month</string>
     <string name="gart_body_check_hint">Not a score, a guide: what may be needed in danger.</string>
-    <string name="gart_body_doctor">With heart or joint conditions, pregnancy or a recent injury, ask a doctor first. WHO guide for adults: 150–300 minutes of moderate movement a week and strength exercises twice a week.</string>
+    <string name="gart_body_doctor">With heart or joint conditions, pregnancy or a recent injury, ask a doctor what load suits you. WHO guide for adults: 150–300 minutes of moderate movement a week and strength exercises on at least two days a week; after 65, balance exercises on 3 days too. Any movement is better than none.</string>
     <string name="gart_why">Why it works</string>
     <string name="gart_why_hint">What science says</string>
-    <string name="gart_why_1">A habit becomes automatic in about 66 days on average, from 18 to more than 200 for different people. So days done are counted here, not an unbroken streak.</string>
+    <string name="gart_why_1">A habit mostly becomes automatic in about 66 days, from 18 to more than 200 depending on the person and the habit. So days done are counted here, not an unbroken streak.</string>
     <string name="gart_why_2">One missed day hardly affects how a habit forms — so nothing is reset.</string>
-    <string name="gart_why_3">An "if — then" plan tied to something you already do every day makes a habit much more likely to stick.</string>
-    <string name="gart_why_4">The groups are the five supports of resilience after disasters: safety, calm, the sense of being able to act, connection with people, and hope.</string>
+    <string name="gart_why_3">An \"if — then\" plan tied to something you already do every day makes you noticeably more likely to actually do it.</string>
+    <string name="gart_why_4">The first five groups follow the five supports that help people hold on after disasters: safety, calm, belief that you and your community can act, connection, and hope. The sixth is the body.</string>
 </resources>
