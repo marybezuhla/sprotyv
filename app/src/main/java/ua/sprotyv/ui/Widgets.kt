@@ -99,9 +99,10 @@ object Widgets {
     private fun counts(context: Context, now: Long): List<Count> {
         val out = ArrayList<Count>()
         fun prefs(name: String) = context.getSharedPreferences(name, Context.MODE_PRIVATE)
-        prefs("tourniquet").getLong("at", 0L).takeIf { it > 0 && now - it in 0 until 24 * 3600_000L }?.let { at ->
+        Tourniquets.all(context, now).let { list ->
+            val at = list.firstOrNull()?.at ?: return@let
             val clock = java.time.Instant.ofEpochMilli(at).atZone(java.time.ZoneId.systemDefault()).format(java.time.format.DateTimeFormatter.ofPattern("HH:mm"))
-            out += Count(context.getString(R.string.widget_tourniquet, clock), at, false, "bleeding")
+            out += Count(if (list.size == 1) context.getString(R.string.widget_tourniquet, clock) else context.getString(R.string.widget_tourniquets, list.size, clock), at, false, "bleeding")
         }
         prefs("wait").let { p ->
             val t = p.getLong("since", 0L)

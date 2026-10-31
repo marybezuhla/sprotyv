@@ -130,8 +130,11 @@ object Notify {
 
     // ---- the running counts, read from where their screens keep them
 
-    private fun tourniquetAt(c: Context, now: Long): Long? =
-        other(c, "tourniquet").getLong("at", 0L).takeIf { it > 0 && now - it in 0 until DAY }
+    private fun tourniquetAt(c: Context, now: Long): Long? = Tourniquets.earliest(c, now)
+
+    /** The next full hour of any tourniquet on now: each is reminded of on its own hours. */
+    private fun nextTourniquetHour(c: Context, now: Long): Long? =
+        Tourniquets.all(c, now).map { it.at + ((now - it.at) / HOUR + 1) * HOUR }.minOrNull()
 
     private fun waitEnd(c: Context, now: Long): Pair<Long, Int>? {
         val p = other(c, "wait")
@@ -166,7 +169,7 @@ object Notify {
         val t = tourniquetAt(app, now)
         if (t != null && shows(app, Kind.TOURNIQUET)) {
             postTourniquetOn(app, t)
-            alarm(app, "tourniquet", t + ((now - t) / HOUR + 1) * HOUR)
+            nextTourniquetHour(app, now)?.let { alarm(app, "tourniquet", it) }
         } else {
             cancel(app, ID_TOURNIQUET_ON); cancel(app, ID_TOURNIQUET); unalarm(app, "tourniquet")
         }
@@ -212,7 +215,7 @@ object Notify {
     /** The next moment the widget's counts change by themselves: a wait ends, a count expires. */
     private fun widgetDue(c: Context, now: Long): Long? {
         val times = ArrayList<Long>()
-        other(c, "tourniquet").getLong("at", 0L).takeIf { it > 0 }?.let { times += it + DAY }
+        Tourniquets.all(c, now).forEach { times += it.at + DAY }
         other(c, "wait").let { p -> p.getLong("since", 0L).takeIf { it > 0 }?.let { t -> times += t + p.getInt("total", 40).coerceIn(1, 180) * 60_000L; times += t + 3 * HOUR } }
         Since.SHELTER.get(c, now).takeIf { it != 0L }?.let { times += it + 48 * HOUR }
         Since.POWER.get(c, now).takeIf { it != 0L }?.let { times += it + 72 * HOUR }
@@ -247,10 +250,20 @@ object Notify {
         val app = c.applicationContext
         val now = System.currentTimeMillis()
         when {
-            name == "tourniquet" -> tourniquetAt(app, now)?.takeIf { shows(app, Kind.TOURNIQUET) }?.let { t ->
-                val hours = ((now - t + 5 * 60_000) / HOUR).toInt().coerceAtLeast(1)
-                post(app, ID_TOURNIQUET, URGENT, "bleeding", app.getString(R.string.notify_tourniquet_title, hours), app.getString(R.string.notify_tourniquet_text, clock(t)))
+            name == "tourniquet" -> if (shows(app, Kind.TOURNIQUET)) {
+                // The ones whose full hour is now (the alarm may come a few minutes late); never their notes
+                val all = Tourniquets.all(app, now)
+                val due = all.filter { val since = now - it.at; since >= HOUR - 10 * 60_000 && since % HOUR < 15 * 60_000 }
+                due.firstOrNull()?.let { first ->
+                    val hours = ((now - first.at + 10 * 60_000) / HOUR).toInt().coerceAtLeast(1)
+                    val title = if (all.size == 1) app.getString(R.string.notify_tourniquet_title, hours)
+                        else app.getString(R.string.notify_tourniquet_title_many, due.joinToString(", ") { "№" + it.n }, hours)
+                    post(app, ID_TOURNIQUET, URGENT, "bleeding", title, app.getString(R.string.notify_tourniquet_text, due.joinToString(", ") { clock(it.at) }))
+                }
+                nextTourniquetHour(app, now + 60_000)?.let { alarm(app, "tourniquet", it) }
             }
+            // The running notice was swiped away while a tourniquet is still on: it comes back
+            name == "tourniquet-on" -> tourniquetAt(app, now)?.takeIf { shows(app, Kind.TOURNIQUET) }?.let { postTourniquetOn(app, it) }
             name == "wait" -> waitEnd(app, now)?.takeIf { shows(app, Kind.WAIT) && it.first <= now + 60_000 }?.let { (_, total) ->
                 post(app, ID_WAIT, URGENT, "now", app.getString(R.string.active_wait_done, total), app.getString(R.string.notify_wait_text))
             }
@@ -331,9 +344,13 @@ object Notify {
     /** The tourniquet's time, in the shade for as long as it is on, with a clock counting up. */
     private fun postTourniquetOn(c: Context, t: Long) {
         if (!allowedBySystem(c)) return
+        val count = Tourniquets.all(c).size
         val n = NotificationCompat.Builder(c, RUNNING)
             .setSmallIcon(R.drawable.ic_notify)
-            .setContentTitle(c.getString(R.string.tourniquet_mark, clock(t)))
+            // Several: how many and the first time; never the notes about the people
+            .setContentTitle(if (count > 1) c.getString(R.string.notify_tourniquets_on, count, clock(t)) else c.getString(R.string.tourniquet_mark, clock(t)))
+            // Android 14 lets an ongoing notice be swiped away: it is put back while a tourniquet is on
+            .setDeleteIntent(pending(c, "tourniquet-on"))
             .setContentText(c.getString(R.string.notify_tourniquet_on))
             .setWhen(t).setShowWhen(true).setUsesChronometer(true)
             .setOngoing(true).setOnlyAlertOnce(true).setSilent(true)

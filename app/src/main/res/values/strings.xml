@@ -972,4 +972,15 @@
     <string name="ok">OK</string>
     <string name="backup_done_title">Done</string>
     <string name="backup_problem_title">That did not work</string>
+    <string name="tourniquets_count">Tourniquets: %1$d</string>
+    <string name="tourniquet_note">Who and where</string>
+    <string name="tourniquet_note_hint">E.g. girl, left arm</string>
+    <string name="tourniquet_earlier">−%1$d min</string>
+    <string name="tourniquet_handed">Handed to medics</string>
+    <string name="tourniquet_another">＋ Another tourniquet</string>
+    <string name="handover_tourniquet_line">tourniquet on at %1$s (%2$d h %3$02d min ago)</string>
+    <string name="notify_tourniquets_on">Tourniquets: %1$d · first T %2$s</string>
+    <string name="notify_tourniquet_title_many">Tourniquet %1$s: %2$d h on</string>
+    <string name="active_tourniquets">Tourniquets: %1$d, longest %2$s</string>
+    <string name="widget_tourniquets">Tourniquets: %1$d · first %2$s</string>
 </resources>
