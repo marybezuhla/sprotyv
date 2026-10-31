@@ -359,6 +359,26 @@ def main():
         if not ch["title"]:
             sys.exit(f"Chapter without a title: {ch['id']}")
 
+    # Pictures the guide lacks, from open sources (scripts/figures-extra), each after its heading
+    extra_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "figures-extra")
+    with open(os.path.join(extra_dir, "extras.json"), encoding="utf-8") as f:
+        extras = json.load(f)
+    for x in extras:
+        if not re.fullmatch(r"fig_[0-9a-f]{16}", x["name"]):
+            sys.exit(f"Bad extra figure name: {x['name']}")
+        placed = 0
+        for ch in chapters:
+            if ch["title"] != x["chapter"]:
+                continue
+            for sec in ch["sections"]:
+                for i, b in enumerate(sec["blocks"]):
+                    if b.get("t") == "h" and b["text"].startswith(x["after"]):
+                        sec["blocks"].insert(i + 1, {"t": "figure", "pictures": [x["name"]], "caption": x["caption"]})
+                        placed += 1
+                        break
+        if placed != 1:
+            sys.exit(f"Extra figure {x['name']}: heading «{x['after']}» found {placed} times")
+
     try:
         commit = subprocess.run(["git", "-C", args.source, "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
     except Exception:
@@ -395,7 +415,8 @@ def main():
         "license": "CC BY-SA 4.0",
         "changes": "Перетворено для показу в застосунку: розмітку змінено, рисунки збережено як зображення, "
                    "розділам Додатку А додано номери А.1–А.5, застереження з обкладинки перенесено в «Про довідник», "
-                   "решту обкладинки, зміст і бланки нотаток не включено. Текст розділів не змінено.",
+                   "решту обкладинки, зміст і бланки нотаток не включено. Додано три рисунки з відкритих джерел "
+                   "(суспільне надбання; автор — у підписі): рис. 11.2, 15.5, 15.6. Текст розділів не змінено.",
         "chapters": chapters,
     }
     os.makedirs(args.out, exist_ok=True)
