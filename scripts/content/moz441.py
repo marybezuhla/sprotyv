@@ -81,6 +81,8 @@ def main():
         "act": "Наказ МОЗ України від 09.03.2022 № 441, зареєстровано в Мін'юсті 28.03.2022 за № 356/37692",
         "source": "https://moz.gov.ua/uk/decrees/nakaz-moz-ukraini-vid-09032022--441-pro-zatverdzhennja-porjadkiv-nadannja-domedichnoi-dopomogi-osobam-pri-nevidkladnih-stanah",
         "retrieved": "2026-10-31",
+        # Checked by hand on zakon.rada.gov.ua (z0356-22): in force
+        "status": "Чинний (перевірено на zakon.rada.gov.ua 31.10.2026)",
         "license": "Офіційний документ: не охороняється авторським правом (Закон № 2811-IX, ст. 8)",
         "procedures": procedures,
     }

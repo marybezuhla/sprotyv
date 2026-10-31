@@ -59,7 +59,7 @@ fun MozListScreen(content: Content?, nav: Nav) {
             }
         }
         SourceBox(moz.act, moz.license, reviewedBy = "")
-        Text(stringResource(R.string.moz_retrieved, moz.retrieved), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(listOf(moz.status, stringResource(R.string.moz_retrieved, moz.retrieved)).filter { it.isNotBlank() }.joinToString(" · "), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 
@@ -85,7 +85,7 @@ fun MozScreen(content: Content?, n: Int, nav: Nav) {
         if (full) FullText(p, medic) else Steps(p)
         SourceBox(stringResource(R.string.moz_source_line, moz.act, p.n), moz.license, reviewedBy = "")
         Text(
-            stringResource(if (full) R.string.moz_as_is else R.string.moz_layout_only) + " " + stringResource(R.string.moz_retrieved, moz.retrieved),
+            stringResource(if (full) R.string.moz_as_is else R.string.moz_layout_only) + " " + moz.status.let { if (it.isBlank()) "" else "$it. " } + stringResource(R.string.moz_retrieved, moz.retrieved),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
