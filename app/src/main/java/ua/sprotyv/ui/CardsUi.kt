@@ -62,18 +62,18 @@ import ua.sprotyv.reach.Reach
 /** A tappable row for a card: large, title first. */
 @Composable
 fun CardRow(card: Card, onClick: () -> Unit) {
+    // "The first 60 seconds" is where to start when it is not clear what happened: marked out
+    val first = card.id == "first-60"
     Card(
         onClick = onClick,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        colors = CardDefaults.cardColors(containerColor = if (first) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface),
+        border = if (first) BorderStroke(2.dp, MaterialTheme.colorScheme.primary) else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp),
     ) {
-        Text(
-            card.title,
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 20.dp),
-        )
+        Column(Modifier.padding(horizontal = 16.dp, vertical = if (first) 16.dp else 20.dp)) {
+            Text(card.title, style = if (first) MaterialTheme.typography.titleLarge else MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+            if (first) Text(stringResource(R.string.first_60_hint), style = MaterialTheme.typography.bodyMedium)
+        }
     }
 }
 

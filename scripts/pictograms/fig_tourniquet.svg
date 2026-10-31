@@ -1,12 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480">
-<path fill="#1d1d1f" fill-opacity="1.0" d="M70 120H110A50 50 0 0 1 160 170V310A50 50 0 0 1 110 360H70A50 50 0 0 1 20 310V170A50 50 0 0 1 70 120Z"/>
-<path fill="#1d1d1f" fill-opacity="1.0" d="M170 170H332V310H170Z"/>
-<path fill="#1d1d1f" fill-opacity="1.0" d="M458 170H770A70 70 0 0 1 840 240V240A70 70 0 0 1 770 310H458A70 70 0 0 1 388 240V240A70 70 0 0 1 458 170Z"/>
-<path fill="#1d1d1f" fill-opacity="1.0" d="M818 240A62 62 0 1 0 942 240A62 62 0 1 0 818 240Z"/>
-<path fill="#1d1d1f" fill-opacity="1.0" d="M352 140H368A12 12 0 0 1 380 152V328A12 12 0 0 1 368 340H352A12 12 0 0 1 340 328V152A12 12 0 0 1 352 140Z"/>
-<path fill="#1d1d1f" fill-opacity="1.0" d="M315 84H405A15 15 0 0 1 420 99V99A15 15 0 0 1 405 114H315A15 15 0 0 1 300 99V99A15 15 0 0 1 315 84Z"/>
-<path fill="#1d1d1f" fill-opacity="1.0" d="M350 110H370V144H350Z"/>
-<path d="M380 410H640M380 380V440M640 380V440" fill="none" stroke="#2f5fbf" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
-<path fill="#c62828" fill-opacity="1.0" d="M604 230A36 36 0 1 0 676 230A36 36 0 1 0 604 230Z"/>
-<path d="M640 264C648 300 660 330 652 372" fill="none" stroke="#c62828" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+<path fill="#1d1d1f" fill-opacity="1.0" d="M36 96A64 64 0 1 0 164 96A64 64 0 1 0 36 96Z"/>
+<path fill="#1d1d1f" fill-opacity="1.0" d="M30 470V230Q30 170 100 170H200Q240 170 240 215V470Z"/>
+<path fill="#1d1d1f" fill-opacity="1.0" d="M220 186L530 214Q560 220 560 258Q560 296 530 302L220 330Z"/>
+<path fill="#1d1d1f" fill-opacity="1.0" d="M520 222L790 240Q800 260 790 282L520 296Z"/>
+<path fill="#1d1d1f" fill-opacity="1.0" d="M486 258A44 44 0 1 0 574 258A44 44 0 1 0 486 258Z"/>
+<path transform="translate(770.0 181.1) scale(0.2159) translate(440.0 388.5) rotate(90) translate(-388.5 -440.0) translate(-64 920)" fill="#1d1d1f" d="M402-40q-27 0-51.5-12.5T311-88L68-446q-6-9-4-20t10-18q17-15 39.5-19t44.57 13.19L280-397v-413q0-12.75 8.68-21.38 8.67-8.62 21.5-8.62 12.82 0 21.32 8.62 8.5 8.63 8.5 21.38v330h107v-410q0-12.75 8.68-21.38 8.67-8.62 21.5-8.62 12.82 0 21.32 8.62 8.5 8.63 8.5 21.38v410h107v-370q0-12.75 8.68-21.38 8.67-8.62 21.5-8.62 12.82 0 21.32 8.62 8.5 8.63 8.5 21.38v370h106v-290q0-12.75 8.68-21.38 8.67-8.62 21.5-8.62 12.82 0 21.32 8.62 8.5 8.63 8.5 21.38v580q0 63-43.5 106.5T690-40H402Z"/>
+<path fill="#2f5fbf" fill-opacity="1.0" d="M330 172H346A12 12 0 0 1 358 184V336A12 12 0 0 1 346 348H330A12 12 0 0 1 318 336V184A12 12 0 0 1 330 172Z"/>
+<path d="M286 140L392 196" fill="none" stroke="#2f5fbf" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M358 410H462M358 386V434M462 386V434" fill="none" stroke="#2f5fbf" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+<path fill="#c62828" fill-opacity="1.0" d="M440 262A30 30 0 1 0 500 262A30 30 0 1 0 440 262Z"/>
+<path d="M470 292C476 320 486 340 478 372" fill="none" stroke="#c62828" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

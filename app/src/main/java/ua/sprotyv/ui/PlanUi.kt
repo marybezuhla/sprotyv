@@ -9,6 +9,10 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -141,11 +145,27 @@ fun KitScreen(content: Content?, nav: Nav) {
 
     Text(stringResource(R.string.kit_progress, done, total), style = MaterialTheme.typography.titleMedium)
     Text(stringResource(R.string.kit_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    // One frame per group with its own count, as in a reviewed app: the eye finds the group, then the item
     groups.forEach { g ->
-        Text(g.title, style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
-        g.items.forEach { item ->
-            CheckRow(item.text, item.key in checked) { on ->
-                PersonalStore.save("kit:" + item.key) { it.kit().set(KitCheck(item.key, on, System.currentTimeMillis())) }
+        val got = g.items.count { it.key in checked }
+        androidx.compose.material3.Card(
+            colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+            border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Row(Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 4.dp), verticalAlignment = Alignment.Top) {
+                Text(g.title, style = MaterialTheme.typography.titleSmall, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, modifier = Modifier.weight(1f).semantics { heading() })
+                Text(
+                    stringResource(R.string.ready_count, got, g.items.size),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = if (got == g.items.size) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            g.items.forEachIndexed { i, item ->
+                if (i > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant, modifier = Modifier.padding(start = 56.dp))
+                KitRow(item.text, item.key in checked) { on ->
+                    PersonalStore.save("kit:" + item.key) { it.kit().set(KitCheck(item.key, on, System.currentTimeMillis())) }
+                }
             }
         }
     }
@@ -182,3 +202,28 @@ fun KitScreen(content: Content?, nav: Nav) {
 
 const val KEY_KIT_REVIEWED = "kit_reviewed_at"
 
+
+/**
+ * One kit item: the thing itself first, in plain weight, and the guide's explanation after it,
+ * smaller and quieter, so a long line still reads at a glance.
+ */
+@Composable
+private fun KitRow(text: String, checked: Boolean, onChange: (Boolean) -> Unit) {
+    val plain = text.replace("**", "")
+    // The head is the part before the first dash, colon or bracket, when that part is short
+    val cut = listOf(" — ", ": ", " (").mapNotNull { sep -> plain.indexOf(sep).takeIf { it in 3..70 }?.let { it to sep } }.minByOrNull { it.first }
+    val head = cut?.let { plain.substring(0, it.first) } ?: plain
+    val tail = cut?.let { (at, sep) -> plain.substring(at + sep.length).let { if (sep == " (") "(" + it else it } }
+    Row(
+        Modifier.fillMaxWidth().heightIn(min = 48.dp)
+            .toggleable(value = checked, role = androidx.compose.ui.semantics.Role.Checkbox, onValueChange = onChange)
+            .padding(end = 16.dp, top = 6.dp, bottom = 6.dp),
+        verticalAlignment = Alignment.Top,
+    ) {
+        Checkbox(checked = checked, onCheckedChange = null, modifier = Modifier.padding(horizontal = 12.dp, vertical = 2.dp))
+        Column(Modifier.weight(1f).padding(top = 2.dp)) {
+            Text(head, style = MaterialTheme.typography.bodyLarge)
+            if (!tail.isNullOrBlank()) Text(tail, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
+}

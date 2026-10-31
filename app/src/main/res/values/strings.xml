@@ -585,4 +585,10 @@
     <string name="welcome_restore">Move from another phone</string>
     <string name="backup_replace_home">The look, home-screen tiles and settings come along too, including the name “Notes” instead of Sprotyv if the copy had it.</string>
     <string name="backup_restored_lock">Restored. In the copy, “Mine” opened with a fingerprint or PIN: turn that on again in settings, as a new phone has a new key.</string>
+    <string name="tile_power_out">No power for %1$d h %2$d min</string>
+    <string name="tile_ready">✓ Done</string>
+    <string name="first_60_hint">Not sure what happened? Start here.</string>
+    <string name="ready_yes">✓</string>
+    <string name="ready_no">not yet</string>
+    <string name="ready_people_detail">Someone to tell “I am safe”: %1$s · Someone to call in an emergency: %2$s</string>
 </resources>

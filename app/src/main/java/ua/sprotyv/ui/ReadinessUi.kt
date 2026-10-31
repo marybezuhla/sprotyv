@@ -55,6 +55,7 @@ import ua.sprotyv.personal.PersonalStore
 fun ReadinessBlock(content: Content?, nav: Nav) {
     val medical by remember { PersonalStore.observe { db -> db.medical().observe().map(Readiness::medical) } }.collectAsStateWithLifecycle(null)
     val people by remember { PersonalStore.observe { db -> db.people().observe().map(Readiness::people) } }.collectAsStateWithLifecycle(null)
+    val peopleFlags by remember { PersonalStore.observe { db -> db.people().observe().map { l -> l.any { it.safeList } to l.any { it.ice } } } }.collectAsStateWithLifecycle(null)
     val plan by remember { PersonalStore.observe { db -> db.plan().observe().map(Readiness::plan) } }.collectAsStateWithLifecycle(null)
     val ticked by remember { PersonalStore.observe { db -> db.kit().observe().map { l -> l.filter { it.checked }.map { it.key }.toSet() } } }.collectAsStateWithLifecycle(null)
     val kit = remember(content, ticked) {
@@ -89,7 +90,13 @@ fun ReadinessBlock(content: Content?, nav: Nav) {
     Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text(stringResource(R.string.ready_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
-            rows.forEach { (title, p, route) -> ReadyRow(stringResource(title), p) { nav.go(route) } }
+            // People: two things, not two people, so they are said in words under the bar
+            val yes = stringResource(R.string.ready_yes)
+            val no = stringResource(R.string.ready_no)
+            val peopleDetail = peopleFlags?.let { (safe, ice) ->
+                stringResource(R.string.ready_people_detail, if (safe) yes else no, if (ice) yes else no)
+            }
+            rows.forEach { (title, p, route) -> ReadyRow(stringResource(title), p, if (title == R.string.people) peopleDetail else null) { nav.go(route) } }
             if (rows.all { it.second != null }) {
                 val next = rows.firstOrNull { it.second?.complete == false }
                 Text(
@@ -103,14 +110,14 @@ fun ReadinessBlock(content: Content?, nav: Nav) {
 }
 
 @Composable
-private fun ReadyRow(title: String, p: Progress?, onClick: () -> Unit) {
+private fun ReadyRow(title: String, p: Progress?, detail: String? = null, onClick: () -> Unit) {
     val done = if (LocalDark.current) Color(0xFF81C784) else Color(0xFF2E7D32)
     val going = MaterialTheme.colorScheme.primary
     val track = MaterialTheme.colorScheme.outlineVariant
     val words = if (p == null) "…" else stringResource(R.string.ready_count, p.done, p.total)
     Column(
         Modifier.fillMaxWidth().heightIn(min = 48.dp).clickable(onClick = onClick)
-            .clearAndSetSemantics { contentDescription = "$title: $words" },
+            .clearAndSetSemantics { contentDescription = "$title: " + (detail ?: words) },
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -127,6 +134,7 @@ private fun ReadyRow(title: String, p: Progress?, onClick: () -> Unit) {
             val f = p?.fraction ?: 0f
             if (f > 0f) drawRoundRect(if (p?.complete == true) done else going, size = Size(size.width * f, size.height), cornerRadius = r)
         }
+        if (detail != null) Text(detail, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 

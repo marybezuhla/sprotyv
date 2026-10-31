@@ -69,6 +69,8 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -291,7 +293,7 @@ fun IconBadge(icon: ImageVector, tint: Tint, size: Dp) {
  * bottom); otherwise a card for the grid. "What to do now" is the one marked out.
  */
 @Composable
-fun TileCard(info: TileInfo, big: Boolean, onClick: () -> Unit) {
+fun TileCard(info: TileInfo, big: Boolean, status: String? = null, onClick: () -> Unit) {
     val marked = info.id == Tiles.tool(Tool.NOW)
     Card(
         onClick = onClick,
@@ -299,7 +301,7 @@ fun TileCard(info: TileInfo, big: Boolean, onClick: () -> Unit) {
             containerColor = if (marked) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface,
         ),
         border = if (marked) BorderStroke(2.dp, MaterialTheme.colorScheme.primary) else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-        modifier = Modifier.fillMaxWidth().heightIn(min = if (big) 88.dp else 120.dp),
+        modifier = Modifier.fillMaxWidth().heightIn(min = if (big) 88.dp else 76.dp),
     ) {
         if (big) {
             Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -308,17 +310,24 @@ fun TileCard(info: TileInfo, big: Boolean, onClick: () -> Unit) {
                 Column(Modifier.weight(1f)) {
                     // Simple look: large print (24 and 18 sp), still growing with the phone's text size
                     Text(info.title, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
-                    if (info.hint.isNotBlank()) {
+                    if (status != null) {
+                        Text(status, style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp, lineHeight = 24.sp), color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
+                    } else if (info.hint.isNotBlank()) {
                         Text(info.hint, style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp, lineHeight = 24.sp), color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
             }
         } else {
-            Column(Modifier.padding(16.dp)) {
-                IconBadge(info.icon, info.group.tint(), 40.dp)
-                Spacer(Modifier.size(10.dp))
-                Text(info.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, maxLines = 3, overflow = TextOverflow.Ellipsis)
-                if (info.hint.isNotBlank()) {
+            // Compact: icon beside the title, so more fits on the screen; a live status replaces the hint
+            Column(Modifier.padding(horizontal = 12.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    IconBadge(info.icon, info.group.tint(), 32.dp)
+                    Spacer(Modifier.width(10.dp))
+                    Text(info.title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                }
+                if (status != null) {
+                    Text(status, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold, maxLines = 2)
+                } else if (info.hint.isNotBlank()) {
                     Text(info.hint, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
                 }
             }
@@ -346,7 +355,8 @@ fun SimpleHome(content: Content?, pins: List<String>, nav: Nav, onSettings: () -
             // Only tiles that can be shown count towards the six, so the screen matches the editor
             val fixed = Tiles.FIXED.mapNotNull { tileInfo(it, content) }
             val chosen = pins.mapNotNull { tileInfo(it, content) }.take(Tiles.SIMPLE_CHOSEN)
-            (fixed + chosen).forEach { info -> TileCard(info, big = true) { nav.go(info.route) } }
+            val now = remember { System.currentTimeMillis() }
+            (fixed + chosen).forEach { info -> TileCard(info, big = true, status = tileStatus(info.id, now)) { nav.go(info.route) } }
         }
         CallBar()
     }
@@ -355,6 +365,9 @@ fun SimpleHome(content: Content?, pins: List<String>, nav: Nav, onSettings: () -
 /** Full mode, "Home": the two fixed tiles, then the person's own, in their order. */
 @Composable
 fun FullHome(content: Content?, pins: List<String>, nav: Nav, onSettings: () -> Unit, onEdit: () -> Unit, onAdd: () -> Unit) {
+    // Live states on tiles (power out for how long) are worked out again every minute
+    var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
+    LaunchedEffect(Unit) { while (true) { kotlinx.coroutines.delay(60_000); now = System.currentTimeMillis() } }
     val fixed = Tiles.FIXED.mapNotNull { tileInfo(it, content) }
     val mine = pins.mapNotNull { tileInfo(it, content) }
     LazyVerticalGrid(
@@ -398,7 +411,7 @@ fun FullHome(content: Content?, pins: List<String>, nav: Nav, onSettings: () -> 
                 }
             }
         }
-        items(mine, key = { it.id }) { info -> TileCard(info, big = false) { nav.go(info.route) } }
+        items(mine, key = { it.id }) { info -> TileCard(info, big = false, status = tileStatus(info.id, now)) { nav.go(info.route) } }
     }
 }
 
@@ -843,4 +856,27 @@ private fun TripToggle(on: Boolean) {
             dismissButton = { androidx.compose.material3.TextButton(onClick = { ask = false }) { Text(stringResource(R.string.cancel)) } },
         )
     }
+}
+
+/**
+ * A tile's live state, when it has one: how long the power has been out, and how far the
+ * owner's own parts are (the shares last seen in "Mine", never the records).
+ */
+@Composable
+fun tileStatus(id: String, now: Long): String? {
+    val context = LocalContext.current
+    val prefs = HomePrefs.state.collectAsState().value
+    if (id == Tiles.tool(Tool.POWER) || id == Tiles.card("blackout")) {
+        val since = context.getSharedPreferences("blackout", android.content.Context.MODE_PRIVATE).getLong("since", 0L)
+        if (since == 0L || now - since > 72 * 3600_000L || since > now) return null
+        val min = (now - since) / 60_000
+        return stringResource(R.string.tile_power_out, (min / 60).toInt(), (min % 60).toInt())
+    }
+    if (prefs == null || prefs.trip) return null
+    val index = listOf(Tool.MEDICAL, Tool.PEOPLE, Tool.PLAN, Tool.KIT, Tool.SUPPLIES).indexOfFirst { Tiles.tool(it) == id }
+    if (index < 0) return null
+    val share = prefs.readiness.split(",").getOrNull(index)?.split("/") ?: return null
+    val d = share.getOrNull(0)?.toIntOrNull() ?: return null
+    val t = share.getOrNull(1)?.toIntOrNull() ?: return null
+    return if (t > 0 && d >= t) stringResource(R.string.tile_ready) else stringResource(R.string.ready_count, d, t)
 }

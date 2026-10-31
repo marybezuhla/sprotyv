@@ -591,4 +591,10 @@
     <string name="welcome_restore">Перенести з іншого телефона</string>
     <string name="backup_replace_home">Вигляд, плитки на головній і налаштування теж буде перенесено, зокрема назву «Нотатки» замість «Спротив», якщо в копії так було.</string>
     <string name="backup_restored_lock">Відновлено. У копії «Моє» відкривалося відбитком або PIN-кодом: увімкніть це знову в налаштуваннях, бо на новому телефоні новий ключ.</string>
+    <string name="tile_power_out">Світла немає %1$d год %2$d хв</string>
+    <string name="tile_ready">✓ Готово</string>
+    <string name="first_60_hint">Не знаєте, що сталося? Почніть звідси.</string>
+    <string name="ready_yes">✓</string>
+    <string name="ready_no">ще ні</string>
+    <string name="ready_people_detail">Кому писати «Я в безпеці»: %1$s · Кому дзвонити в біді: %2$s</string>
 </resources>

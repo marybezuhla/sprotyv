@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Built by scripts/pictograms/figures.py; tinted by the app -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="240dp" android:height="120dp" android:viewportWidth="960" android:viewportHeight="480">
-    <path android:pathData="M380 410H640M380 380V440M640 380V440" android:strokeColor="#FF000000" android:strokeWidth="18" android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000"/>
+    <path android:fillColor="#FF000000" android:fillAlpha="1.0" android:pathData="M330 172H346A12 12 0 0 1 358 184V336A12 12 0 0 1 346 348H330A12 12 0 0 1 318 336V184A12 12 0 0 1 330 172Z"/>
+    <path android:pathData="M286 140L392 196" android:strokeColor="#FF000000" android:strokeWidth="26" android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000"/>
+    <path android:pathData="M358 410H462M358 386V434M462 386V434" android:strokeColor="#FF000000" android:strokeWidth="16" android:strokeLineCap="round" android:strokeLineJoin="round" android:fillColor="#00000000"/>
 </vector>
