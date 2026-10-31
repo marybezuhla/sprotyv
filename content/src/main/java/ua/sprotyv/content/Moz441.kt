@@ -8,7 +8,7 @@ import org.json.JSONObject
  * (built by scripts/content/moz441.py). An official document: not protected by copyright.
  * Numbering as in the order: points "1.", items "1)", sub-items "а)".
  */
-data class Moz441(val title: String, val act: String, val source: String, val retrieved: String, val license: String, val procedures: List<Procedure>) {
+data class Moz441(val title: String, val act: String, val source: String, val retrieved: String, val license: String, val procedures: List<Procedure>, val status: String = "") {
     data class Item(val n: String, val text: String, val items: List<Item> = emptyList())
     data class Procedure(val n: Int, val title: String, val points: List<Item>) {
         /** "При масивній зовнішній кровотечі": the title without "надання домедичної допомоги постраждалим". */
@@ -35,6 +35,7 @@ object Moz441Reader {
                 val p = list.getJSONObject(i)
                 Moz441.Procedure(p.getInt("n"), text(p, "title"), items(p.getJSONArray("points"), 0))
             },
+            o.optString("status").take(MAX_TEXT),
         )
     }
 
