@@ -64,6 +64,9 @@ fun askOwner(activity: Activity, title: String, cipher: Cipher, pinOnly: Boolean
             }
         })
     } catch (e: Exception) {
+        // The window could not even start: said, and the reason kept for feedback
+        PersonalStore.noteLockTrouble(e)
+        android.widget.Toast.makeText(activity.applicationContext, activity.getString(R.string.lock_mine_failed), android.widget.Toast.LENGTH_LONG).show()
         Away.back()
         onDone(null)
     }
@@ -141,7 +144,7 @@ fun LockMineSettings() {
         }
         if (change.mode.locked) {
             Away.forOwnWindow()
-            askOwner(activity, title, change.cipher, change.mode.pinOnly) { c -> if (c != null) store() else { change.discard(); busy = false } }
+            askOwner(activity, title, change.cipher, change.mode.pinOnly) { c -> if (c != null) store() else { change.discard(); busy = false; reason = PersonalStore.lockTrouble } }
         } else {
             store()
         }
@@ -150,6 +153,7 @@ fun LockMineSettings() {
     /** From a locked mode to [target]: the owner first opens the current key. */
     fun changeFromLocked(current: KeyVault.Mode, target: KeyVault.Mode) {
         busy = true
+        PersonalStore.clearLockTrouble()
         scope.launch {
             val unlocking = withContext(Dispatchers.IO) { PersonalStore.unlockCipher(context) } ?: return@launch fail()
             Away.forOwnWindow()
@@ -184,7 +188,7 @@ fun LockMineSettings() {
     Text(stringResource(R.string.lock_mine_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     reason?.let { r ->
         androidx.compose.foundation.text.selection.SelectionContainer {
-            Text(stringResource(R.string.lock_mine_reason, r), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
+            Text(stringResource(R.string.lock_mine_reason, r), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
     if (askOn) {

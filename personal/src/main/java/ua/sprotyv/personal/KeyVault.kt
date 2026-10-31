@@ -214,7 +214,13 @@ class KeyVault(context: Context) {
             // Some phones make a StrongBox key that needs the owner's confirmation and then refuse to
             // use it: the phone's regular secure hardware is used instead. A failed key holds nothing.
             lastError = e
-            attempt(strongBox = false)
+            try {
+                attempt(strongBox = false)
+            } catch (e2: Exception) {
+                // Both reasons travel together, so the first one is not lost
+                e2.addSuppressed(e)
+                throw e2
+            }
         }
     }
 
