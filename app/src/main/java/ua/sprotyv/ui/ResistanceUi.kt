@@ -171,10 +171,10 @@ fun ResistanceScreen(content: Content?, nav: Nav) {
         }
         if (prefs?.service == true) {
             Block(stringResource(R.string.service_facts_title), Group.PREPARE, tint = resist(), foldable = true) {
-                listOf(R.string.service_fact_1, R.string.service_fact_2, R.string.service_fact_3, R.string.service_fact_4, R.string.service_fact_5).forEach {
+                listOf(R.string.service_fact_1, R.string.role_dobro_contracts, R.string.role_dobro_tro, R.string.service_fact_3, R.string.service_fact_4, R.string.service_fact_5, R.string.role_dobro_rights).forEach {
                     Row { Text("•", modifier = Modifier.padding(end = 8.dp)); Text(stringResource(it), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f)) }
                 }
-                Text(stringResource(R.string.service_source), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.role_dobro_source), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             val service = links.filter { it.group == "service" }
             if (service.isNotEmpty()) Block(stringResource(R.string.service_title), Group.PREPARE, tint = resist(), foldable = true, summary = stringResource(R.string.shelf_count, service.size)) {
