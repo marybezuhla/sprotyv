@@ -171,4 +171,3 @@ private fun tourniquetLine(context: Context, t: Tourniquets.One, count: Int): St
     val who = t.note.takeIf { it.isNotBlank() }?.let { " — $it" }.orEmpty()
     return (if (count > 1) "№${t.n}$who: " else if (who.isNotEmpty()) "${t.note}: " else "") + base
 }
-}

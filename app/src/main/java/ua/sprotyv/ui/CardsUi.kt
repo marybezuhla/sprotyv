@@ -290,7 +290,7 @@ private fun TourniquetTime(nav: Nav? = null) {
     // Running now: the danger colour of the whole app, the same as on the home screen
     val tint = ua.sprotyv.home.Group.DANGER.tint()
     if (list.size > 1) Text(stringResource(R.string.tourniquets_count, list.size), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-    list.forEach { t ->
+    list.forEach { t -> androidx.compose.runtime.key(t.n) {
         val clock = java.time.Instant.ofEpochMilli(t.at).atZone(java.time.ZoneId.systemDefault()).toLocalTime()
         val mark = stringResource(R.string.tourniquet_mark, String.format(java.util.Locale.ROOT, "%02d:%02d", clock.hour, clock.minute))
         val minutes = ((now - t.at) / 60_000).coerceAtLeast(0)
@@ -318,7 +318,7 @@ private fun TourniquetTime(nav: Nav? = null) {
                 }
             }
         }
-    }
+    } }
     Text(stringResource(R.string.tourniquet_write), style = MaterialTheme.typography.bodyLarge)
     if (list.size < Tourniquets.MAX) {
         OutlinedButton(onClick = { Tourniquets.add(context); changed() }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
