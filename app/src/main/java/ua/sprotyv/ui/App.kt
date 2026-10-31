@@ -247,6 +247,7 @@ private fun Screen(
         Route.MozList -> MozListScreen(content, nav)
         Route.Resistance -> ResistanceScreen(content, nav)
         is Route.Moz -> MozScreen(content, top.n, nav)
+        is Route.ConstitutionRoute -> if (top.article.isEmpty()) ConstitutionScreen(content, nav) else ConstitutionArticleScreen(content, top.article, nav)
         is Route.Delegate -> DelegateScreen(content, top.n, nav)
         Route.Handover -> HandoverScreen(nav)
         is Route.PracticeRoute -> PracticeScreen(content, top.card, nav)

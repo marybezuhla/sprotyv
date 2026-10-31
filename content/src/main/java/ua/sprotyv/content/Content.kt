@@ -17,6 +17,8 @@ class Content(
     private val practiceOrNull: List<Practice>? = null,
     /** The Ministry of Health's first-aid procedures (order No. 441); null if they could not be read. */
     val moz441: Moz441? = null,
+    /** The Constitution of Ukraine in full; null if it could not be read. */
+    val constitution: Constitution? = null,
 ) {
     val guideBroken get() = guideOrNull == null
     val cardsBroken get() = cardsOrNull == null
@@ -73,7 +75,12 @@ class Content(
                 } catch (e: Exception) {
                     null
                 }
-                Content(guide, cards, kids, links, practice, moz).also { loaded = it }
+                val constitution = try {
+                    assets.open("constitution.json").bufferedReader().use { ConstitutionReader.parse(it.readText()) }
+                } catch (e: Exception) {
+                    null
+                }
+                Content(guide, cards, kids, links, practice, moz, constitution).also { loaded = it }
             }
         }
 
