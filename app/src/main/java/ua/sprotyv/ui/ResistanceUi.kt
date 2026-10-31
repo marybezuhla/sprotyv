@@ -78,12 +78,22 @@ fun ResistanceScreen(content: Content?, nav: Nav) {
     val prefs = HomePrefs.state.collectAsState().value
     Frame(stringResource(R.string.resist_title), nav::back) {
         // The opening: why it matters, in plain words
-        Block(stringResource(R.string.resist_hero_title), Group.PREPARE) {
+        Block(stringResource(R.string.resist_hero_title), Group.PREPARE, tint = resist()) {
             Text(stringResource(R.string.resist_hero_1), style = MaterialTheme.typography.bodyLarge)
             Text(stringResource(R.string.resist_hero_2), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
         }
+        // Everything on resistance from other sections, in one plate that opens
+        Block(stringResource(R.string.resist_all_title), Group.PREPARE, tint = resist(), padded = false, foldable = true, summary = stringResource(R.string.resist_all_desc),
+            leading = { IconBadge(Shield, Tint(MaterialTheme.colorScheme.surface, resist().ink), 40.dp) }) {
+            BlockRow(stringResource(R.string.path_title), stringResource(R.string.path_open_hint), first = true) { nav.go(Route.Mine(MinePart.PATH)) }
+            BlockRow(stringResource(R.string.moz_title), stringResource(R.string.role_save_hint)) { nav.go(Route.MozList) }
+            BlockRow(stringResource(R.string.kit), stringResource(R.string.role_ready_hint)) { nav.go(Route.Mine(MinePart.KIT)) }
+            BlockRow(stringResource(R.string.family_plan), stringResource(R.string.role_family_hint)) { nav.go(Route.Mine(MinePart.PLAN)) }
+            BlockRow(stringResource(R.string.dir_title), stringResource(R.string.resist_all_rights)) { nav.go(Route.Directory) }
+            BlockRow(stringResource(R.string.role_truth), stringResource(R.string.role_truth_hint)) { nav.go(Route.ChapterRoute("ch18")) }
+        }
         // What anyone can do: each with the place in Sprotyv where it starts
-        Block(stringResource(R.string.resist_roles_title), Group.PREPARE, padded = false) {
+        Block(stringResource(R.string.resist_roles_title), Group.PREPARE, tint = resist(), padded = false) {
             BlockRow(stringResource(R.string.role_save), stringResource(R.string.role_save_hint), first = true) { nav.go(Route.MozList) }
             BlockRow(stringResource(R.string.role_ready), stringResource(R.string.role_ready_hint)) { nav.go(Route.Mine(MinePart.KIT)) }
             BlockRow(stringResource(R.string.role_family), stringResource(R.string.role_family_hint)) { nav.go(Route.Mine(MinePart.PLAN)) }
@@ -94,7 +104,7 @@ fun ResistanceScreen(content: Content?, nav: Nav) {
         // My path: the owner's own ticks, private, in "Mine"; here only the count
         val share = prefs?.path?.let(::pathShare)
         Block(
-            stringResource(R.string.path_title), Group.PREPARE, padded = false,
+            stringResource(R.string.path_title), Group.PREPARE, tint = resist(), padded = false,
             summary = share?.let { (d, t) -> stringResource(R.string.path_summary, d, t) },
             leading = share?.let { (d, t) -> { ReadyRing(d.toFloat() / t, "$d/$t") } },
         ) {
@@ -109,7 +119,7 @@ fun ResistanceScreen(content: Content?, nav: Nav) {
         // Support the country: donations to the largest funds, bonds, blood, reporting
         LinkGroup(stringResource(R.string.resist_support_title), stringResource(R.string.resist_support_intro), links.filter { it.group == "support" }, toolbar, context)
         // Military service: only for adults who choose to see it
-        Block(stringResource(R.string.service_title), Group.PREPARE) {
+        Block(stringResource(R.string.service_title), Group.PREPARE, tint = resist()) {
             Toggle(stringResource(R.string.service_toggle), prefs?.service == true) { on -> HomePrefs.update(context) { it.copy(service = on) } }
             Text(stringResource(R.string.service_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
@@ -161,7 +171,7 @@ fun PathScreen(nav: Nav) {
     // This week's step: the first one not done yet, in the order of the path. One at a time, calmly
     var justDone by androidx.compose.runtime.saveable.rememberSaveable { androidx.compose.runtime.mutableStateOf<String?>(null) }
     val next = path.firstOrNull { it.key !in done }
-    Block(stringResource(R.string.path_week_title), Group.PREPARE) {
+    Block(stringResource(R.string.path_week_title), Group.PREPARE, tint = resist()) {
         justDone?.let { Text(stringResource(R.string.path_week_well_done), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold) }
         if (next == null) {
             Text(stringResource(R.string.path_week_all), style = MaterialTheme.typography.bodyLarge)
@@ -177,7 +187,7 @@ fun PathScreen(nav: Nav) {
         }
     }
     Block(
-        stringResource(R.string.path_title), Group.PREPARE,
+        stringResource(R.string.path_title), Group.PREPARE, tint = resist(),
         summary = stringResource(R.string.path_summary, count, path.size),
         leading = { ReadyRing(count.toFloat() / path.size, "$count/${path.size}") },
     ) {
@@ -187,7 +197,7 @@ fun PathScreen(nav: Nav) {
         val steps = path.filter { it.level == level }
         if (steps.isEmpty()) return@forEachIndexed
         val got = steps.count { it.key in done }
-        Block(stringResource(title), Group.PREPARE, padded = false, trailing = {
+        Block(stringResource(title), Group.PREPARE, tint = resist(), padded = false, trailing = {
             Text((if (got == steps.size) "✓ " else "") + stringResource(R.string.ready_count, got, steps.size), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
         }) {
             steps.forEachIndexed { i, s ->

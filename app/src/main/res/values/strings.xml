@@ -867,4 +867,8 @@
     <string name="kid_step_next">Next</string>
     <string name="kid_step_last">Got it!</string>
     <string name="kid_step_back">Back</string>
+    <string name="resist_all_title">All about resistance</string>
+    <string name="resist_all_desc">My path, first aid, the go-bag, the plan, rights, facts, from every section</string>
+    <string name="resist_all_rights">Rights of service members and families, lawyers, veterans\' lines</string>
+    <string name="shelf_resist_desc">Everyone\'s part, where to learn, supporting the country, resilience</string>
 </resources>
