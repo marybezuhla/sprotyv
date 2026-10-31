@@ -78,7 +78,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <!-- A long press on the icon: three ways in (the neutral icon has none) -->
-            <meta-data android:name="android.app.shortcuts" android:resource="@xml/shortcuts" />
         </activity-alias>
         <activity-alias
             android:name=".LauncherNeutral"
