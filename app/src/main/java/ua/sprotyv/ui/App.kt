@@ -210,7 +210,7 @@ private fun Screen(
             MinePart.PEOPLE -> Personal(R.string.people, personal, nav) { PeopleScreen() }
             MinePart.PLAN -> Personal(R.string.family_plan, personal, nav) { PlanScreen() }
             MinePart.KIT -> Personal(R.string.kit, personal, nav) { KitScreen(content, nav) }
-            MinePart.PRINT -> Personal(R.string.print_title, personal, nav) { PrintScreen() }
+            MinePart.PRINT -> Personal(R.string.print_title, personal, nav) { PrintScreen(content) }
             MinePart.RESCUER -> Personal(R.string.rescuer_screen, personal, nav) { RescuerQrScreen(nav) }
             MinePart.BACKUP -> Personal(R.string.backup_title, personal, nav) { BackupScreen() }
             MinePart.PLAN_QR -> Personal(R.string.plan_code_title, personal, nav) { PlanCodeScreen() }

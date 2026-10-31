@@ -43,6 +43,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -85,8 +86,14 @@ private fun labels(context: Context) = RescuerCode.Labels(
     contact = context.getString(R.string.rescuer_contact),
 )
 
+/** What goes on the owner's paper: chosen by the owner, part by part. */
+enum class PrintPart { MEDICAL, PLAN, PEOPLE, SERVICES, NOTES, KIT }
+
 /** Everything the owner's printout needs, read in one go. */
-private class OwnerData(val card: MedicalCard, val people: List<Person>, val plan: FamilyPlan, val ifThen: List<PlanRow>, val roles: List<PlanRow>)
+private class OwnerData(
+    val card: MedicalCard, val people: List<Person>, val plan: FamilyPlan, val ifThen: List<PlanRow>, val roles: List<PlanRow>,
+    val notes: List<ua.sprotyv.personal.Note>, val kit: Set<String>,
+)
 
 private suspend fun readOwner(): OwnerData? = PersonalStore.read { db ->
     OwnerData(
@@ -95,16 +102,53 @@ private suspend fun readOwner(): OwnerData? = PersonalStore.read { db ->
         db.plan().get() ?: FamilyPlan(),
         db.plan().observeRows(PlanRow.KIND_IF_THEN).first(),
         db.plan().observeRows(PlanRow.KIND_ROLE).first(),
+        db.notes().observe().first(),
+        db.kit().observe().first().filter { it.checked }.map { it.key }.toSet(),
     )
 }
 
-private fun ownerPdf(context: Context, d: OwnerData): ByteArray {
+/**
+ * Only the parts the owner ticked, and of the notes only the ones chosen. The kit list comes from
+ * the guide, with the owner's ticks.
+ */
+private fun ownerPdf(context: Context, d: OwnerData, parts: Set<PrintPart>, noteIds: Set<Long>, content: Content?): ByteArray {
     val s: (Int) -> String = { context.getString(it) }
     // No app name on the page: the paper should not say which app it came from
     val pdf = Pdf(LocalDate.now().toString())
     pdf.title(s(R.string.print_owner_title))
     pdf.text(s(R.string.print_private), bold = true)
+    if (PrintPart.MEDICAL in parts) medicalPart(pdf, s, d)
+    if (PrintPart.PLAN in parts) planPart(pdf, s, d)
+    if (PrintPart.PEOPLE in parts) {
+        pdf.heading(s(R.string.people))
+        d.people.forEach { pdf.text(listOf(it.name, it.phone, it.relation).filter { x -> x.isNotBlank() }.joinToString(" · ")) }
+    }
+    if (PrintPart.SERVICES in parts) {
+        pdf.heading(s(R.string.print_services))
+        servicesLines(context).forEach { pdf.text(it) }
+    }
+    if (PrintPart.NOTES in parts) {
+        val chosen = d.notes.filter { it.id in noteIds }
+        if (chosen.isNotEmpty()) {
+            pdf.heading(s(R.string.notes_title_screen))
+            chosen.forEach { n ->
+                pdf.text(n.name().ifBlank { s(R.string.notes_untitled) }, bold = true)
+                val body = if (n.title.isNotBlank()) n.text else n.text.lineSequence().dropWhile { it.isBlank() }.drop(1).joinToString("\n")
+                if (body.isNotBlank()) pdf.text(body.trim())
+            }
+        }
+    }
+    if (PrintPart.KIT in parts && content != null) {
+        pdf.heading(s(R.string.kit))
+        ua.sprotyv.content.Kit.groups(content.guide).forEach { g ->
+            pdf.text(g.title, bold = true)
+            g.items.forEach { pdf.text((if (it.key in d.kit) "✓ " else "○ ") + ua.sprotyv.content.plain(it.text)) }
+        }
+    }
+    return pdf.build()
+}
 
+private fun medicalPart(pdf: Pdf, s: (Int) -> String, d: OwnerData) {
     pdf.heading(s(R.string.medical_card))
     pdf.field(s(R.string.med_name), d.card.name)
     pdf.field(s(R.string.med_birth), d.card.birthDate)
@@ -114,7 +158,9 @@ private fun ownerPdf(context: Context, d: OwnerData): ByteArray {
     pdf.field(s(R.string.med_conditions), d.card.conditions)
     pdf.field(s(R.string.med_notes), d.card.notes)
     d.people.filter { it.ice }.forEach { pdf.field(s(R.string.ice_title), "${it.name} · ${it.phone}") }
+}
 
+private fun planPart(pdf: Pdf, s: (Int) -> String, d: OwnerData) {
     pdf.heading(s(R.string.family_plan))
     pdf.field(s(R.string.plan_point1), d.plan.point1)
     pdf.field(s(R.string.plan_point2), d.plan.point2)
@@ -129,13 +175,6 @@ private fun ownerPdf(context: Context, d: OwnerData): ByteArray {
         d.roles.forEach { pdf.text("${it.first} — ${it.second}") }
     }
     pdf.field(s(R.string.plan_notes), d.plan.notes)
-
-    pdf.heading(s(R.string.people))
-    d.people.forEach { pdf.text(listOf(it.name, it.phone, it.relation).filter { x -> x.isNotBlank() }.joinToString(" · ")) }
-
-    pdf.heading(s(R.string.print_services))
-    servicesLines(context).forEach { pdf.text(it) }
-    return pdf.build()
 }
 
 private fun servicesLines(context: Context): List<String> = Service.entries.map {
@@ -212,18 +251,57 @@ object Exports {
     }
 }
 
-/** Printing the owner's plan and medical card. The file is not encrypted, and the screen says so first. */
+/**
+ * Printing the owner's own papers: the owner ticks what goes on them (the medical card, the plan,
+ * people, services, chosen notes, the go-bag list). The file is not encrypted, and the screen says
+ * so first.
+ */
 @Composable
-fun PrintScreen() {
+fun PrintScreen(content: Content?) {
     val context = LocalContext.current
     var confirm by remember { mutableStateOf(false) }
+    var parts by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(listOf(PrintPart.MEDICAL, PrintPart.PLAN, PrintPart.PEOPLE, PrintPart.SERVICES).map { it.name }) }
+    var noteIds by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(listOf<Long>()) }
+    val notes by remember { PersonalStore.observe { it.notes().observe() } }.collectAsStateWithLifecycle(null)
     val result = Exports.result.collectAsStateWithLifecycle().value?.takeIf { it.first == KIND_OWNER }?.second
+    val chosen = parts.mapNotNull { n -> PrintPart.entries.firstOrNull { it.name == n } }.toSet()
     val save = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { uri ->
         if (uri == null) return@rememberLauncherForActivityResult
-        Exports.save(context, uri, KIND_OWNER) { app -> readOwner()?.let { ownerPdf(app, it) } }
+        // What was chosen at the moment of saving, never a later change
+        val p = chosen
+        val ids = noteIds.toSet()
+        Exports.save(context, uri, KIND_OWNER) { app -> readOwner()?.let { ownerPdf(app, it, p, ids, content) } }
     }
     Text(stringResource(R.string.print_intro), style = MaterialTheme.typography.bodyLarge)
-    Button(onClick = { confirm = true }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+    Block(stringResource(R.string.print_choose), ua.sprotyv.home.Group.GUIDE) {
+        listOf(
+            PrintPart.MEDICAL to R.string.medical_card, PrintPart.PLAN to R.string.family_plan, PrintPart.PEOPLE to R.string.people,
+            PrintPart.SERVICES to R.string.print_services, PrintPart.KIT to R.string.kit, PrintPart.NOTES to R.string.notes_title_screen,
+        ).forEach { (part, label) ->
+            Toggle(stringResource(label), part in chosen) { on ->
+                parts = if (on) parts + part.name else parts - part.name
+                // Notes: the pinned ones are offered first; the owner adds or removes any
+                if (part == PrintPart.NOTES && on && noteIds.isEmpty()) noteIds = notes.orEmpty().filter { it.pinned }.map { it.id }
+            }
+        }
+        if (PrintPart.NOTES in chosen) {
+            val list = notes.orEmpty()
+            if (list.isEmpty()) Text(stringResource(R.string.notes_empty), style = MaterialTheme.typography.bodyMedium)
+            list.forEach { n ->
+                androidx.compose.foundation.layout.Row(
+                    Modifier.fillMaxWidth().heightIn(min = 48.dp).androidx_toggle(n.id in noteIds) { on -> noteIds = if (on) noteIds + n.id else noteIds - n.id }
+                        .padding(start = 8.dp),
+                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+                ) {
+                    androidx.compose.material3.Checkbox(checked = n.id in noteIds, onCheckedChange = null)
+                    Text(n.name().ifBlank { stringResource(R.string.notes_untitled) }, style = MaterialTheme.typography.bodyLarge, maxLines = 1,
+                        overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis, modifier = Modifier.padding(start = 8.dp))
+                }
+            }
+        }
+    }
+    val nothing = chosen.isEmpty() || (chosen == setOf(PrintPart.NOTES) && noteIds.isEmpty())
+    Button(enabled = !nothing, onClick = { confirm = true }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
         Text(stringResource(R.string.print_owner_button))
     }
     result?.let { Text(stringResource(it), style = MaterialTheme.typography.bodyLarge) }
@@ -489,3 +567,6 @@ private fun decodeUri(context: Context, uri: Uri): String? = try {
 } catch (e: OutOfMemoryError) {
     null
 }
+
+private fun Modifier.androidx_toggle(on: Boolean, change: (Boolean) -> Unit): Modifier =
+    this.then(Modifier.toggleable(value = on, role = androidx.compose.ui.semantics.Role.Checkbox, onValueChange = change))

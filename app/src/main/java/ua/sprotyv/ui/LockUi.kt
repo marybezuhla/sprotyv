@@ -1,5 +1,13 @@
 package ua.sprotyv.ui
 
+import androidx.compose.foundation.layout.size
+
+import androidx.compose.foundation.layout.padding
+
+import androidx.compose.foundation.layout.fillMaxWidth
+
+import androidx.compose.foundation.background
+
 import android.app.Activity
 import android.hardware.biometrics.BiometricManager
 import android.hardware.biometrics.BiometricPrompt
@@ -99,10 +107,24 @@ fun LockedView(pinOnly: Boolean) {
             }
         }
     }
-    Text(stringResource(R.string.lock_mine_locked), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
-    Text(stringResource(if (pinOnly) R.string.lock_mine_locked_pin else R.string.lock_mine_locked_text), style = MaterialTheme.typography.bodyLarge)
-    if (trouble) Text(stringResource(R.string.lock_mine_trouble), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.error)
-    Button(onClick = ::ask, enabled = !busy, modifier = Modifier.heightIn(min = 56.dp)) { Text(title) }
+    // A calm closed door in the middle of the screen: the shield of the app, a line, one big button
+    androidx.compose.foundation.layout.Column(
+        Modifier.fillMaxWidth().padding(top = 48.dp),
+        horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
+        verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(16.dp),
+    ) {
+        androidx.compose.foundation.layout.Box(
+            Modifier.size(112.dp).background(MaterialTheme.colorScheme.primaryContainer, androidx.compose.foundation.shape.CircleShape),
+            contentAlignment = androidx.compose.ui.Alignment.Center,
+        ) {
+            androidx.compose.material3.Icon(Shield, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimaryContainer, modifier = Modifier.size(64.dp))
+        }
+        Text(stringResource(R.string.lock_mine_locked), style = MaterialTheme.typography.headlineSmall, textAlign = androidx.compose.ui.text.style.TextAlign.Center, modifier = Modifier.semantics { heading() })
+        Text(stringResource(if (pinOnly) R.string.lock_mine_locked_pin else R.string.lock_mine_locked_text), style = MaterialTheme.typography.bodyLarge, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+        if (trouble) Text(stringResource(R.string.lock_mine_trouble), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.error, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+        Button(onClick = ::ask, enabled = !busy, modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp)) { Text(title, style = MaterialTheme.typography.titleMedium) }
+        Text(stringResource(R.string.lock_mine_112_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+    }
 }
 
 /**

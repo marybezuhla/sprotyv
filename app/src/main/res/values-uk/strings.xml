@@ -171,7 +171,7 @@
     <string name="print_title">Друк (PDF)</string>
     <string name="print_hint">План, медкартка й контакти на папері</string>
     <string name="print_intro">Телефони розряджаються. Тримайте паперову копію вдома й у валізі.</string>
-    <string name="print_owner_button">Зберегти PDF: план, медкартка, контакти</string>
+    <string name="print_owner_button">Зберегти PDF</string>
     <string name="print_owner_title">Сімейний план і медкартка</string>
     <string name="print_private">Особисте. Тримайте там, де не побачать чужі.</string>
     <string name="print_services">Телефони служб</string>
@@ -877,4 +877,6 @@
     <string name="resist_all_desc">Мій шлях, перша допомога, валіза, план, права, факти — з усіх розділів</string>
     <string name="resist_all_rights">Права військових і родин, юристи, ветеранські лінії</string>
     <string name="shelf_resist_desc">Внесок кожного, де вчитися, як підтримати країну, стійкість</string>
+    <string name="print_choose">Що буде на папері</string>
+    <string name="lock_mine_112_hint">Медкартка й «Я в безпеці» теж за замком. Дзвінок 112 працює завжди.</string>
 </resources>
