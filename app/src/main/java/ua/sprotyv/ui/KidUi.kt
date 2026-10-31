@@ -248,15 +248,15 @@ fun KidCallScreen() {
     val people = rememberPeople() ?: return Loading()
     val family = people.filter { it.ice || it.safeList }.filter { it.phone.isNotBlank() }
     if (family.isEmpty()) {
-        Text(stringResource(R.string.kid_call_none), style = MaterialTheme.typography.titleMedium)
+        Text(stringResource(R.string.kid_call_none), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
         return
     }
-    Text(stringResource(R.string.kid_call_intro), style = MaterialTheme.typography.titleMedium)
+    Text(stringResource(R.string.kid_call_intro), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
     family.forEach { p ->
         Button(onClick = { Reach.dial(context, p.phone) }, modifier = Modifier.fillMaxWidth().heightIn(min = 72.dp)) {
             Text("📞", modifier = Modifier.clearAndSetSemantics { })
             Spacer(Modifier.width(12.dp))
-            Text(p.name.ifBlank { p.phone }, style = MaterialTheme.typography.titleLarge)
+            Text(p.name.ifBlank { p.phone }, style = MaterialTheme.typography.titleLarge, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
         }
     }
     Text(stringResource(R.string.kid_call_112_hint), style = MaterialTheme.typography.bodyLarge)

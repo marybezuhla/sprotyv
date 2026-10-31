@@ -111,7 +111,7 @@ fun SuppliesScreen(content: Content?, nav: Nav) {
     // For whom and for how long
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
         OutlinedButton(onClick = { if (s.people > 1) change { it.copy(people = (it.people - 1).coerceAtLeast(1)) } }, modifier = Modifier.heightIn(min = 56.dp)) { Text("−") }
-        Text(stringResource(R.string.supplies_people, s.people), style = MaterialTheme.typography.titleMedium)
+        Text(stringResource(R.string.supplies_people, s.people), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
         OutlinedButton(onClick = { if (s.people < 20) change { it.copy(people = (it.people + 1).coerceAtMost(20)) } }, modifier = Modifier.heightIn(min = 56.dp)) { Text("+") }
     }
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {

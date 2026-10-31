@@ -456,7 +456,7 @@ fun ScanScreen(nav: Nav) {
         scanned?.let { s ->
             if (s is Scanned.Plain && ua.sprotyv.personal.backup.PlanCode.isPlanCode(s.text)) {
                 // A relative's family plan: opened on the owner's protected screen, with the spoken password
-                Text(stringResource(R.string.plan_code_found), style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(R.string.plan_code_found), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
                 Text(stringResource(R.string.plan_code_found_hint), style = MaterialTheme.typography.bodyLarge)
                 Button(onClick = { PlanInbox.text = s.text; nav.go(Route.Mine(MinePart.PLAN_IMPORT)) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
                     Text(stringResource(R.string.plan_code_open))

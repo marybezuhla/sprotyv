@@ -156,7 +156,7 @@ fun Personal(title: Int, state: Opened?, nav: Nav, content: @Composable () -> Un
             state is Opened.Locked -> LockedView(state.pinOnly)
             state == Opened.TryAgain -> Problem(R.string.try_again_title, R.string.try_again_text) { PersonalStore.close(); PersonalStore.open(context) }
             state == Opened.NeedsUpdate -> {
-                Text(stringResource(R.string.needs_update_title), style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(R.string.needs_update_title), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
                 Text(stringResource(R.string.needs_update_text), style = MaterialTheme.typography.bodyLarge)
             }
             state == Opened.Damaged -> {
@@ -164,7 +164,7 @@ fun Personal(title: Int, state: Opened?, nav: Nav, content: @Composable () -> Un
                 StartFresh { PersonalStore.startFresh(context) }
             }
             else -> {
-                Text(stringResource(R.string.key_lost_title), style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(R.string.key_lost_title), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
                 Text(stringResource(R.string.key_lost_text), style = MaterialTheme.typography.bodyLarge)
                 StartFresh { PersonalStore.startFresh(context) }
             }
@@ -174,7 +174,7 @@ fun Personal(title: Int, state: Opened?, nav: Nav, content: @Composable () -> Un
 
 @Composable
 private fun Problem(title: Int, text: Int, onTryAgain: () -> Unit) {
-    Text(stringResource(title), style = MaterialTheme.typography.titleMedium)
+    Text(stringResource(title), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
     Text(stringResource(text), style = MaterialTheme.typography.bodyLarge)
     Button(onClick = onTryAgain, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.try_again)) }
 }
@@ -213,7 +213,7 @@ fun ScreenshotsStrip() {
             .padding(vertical = 4.dp),
         verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
     ) {
-        Text("◉ " + stringResource(R.string.screenshots_banner), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1f))
-        Text(stringResource(R.string.screenshots_turn_off), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+        Text("◉ " + stringResource(R.string.screenshots_banner), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1f))
+        Text(stringResource(R.string.screenshots_turn_off), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary)
     }
 }

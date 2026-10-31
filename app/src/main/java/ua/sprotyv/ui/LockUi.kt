@@ -119,7 +119,7 @@ fun LockedView(pinOnly: Boolean) {
         ) {
             androidx.compose.material3.Icon(Shield, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimaryContainer, modifier = Modifier.size(64.dp))
         }
-        Text(stringResource(R.string.lock_mine_locked), style = MaterialTheme.typography.headlineSmall, textAlign = androidx.compose.ui.text.style.TextAlign.Center, modifier = Modifier.semantics { heading() })
+        Text(stringResource(R.string.lock_mine_locked), style = MaterialTheme.typography.headlineSmall, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, textAlign = androidx.compose.ui.text.style.TextAlign.Center, modifier = Modifier.semantics { heading() })
         Text(stringResource(if (pinOnly) R.string.lock_mine_locked_pin else R.string.lock_mine_locked_text), style = MaterialTheme.typography.bodyLarge, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
         if (trouble) Text(stringResource(R.string.lock_mine_trouble), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.error, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
         Button(onClick = ::ask, enabled = !busy, modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp)) { Text(title, style = MaterialTheme.typography.titleMedium) }

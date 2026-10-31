@@ -139,7 +139,7 @@ private fun SharedCard(shared: Incoming.Shared, onKeep: (String, String) -> Unit
             when (val c = shared.check) {
                 is Bookmarks.Check.Page -> {
                     var name by rememberSaveable(shared.id) { mutableStateOf(shared.title.ifBlank { Bookmarks.host(c.url) }) }
-                    Text(stringResource(R.string.bookmarks_keep_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+                    Text(stringResource(R.string.bookmarks_keep_title), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, modifier = Modifier.semantics { heading() })
                     // The site first and large: a name suggested by another app cannot hide where it leads
                     Text(Bookmarks.host(c.url), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                     Text(c.url, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 3, overflow = TextOverflow.Ellipsis)

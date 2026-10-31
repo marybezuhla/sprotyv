@@ -219,7 +219,7 @@ private fun PersonDialog(start: Person, onDone: () -> Unit) {
                 Field(stringResource(R.string.person_name), p.name, { p = p.copy(name = it) })
                 Field(stringResource(R.string.person_phone), p.phone, { p = p.copy(phone = it) }, phone = true, hint = "+380…")
                 if (!p.phone.trim().startsWith("+") && !ua.sprotyv.reach.Links.clean(p.phone).let { it.length == 10 && it.startsWith("0") } && p.phone.isNotBlank()) {
-                    Text(stringResource(R.string.person_phone_format), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
+                    Text(stringResource(R.string.person_phone_format), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.error)
                 }
                 Field(stringResource(R.string.person_relation), p.relation, { p = p.copy(relation = it) })
                 Toggle(stringResource(R.string.person_safe_list), p.safeList) { p = p.copy(safeList = it) }
@@ -294,7 +294,7 @@ fun SafeScreen(nav: Nav) {
         Button(onClick = { nav.go(Route.Mine(MinePart.PEOPLE)) }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.add_person)) }
         return
     }
-    Text(stringResource(R.string.safe_status), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+    Text(stringResource(R.string.safe_status), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, modifier = Modifier.semantics { heading() })
     SafeStatus.entries.forEach { st ->
         val on = st == status
         Card(
@@ -328,7 +328,7 @@ fun SafeScreen(nav: Nav) {
         }
     }, multiline = true)
     // One SMS to each person is the surest: several numbers in one go may be sent as an MMS, which needs mobile data
-    Text(stringResource(R.string.safe_each), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+    Text(stringResource(R.string.safe_each), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, modifier = Modifier.semantics { heading() })
     list.forEach { p ->
         Text(p.name, style = MaterialTheme.typography.bodyLarge)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
@@ -336,7 +336,7 @@ fun SafeScreen(nav: Nav) {
             OutlinedButton(onClick = { Reach.whatsapp(context, p.phone, text) }, modifier = Modifier.weight(1f).heightIn(min = 56.dp)) { Text("WhatsApp") }
         }
     }
-    Text(stringResource(R.string.safe_sms_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    Text(stringResource(R.string.safe_sms_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     HorizontalDivider()
     if (list.size > 1) {
         OutlinedButton(onClick = { Reach.sms(context, list.map { it.phone }, text) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
@@ -346,7 +346,7 @@ fun SafeScreen(nav: Nav) {
     OutlinedButton(onClick = { Reach.signal(context, text) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
         Text(stringResource(R.string.safe_signal))
     }
-    Text(stringResource(R.string.safe_how), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    Text(stringResource(R.string.safe_how), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 }
 
 /** A read of the owner's data failed; nothing was changed. */

@@ -715,9 +715,9 @@ fun EditTilesScreen(content: Content?, mode: Mode?, pins: List<String>, nav: Nav
     val context = LocalContext.current
     Frame(stringResource(R.string.edit_tiles), nav::back) {
         Text(stringResource(R.string.edit_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        Text(stringResource(R.string.edit_fixed), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+        Text(stringResource(R.string.edit_fixed), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, modifier = Modifier.semantics { heading() })
         Text(stringResource(R.string.edit_fixed_note), style = MaterialTheme.typography.bodyLarge)
-        Text(stringResource(R.string.edit_yours), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+        Text(stringResource(R.string.edit_yours), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, modifier = Modifier.semantics { heading() })
         val shown = pins.mapNotNull { tileInfo(it, content) }
         val ids = shown.map { it.id }
         // Tiles that cannot be shown now (content unreadable, say) are kept, at the end, not lost
@@ -977,7 +977,7 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
 private fun FeedbackBlock() {
     val context = LocalContext.current
     var crash by remember { mutableStateOf(CrashLog.pending(context)) }
-    Text(stringResource(R.string.feedback_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+    Text(stringResource(R.string.feedback_title), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, modifier = Modifier.semantics { heading() })
     crash?.let { t ->
         Text(stringResource(R.string.crash_title), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
         Text(stringResource(R.string.crash_text), style = MaterialTheme.typography.bodyMedium)
@@ -1017,7 +1017,7 @@ fun WelcomeScreen(nav: Nav) {
             Text(stringResource(R.string.app_name), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
             tileInfo(Tiles.tool(Tool.NOW), null)?.let { info -> TileCard(info, big = true) { nav.go(info.route) } }
             if (step == 0 || mode == null) {
-                Text(stringResource(R.string.welcome_mode_q), style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
+                Text(stringResource(R.string.welcome_mode_q), style = MaterialTheme.typography.titleLarge, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, modifier = Modifier.semantics { heading() })
                 ModeChoice(mode) { chosen = it.name; step = 1 }
                 // A new phone: everything, the look included, comes back from the encrypted copy
                 OutlinedButton(onClick = { nav.go(Route.Mine(MinePart.BACKUP)) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
@@ -1025,7 +1025,7 @@ fun WelcomeScreen(nav: Nav) {
                 }
             } else if (mode == Mode.KID) {
                 // No tile sets for a child; the grown-up is asked once to lock the settings
-                Text(stringResource(R.string.kid_setup_title), style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
+                Text(stringResource(R.string.kid_setup_title), style = MaterialTheme.typography.titleLarge, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, modifier = Modifier.semantics { heading() })
                 Text(stringResource(R.string.kid_setup_text), style = MaterialTheme.typography.bodyLarge)
                 val canLock = Guard.available(context)
                 if (canLock) {
@@ -1040,7 +1040,7 @@ fun WelcomeScreen(nav: Nav) {
                 }
                 TextButton(onClick = { step = 0 }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.back)) }
             } else {
-                Text(stringResource(R.string.welcome_preset_q), style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
+                Text(stringResource(R.string.welcome_preset_q), style = MaterialTheme.typography.titleLarge, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, modifier = Modifier.semantics { heading() })
                 PresetList { p -> HomePrefs.update(context) { it.copy(mode = mode, pins = p.pins) } }
                 TextButton(onClick = { step = 0 }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.back)) }
             }
