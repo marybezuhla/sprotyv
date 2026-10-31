@@ -187,10 +187,11 @@ private fun BlockView(b: Block) {
         is Block.Callout -> {
             // Red only for the guide's "critical" notes; the word, not the colour, carries the meaning
             val (bg, label) = when (b.kind) {
-                Block.Callout.Kind.CRITICAL -> MaterialTheme.colorScheme.errorContainer to R.string.callout_critical
-                Block.Callout.Kind.WARNING -> MaterialTheme.colorScheme.tertiaryContainer to R.string.callout_warning
-                Block.Callout.Kind.TIP -> MaterialTheme.colorScheme.primaryContainer to R.string.callout_tip
-                Block.Callout.Kind.NOTE -> MaterialTheme.colorScheme.surfaceVariant to R.string.callout_note
+                // The colour code: danger orange for critical and warnings, green for tips, neutral for notes
+                Block.Callout.Kind.CRITICAL -> ua.sprotyv.home.Group.DANGER.tint().container to R.string.callout_critical
+                Block.Callout.Kind.WARNING -> ua.sprotyv.home.Group.DANGER.tint().container to R.string.callout_warning
+                Block.Callout.Kind.TIP -> ua.sprotyv.home.Group.FIRST_AID.tint().container to R.string.callout_tip
+                Block.Callout.Kind.NOTE -> ua.sprotyv.home.Group.GUIDE.tint().container to R.string.callout_note
             }
             Surface(color = bg, shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {

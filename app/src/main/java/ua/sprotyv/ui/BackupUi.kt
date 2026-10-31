@@ -361,7 +361,7 @@ private fun ShownPassword(text: String) {
 
 @Composable
 private fun Heading(text: Int) {
-    Text(stringResource(text), style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+    Text(stringResource(text), style = BlockTitle, modifier = Modifier.padding(top = 8.dp).semantics { heading() })
 }
 
 /** The word list, read off the main thread; null for the first moment. */

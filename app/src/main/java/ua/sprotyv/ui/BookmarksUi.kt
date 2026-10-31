@@ -112,7 +112,7 @@ fun BookmarksScreen() {
             }
         }
     }
-    Text(stringResource(R.string.bookmarks_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    Text(stringResource(R.string.bookmarks_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
     removing?.let { b ->
         AlertDialog(

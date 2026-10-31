@@ -632,7 +632,7 @@ fun SectionsList(content: Content?, pins: List<String>, nav: Nav, onPin: (String
                     Spacer(Modifier.width(12.dp))
                     Column(Modifier.weight(1f)) {
                         Text(info.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                        if (info.hint.isNotBlank()) Text(info.hint, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        if (info.hint.isNotBlank()) Text(info.hint, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                     // A small round switch, not a wide button: the title keeps the whole line
                     if (pinned) {
@@ -648,7 +648,7 @@ fun SectionsList(content: Content?, pins: List<String>, nav: Nav, onPin: (String
             }
         }
     }
-    Text(stringResource(R.string.pin_legend), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    Text(stringResource(R.string.pin_legend), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 }
 
 /** The person's tiles in their order, moved with buttons. In simple mode a line shows where the screen ends. */
@@ -938,7 +938,7 @@ private fun FeedbackBlock() {
     OutlinedButton(onClick = {
         Feedback.open(context, context.getString(R.string.feedback_title), context.getString(R.string.feedback_body, Feedback.version(context)))
     }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.feedback)) }
-    Text(stringResource(R.string.feedback_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    Text(stringResource(R.string.feedback_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 }
 
 /**

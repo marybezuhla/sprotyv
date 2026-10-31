@@ -370,12 +370,12 @@ fun RescuerQrScreen(nav: Nav) {
     // Plain text, not selectable: medical facts should not end up in the clipboard by accident
     Text(text, style = MaterialTheme.typography.bodyLarge)
     if (code.cut) Text(stringResource(R.string.rescuer_cut), style = MaterialTheme.typography.bodyMedium)
-    Text(stringResource(R.string.rescuer_warning), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.error)
+    Text(stringResource(R.string.rescuer_warning), style = MaterialTheme.typography.bodyMedium, color = ua.sprotyv.home.Group.DANGER.tint().ink)
     Button(onClick = { Exports.clear(); Away.forOwnWindow(); save.launch("medical.png") }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
         Text(stringResource(R.string.rescuer_save))
     }
     result?.let { Text(stringResource(it), style = MaterialTheme.typography.bodyMedium) }
-    Text(stringResource(R.string.rescuer_lock_screen), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    Text(stringResource(R.string.rescuer_lock_screen), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 }
 
 /** A tall picture for the lock screen: the key facts in large letters and the code below. */

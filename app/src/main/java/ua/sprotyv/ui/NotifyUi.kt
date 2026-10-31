@@ -66,11 +66,11 @@ fun NotifySettings() {
     }
     val tripAll = remember(version, refresh) { Notify.hideAllInTrip(context) }
     Toggle(stringResource(R.string.notify_trip_all), tripAll) { Notify.setHideAllInTrip(context, it) }
-    if (neutral) Text(stringResource(R.string.notify_neutral), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.tertiary)
+    if (neutral) Text(stringResource(R.string.notify_neutral), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     val anyOn = remember(version, refresh) { Notify.Kind.entries.any { Notify.isOn(context, it) } }
     // Also after a "no" in Android: the switch alone would seem to do nothing
     if ((anyOn || denied) && !system) {
-        Text(stringResource(R.string.notify_blocked), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.tertiary)
+        Text(stringResource(R.string.notify_blocked), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         OutlinedButton(onClick = {
             runCatching {
                 context.startActivity(Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName))

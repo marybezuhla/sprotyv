@@ -136,7 +136,7 @@ fun ReadinessBlock(content: Content?, nav: Nav) {
 @Composable
 fun ReadyRing(fraction: Float, label: String) {
     val track = MaterialTheme.colorScheme.outlineVariant
-    val fill = if (fraction >= 1f) (if (LocalDark.current) Color(0xFF81C784) else Color(0xFF2E7D32)) else MaterialTheme.colorScheme.primary
+    val fill = if (fraction >= 1f) ua.sprotyv.home.Group.FIRST_AID.tint().ink else MaterialTheme.colorScheme.primary
     androidx.compose.foundation.layout.Box(Modifier.size(52.dp).clearAndSetSemantics { }, contentAlignment = Alignment.Center) {
         Canvas(Modifier.size(52.dp)) {
             val stroke = androidx.compose.ui.graphics.drawscope.Stroke(width = 6.dp.toPx(), cap = androidx.compose.ui.graphics.StrokeCap.Round)
@@ -152,7 +152,7 @@ fun ReadyRing(fraction: Float, label: String) {
 
 @Composable
 private fun ReadyRow(title: String, p: Progress?, detail: String? = null, onClick: () -> Unit) {
-    val done = if (LocalDark.current) Color(0xFF81C784) else Color(0xFF2E7D32)
+    val done = ua.sprotyv.home.Group.FIRST_AID.tint().ink
     val going = MaterialTheme.colorScheme.primary
     val track = MaterialTheme.colorScheme.outlineVariant
     val words = if (p == null) "…" else stringResource(R.string.ready_count, p.done, p.total)
@@ -196,7 +196,7 @@ fun ReadinessStrip(nav: Nav) {
     }
     if (parts.size != READY_PARTS.size) return
     val done = parts.count { it.complete }
-    val doneColour = if (LocalDark.current) Color(0xFF81C784) else Color(0xFF2E7D32)
+    val doneColour = ua.sprotyv.home.Group.FIRST_AID.tint().ink
     val going = MaterialTheme.colorScheme.primary
     val track = MaterialTheme.colorScheme.outlineVariant
     Card(

@@ -100,7 +100,7 @@ fun PracticeScreen(content: Content?, cardId: String, nav: Nav) {
             OutlinedButton(
                 onClick = { if (!answered) chosen = i },
                 colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = if (answered && o.right) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface,
+                    containerColor = if (answered && o.right) ua.sprotyv.home.Group.FIRST_AID.tint().container else MaterialTheme.colorScheme.surface,
                     contentColor = MaterialTheme.colorScheme.onSurface,
                 ),
                 modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp),
@@ -148,7 +148,7 @@ fun PracticeScreen(content: Content?, cardId: String, nav: Nav) {
             }
         }
 
-        Text(stringResource(R.string.practice_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(stringResource(R.string.practice_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         // The same source and review status as the card it comes from
         content.card(p.card)?.let { Source(it) }
     }
