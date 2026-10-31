@@ -41,39 +41,48 @@ object Bookmarks {
         data object NoPage : Check
     }
 
-    /** What a shared text or a pasted line holds: the first page address in it, checked. */
+    private val HOST = Regex("^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$")
+
+    /**
+     * What a shared text or a pasted line holds: the first page address in it, checked. The site
+     * part is read by hand, strictly: plain letters, digits, dots and dashes only (a Ukrainian
+     * domain such as .укр in its punycode form), no "name@" before it, so what is shown is where it
+     * leads. Android's own reading of the result must agree, as that is what opens it.
+     */
     fun check(raw: String): Check {
         val found = URL.find(raw.take(10_000)) ?: return Check.NoPage
         val url = found.value.trimEnd('.', ',', ')', ';', '!', '?', ':')
         if (url.startsWith("tg:", ignoreCase = true)) return Check.Telegram
-        val ascii = asciiHost(url) ?: return Check.NoPage
-        if (ascii.length > MAX_URL) return Check.NoPage
-        val uri = try {
-            java.net.URI(ascii)
-        } catch (e: Exception) {
-            return Check.NoPage
-        }
-        val host = uri.host?.lowercase()?.trimEnd('.')
-        if (host.isNullOrEmpty()) return Check.NoPage
-        if (TELEGRAM.any { host == it || host.endsWith(".$it") }) return Check.Telegram
-        if (!uri.scheme.equals("https", ignoreCase = true)) return Check.NotSecure
+        if ('\\' in url) return Check.NoPage
+        val start = url.indexOf("://") + 3
+        val end = url.indexOfAny(charArrayOf('/', '?', '#'), start).let { if (it < 0) url.length else it }
+        val authority = url.substring(start, end)
         // "https://bank.example@other.example" shows one site and opens another: not kept
-        if (uri.rawUserInfo != null) return Check.NoPage
-        return Check.Page("https://" + ascii.substring(ascii.indexOf("://") + 3))
+        if ('@' in authority) return Check.NoPage
+        val port = authority.substringAfterLast(':', "").takeIf { ':' in authority }
+        if (port != null && (port.isEmpty() || port.length > 5 || !port.all { it in '0'..'9' })) return Check.NoPage
+        val host = ascii(authority.removeSuffix(":" + (port ?: "")).lowercase().trimEnd('.')) ?: return Check.NoPage
+        if (!HOST.matches(host)) return Check.NoPage
+        if (TELEGRAM.any { host == it || host.endsWith(".$it") }) return Check.Telegram
+        if (!url.substring(0, start - 3).equals("https", ignoreCase = true)) return Check.NotSecure
+        val clean = "https://" + host + (port?.let { ":$it" } ?: "") + url.substring(end)
+        if (clean.length > MAX_URL) return Check.NoPage
+        val seen = try {
+            android.net.Uri.parse(clean).host?.lowercase()
+        } catch (e: Exception) {
+            null
+        }
+        return if (seen == host) Check.Page(clean) else Check.NoPage
     }
 
-    /**
-     * The address with its host in plain Latin letters (Ukrainian domains such as .укр in their
-     * punycode form), so one parser sees the same host the browser will. Null if it cannot be done.
-     */
-    private fun asciiHost(url: String): String? {
-        val start = url.indexOf("://") + 3
-        if (start < 3) return null
-        val end = url.indexOfAny(charArrayOf('/', '?', '#'), start).let { if (it < 0) url.length else it }
-        val host = url.substring(start, end)
-        if (host.all { it.code < 128 }) return url
+    /** A host in plain Latin letters (punycode); null if it cannot be written so. */
+    private fun ascii(host: String): String? {
+        if (host.all { it.code < 128 }) return host
         return try {
-            url.substring(0, start) + java.net.IDN.toASCII(host, java.net.IDN.USE_STD3_ASCII_RULES) + url.substring(end)
+            val out = StringBuilder()
+            val info = android.icu.text.IDNA.Info()
+            android.icu.text.IDNA.getUTS46Instance(android.icu.text.IDNA.DEFAULT).nameToASCII(host, out, info)
+            if (info.hasErrors()) null else out.toString().lowercase()
         } catch (e: Exception) {
             null
         }
@@ -85,7 +94,10 @@ object Bookmarks {
 
     /** The site's name to show, in its own letters (a .укр domain reads as .укр). */
     fun host(url: String): String = try {
-        java.net.IDN.toUnicode(java.net.URI(url).host.orEmpty()).removePrefix("www.")
+        val h = android.net.Uri.parse(url).host.orEmpty()
+        val out = StringBuilder()
+        android.icu.text.IDNA.getUTS46Instance(android.icu.text.IDNA.DEFAULT).nameToUnicode(h, out, android.icu.text.IDNA.Info())
+        out.toString().removePrefix("www.")
     } catch (e: Exception) {
         ""
     }

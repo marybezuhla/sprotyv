@@ -266,7 +266,7 @@
     <string name="welcome_mode_q">What suits you better?</string>
     <string name="welcome_preset_q">What do you need most?</string>
     <string name="welcome_note">You can change all of this any time in Settings.</string>
-    <string name="ready_title">How ready are we</string>
+    <string name="ready_title">Readiness</string>
     <string name="ready_count">%1$d of %2$d</string>
     <string name="ready_next">Next step: %1$s</string>
     <string name="ready_all">All done. Check again every six months.</string>
@@ -468,7 +468,7 @@
         <item>30 presses : 2 breaths</item>
     </string-array>
     <string name="supplies_dash_title">How long it lasts</string>
-    <string name="supplies_water_none">Water for less than a day</string>
+    <string name="supplies_water_none">Not enough water for a day</string>
     <plurals name="supplies_water_days">
         <item quantity="one">Water for %1$d day</item>
         <item quantity="other">Water for %1$d days</item>
@@ -638,4 +638,24 @@
     <string name="block_power">Power</string>
     <string name="block_heat">Heating</string>
     <string name="block_shelter">Shelter</string>
+    <string name="group_danger_desc">Alerts, drones, ballistic missiles, rubble, fire</string>
+    <string name="group_first_aid_desc">Bleeding, unconscious, burns</string>
+    <string name="group_family_desc">Children, older people, family plan, where to turn</string>
+    <string name="group_home_life_desc">Power, water, heat, food, supplies</string>
+    <string name="group_prepare_desc">Emergency bag, practice, 30-day plan</string>
+    <string name="group_leave_desc">Evacuation, the road, abroad</string>
+    <string name="group_safety_desc">Mines, documents, fakes, crowds, disasters</string>
+    <string name="group_mine_desc">Medical card, screen for rescuers, printing</string>
+    <string name="group_guide_desc">The whole guide and search</string>
+    <string name="shelf_situation_desc">Threat maps, the front, checking fakes</string>
+    <string name="shelf_power_desc">Outage schedules by region</string>
+    <string name="shelf_dir_desc">Services for displaced people, money, documents</string>
+    <string name="shelf_rest_desc">Guide chapters not listed above</string>
+    <string name="shelf_count">Items: %1$d</string>
+    <string name="shelf_on_home">on home: %1$d</string>
+    <string name="shelf_fold">fold</string>
+    <string name="shelf_unfold">unfold</string>
+    <string name="mine_block_trouble">In case of trouble</string>
+    <string name="mine_block_home">Supplies and bookmarks</string>
+    <string name="mine_block_copies">Copies and printing</string>
 </resources>

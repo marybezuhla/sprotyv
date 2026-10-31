@@ -2,6 +2,7 @@ package ua.sprotyv.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -46,35 +47,34 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.foundation.clickable
-import androidx.compose.material3.OutlinedIconButton
-import androidx.compose.material3.FilledTonalIconButton
-import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -144,6 +144,21 @@ private val Group.title: Int get() = when (this) {
     Group.SAFETY -> R.string.group_safety
     Group.MINE -> R.string.group_mine
     Group.GUIDE -> R.string.group_guide
+}
+
+/** One folded group in "Sections": its name, a line on what is in it, its colour, its tiles. */
+private class Shelf(val title: Int, val desc: Int, val group: Group, val ids: List<String>)
+
+private val Group.desc: Int get() = when (this) {
+    Group.DANGER -> R.string.group_danger_desc
+    Group.FIRST_AID -> R.string.group_first_aid_desc
+    Group.FAMILY -> R.string.group_family_desc
+    Group.HOME_LIFE -> R.string.group_home_life_desc
+    Group.PREPARE -> R.string.group_prepare_desc
+    Group.LEAVE -> R.string.group_leave_desc
+    Group.SAFETY -> R.string.group_safety_desc
+    Group.MINE -> R.string.group_mine_desc
+    Group.GUIDE -> R.string.group_guide_desc
 }
 
 private val Group.icon: ImageVector get() = when (this) {
@@ -319,16 +334,17 @@ fun TileCard(info: TileInfo, big: Boolean, status: String? = null, onClick: () -
             }
         } else {
             // Compact: icon beside the title, so more fits on the screen; a live status replaces the hint
-            Column(Modifier.padding(horizontal = 12.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    IconBadge(info.icon, info.group.tint(), 32.dp)
-                    Spacer(Modifier.width(10.dp))
-                    Text(info.title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                }
-                if (status != null) {
-                    Text(status, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold, maxLines = 2)
-                } else if (info.hint.isNotBlank()) {
-                    Text(info.hint, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            // Every line starts at the same edge, right of the icon; one size for titles, one for hints
+            Row(Modifier.padding(horizontal = 12.dp, vertical = 12.dp), verticalAlignment = Alignment.Top) {
+                IconBadge(info.icon, info.group.tint(), 36.dp)
+                Spacer(Modifier.width(10.dp))
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                    Text(info.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                    if (status != null) {
+                        Text(status, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold, maxLines = 2)
+                    } else if (info.hint.isNotBlank()) {
+                        Text(info.hint, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                    }
                 }
             }
         }
@@ -425,26 +441,42 @@ fun SectionsList(content: Content?, pins: List<String>, nav: Nav, onPin: (String
     if (content.guideBroken || content.cardsBroken) Broken()
     val full = pins.size >= Tiles.MAX_PINS
     if (full) Text(stringResource(R.string.pins_full), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    val lists = Group.entries.map { it.title to it.tiles } +
-        (R.string.situation_title to content.links.filter { it.group != ua.sprotyv.content.Link.POWER && it.group !in ua.sprotyv.content.Link.DIRECTORY }.map { Tiles.link(it.id) }) +
-        (R.string.power_title to content.links.filter { it.group == ua.sprotyv.content.Link.POWER }.map { Tiles.link(it.id) }) +
-        (R.string.dir_title to content.links.filter { it.group in ua.sprotyv.content.Link.DIRECTORY }.map { Tiles.link(it.id) }) +
-        (R.string.group_rest to Group.rest(content.guide.chapters.map { it.id }))
-    lists.forEach { (title, ids) ->
-        val infos = ids.mapNotNull { tileInfo(it, content) }
+    val links = content.links
+    val lists = Group.entries.map { Shelf(it.title, it.desc, it, it.tiles) } +
+        Shelf(R.string.situation_title, R.string.shelf_situation_desc, Group.SAFETY, links.filter { it.group != ua.sprotyv.content.Link.POWER && it.group !in ua.sprotyv.content.Link.DIRECTORY }.map { Tiles.link(it.id) }) +
+        Shelf(R.string.power_title, R.string.shelf_power_desc, Group.HOME_LIFE, links.filter { it.group == ua.sprotyv.content.Link.POWER }.map { Tiles.link(it.id) }) +
+        Shelf(R.string.dir_title, R.string.shelf_dir_desc, Group.FAMILY, links.filter { it.group in ua.sprotyv.content.Link.DIRECTORY }.map { Tiles.link(it.id) }) +
+        Shelf(R.string.group_rest, R.string.shelf_rest_desc, Group.GUIDE, Group.rest(content.guide.chapters.map { it.id }))
+    lists.forEach { shelf ->
+        val infos = shelf.ids.mapNotNull { tileInfo(it, content) }
         if (infos.isEmpty()) return@forEach
-        Text(
-            stringResource(title) + " · " + infos.size,
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(top = 8.dp).semantics { heading() },
-        )
-        // One frame per group, rows split by hairlines: the group is seen before its parts
+        // Folded by default: the groups are seen first, each with its colour and a line on what is in it
+        var open by rememberSaveable(shelf.title) { mutableStateOf(false) }
+        val tint = shelf.group.tint()
+        val onHome = infos.count { it.id in pins }
         Card(
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+            border = BorderStroke(1.dp, tint.container),
             modifier = Modifier.fillMaxWidth(),
         ) {
-            infos.forEachIndexed { i, info ->
+            Row(
+                Modifier.fillMaxWidth().background(tint.container).clickable(onClickLabel = stringResource(if (open) R.string.shelf_fold else R.string.shelf_unfold)) { open = !open }
+                    .heightIn(min = 64.dp).padding(start = 12.dp, end = 8.dp, top = 10.dp, bottom = 10.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                IconBadge(shelf.group.icon, Tint(MaterialTheme.colorScheme.surface, tint.ink), 40.dp)
+                Spacer(Modifier.width(12.dp))
+                Column(Modifier.weight(1f).semantics(mergeDescendants = true) { heading() }) {
+                    Text(stringResource(shelf.title), style = BlockTitle, color = tint.ink)
+                    Text(stringResource(shelf.desc), style = MaterialTheme.typography.bodyMedium, color = tint.ink)
+                    Text(
+                        stringResource(R.string.shelf_count, infos.size) + if (onHome > 0) " · " + stringResource(R.string.shelf_on_home, onHome) else "",
+                        style = MaterialTheme.typography.labelLarge, color = tint.ink,
+                    )
+                }
+                Icon(if (open) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown, contentDescription = null, tint = tint.ink)
+            }
+            if (open) infos.forEachIndexed { i, info ->
                 if (i > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                 val pinned = info.id in pins
                 Row(
