@@ -376,9 +376,9 @@ fun TileCard(info: TileInfo, big: Boolean, status: String? = null, onClick: () -
                     // Simple look: large print (24 and 18 sp), still growing with the phone's text size
                     Text(info.title, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
                     if (status != null) {
-                        Text(status, style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp, lineHeight = 24.sp), color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
+                        Text(status, style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp, lineHeight = 24.sp, textAlign = androidx.compose.ui.text.style.TextAlign.Start), color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
                     } else if (info.hint.isNotBlank()) {
-                        Text(info.hint, style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp, lineHeight = 24.sp), color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(info.hint, style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp, lineHeight = 24.sp, textAlign = androidx.compose.ui.text.style.TextAlign.Start), color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
             }
@@ -391,9 +391,9 @@ fun TileCard(info: TileInfo, big: Boolean, status: String? = null, onClick: () -
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                     Text(info.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
                     if (status != null) {
-                        Text(status, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold, maxLines = 2)
+                        Text(status, style = MaterialTheme.typography.bodyMedium.copy(textAlign = androidx.compose.ui.text.style.TextAlign.Start), color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold, maxLines = 2)
                     } else if (info.hint.isNotBlank()) {
-                        Text(info.hint, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                        Text(info.hint, style = MaterialTheme.typography.bodyMedium.copy(textAlign = androidx.compose.ui.text.style.TextAlign.Start), color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
                     }
                 }
             }
