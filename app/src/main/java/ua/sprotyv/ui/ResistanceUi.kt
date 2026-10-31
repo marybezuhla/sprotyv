@@ -169,7 +169,7 @@ fun PathScreen(nav: Nav) {
         // Counts per level, in the order of the levels; nothing about which steps
         val share = PATH_LEVELS.indices.map { l -> path.filter { it.level == l } }.filter { it.isNotEmpty() }
             .joinToString(",") { steps -> "${steps.count { it.key in done }}/${steps.size}" }
-        if (HomePrefs.load(context).path != share) HomePrefs.update(context) { it.copy(path = share) }
+        if (HomePrefs.load(context).path != share) { HomePrefs.update(context) { it.copy(path = share) }; Widgets.update(context) }
     }
     // This week's step: the first one not done yet, in the order of the path. One at a time, calmly
     var justDone by androidx.compose.runtime.saveable.rememberSaveable { androidx.compose.runtime.mutableStateOf<String?>(null) }

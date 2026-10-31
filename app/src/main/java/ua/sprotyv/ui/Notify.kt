@@ -153,6 +153,8 @@ object Notify {
     fun sync(c: Context) {
         val app = c.applicationContext
         channels(app)
+        // The home-screen widgets show the same counts
+        Widgets.update(app)
         val now = System.currentTimeMillis()
         // Hidden at once: everything under the neutral icon, the owner's reminders in trip mode
         if (Neutral.isOn(app) || (HomePrefs.load(app).trip && hideAllInTrip(app))) NotificationManagerCompat.from(app).cancelAll()
@@ -368,9 +370,10 @@ object Opening {
         "power" -> Route.Power
         "supplies" -> Route.SuppliesRoute
         "kit" -> Route.Mine(MinePart.KIT)
+        "path" -> Route.Mine(MinePart.PATH)
         else -> t.removePrefix("note/").toLongOrNull()?.let { Route.NoteEdit(it) }
     }
 
-    private val FIXED = setOf("bleeding", "now", "alarm", "power", "supplies", "kit")
+    private val FIXED = setOf("bleeding", "now", "alarm", "power", "supplies", "kit", "path")
     private val NOTE = Regex("^note/[0-9]{1,18}$")
 }

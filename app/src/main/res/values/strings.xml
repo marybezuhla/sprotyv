@@ -891,4 +891,16 @@
     <string name="inspire_4b">Teach one person to stop bleeding, and two people can save a life.</string>
     <string name="inspire_all">You have walked the whole path. Teach one person: that is how readiness grows.</string>
     <string name="inspire_level_done">Level «%1$s» complete. It already helps your family.</string>
+    <string name="widget_nothing_running">Nothing is running. Tap for what to do now.</string>
+    <string name="widget_tourniquet">Tourniquet T %1$s</string>
+    <string name="widget_wait">Do not go back for</string>
+    <string name="widget_shelter">In the shelter</string>
+    <string name="widget_power">No power</string>
+    <string name="widget_heat">No heating</string>
+    <string name="widget_path_level">%1$s: %2$d of %3$d. Tap to see the step.</string>
+    <string name="widget_path_start">Open My path to begin.</string>
+    <string name="widget_path_trip">Trip mode: tap to open the action cards.</string>
+    <string name="widget_now_desc">One big button to the action cards</string>
+    <string name="widget_running_desc">Tourniquet, the wait after a strike, shelter, power: a live count</string>
+    <string name="widget_path_desc">The level of My path, without details</string>
 </resources>
