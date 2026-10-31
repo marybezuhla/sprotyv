@@ -891,6 +891,7 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
             Toggle(stringResource(R.string.ready_on_home), !prefs.readinessHidden) { on -> HomePrefs.update(context) { it.copy(readinessHidden = !on) } }
         }
         }
+        Block(stringResource(R.string.lang_title), ua.sprotyv.home.Group.GUIDE, foldable = true) { LanguageChoice() }
         Block(stringResource(R.string.theme_title), ua.sprotyv.home.Group.GUIDE, foldable = true) {
         ThemeChoice.entries.forEach { t ->
             val on = t == prefs.theme
@@ -1143,4 +1144,27 @@ fun tileStatus(id: String, now: Long): String? {
     val d = share.getOrNull(0)?.toIntOrNull() ?: return null
     val t = share.getOrNull(1)?.toIntOrNull() ?: return null
     return if (t > 0 && d >= t) stringResource(R.string.tile_ready) else stringResource(R.string.ready_count, d, t)
+}
+
+/**
+ * The app's language, whatever the phone's: Ukrainian or English. Android 13 and later keep the
+ * choice for this app alone; on older phones the phone's own language is used.
+ */
+@Composable
+private fun LanguageChoice() {
+    if (android.os.Build.VERSION.SDK_INT < 33) {
+        Text(stringResource(R.string.lang_old_phone), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        return
+    }
+    val current = androidx.appcompat.app.AppCompatDelegate.getApplicationLocales().toLanguageTags()
+    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        listOf("" to R.string.lang_phone, "uk" to R.string.lang_uk, "en" to R.string.lang_en).forEach { (tag, label) ->
+            androidx.compose.material3.FilterChip(
+                selected = current.substringBefore('-') == tag,
+                onClick = { androidx.appcompat.app.AppCompatDelegate.setApplicationLocales(androidx.core.os.LocaleListCompat.forLanguageTags(tag)) },
+                label = { Text(stringResource(label)) }, modifier = Modifier.heightIn(min = 48.dp),
+            )
+        }
+    }
+    Text(stringResource(R.string.lang_content_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 }
