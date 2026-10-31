@@ -165,7 +165,7 @@ fun KitScreen(content: Content?, nav: Nav) {
         modifier = Modifier.fillMaxWidth(),
     ) {
         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text("🧳", fontSize = 48.sp, modifier = Modifier.clearAndSetSemantics { })
+            Text("🎒", fontSize = 48.sp, modifier = Modifier.clearAndSetSemantics { })
             Spacer(Modifier.width(16.dp))
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Text(stringResource(if (done == total) R.string.kit_full else R.string.kit_packed, done, total), style = MaterialTheme.typography.titleLarge, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
@@ -178,13 +178,12 @@ fun KitScreen(content: Content?, nav: Nav) {
         }
     }
     // One folded pocket per group, with its own count; the first pocket not packed yet is open
-    val firstOpen = groups.indexOfFirst { g -> g.items.any { it.key !in checked } }
     groups.forEachIndexed { gi, g ->
         val got = g.items.count { it.key in checked }
         val title = g.title.substringBefore(" (").trim()
         val note = g.title.substringAfter(" (", "").removeSuffix(")").trim()
         Block(
-            title, ua.sprotyv.home.Group.PREPARE, padded = false, foldable = true, startOpen = gi == firstOpen,
+            title, ua.sprotyv.home.Group.PREPARE, padded = false, foldable = true, startOpen = false,
             summary = (if (got == g.items.size) "✓ " else "") + stringResource(R.string.ready_count, got, g.items.size) + if (note.isNotBlank()) " · $note" else "",
             leading = { Text(kitIcon(title), fontSize = 28.sp, modifier = Modifier.clearAndSetSemantics { }) },
         ) {

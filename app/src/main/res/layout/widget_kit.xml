@@ -2,7 +2,7 @@
 <!-- The go-bag: counts only, never which things -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/w_root" android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="@drawable/w_shape_blue" android:gravity="center_vertical" android:orientation="horizontal" android:padding="12dp">
-    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🧳" android:textSize="28sp" android:importantForAccessibility="no" />
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🎒" android:textSize="28sp" android:importantForAccessibility="no" />
     <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:layout_marginStart="10dp" android:orientation="vertical">
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/kit"
             android:textColor="@color/w_blue_ink" android:textSize="16sp" android:textStyle="bold" />
