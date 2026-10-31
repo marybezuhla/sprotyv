@@ -73,6 +73,10 @@ object Notify {
     fun set(c: Context, kind: Kind, on: Boolean) {
         prefs(c).edit().putBoolean(kind.key, on).apply()
         if (kind == Kind.KIT && on) prefs(c).edit().putLong("kit_next", System.currentTimeMillis() + KIT_EVERY).apply()
+        // Switched off: what was kept for it goes too
+        if (kind == Kind.SUPPLIES && !on) prefs(c).edit().remove("supplies_for").remove("supplies_at").apply()
+        if (kind == Kind.KIT && !on) prefs(c).edit().remove("kit_next").apply()
+        if (kind == Kind.NOTES && !on) notes(c).edit().clear().apply()
         changed.value++
         sync(c)
     }
@@ -105,6 +109,8 @@ object Notify {
     /** Called with the supplies as they are now; keeps only when to remind. */
     fun supplies(c: Context, soonest: YearMonth?) {
         val p = prefs(c)
+        // Nothing is kept unless the owner switched these reminders on
+        if (!isOn(c, Kind.SUPPLIES)) return
         val key = soonest?.toString().orEmpty()
         if (key == p.getString("supplies_for", "")) return
         val at = soonest?.minusMonths(1)?.atDay(1)?.atTime(10, 0)?.atZone(ZoneId.systemDefault())?.toInstant()?.toEpochMilli()
@@ -127,7 +133,7 @@ object Notify {
 
     private fun nextMark(since: Long, marks: List<Long>, now: Long): Long? = marks.map { since + it * HOUR }.firstOrNull { it > now }
 
-    /** The mark just reached (within a quarter of an hour), so a late alarm still says the right thing. */
+    /** The mark just reached (up to six hours late, e.g. after the phone was off), so a late alarm still says the right thing. */
     private fun reached(since: Long, marks: List<Long>, now: Long): Long? =
         marks.lastOrNull { since + it * HOUR <= now + 60_000 }?.takeIf { now - (since + it * HOUR) < 6 * HOUR }
 
@@ -155,15 +161,15 @@ object Notify {
 
         val w = waitEnd(app, now)
         if (w != null && w.first > now && shows(app, Kind.WAIT)) alarm(app, "wait", w.first) else unalarm(app, "wait")
-        if (w == null) cancel(app, ID_WAIT)
+        if (w == null || !shows(app, Kind.WAIT)) cancel(app, ID_WAIT)
 
         val counts = shows(app, Kind.COUNTS)
         plan(app, "shelter", Since.SHELTER.get(app, now).takeIf { counts && it != 0L }?.let { nextMark(it, SHELTER_MARKS, now) })
         plan(app, "power", Since.POWER.get(app, now).takeIf { counts && it != 0L }?.let { nextMark(it, POWER_MARKS, now) })
         plan(app, "heat", Since.HEAT.get(app, now).takeIf { counts && it != 0L }?.let { nextMark(it, HEAT_MARKS, now) })
-        if (Since.SHELTER.get(app, now) == 0L) cancel(app, ID_SHELTER)
-        if (Since.POWER.get(app, now) == 0L) cancel(app, ID_POWER)
-        if (Since.HEAT.get(app, now) == 0L) cancel(app, ID_HEAT)
+        if (!counts || Since.SHELTER.get(app, now) == 0L) cancel(app, ID_SHELTER)
+        if (!counts || Since.POWER.get(app, now) == 0L) cancel(app, ID_POWER)
+        if (!counts || Since.HEAT.get(app, now) == 0L) cancel(app, ID_HEAT)
 
         val p = prefs(app)
         plan(app, "supplies", p.getLong("supplies_at", 0L).takeIf { it > 0 && shows(app, Kind.SUPPLIES) })
@@ -180,7 +186,8 @@ object Notify {
         notes(app).all.forEach { (k, v) ->
             val id = k.toLongOrNull()
             val at = v as? Long
-            if (id == null || at == null) { notes(app).edit().remove(k).apply(); return@forEach }
+            // Anything odd, or missed by more than a day, or with reminders off: not kept
+            if (id == null || at == null || at <= now - DAY || !isOn(app, Kind.NOTES)) { notes(app).edit().remove(k).apply(); unalarm(app, "note/$k"); return@forEach }
             // Missed while the phone was off: said soon after, if not older than a day
             val due = if (at <= now && now - at < DAY) now + 30_000 else at
             plan(app, "note/$id", due.takeIf { notesOn && it > now })
@@ -333,8 +340,11 @@ object Opening {
     val target: StateFlow<String?> = _target
 
     fun take(intent: Intent?) {
-        val t = try { intent?.getStringExtra(EXTRA) } catch (e: Exception) { null } ?: return
-        intent?.removeExtra(EXTRA)
+        // Only the app's own notifications address Main directly; the home-screen and share
+        // entries (open to other apps) never carry a screen to open
+        if (intent?.component?.className != Main::class.java.name) return
+        val t = try { intent.getStringExtra(EXTRA) } catch (e: Exception) { null } ?: return
+        intent.removeExtra(EXTRA)
         if (t in FIXED || NOTE.matches(t)) _target.value = t
     }
 
