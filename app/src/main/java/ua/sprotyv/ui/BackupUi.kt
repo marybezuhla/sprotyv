@@ -276,11 +276,16 @@ private fun homeForBackup(context: Context): Map<String, String> = HomePrefs.exp
     "neutral" to Neutral.isOn(context).toString(),
     // Only a wish: a new phone has a new key, so the lock is switched on again by hand (a notice says so)
     "lock_mine" to (PersonalStore.lockMode(context)?.locked == true).toString(),
-)
+) + Notify.Kind.entries.associate { "notify_" + it.key to Notify.isOn(context, it).toString() } +
+    // Only the switches; reminders in notes are set again on the new phone
+    mapOf("notify_trip_all" to Notify.hideAllInTrip(context).toString())
 
 private fun restoreHome(context: Context, home: Map<String, String>) {
     HomePrefs.import(context, home)
     home["neutral"]?.toBooleanStrictOrNull()?.let { want -> if (Neutral.isOn(context) != want) Neutral.set(context, want) }
+    // Notifications as they were; Android asks again for its permission when one is used
+    Notify.Kind.entries.forEach { k -> home["notify_" + k.key]?.toBooleanStrictOrNull()?.let { if (Notify.isOn(context, k) != it) Notify.set(context, k, it) } }
+    home["notify_trip_all"]?.toBooleanStrictOrNull()?.let { if (Notify.hideAllInTrip(context) != it) Notify.setHideAllInTrip(context, it) }
 }
 
 /** The settings a backup carries; others (like the date of the last backup) stay on this phone. */

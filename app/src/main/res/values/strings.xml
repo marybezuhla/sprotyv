@@ -853,4 +853,8 @@
     <string name="path_home_all">My path is complete</string>
     <string name="resist_support_title">Support the country</string>
     <string name="resist_support_intro">Money, blood, vigilance. Donate only through official sites: scammers copy well-known funds.</string>
+    <string name="notes_send_open">Send as plain text…</string>
+    <string name="notes_send_title">The text leaves the encryption</string>
+    <string name="notes_send_warning">The app you send it to (mail, a messenger) and its servers will see this text, and a copy stays there. Do not send passwords or document or card numbers this way. For a phone nearby, a QR code is safer.</string>
+    <string name="notes_send_yes">Send</string>
 </resources>
