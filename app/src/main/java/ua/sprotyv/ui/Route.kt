@@ -33,6 +33,9 @@ sealed interface Route {
     data class Moz(val n: Int) : Route
     /** The Constitution of Ukraine: all of it when [article] is empty, or one article. */
     data class ConstitutionRoute(val article: String) : Route
+    /** "Why resist": stories from history, and one of them. */
+    data object HistoryRoute : Route
+    data class Story(val id: String) : Route
     /** Hand out the steps of a procedure to people nearby. */
     data class Delegate(val n: Int) : Route
     /** What happened and what was done, for the ambulance crew; kept nowhere. */
@@ -70,6 +73,8 @@ sealed interface Route {
         Resistance -> "resistance"
         is NoteEdit -> "note:$id"
         is Moz -> "moz:$n"
+        HistoryRoute -> "history"
+        is Story -> "story:$id"
         is ConstitutionRoute -> if (article.isEmpty()) "constitution" else "constitution:$article"
         is Delegate -> "delegate:$n"
         Handover -> "handover"
@@ -102,6 +107,8 @@ sealed interface Route {
                 "handover" -> Handover
                 "resistance" -> Resistance
                 "note" -> value.toLongOrNull()?.takeIf { it >= 0 }?.let(::NoteEdit)
+                "history" -> HistoryRoute
+                "story" -> value.takeIf { it.matches(Regex("^[a-z0-9-]{1,40}$")) }?.let(::Story)
                 "constitution" -> if (value.isEmpty()) ConstitutionRoute("") else value.takeIf { it.matches(Regex("^\\d{1,3}(-\\d)?$")) }?.let(::ConstitutionRoute)
                 "moz" -> if (value.isEmpty()) MozList else value.toIntOrNull()?.takeIf { it in 1..60 }?.let(::Moz)
                 "practice" -> PracticeRoute(value)

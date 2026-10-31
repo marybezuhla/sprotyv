@@ -99,7 +99,7 @@ private fun Picker(onPick: (String, String, String) -> Unit) {
                 infos.forEachIndexed { i, info ->
                     if (i > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                     val tone = when {
-                        info.id == Tiles.tool(Tool.RESIST) || info.id == Tiles.tool(Tool.CONSTITUTION) -> "khaki"
+                        info.id == Tiles.tool(Tool.RESIST) || info.id == Tiles.tool(Tool.CONSTITUTION) || info.id == Tiles.tool(Tool.HISTORY) -> "khaki"
                         info.id == Tiles.tool(Tool.NOW) -> "urgent"
                         else -> when (info.tone) {
                             Group.DANGER -> "urgent"

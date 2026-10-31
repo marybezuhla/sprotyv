@@ -954,4 +954,25 @@
     <string name="const_retrieved">текст отримано %1$s</string>
     <string name="const_no_changes">текст не змінено</string>
     <string name="const_official">Офіційний текст без змін. Офіційне тлумачення Конституції здійснює Конституційний Суд (стаття 147). По допомогу — до юриста або безоплатної правничої допомоги.</string>
+    <string name="history_title">Навіщо спротив</string>
+    <string name="history_hint">Історії з минулого: коли вистояли і коли ні</string>
+    <string name="history_intro">Правдиві історії з України і світу. Кожна — на один екран: що сталося, чим закінчилося і чого вчить. Під кожною — джерела й дата перевірки.</string>
+    <string name="history_stood">Коли спротив вистояв</string>
+    <string name="history_stood_hint">Згуртованість і витримка</string>
+    <string name="history_lost">Коли спротив не дотиснули або залишилися самі</string>
+    <string name="history_lost_hint">Ціна розбрату й поступок</string>
+    <string name="history_word">Спротив там, де здавалося неможливо</string>
+    <string name="history_word_hint">Табори, слово правди</string>
+    <string name="history_summary">Що з цього випливає</string>
+    <string name="history_summary_hint">Підсумок</string>
+    <string name="history_summary_open">Відкрити підсумок</string>
+    <string name="history_happened">Що сталося</string>
+    <string name="history_outcome">Чим закінчилося</string>
+    <string name="history_lesson">Урок</string>
+    <string name="history_sources">Джерела</string>
+    <string name="history_source_open">Відкриється поза «Спротивом»</string>
+    <string name="history_checked">Факти перевірено %1$s. Текст укладено за наведеними джерелами.</string>
+    <string name="history_prev">Попередня</string>
+    <string name="history_next">Наступна</string>
+    <string name="history_all">Усі історії</string>
 </resources>

@@ -15,6 +15,17 @@ class ContentTest {
     private val kidCards by lazy { CardsReader.parse(File(assets, "kid_cards.json").readText()) }
     private val cards by lazy { adultCards + kidCards }
 
+    @Test fun historyHasSourcesAndDates() {
+        val h = HistoryReader.parse(File(assets, "history.json").readText())
+        assertTrue(h.stories.size >= 10)
+        assertEquals(h.stories.size, h.stories.map { it.id }.toSet().size)
+        h.stories.filter { it.kind != History.Kind.SUMMARY }.forEach {
+            assertTrue("${it.id} sources", it.sources.isNotEmpty())
+            assertTrue("${it.id} checked", it.checked.matches(Regex("\\d{2}\\.\\d{2}\\.\\d{4}")))
+            assertTrue("${it.id} telegram", it.sources.none { s -> "t.me" in s.url || "telegram" in s.url })
+        }
+    }
+
     @Test fun constitutionIsWhole() {
         val c = ConstitutionReader.parse(File(assets, "constitution.json").readText())
         val nums = c.sections.flatMap { s -> s.articles.map { it.num } }
