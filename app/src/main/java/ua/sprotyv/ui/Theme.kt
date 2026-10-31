@@ -168,25 +168,11 @@ fun SprotyvTheme(choice: ThemeChoice = ThemeChoice.SYSTEM, dynamic: Boolean = fa
         }
     }
     CompositionLocalProvider(LocalDark provides dark, LocalContrast provides contrast) {
-        MaterialTheme(colorScheme = scheme, typography = Reading) {
+        MaterialTheme(colorScheme = scheme) {
             // The base every screen draws on: its own background and, with it, a readable text colour
             Surface(modifier = Modifier.fillMaxSize(), color = scheme.background, contentColor = scheme.onBackground) {
                 content()
             }
         }
     }
-}
-
-/**
- * Reading text is set flush on both sides, as the owner asked, with hyphenation (Ukrainian
- * patterns are built into Android) so justified lines do not open wide gaps. Only the two body
- * sizes: titles, labels and buttons stay left-aligned. The last line of a paragraph stays ragged.
- */
-private val Reading: androidx.compose.material3.Typography = androidx.compose.material3.Typography().let { t ->
-    fun androidx.compose.ui.text.TextStyle.justified() = copy(
-        textAlign = androidx.compose.ui.text.style.TextAlign.Justify,
-        hyphens = androidx.compose.ui.text.style.Hyphens.Auto,
-        lineBreak = androidx.compose.ui.text.style.LineBreak.Paragraph,
-    )
-    t.copy(bodyLarge = t.bodyLarge.justified(), bodyMedium = t.bodyMedium.justified())
 }

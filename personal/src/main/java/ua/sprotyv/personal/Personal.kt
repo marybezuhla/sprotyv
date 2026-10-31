@@ -273,15 +273,28 @@ object PersonalStore {
     fun startLock(context: Context, pinOnly: Boolean): LockChange? = try {
         val vault = KeyVault(context.applicationContext)
         val u = vault.unwrap()
-        if (u !is KeyVault.Unwrapped.Ok) null
-        else {
+        if (u !is KeyVault.Unwrapped.Ok) {
+            lockTrouble = "unwrap: " + u.javaClass.simpleName
+            null
+        } else {
             val mode = KeyVault.Mode(locked = true, pinOnly = pinOnly)
             val (cipher, alias) = vault.cipherForRewrap(mode)
             LockChange(cipher, alias, mode, u.passphrase)
         }
     } catch (e: Exception) {
+        lockTrouble = describe(e)
         null
     }
+
+    /**
+     * Why the last change of the lock failed, in technical words for feedback (exception names and
+     * the keystore's own messages; never a key or a passphrase). Null when the last change went well.
+     */
+    @Volatile var lockTrouble: String? = null
+        private set
+
+    private fun describe(e: Throwable): String =
+        generateSequence(e) { it.cause }.take(3).joinToString(" ← ") { (it.javaClass.simpleName + ": " + (it.message ?: "")).take(160) }
 
     /**
      * Turning the lock off, or switching "PIN only": the owner first confirms [unlockCipher]; with
@@ -291,12 +304,15 @@ object PersonalStore {
     fun startChange(context: Context, unlocking: KeyVault.Unlocking, confirmedUnlock: javax.crypto.Cipher, target: KeyVault.Mode): LockChange? = try {
         val vault = KeyVault(context.applicationContext)
         val u = vault.finishUnlock(confirmedUnlock, unlocking.data)
-        if (u !is KeyVault.Unwrapped.Ok) null
-        else {
+        if (u !is KeyVault.Unwrapped.Ok) {
+            lockTrouble = "unlock: " + u.javaClass.simpleName
+            null
+        } else {
             val (cipher, alias) = vault.cipherForRewrap(target)
             LockChange(cipher, alias, target, u.passphrase)
         }
     } catch (e: Exception) {
+        lockTrouble = describe(e)
         null
     }
 
@@ -307,8 +323,10 @@ object PersonalStore {
             val ok = mutex.withLock {
                 try {
                     KeyVault(app).finishRewrap(change.cipher, change.alias, change.mode, change.passphrase)
+                    lockTrouble = null
                     true
                 } catch (t: Throwable) {
+                    lockTrouble = describe(t)
                     false
                 } finally {
                     change.passphrase.fill(0)

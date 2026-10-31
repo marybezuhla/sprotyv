@@ -200,13 +200,26 @@ class KeyVault(context: Context) {
      * Nothing stored changes until then.
      */
     fun cipherForRewrap(mode: Mode): Pair<Cipher, String> {
-        val alias = KEY_PREFIX + randomHex(8)
-        val key = createKey(alias, mode)
-        return Cipher.getInstance(TRANSFORMATION).apply {
-            init(Cipher.ENCRYPT_MODE, key)
-            updateAAD(header(FORMAT_VERSION, mode, alias))
-        } to alias
+        fun attempt(strongBox: Boolean?): Pair<Cipher, String> {
+            val alias = KEY_PREFIX + randomHex(8)
+            val key = if (strongBox == null) createKey(alias, mode) else generate(alias, mode, strongBox)
+            return Cipher.getInstance(TRANSFORMATION).apply {
+                init(Cipher.ENCRYPT_MODE, key)
+                updateAAD(header(FORMAT_VERSION, mode, alias))
+            } to alias
+        }
+        return try {
+            attempt(null)
+        } catch (e: Exception) {
+            // Some phones make a StrongBox key that needs the owner's confirmation and then refuse to
+            // use it: the phone's regular secure hardware is used instead. A failed key holds nothing.
+            lastError = e
+            attempt(strongBox = false)
+        }
     }
+
+    /** The last keystore failure seen while changing the lock, for the owner's feedback (no secrets in it). */
+    @Volatile var lastError: Throwable? = null
 
     /**
      * Step 2: the same passphrase is stored wrapped with the new key, atomically. The old key

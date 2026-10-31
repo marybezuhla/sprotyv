@@ -388,19 +388,26 @@ fun IconBadge(icon: ImageVector, tint: Tint, size: Dp) {
 @Composable
 fun TileCard(info: TileInfo, big: Boolean, status: String? = null, onClick: () -> Unit) {
     val marked = info.id == Tiles.tool(Tool.NOW)
+    // "I am safe" beside it in its own green, so the two ways in sit side by side in harmony
+    val safe = info.id == Tiles.tool(Tool.SAFE)
     val u = urgent()
+    val green = Group.FIRST_AID.tint()
     Card(
         onClick = onClick,
         colors = CardDefaults.cardColors(
-            containerColor = if (marked) u.container else MaterialTheme.colorScheme.surface,
-            contentColor = if (marked) u.ink else MaterialTheme.colorScheme.onSurface,
+            containerColor = when { marked -> u.container; safe -> green.container; else -> MaterialTheme.colorScheme.surface },
+            contentColor = when { marked -> u.ink; safe -> green.ink; else -> MaterialTheme.colorScheme.onSurface },
         ),
-        border = if (marked) BorderStroke(2.dp, u.edge) else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        border = when {
+            marked -> BorderStroke(2.dp, u.edge)
+            safe -> BorderStroke(2.dp, green.ink.copy(alpha = 0.6f))
+            else -> BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+        },
         modifier = Modifier.fillMaxWidth().heightIn(min = if (big) 88.dp else 76.dp),
     ) {
         if (big) {
             Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                IconBadge(info.icon, if (marked) Tint(MaterialTheme.colorScheme.surface, u.edge) else info.tone.tint(), 56.dp)
+                IconBadge(info.icon, if (marked) Tint(MaterialTheme.colorScheme.surface, u.edge) else if (safe) Tint(MaterialTheme.colorScheme.surface, green.ink) else info.tone.tint(), 56.dp)
                 Spacer(Modifier.width(16.dp))
                 Column(Modifier.weight(1f)) {
                     // Simple look: large print (24 and 18 sp), still growing with the phone's text size
@@ -416,7 +423,7 @@ fun TileCard(info: TileInfo, big: Boolean, status: String? = null, onClick: () -
             // Compact: icon beside the title, so more fits on the screen; a live status replaces the hint
             // Every line starts at the same edge, right of the icon; one size for titles, one for hints
             Row(Modifier.padding(horizontal = 12.dp, vertical = 12.dp), verticalAlignment = Alignment.Top) {
-                IconBadge(info.icon, if (marked) Tint(MaterialTheme.colorScheme.surface, u.edge) else info.tone.tint(), 36.dp)
+                IconBadge(info.icon, if (marked) Tint(MaterialTheme.colorScheme.surface, u.edge) else if (safe) Tint(MaterialTheme.colorScheme.surface, green.ink) else info.tone.tint(), 36.dp)
                 Spacer(Modifier.width(10.dp))
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                     Text(info.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
@@ -452,6 +459,7 @@ fun SimpleHome(content: Content?, pins: List<String>, nav: Nav, onSettings: () -
             val fixed = Tiles.FIXED.mapNotNull { tileInfo(it, content) }
             val chosen = pins.mapNotNull { tileInfo(it, content) }.take(Tiles.SIMPLE_CHOSEN)
             val now = remember { System.currentTimeMillis() }
+            ActiveStrip(nav)
             (fixed + chosen).forEach { info -> TileCard(info, big = true, status = tileStatus(info.id, now)) { nav.go(info.route) } }
         }
         CallBar()
@@ -487,6 +495,8 @@ fun FullHome(content: Content?, pins: List<String>, nav: Nav, onSettings: () -> 
                 }
             }
         }
+        // Counts running now come first, by themselves
+        item(span = { GridItemSpan(maxLineSpan) }) { ActiveStrip(nav) }
         items(fixed, key = { it.id }) { info -> TileCard(info, big = false) { nav.go(info.route) } }
         item(span = { GridItemSpan(maxLineSpan) }) { ReadinessStrip(nav) }
         item(span = { GridItemSpan(maxLineSpan) }) {

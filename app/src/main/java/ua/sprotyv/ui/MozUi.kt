@@ -169,8 +169,8 @@ private fun StepLine(step: Moz441.Item) {
             Text(step.n, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold, color = tint.ink)
         }
         Column(Modifier.weight(1f).padding(start = 12.dp, top = 4.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(step.text, style = MaterialTheme.typography.bodyLarge)
-            step.items.forEach { Text("${it.n}) ${it.text}", style = MaterialTheme.typography.bodyMedium) }
+            Text(step.text, style = ReadingText)
+            step.items.forEach { Text("${it.n}) ${it.text}", style = ReadingText) }
         }
     }
 }
@@ -180,8 +180,8 @@ private fun Bullet(item: Moz441.Item) {
     Row {
         Text("•", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.width(20.dp))
         Column(Modifier.weight(1f)) {
-            Text(item.text, style = MaterialTheme.typography.bodyLarge)
-            item.items.forEach { Text("${it.n}) ${it.text}", style = MaterialTheme.typography.bodyMedium) }
+            Text(item.text, style = ReadingText)
+            item.items.forEach { Text("${it.n}) ${it.text}", style = ReadingText) }
         }
     }
 }
@@ -197,11 +197,11 @@ private fun FullText(p: Moz441.Procedure, medic: Boolean) {
     Text(stringResource(R.string.moz_procedure_title, p.title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
     p.points.forEach { point ->
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text("${point.n}. ${point.text}", style = MaterialTheme.typography.bodyMedium)
+            Text("${point.n}. ${point.text}", style = ReadingText)
             point.items.forEach { item ->
-                Text("${item.n}) ${item.text}", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(start = 16.dp))
+                Text("${item.n}) ${item.text}", style = ReadingText, modifier = Modifier.padding(start = 16.dp))
                 item.items.forEach { sub ->
-                    Text("${sub.n}) ${sub.text}", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(start = 32.dp))
+                    Text("${sub.n}) ${sub.text}", style = ReadingText, modifier = Modifier.padding(start = 32.dp))
                 }
             }
         }

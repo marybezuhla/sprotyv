@@ -202,7 +202,7 @@ fun WaitTimer(total: Int) {
     if (since == 0L) {
         OutlinedButton(onClick = {
             val t = System.currentTimeMillis()
-            prefs.edit().putLong("since", t).apply()
+            prefs.edit().putLong("since", t).putInt("total", total).apply()
             now = t
             since = t
         }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.wait_start, total)) }

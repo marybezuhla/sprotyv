@@ -663,14 +663,14 @@
     <string name="shelf_unfold">розгорнути</string>
     <string name="mine_block_trouble">На випадок біди</string>
     <string name="mine_block_home">Запаси й закладки</string>
-    <string name="mine_block_copies">Нотатки, закладки, друк, коди</string>
+    <string name="mine_block_copies">Закладки, друк, коди</string>
     <string name="source_section">Джерело: «%1$s» %2$s, п. %3$s</string>
     <string name="source_license">Ліцензія: %1$s</string>
     <string name="about_icons">Піктограми: Health Icons (healthicons.org, суспільне надбання, CC0) і Material Symbols (Google, Apache 2.0).</string>
     <string name="ready_summary">Готово частин: %1$d з %2$d</string>
     <string name="mine_block_trouble_desc">Я в безпеці, медкартка, довірені люди, план, екран для рятувальника</string>
     <string name="mine_block_home_desc">Тривожна валіза, запаси вдома, закладки</string>
-    <string name="mine_block_copies_desc">Нотатки, закладки, друк, коди, резервна копія</string>
+    <string name="mine_block_copies_desc">Закладки, друк, коди, резервна копія</string>
     <string name="lock_mine_unknown">Стан замка зараз не вдалося прочитати. Відкрийте «Моє» один раз і поверніться сюди.</string>
     <string name="settings_other_hands">Якщо телефон у чужих руках</string>
     <string name="settings_about">Про застосунок і відгук</string>
@@ -835,4 +835,14 @@
     <string name="path_delegate">Вмію розподілити кроки між людьми поруч</string>
     <string name="delegate_step">Крок %1$s</string>
     <string name="delegate_who">Хто:</string>
+    <string name="lock_mine_reason">Технічна причина (можна скопіювати й надіслати у відгуку): %1$s</string>
+    <string name="active_title">Зараз триває</string>
+    <string name="active_tourniquet">Турнікет накладено %1$s тому</string>
+    <string name="active_wait">Не повертайтеся ще %1$d хв</string>
+    <string name="active_wait_done">%1$d хв минуло: орієнтуйтеся на відбій</string>
+    <string name="active_heat">Тепла немає %1$s</string>
+    <string name="notes_open">Відкрити нотатки</string>
+    <string name="notes_count">Нотаток: %1$d</string>
+    <string name="handover_to_notes">Зберегти в мої нотатки</string>
+    <string name="handover_note_title">Для бригади, %1$s</string>
 </resources>

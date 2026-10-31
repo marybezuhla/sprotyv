@@ -146,6 +146,13 @@ fun HandoverScreen(nav: Nav) {
         OutlinedButton(enabled = fits, onClick = { QrInbox.text = summary; nav.go(Route.QrText) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
             Text(stringResource(R.string.handover_qr))
         }
+        // Kept only if the owner asks: then encrypted in "My notes"
+        val noteTitle = stringResource(R.string.handover_note_title, clockOf(System.currentTimeMillis()))
+        OutlinedButton(enabled = summary.isNotBlank(), onClick = {
+            NoteInbox.title = noteTitle
+            NoteInbox.text = summary
+            nav.go(Route.Mine(MinePart.NOTES))
+        }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.handover_to_notes)) }
         Text(stringResource(R.string.handover_kept_nowhere), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }

@@ -657,14 +657,14 @@
     <string name="shelf_unfold">unfold</string>
     <string name="mine_block_trouble">In case of trouble</string>
     <string name="mine_block_home">Supplies and bookmarks</string>
-    <string name="mine_block_copies">Notes, bookmarks, printing, codes</string>
+    <string name="mine_block_copies">Bookmarks, printing, codes</string>
     <string name="source_section">Source: “%1$s” %2$s, sec. %3$s</string>
     <string name="source_license">Licence: %1$s</string>
     <string name="about_icons">Icons: Health Icons (healthicons.org, public domain, CC0) and Material Symbols (Google, Apache 2.0).</string>
     <string name="ready_summary">Parts done: %1$d of %2$d</string>
     <string name="mine_block_trouble_desc">I am safe, medical card, trusted people, plan, screen for rescuers</string>
     <string name="mine_block_home_desc">Emergency bag, supplies at home, bookmarks</string>
-    <string name="mine_block_copies_desc">Notes, bookmarks, printing, codes, backup</string>
+    <string name="mine_block_copies_desc">Bookmarks, printing, codes, backup</string>
     <string name="lock_mine_unknown">The lock’s state could not be read just now. Open “Mine” once and come back here.</string>
     <string name="settings_other_hands">If the phone is in the wrong hands</string>
     <string name="settings_about">About and feedback</string>
@@ -829,4 +829,14 @@
     <string name="path_delegate">I can share out steps among people nearby</string>
     <string name="delegate_step">Step %1$s</string>
     <string name="delegate_who">Who:</string>
+    <string name="lock_mine_reason">Technical reason (you can copy it and send it in feedback): %1$s</string>
+    <string name="active_title">Running now</string>
+    <string name="active_tourniquet">Tourniquet on for %1$s</string>
+    <string name="active_wait">Do not go back for %1$d more min</string>
+    <string name="active_wait_done">%1$d min passed: follow the all-clear</string>
+    <string name="active_heat">No heat for %1$s</string>
+    <string name="notes_open">Open notes</string>
+    <string name="notes_count">Notes: %1$d</string>
+    <string name="handover_to_notes">Save to my notes</string>
+    <string name="handover_note_title">For the crew, %1$s</string>
 </resources>
