@@ -70,7 +70,7 @@ fun ChapterRow(chapter: Chapter, onClick: () -> Unit) {
             if (chapter.label.isNotBlank()) {
                 Text(chapter.label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
-            Text(chapter.title, style = MaterialTheme.typography.titleMedium)
+            Text(chapter.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
         }
     }
 }
@@ -92,7 +92,7 @@ fun GuideScreen(content: Content?, nav: Nav) {
             }
         }
         content.guide.chapters.forEach { ch -> ChapterRow(ch) { nav.go(Route.ChapterRoute(ch.id)) } }
-        OutlinedButton(onClick = { nav.go(Route.About) }, modifier = Modifier.heightIn(min = 48.dp)) {
+        OutlinedButton(onClick = { nav.go(Route.About) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
             Text(stringResource(R.string.about_guide))
         }
     }
@@ -122,6 +122,7 @@ private fun SectionRow(s: GuideSection, onClick: () -> Unit) {
         Text(
             (if (s.num.isNotBlank()) s.num + ". " else "") + s.title,
             style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.SemiBold,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
         )
     }
@@ -332,7 +333,7 @@ fun SearchScreen(content: Content?, nav: Nav) {
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text("${h.section.num}. ${h.section.title}", style = MaterialTheme.typography.titleMedium)
+                    Text("${h.section.num}. ${h.section.title}", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                     Text(h.snippet, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }

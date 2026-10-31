@@ -497,17 +497,17 @@ private fun ScanResult(s: Scanned, onOpen: (Scanned.Link) -> Unit) {
                     Text("⚠ " + stringResource(warning(w)), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.error)
                 }
                 Text(stringResource(R.string.scan_link_note), style = MaterialTheme.typography.bodyMedium)
-                OutlinedButton(onClick = { onOpen(s) }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.scan_open)) }
+                OutlinedButton(onClick = { onOpen(s) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.scan_open)) }
             }
             is Scanned.Phone -> {
                 // The number shown is exactly the number that will be dialled
                 val number = ua.sprotyv.reach.Links.clean(s.number)
                 Text(number, style = MaterialTheme.typography.headlineSmall)
-                Button(onClick = { Reach.dial(context, number) }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.call_number, number)) }
+                Button(onClick = { Reach.dial(context, number) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.call_number, number)) }
             }
             is Scanned.Plain -> SelectionContainer { Text(s.text, style = MaterialTheme.typography.bodyLarge) }
         }
-        OutlinedButton(onClick = { copy(context, s.text) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.scan_copy)) }
+        OutlinedButton(onClick = { copy(context, s.text) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.scan_copy)) }
     }
 }
 
