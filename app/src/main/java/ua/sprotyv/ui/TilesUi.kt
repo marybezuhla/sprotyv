@@ -175,7 +175,34 @@ private val Group.title: Int get() = when (this) {
 }
 
 /** One folded group in "Sections": its name, a line on what is in it, its colour, its tiles. */
-private class Shelf(val title: Int, val desc: Int, val group: Group, val ids: List<String>)
+private class Shelf(val title: Int, val desc: Int, val group: Group, val ids: List<String>, val resist: Boolean = false)
+
+/**
+ * Resistance runs through many sections, so it has its own quiet mark: a muted khaki and the
+ * app's shield. It is a theme, not a fifth level of urgency: the four colours keep their meaning,
+ * and khaki never fills a whole screen.
+ */
+@Composable
+fun resist(): Tint = when {
+    LocalContrast.current -> Tint(MaterialTheme.colorScheme.surfaceVariant, MaterialTheme.colorScheme.onSurface)
+    LocalDark.current -> Tint(Color(0xFF2F3021), Color(0xFFD9D4A9))
+    else -> Tint(Color(0xFFECE9D5), Color(0xFF4B4921))
+}
+
+/** The app's own shield, the same shape as its icon. */
+val Shield: ImageVector by lazy {
+    ImageVector.Builder("shield", 24.dp, 24.dp, 24f, 24f).addPath(
+        androidx.compose.ui.graphics.vector.PathParser().parsePathString("M12,2.5L19.5,5.2L19.5,10.6C19.5,15.4 16.4,18.9 12,20.6C7.6,18.9 4.5,15.4 4.5,10.6L4.5,5.2Z").toNodes(),
+        fill = androidx.compose.ui.graphics.SolidColor(Color.Black),
+    ).build()
+}
+
+/** The tiles that belong to resistance: they wear its mark wherever they are. */
+private fun isResist(id: String) = id == Tiles.tool(Tool.RESIST)
+
+/** A tile's badge colours: its group's, or resistance's khaki. */
+@Composable
+fun TileInfo.badge(): Tint = if (isResist(id)) resist() else tone.tint()
 
 private val Group.desc: Int get() = when (this) {
     Group.DANGER -> R.string.group_danger_desc
@@ -301,7 +328,7 @@ private val Tool.icon: ImageVector? get() = when (this) {
     Tool.PEOPLE -> Icons.Filled.Person
     Tool.SUPPLIES -> Icons.Filled.ShoppingCart
     Tool.PRACTICE -> Icons.Filled.PlayArrow
-    Tool.RESIST -> Icons.Filled.Star
+    Tool.RESIST -> Shield
     Tool.PRINT, Tool.RESCUER, Tool.SCAN, Tool.QR_TEXT -> Icons.Filled.Share
     else -> null
 }
@@ -409,7 +436,7 @@ fun TileCard(info: TileInfo, big: Boolean, status: String? = null, modifier: Mod
     ) {
         if (big) {
             Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                IconBadge(info.icon, if (marked) Tint(MaterialTheme.colorScheme.surface, u.edge) else if (safe) Tint(MaterialTheme.colorScheme.surface, green.ink) else info.tone.tint(), 56.dp)
+                IconBadge(info.icon, if (marked) Tint(MaterialTheme.colorScheme.surface, u.edge) else if (safe) Tint(MaterialTheme.colorScheme.surface, green.ink) else info.badge(), 56.dp)
                 Spacer(Modifier.width(16.dp))
                 Column(Modifier.weight(1f)) {
                     // Simple look: large print (24 and 18 sp), still growing with the phone's text size
@@ -425,7 +452,7 @@ fun TileCard(info: TileInfo, big: Boolean, status: String? = null, modifier: Mod
             // Compact: icon beside the title, so more fits on the screen; a live status replaces the hint
             // Every line starts at the same edge, right of the icon; one size for titles, one for hints
             Row(Modifier.padding(horizontal = 12.dp, vertical = 12.dp), verticalAlignment = Alignment.Top) {
-                IconBadge(info.icon, if (marked) Tint(MaterialTheme.colorScheme.surface, u.edge) else if (safe) Tint(MaterialTheme.colorScheme.surface, green.ink) else info.tone.tint(), 36.dp)
+                IconBadge(info.icon, if (marked) Tint(MaterialTheme.colorScheme.surface, u.edge) else if (safe) Tint(MaterialTheme.colorScheme.surface, green.ink) else info.badge(), 36.dp)
                 Spacer(Modifier.width(10.dp))
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                     Text(info.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
@@ -557,7 +584,9 @@ fun SectionsList(content: Content?, pins: List<String>, nav: Nav, onPin: (String
     val full = pins.size >= Tiles.MAX_PINS
     if (full) Text(stringResource(R.string.pins_full), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     val links = content.links
-    val lists = Group.entries.map { Shelf(it.title, it.desc, it, it.tiles) } +
+    val resistLinks = links.filter { it.group in ua.sprotyv.content.Link.RESIST && it.group != "service" }.map { Tiles.link(it.id) }
+    val lists = listOf(Shelf(R.string.resist_title, R.string.shelf_resist_desc, Group.PREPARE, listOf(Tiles.tool(Tool.RESIST), Tiles.tool(Tool.MOZ), Tiles.tool(Tool.PRACTICE), Tiles.tool(Tool.KIT)) + resistLinks, resist = true)) +
+        Group.entries.map { Shelf(it.title, it.desc, it, it.tiles) } +
         Shelf(R.string.situation_title, R.string.shelf_situation_desc, Group.GUIDE, links.filter { it.group != ua.sprotyv.content.Link.POWER && it.group !in ua.sprotyv.content.Link.DIRECTORY && it.group !in ua.sprotyv.content.Link.RESIST }.map { Tiles.link(it.id) }) +
         Shelf(R.string.power_title, R.string.shelf_power_desc, Group.HOME_LIFE, links.filter { it.group == ua.sprotyv.content.Link.POWER }.map { Tiles.link(it.id) }) +
         Shelf(R.string.dir_title, R.string.shelf_dir_desc, Group.GUIDE, links.filter { it.group in ua.sprotyv.content.Link.DIRECTORY }.map { Tiles.link(it.id) }) +
@@ -567,7 +596,7 @@ fun SectionsList(content: Content?, pins: List<String>, nav: Nav, onPin: (String
         if (infos.isEmpty()) return@forEach
         // Folded by default: the groups are seen first, each with its colour and a line on what is in it
         var open by rememberSaveable(shelf.title) { mutableStateOf(false) }
-        val tint = shelf.group.tint()
+        val tint = if (shelf.resist) resist() else shelf.group.tint()
         val onHome = infos.count { it.id in pins }
         Card(
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -579,7 +608,7 @@ fun SectionsList(content: Content?, pins: List<String>, nav: Nav, onPin: (String
                     .heightIn(min = 64.dp).padding(start = 12.dp, end = 8.dp, top = 10.dp, bottom = 10.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                IconBadge(shelf.group.icon, Tint(MaterialTheme.colorScheme.surface, tint.ink), 40.dp)
+                IconBadge(if (shelf.resist) Shield else shelf.group.icon, Tint(MaterialTheme.colorScheme.surface, tint.ink), 40.dp)
                 Spacer(Modifier.width(12.dp))
                 Column(Modifier.weight(1f).semantics(mergeDescendants = true) { heading() }) {
                     Text(stringResource(shelf.title), style = BlockTitle, color = tint.ink)
@@ -599,7 +628,7 @@ fun SectionsList(content: Content?, pins: List<String>, nav: Nav, onPin: (String
                         .padding(start = 12.dp, end = 4.dp, top = 8.dp, bottom = 8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    IconBadge(info.icon, info.tone.tint(), 40.dp)
+                    IconBadge(info.icon, info.badge(), 40.dp)
                     Spacer(Modifier.width(12.dp))
                     Column(Modifier.weight(1f)) {
                         Text(info.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
@@ -643,7 +672,7 @@ fun EditTilesScreen(content: Content?, mode: Mode?, pins: List<String>, nav: Nav
                 Text(stringResource(R.string.edit_simple_rest), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Row(Modifier.fillMaxWidth().heightIn(min = 56.dp), verticalAlignment = Alignment.CenterVertically) {
-                IconBadge(info.icon, info.tone.tint(), 36.dp)
+                IconBadge(info.icon, info.badge(), 36.dp)
                 Spacer(Modifier.width(12.dp))
                 Text(info.title, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
                 IconButton(onClick = { change(Pins.move(ids, info.id, -1)) }, enabled = i > 0, modifier = Modifier.size(48.dp)) {

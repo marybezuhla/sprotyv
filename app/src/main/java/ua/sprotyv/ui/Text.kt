@@ -93,9 +93,11 @@ fun Block(
     foldable: Boolean = false,
     summary: String? = null,
     leading: (@Composable () -> Unit)? = null,
+    /** Its own colours instead of the group's (resistance's khaki). */
+    tint: Tint? = null,
     content: @Composable androidx.compose.foundation.layout.ColumnScope.() -> Unit,
 ) {
-    val tint = group.tint()
+    val tint = tint ?: group.tint()
     var open by androidx.compose.runtime.saveable.rememberSaveable(title) { androidx.compose.runtime.mutableStateOf(!foldable) }
     androidx.compose.material3.Card(
         colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),

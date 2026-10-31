@@ -873,4 +873,8 @@
     <string name="kid_step_next">Далі</string>
     <string name="kid_step_last">Зрозуміло!</string>
     <string name="kid_step_back">Назад</string>
+    <string name="resist_all_title">Усе про спротив</string>
+    <string name="resist_all_desc">Мій шлях, перша допомога, валіза, план, права, факти — з усіх розділів</string>
+    <string name="resist_all_rights">Права військових і родин, юристи, ветеранські лінії</string>
+    <string name="shelf_resist_desc">Внесок кожного, де вчитися, як підтримати країну, стійкість</string>
 </resources>
