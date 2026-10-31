@@ -23,6 +23,9 @@ class Main : ComponentActivity() {
         HomePrefs.load(this)
         // A page shared from a browser; only on a fresh start, never again when Android restores the app
         if (savedInstanceState == null) Incoming.take(intent)
+        // A notification's tap; and the notifications' alarms planned again from what is on
+        if (savedInstanceState == null) Opening.take(intent)
+        Notify.sync(this)
         // Screenshots of "Mine" are for showing the app to testers: off again at every fresh start
         if (savedInstanceState == null && HomePrefs.load(this).screenshots) HomePrefs.update(this) { it.copy(screenshots = false) }
         setContent {
@@ -43,6 +46,7 @@ class Main : ComponentActivity() {
     override fun onNewIntent(intent: android.content.Intent) {
         super.onNewIntent(intent)
         Incoming.take(intent)
+        Opening.take(intent)
     }
 
     override fun onResume() {

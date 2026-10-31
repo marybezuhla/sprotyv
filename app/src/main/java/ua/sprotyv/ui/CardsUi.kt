@@ -285,7 +285,8 @@ private fun TourniquetTime() {
     if (time == null) {
         OutlinedButton(onClick = {
             val t = System.currentTimeMillis()
-            prefs.edit().putLong("at", t).apply()
+            prefs.edit().putLong("at", t).commit()
+            Notify.sync(context)
             at = t
             now = t
         }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
@@ -307,7 +308,7 @@ private fun TourniquetTime() {
             Text(label, style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.Bold)
             Text(stringResource(R.string.tourniquet_since, minutes / 60, minutes % 60), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
             Text(stringResource(R.string.tourniquet_write), style = MaterialTheme.typography.bodyLarge)
-            OutlinedButton(onClick = { prefs.edit().remove("at").apply(); at = null }, modifier = Modifier.heightIn(min = 48.dp)) {
+            OutlinedButton(onClick = { prefs.edit().remove("at").commit(); Notify.sync(context); at = null }, modifier = Modifier.heightIn(min = 48.dp)) {
                 Text(stringResource(R.string.tourniquet_reset), color = tint.ink)
             }
         }

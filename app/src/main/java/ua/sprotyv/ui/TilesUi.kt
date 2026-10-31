@@ -839,6 +839,7 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
         }
         }
         Block(stringResource(R.string.lock_mine_title), ua.sprotyv.home.Group.GUIDE) { LockMineSettings() }
+        Block(stringResource(R.string.notify_title), ua.sprotyv.home.Group.GUIDE) { NotifySettings() }
         Block(stringResource(R.string.settings_other_hands), ua.sprotyv.home.Group.GUIDE) {
             TripToggle(prefs.trip)
             NeutralToggle()

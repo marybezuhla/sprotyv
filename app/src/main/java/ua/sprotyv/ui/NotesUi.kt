@@ -203,6 +203,7 @@ fun NotesPlate(nav: Nav) {
  */
 @Composable
 fun NoteEditScreen(id: Long, nav: Nav) {
+    val context = androidx.compose.ui.platform.LocalContext.current
     // Read once; "could not read" is told apart from "not there" (deleted meanwhile)
     val read by androidx.compose.runtime.produceState<Loaded<Note?>>(Loaded.Waiting, id) {
         value = PersonalStore.read { db -> listOf(db.notes().get(id)) }?.let { Loaded.Value(it.first()) } ?: Loaded.Failed
@@ -242,6 +243,7 @@ fun NoteEditScreen(id: Long, nav: Nav) {
         supportingText = if (text.length > MAX_NOTE - 2_000) ({ Text(stringResource(R.string.notes_length, text.length, MAX_NOTE)) }) else null,
     )
     Toggle(stringResource(R.string.notes_pin), pinned) { pinned = it; save() }
+    NoteReminder(first.id)
     val whole = text.trim()
     val fits = whole.isNotBlank() && whole.toByteArray(Charsets.UTF_8).size <= Qr.MAX_PLAN_BYTES
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -263,6 +265,7 @@ fun NoteEditScreen(id: Long, nav: Nav) {
                     confirmDelete = false
                     // Same key: a save still waiting is replaced by the deletion
                     PersonalStore.save(key) { it.notes().delete(first.id) }
+                    Notify.setNoteReminder(context, first.id, null)
                     nav.back()
                 }) { Text(stringResource(R.string.delete_row)) }
             },

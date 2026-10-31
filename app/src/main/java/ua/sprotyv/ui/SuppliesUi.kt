@@ -75,6 +75,9 @@ fun SuppliesScreen(content: Content?, nav: Nav) {
     val lines = Supplies.food(content.guide, s.people, s.days)
     val keyed = lines.map { Kit.key(it.what) to it }
     val now = YearMonth.now()
+    // Only when to remind is kept for notifications, never what runs out
+    val context = androidx.compose.ui.platform.LocalContext.current
+    androidx.compose.runtime.LaunchedEffect(s) { Notify.supplies(context, s.expiring(YearMonth.of(9998, 1)).firstOrNull()?.second) }
     var picking by remember { mutableStateOf<String?>(null) }
 
     // How long will it last
