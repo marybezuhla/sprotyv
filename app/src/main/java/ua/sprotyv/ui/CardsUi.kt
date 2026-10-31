@@ -64,15 +64,28 @@ import ua.sprotyv.reach.Reach
 fun CardRow(card: Card, onClick: () -> Unit) {
     // "The first 60 seconds" is where to start when it is not clear what happened: marked out
     val first = card.id == "first-60"
+    val u = urgent()
+    val (icon, tint) = cardBadge(card.id)
     Card(
         onClick = onClick,
-        colors = CardDefaults.cardColors(containerColor = if (first) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface),
-        border = if (first) BorderStroke(2.dp, MaterialTheme.colorScheme.primary) else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        colors = CardDefaults.cardColors(
+            containerColor = if (first) u.container else MaterialTheme.colorScheme.surface,
+            contentColor = if (first) u.ink else MaterialTheme.colorScheme.onSurface,
+        ),
+        border = if (first) BorderStroke(2.dp, u.edge) else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp),
     ) {
-        Column(Modifier.padding(horizontal = 16.dp, vertical = if (first) 16.dp else 20.dp)) {
-            Text(card.title, style = if (first) MaterialTheme.typography.titleLarge else MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-            if (first) Text(stringResource(R.string.first_60_hint), style = MaterialTheme.typography.bodyMedium)
+        androidx.compose.foundation.layout.Row(
+            Modifier.padding(horizontal = 16.dp, vertical = if (first) 16.dp else 12.dp),
+            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+        ) {
+            // The same picture and colour as the card's tile on the home screen
+            IconBadge(icon, if (first) Tint(MaterialTheme.colorScheme.surface, u.edge) else tint, if (first) 48.dp else 40.dp)
+            androidx.compose.foundation.layout.Spacer(Modifier.padding(start = 12.dp))
+            Column(Modifier.weight(1f)) {
+                Text(card.title, style = if (first) MaterialTheme.typography.titleLarge else MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                if (first) Text(stringResource(R.string.first_60_hint), style = MaterialTheme.typography.bodyMedium)
+            }
         }
     }
 }

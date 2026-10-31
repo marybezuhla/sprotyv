@@ -165,6 +165,27 @@ private val Group.desc: Int get() = when (this) {
     Group.GUIDE -> R.string.group_guide_desc
 }
 
+/**
+ * The one colour that calls for attention: a strong orange, for the way in when something is
+ * happening ("What to do now", "The first 60 seconds"). Warm, saturated colours are seen first;
+ * orange rather than red, which stays for danger on the spot.
+ */
+data class Urgent(val container: Color, val ink: Color, val edge: Color)
+
+@Composable
+fun urgent(): Urgent = when {
+    LocalContrast.current -> Urgent(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.onSurface, MaterialTheme.colorScheme.onSurface)
+    LocalDark.current -> Urgent(Color(0xFF5A2E0A), Color(0xFFFFE0C2), Color(0xFFFF9A4D))
+    else -> Urgent(Color(0xFFFFDDBF), Color(0xFF5C2600), Color(0xFFE8700F))
+}
+
+/** A card's own picture and its group's colours, for lists of cards. */
+@Composable
+fun cardBadge(id: String): Pair<ImageVector, Tint> {
+    val group = groupOf(Tiles.card(id))
+    return (CARD_ICONS[id]?.let { ImageVector.vectorResource(it) } ?: group.icon) to group.tint()
+}
+
 private val Group.icon: ImageVector get() = when (this) {
     Group.DANGER -> Icons.Filled.Warning
     Group.FIRST_AID -> Icons.Filled.Favorite
@@ -197,6 +218,7 @@ private val Tool.title: Int get() = when (this) {
     Tool.PRINT -> R.string.print_title
     Tool.SCAN -> R.string.scan_title
     Tool.PRACTICE -> R.string.practice_title
+    Tool.QR_TEXT -> R.string.qr_text_title
 }
 
 private val Tool.hint: Int get() = when (this) {
@@ -219,6 +241,7 @@ private val Tool.hint: Int get() = when (this) {
     Tool.PRINT -> R.string.print_hint
     Tool.SCAN -> R.string.scan_hint
     Tool.PRACTICE -> R.string.practice_hint
+    Tool.QR_TEXT -> R.string.qr_text_hint
 }
 
 /** Cards and tools with a picture of their own (Health Icons, public domain), clearer than the group's. */
@@ -249,7 +272,7 @@ private val Tool.icon: ImageVector? get() = when (this) {
     Tool.PEOPLE -> Icons.Filled.Person
     Tool.SUPPLIES -> Icons.Filled.ShoppingCart
     Tool.PRACTICE -> Icons.Filled.PlayArrow
-    Tool.PRINT, Tool.RESCUER, Tool.SCAN -> Icons.Filled.Share
+    Tool.PRINT, Tool.RESCUER, Tool.SCAN, Tool.QR_TEXT -> Icons.Filled.Share
     else -> null
 }
 
@@ -273,6 +296,7 @@ val Tool.route: Route get() = when (this) {
     Tool.PRINT -> Route.Mine(MinePart.PRINT)
     Tool.SCAN -> Route.Scan
     Tool.PRACTICE -> Route.PracticeRoute("")
+    Tool.QR_TEXT -> Route.QrText
 }
 
 /** The group a tile belongs to: the first that names it. "What to do now" and "I am safe" have their own. */
@@ -334,17 +358,19 @@ fun IconBadge(icon: ImageVector, tint: Tint, size: Dp) {
 @Composable
 fun TileCard(info: TileInfo, big: Boolean, status: String? = null, onClick: () -> Unit) {
     val marked = info.id == Tiles.tool(Tool.NOW)
+    val u = urgent()
     Card(
         onClick = onClick,
         colors = CardDefaults.cardColors(
-            containerColor = if (marked) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface,
+            containerColor = if (marked) u.container else MaterialTheme.colorScheme.surface,
+            contentColor = if (marked) u.ink else MaterialTheme.colorScheme.onSurface,
         ),
-        border = if (marked) BorderStroke(2.dp, MaterialTheme.colorScheme.primary) else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        border = if (marked) BorderStroke(2.dp, u.edge) else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         modifier = Modifier.fillMaxWidth().heightIn(min = if (big) 88.dp else 76.dp),
     ) {
         if (big) {
             Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                IconBadge(info.icon, info.group.tint(), 56.dp)
+                IconBadge(info.icon, if (marked) Tint(MaterialTheme.colorScheme.surface, u.edge) else info.group.tint(), 56.dp)
                 Spacer(Modifier.width(16.dp))
                 Column(Modifier.weight(1f)) {
                     // Simple look: large print (24 and 18 sp), still growing with the phone's text size
@@ -360,7 +386,7 @@ fun TileCard(info: TileInfo, big: Boolean, status: String? = null, onClick: () -
             // Compact: icon beside the title, so more fits on the screen; a live status replaces the hint
             // Every line starts at the same edge, right of the icon; one size for titles, one for hints
             Row(Modifier.padding(horizontal = 12.dp, vertical = 12.dp), verticalAlignment = Alignment.Top) {
-                IconBadge(info.icon, info.group.tint(), 36.dp)
+                IconBadge(info.icon, if (marked) Tint(MaterialTheme.colorScheme.surface, u.edge) else info.group.tint(), 36.dp)
                 Spacer(Modifier.width(10.dp))
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                     Text(info.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)

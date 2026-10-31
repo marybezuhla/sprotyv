@@ -674,4 +674,13 @@
     <string name="lock_mine_unknown">Стан замка зараз не вдалося прочитати. Відкрийте «Моє» один раз і поверніться сюди.</string>
     <string name="settings_other_hands">Якщо телефон у чужих руках</string>
     <string name="settings_about">Про застосунок і відгук</string>
+    <string name="qr_text_title">QR-код з тексту</string>
+    <string name="qr_text_hint">Передати текст іншому телефону без зв’язку</string>
+    <string name="qr_text_intro">Напишіть адресу, номер чи коротку записку. Інша людина зчитає код камерою свого телефона, інтернет не потрібен. Текст ніде не зберігається.</string>
+    <string name="qr_text_field">Текст для коду</string>
+    <string name="qr_text_size">%1$d з %2$d байтів. Що коротший текст, то легше зчитати.</string>
+    <string name="qr_text_too_long">Задовго для коду: %1$d з %2$d байтів. Скоротіть текст.</string>
+    <string name="qr_text_code_desc">QR-код із вашим текстом</string>
+    <string name="qr_text_bright">Підвищіть яскравість екрана й тримайте телефон рівно.</string>
+    <string name="qr_text_clear">Стерти текст</string>
 </resources>
