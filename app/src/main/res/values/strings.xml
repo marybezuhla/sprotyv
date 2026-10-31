@@ -658,4 +658,7 @@
     <string name="mine_block_trouble">In case of trouble</string>
     <string name="mine_block_home">Supplies and bookmarks</string>
     <string name="mine_block_copies">Copies and printing</string>
+    <string name="source_section">Source: “%1$s” %2$s, sec. %3$s</string>
+    <string name="source_license">Licence: %1$s</string>
+    <string name="about_icons">Icons: Health Icons (healthicons.org, public domain, CC0) and Material Symbols (Google, Apache 2.0).</string>
 </resources>

@@ -86,6 +86,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -217,6 +218,22 @@ private val Tool.hint: Int get() = when (this) {
     Tool.PRACTICE -> R.string.practice_hint
 }
 
+/** Cards and tools with a picture of their own (Health Icons, public domain), clearer than the group's. */
+private val CARD_ICONS = mapOf(
+    "bleeding" to R.drawable.hi_blood_drop,
+    "unconscious" to R.drawable.hi_cpr,
+    "burn" to R.drawable.hi_burn,
+    "chemical" to R.drawable.hi_poison,
+    "radiation" to R.drawable.hi_hazardous,
+    "drone" to R.drawable.hi_drone,
+    "air-alert" to R.drawable.hi_megaphone,
+)
+private val TOOL_ICONS = mapOf(
+    Tool.ALARM to R.drawable.hi_megaphone,
+    Tool.KIT to R.drawable.hi_bandage_adhesive,
+    Tool.SUPPLIES to R.drawable.hi_treated_water,
+)
+
 private val Tool.icon: ImageVector? get() = when (this) {
     Tool.NOW -> Icons.Filled.Warning
     Tool.SAFE -> Icons.AutoMirrored.Filled.Send
@@ -275,7 +292,10 @@ fun tileInfo(id: String, content: Content?): TileInfo? {
     val value = id.substringAfter(':', "")
     val group = groupOf(id)
     return when (kind) {
-        "card" -> content?.card(value)?.let { TileInfo(id, it.title, "", group.icon, group, Route.CardRoute(value)) }
+        "card" -> content?.card(value)?.let { c ->
+            val own = CARD_ICONS[value]?.let { ImageVector.vectorResource(it) }
+            TileInfo(id, c.title, "", own ?: group.icon, group, Route.CardRoute(value))
+        }
         "chapter" -> content?.guide?.chapters?.firstOrNull { it.id == value }?.let { ch ->
             // "Water: finding, cleaning..." becomes "Water" with the rest below it
             val title = ch.title.substringBefore(':').trim()
@@ -286,7 +306,8 @@ fun tileInfo(id: String, content: Content?): TileInfo? {
             TileInfo(id, l.title, l.note, Icons.Filled.LocationOn, group, Route.External(l.id))
         }
         "tool" -> Tool.entries.firstOrNull { it.name == value }?.let { tool ->
-            TileInfo(id, stringResource(tool.title), stringResource(tool.hint), tool.icon ?: group.icon, group, tool.route)
+            val own = TOOL_ICONS[tool]?.let { ImageVector.vectorResource(it) }
+            TileInfo(id, stringResource(tool.title), stringResource(tool.hint), own ?: tool.icon ?: group.icon, group, tool.route)
         }
         else -> null
     }

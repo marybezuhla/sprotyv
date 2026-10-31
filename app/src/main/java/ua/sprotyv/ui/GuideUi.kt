@@ -135,10 +135,9 @@ fun GuideSectionScreen(content: Content?, num: String, nav: Nav) {
         if (found == null) return@Frame Text(stringResource(R.string.not_found))
         Text(found.first.title, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Blocks(found.second.blocks)
-        Text(
-            stringResource(R.string.guide_attribution, content.guide.title, content.guide.version, content.guide.license),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        SourceBox(
+            stringResource(R.string.source_section, content.guide.title, content.guide.version, found.second.num),
+            content.guide.license,
         )
     }
 }
@@ -340,5 +339,28 @@ fun AboutScreen(content: Content?, nav: Nav) {
         Text(stringResource(R.string.about_source, g.source), style = MaterialTheme.typography.bodyLarge)
         Text(stringResource(R.string.about_license, g.license), style = MaterialTheme.typography.bodyLarge)
         Text(g.changes, style = MaterialTheme.typography.bodyLarge)
+        Text(stringResource(R.string.about_icons), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+}
+
+/**
+ * Where a text comes from, the same way under every section: the source and its part, the
+ * licence, and whether a specialist has reviewed it. Kept apart from the text in a quiet frame.
+ */
+@Composable
+fun SourceBox(source: String, license: String, reviewedBy: String = "") {
+    Card(
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+        modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+    ) {
+        Column(Modifier.padding(horizontal = 16.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Text(source, style = MaterialTheme.typography.bodySmall, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
+            Text(stringResource(R.string.source_license, license), style = MaterialTheme.typography.bodySmall)
+            Text(
+                if (reviewedBy.isBlank()) stringResource(R.string.not_reviewed) else stringResource(R.string.reviewed_by, reviewedBy),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
     }
 }
