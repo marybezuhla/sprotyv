@@ -233,7 +233,7 @@ fun PrintScreen() {
             title = { Text(stringResource(R.string.print_warning_title)) },
             text = { Text(stringResource(R.string.print_warning)) },
             confirmButton = {
-                TextButton(onClick = { confirm = false; Exports.clear(); save.launch("plan.pdf") }) { Text(stringResource(R.string.print_continue)) }
+                TextButton(onClick = { confirm = false; Exports.clear(); Away.forOwnWindow(); save.launch("plan.pdf") }) { Text(stringResource(R.string.print_continue)) }
             },
             dismissButton = { TextButton(onClick = { confirm = false }) { Text(stringResource(R.string.cancel)) } },
         )
@@ -249,7 +249,7 @@ fun CardsPdfButton(content: Content) {
         if (uri == null) return@rememberLauncherForActivityResult
         Exports.save(context, uri, KIND_CARDS) { app -> cardsPdf(app, content) }
     }
-    OutlinedButton(onClick = { Exports.clear(); save.launch("cards.pdf") }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+    OutlinedButton(onClick = { Exports.clear(); Away.forOwnWindow(); save.launch("cards.pdf") }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
         Text(stringResource(R.string.print_cards_button))
     }
     result?.let { Text(stringResource(it), style = MaterialTheme.typography.bodyMedium) }
@@ -293,7 +293,7 @@ fun RescuerQrScreen(nav: Nav) {
     Text(text, style = MaterialTheme.typography.bodyLarge)
     if (code.cut) Text(stringResource(R.string.rescuer_cut), style = MaterialTheme.typography.bodyMedium)
     Text(stringResource(R.string.rescuer_warning), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.error)
-    Button(onClick = { Exports.clear(); save.launch("medical.png") }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+    Button(onClick = { Exports.clear(); Away.forOwnWindow(); save.launch("medical.png") }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
         Text(stringResource(R.string.rescuer_save))
     }
     result?.let { Text(stringResource(it), style = MaterialTheme.typography.bodyMedium) }
@@ -366,10 +366,11 @@ fun ScanScreen(nav: Nav) {
         Text(stringResource(R.string.scan_intro), style = MaterialTheme.typography.bodyLarge)
         Button(onClick = {
             scanned = null; notFound = false; noCamera = false
-            try { camera.launch(photoUri(context, photo)) } catch (e: Exception) { noCamera = true }
+            try { Away.forOwnWindow(); camera.launch(photoUri(context, photo)) } catch (e: Exception) { Away.back(); noCamera = true }
         }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.scan_camera)) }
         OutlinedButton(onClick = {
             scanned = null; notFound = false
+            Away.forOwnWindow()
             pick.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.scan_picture)) }
         if (notFound) Text(stringResource(R.string.scan_none), style = MaterialTheme.typography.bodyLarge)

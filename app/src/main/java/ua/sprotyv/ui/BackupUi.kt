@@ -413,6 +413,7 @@ fun BackupScreen() {
     Button(onClick = {
         BackupJobs.hold(pw)
         // A neutral name: the file does not say which app made it
+        Away.forOwnWindow()
         save.launch("backup-" + LocalDate.now() + ".bin")
     }, enabled = ready, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.backup_save)) }
     Text(stringResource(R.string.backup_save_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -420,7 +421,7 @@ fun BackupScreen() {
     HorizontalDivider()
     Heading(R.string.backup_restore_title)
     Text(stringResource(R.string.backup_restore_intro), style = MaterialTheme.typography.bodyMedium)
-    OutlinedButton(onClick = { BackupJobs.clearNotice(); pick.launch(arrayOf("*/*")) }, enabled = !busy, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+    OutlinedButton(onClick = { BackupJobs.clearNotice(); Away.forOwnWindow(); pick.launch(arrayOf("*/*")) }, enabled = !busy, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
         Text(stringResource(R.string.backup_choose_file))
     }
     openUri?.let { uri ->

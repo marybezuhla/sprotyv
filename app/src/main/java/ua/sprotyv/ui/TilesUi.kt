@@ -693,6 +693,7 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
                 dismissButton = { androidx.compose.material3.TextButton(onClick = { askScreenshots = false }) { Text(stringResource(R.string.cancel)) } },
             )
         }
+        LockMineSettings()
         TripToggle(prefs.trip)
         NeutralToggle()
         NavRow(stringResource(R.string.about_guide)) { nav.go(Route.About) }

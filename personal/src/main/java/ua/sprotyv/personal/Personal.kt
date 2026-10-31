@@ -43,6 +43,9 @@ sealed interface Opened {
 
     /** Could not open for a reason that may pass. Nothing is judged or changed. */
     data object TryAgain : Opened
+
+    /** "Mine" is locked: it opens after the owner confirms with a fingerprint or the PIN ([pinOnly]: PIN only). */
+    data class Locked(val pinOnly: Boolean) : Opened
 }
 
 object Personal {
@@ -62,9 +65,16 @@ object Personal {
             val fresh = vault.create()
             return Opened.Ready(PersonalDb.open(context, fresh.passphrase), fresh.softwareKey)
         }
-        return when (val u = vault.unwrap()) {
+        return withPassphrase(context, vault.unwrap()) { vault.lockedKeyLost() }
+    }
+
+    /** Opens the data with an unwrapped passphrase, or says why not. */
+    internal fun withPassphrase(context: Context, u: KeyVault.Unwrapped, lockedLost: () -> Boolean = { false }): Opened {
+        return when (u) {
             KeyVault.Unwrapped.Lost -> Opened.KeyLost
             KeyVault.Unwrapped.Retry -> Opened.TryAgain
+            // The screen lock removed (say) invalidates a locked key: then it is lost, said plainly
+            is KeyVault.Unwrapped.NeedsOwner -> if (lockedLost()) Opened.KeyLost else Opened.Locked(u.pinOnly)
             is KeyVault.Unwrapped.Ok -> try {
                 Opened.Ready(PersonalDb.open(context, u.passphrase), u.softwareKey)
             } catch (e: android.database.sqlite.SQLiteFullException) {
@@ -230,6 +240,84 @@ object PersonalStore {
     private data object Failed : ReadResult
     private data object Retry : ReadResult
 
+    /**
+     * The lock on "Mine". [unlockCipher] gives a cipher for the owner to confirm (a fingerprint or
+     * the PIN, through Android's own window); [unlock] opens the data with it. Changing the mode
+     * runs in order with opening and closing, and leaves the data closed, so the next entry asks.
+     */
+    fun lockMode(context: Context): KeyVault.Mode? = KeyVault(context.applicationContext).mode()
+
+    /** Off the main thread: the keystore can be slow. */
+    fun unlockCipher(context: Context): KeyVault.Unlocking? = KeyVault(context.applicationContext).cipherForUnlock()
+
+    fun unlock(context: Context, unlocking: KeyVault.Unlocking, confirmed: javax.crypto.Cipher) {
+        val app = context.applicationContext
+        scope.launch {
+            mutex.withLock {
+                if (_state.value is Opened.Ready) return@withLock
+                _state.value = null
+                _state.value = try {
+                    Personal.withPassphrase(app, KeyVault(app).finishUnlock(confirmed, unlocking.data))
+                } catch (t: Throwable) {
+                    Opened.TryAgain
+                }
+            }
+        }
+    }
+
+    /**
+     * Turning the lock on (from the open, unlocked mode): the passphrase is read with the plain key,
+     * no prompt needed. Returns the cipher to confirm and finishes in [finishLock]; null if the data
+     * is not in the open mode or anything is unclear (nothing changes then).
+     */
+    fun startLock(context: Context, pinOnly: Boolean): LockChange? = try {
+        val vault = KeyVault(context.applicationContext)
+        val u = vault.unwrap()
+        if (u !is KeyVault.Unwrapped.Ok) null
+        else {
+            val mode = KeyVault.Mode(locked = true, pinOnly = pinOnly)
+            val (cipher, alias) = vault.cipherForRewrap(mode)
+            LockChange(cipher, alias, mode, u.passphrase)
+        }
+    } catch (e: Exception) {
+        null
+    }
+
+    /**
+     * Turning the lock off, or switching "PIN only": the owner first confirms [unlockCipher]; with
+     * it the passphrase is read and a change to [target] prepared. A locked target needs one more
+     * confirmation of its own cipher.
+     */
+    fun startChange(context: Context, unlocking: KeyVault.Unlocking, confirmedUnlock: javax.crypto.Cipher, target: KeyVault.Mode): LockChange? = try {
+        val vault = KeyVault(context.applicationContext)
+        val u = vault.finishUnlock(confirmedUnlock, unlocking.data)
+        if (u !is KeyVault.Unwrapped.Ok) null
+        else {
+            val (cipher, alias) = vault.cipherForRewrap(target)
+            LockChange(cipher, alias, target, u.passphrase)
+        }
+    } catch (e: Exception) {
+        null
+    }
+
+    /** Stores the change (the cipher confirmed if the target is locked). The data closes after. */
+    fun finishLock(context: Context, change: LockChange, done: (Boolean) -> Unit) {
+        val app = context.applicationContext
+        scope.launch {
+            val ok = mutex.withLock {
+                try {
+                    KeyVault(app).finishRewrap(change.cipher, change.alias, change.mode, change.passphrase)
+                    true
+                } catch (t: Throwable) {
+                    false
+                } finally {
+                    change.passphrase.fill(0)
+                }
+            }
+            withContext(Dispatchers.Main) { done(ok) }
+        }
+    }
+
     /** Drops waiting changes whose key starts with [prefix] (before a change that replaces them all). */
     fun dropPending(prefix: String) {
         synchronized(pending) { pending.keys.removeAll { it.startsWith(prefix) } }
@@ -247,4 +335,15 @@ object PersonalStore {
             }
         }
     }
+}
+
+/** A lock change waiting for its last step: the cipher to (maybe) confirm and what it will store. */
+class LockChange internal constructor(
+    val cipher: javax.crypto.Cipher,
+    internal val alias: String,
+    val mode: KeyVault.Mode,
+    internal val passphrase: ByteArray,
+) {
+    /** Cancelled: the passphrase copy is wiped at once. */
+    fun discard() = passphrase.fill(0)
 }

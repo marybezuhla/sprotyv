@@ -31,10 +31,26 @@ class Main : ComponentActivity() {
         }
     }
 
+    private val closeLater = android.os.Handler(android.os.Looper.getMainLooper())
+    private val closeNow = Runnable {
+        Away.back()
+        PersonalStore.close()
+        Guard.close()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        closeLater.removeCallbacks(closeNow)
+        Away.back()
+    }
+
     /** Leaving the screen closes the owner's data and the settings; both open again when asked for. */
     override fun onStop() {
         super.onStop()
-        if (!isChangingConfigurations) {
+        // Gone into our own window (a file picker, the camera): if the owner does not come back
+        // from it within three minutes, the data closes anyway
+        if (!isChangingConfigurations && Away.expected) closeLater.postDelayed(closeNow, 3 * 60_000L)
+        if (!isChangingConfigurations && !Away.expected) {
             PersonalStore.close()
             // Settings lock again; not while Android's own PIN window is what covers the app
             Guard.close()
