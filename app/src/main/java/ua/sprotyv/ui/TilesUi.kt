@@ -198,7 +198,7 @@ val Shield: ImageVector by lazy {
 }
 
 /** The tiles that belong to resistance: they wear its mark wherever they are. */
-private fun isResist(id: String) = id == Tiles.tool(Tool.RESIST)
+private fun isResist(id: String) = id == Tiles.tool(Tool.RESIST) || id == Tiles.tool(Tool.CONSTITUTION)
 
 /** A tile's badge colours: its group's, or resistance's khaki. */
 @Composable
@@ -272,6 +272,7 @@ private val Tool.title: Int get() = when (this) {
     Tool.QR_TEXT -> R.string.qr_text_title
     Tool.MOZ -> R.string.moz_short
     Tool.RESIST -> R.string.resist_title
+    Tool.CONSTITUTION -> R.string.const_title
 }
 
 private val Tool.hint: Int get() = when (this) {
@@ -297,6 +298,7 @@ private val Tool.hint: Int get() = when (this) {
     Tool.QR_TEXT -> R.string.qr_text_hint
     Tool.MOZ -> R.string.moz_hint
     Tool.RESIST -> R.string.resist_hint
+    Tool.CONSTITUTION -> R.string.const_hint
 }
 
 /** Cards and tools with a picture of their own (Health Icons, public domain), clearer than the group's. */
@@ -343,6 +345,7 @@ private val TOOL_ICONS = mapOf(
     Tool.PLAN to R.drawable.ocha_assembly_point,
     Tool.PRACTICE to R.drawable.ocha_training,
     Tool.GUIDE to R.drawable.ocha_learning,
+    Tool.CONSTITUTION to R.drawable.ocha_public_information,
 )
 
 private val Tool.icon: ImageVector? get() = when (this) {
@@ -385,6 +388,7 @@ val Tool.route: Route get() = when (this) {
     Tool.QR_TEXT -> Route.QrText
     Tool.MOZ -> Route.MozList
     Tool.RESIST -> Route.Resistance
+    Tool.CONSTITUTION -> Route.ConstitutionRoute("")
 }
 
 /** The group a tile belongs to: the first that names it. "What to do now" and "I am safe" have their own. */
@@ -615,7 +619,7 @@ fun SectionsList(content: Content?, pins: List<String>, nav: Nav, onPin: (String
     if (full) Text(stringResource(R.string.pins_full), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     val links = content.links
     val resistLinks = links.filter { it.group in ua.sprotyv.content.Link.RESIST && it.group != "service" }.map { Tiles.link(it.id) }
-    val lists = listOf(Shelf(R.string.resist_title, R.string.shelf_resist_desc, Group.PREPARE, listOf(Tiles.tool(Tool.RESIST), Tiles.tool(Tool.MOZ), Tiles.tool(Tool.PRACTICE), Tiles.tool(Tool.KIT)) + resistLinks, resist = true)) +
+    val lists = listOf(Shelf(R.string.resist_title, R.string.shelf_resist_desc, Group.PREPARE, listOf(Tiles.tool(Tool.RESIST), Tiles.tool(Tool.CONSTITUTION), Tiles.tool(Tool.MOZ), Tiles.tool(Tool.PRACTICE), Tiles.tool(Tool.KIT)) + resistLinks, resist = true)) +
         Group.entries.map { Shelf(it.title, it.desc, it, it.tiles) } +
         Shelf(R.string.situation_title, R.string.shelf_situation_desc, Group.GUIDE, icon = ImageVector.vectorResource(R.drawable.ocha_map), ids = links.filter { it.group != ua.sprotyv.content.Link.POWER && it.group !in ua.sprotyv.content.Link.DIRECTORY && it.group !in ua.sprotyv.content.Link.RESIST }.map { Tiles.link(it.id) }) +
         Shelf(R.string.power_title, R.string.shelf_power_desc, Group.HOME_LIFE, icon = ImageVector.vectorResource(R.drawable.ocha_power_outage), ids = links.filter { it.group == ua.sprotyv.content.Link.POWER }.map { Tiles.link(it.id) }) +

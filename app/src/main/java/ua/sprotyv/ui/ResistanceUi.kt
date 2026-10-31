@@ -89,6 +89,7 @@ fun ResistanceScreen(content: Content?, nav: Nav) {
             BlockRow(stringResource(R.string.moz_title), stringResource(R.string.role_save_hint)) { nav.go(Route.MozList) }
             BlockRow(stringResource(R.string.kit), stringResource(R.string.role_ready_hint)) { nav.go(Route.Mine(MinePart.KIT)) }
             BlockRow(stringResource(R.string.family_plan), stringResource(R.string.role_family_hint)) { nav.go(Route.Mine(MinePart.PLAN)) }
+            BlockRow(stringResource(R.string.const_title), stringResource(R.string.const_hint)) { nav.go(Route.ConstitutionRoute("")) }
             BlockRow(stringResource(R.string.dir_title), stringResource(R.string.resist_all_rights)) { nav.go(Route.Directory) }
             BlockRow(stringResource(R.string.role_truth), stringResource(R.string.role_truth_hint)) { nav.go(Route.ChapterRoute("ch18")) }
         }

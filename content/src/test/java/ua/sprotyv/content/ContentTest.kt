@@ -15,6 +15,17 @@ class ContentTest {
     private val kidCards by lazy { CardsReader.parse(File(assets, "kid_cards.json").readText()) }
     private val cards by lazy { adultCards + kidCards }
 
+    @Test fun constitutionIsWhole() {
+        val c = ConstitutionReader.parse(File(assets, "constitution.json").readText())
+        val nums = c.sections.flatMap { s -> s.articles.map { it.num } }
+        assertEquals(166, nums.size)
+        assertEquals(nums.size, nums.toSet().size)
+        listOf("1", "17", "64", "65", "157", "161").forEach { assertTrue("article $it", c.article(it) != null) }
+        assertTrue(c.preamble.first().startsWith("Верховна Рада України від імені Українського народу"))
+        assertTrue(c.article("157")!!.second.parts.any { it.contains("в умовах воєнного або надзвичайного стану") })
+        assertEquals("XV", c.sections.last().num)
+    }
+
     @Test fun childCardsAreShortAndApart() {
         assertTrue("kid cards", kidCards.size >= 6)
         kidCards.forEach { card ->

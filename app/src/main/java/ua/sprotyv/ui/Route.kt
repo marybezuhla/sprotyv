@@ -31,6 +31,8 @@ sealed interface Route {
     /** One of the owner's notes; 0 for a new one. */
     data class NoteEdit(val id: Long) : Route
     data class Moz(val n: Int) : Route
+    /** The Constitution of Ukraine: all of it when [article] is empty, or one article. */
+    data class ConstitutionRoute(val article: String) : Route
     /** Hand out the steps of a procedure to people nearby. */
     data class Delegate(val n: Int) : Route
     /** What happened and what was done, for the ambulance crew; kept nowhere. */
@@ -68,6 +70,7 @@ sealed interface Route {
         Resistance -> "resistance"
         is NoteEdit -> "note:$id"
         is Moz -> "moz:$n"
+        is ConstitutionRoute -> if (article.isEmpty()) "constitution" else "constitution:$article"
         is Delegate -> "delegate:$n"
         Handover -> "handover"
         is PracticeRoute -> "practice:$card"
@@ -99,6 +102,7 @@ sealed interface Route {
                 "handover" -> Handover
                 "resistance" -> Resistance
                 "note" -> value.toLongOrNull()?.takeIf { it >= 0 }?.let(::NoteEdit)
+                "constitution" -> if (value.isEmpty()) ConstitutionRoute("") else value.takeIf { it.matches(Regex("^\\d{1,3}(-\\d)?$")) }?.let(::ConstitutionRoute)
                 "moz" -> if (value.isEmpty()) MozList else value.toIntOrNull()?.takeIf { it in 1..60 }?.let(::Moz)
                 "practice" -> PracticeRoute(value)
                 // Never reopened after the app is restored: that would open a page unasked

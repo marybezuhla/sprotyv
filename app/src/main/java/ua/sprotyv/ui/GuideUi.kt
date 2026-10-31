@@ -362,7 +362,7 @@ fun AboutScreen(content: Content?, nav: Nav) {
  * licence, and whether a specialist has reviewed it. Kept apart from the text in a quiet frame.
  */
 @Composable
-fun SourceBox(source: String, license: String, reviewedBy: String = "") {
+fun SourceBox(source: String, license: String, reviewedBy: String = "", note: String? = null) {
     Card(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
         modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
@@ -371,7 +371,7 @@ fun SourceBox(source: String, license: String, reviewedBy: String = "") {
             Text(source, style = MaterialTheme.typography.bodySmall, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
             Text(stringResource(R.string.source_license, license), style = MaterialTheme.typography.bodySmall)
             Text(
-                if (reviewedBy.isBlank()) stringResource(R.string.not_reviewed) else stringResource(R.string.reviewed_by, reviewedBy),
+                note ?: if (reviewedBy.isBlank()) stringResource(R.string.not_reviewed) else stringResource(R.string.reviewed_by, reviewedBy),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
