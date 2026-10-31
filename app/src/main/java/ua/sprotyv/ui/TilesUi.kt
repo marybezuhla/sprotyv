@@ -120,16 +120,17 @@ data class TileInfo(val id: String, val title: String, val hint: String, val ico
 
 /**
  * One colour code for the whole app, by what a thing is for, wherever it is shown:
- * - orange ([Group.DANGER]): danger, act now: what to do now, "I am safe", alerts, the danger cards, the shelter;
- * - green ([Group.FIRST_AID]): health and rescue: first aid, the medical card, the screen for rescuers,
+ * - orange ([Group.DANGER]): danger, act now: what to do now, alerts, the danger cards, the shelter;
+ * - green ([Group.FIRST_AID]): safety, health and rescue: "I am safe", first aid, the medical card, the screen for rescuers,
  *   the Ministry's first-aid procedures, leaving for safety;
  * - blue ([Group.PREPARE]): preparing and keeping: readiness, the bag, supplies, people, the family plan, practice;
  * - neutral ([Group.GUIDE]): everyday life, reading, sources, copies and settings.
  * The [Group] carries the palette ([tint]); groups of the same meaning share a colour.
  */
 fun toneOf(id: String): Group = when (id) {
-    Tiles.tool(Tool.NOW), Tiles.tool(Tool.SAFE), Tiles.tool(Tool.ALARM) -> Group.DANGER
-    Tiles.tool(Tool.MEDICAL), Tiles.tool(Tool.RESCUER) -> Group.FIRST_AID
+    Tiles.tool(Tool.NOW), Tiles.tool(Tool.ALARM) -> Group.DANGER
+    // "I am safe" is green: the colour of a safe condition on safety signs
+    Tiles.tool(Tool.SAFE), Tiles.tool(Tool.MEDICAL), Tiles.tool(Tool.RESCUER) -> Group.FIRST_AID
     Tiles.tool(Tool.MINE), Tiles.tool(Tool.PEOPLE), Tiles.tool(Tool.PLAN) -> Group.PREPARE
     Tiles.tool(Tool.PRINT), Tiles.tool(Tool.SCAN), Tiles.tool(Tool.QR_TEXT), Tiles.tool(Tool.SITUATION), Tiles.tool(Tool.DIRECTORY) -> Group.GUIDE
     else -> if (id.startsWith("link:")) Group.GUIDE else groupOf(id)
@@ -326,7 +327,7 @@ val Tool.route: Route get() = when (this) {
 /** The group a tile belongs to: the first that names it. "What to do now" and "I am safe" have their own. */
 fun groupOf(id: String): Group = when (id) {
     Tiles.tool(Tool.NOW) -> Group.DANGER
-    Tiles.tool(Tool.SAFE) -> Group.DANGER
+    Tiles.tool(Tool.SAFE) -> Group.FIRST_AID
     else -> if (id.startsWith("link:")) Group.SAFETY else Group.entries.firstOrNull { id in it.tiles } ?: Group.GUIDE
 }
 
