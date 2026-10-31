@@ -95,7 +95,7 @@ fun ReadinessBlock(content: Content?, nav: Nav) {
     val context = androidx.compose.ui.platform.LocalContext.current
     val shares = if (rows.all { it.second != null }) rows.joinToString(",") { "${it.second!!.done}/${it.second!!.total}" } else null
     androidx.compose.runtime.LaunchedEffect(shares) {
-        if (shares != null && HomePrefs.load(context).readiness != shares) HomePrefs.update(context) { it.copy(readiness = shares) }
+        if (shares != null && HomePrefs.load(context).readiness != shares) { HomePrefs.update(context) { it.copy(readiness = shares) }; Widgets.update(context) }
     }
     // Folded: one ring for the whole (each part counts the same) and the next step in words
     val known = rows.all { it.second != null }
