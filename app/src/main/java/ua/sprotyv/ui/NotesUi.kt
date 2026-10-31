@@ -36,7 +36,6 @@ import ua.sprotyv.R
 import ua.sprotyv.personal.Note
 import ua.sprotyv.personal.PersonalStore
 import ua.sprotyv.qr.Qr
-import java.util.concurrent.atomic.AtomicLong
 
 /** Text for the QR screen, handed over in memory only (never in the saved screen state). */
 object QrInbox {
@@ -45,6 +44,9 @@ object QrInbox {
 
 private const val MAX_NOTE = 20_000
 private const val MAX_NOTE_TITLE = 200
+private const val MAX_NOTES = 500
+/** Letters in all notes together: about 3 MB in the copy at most, under the 4 MB a restore accepts. */
+private const val MAX_TOTAL = 1_400_000
 
 /**
  * "My notes": free text, encrypted with the rest of "Mine", carried by the encrypted copy, hidden
@@ -56,7 +58,18 @@ fun NotesScreen(nav: Nav) {
     val list = notes ?: return Loading()
     var query by remember { mutableStateOf("") }
     Text(stringResource(R.string.notes_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    Button(onClick = { nav.go(Route.NoteEdit(0)) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.notes_new)) }
+    // Room for the encrypted copy: the whole of the notes stays well within what a restore accepts
+    val total = list.sumOf { it.title.length + it.text.length }
+    val full = list.size >= MAX_NOTES || total >= MAX_TOTAL
+    Button(enabled = !full, onClick = {
+        // The note exists before its screen opens, so it has one id whatever happens to the screen
+        val main = android.os.Handler(android.os.Looper.getMainLooper())
+        PersonalStore.save("note-new:" + java.util.UUID.randomUUID()) { db ->
+            val id = db.notes().save(Note(updatedAt = System.currentTimeMillis()))
+            if (id > 0) main.post { nav.go(Route.NoteEdit(id)) }
+        }
+    }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.notes_new)) }
+    if (full) Text(stringResource(R.string.notes_full), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.error)
     if (list.size > 3) {
         OutlinedTextField(
             value = query, onValueChange = { query = it.take(100) },
@@ -107,32 +120,30 @@ fun NotesScreen(nav: Nav) {
  */
 @Composable
 fun NoteEditScreen(id: Long, nav: Nav) {
-    // The note as it was when opened; null until read (a new note starts empty)
-    val start by androidx.compose.runtime.produceState<Note?>(if (id == 0L) Note() else null, id) {
-        if (id != 0L) value = PersonalStore.read { it.notes().get(id) } ?: Note()
+    // Read once; "could not read" is told apart from "not there" (deleted meanwhile)
+    val read by androidx.compose.runtime.produceState<Loaded<Note?>>(Loaded.Waiting, id) {
+        value = PersonalStore.read { db -> listOf(db.notes().get(id)) }?.let { Loaded.Value(it.first()) } ?: Loaded.Failed
     }
-    val first = start ?: return Loading()
+    val first = when (val r = read) {
+        Loaded.Waiting -> return Loading()
+        Loaded.Failed -> return Text(stringResource(R.string.notes_read_failed), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.error)
+        is Loaded.Value -> r.value ?: return Text(stringResource(R.string.notes_gone), style = MaterialTheme.typography.bodyLarge)
+    }
     var title by remember(first) { mutableStateOf(first.title) }
     var text by remember(first) { mutableStateOf(first.text) }
     var pinned by remember(first) { mutableStateOf(first.pinned) }
     var confirmDelete by remember { mutableStateOf(false) }
-    // The note's id once it exists; changes are saved in order under one key, so each uses the id the last one made
-    val saved = remember(first) { AtomicLong(first.id) }
-    val key = remember(first) { "note:" + java.util.UUID.randomUUID() }
+    val key = "note:${first.id}"
     fun save() {
-        val t = title; val x = text; val p = pinned
-        PersonalStore.save(key) { db ->
-            if (t.isBlank() && x.isBlank() && saved.get() == 0L) return@save
-            val newId = db.notes().save(Note(saved.get(), t, x, p, System.currentTimeMillis()))
-            if (saved.get() == 0L && newId > 0) saved.set(newId)
-        }
+        val n = Note(first.id, title, text, pinned, System.currentTimeMillis())
+        PersonalStore.save(key) { db -> if (db.notes().get(n.id) != null) db.notes().save(n) }
     }
-    // An emptied note goes when the screen is left
-    DisposableEffect(first) {
+    // A note left empty goes; decided on the worker, after every save before it
+    DisposableEffect(first.id) {
         onDispose {
-            if (title.isBlank() && text.isBlank() && saved.get() != 0L) {
-                val gone = saved.get()
-                PersonalStore.save("note-delete:$gone") { it.notes().delete(gone) }
+            val gone = first.id
+            PersonalStore.save("note-empty:$gone") { db ->
+                db.notes().get(gone)?.let { n -> if (n.title.isBlank() && n.text.isBlank()) db.notes().delete(gone) }
             }
         }
     }
@@ -143,6 +154,7 @@ fun NoteEditScreen(id: Long, nav: Nav) {
     OutlinedTextField(
         value = text, onValueChange = { text = it.take(MAX_NOTE); save() },
         label = { Text(stringResource(R.string.notes_text)) }, minLines = 8, modifier = Modifier.fillMaxWidth(),
+        supportingText = if (text.length > MAX_NOTE - 2_000) ({ Text(stringResource(R.string.notes_length, text.length, MAX_NOTE)) }) else null,
     )
     Toggle(stringResource(R.string.notes_pin), pinned) { pinned = it; save() }
     val whole = listOf(title, text).filter { it.isNotBlank() }.joinToString("\n")
@@ -151,7 +163,7 @@ fun NoteEditScreen(id: Long, nav: Nav) {
         OutlinedButton(enabled = fits, onClick = { QrInbox.text = whole; nav.go(Route.QrText) }, modifier = Modifier.heightIn(min = 48.dp)) {
             Text(stringResource(R.string.notes_as_qr))
         }
-        TextButton(enabled = whole.isNotBlank(), onClick = { confirmDelete = true }, modifier = Modifier.heightIn(min = 48.dp)) {
+        TextButton(onClick = { confirmDelete = true }, modifier = Modifier.heightIn(min = 48.dp)) {
             Text(stringResource(R.string.delete_row), color = MaterialTheme.colorScheme.error)
         }
     }
@@ -164,9 +176,8 @@ fun NoteEditScreen(id: Long, nav: Nav) {
             confirmButton = {
                 TextButton(onClick = {
                     confirmDelete = false
-                    title = ""; text = ""
-                    val gone = saved.get()
-                    if (gone != 0L) PersonalStore.save(key) { it.notes().delete(gone) }
+                    // Same key: a save still waiting is replaced by the deletion
+                    PersonalStore.save(key) { it.notes().delete(first.id) }
                     nav.back()
                 }) { Text(stringResource(R.string.delete_row)) }
             },
