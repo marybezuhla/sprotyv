@@ -155,6 +155,7 @@ object BackupJobs {
                 if (!fresh) return@job R.string.backup_existing
                 // Waits for the data to open again after the file picker (it closes while the app is away)
                 val snap = withTimeoutOrNull(20_000) { PersonalStore.read { BackupData.read(it, BACKED_UP_SETTINGS) } }
+                    ?.copy(home = homeForBackup(app))
                     ?: return@job removeNew(app, uri, R.string.backup_failed)
                 plain = BackupData.encode(snap)
                 val file = withContext(Dispatchers.Default) { BackupCrypto.encrypt(plain!!, pw, BackupCrypto.Purpose.BACKUP) }
@@ -236,7 +237,8 @@ object BackupJobs {
     }
 
     /** The owner said yes: everything now on the phone is replaced by the copy, all or nothing. */
-    fun confirmRestore() {
+    fun confirmRestore(context: Context) {
+        val app = context.applicationContext
         val snap = _pending.value ?: return
         _pending.value = null
         job {
@@ -244,7 +246,11 @@ object BackupJobs {
             PersonalStore.dropPending("")
             // Never later and unseen: if the data does not open in time, nothing is replaced
             val ok = withTimeoutOrNull(20_000) { PersonalStore.read { BackupData.replaceAll(it, snap, BACKED_UP_SETTINGS); true } } == true
-            if (ok) R.string.backup_restored else R.string.backup_restore_failed
+            if (!ok) return@job R.string.backup_restore_failed
+            // The look and set-up too, so nothing has to be set up again on a new phone
+            withContext(Dispatchers.Main) { restoreHome(app, snap.home) }
+            if (snap.home["lock_mine"] == "true" && PersonalStore.lockMode(app)?.locked != true) R.string.backup_restored_lock
+            else R.string.backup_restored
         }
     }
 
@@ -259,6 +265,18 @@ object BackupJobs {
         suggested.value = null
         written.value = false
     }
+}
+
+/** The look and set-up a backup carries, besides the data. */
+private fun homeForBackup(context: Context): Map<String, String> = HomePrefs.export(context) + mapOf(
+    "neutral" to Neutral.isOn(context).toString(),
+    // Only a wish: a new phone has a new key, so the lock is switched on again by hand (a notice says so)
+    "lock_mine" to (PersonalStore.lockMode(context)?.locked == true).toString(),
+)
+
+private fun restoreHome(context: Context, home: Map<String, String>) {
+    HomePrefs.import(context, home)
+    home["neutral"]?.toBooleanStrictOrNull()?.let { want -> if (Neutral.isOn(context) != want) Neutral.set(context, want) }
 }
 
 /** The settings a backup carries; others (like the date of the last backup) stay on this phone. */
@@ -435,9 +453,14 @@ fun BackupScreen() {
         AlertDialog(
             onDismissRequest = { BackupJobs.cancelRestore() },
             title = { Text(stringResource(R.string.backup_replace_title)) },
-            text = { Text(stringResource(R.string.backup_replace_text, date, snap.people.size, snap.records)) },
+            text = {
+                Text(
+                    stringResource(R.string.backup_replace_text, date, snap.people.size, snap.records) +
+                        if (snap.home.isNotEmpty()) " " + stringResource(R.string.backup_replace_home) else "",
+                )
+            },
             confirmButton = {
-                TextButton(onClick = { openUri = null; openText = ""; BackupJobs.confirmRestore() }) { Text(stringResource(R.string.replace)) }
+                TextButton(onClick = { openUri = null; openText = ""; BackupJobs.confirmRestore(context) }) { Text(stringResource(R.string.replace)) }
             },
             dismissButton = { TextButton(onClick = { BackupJobs.cancelRestore() }) { Text(stringResource(R.string.cancel)) } },
         )

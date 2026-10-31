@@ -30,6 +30,9 @@ object BackupData {
 
     /** Our files nest four levels at most; anything deeper is refused before parsing. */
     private const val MAX_DEPTH = 6
+    private const val MAX_HOME = 40
+    private const val MAX_HOME_TEXT = 2_000
+    private val HOME_KEY = Regex("^[a-z_]{1,30}$")
 
     /** The file does not fit this version of Sprotyv (or is not a Sprotyv file at all). */
     class Incompatible : Exception()
@@ -45,6 +48,11 @@ object BackupData {
         val rows: List<PlanRow>,
         val kit: List<KitCheck>,
         val settings: List<Setting>,
+        /**
+         * How the app looks and is set up (mode, tiles, theme and so on), as plain names and
+         * values chosen by the app, so a new phone needs no setting up again. Empty in older copies.
+         */
+        val home: Map<String, String> = emptyMap(),
     ) {
         /** For the "what is in it" line before anything is replaced. */
         val records: Int get() = (if (medical != null) 1 else 0) + people.size + (if (plan != null) 1 else 0) + rows.size + kit.size + settings.size
@@ -100,6 +108,7 @@ object BackupData {
         .put("rows", JSONArray().apply { s.rows.forEach { put(row(it)) } })
         .put("kit", JSONArray().apply { s.kit.forEach { put(JSONObject().put("key", it.key).put("checked", it.checked).put("at", it.at)) } })
         .put("settings", JSONArray().apply { s.settings.forEach { put(JSONObject().put("key", it.key).put("value", it.value)) } })
+        .put("home", JSONObject().apply { s.home.toSortedMap().forEach { (k, v) -> put(k, v) } })
         .toString().toByteArray(Charsets.UTF_8)
 
     fun decode(bytes: ByteArray): Snapshot {
@@ -124,6 +133,7 @@ object BackupData {
                 rows = items(root.getJSONArray("rows")).map(::rowOf),
                 kit = items(root.getJSONArray("kit")).map { KitCheck(text(it, "key").also { k -> require(k.isNotEmpty()) }, it.getBoolean("checked"), it.getLong("at")) },
                 settings = items(root.getJSONArray("settings")).map { Setting(text(it, "key").also { k -> require(k.isNotEmpty()) }, text(it, "value")) },
+                home = root.optJSONObject("home")?.let(::homeOf) ?: emptyMap(),
             ).also { s ->
                 // The same person, row, tick or setting twice: not a file Sprotyv wrote
                 require(s.people.map { it.id }.toSet().size == s.people.size)
@@ -131,6 +141,17 @@ object BackupData {
                 require(s.kit.map { it.key }.toSet().size == s.kit.size)
                 require(s.settings.map { it.key }.toSet().size == s.settings.size)
             }
+        }
+    }
+
+    /** The look and set-up: a few short names and values; anything else refuses the file. */
+    private fun homeOf(o: JSONObject): Map<String, String> {
+        require(o.length() <= MAX_HOME)
+        return o.keys().asSequence().associateWith { k ->
+            require(HOME_KEY.matches(k))
+            val v = o.get(k)
+            require(v is String && v.length <= MAX_HOME_TEXT)
+            v
         }
     }
 

@@ -65,6 +65,41 @@ object HomePrefs {
         return s
     }
 
+    /**
+     * The look and set-up for a backup, so a new phone needs no setting up again. Not carried:
+     * trip mode and screenshots (on purpose, each is switched on by hand) and the readiness shares
+     * (worked out again).
+     */
+    fun export(context: Context): Map<String, String> {
+        val s = load(context)
+        return buildMap {
+            s.mode?.let { put("mode", it.name) }
+            put("pins", Pins.write(s.pins))
+            put("lock", s.locked.toString())
+            put("theme", s.theme.name)
+            put("dynamic", s.dynamic.toString())
+            put("call_bar", s.callBar.toString())
+            put("readiness_hidden", s.readinessHidden.toString())
+        }
+    }
+
+    /** Applies a backup's look and set-up; anything unknown or malformed is left as it is. */
+    fun import(context: Context, home: Map<String, String>) {
+        if (home.isEmpty()) return
+        fun flag(k: String, now: Boolean) = home[k]?.toBooleanStrictOrNull() ?: now
+        update(context) { s ->
+            s.copy(
+                mode = home["mode"]?.let { m -> Mode.entries.firstOrNull { it.name == m } } ?: s.mode,
+                pins = home["pins"]?.let(Pins::parse) ?: s.pins,
+                locked = flag("lock", s.locked),
+                theme = home["theme"]?.let { t -> ThemeChoice.entries.firstOrNull { it.name == t } } ?: s.theme,
+                dynamic = flag("dynamic", s.dynamic),
+                callBar = flag("call_bar", s.callBar),
+                readinessHidden = flag("readiness_hidden", s.readinessHidden),
+            )
+        }
+    }
+
     fun update(context: Context, change: (State) -> State) {
         val next = change(load(context))
         flow.value = next

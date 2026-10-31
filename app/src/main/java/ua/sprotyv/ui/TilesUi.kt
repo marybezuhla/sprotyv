@@ -748,6 +748,10 @@ fun WelcomeScreen(nav: Nav) {
             if (step == 0 || mode == null) {
                 Text(stringResource(R.string.welcome_mode_q), style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
                 ModeChoice(mode) { chosen = it.name; step = 1 }
+                // A new phone: everything, the look included, comes back from the encrypted copy
+                OutlinedButton(onClick = { nav.go(Route.Mine(MinePart.BACKUP)) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+                    Text(stringResource(R.string.welcome_restore))
+                }
             } else if (mode == Mode.KID) {
                 // No tile sets for a child; the grown-up is asked once to lock the settings
                 Text(stringResource(R.string.kid_setup_title), style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
