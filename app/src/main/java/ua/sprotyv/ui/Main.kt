@@ -25,6 +25,7 @@ class Main : ComponentActivity() {
         if (savedInstanceState == null) Incoming.take(intent)
         // A notification's tap; and the notifications' alarms planned again from what is on
         if (savedInstanceState == null) Opening.take(intent)
+        Widgets.sync(this)
         Notify.sync(this)
         // Screenshots of "Mine" are for showing the app to testers: off again at every fresh start
         if (savedInstanceState == null && HomePrefs.load(this).screenshots) HomePrefs.update(this) { it.copy(screenshots = false) }

@@ -29,7 +29,8 @@ object Neutral {
         pm.setComponentEnabledSetting(entry(context, neutral), PackageManager.COMPONENT_ENABLED_STATE_ENABLED, keep)
         pm.setComponentEnabledSetting(entry(context, !neutral), PackageManager.COMPONENT_ENABLED_STATE_DISABLED, keep)
         ShareIn.sync(context)
-        // A notification would name Sprotyv: none while the neutral icon is on
+        // A notification or a widget would name Sprotyv: none while the neutral icon is on
+        Widgets.sync(context)
         Notify.sync(context)
     }
 

@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="background">#FF121418</color>
+    <color name="w_urgent_bg">#FF5A2E0A</color>
+    <color name="w_urgent_ink">#FFFFE0C2</color>
+    <color name="w_urgent_edge">#FFFF9A4D</color>
+    <color name="w_bg">#FF1D2421</color>
+    <color name="w_ink">#FFE8ECE9</color>
+    <color name="w_muted">#FFA3ADA7</color>
+    <color name="w_khaki_bg">#FF2F3021</color>
+    <color name="w_khaki_ink">#FFD9D4A9</color>
 </resources>

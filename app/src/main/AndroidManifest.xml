@@ -112,6 +112,19 @@
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
         </receiver>
+        <!-- Home-screen widgets: nothing personal on them; exported only because the launcher must reach them -->
+        <receiver android:name=".ui.NowWidget" android:exported="true" android:label="@string/tile_now">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_now_info" />
+        </receiver>
+        <receiver android:name=".ui.RunningWidget" android:exported="true" android:label="@string/active_title">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_running_info" />
+        </receiver>
+        <receiver android:name=".ui.PathWidget" android:exported="true" android:label="@string/path_week_title">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_path_info" />
+        </receiver>
         <!-- Lets the camera app write one photo into Sprotyv's cache; deleted right after reading -->
         <provider
             android:name="androidx.core.content.FileProvider"

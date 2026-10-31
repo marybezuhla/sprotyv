@@ -4,4 +4,12 @@
     <color name="icon_background">#FF0057B7</color>
     <color name="icon_foreground">#FFFFD700</color>
     <color name="icon_neutral_bg">#FF5F6368</color>
+    <color name="w_urgent_bg">#FFFFDDBF</color>
+    <color name="w_urgent_ink">#FF5C2600</color>
+    <color name="w_urgent_edge">#FFE8700F</color>
+    <color name="w_bg">#FFF7F6F2</color>
+    <color name="w_ink">#FF1D2421</color>
+    <color name="w_muted">#FF5C6661</color>
+    <color name="w_khaki_bg">#FFECE9D5</color>
+    <color name="w_khaki_ink">#FF4B4921</color>
 </resources>

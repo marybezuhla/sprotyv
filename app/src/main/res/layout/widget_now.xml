@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "What to do now": one big orange way in, nothing personal -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/w_root" android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@drawable/w_shape_urgent" android:gravity="center_vertical" android:orientation="horizontal" android:padding="12dp">
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⚠" android:textSize="28sp"
+        android:textColor="@color/w_urgent_edge" android:importantForAccessibility="no" />
+    <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:layout_marginStart="10dp"
+        android:text="@string/tile_now" android:textColor="@color/w_urgent_ink" android:textSize="18sp" android:textStyle="bold" android:maxLines="2" />
+</LinearLayout>
