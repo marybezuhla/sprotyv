@@ -35,6 +35,8 @@ jobs:
           unzip -q "$RUNNER_TEMP/gradle.zip" -d "$RUNNER_TEMP"
           echo "$RUNNER_TEMP/gradle-$V/bin" >> "$GITHUB_PATH"
       - uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4
+      - name: Built-in maps (checked against maps.lock)
+        run: bash scripts/maps/fetch.sh
       - name: Write checksums
         shell: bash
         run: |

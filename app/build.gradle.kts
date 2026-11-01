@@ -45,6 +45,8 @@ android {
         }
     }
 
+    // The built-in map is read straight from the APK, so it stays uncompressed there
+    androidResources { noCompress += "map" }
     packaging {
         jniLibs {
             useLegacyPackaging = true
