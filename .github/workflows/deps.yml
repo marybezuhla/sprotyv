@@ -44,7 +44,7 @@ jobs:
           mkdir -p meta
           cp gradle/verification-metadata.xml meta/ 2>/dev/null || echo "no metadata written" > meta/MISSING
           # Which network classes are left in the built APK (should be none)
-          { unzip -o -q app/build/outputs/apk/release/app-release-unsigned.apk 'classes*.dex' -d dex && cat dex/classes*.dex | grep -a -o -E 'Lorg/mapsforge/map/layer/download/[A-Za-z/]*|Ljava/net/[A-Za-z]*;' | sort | uniq -c > meta/network-classes.txt; } 2>/dev/null || echo "no apk" > meta/network-classes.txt
+          { unzip -o -q app/build/outputs/apk/release/app-release-unsigned.apk 'classes*.dex' -d dex && { grep -a -o -h -E 'Lorg/mapsforge/map/layer/download/[A-Za-z/]*|Ljava/net/[A-Za-z]*;|Ljavax/net/ssl/[A-Za-z]*;|Landroid/net/http/[A-Za-z]*;' dex/classes*.dex || true; } | sort | uniq -c > meta/network-classes.txt; echo "checked" >> meta/network-classes.txt; } 2>/dev/null || echo "no apk" > meta/network-classes.txt
           # The screens drawn by the tests, for review of type and layout (neutral test data only)
           cp -r app/build/screens meta/screens 2>/dev/null || true
           # (no matches is fine: grep would otherwise stop the step under pipefail)
