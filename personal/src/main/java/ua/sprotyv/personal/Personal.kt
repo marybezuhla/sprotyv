@@ -159,7 +159,10 @@ object PersonalStore {
      * Tests only: the screens drawn with a made-up, in-memory database (the demo person), so they
      * can be checked by eye. Never called by the app; the real data is opened only by [open].
      */
+    @androidx.annotation.VisibleForTesting(otherwise = androidx.annotation.VisibleForTesting.PRIVATE)
     fun showForTest(db: PersonalDb) {
+        // Never over data already open
+        if (_state.value is Opened.Ready) return
         _state.value = Opened.Ready(db, softwareKey = false)
     }
 
