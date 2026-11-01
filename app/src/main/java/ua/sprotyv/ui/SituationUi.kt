@@ -104,7 +104,7 @@ fun SituationScreen(content: Content?, nav: Nav) {
             BlockRow(stringResource(R.string.power_title), stringResource(R.string.power_hint), first = true) { nav.go(Route.Power) }
         }
         val trip = HomePrefs.state.collectAsState().value?.trip == true
-        content.links.filter { it.group != Link.POWER && it.group !in Link.DIRECTORY && it.group !in Link.RESIST && !(trip && Trip.hides(it)) }.groupBy { it.group }.forEach { (g, links) ->
+        content.links.filter { it.group != Link.POWER && it.group != Link.ROLES && it.group !in Link.DIRECTORY && it.group !in Link.RESIST && !(trip && Trip.hides(it)) }.groupBy { it.group }.forEach { (g, links) ->
             // Each kind of source in its colour, folded: open the one needed now
             Block(stringResource(links.first().groupTitle), linkGroupColour(g), foldable = true, summary = stringResource(R.string.shelf_count, links.size)) {
                 links.forEach { link -> LinkRow(link) { openLink(context, link, toolbar) } }
