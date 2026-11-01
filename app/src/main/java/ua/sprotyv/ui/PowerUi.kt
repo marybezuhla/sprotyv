@@ -87,6 +87,7 @@ fun BlackoutBlock() {
             Keep(R.string.blackout_freezer_half_name, Blackout.FREEZER_HALF_HOURS, minutes, R.string.blackout_freezer_over)
             Text(stringResource(R.string.blackout_closed), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             OutlinedButton(onClick = {
+                Held.add(context, "blackout")
                 prefs.edit().remove("since").commit()
                 Notify.sync(context)
                 since = 0L
