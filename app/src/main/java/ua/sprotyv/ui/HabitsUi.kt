@@ -51,13 +51,13 @@ const val KEY_HABITS = "habits"
  * streak; a missed day did not set people back, so nothing is reset; an "if — then" plan makes doing
  * it far more likely (Gollwitzer and Sheeran, 2006); a few at a time. Kept encrypted in "Mine".
  */
-private enum class Pillar(val title: Int, val hint: Int, val group: Group, val resist: Boolean = false) {
-    SAFETY(R.string.gart_safety, R.string.gart_safety_hint, Group.DANGER),
-    CALM(R.string.gart_calm, R.string.gart_calm_hint, Group.FIRST_AID),
-    SKILL(R.string.gart_skill, R.string.gart_skill_hint, Group.PREPARE),
-    BOND(R.string.gart_bond, R.string.gart_bond_hint, Group.FAMILY),
-    MEANING(R.string.gart_meaning, R.string.gart_meaning_hint, Group.PREPARE, resist = true),
-    BODY(R.string.gart_body, R.string.gart_body_hint, Group.LEAVE),
+private enum class Pillar(val title: Int, val hint: Int, val group: Group, val icon: Int, val resist: Boolean = false) {
+    SAFETY(R.string.gart_safety, R.string.gart_safety_hint, Group.DANGER, R.drawable.ocha_security),
+    CALM(R.string.gart_calm, R.string.gart_calm_hint, Group.FIRST_AID, R.drawable.ic_leaf),
+    SKILL(R.string.gart_skill, R.string.gart_skill_hint, Group.PREPARE, R.drawable.ocha_learning),
+    BOND(R.string.gart_bond, R.string.gart_bond_hint, Group.FAMILY, R.drawable.ocha_group),
+    MEANING(R.string.gart_meaning, R.string.gart_meaning_hint, Group.PREPARE, R.drawable.ic_heart, resist = true),
+    BODY(R.string.gart_body, R.string.gart_body_hint, Group.LEAVE, R.drawable.ic_dumbbell),
 }
 
 /** One habit: what to do, and an "if — then" plan that ties it to something already done every day. */
@@ -180,7 +180,8 @@ fun GartScreen(nav: Nav) {
     if (full) Text(stringResource(R.string.gart_full, MAX_ACTIVE), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     Pillar.entries.forEach { p ->
         val list = HABITS.filter { it.pillar == p }
-        Block(stringResource(p.title), p.group, tint = if (p.resist) resist() else null, padded = false, foldable = true, summary = stringResource(p.hint)) {
+        val pt = if (p.resist) resist() else p.group.tint()
+        Block(stringResource(p.title), p.group, tint = pt, padded = false, foldable = true, summary = stringResource(p.hint), leading = { ThemeIcon(p.icon, pt) }) {
             list.forEachIndexed { i, h ->
                 if (i > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                 val on = h.id in g.active

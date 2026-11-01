@@ -140,11 +140,18 @@ fun ShieldsScreen(nav: Nav) {
     Block(stringResource(R.string.shields_title), Group.PREPARE, tint = resist(), summary = stringResource(R.string.shields_count, earned, all), leading = { ReadyRing(if (all == 0) 0f else earned.toFloat() / all, "$earned") }) {
         Text(stringResource(R.string.shields_never_lost), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
+    // What is already earned, together at the top; the groups below show the way to the rest
+    val got = groups.flatMap { it.second }.filter { it.level == 2 }
+    if (got.isNotEmpty()) Block(stringResource(R.string.shields_earned_title), Group.PREPARE, tint = resist()) {
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) { got.forEach { ShieldBadge(it) } }
+    }
     groups.forEachIndexed { gi, (title, list) ->
         if (list.isEmpty()) return@forEachIndexed
         Block(stringResource(title), Group.PREPARE, tint = resist(), foldable = true, startOpen = false, trailing = {
             Text(stringResource(R.string.ready_count, list.count { it.level == 2 }, list.size), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
         }) {
+            // Counts are kept by hand: said so, so nobody waits for them to fill by themselves
+            if (title == R.string.shields_counts) Text(stringResource(R.string.shields_counts_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 list.forEach { ShieldBadge(it) }
             }

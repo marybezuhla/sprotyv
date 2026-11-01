@@ -100,22 +100,22 @@ fun NavRow(title: String, hint: String = "", group: ua.sprotyv.home.Group = ua.s
 @Composable
 fun MineHub(nav: Nav, content: ua.sprotyv.content.Content?) {
     // The colour code of the whole app: green safety and health, blue prepare, neutral copies
-    Block(stringResource(R.string.mine_block_now), ua.sprotyv.home.Group.FIRST_AID, padded = false) {
+    Block(stringResource(R.string.mine_block_now), ua.sprotyv.home.Group.FIRST_AID, padded = false, leading = { ThemeIcon(R.drawable.ocha_walkie_talkie, ua.sprotyv.home.Group.FIRST_AID.tint()) }) {
         BlockRow(stringResource(R.string.tile_safe), stringResource(R.string.tile_safe_hint), first = true) { nav.go(Route.Open(Section.SAFE)) }
     }
     // Who I am now and what is already done: found right here, not only from "My path"
-    Block(stringResource(R.string.mine_block_me), ua.sprotyv.home.Group.PREPARE, tint = resist(), padded = false) {
+    Block(stringResource(R.string.mine_block_me), ua.sprotyv.home.Group.PREPARE, tint = resist(), padded = false, leading = { ThemeIcon(R.drawable.ocha_users, resist()) }) {
         BlockRow(stringResource(R.string.roles_title), stringResource(R.string.roles_hint), first = true) { nav.go(Route.Mine(MinePart.ROLES)) }
         BlockRow(stringResource(R.string.shields_title), stringResource(R.string.shields_hint)) { nav.go(Route.Mine(MinePart.SHIELDS)) }
     }
     // Notes on their own, on a light "paper" plate, with the pinned and newest ones visible
     NotesPlate(nav)
     ReadinessBlock(content, nav)
-    Block(stringResource(R.string.mine_block_health), ua.sprotyv.home.Group.FIRST_AID, padded = false, foldable = true, summary = stringResource(R.string.mine_block_health_desc)) {
+    Block(stringResource(R.string.mine_block_health), ua.sprotyv.home.Group.FIRST_AID, padded = false, foldable = true, summary = stringResource(R.string.mine_block_health_desc), leading = { ThemeIcon(R.drawable.ocha_health, ua.sprotyv.home.Group.FIRST_AID.tint()) }) {
         BlockRow(stringResource(R.string.medical_card), stringResource(R.string.medical_card_hint), first = true) { nav.go(Route.Mine(MinePart.MEDICAL)) }
         BlockRow(stringResource(R.string.rescuer_screen), stringResource(R.string.rescuer_hint)) { nav.go(Route.Mine(MinePart.RESCUER)) }
     }
-    Block(stringResource(R.string.mine_block_copies), ua.sprotyv.home.Group.MINE, padded = false, foldable = true, summary = stringResource(R.string.mine_block_copies_desc)) {
+    Block(stringResource(R.string.mine_block_copies), ua.sprotyv.home.Group.MINE, padded = false, foldable = true, summary = stringResource(R.string.mine_block_copies_desc), leading = { ThemeIcon(R.drawable.ocha_services_and_tools, ua.sprotyv.home.Group.MINE.tint()) }) {
         BlockRow(stringResource(R.string.backup_title), stringResource(R.string.backup_hint), first = true) { nav.go(Route.Mine(MinePart.BACKUP)) }
         BlockRow(stringResource(R.string.bookmarks_title), stringResource(R.string.bookmarks_hint)) { nav.go(Route.Mine(MinePart.BOOKMARKS)) }
         BlockRow(stringResource(R.string.print_title), stringResource(R.string.print_hint)) { nav.go(Route.Mine(MinePart.PRINT)) }
