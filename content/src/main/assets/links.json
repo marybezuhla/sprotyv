@@ -1525,6 +1525,122 @@
   "flags": []
  },
  {
+  "id": "svarog-test-drive",
+  "group": "drones",
+  "kind": "official",
+  "title": "Батальйон «Сварог»: курс для цивільних (Київ)",
+  "note": "Безкоштовний триденний курс від підрозділу Сил безпілотних систем: розвідувальні дрони й FPV. Набори періодичні.",
+  "url": "https://svarog.army/test-drive",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
+  "id": "victory-drones",
+  "group": "drones",
+  "kind": "ngo",
+  "title": "Victory Drones: онлайн-курси",
+  "note": "Безкоштовні курси благодійного фонду Dignitas: як працює й збирається FPV-дрон. Для всіх, онлайн.",
+  "url": "https://victory-drones.com/fpv",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
+  "id": "drone-engineering",
+  "group": "drones",
+  "kind": "ngo",
+  "title": "Prometheus: «Інженер БпЛА»",
+  "note": "Безкоштовний онлайн-курс від Victory Drones про будову й ремонт безпілотників.",
+  "url": "https://prometheus.org.ua/prometheus-free/drone-engineering-intro/",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
+  "id": "kill-house",
+  "group": "drones",
+  "kind": "official",
+  "title": "Kill House Academy",
+  "note": "Школа операторів дронів від 3-го армійського корпусу; приймає цивільних, зокрема жінок. Київ, Львів, Одеса, Черкаси, мобільна школа.",
+  "url": "https://killhouse.academy",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": [
+   "paid"
+  ]
+ },
+ {
+  "id": "dronarium",
+  "group": "drones",
+  "kind": "independent",
+  "title": "Dronarium Academy",
+  "note": "Приватна сертифікована школа: FPV, мультикоптери, агродрони. Київ і Львів. Для цивільних платно, для військових безкоштовно.",
+  "url": "https://www.dronarium.academy",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": [
+   "paid"
+  ]
+ },
+ {
+  "id": "kruk",
+  "group": "drones",
+  "kind": "independent",
+  "title": "Навчальний центр «Крук»",
+  "note": "Недержавний сертифікований центр: є курси для цивільних, зокрема дрони типу «крило». Умови й ціни — на сайті.",
+  "url": "https://kruk.in.ua",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": [
+   "paid"
+  ]
+ },
+ {
+  "id": "uadroneschool",
+  "group": "drones",
+  "kind": "ngo",
+  "title": "UA Drone School (Бровари)",
+  "note": "Громадська організація: курси операторів дронів, для цивільних платно.",
+  "url": "https://uadroneschool.com",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": [
+   "paid"
+  ]
+ },
+ {
+  "id": "contract-18-24",
+  "group": "service",
+  "kind": "official",
+  "title": "Контракт 18–24: оператор безпілотників",
+  "note": "Служба за контрактом для молоді з навчанням на оператора дронів. Умови й вік — на офіційному сайті.",
+  "url": "https://18-24.army.gov.ua",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
+  "id": "drone-force",
+  "group": "service",
+  "kind": "official",
+  "title": "Drone Force Сухопутних військ",
+  "note": "Відбір і навчання майбутніх операторів безпілотників.",
+  "url": "https://landforces.mil.gov.ua/df/",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
   "id": "cpd",
   "group": "facts",
   "kind": "official",
