@@ -217,7 +217,6 @@ fun GartScreen(nav: Nav) {
     }
 
     // Why it works: the science, with its sources
-    val context = LocalContext.current
     Block(stringResource(R.string.gart_why), Group.GUIDE, foldable = true, summary = stringResource(R.string.gart_why_hint)) {
         listOf(R.string.gart_why_1, R.string.gart_why_2, R.string.gart_why_3, R.string.gart_why_4).forEach {
             Text(stringResource(it), style = MaterialTheme.typography.bodyMedium)
@@ -283,7 +282,7 @@ fun gartToday(share: String, today: Long = LocalDate.now().toEpochDay()): Pair<I
 /** "Daily hardening today: 1 of 3", on the home screen and in "My way": counts only, a tap to tick. */
 @Composable
 fun GartStrip(nav: Nav) {
-    val prefs = androidx.compose.runtime.collectAsState(HomePrefs.state).value ?: return
+    val prefs = HomePrefs.state.collectAsStateWithLifecycle().value ?: return
     if (prefs.trip) return
     val (d, t) = gartToday(prefs.gart) ?: return
     HubCard(
