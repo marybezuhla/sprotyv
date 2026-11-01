@@ -137,6 +137,19 @@ jobs:
             if grep -q "project :personal" "deps-$m.txt"; then echo "::error::$m depends on :personal"; exit 1; fi
           done
 
+      - name: Check that no network code is in the app (map library's online download removed)
+        shell: bash
+        run: |
+          set -euo pipefail
+          APK=app/build/outputs/apk/release/app-release-unsigned.apk
+          unzip -o -q "$APK" 'classes*.dex' -d dex
+          ls dex/classes*.dex >/dev/null || { echo "::error::No code found in the APK"; exit 1; }
+          # Class names of the library's online parts, and Java's URL connections from any library
+          if cat dex/classes*.dex | grep -a -q -E 'Lorg/mapsforge/map/layer/download/|Lorg/mapsforge/map/layer/download/tilesource/|Ljava/net/HttpURLConnection;'; then
+            echo "::error::Network classes found in the APK"; exit 1
+          fi
+          echo "No network classes in the APK"
+
       - name: Check permissions (no internet, only what is expected)
         shell: bash
         run: |
