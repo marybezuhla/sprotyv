@@ -66,6 +66,7 @@ import ua.sprotyv.ui.RoleScreen
 import ua.sprotyv.ui.RolesScreen
 import ua.sprotyv.ui.SafeScreen
 import ua.sprotyv.ui.SuppliesScreen
+import ua.sprotyv.ui.ShieldsScreen
 
 /**
  * The owner's screens, drawn with the made-up demo person ([Demo]) in an in-memory database:
@@ -147,4 +148,6 @@ class PersonalScreensTest {
     @Test fun notes() = shot("50-notes-dark", dark = true) { Frame("Нотатки", {}) { NotesScreen(nav) } }
     @Test fun newPlace() = shot("51-new-place-dark", dark = true) { Frame("Нове місце", {}) { NewPlaceScreen(content, nav) } }
     @Test fun safe() = shot("52-safe") { Frame("Я в безпеці", {}) { SafeScreen(nav) } }
+    @Test fun shields() = shot("53-shields-dark", dark = true) { Frame("Мої щити", {}) { ShieldsScreen(nav) } }
+    @Test fun shieldsLight() = shot("53-shields") { Frame("Мої щити", {}) { ShieldsScreen(nav) } }
 }

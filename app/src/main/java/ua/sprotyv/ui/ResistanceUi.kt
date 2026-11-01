@@ -304,3 +304,23 @@ private fun parsePath(s: String?): Set<String> {
         emptySet()
     }
 }
+
+
+/** Shields for "My path": a level done, and each step checked by a test. */
+internal fun pathShields(stored: String?, roles: Set<String>): List<ShieldItem> {
+    val done = parsePath(stored)
+    val path = PATH.filter {
+        it.level < PATH_LEVEL_MEDIC || (it.level == PATH_LEVEL_MEDIC && ROLE_MEDIC in roles) ||
+            (it.level == PATH_LEVEL_DOBRO && "dobro" in roles) || (it.level == PATH_LEVEL_DFTG && "dftg" in roles)
+    }
+    val levels = PATH_LEVELS.indices.mapNotNull { l ->
+        val steps = path.filter { it.level == l }
+        if (steps.isEmpty()) return@mapNotNull null
+        ShieldItem("path:$l", PATH_LEVELS[l], R.string.shield_how_level, null, R.drawable.tab_way, if (steps.all { it.key in done }) 2 else 0)
+    }
+    val tests = PATH_CHECKS.keys.map { k ->
+        val words = PATH.first { it.key == k }.words
+        ShieldItem("test:$k", words, R.string.shield_how_test, Group.FIRST_AID, R.drawable.tab_know, if (k + TESTED in done) 2 else 0)
+    }
+    return levels + tests
+}

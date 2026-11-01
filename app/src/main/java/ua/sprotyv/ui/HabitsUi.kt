@@ -293,3 +293,18 @@ fun GartStrip(nav: Nav) {
         leading = { ReadyRing(d.toFloat() / t, "$d/$t") },
     ) { nav.go(Route.Mine(MinePart.GART)) }
 }
+
+
+/**
+ * Shields for habits: half when a habit is "almost one's own" (21 days done), full when it is
+ * one's own (66). Days done count, never a streak; a shield once earned stays, even after a break.
+ */
+internal fun habitShields(stored: String?): List<ShieldItem> {
+    val g = parseGart(stored)
+    return HABITS.mapNotNull { h ->
+        val days = g.done[h.id].orEmpty().size
+        if (h.id !in g.active && days < 21) return@mapNotNull null
+        val level = when { days >= ROOTED_DAYS -> 2; days >= 21 -> 1; else -> 0 }
+        ShieldItem("habit:" + h.id, h.title, R.string.shield_how_habit, if (h.pillar.resist) null else h.pillar.group, R.drawable.ocha_training, level)
+    }
+}

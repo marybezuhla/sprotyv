@@ -253,6 +253,7 @@ private fun Screen(
             MinePart.GART -> Personal(R.string.gart_title, personal, nav) { GartScreen(nav) }
             MinePart.NEW_PLACE -> Personal(R.string.np_title, personal, nav) { NewPlaceScreen(content, nav) }
             MinePart.ROLES -> Personal(R.string.roles_title, personal, nav) { RolesScreen(nav) }
+            MinePart.SHIELDS -> Personal(R.string.shields_title, personal, nav) { ShieldsScreen(nav) }
         }
         is Route.RoleRoute -> ROLES[top.id]?.let { r -> Personal(r.title, personal, nav) { RoleScreen(r, content, nav) } }
         Route.Scan -> ScanScreen(nav)

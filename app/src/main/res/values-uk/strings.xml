@@ -1224,4 +1224,20 @@
     <string name="comms_note">«Спротив» лише пояснює й відкриває ці застосунки: сам він не має ні інтернету, ні Bluetooth, ні радіо, тож ваші дані тут лишаються недосяжними.</string>
     <string name="screenshots_mark_text">Екрани з особистими даними зараз можна сфотографувати чи записати. Це ваш вибір; вимкнути можна тут або в налаштуваннях.</string>
     <string name="screenshots_keep">Лишити</string>
+    <string name="shields_title">Мої щити</string>
+    <string name="shields_hint">Що вже справді вмієте й зробили</string>
+    <string name="shields_intro">Щит з’являється сам, коли справу зроблено насправді: звичка стала своєю, рівень шляху пройдено, тест без помилок, частину готовності завершено.</string>
+    <string name="shields_count">Здобуто: %1$d з %2$d</string>
+    <string name="shields_never_lost">Здобутий щит лишається назавжди, навіть після перерви. Жодних рейтингів і порівнянь.</string>
+    <string name="shields_habits">Звички</string>
+    <string name="shields_path">Мій шлях</string>
+    <string name="shields_tests">Перевірено тестом</string>
+    <string name="shields_ready">Готовність</string>
+    <string name="shield_how_habit">21 день — половина, 66 — повний</string>
+    <string name="shield_how_level">Усі кроки рівня</string>
+    <string name="shield_how_test">Тест без помилок</string>
+    <string name="shield_how_ready">Усе в цій частині</string>
+    <string name="shield_earned">здобуто</string>
+    <string name="shield_half">половина</string>
+    <string name="shield_not_yet">ще попереду</string>
 </resources>
