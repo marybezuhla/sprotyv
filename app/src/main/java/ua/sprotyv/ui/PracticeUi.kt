@@ -200,7 +200,8 @@ private fun PracticeChoice(content: Content?, nav: Nav) {
         TOPICS.forEach { t ->
             val n = pick(content.practice, t).size
             if (n == 0) return@forEach
-            HubCard(stringResource(t.title), stringResource(t.hint) + " · " + stringResource(R.string.practice_count, n), ua.sprotyv.home.Group.PREPARE.tint()) {
+            // The count beside the name, so the hint never ends on a lonely number
+            HubCard(stringResource(t.title) + " · $n", stringResource(t.hint), ua.sprotyv.home.Group.PREPARE.tint()) {
                 nav.go(Route.PracticeRoute("topic:" + t.id))
             }
         }
