@@ -1283,4 +1283,5 @@
     <string name="practice_open_const">Open the Constitution article</string>
     <string name="practice_source_guide">Source: “Survival guide”, sec. %1$s</string>
     <string name="practice_source_const">Source: Constitution of Ukraine, art. %1$s</string>
+    <string name="path_repeat">✓ Checked · you can repeat the test</string>
 </resources>

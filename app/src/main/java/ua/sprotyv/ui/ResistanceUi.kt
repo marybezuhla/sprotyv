@@ -55,6 +55,9 @@ fun markPathTested(step: String) {
         val now = parsePath(db.settings().get(KEY_PATH))
         db.settings().put(Setting(KEY_PATH, org.json.JSONArray((now + step + (step + TESTED)).sorted()).toString()))
     }
+    // The day it was passed, for a gentle repeat later
+    val today = java.time.LocalDate.now().toEpochDay()
+    Steps.change { s -> s.copy(checks = s.checks + (step to (today to ((s.checks[step]?.second ?: 0) + 1)))) }
 }
 
 /** A step of "My path": what it is, the level it belongs to, and where to learn it in Sprotyv. */
@@ -217,6 +220,9 @@ fun PathScreen(nav: Nav) {
             db.settings().put(Setting(KEY_PATH, org.json.JSONArray((if (on) now + key else now - key - (key + TESTED)).sorted()).toString()))
         }
     }
+    val stepsStored by remember { PersonalStore.observe { db -> db.settings().observe(KEY_STEPS).map { listOf(it) } } }.collectAsStateWithLifecycle(null)
+    val steps = stepsStored?.let { Steps.parse(it.first()) }
+    val today = java.time.LocalDate.now().toEpochDay()
     val count = path.count { it.key in done }
     // Only the count leaves "Mine", for the home screen and "Resistance"
     val context = LocalContext.current
@@ -273,8 +279,13 @@ fun PathScreen(nav: Nav) {
                         Text(stringResource(s.words), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = doneText(on))
                         // A step that can be checked: the mark when passed, or the way to the check
                         if (s.key in PATH_CHECKS) {
-                            if (s.key + TESTED in done) {
+                            if (s.key + TESTED in done && !(steps?.repeatDue(s.key, today) == true)) {
                                 Text(stringResource(R.string.path_tested), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            } else if (s.key + TESTED in done) {
+                                // Passed a while ago: a quiet offer to repeat, nothing taken away
+                                androidx.compose.material3.TextButton(onClick = { nav.go(Route.PathCheck(s.key)) }, contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp), modifier = Modifier.heightIn(min = 40.dp)) {
+                                    Text(stringResource(R.string.path_repeat), style = MaterialTheme.typography.labelLarge)
+                                }
                             } else {
                                 androidx.compose.material3.TextButton(onClick = { nav.go(Route.PathCheck(s.key)) }, contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp), modifier = Modifier.heightIn(min = 40.dp)) {
                                     Text(stringResource(R.string.path_check), style = MaterialTheme.typography.labelLarge)

@@ -1289,4 +1289,5 @@
     <string name="practice_open_const">Відкрити статтю Конституції</string>
     <string name="practice_source_guide">Джерело: «Довідник виживання», п. %1$s</string>
     <string name="practice_source_const">Джерело: Конституція України, ст. %1$s</string>
+    <string name="path_repeat">✓ Перевірено · можна повторити тест</string>
 </resources>
