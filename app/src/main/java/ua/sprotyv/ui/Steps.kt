@@ -52,7 +52,31 @@ data class Steps(
             }
         }
 
-        /** A change, saved only while "Mine" is open (practice can be done with it locked: then nothing is kept). */
+        /**
+         * Practice is done outside "Mine", where the encrypted data is closed: what was solved waits
+         * here (only practice ids, no personal words) and moves into "Mine" the next time it opens.
+         */
+        fun practice(context: android.content.Context, solved: String? = null, topic: String? = null) {
+            if (PersonalStore.state.value is Opened.Ready) {
+                change { s -> s.copy(solved = if (solved != null) (s.solved + solved).take(300).toSet() else s.solved, topics = if (topic != null) s.topics + topic else s.topics) }
+                return
+            }
+            val p = context.applicationContext.getSharedPreferences("practice_wait", android.content.Context.MODE_PRIVATE)
+            fun add(key: String, v: String?) { if (v != null && ID.matches(v)) p.edit().putStringSet(key, (p.getStringSet(key, emptySet()).orEmpty() + v).take(300).toSet()).apply() }
+            add("solved", solved); add("topics", topic)
+        }
+
+        /** Moves what waited into "Mine" (called when it opens), then forgets it. */
+        fun flush(context: android.content.Context) {
+            val p = context.applicationContext.getSharedPreferences("practice_wait", android.content.Context.MODE_PRIVATE)
+            val solved = p.getStringSet("solved", emptySet()).orEmpty().filter { ID.matches(it) }
+            val topics = p.getStringSet("topics", emptySet()).orEmpty().filter { ID.matches(it) }
+            if (solved.isEmpty() && topics.isEmpty()) return
+            change { s -> s.copy(solved = (s.solved + solved).take(300).toSet(), topics = (s.topics + topics).take(30).toSet()) }
+            p.edit().clear().apply()
+        }
+
+        /** A change, saved only while "Mine" is open. */
         fun change(f: (Steps) -> Steps) {
             if (PersonalStore.state.value !is Opened.Ready) return
             PersonalStore.save("setting:$KEY_STEPS:" + java.util.UUID.randomUUID()) { db ->

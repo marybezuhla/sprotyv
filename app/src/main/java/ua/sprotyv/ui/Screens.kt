@@ -137,6 +137,8 @@ fun Personal(title: Int, state: Opened?, nav: Nav, content: @Composable () -> Un
     // coming back), so a half-filled dialog is not lost
     val seen = remember { BooleanArray(1) }
     if (state is Opened.Ready) seen[0] = true
+    // What practice solved while "Mine" was closed moves in now
+    androidx.compose.runtime.LaunchedEffect(state is Opened.Ready) { if (state is Opened.Ready) Steps.flush(context) }
     if (state != null && state !is Opened.Ready) seen[0] = false
     val wasReady = seen[0]
     SecureScreen()
