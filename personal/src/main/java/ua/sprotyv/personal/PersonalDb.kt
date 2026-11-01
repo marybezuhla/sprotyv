@@ -117,6 +117,7 @@ abstract class PersonalDb : RoomDatabase() {
             return db
         }
 
+        // No autoClose, createFrom* or setQueryCallback here: Room would wrap the helper and the rekey cast would fail
         private fun build(context: Context, key: ByteArray): PersonalDb {
             val db = Room.databaseBuilder(context.applicationContext, PersonalDb::class.java, FILE_NAME)
                 // Third argument: write-ahead logging off. With TRUNCATE no second file with
