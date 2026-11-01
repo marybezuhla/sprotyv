@@ -38,6 +38,8 @@ dependencies {
 
     // Argon2id for password backups and the family plan code (a reviewed version, its checksum pinned)
     implementation("org.bouncycastle:bcprov-jdk18on:1.79")
+    // Streaming encryption of the backup file (AES-256-GCM-HKDF, in parts), from Google Tink
+    implementation("com.google.crypto.tink:tink-android:1.20.0")
 
     testImplementation("junit:junit:4.13.2")
     // Real org.json for unit tests (Android provides it on the phone)

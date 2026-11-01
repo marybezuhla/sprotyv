@@ -307,6 +307,8 @@
     <string name="backup_from_newer">Цю копію зроблено новішою версією «Спротиву». Спершу оновіть застосунок.</string>
     <string name="backup_not_ours">Це не копія «Спротиву» або файл пошкоджено.</string>
     <string name="backup_restored">Дані відновлено.</string>
+    <string name="backup_restored_partly">Відновлено. Копію зробила новіша версія «Спротиву»: повернуто все, що знає ця версія; оновіть застосунок, щоб повернути решту.</string>
+    <string name="backup_replace_skipped">Частину даних зробила новіша версія «Спротиву»: ця версія поверне те, що знає.</string>
     <string name="backup_restore_failed">Не вдалося. Ваші дані лишилися як були.</string>
     <string name="plan_code_title">Поділитися планом (QR)</string>
     <string name="plan_code_hint">Зашифрований код для телефону родича</string>

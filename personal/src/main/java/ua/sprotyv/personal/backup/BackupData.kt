@@ -26,8 +26,8 @@ object BackupData {
     private const val KIND_PLAN = "plan"
 
     /** Generous limits: real data is far smaller; anything larger is not ours. */
-    private const val MAX_TEXT = 20_000
-    private const val MAX_ITEMS = 2_000
+    internal const val MAX_TEXT = 20_000
+    internal const val MAX_ITEMS = 2_000
 
     /** Our files nest four levels at most; anything deeper is refused before parsing. */
     private const val MAX_DEPTH = 6
@@ -36,9 +36,9 @@ object BackupData {
     /** The notes limits the app keeps, held on restore too. */
     const val MAX_NOTES = 500
     const val MAX_NOTES_TEXT = 1_400_000
-    private const val MAX_HOME = 40
-    private const val MAX_HOME_TEXT = 2_000
-    private val HOME_KEY = Regex("^[a-z_]{1,30}$")
+    internal const val MAX_HOME = 40
+    internal const val MAX_HOME_TEXT = 2_000
+    internal val HOME_KEY = Regex("^[a-z_]{1,30}$")
 
     /** The file does not fit this version of Sprotyv (or is not a Sprotyv file at all). */
     class Incompatible : Exception()
@@ -86,17 +86,36 @@ object BackupData {
     /** Replaces all of the owner's data with [s], all or nothing. Only the [settings] keys are touched. */
     suspend fun replaceAll(db: PersonalDb, s: Snapshot, settings: Set<String>) {
         db.withTransaction {
-            db.medical().clear(); db.people().clear(); db.plan().clear(); db.plan().clearRows()
-            db.kit().clear()
-            db.notes().clear()
-            settings.forEach { db.settings().delete(it) }
-            s.medical?.let { db.medical().save(it) }
-            s.people.forEach { db.people().save(it) }
-            s.plan?.let { db.plan().save(it) }
-            s.rows.forEach { db.plan().saveRow(it) }
-            s.kit.forEach { db.kit().set(it) }
-            s.settings.filter { it.key in settings }.forEach { db.settings().put(it) }
-            s.notes.forEach { db.notes().save(it) }
+            clearAll(db, settings)
+            s.medical?.let { put(db, it, settings) }
+            s.people.forEach { put(db, it, settings) }
+            s.plan?.let { put(db, it, settings) }
+            s.rows.forEach { put(db, it, settings) }
+            s.kit.forEach { put(db, it, settings) }
+            s.settings.forEach { put(db, it, settings) }
+            s.notes.forEach { put(db, it, settings) }
+        }
+    }
+
+    /** Empties everything a backup carries. Only inside a transaction that then fills it again. */
+    internal suspend fun clearAll(db: PersonalDb, settings: Set<String>) {
+        db.medical().clear(); db.people().clear(); db.plan().clear(); db.plan().clearRows()
+        db.kit().clear()
+        db.notes().clear()
+        settings.forEach { db.settings().delete(it) }
+    }
+
+    /** One record from a copy into the database; a setting outside [settings] is never written. */
+    internal suspend fun put(db: PersonalDb, r: Any, settings: Set<String>) {
+        when (r) {
+            is MedicalCard -> db.medical().save(r)
+            is Person -> db.people().save(r)
+            is FamilyPlan -> db.plan().save(r)
+            is PlanRow -> db.plan().saveRow(r)
+            is KitCheck -> db.kit().set(r)
+            is Setting -> if (r.key in settings) db.settings().put(r)
+            is Note -> db.notes().save(r)
+            else -> throw IllegalArgumentException()
         }
     }
 
@@ -117,10 +136,10 @@ object BackupData {
         .put("people", JSONArray().apply { s.people.forEach { put(person(it)) } })
         .put("plan", s.plan?.let(::plan) ?: JSONObject.NULL)
         .put("rows", JSONArray().apply { s.rows.forEach { put(row(it)) } })
-        .put("kit", JSONArray().apply { s.kit.forEach { put(JSONObject().put("key", it.key).put("checked", it.checked).put("at", it.at)) } })
-        .put("settings", JSONArray().apply { s.settings.forEach { put(JSONObject().put("key", it.key).put("value", it.value)) } })
+        .put("kit", JSONArray().apply { s.kit.forEach { put(kit(it)) } })
+        .put("settings", JSONArray().apply { s.settings.forEach { put(setting(it)) } })
         .put("home", JSONObject().apply { s.home.toSortedMap().forEach { (k, v) -> put(k, v) } })
-        .put("notes", JSONArray().apply { s.notes.forEach { put(JSONObject().put("id", it.id).put("title", it.title).put("text", it.text).put("pinned", it.pinned).put("updatedAt", it.updatedAt)) } })
+        .put("notes", JSONArray().apply { s.notes.forEach { put(note(it)) } })
         .toString().toByteArray(Charsets.UTF_8)
 
     fun decode(bytes: ByteArray): Snapshot {
@@ -128,27 +147,16 @@ object BackupData {
         return guard {
             Snapshot(
                 created = root.getLong("created"),
-                medical = objectOrNull(root, "medical")?.let { m ->
-                    MedicalCard(
-                        name = text(m, "name"), birthDate = text(m, "birthDate"), bloodGroup = text(m, "bloodGroup"),
-                        allergies = text(m, "allergies"), medicines = text(m, "medicines"), conditions = text(m, "conditions"),
-                        notes = text(m, "notes"), updatedAt = m.optLong("updatedAt", 0),
-                    )
-                },
-                people = items(root.getJSONArray("people")).map { p ->
-                    Person(
-                        id = p.getLong("id").also { require(it > 0) }, name = text(p, "name"), phone = text(p, "phone"),
-                        relation = text(p, "relation"), safeList = p.getBoolean("safeList"), ice = p.getBoolean("ice"),
-                    )
-                },
+                medical = objectOrNull(root, "medical")?.let(::medicalOf),
+                people = items(root.getJSONArray("people")).map(::personOf),
                 plan = objectOrNull(root, "plan")?.let(::planOf),
                 rows = items(root.getJSONArray("rows")).map(::rowOf),
-                kit = items(root.getJSONArray("kit")).map { KitCheck(text(it, "key").also { k -> require(k.isNotEmpty()) }, it.getBoolean("checked"), it.getLong("at")) },
-                settings = items(root.getJSONArray("settings")).map { Setting(text(it, "key").also { k -> require(k.isNotEmpty()) }, text(it, "value")) },
+                kit = items(root.getJSONArray("kit")).map(::kitOf),
+                settings = items(root.getJSONArray("settings")).map(::settingOf),
                 home = root.optJSONObject("home")?.let(::homeOf) ?: emptyMap(),
                 // Optional: a copy from before notes simply has none
                 notes = root.optJSONArray("notes")?.let { a ->
-                    items(a).map { Note(it.getLong("id").also { id -> require(id > 0) }, text(it, "title"), text(it, "text"), it.getBoolean("pinned"), it.optLong("updatedAt", 0)) }
+                    items(a).map(::noteOf)
                 } ?: emptyList(),
             ).also { s ->
                 // The same person, row, tick or setting twice: not a file Sprotyv wrote
@@ -166,7 +174,7 @@ object BackupData {
      * The look and set-up: a few short names and values. Unlike the data, an odd entry is skipped,
      * never the whole file, so a copy from a newer version still brings everything it can.
      */
-    private fun homeOf(o: JSONObject): Map<String, String> =
+    internal fun homeOf(o: JSONObject): Map<String, String> =
         o.keys().asSequence().take(MAX_HOME * 4)
             .mapNotNull { k -> (o.opt(k) as? String)?.takeIf { HOME_KEY.matches(k) && it.length <= MAX_HOME_TEXT }?.let { k to it } }
             .take(MAX_HOME).toMap()
@@ -246,34 +254,52 @@ object BackupData {
         return (0 until a.length()).map { a.getJSONObject(it) }
     }
 
-    private fun text(o: JSONObject, name: String): String {
+    internal fun text(o: JSONObject, name: String): String {
         val v = o.get(name)
         require(v is String && v.length <= MAX_TEXT)
         return v
     }
 
-    private fun medical(m: MedicalCard) = JSONObject()
+    internal fun medicalOf(m: JSONObject) = MedicalCard(
+        name = text(m, "name"), birthDate = text(m, "birthDate"), bloodGroup = text(m, "bloodGroup"),
+        allergies = text(m, "allergies"), medicines = text(m, "medicines"), conditions = text(m, "conditions"),
+        notes = text(m, "notes"), updatedAt = m.optLong("updatedAt", 0),
+    )
+
+    internal fun personOf(p: JSONObject) = Person(
+        id = p.getLong("id").also { require(it > 0) }, name = text(p, "name"), phone = text(p, "phone"),
+        relation = text(p, "relation"), safeList = p.getBoolean("safeList"), ice = p.getBoolean("ice"),
+    )
+
+    internal fun kit(k: KitCheck) = JSONObject().put("key", k.key).put("checked", k.checked).put("at", k.at)
+    internal fun kitOf(o: JSONObject) = KitCheck(text(o, "key").also { require(it.isNotEmpty()) }, o.getBoolean("checked"), o.getLong("at"))
+    internal fun setting(x: Setting) = JSONObject().put("key", x.key).put("value", x.value)
+    internal fun settingOf(o: JSONObject) = Setting(text(o, "key").also { require(it.isNotEmpty()) }, text(o, "value"))
+    internal fun note(n: Note) = JSONObject().put("id", n.id).put("title", n.title).put("text", n.text).put("pinned", n.pinned).put("updatedAt", n.updatedAt)
+    internal fun noteOf(o: JSONObject) = Note(o.getLong("id").also { require(it > 0) }, text(o, "title"), text(o, "text"), o.getBoolean("pinned"), o.optLong("updatedAt", 0))
+
+    internal fun medical(m: MedicalCard) = JSONObject()
         .put("name", m.name).put("birthDate", m.birthDate).put("bloodGroup", m.bloodGroup).put("allergies", m.allergies)
         .put("medicines", m.medicines).put("conditions", m.conditions).put("notes", m.notes).put("updatedAt", m.updatedAt)
 
-    private fun person(p: Person) = JSONObject()
+    internal fun person(p: Person) = JSONObject()
         .put("id", p.id).put("name", p.name).put("phone", p.phone).put("relation", p.relation)
         .put("safeList", p.safeList).put("ice", p.ice)
 
-    private fun plan(p: FamilyPlan) = JSONObject()
+    internal fun plan(p: FamilyPlan) = JSONObject()
         .put("point1", p.point1).put("point2", p.point2).put("point3", p.point3)
         .put("goBetweenName", p.goBetweenName).put("goBetweenPhone", p.goBetweenPhone).put("notes", p.notes)
         .put("updatedAt", p.updatedAt)
 
-    private fun planOf(o: JSONObject) = FamilyPlan(
+    internal fun planOf(o: JSONObject) = FamilyPlan(
         point1 = text(o, "point1"), point2 = text(o, "point2"), point3 = text(o, "point3"),
         goBetweenName = text(o, "goBetweenName"), goBetweenPhone = text(o, "goBetweenPhone"), notes = text(o, "notes"),
         updatedAt = o.optLong("updatedAt", 0),
     )
 
-    private fun row(r: PlanRow) = JSONObject().put("id", r.id).put("kind", r.kind).put("first", r.first).put("second", r.second).put("sort", r.sort)
+    internal fun row(r: PlanRow) = JSONObject().put("id", r.id).put("kind", r.kind).put("first", r.first).put("second", r.second).put("sort", r.sort)
 
-    private fun rowOf(o: JSONObject): PlanRow {
+    internal fun rowOf(o: JSONObject): PlanRow {
         val kind = text(o, "kind")
         require(kind == PlanRow.KIND_ROLE || kind == PlanRow.KIND_IF_THEN)
         return PlanRow(id = o.optLong("id", 0).coerceAtLeast(0), kind = kind, first = text(o, "first"), second = text(o, "second"), sort = o.optInt("sort", 0))

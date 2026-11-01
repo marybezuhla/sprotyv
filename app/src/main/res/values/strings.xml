@@ -307,6 +307,8 @@
     <string name="backup_from_newer">This backup was made by a newer Sprotyv. Update the app first.</string>
     <string name="backup_not_ours">This is not a Sprotyv backup, or the file is damaged.</string>
     <string name="backup_restored">Your data is restored.</string>
+    <string name="backup_restored_partly">Restored. This copy was made by a newer Sprotyv: what this version knows is back; update the app to bring the rest.</string>
+    <string name="backup_replace_skipped">Part of it was made by a newer Sprotyv: this version will bring back what it knows.</string>
     <string name="backup_restore_failed">That did not work. Your data is as it was.</string>
     <string name="plan_code_title">Share the plan (QR)</string>
     <string name="plan_code_hint">An encrypted code for a relative\'s phone</string>

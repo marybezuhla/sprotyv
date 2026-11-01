@@ -55,6 +55,8 @@ import ua.sprotyv.R
 import ua.sprotyv.personal.PersonalStore
 import ua.sprotyv.personal.backup.BackupCrypto
 import ua.sprotyv.personal.backup.BackupData
+import ua.sprotyv.personal.backup.BackupLines
+import ua.sprotyv.personal.backup.BackupStream
 import ua.sprotyv.personal.backup.PlanCode
 import ua.sprotyv.qr.Qr
 import java.io.ByteArrayOutputStream
@@ -87,8 +89,27 @@ object BackupJobs {
     val busy: StateFlow<Boolean> = _busy
     private val _notice = MutableStateFlow<Int?>(null)
     val notice: StateFlow<Int?> = _notice
-    private val _pending = MutableStateFlow<BackupData.Snapshot?>(null)
-    val pending: StateFlow<BackupData.Snapshot?> = _pending
+    private val _pending = MutableStateFlow<Opened?>(null)
+    val pending: StateFlow<Opened?> = _pending
+
+    /**
+     * A copy opened and checked, waiting for the owner's yes. A streamed copy keeps only its
+     * summary and key here (the data is read again from the file on "yes"); an older one-piece
+     * copy keeps its decrypted data. Both only in memory, and only until yes or no.
+     */
+    sealed class Opened(val created: Long, val people: Int, val records: Int, val skipped: Int, val home: Map<String, String>) {
+        class Piece(val snap: BackupData.Snapshot) : Opened(snap.created, snap.people.size, snap.records, 0, snap.home)
+        class Stream(val uri: Uri, val key: BackupStream.Key, val summary: BackupLines.Summary) :
+            Opened(summary.created, summary.people, summary.records, summary.skipped, summary.home)
+
+        fun wipe() { if (this is Stream) key.wipe() }
+    }
+
+    private fun setPending(o: Opened?) {
+        val old = _pending.value
+        _pending.value = o
+        if (old !== o) old?.wipe()
+    }
 
     /**
      * The suggested password and the "written down" tick live here, in memory, so turning the
@@ -149,7 +170,7 @@ object BackupJobs {
         }
         val started = job {
             var fresh = false
-            var plain: ByteArray? = null
+            var key: BackupStream.Key? = null
             try {
                 fresh = isNewDocument(app, uri)
                 if (!fresh) return@job R.string.backup_existing
@@ -157,17 +178,27 @@ object BackupJobs {
                 val snap = withTimeoutOrNull(20_000) { PersonalStore.read { BackupData.read(it, BACKED_UP_SETTINGS) } }
                     ?.copy(home = homeForBackup(app))
                     ?: return@job removeNew(app, uri, R.string.backup_failed)
-                plain = BackupData.encode(snap)
-                // Never a copy that would not open again: it must read back, and fit the size a restore accepts
-                if (plain!!.size + BackupCrypto.OVERHEAD > BackupCrypto.MAX_FILE_BYTES) return@job removeNew(app, uri, R.string.backup_too_big)
-                if (runCatching { BackupData.decode(plain!!) }.isFailure) return@job removeNew(app, uri, R.string.backup_failed)
-                val file = withContext(Dispatchers.Default) { BackupCrypto.encrypt(plain!!, pw, BackupCrypto.Purpose.BACKUP) }
+                val k = withContext(Dispatchers.Default) { BackupStream.newKey(pw) }
+                key = k
+                // Written in parts, with a fingerprint of what went in, to compare with what reads back
+                val wrote = java.security.MessageDigest.getInstance("SHA-256")
                 val out = app.contentResolver.openOutputStream(uri, "w") ?: return@job removeNew(app, uri, R.string.backup_failed)
-                out.use { it.write(file) }
-                // Check what actually landed on the storage, not what we meant to write
-                val back = withContext(Dispatchers.Default) { BackupCrypto.decrypt(readLimited(app, uri), pw, BackupCrypto.Purpose.BACKUP) }
-                val ok = back.contentEquals(plain!!)
-                back.fill(0)
+                out.use { o ->
+                    java.io.OutputStreamWriter(java.security.DigestOutputStream(BackupStream.writer(o, k), wrote), Charsets.UTF_8).buffered().use { w ->
+                        BackupLines.write(snap, w)
+                    }
+                }
+                // Check what actually landed on the storage, not what we meant to write: it must
+                // decrypt, read as a whole copy, and match what went in
+                val read = java.security.MessageDigest.getInstance("SHA-256")
+                val back = app.contentResolver.openInputStream(uri) ?: return@job removeNew(app, uri, R.string.backup_failed)
+                val ok = back.use { input ->
+                    if (!BackupStream.readHeader(input).contentEquals(k.header)) return@use false
+                    val summary = java.io.InputStreamReader(java.security.DigestInputStream(BackupStream.reader(input, k), read), Charsets.UTF_8).use { r ->
+                        BackupLines.read(r) { }
+                    }
+                    summary.records == snap.records && summary.skipped == 0 && read.digest().contentEquals(wrote.digest())
+                }
                 if (ok) {
                     PersonalStore.save("setting:$KEY_BACKUP_AT") { it.settings().put(ua.sprotyv.personal.Setting(KEY_BACKUP_AT, System.currentTimeMillis().toString())) }
                     // Next time, new words
@@ -184,7 +215,7 @@ object BackupJobs {
                 if (fresh) removeNew(app, uri, if (e is OutOfMemoryError) R.string.backup_no_memory else R.string.backup_failed)
                 else R.string.backup_failed
             } finally {
-                plain?.fill(0)
+                key?.wipe()
                 pw.fill(' ')
             }
         }
@@ -204,21 +235,45 @@ object BackupJobs {
             var plain: ByteArray? = null
             var words: CharArray? = null
             try {
-                val file = readLimited(app, uri)
-                plain = withContext(Dispatchers.Default) {
+                val head = app.contentResolver.openInputStream(uri)?.use { readUpTo(it, BackupStream.HEADER_BYTES) } ?: throw BackupCrypto.NotABackup()
+                val opened: Opened = if (BackupStream.isStream(head)) {
+                    // Checked to the end, one record at a time; only the summary and the key stay
+                    suspend fun tryWith(p: CharArray): Opened {
+                        val key = withContext(Dispatchers.Default) { BackupStream.keyFor(head, p) }
+                        try {
+                            val summary = readCopy(app, uri, key) { BackupLines.read(it) { } }
+                            return Opened.Stream(uri, key, summary)
+                        } catch (e: Throwable) {
+                            key.wipe()
+                            throw e
+                        }
+                    }
                     try {
-                        BackupCrypto.decrypt(file, pw, BackupCrypto.Purpose.BACKUP)
+                        tryWith(pw)
                     } catch (e: BackupCrypto.WrongPasswordOrDamaged) {
                         // The suggested words typed with spaces or capitals: tried once more as words
                         words = BackupCrypto.asWords(pw)
                         val w = words
                         if (w == null || w.contentEquals(pw)) throw e
-                        BackupCrypto.decrypt(file, w, BackupCrypto.Purpose.BACKUP)
+                        tryWith(w)
                     }
+                } else {
+                    // A copy from before copies were streamed: one piece, small by its own limit
+                    val file = readLimited(app, uri)
+                    plain = withContext(Dispatchers.Default) {
+                        try {
+                            BackupCrypto.decrypt(file, pw, BackupCrypto.Purpose.BACKUP)
+                        } catch (e: BackupCrypto.WrongPasswordOrDamaged) {
+                            words = BackupCrypto.asWords(pw)
+                            val w = words
+                            if (w == null || w.contentEquals(pw)) throw e
+                            BackupCrypto.decrypt(file, w, BackupCrypto.Purpose.BACKUP)
+                        }
+                    }
+                    Opened.Piece(BackupData.decode(plain!!))
                 }
-                val snap = BackupData.decode(plain!!)
                 // The screen was left meanwhile: nothing decrypted stays behind
-                if (mine == generation) _pending.value = snap
+                if (mine == generation) setPending(opened) else opened.wipe()
                 null
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
@@ -247,8 +302,26 @@ object BackupJobs {
         job {
             // Changes still waiting to be saved would land on top of the restored data
             PersonalStore.dropPending("")
-            // Never later and unseen: if the data does not open in time, nothing is replaced
-            val ok = withTimeoutOrNull(20_000) { PersonalStore.read { BackupData.replaceAll(it, snap, BACKED_UP_SETTINGS); true } } == true
+            // Never later and unseen: if the data does not open in time, nothing is replaced.
+            // A streamed copy is read again from the file and checked once more while it goes in;
+            // anything different from what the owner saw changes nothing
+            val ok = try {
+                withTimeoutOrNull(120_000) {
+                    PersonalStore.read { db ->
+                        when (snap) {
+                            is Opened.Piece -> BackupData.replaceAll(db, snap.snap, BACKED_UP_SETTINGS)
+                            is Opened.Stream -> readCopy(app, snap.uri, snap.key) { BackupLines.restore(db, it, BACKED_UP_SETTINGS, snap.summary) }
+                        }
+                        true
+                    }
+                } == true
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
+            } catch (e: Throwable) {
+                false
+            } finally {
+                snap.wipe()
+            }
             if (!ok) return@job R.string.backup_restore_failed
             // The look and set-up too, so nothing has to be set up again on a new phone
             // The data is back even if the look could not be set: never report that as a failure
@@ -258,12 +331,14 @@ object BackupJobs {
                 snap.home["lock_mine"] == "true" && PersonalStore.lockMode(app)?.locked != true -> R.string.backup_restored_lock
                 // A tourniquet reminder that cannot sound must not look switched on
                 notifyOff -> R.string.backup_restored_notify
+                // Made by a newer Sprotyv: what this version knows is back, the rest waits for an update
+                snap.skipped > 0 -> R.string.backup_restored_partly
                 else -> R.string.backup_restored
             }
         }
     }
 
-    fun cancelRestore() { _pending.value = null }
+    fun cancelRestore() { setPending(null) }
 
     /** The chosen copy, kept while the screen is drawn again (the data reopening after the picker, a lock). */
     val openUri = MutableStateFlow<Uri?>(null)
@@ -289,7 +364,7 @@ object BackupJobs {
     fun forget() {
         openUri.value = null
         generation++
-        _pending.value = null
+        setPending(null)
         password?.fill(' ')
         password = null
         suggested.value = null
@@ -354,6 +429,27 @@ private fun readLimited(context: Context, uri: Uri): ByteArray {
         return out.toByteArray()
     }
 }
+
+/** The first [n] bytes of a file, or fewer if it is shorter. */
+private fun readUpTo(input: java.io.InputStream, n: Int): ByteArray {
+    val out = ByteArray(n)
+    var got = 0
+    while (got < n) {
+        val r = input.read(out, got, n - got)
+        if (r < 0) break
+        got += r
+    }
+    return out.copyOf(got)
+}
+
+/** Opens a streamed copy with [key] and hands its content, read in parts, to [block]. */
+private suspend fun <T> readCopy(context: Context, uri: Uri, key: BackupStream.Key, block: suspend (java.io.Reader) -> T): T =
+    withContext(Dispatchers.IO) {
+        (context.contentResolver.openInputStream(uri) ?: throw BackupCrypto.NotABackup()).use { input ->
+            if (!BackupStream.readHeader(input).contentEquals(key.header)) throw BackupCrypto.NotABackup()
+            java.io.InputStreamReader(BackupStream.reader(input, key), Charsets.UTF_8).use { block(it) }
+        }
+    }
 
 /** A password field: hidden, no suggestions, no learning by the keyboard. */
 @Composable
@@ -509,7 +605,8 @@ fun BackupScreen() {
             title = { Text(stringResource(R.string.backup_replace_title)) },
             text = {
                 Text(
-                    stringResource(R.string.backup_replace_text, date, snap.people.size, snap.records) +
+                    stringResource(R.string.backup_replace_text, date, snap.people, snap.records) +
+                        (if (snap.skipped > 0) " " + stringResource(R.string.backup_replace_skipped) else "") +
                         (if (snap.home.isNotEmpty()) " " + stringResource(R.string.backup_replace_home) else "") +
                         " " + stringResource(R.string.backup_replace_notes, snap.notes.size),
                 )
