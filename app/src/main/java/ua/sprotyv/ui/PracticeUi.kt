@@ -89,11 +89,18 @@ fun PracticeScreen(content: Content?, cardId: String, nav: Nav, check: String? =
                 return@Frame
             }
             if (kid) {
+                // Finishing is what counts, not being right: a sticker for every situation played through
+                val ctx = androidx.compose.ui.platform.LocalContext.current
+                androidx.compose.runtime.LaunchedEffect(cardId) { KidStickers.add(ctx, cardId) }
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Sunny(96.dp, happy = true)
                     Spacer(Modifier.width(16.dp))
-                    Text(stringResource(R.string.kid_well_done), style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.SemiBold)
+                    Column {
+                        Text(stringResource(R.string.kid_well_done), style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.SemiBold)
+                        Text(stringResource(R.string.kid_sticker_got), style = MaterialTheme.typography.titleMedium)
+                    }
                 }
+                Text(stringResource(R.string.kid_show_grown_up), style = MaterialTheme.typography.bodyLarge)
             } else {
                 Text(
                     stringResource(R.string.practice_done),
