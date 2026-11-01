@@ -23,7 +23,7 @@ object HomePrefs {
         /** The call bar at the bottom; off, a phone button sits in the corner instead. */
         val callBar: Boolean = true,
         /** Screenshots of the owner's screens allowed (off by default; the owner's choice, kept until changed). */
-        val screenshots: Boolean = false,
+        val screenshots: Boolean = true,
         /** The readiness shares last seen in "Mine" ("2/4,1/2,…"), shown on the full home screen; no records. */
         val readiness: String = "",
         val readinessHidden: Boolean = false,
@@ -71,7 +71,7 @@ object HomePrefs {
             theme = ThemeChoice.entries.firstOrNull { it.name == p.getString(THEME, null) } ?: ThemeChoice.SYSTEM,
             dynamic = p.getBoolean(DYNAMIC, false),
             callBar = p.getBoolean(CALL_BAR, true),
-            screenshots = p.getBoolean(SCREENSHOTS, false),
+            screenshots = p.getBoolean(SCREENSHOTS, true),
             readiness = p.getString(READINESS, null).orEmpty().take(100),
             readinessHidden = p.getBoolean(READINESS_HIDDEN, false),
             path = p.getString(PATH, null).orEmpty().take(40),
