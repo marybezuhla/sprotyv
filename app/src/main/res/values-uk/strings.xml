@@ -1240,4 +1240,13 @@
     <string name="shield_earned">здобуто</string>
     <string name="shield_half">половина</string>
     <string name="shield_not_yet">ще попереду</string>
+    <string name="experience_new">Записати досвід: знадобилося в житті</string>
+    <string name="experience_title">Мій досвід</string>
+    <string name="experience_what">Що сталося:</string>
+    <string name="experience_helped">Що допомогло:</string>
+    <string name="experience_next">Наступного разу:</string>
+    <string name="shields_life">Знадобилося</string>
+    <string name="shield_life">Знання допомогли в житті</string>
+    <string name="shield_how_life">Запишіть досвід у нотатках</string>
+    <string name="experience_support">Якщо згадувати важко — де знайти підтримку</string>
 </resources>

@@ -64,6 +64,8 @@ fun ShieldsScreen(nav: Nav) {
     val path by remember { PersonalStore.observe { db -> db.settings().observe(KEY_PATH).map { listOf(it) } } }.collectAsStateWithLifecycle(null)
     val roles = rememberRoles() ?: return Loading()
     val prefs = HomePrefs.state.collectAsStateWithLifecycle().value ?: return Loading()
+    val notes by remember { PersonalStore.observe { db -> db.notes().observe() } }.collectAsStateWithLifecycle(null)
+    val context = androidx.compose.ui.platform.LocalContext.current
     val h = habits ?: return Loading()
     val p = path ?: return Loading()
     val groups = listOf(
@@ -71,6 +73,8 @@ fun ShieldsScreen(nav: Nav) {
         R.string.shields_path to pathShields(p.first(), roles).filter { it.id.startsWith("path:") },
         R.string.shields_tests to pathShields(p.first(), roles).filter { it.id.startsWith("test:") },
         R.string.shields_ready to readinessShields(prefs.readiness),
+        // The rarest one: the knowledge was needed in life, and written down
+        R.string.shields_life to listOf(ShieldItem("life", R.string.shield_life, R.string.shield_how_life, Group.FIRST_AID, R.drawable.ocha_help, if (notes?.let { experienceWritten(it, context) } == true) 2 else 0)),
     )
     val earned = groups.sumOf { (_, l) -> l.count { it.level == 2 } }
     val all = groups.sumOf { (_, l) -> l.size }
