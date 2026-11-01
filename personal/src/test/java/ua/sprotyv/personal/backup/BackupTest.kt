@@ -2,6 +2,7 @@ package ua.sprotyv.personal.backup
 
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import ua.sprotyv.personal.FamilyPlan
@@ -125,6 +126,8 @@ class BackupTest {
         assertTrue(BackupData.shallow(BackupData.encode(snapshot)))
         // Brackets inside text do not count
         assertTrue(BackupData.shallow("{\"a\":\"[[[[[[[[[[\\\"[[[[\"}".toByteArray()))
+        // Millions of empty objects: refused before parsing, so memory stays small
+        assertFalse(BackupData.shallow(("[" + "{},".repeat(300_000) + "{}]").toByteArray()))
     }
 
     @Test fun duplicatesAndWrongShapesAreRefused() {
