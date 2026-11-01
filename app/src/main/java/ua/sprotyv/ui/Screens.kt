@@ -221,7 +221,7 @@ fun ScreenshotsMark() {
     if (!allowed || SecureScreens.open.intValue <= 0) return
     var asking by remember { androidx.compose.runtime.mutableStateOf(false) }
     IconButton(onClick = { asking = true }, modifier = Modifier.heightIn(min = 48.dp)) {
-        Icon(androidx.compose.ui.graphics.vector.ImageVector.vectorResource(R.drawable.ic_camera_on), contentDescription = stringResource(R.string.screenshots_banner), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+        Icon(androidx.compose.ui.res.painterResource(R.drawable.ic_camera_on), contentDescription = stringResource(R.string.screenshots_banner), tint = MaterialTheme.colorScheme.onSurfaceVariant)
     }
     if (asking) {
         androidx.compose.material3.AlertDialog(
