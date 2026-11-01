@@ -67,6 +67,7 @@ private val Link.groupTitle: Int get() = when (group) {
     "health" -> R.string.dir_health
     "care" -> R.string.dir_care
     Link.POWER -> R.string.power_title
+    Link.MAPS -> R.string.situation_maps
     else -> R.string.situation_facts
 }
 

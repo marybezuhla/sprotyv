@@ -1267,6 +1267,44 @@
   "flags": []
  },
  {
+  "id": "comaps",
+  "group": "maps",
+  "kind": "volunteer",
+  "title": "CoMaps",
+  "note": "Мапи вулиць, маршрути й пошук без інтернету. Громадський неприбутковий проєкт, відгалуження Organic Maps; без реклами й стеження.",
+  "url": "https://www.comaps.app",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
+  "id": "organicmaps",
+  "group": "maps",
+  "kind": "independent",
+  "title": "Organic Maps",
+  "note": "Мапи вулиць і маршрути без інтернету, без реклами. Через суперечки щодо керування проєктом частина розробників створила CoMaps.",
+  "url": "https://organicmaps.app",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
+  "id": "osmand",
+  "group": "maps",
+  "kind": "independent",
+  "title": "OsmAnd",
+  "note": "Найбільше можливостей: мапи без інтернету, рельєф, стежки, маршрути. Частина функцій платна.",
+  "url": "https://osmand.net",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": [
+   "paid"
+  ]
+ },
+ {
   "id": "cpd",
   "group": "facts",
   "kind": "official",

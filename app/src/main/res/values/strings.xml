@@ -1288,6 +1288,10 @@
     <string name="map_title">Offline map</string>
     <string name="map_hint">All Ukraine, always with you</string>
     <string name="map_missing">The map is not in this build of the app.</string>
+    <string name="map_press">Press and hold a point on the map to open it in a map app with streets.</string>
+    <string name="map_open_in">Open in a map app</string>
+    <string name="map_apps_intro">Streets, paths and routes with no internet: download the maps in the app beforehand.</string>
+    <string name="situation_maps">Detailed maps without internet</string>
     <string name="map_note">The overview of Ukraine is built into the app, like the Constitution: towns and villages, main roads, railways, rivers. Sprotyv downloads nothing and does not know where you are.</string>
     <string name="map_osm">Map data © OpenStreetMap contributors (ODbL). The map is a reference, not a signal: act on alerts.</string>
 </resources>
