@@ -36,6 +36,8 @@ object BackupStream {
     /** The key for one file, held only while it is written or until a restore is confirmed or dropped. */
     class Key internal constructor(internal val header: ByteArray, internal val ikm: ByteArray) {
         fun wipe() = ikm.fill(0)
+        /** True when [h] is the header this key was made for. */
+        fun matches(h: ByteArray): Boolean = h.contentEquals(header)
     }
 
     /** True when the first bytes are those of a streamed copy; older copies are one piece ([BackupCrypto]). */

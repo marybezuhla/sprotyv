@@ -97,10 +97,10 @@ object BackupJobs {
      * summary and key here (the data is read again from the file on "yes"); an older one-piece
      * copy keeps its decrypted data. Both only in memory, and only until yes or no.
      */
-    sealed class Opened(val created: Long, val people: Int, val records: Int, val skipped: Int, val home: Map<String, String>) {
-        class Piece(val snap: BackupData.Snapshot) : Opened(snap.created, snap.people.size, snap.records, 0, snap.home)
+    sealed class Opened(val created: Long, val people: Int, val notes: Int, val records: Int, val skipped: Int, val home: Map<String, String>) {
+        class Piece(val snap: BackupData.Snapshot) : Opened(snap.created, snap.people.size, snap.notes.size, snap.records, 0, snap.home)
         class Stream(val uri: Uri, val key: BackupStream.Key, val summary: BackupLines.Summary) :
-            Opened(summary.created, summary.people, summary.records, summary.skipped, summary.home)
+            Opened(summary.created, summary.people, summary.notes, summary.records, summary.skipped, summary.home)
 
         fun wipe() { if (this is Stream) key.wipe() }
     }
@@ -193,7 +193,7 @@ object BackupJobs {
                 val read = java.security.MessageDigest.getInstance("SHA-256")
                 val back = app.contentResolver.openInputStream(uri) ?: return@job removeNew(app, uri, R.string.backup_failed)
                 val ok = back.use { input ->
-                    if (!BackupStream.readHeader(input).contentEquals(k.header)) return@use false
+                    if (!k.matches(BackupStream.readHeader(input))) return@use false
                     val summary = java.io.InputStreamReader(java.security.DigestInputStream(BackupStream.reader(input, k), read), Charsets.UTF_8).use { r ->
                         BackupLines.read(r) { }
                     }
@@ -446,7 +446,7 @@ private fun readUpTo(input: java.io.InputStream, n: Int): ByteArray {
 private suspend fun <T> readCopy(context: Context, uri: Uri, key: BackupStream.Key, block: suspend (java.io.Reader) -> T): T =
     withContext(Dispatchers.IO) {
         (context.contentResolver.openInputStream(uri) ?: throw BackupCrypto.NotABackup()).use { input ->
-            if (!BackupStream.readHeader(input).contentEquals(key.header)) throw BackupCrypto.NotABackup()
+            if (!key.matches(BackupStream.readHeader(input))) throw BackupCrypto.NotABackup()
             java.io.InputStreamReader(BackupStream.reader(input, key), Charsets.UTF_8).use { block(it) }
         }
     }
@@ -608,7 +608,7 @@ fun BackupScreen() {
                     stringResource(R.string.backup_replace_text, date, snap.people, snap.records) +
                         (if (snap.skipped > 0) " " + stringResource(R.string.backup_replace_skipped) else "") +
                         (if (snap.home.isNotEmpty()) " " + stringResource(R.string.backup_replace_home) else "") +
-                        " " + stringResource(R.string.backup_replace_notes, snap.notes.size),
+                        " " + stringResource(R.string.backup_replace_notes, snap.notes),
                 )
             },
             confirmButton = {

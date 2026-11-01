@@ -27,6 +27,7 @@ object BackupLines {
     data class Summary(
         val created: Long,
         val people: Int,
+        val notes: Int,
         val records: Int,
         /** Records of kinds this version does not know: left out, and the owner is told. */
         val skipped: Int,
@@ -97,7 +98,7 @@ object BackupLines {
             }
             if (record != null) each(record)
         }
-        return Summary(created, people.size, count - skipped - homeSeen, skipped, home)
+        return Summary(created, people.size, notes.size, count - skipped - homeSeen, skipped, home)
     }
 
     /**
