@@ -213,14 +213,14 @@ val ROLES: Map<String, Role> = listOf(
         factsTitle = R.string.role_student_facts_title,
         facts = listOf(R.string.role_student_1, R.string.role_student_2, R.string.role_student_3, R.string.role_student_4),
         source = R.string.role_student_source,
-        links = listOf("#mon", "#nszu", "#dcz-voucher"),
+        links = listOf("#mon", "#nszu", "#dcz-voucher", "#plast"),
     ),
     Role(
         "abroad", Circle.VOICE, R.string.role_abroad, R.string.role_abroad_hint, R.string.role_abroad_affirm,
         factsTitle = R.string.role_abroad_facts_title,
         facts = listOf(R.string.role_abroad_1, R.string.role_abroad_2, R.string.role_abroad_3, R.string.role_abroad_4, R.string.role_abroad_5, R.string.role_abroad_6),
         source = R.string.role_abroad_source,
-        links = listOf("#united24", "#mfa-queue", "#msp-abroad", "#mon-abroad", "#mfa"),
+        links = listOf("#united24", "#mfa-queue", "#msp-abroad", "#mon-abroad", "#mfa", "#plast"),
     ),
     Role(
         "frontline", Circle.SITUATION, R.string.role_frontline, R.string.role_frontline_hint, R.string.role_frontline_affirm,

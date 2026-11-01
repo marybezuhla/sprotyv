@@ -491,6 +491,9 @@ LINKS = [
     link("diia-licence", "roles", "official", "Дія: обмін посвідчення водія",
          "Як обміняти чи відновити посвідчення онлайн; перше посвідчення онлайн не видають.",
          url="https://guide.diia.gov.ua/view/obmin-posvidchennia-vodiia-na-pravo-keruvannia-transportnymy-zasobamy-bez-skladannia-ispytiv-eec56a80-133a-4c96-857f-2de36b93f202"),
+    link("plast", "kids", "ngo", "Пласт — Національна скаутська організація України",
+         "Скаутські гуртки для дітей від 6 років, підлітків і молоді: табори, вміння в природі, перша допомога, служба громаді. Осередки в містах України й за кордоном.",
+         url="https://plast.org.ua"),
     # Fakes
     link("cpd", "facts", "official", "Центр протидії дезінформації",
          "Спростування фейків і попередження про ворожі канали та боти.",
