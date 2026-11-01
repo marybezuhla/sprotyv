@@ -1,8 +1,8 @@
 name: Build maps
 
-# Builds the offline maps from OpenStreetMap: a light overview of all Ukraine (built into the app)
-# and a detailed map per oblast (opened by the owner from a file). Run by hand, or by pushing the
-# maps-build branch. Publishes them as a release with their SHA-256 sums. No app code runs here.
+# Builds the light overview map of all Ukraine from OpenStreetMap (built into the app at build
+# time, checked against maps.lock). Run by hand, or by pushing the maps-build branch. Publishes it
+# as a release with its SHA-256 sum. No app code runs here.
 on:
   workflow_dispatch:
   push:
@@ -14,7 +14,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 340
+    timeout-minutes: 90
     env:
       # Read by every Java start, whatever the launcher script does (the JVM says "Picked up" in the log)
       JAVA_TOOL_OPTIONS: -Xmx13g
@@ -59,16 +59,6 @@ jobs:
           osmium fileinfo -e ukraine.osm.pbf | grep -E "Timestamp|Number of" | head -8 || true
           ls -la
 
-      - name: Oblasts (their boundaries from the data itself)
-        shell: bash
-        run: |
-          set -euo pipefail
-          cd work
-          osmium tags-filter ukraine.osm.pbf r/boundary=administrative -o adm.osm.pbf
-          osmium export adm.osm.pbf --geometry-types=polygon -f geojsonseq -o adm.geojsonseq
-          python3 ../scripts/maps/oblasts.py adm.geojsonseq extracts.json oblasts.json
-          cat oblasts.json | head -80
-
       - name: Overview of all Ukraine (built into the app)
         shell: bash
         run: |
@@ -86,29 +76,6 @@ jobs:
             preferred-languages=uk,en zoom-interval-conf=5,0,7,9,8,11 simplification-factor=5
           ls -la out
 
-      - name: Detailed maps, one per oblast
-        shell: bash
-        run: |
-          set -euo pipefail
-          cd work
-          mkdir -p out obl
-          free -h
-          # One oblast at a time: a pass over the data each, so the memory stays small
-          # The writer gets the oblast's box itself (lat,lon order): left to guess it from the data, one
-          # far-away point makes the box, and the tiles kept in memory, enormous
-          python3 -c 'import json;[print(e["output"][:-8], ",".join(map(str,e["bbox"])), ",".join(map(str,[e["bbox"][1],e["bbox"][0],e["bbox"][3],e["bbox"][2]]))) for e in json.load(open("extracts.json"))["extracts"]]' |
-          while read -r id box wbox; do
-            osmium extract -b "$box" -o "obl/$id.osm.pbf" --overwrite ukraine.osm.pbf
-            osmosis -q --rbf file="obl/$id.osm.pbf" --mapfile-writer file="out/$id.map" type=hd threads=2 preferred-languages=uk,en bbox="$wbox" \
-              || { echo "FAILED $id"; rm -f "out/$id.map"; echo "$id" >> failed.txt; }
-            rm "obl/$id.osm.pbf"
-            ls -la "out/$id.map" || true
-            # Three failures in a row mean the settings are wrong: stop rather than spend hours
-            if [ "$(wc -l < failed.txt 2>/dev/null || echo 0)" -ge 3 ] && [ ! -e "out/$id.map" ]; then echo "Stopping early"; break; fi
-          done
-          # Every oblast or none: a missing one stops the release
-          if [ -s failed.txt ]; then echo "Failed: $(cat failed.txt)"; exit 1; fi
-
       - name: Sums and sizes
         if: always()
         shell: bash
@@ -116,7 +83,6 @@ jobs:
           set -euo pipefail
           cd work/out
           sha256sum *.map > SHA256SUMS || true
-          cp ../oblasts.json . || true
           du -h *.map | sort -h
           du -ch *.map | tail -1
 
@@ -145,4 +111,4 @@ jobs:
           set -euo pipefail
           tag="maps-$(date -u +%Y%m%d)-${{ github.run_number }}"
           gh release create "$tag" out/* --repo "${{ github.repository }}" --title "Мапи $(date -u +%d.%m.%Y)" \
-            --notes "Офлайн-мапи з OpenStreetMap (© учасники OpenStreetMap, ODbL). overview.map вшивається в застосунок; файли областей відкриваються в «Спротиві». Суми SHA-256 — у SHA256SUMS." --prerelease
+            --notes "Офлайн-мапи з OpenStreetMap (© учасники OpenStreetMap, ODbL). Оглядова мапа України, вшивається в застосунок. Суми SHA-256 — у SHA256SUMS." --prerelease
