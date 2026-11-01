@@ -103,6 +103,11 @@ fun MineHub(nav: Nav, content: ua.sprotyv.content.Content?) {
     Block(stringResource(R.string.mine_block_now), ua.sprotyv.home.Group.FIRST_AID, padded = false) {
         BlockRow(stringResource(R.string.tile_safe), stringResource(R.string.tile_safe_hint), first = true) { nav.go(Route.Open(Section.SAFE)) }
     }
+    // Who I am now and what is already done: found right here, not only from "My path"
+    Block(stringResource(R.string.mine_block_me), ua.sprotyv.home.Group.PREPARE, tint = resist(), padded = false) {
+        BlockRow(stringResource(R.string.roles_title), stringResource(R.string.roles_hint), first = true) { nav.go(Route.Mine(MinePart.ROLES)) }
+        BlockRow(stringResource(R.string.shields_title), stringResource(R.string.shields_hint)) { nav.go(Route.Mine(MinePart.SHIELDS)) }
+    }
     // Notes on their own, on a light "paper" plate, with the pinned and newest ones visible
     NotesPlate(nav)
     ReadinessBlock(content, nav)

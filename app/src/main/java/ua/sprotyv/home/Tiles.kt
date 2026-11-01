@@ -82,6 +82,7 @@ enum class Preset(val pins: List<String>) {
         listOf(
             Tiles.card("air-alert"), Tiles.card("bleeding"), Tiles.tool(Tool.SITUATION), Tiles.card("blackout"),
             Tiles.tool(Tool.MEDICAL), Tiles.card("first-60"), Tiles.tool(Tool.KIT), Tiles.tool(Tool.SUPPLIES), Tiles.tool(Tool.GUIDE),
+            Tiles.tool(Tool.MAP),
         ),
     ),
     ELDER(
@@ -100,7 +101,7 @@ enum class Preset(val pins: List<String>) {
         listOf(
             Tiles.card("air-alert"), Tiles.tool(Tool.SITUATION), Tiles.card("drone"), Tiles.card("bleeding"), Tiles.card("leave-home"),
             Tiles.card("ballistic"), Tiles.card("suspicious"), Tiles.card("rubble"), Tiles.tool(Tool.KIT),
-            Tiles.tool(Tool.PLAN),
+            Tiles.tool(Tool.PLAN), Tiles.tool(Tool.MAP),
         ),
     ),
     WINTER(
