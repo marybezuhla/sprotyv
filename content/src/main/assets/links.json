@@ -1893,6 +1893,78 @@
   "flags": []
  },
  {
+  "id": "pdr",
+  "group": "roles",
+  "kind": "official",
+  "title": "Правила дорожнього руху",
+  "note": "Чинний текст постанови Кабміну № 1306 на сайті Верховної Ради.",
+  "url": "https://zakon.rada.gov.ua/laws/show/1306-2001-%D0%BF",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
+  "id": "hsc-tests",
+  "group": "roles",
+  "kind": "official",
+  "title": "Питання й іспит з ПДР",
+  "note": "Головний сервісний центр МВС: офіційні екзаменаційні питання й відповіді, безкоштовно й без реєстрації.",
+  "url": "https://hsc.gov.ua/index/poslugi/vidacha-posvidchennya-vodiya/pitannya-ta-ispit-z-pdr/",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
+  "id": "hsc-licence",
+  "group": "roles",
+  "kind": "official",
+  "title": "Як отримати перше посвідчення водія",
+  "note": "Головний сервісний центр МВС: кроки від медичної довідки до практичного іспиту.",
+  "url": "https://hsc.gov.ua/2026/08/27/ispiti-na-pravo-keruvannya-skladayut-lishe-v-servisnih-tsentrah-mvs-yak-otrimati-pershe-posvidchennya-vodiya/",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
+  "id": "hsc-schools",
+  "group": "roles",
+  "kind": "official",
+  "title": "Перелік акредитованих автошкіл",
+  "note": "Головний сервісний центр МВС: автошколи за областями з номерами сертифікатів.",
+  "url": "https://hsc.gov.ua/index/poslugi/vidacha-posvidchennya-vodiya/perelik-avtoshkil/",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
+  "id": "hsc-queue",
+  "group": "roles",
+  "kind": "official",
+  "title": "Запис на іспит у сервісний центр МВС",
+  "note": "Електронна черга: обрати сервісний центр, дату й час.",
+  "url": "https://eqn.hsc.gov.ua",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
+  "id": "diia-licence",
+  "group": "roles",
+  "kind": "official",
+  "title": "Дія: обмін посвідчення водія",
+  "note": "Як обміняти чи відновити посвідчення онлайн; перше посвідчення онлайн не видають.",
+  "url": "https://guide.diia.gov.ua/view/obmin-posvidchennia-vodiia-na-pravo-keruvannia-transportnymy-zasobamy-bez-skladannia-ispytiv-eec56a80-133a-4c96-857f-2de36b93f202",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
   "id": "cpd",
   "group": "facts",
   "kind": "official",
