@@ -1881,6 +1881,18 @@
   "flags": []
  },
  {
+  "id": "emalyatko",
+  "group": "kids",
+  "kind": "official",
+  "title": "єМалятко в Дії",
+  "note": "Реєстрація народження й до дев’яти послуг однією заявою: у Дії, ЦНАПі, РАЦСі чи в пологовому.",
+  "url": "https://diia.gov.ua/services/yemalyatko",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
   "id": "cpd",
   "group": "facts",
   "kind": "official",

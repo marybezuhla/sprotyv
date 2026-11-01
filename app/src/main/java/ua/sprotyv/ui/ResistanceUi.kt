@@ -239,9 +239,17 @@ fun PathScreen(nav: Nav) {
     // This week's step: the first one not done yet, in the order of the path. One at a time, calmly
     var justDone by androidx.compose.runtime.saveable.rememberSaveable { androidx.compose.runtime.mutableStateOf<String?>(null) }
     val next = path.firstOrNull { it.key !in done }
+    // How much strength now: little asks nothing this week (the step stays one tap away); plenty shows one more
+    val strength = rememberStrength() ?: "normal"
+    var showAnyway by androidx.compose.runtime.saveable.rememberSaveable { androidx.compose.runtime.mutableStateOf(false) }
+    val then = if (strength == "high") path.filter { it.key !in done }.getOrNull(1) else null
     Block(stringResource(R.string.path_week_title), Group.PREPARE, tint = resist()) {
         justDone?.let { Text(stringResource(R.string.path_week_well_done), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold) }
-        if (next == null) {
+        if (next != null && strength == "low" && !showAnyway) {
+            Text(stringResource(R.string.path_week_low), style = MaterialTheme.typography.bodyLarge)
+            BlockRow(stringResource(R.string.gart_title), stringResource(R.string.gart_hint)) { nav.go(Route.Mine(MinePart.GART)) }
+            androidx.compose.material3.TextButton(onClick = { showAnyway = true }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.path_week_show_anyway)) }
+        } else if (next == null) {
             Text(stringResource(R.string.path_week_all), style = MaterialTheme.typography.bodyLarge)
         } else {
             Text(stringResource(next.words), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
@@ -252,6 +260,10 @@ fun PathScreen(nav: Nav) {
                 next.learn?.let { r -> androidx.compose.material3.OutlinedButton(onClick = { nav.go(r) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.path_learn)) } }
             }
             Text(stringResource(R.string.path_week_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            then?.let { t ->
+                Text(stringResource(R.string.path_week_more), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(t.words), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+            }
         }
     }
     Block(

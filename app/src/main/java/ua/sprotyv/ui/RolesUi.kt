@@ -30,9 +30,20 @@ import ua.sprotyv.personal.PersonalStore
 import ua.sprotyv.personal.Setting
 
 const val KEY_ROLES = "roles"
+/** "How much strength now": low, normal or high; kept encrypted in "Mine", like the roles. */
+const val KEY_STRENGTH = "strength"
+val STRENGTHS = listOf("low", "normal", "high")
+
+/** The strength chosen; "normal" when none was chosen or anything odd is stored. */
+@Composable
+fun rememberStrength(): String? {
+    val stored by remember { PersonalStore.observe { db -> db.settings().observe(KEY_STRENGTH).map { listOf(it) } } }.collectAsStateWithLifecycle(null)
+    val v = (stored ?: return null).first()
+    return v?.takeIf { it in STRENGTHS } ?: "normal"
+}
 
 /** The circles a role belongs to: how a person holds on and helps in a long war. */
-enum class Circle(val title: Int) { CARE(R.string.circle_care), DEFENCE(R.string.circle_defence), HELP(R.string.circle_help), WORK(R.string.circle_work), VOICE(R.string.circle_voice) }
+enum class Circle(val title: Int) { CARE(R.string.circle_care), DEFENCE(R.string.circle_defence), HELP(R.string.circle_help), WORK(R.string.circle_work), VOICE(R.string.circle_voice), SITUATION(R.string.circle_situation) }
 
 /**
  * One role: not a label but a person's place, and the next step from there. [facts] are short
@@ -212,6 +223,41 @@ val ROLES: Map<String, Role> = listOf(
         links = listOf("#united24", "#mfa-queue", "#msp-abroad", "#mon-abroad", "#mfa"),
     ),
     Role(
+        "frontline", Circle.SITUATION, R.string.role_frontline, R.string.role_frontline_hint, R.string.role_frontline_affirm,
+        factsTitle = R.string.role_frontline_facts_title,
+        facts = listOf(R.string.role_frontline_1, R.string.role_frontline_2, R.string.role_frontline_3, R.string.role_frontline_4),
+        source = R.string.role_frontline_source,
+        links = listOf("#evacuation", "evac"),
+    ),
+    Role(
+        "baby", Circle.SITUATION, R.string.role_baby, R.string.role_baby_hint, R.string.role_baby_affirm,
+        factsTitle = R.string.role_baby_facts_title,
+        facts = listOf(R.string.role_baby_1, R.string.role_baby_2, R.string.role_baby_3),
+        source = R.string.role_baby_source,
+        links = listOf("#emalyatko", "#nszu", "#unicef-parents"),
+    ),
+    Role(
+        "disability", Circle.SITUATION, R.string.role_disability, R.string.role_disability_hint, R.string.role_disability_affirm,
+        factsTitle = R.string.role_disability_facts_title,
+        facts = listOf(R.string.role_disability_1, R.string.role_disability_2),
+        source = R.string.role_disability_source,
+        links = listOf("#barrier-free", "#msp-eservices", "#legal-aid"),
+    ),
+    Role(
+        "elder", Circle.SITUATION, R.string.role_elder, R.string.role_elder_hint, R.string.role_elder_affirm,
+        factsTitle = R.string.role_elder_facts_title,
+        facts = listOf(R.string.role_elder_1, R.string.role_elder_2, R.string.role_elder_3),
+        source = R.string.role_elder_source,
+        links = listOf("#pfu-line", "#pfu-portal", "#shid-sos", "#elegant-course"),
+    ),
+    Role(
+        "loss", Circle.SITUATION, R.string.role_loss, R.string.role_loss_hint, R.string.role_loss_affirm,
+        factsTitle = R.string.role_loss_facts_title,
+        facts = listOf(R.string.role_loss_1, R.string.role_loss_2),
+        source = R.string.role_loss_source,
+        links = listOf("#howareu", "#nszu", "mind"),
+    ),
+    Role(
         ROLE_MEDIC, Circle.WORK, R.string.role_medic, R.string.role_medic_hint, R.string.role_medic_affirm,
         links = listOf("health"),
         pathLevel = PATH_LEVEL_MEDIC,
@@ -258,6 +304,21 @@ fun RolesScreen(nav: Nav) {
         }
     }
     Text(stringResource(R.string.roles_intro), style = MaterialTheme.typography.bodyLarge)
+    // How much strength now: the path asks less when there is little
+    val strength = rememberStrength() ?: return Loading()
+    Block(stringResource(R.string.strength_title), Group.PREPARE, tint = resist()) {
+        Row(horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)) {
+            listOf("low" to R.string.strength_low, "normal" to R.string.strength_normal, "high" to R.string.strength_high).forEach { (k, label) ->
+                androidx.compose.material3.FilterChip(
+                    selected = strength == k,
+                    onClick = { PersonalStore.save("setting:$KEY_STRENGTH") { db -> db.settings().put(Setting(KEY_STRENGTH, k)) } },
+                    label = { ChipText(stringResource(label)) },
+                    modifier = Modifier.heightIn(min = 48.dp),
+                )
+            }
+        }
+        Text(stringResource(R.string.strength_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
     // The roles picked first, each one tap from its page
     val mine = ROLES.values.filter { it.id in picked }
     if (mine.isNotEmpty()) {
@@ -269,6 +330,8 @@ fun RolesScreen(nav: Nav) {
         val roles = ROLES.values.filter { it.circle == circle }
         if (roles.isEmpty()) return@forEach
         val got = roles.count { it.id in picked }
+        // Circumstances are not chosen like roles: said so, gently, before them
+        if (circle == Circle.SITUATION) Text(stringResource(R.string.roles_situation_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Block(stringResource(circle.title), Group.PREPARE, tint = resist(), padded = false, foldable = true, startOpen = got > 0 || mine.isEmpty(),
             trailing = { if (got > 0) Text(stringResource(R.string.ready_count, got, roles.size), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold) }) {
             roles.forEachIndexed { i, r ->

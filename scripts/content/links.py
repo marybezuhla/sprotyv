@@ -469,6 +469,9 @@ LINKS = [
     link("mon-abroad", "roles", "official", "МОН: українська школа з будь-якої точки світу",
          "Формати навчання в українській школі для дітей за кордоном.",
          url="https://mon.gov.ua/news/ukrainska-shkola-z-bud-iakoi-tochky-svitu-dostupni-formaty-ta-roziasnennia-vid-mon"),
+    link("emalyatko", "kids", "official", "єМалятко в Дії",
+         "Реєстрація народження й до дев’яти послуг однією заявою: у Дії, ЦНАПі, РАЦСі чи в пологовому.",
+         url="https://diia.gov.ua/services/yemalyatko"),
     # Fakes
     link("cpd", "facts", "official", "Центр протидії дезінформації",
          "Спростування фейків і попередження про ворожі канали та боти.",
