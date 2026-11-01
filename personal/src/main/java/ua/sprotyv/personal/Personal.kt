@@ -155,6 +155,14 @@ object PersonalStore {
         }
     }
 
+    /**
+     * Tests only: the screens drawn with a made-up, in-memory database (the demo person), so they
+     * can be checked by eye. Never called by the app; the real data is opened only by [open].
+     */
+    fun showForTest(db: PersonalDb) {
+        _state.value = Opened.Ready(db, softwareKey = false)
+    }
+
     fun close() {
         scope.launch {
             mutex.withLock {
