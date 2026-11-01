@@ -145,7 +145,8 @@ jobs:
           unzip -o -q "$APK" 'classes*.dex' -d dex
           ls dex/classes*.dex >/dev/null || { echo "::error::No code found in the APK"; exit 1; }
           # Class names of the library's online parts, and Java's URL connections from any library
-          if cat dex/classes*.dex | grep -a -q -E 'Lorg/mapsforge/map/layer/download/|Lorg/mapsforge/map/layer/download/tilesource/|Ljava/net/HttpURLConnection;'; then
+          # grep reads the files itself: a pipe from cat would be cut short and pass by mistake
+          if grep -a -q -E 'Lorg/mapsforge/map/layer/download/|Ljava/net/HttpURLConnection;|Ljava/net/URLConnection;|Ljava/net/Socket;|Ljava/net/DatagramSocket;|Ljavax/net/ssl/|Landroid/net/http/' dex/classes*.dex; then
             echo "::error::Network classes found in the APK"; exit 1
           fi
           echo "No network classes in the APK"
