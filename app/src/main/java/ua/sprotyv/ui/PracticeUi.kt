@@ -70,6 +70,8 @@ fun PracticeScreen(content: Content?, cardId: String, nav: Nav, check: String? =
         var rightCount by rememberSaveable(cardId) { mutableIntStateOf(0) }
 
         if (index >= list.size) {
+            // A theme answered without a mistake: its shield in "My shields"
+            if (topic != null && rightCount == list.size) androidx.compose.runtime.LaunchedEffect(topic.id) { Steps.change { s -> s.copy(topics = s.topics + topic.id) } }
             if (check != null) {
                 val all = rightCount == list.size
                 if (all) androidx.compose.runtime.LaunchedEffect(check) { markPathTested(check) }
@@ -135,7 +137,7 @@ fun PracticeScreen(content: Content?, cardId: String, nav: Nav, check: String? =
                 else -> ""
             }
             OutlinedButton(
-                onClick = { if (!answered) { chosen = i; if (o.right) rightCount++ } },
+                onClick = { if (!answered) { chosen = i; if (o.right) { rightCount++; Steps.change { s -> s.copy(solved = (s.solved + p.id).take(300).toSet()) } } } },
                 colors = ButtonDefaults.outlinedButtonColors(
                     containerColor = if (answered && o.right) doneTint().container else MaterialTheme.colorScheme.surface,
                     contentColor = MaterialTheme.colorScheme.onSurface,
@@ -208,3 +210,7 @@ private fun PracticeChoice(content: Content?, nav: Nav) {
         Text(stringResource(R.string.practice_more_coming), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
+
+
+/** The practice themes, for the shields: id and name. */
+internal val PRACTICE_TOPICS: List<Pair<String, Int>> get() = TOPICS.map { it.id to it.title }

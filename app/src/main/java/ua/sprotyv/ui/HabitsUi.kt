@@ -96,7 +96,7 @@ private const val MAX_ACTIVE = 5
 private const val ROOTED_DAYS = 66
 
 /** What the owner keeps: the chosen habits, the days each was done, and this month's body check. */
-private data class Gart(val active: List<String>, val done: Map<String, Set<Long>>, val body: Set<String>, val bodyMonth: String)
+private data class Gart(val active: List<String>, val done: Map<String, Set<Long>>, val body: Set<String>, val bodyMonth: String, val bodyMonths: Set<String> = emptySet())
 
 private fun parseGart(s: String?): Gart {
     val empty = Gart(emptyList(), emptyMap(), emptySet(), "")
@@ -112,7 +112,10 @@ private fun parseGart(s: String?): Gart {
             (0 until minOf(days.length(), 400)).map { days.optLong(it) }.filter { it > 0 }.toSet()
         }.filterValues { it.isNotEmpty() }
         val b = o.optJSONArray("body") ?: JSONArray()
-        Gart(active, done, (0 until minOf(b.length(), 10)).map { b.optString(it) }.toSet(), o.optString("bodyMonth").take(7))
+        // The months whose whole body check was done ("2026-10"): for the "Body that holds" shield
+        val m = o.optJSONArray("bodyMonths") ?: JSONArray()
+        val months = (0 until minOf(m.length(), 240)).map { m.optString(it) }.filter { it.matches(Regex("^\\d{4}-\\d{2}$")) }.toSet()
+        Gart(active, done, (0 until minOf(b.length(), 10)).map { b.optString(it) }.toSet(), o.optString("bodyMonth").take(7), months)
     } catch (e: Exception) {
         empty
     }
@@ -124,6 +127,7 @@ private fun Gart.json(): String = JSONObject()
     .put("done", JSONObject().apply { done.forEach { (id, days) -> put(id, JSONArray(days.sorted().takeLast(366))) } })
     .put("body", JSONArray(body.toList()))
     .put("bodyMonth", bodyMonth)
+    .put("bodyMonths", JSONArray(bodyMonths.sorted().takeLast(240)))
     .toString()
 
 /** How rooted a habit is, by the days it was done (never by an unbroken run). */
@@ -203,7 +207,12 @@ fun GartScreen(nav: Nav) {
                     val on = key in got
                     Row(
                         Modifier.fillMaxWidth().heightIn(min = 48.dp).doneRow(on).toggleable(value = on, role = Role.Checkbox) { v ->
-                            change { s -> val cur = if (s.bodyMonth == month) s.body else emptySet(); s.copy(body = if (v) cur + key else cur - key, bodyMonth = month) }
+                            change { s ->
+                                val cur = if (s.bodyMonth == month) s.body else emptySet()
+                                val next = if (v) cur + key else cur - key
+                                // A month counts once its whole check is done; unticking later does not take it away
+                                s.copy(body = next, bodyMonth = month, bodyMonths = if (BODY_CHECKS.all { it.first in next }) s.bodyMonths + month else s.bodyMonths)
+                            }
                         }.padding(end = 16.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
@@ -307,4 +316,11 @@ internal fun habitShields(stored: String?): List<ShieldItem> {
         val level = when { days >= ROOTED_DAYS -> 2; days >= 21 -> 1; else -> 0 }
         ShieldItem("habit:" + h.id, h.title, R.string.shield_how_habit, if (h.pillar.resist) null else h.pillar.group, R.drawable.ocha_training, level)
     }
+}
+
+
+/** "We hold on" from the habits: all the days of daily hardening, and the months of the body check. */
+internal fun gartTotals(stored: String?): Pair<Int, Int> {
+    val g = parseGart(stored)
+    return g.done.values.sumOf { it.size } to g.bodyMonths.size
 }

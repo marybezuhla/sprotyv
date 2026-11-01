@@ -51,6 +51,7 @@ import ua.sprotyv.ui.WayHub
 import java.io.File
 import ua.sprotyv.personal.backup.BackupData
 import ua.sprotyv.personal.PersonalStore
+import kotlinx.coroutines.flow.first
 import ua.sprotyv.ui.BACKED_UP_SETTINGS
 import ua.sprotyv.ui.GartScreen
 import ua.sprotyv.ui.KitScreen
@@ -100,7 +101,12 @@ class PersonalScreensTest {
         HomePrefs.update(app) { it.copy(mode = Mode.FULL, pins = Preset.GENERAL.pins, medic = false, trip = false) }
     }
 
-    @org.junit.After fun tearDown() { db?.close() }
+    @org.junit.After fun tearDown() {
+        // Closed through the store, so the next test opens its own data (the store never replaces open data)
+        PersonalStore.close()
+        kotlinx.coroutines.runBlocking { kotlinx.coroutines.withTimeoutOrNull(5_000) { PersonalStore.state.first { it == null } } }
+        db?.close()
+    }
 
     private fun shot(name: String, dark: Boolean = false, big: Boolean = false, body: @Composable () -> Unit) {
         if (big) org.robolectric.RuntimeEnvironment.setFontScale(1.3f)

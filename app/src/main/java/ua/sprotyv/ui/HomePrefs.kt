@@ -102,12 +102,15 @@ object HomePrefs {
             put("readiness_hidden", s.readinessHidden.toString())
             put("medic", s.medic.toString())
             put("service", s.service.toString())
+            // "We hold on": the numbers lived through travel with the backup
+            Held.KINDS.forEach { k -> put("held_$k", Held.get(context, k).toString()) }
         }
     }
 
     /** Applies a backup's look and set-up; anything unknown or malformed is left as it is. */
     fun import(context: Context, home: Map<String, String>) {
         if (home.isEmpty()) return
+        Held.KINDS.forEach { k -> home["held_$k"]?.toIntOrNull()?.let { Held.set(context, k, it) } }
         fun flag(k: String, now: Boolean) = home[k]?.toBooleanStrictOrNull() ?: now
         update(context) { s ->
             s.copy(

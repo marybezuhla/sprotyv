@@ -56,7 +56,11 @@ class Since(private val name: String, private val maxHours: Int) {
     }
 
     fun start(context: Context): Long = System.currentTimeMillis().also { prefs(context).edit().putLong("since", it).commit(); Notify.sync(context) }
-    fun stop(context: Context) { prefs(context).edit().remove("since").commit(); Notify.sync(context) }
+    fun stop(context: Context) {
+        // One more held through: only the number is kept, for "We hold on"
+        if (get(context) != 0L) Held.add(context, name)
+        prefs(context).edit().remove("since").commit(); Notify.sync(context)
+    }
 
     companion object {
         val POWER = Since("blackout", 72)
@@ -252,4 +256,30 @@ private fun SourceLine(section: String) {
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
     )
+}
+
+
+/**
+ * "We hold on": how many power cuts, days without heat and stays in the shelter were lived through
+ * — one more each time "it is back" is tapped. Only numbers: no dates, no places. Kept on this phone
+ * beside the counts themselves, and carried in the encrypted backup with the home settings.
+ */
+object Held {
+    val KINDS = listOf("blackout", "heating", "shelter")
+    private fun prefs(c: Context) = c.applicationContext.getSharedPreferences("held", Context.MODE_PRIVATE)
+    fun get(c: Context, kind: String): Int = prefs(c).getInt(kind, 0).coerceIn(0, 100_000)
+    fun add(c: Context, kind: String) { if (kind in KINDS) prefs(c).edit().putInt(kind, get(c, kind) + 1).apply() }
+    fun set(c: Context, kind: String, n: Int) { if (kind in KINDS) prefs(c).edit().putInt(kind, n.coerceIn(0, 100_000)).apply() }
+}
+
+/**
+ * The marks a count passes: often-lived things 1, 10, 25, 50, 75, 100, then every 50 with no end;
+ * rare ones start closer (1, 3, 5, 10, 25…). Returns the last mark reached and the next one.
+ */
+fun milestones(n: Int, rare: Boolean): Pair<Int, Int> {
+    val start = if (rare) listOf(1, 3, 5, 10, 25, 50, 75, 100) else listOf(1, 10, 25, 50, 75, 100)
+    val reached = start.lastOrNull { n >= it } ?: 0
+    val next = start.firstOrNull { n < it } ?: ((n / 50) + 1) * 50
+    val last = if (n >= 100) (n / 50) * 50 else reached
+    return last to next
 }
