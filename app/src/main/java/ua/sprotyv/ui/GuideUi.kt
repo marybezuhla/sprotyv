@@ -371,7 +371,7 @@ fun AboutScreen(content: Content?, nav: Nav) {
         Text(stringResource(R.string.about_license, g.license), style = MaterialTheme.typography.bodyLarge)
         Text(g.changes, style = MaterialTheme.typography.bodyLarge)
         Text(stringResource(R.string.about_icons), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        // A quiet last line: the Constitution and the map are always inside, wherever one is
+        // A quiet last line: the Constitution and the guide are always inside, wherever one is
         Text(
             stringResource(R.string.about_with_you),
             style = MaterialTheme.typography.bodyLarge,

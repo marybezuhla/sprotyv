@@ -1572,13 +1572,5 @@
     <string name="driving_where">Офіційні джерела</string>
     <string name="chapter_evacuation_car">Евакуація пішки та автомобілем</string>
     <string name="chapter_evacuation_car_hint">Розділ 26 довідника</string>
-    <string name="map_title">Мапа без інтернету</string>
-    <string name="map_hint">Уся Україна завжди з вами</string>
-    <string name="map_missing">У цій збірці застосунку мапи немає.</string>
-    <string name="map_press">Затисніть точку на мапі, щоб відкрити її в застосунку мап із вулицями. Офлайн-застосунки тримають точку на телефоні.</string>
-    <string name="map_open_in">Відкрити в застосунку мап</string>
-    <string name="map_apps_intro">Вулиці, маршрути й Вікіпедія без інтернету: завантажте все заздалегідь, краще через Wi‑Fi.</string>
     <string name="situation_maps">Без інтернету: мапи й знання</string>
-    <string name="map_note">Оглядова мапа України вшита в застосунок, як і Конституція: міста й села, головні дороги, залізниці, річки. «Спротив» нічого не завантажує й не знає, де ви.</string>
-    <string name="map_osm">Дані мапи © учасники OpenStreetMap (ODbL). Мапа — довідка, а не сигнал: на тривогу діють за тривогою.</string>
 </resources>

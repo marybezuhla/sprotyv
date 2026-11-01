@@ -97,10 +97,6 @@ fun SituationScreen(content: Content?, nav: Nav) {
             }
             Text(stringResource(R.string.situation_rules_source), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
-        // The map of Ukraine is always inside, with no internet (not in trip mode)
-        if (HomePrefs.state.collectAsState().value?.trip != true) Block(stringResource(R.string.map_title), Group.GUIDE, padded = false) {
-            BlockRow(stringResource(R.string.map_title), stringResource(R.string.map_hint), first = true) { nav.go(Route.MapRoute) }
-        }
         if (content == null) return@Frame Loading()
         if (content.linksBroken) return@Frame Broken()
         // Power cuts have their own screen: one row per oblast would crowd this one

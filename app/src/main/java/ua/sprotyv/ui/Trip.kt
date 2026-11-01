@@ -23,9 +23,7 @@ object Trip {
 
     fun hides(route: Route): Boolean = route.personal || route == Route.Scan || route == Route.Resistance || route == Route.HistoryRoute || route is Route.Story ||
         // Which messengers are installed, and the defence words: not for a checkpoint
-        route == Route.Comms ||
-        // The map opens on the region of its file: not for a checkpoint
-        route == Route.MapRoute
+        route == Route.Comms
 
     fun hides(link: Link): Boolean = link.group in HIDDEN_GROUPS || link.id in HIDDEN_LINKS
 }
