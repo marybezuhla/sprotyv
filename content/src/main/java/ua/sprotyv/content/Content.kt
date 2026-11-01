@@ -69,7 +69,7 @@ class Content(
         private fun read(context: Context, lang: String): Content = run {
                 val assets = context.applicationContext.assets
                 val guide = try {
-                    assets.open("guide.json").bufferedReader().use { GuideReader.parse(it.readText()) }
+                    open(context, lang, "guide.json").bufferedReader().use { GuideReader.parse(it.readText()) }
                 } catch (e: Exception) {
                     null
                 }
