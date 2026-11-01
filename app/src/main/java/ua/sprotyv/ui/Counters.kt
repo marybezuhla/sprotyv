@@ -273,13 +273,12 @@ object Held {
 }
 
 /**
- * The marks a count passes: often-lived things 1, 10, 25, 50, 75, 100, then every 50 with no end;
- * rare ones start closer (1, 3, 5, 10, 25…). Returns the last mark reached and the next one.
+ * How many marks a count has passed: often-lived things 10, 25, 50, 100, then every 50 with no
+ * end; rare ones 3, 5, 10, 25, 50, 100, then every 50. Shown only as notches on the shield.
  */
-fun milestones(n: Int, rare: Boolean): Pair<Int, Int> {
-    val start = if (rare) listOf(1, 3, 5, 10, 25, 50, 75, 100) else listOf(1, 10, 25, 50, 75, 100)
-    val reached = start.lastOrNull { n >= it } ?: 0
-    val next = start.firstOrNull { n < it } ?: ((n / 50) + 1) * 50
-    val last = if (n >= 100) (n / 50) * 50 else reached
-    return last to next
+fun marksPassed(n: Int, rare: Boolean): Int {
+    val start = if (rare) listOf(3, 5, 10, 25, 50, 100) else listOf(10, 25, 50, 100)
+    val early = start.count { n >= it }
+    val later = if (n > 100) (n - 100) / 50 else 0
+    return early + later
 }

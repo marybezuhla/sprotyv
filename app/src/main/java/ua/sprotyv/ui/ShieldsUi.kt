@@ -48,8 +48,8 @@ class ShieldItem(
     /** Ticked by the owner: its id in [Steps.MARKS]; or counted with "+1": its id in [Steps.COUNTS]. */
     val mark: String? = null,
     val counter: String? = null,
-    /** For counts: the next mark, said under the shield. */
-    val next: Int? = null,
+    /** For counts: how many marks (10, 25, 50, 100, then every 50) are passed — small notches on the rim, nothing more. */
+    val notches: Int = 0,
 )
 
 /** The readiness parts, from the counts already kept for the home screen (no records). */
@@ -85,8 +85,8 @@ fun ShieldsScreen(nav: Nav) {
     val pathDone = pathShields(p.first(), roles)
     val (gartDays, bodyMonths) = gartTotals(h.first())
     fun counted(id: String, title: Int, icon: Int, n: Int, rare: Boolean, group: Group?, counter: String? = null): ShieldItem {
-        val (last, next) = milestones(n, rare)
-        return ShieldItem(id, title, R.string.shield_how_count, group, icon, if (n > 0) 2 else 0, count = last.takeIf { it > 0 }, counter = counter, next = next)
+        // Every single time counts: the exact number is on the shield; the marks passed are only notches
+        return ShieldItem(id, title, R.string.shield_how_count, group, icon, if (n > 0) 2 else 0, count = n.takeIf { it > 0 }, counter = counter, notches = marksPassed(n, rare))
     }
     val held = listOf(
         counted("held:blackout", R.string.held_blackout, R.drawable.ocha_power_outage, Held.get(ctx, "blackout"), false, Group.HOME_LIFE),
@@ -177,6 +177,12 @@ private fun ShieldBadge(s: ShieldItem) {
                         drawPath(shield, tint.container); drawPath(shield, tint.ink, style = Stroke(width = 2.dp.toPx()))
                         // A big step: a second, inner rim
                         if (s.big) scale(0.8f) { drawPath(shield, tint.ink, style = Stroke(width = 1.5.dp.toPx())) }
+                        // Marks passed: short notches along the top edge, up to seven shown
+                        val shown = s.notches.coerceAtMost(7)
+                        for (k in 0 until shown) {
+                            val x = sx(12f + (k - (shown - 1) / 2f) * 1.6f)
+                            drawLine(tint.ink, androidx.compose.ui.geometry.Offset(x, sy(4.2f)), androidx.compose.ui.geometry.Offset(x, sy(5.6f)), strokeWidth = 1.5.dp.toPx())
+                        }
                     }
                     1 -> {
                         // Half way: the lower half filled
@@ -195,9 +201,8 @@ private fun ShieldBadge(s: ShieldItem) {
             }
         }
         Text(title, style = MaterialTheme.typography.labelMedium, textAlign = TextAlign.Center, maxLines = 3, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis, color = if (s.level > 0) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant)
-        if (s.next != null) {
-            Text(stringResource(R.string.shield_next, s.next), style = MaterialTheme.typography.labelMedium, textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        } else if (s.level < 2 && s.mark == null) {
+        // Counts say nothing more than their name: no "still to go"
+        if (s.level < 2 && s.mark == null && s.count == null && s.counter == null && !s.id.startsWith("held:") && s.id != "solved") {
             Text(how, style = MaterialTheme.typography.labelMedium, textAlign = TextAlign.Center, maxLines = 3, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         // On the owner's word: a tick; counts: "+1" (and "−1" for a slip of the finger)
