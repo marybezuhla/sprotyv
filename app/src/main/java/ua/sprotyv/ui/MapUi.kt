@@ -91,6 +91,8 @@ object Overview {
  */
 @Composable
 fun MapScreen(content: Content?, nav: Nav) {
+    // The places looked at stay off screenshots and the recent-apps picture
+    SecureScreen()
     val context = LocalContext.current
     val toolbar = MaterialTheme.colorScheme.surface.toArgb()
     var overview by remember { mutableStateOf<File?>(null) }
@@ -165,7 +167,7 @@ private class MapHolder {
         val pin = FixedPixelCircle(null, 12f, fill, edge).apply { isVisible = false }
         val layer = object : TileRendererLayer(InMemoryTileCache(64), map, mapView.model.mapViewPosition, g) {
             override fun onLongPress(tapLatLong: LatLong, layerXY: Point, tapXY: Point): Boolean {
-                pin.latLong = tapLatLong
+                pin.setLatLong(tapLatLong)
                 pin.isVisible = true
                 pin.requestRedraw()
                 onPoint(tapLatLong)
