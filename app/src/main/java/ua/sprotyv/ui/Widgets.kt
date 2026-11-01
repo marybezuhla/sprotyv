@@ -56,6 +56,11 @@ object Widgets {
     }
 
     /** True when a "Running now" widget is on the home screen (its counts need redrawing on time). */
+    /** A "Daily hardening" widget is placed: it is redrawn just after midnight, when today starts at zero. */
+    fun hasGart(context: Context): Boolean = try {
+        (AppWidgetManager.getInstance(context.applicationContext)?.let { ids(context.applicationContext, it, GartWidget::class.java) }?.size ?: 0) > 0
+    } catch (e: Exception) { false }
+
     fun hasRunning(context: Context): Boolean = try {
         (AppWidgetManager.getInstance(context.applicationContext)?.let { ids(context.applicationContext, it, RunningWidget::class.java) }?.size ?: 0) > 0
     } catch (e: Exception) { false }
@@ -149,7 +154,8 @@ object Widgets {
         val today = gartToday(prefs.gart)
         val text = when {
             // Trip mode: a neutral line, never a word that trip mode is on
-            prefs.trip || today == null -> context.getString(R.string.widget_gart_start)
+            prefs.trip -> context.getString(R.string.widget_neutral)
+            today == null -> context.getString(R.string.widget_gart_start)
             today.first >= today.second -> context.getString(R.string.gart_strip_all, today.first, today.second)
             else -> context.getString(R.string.gart_today_count, today.first, today.second)
         }
