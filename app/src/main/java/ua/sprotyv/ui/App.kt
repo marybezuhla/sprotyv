@@ -243,7 +243,11 @@ private fun Screen(
             MinePart.KIT -> Personal(R.string.kit, personal, nav) { KitScreen(content, nav) }
             MinePart.PRINT -> Personal(R.string.print_title, personal, nav) { PrintScreen(content) }
             MinePart.RESCUER -> Personal(R.string.rescuer_screen, personal, nav) { RescuerQrScreen(nav) }
-            MinePart.BACKUP -> Personal(R.string.backup_title, personal, nav) { BackupScreen() }
+            MinePart.BACKUP -> Personal(R.string.backup_title, personal, nav) {
+                BackupScreen()
+                // After a restore the home screen's readiness strip follows at once, not only when "Mine" is opened
+                ReadinessBlock(content, nav, showUi = false)
+            }
             MinePart.PLAN_QR -> Personal(R.string.plan_code_title, personal, nav) { PlanCodeScreen() }
             MinePart.PLAN_IMPORT -> Personal(R.string.plan_code_import_title, personal, nav) { PlanImportScreen(nav) }
             MinePart.KID_CALL -> Personal(R.string.kid_call_family, personal, nav) { KidCallScreen() }

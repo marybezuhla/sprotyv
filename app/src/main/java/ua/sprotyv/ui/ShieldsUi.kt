@@ -142,7 +142,7 @@ fun ShieldsScreen(nav: Nav) {
     }
     groups.forEachIndexed { gi, (title, list) ->
         if (list.isEmpty()) return@forEachIndexed
-        Block(stringResource(title), Group.PREPARE, tint = resist(), foldable = true, startOpen = gi < 2, trailing = {
+        Block(stringResource(title), Group.PREPARE, tint = resist(), foldable = true, startOpen = false, trailing = {
             Text(stringResource(R.string.ready_count, list.count { it.level == 2 }, list.size), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
         }) {
             FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -161,7 +161,8 @@ private fun ShieldBadge(s: ShieldItem) {
     val how = stringResource(s.how)
     val state = stringResource(when (s.level) { 2 -> R.string.shield_earned; 1 -> R.string.shield_half; else -> R.string.shield_not_yet })
     Column(
-        Modifier.width(100.dp).semantics { contentDescription = "$title: $state" },
+        // Two to a row on a phone: names fit whole words, the buttons stay on one line
+        Modifier.width(140.dp).semantics { contentDescription = "$title: $state" },
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(Modifier.size(64.dp), contentAlignment = Alignment.Center) {
@@ -222,8 +223,9 @@ private fun ShieldBadge(s: ShieldItem) {
         }
         s.counter?.let { c ->
             androidx.compose.foundation.layout.Row {
-                androidx.compose.material3.TextButton(onClick = { Steps.change { st -> st.copy(counts = st.counts + (c to ((st.counts[c] ?: 0) - 1).coerceAtLeast(0))) } }, modifier = Modifier.heightIn(min = 48.dp)) { Text("−1") }
-                androidx.compose.material3.TextButton(onClick = { Steps.change { st -> st.copy(counts = st.counts + (c to ((st.counts[c] ?: 0) + 1).coerceAtMost(10_000))) } }, modifier = Modifier.heightIn(min = 48.dp)) { Text("+1") }
+                val pad = androidx.compose.foundation.layout.PaddingValues(horizontal = 8.dp)
+                androidx.compose.material3.TextButton(onClick = { Steps.change { st -> st.copy(counts = st.counts + (c to ((st.counts[c] ?: 0) - 1).coerceAtLeast(0))) } }, contentPadding = pad, modifier = Modifier.heightIn(min = 48.dp)) { Text("−1", maxLines = 1, softWrap = false) }
+                androidx.compose.material3.TextButton(onClick = { Steps.change { st -> st.copy(counts = st.counts + (c to ((st.counts[c] ?: 0) + 1).coerceAtMost(10_000))) } }, contentPadding = pad, modifier = Modifier.heightIn(min = 48.dp)) { Text("+1", maxLines = 1, softWrap = false) }
             }
         }
     }

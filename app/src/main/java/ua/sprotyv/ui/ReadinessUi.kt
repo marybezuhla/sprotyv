@@ -62,7 +62,7 @@ import ua.sprotyv.personal.PersonalStore
  * Only on the owner's own screens, which are kept off screenshots.
  */
 @Composable
-fun ReadinessBlock(content: Content?, nav: Nav) {
+fun ReadinessBlock(content: Content?, nav: Nav, showUi: Boolean = true) {
     val medical by remember { PersonalStore.observe { db -> db.medical().observe().map(Readiness::medical) } }.collectAsStateWithLifecycle(null)
     val people by remember { PersonalStore.observe { db -> db.people().observe().map(Readiness::people) } }.collectAsStateWithLifecycle(null)
     val peopleFlags by remember { PersonalStore.observe { db -> db.people().observe().map { l -> l.any { it.safeList } to l.any { it.ice } } } }.collectAsStateWithLifecycle(null)
@@ -97,6 +97,8 @@ fun ReadinessBlock(content: Content?, nav: Nav) {
     androidx.compose.runtime.LaunchedEffect(shares) {
         if (shares != null && HomePrefs.load(context).readiness != shares) { HomePrefs.update(context) { it.copy(readiness = shares) }; Widgets.update(context) }
     }
+    // Only keeping the home strip up to date (after a restore, say): nothing drawn
+    if (!showUi) return
     // Folded: one ring for the whole (each part counts the same) and the next step in words
     val known = rows.all { it.second != null }
     val whole = if (known) rows.map { it.second!!.fraction }.average().toFloat() else 0f
