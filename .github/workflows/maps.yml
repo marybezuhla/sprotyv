@@ -15,6 +15,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 340
+    env:
+      # Read by every Java start, whatever the launcher script does (the JVM says "Picked up" in the log)
+      JAVA_TOOL_OPTIONS: -Xmx13g
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
@@ -44,10 +47,6 @@ jobs:
           echo "$(cat "$J.sha1" | cut -c1-40)  $J" | sha1sum -c -
           sha256sum "$J"
           mv "$J" ~/.openstreetmap/osmosis/plugins/
-          # The Debian osmosis script takes its Java options from this file (an env var is overwritten)
-          echo 'JAVACMD_OPTIONS="-Xmx12g"' > ~/.osmosisrc
-          cp ~/.osmosisrc ~/.osmosis
-          grep -n 'JAVACMD\|osmosisrc\|\.osmosis' "$(command -v osmosis)" | head || true
 
       - name: OpenStreetMap data for Ukraine (checked against its MD5)
         shell: bash
@@ -98,7 +97,7 @@ jobs:
           python3 -c 'import json;[print(e["output"][:-8], ",".join(map(str,e["bbox"]))) for e in json.load(open("extracts.json"))["extracts"]]' |
           while read -r id box; do
             osmium extract -b "$box" -o "obl/$id.osm.pbf" --overwrite ukraine.osm.pbf
-            osmosis -q --rbf file="obl/$id.osm.pbf" --mapfile-writer file="out/$id.map" type=hd threads=4 preferred-languages=uk,en \
+            osmosis -q --rbf file="obl/$id.osm.pbf" --mapfile-writer file="out/$id.map" type=hd threads=2 preferred-languages=uk,en \
               || { echo "FAILED $id"; rm -f "out/$id.map"; echo "$id" >> failed.txt; }
             rm "obl/$id.osm.pbf"
             ls -la "out/$id.map" || true
