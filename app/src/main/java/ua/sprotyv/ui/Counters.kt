@@ -129,7 +129,7 @@ fun CountHead(minutes: Long, what: String, start: Long, now: Long, spoken: Strin
 @Composable
 fun TimeMark(name: String, left: String, of: String, fraction: Float, over: Boolean, fill: androidx.compose.ui.graphics.Color) {
     val warn = ua.sprotyv.home.Group.DANGER.tint().ink
-    Column(Modifier.fillMaxWidth().clearAndSetSemantics { contentDescription = "$name, $left, $of" }, verticalArrangement = Arrangement.spacedBy(6.dp)) {
+    Column(Modifier.fillMaxWidth().padding(top = 8.dp).clearAndSetSemantics { contentDescription = "$name, $left, $of" }, verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Text(name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
         Bar(fraction, if (over) warn else fill)
         Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {

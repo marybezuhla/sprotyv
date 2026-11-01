@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -153,6 +154,8 @@ fun BlockRow(title: String, hint: String = "", first: Boolean = false, onClick: 
             Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
             if (hint.isNotBlank()) Text(hint, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
+        // Air between the words and the arrow, so a long hint never runs into it
+        androidx.compose.foundation.layout.Spacer(Modifier.padding(start = 12.dp))
         androidx.compose.material3.Icon(
             Icons.AutoMirrored.Filled.ArrowForward,
             contentDescription = null,
@@ -215,3 +218,39 @@ fun doneCheckbox(): androidx.compose.material3.CheckboxColors =
 
 @Composable
 fun doneText(@Suppress("UNUSED_PARAMETER") done: Boolean): androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.onSurface
+
+
+/**
+ * Where the words beside a checkbox start (the box's 48 dp and 12 dp on each side). Everything
+ * under such a row — dots, bars, buttons — starts here too, so every line keeps one left edge.
+ */
+val CheckIndent = 72.dp
+/** A text button's own padding, taken off so its words also start at [CheckIndent]. */
+val ButtonInset = 12.dp
+
+/**
+ * One way in, as one card: the name in its colour, a line on what is inside, an arrow. For hubs
+ * where a block would only repeat its own title above a single row.
+ */
+@Composable
+fun HubCard(title: String, hint: String, tint: Tint, leading: (@Composable () -> Unit)? = null, onClick: () -> Unit) {
+    androidx.compose.material3.Card(
+        onClick = onClick,
+        colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = tint.container.copy(alpha = 0.6f).compositeOver(MaterialTheme.colorScheme.surface)),
+        border = androidx.compose.foundation.BorderStroke(1.dp, tint.ink.copy(alpha = 0.2f)),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Row(Modifier.fillMaxWidth().heightIn(min = 72.dp).padding(start = 16.dp, end = 12.dp, top = 12.dp, bottom = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+            if (leading != null) {
+                leading()
+                androidx.compose.foundation.layout.Spacer(Modifier.padding(start = 12.dp))
+            }
+            androidx.compose.foundation.layout.Column(Modifier.weight(1f)) {
+                Text(title, style = BlockTitle, color = tint.ink)
+                Text(hint, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            androidx.compose.foundation.layout.Spacer(Modifier.padding(start = 12.dp))
+            androidx.compose.material3.Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, tint = tint.ink)
+        }
+    }
+}

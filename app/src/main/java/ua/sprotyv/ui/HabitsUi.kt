@@ -154,6 +154,12 @@ fun GartScreen(nav: Nav) {
 
     // Today: the chosen habits, one tick each
     val mine = g.active.mapNotNull { id -> HABITS.firstOrNull { it.id == id } }
+    // Only today's counts leave "Mine", for the home screen, "My way" and the widget
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val share = "$today:${mine.count { today in g.done[it.id].orEmpty() }}/${mine.size}"
+    androidx.compose.runtime.LaunchedEffect(share) {
+        if (HomePrefs.load(context).gart != share) { HomePrefs.update(context) { it.copy(gart = share) }; Widgets.update(context) }
+    }
     Block(stringResource(R.string.gart_today), Group.PREPARE, padded = mine.isEmpty(),
         summary = if (mine.isEmpty()) null else stringResource(R.string.gart_today_count, mine.count { today in g.done[it.id].orEmpty() }, mine.size)) {
         if (mine.isEmpty()) Text(stringResource(R.string.gart_none), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -246,20 +252,44 @@ private fun ActiveHabit(h: Habit, done: Set<Long>, today: Long, nav: Nav, onTick
             }
         }
         // The last two weeks as dots: done is filled, missed is only empty, never red
-        Row(Modifier.padding(start = 56.dp, end = 16.dp).clearAndSetSemantics { }, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        Row(Modifier.padding(start = CheckIndent, end = 16.dp).clearAndSetSemantics { }, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             (13 downTo 0).forEach { back ->
                 val d = today - back
                 Box(Modifier.size(12.dp).background(if (d in done) tint.ink else MaterialTheme.colorScheme.outlineVariant, CircleShape))
             }
         }
         val count = done.size
-        Column(Modifier.padding(start = 56.dp, end = 16.dp, top = 6.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Column(Modifier.padding(start = CheckIndent, end = 16.dp, top = 8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             LinearProgressIndicator(progress = { (count / ROOTED_DAYS.toFloat()).coerceAtMost(1f) }, color = tint.ink, trackColor = MaterialTheme.colorScheme.outlineVariant, modifier = Modifier.fillMaxWidth())
             Text(stringResource(stage(count)) + " · " + stringResource(R.string.gart_days, count, ROOTED_DAYS), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
-        Row(Modifier.padding(start = 44.dp)) {
+        Row(Modifier.padding(start = CheckIndent - ButtonInset)) {
             h.route?.let { r -> TextButton(onClick = { nav.go(r) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.gart_open)) } }
             TextButton(onClick = onDrop, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.gart_drop)) }
         }
     }
+}
+
+
+/** Today's "Daily hardening" from the counts kept outside: (done, chosen), or null when none chosen. */
+fun gartToday(share: String, today: Long = LocalDate.now().toEpochDay()): Pair<Int, Int>? {
+    val m = Regex("^(\\d{1,9}):(\\d{1,2})/(\\d{1,2})$").matchEntire(share) ?: return null
+    val total = m.groupValues[3].toInt().takeIf { it in 1..20 } ?: return null
+    // Another day's count: today nothing is ticked yet
+    val done = if (m.groupValues[1].toLong() == today) m.groupValues[2].toInt().coerceIn(0, total) else 0
+    return done to total
+}
+
+/** "Daily hardening today: 1 of 3", on the home screen and in "My way": counts only, a tap to tick. */
+@Composable
+fun GartStrip(nav: Nav) {
+    val prefs = androidx.compose.runtime.collectAsState(HomePrefs.state).value ?: return
+    if (prefs.trip) return
+    val (d, t) = gartToday(prefs.gart) ?: return
+    HubCard(
+        stringResource(R.string.gart_strip_title),
+        if (d >= t) stringResource(R.string.gart_strip_all, d, t) else stringResource(R.string.gart_today_count, d, t),
+        Group.PREPARE.tint(),
+        leading = { ReadyRing(d.toFloat() / t, "$d/$t") },
+    ) { nav.go(Route.Mine(MinePart.GART)) }
 }

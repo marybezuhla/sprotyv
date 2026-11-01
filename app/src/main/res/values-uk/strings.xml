@@ -1179,4 +1179,23 @@
     <string name="role_dftg_5">Звичайна участь у ДФТГ не оплачується. Хто виконував бойові завдання за розпорядженням ТрО, може отримати статус учасника бойових дій.</string>
     <string name="role_dftg_6">Офіційних підтверджень, що членство в ДФТГ дає відстрочку від мобілізації, немає.</string>
     <string name="role_dftg_source">Джерела: Міноборони (14.03.2025, 10.07.2025); Суспільне (19.08.2025). Перевірено 01.11.2026. Умови змінюються — уточнюйте в командира ДФТГ чи військової адміністрації.</string>
+    <string name="gart_strip_title">Гарт сьогодні</string>
+    <string name="gart_strip_all">Сьогодні все: %1$d з %2$d ✓</string>
+    <string name="widget_gart_start">Оберіть звички «Щоденного гарту»</string>
+    <string name="widget_gart_desc">Скільки звичок гарту зроблено сьогодні, без назв</string>
+    <string name="practice_core">Основне</string>
+    <string name="practice_core_hint">Найважливіше з різних карток</string>
+    <string name="practice_t_alarm">Тривога й удари</string>
+    <string name="practice_t_alarm_hint">Укриття, балістика, дрони, підозрілі предмети</string>
+    <string name="practice_t_aid">Перша допомога</string>
+    <string name="practice_t_aid_hint">Кровотеча, непритомність, опіки</string>
+    <string name="practice_t_fire">Пожежа й завали</string>
+    <string name="practice_t_fire_hint">Вогонь удома, дим, людина під завалом</string>
+    <string name="practice_t_hazard">Хімія й радіація</string>
+    <string name="practice_t_hazard_hint">Хлор, радіаційна аварія</string>
+    <string name="practice_t_home">Без світла й виїзд</string>
+    <string name="practice_t_home_hint">Генератор, фейкові накази про евакуацію</string>
+    <string name="practice_choose">Оберіть, що перевірити: основне впереміш або одну тему.</string>
+    <string name="practice_count">ситуацій: %1$d</string>
+    <string name="practice_more_coming">Ситуації з довідника додаватимемо поступово, кожну — з посиланням на джерело.</string>
 </resources>

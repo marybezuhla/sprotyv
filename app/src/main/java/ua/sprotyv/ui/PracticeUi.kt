@@ -39,11 +39,30 @@ import ua.sprotyv.content.Content
  * a wrong answer is never red: this is practice, red is kept for danger now.
  * [cardId] empty: all adult cards in order; otherwise only that card's situations.
  */
+/** A set of situations to practise: the main ones mixed, or one theme. */
+private class Topic(val id: String, val title: Int, val hint: Int, val cards: List<String>, val firstOnly: Boolean = false)
+
+private val TOPICS = listOf(
+    // The main ones: one situation from each of the cards that matter most, mixed
+    Topic("core", R.string.practice_core, R.string.practice_core_hint, listOf("first-60", "air-alert", "bleeding", "unconscious", "drone", "home-fire", "ballistic", "suspicious"), firstOnly = true),
+    Topic("alarm", R.string.practice_t_alarm, R.string.practice_t_alarm_hint, listOf("first-60", "air-alert", "ballistic", "drone", "suspicious")),
+    Topic("aid", R.string.practice_t_aid, R.string.practice_t_aid_hint, listOf("bleeding", "unconscious", "burn")),
+    Topic("fire", R.string.practice_t_fire, R.string.practice_t_fire_hint, listOf("home-fire", "rubble")),
+    Topic("hazard", R.string.practice_t_hazard, R.string.practice_t_hazard_hint, listOf("chemical", "radiation")),
+    Topic("home", R.string.practice_t_home, R.string.practice_t_home_hint, listOf("blackout", "leave-home")),
+)
+
+private fun pick(all: List<ua.sprotyv.content.Practice>, t: Topic) =
+    if (t.firstOnly) t.cards.mapNotNull { c -> all.firstOrNull { it.card == c } } else all.filter { it.card in t.cards }
+
 @Composable
 fun PracticeScreen(content: Content?, cardId: String, nav: Nav, check: String? = null) {
+    // No card or theme given: the choice of what to practise
+    if (cardId.isEmpty() && check == null) return PracticeChoice(content, nav)
     Frame(stringResource(if (check != null) R.string.path_check else R.string.practice_title), nav::back) {
         if (content == null) return@Frame Loading()
-        val list = content.practice.filter { if (cardId.isEmpty()) !it.card.startsWith("kid-") else it.card == cardId }
+        val topic = TOPICS.firstOrNull { "topic:" + it.id == cardId }
+        val list = if (topic != null) pick(content.practice, topic) else content.practice.filter { it.card == cardId }
         if (list.isEmpty()) return@Frame Broken()
         val kid = cardId.startsWith("kid-")
         var index by rememberSaveable(cardId) { mutableIntStateOf(0) }
@@ -169,5 +188,22 @@ fun PracticeScreen(content: Content?, cardId: String, nav: Nav, check: String? =
         Text(stringResource(R.string.practice_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         // The same source and review status as the card it comes from
         content.card(p.card)?.let { Source(it) }
+    }
+}
+
+/** What to practise: the main situations mixed, or a theme; each with how many situations it has. */
+@Composable
+private fun PracticeChoice(content: Content?, nav: Nav) {
+    Frame(stringResource(R.string.practice_title), nav::back) {
+        if (content == null) return@Frame Loading()
+        Text(stringResource(R.string.practice_choose), style = MaterialTheme.typography.bodyLarge)
+        TOPICS.forEach { t ->
+            val n = pick(content.practice, t).size
+            if (n == 0) return@forEach
+            HubCard(stringResource(t.title), stringResource(t.hint) + " · " + stringResource(R.string.practice_count, n), ua.sprotyv.home.Group.PREPARE.tint()) {
+                nav.go(Route.PracticeRoute("topic:" + t.id))
+            }
+        }
+        Text(stringResource(R.string.practice_more_coming), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }

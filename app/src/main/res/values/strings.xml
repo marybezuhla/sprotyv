@@ -1173,4 +1173,23 @@
     <string name="role_dftg_5">Ordinary DFTG membership is unpaid. Those who carried out combat tasks on Territorial Defence orders can get combatant status.</string>
     <string name="role_dftg_6">There is no official confirmation that DFTG membership gives a deferment from mobilisation.</string>
     <string name="role_dftg_source">Sources: Ministry of Defence (14.03.2025, 10.07.2025); Suspilne (19.08.2025). Checked 01.11.2026. Terms change — ask the DFTG commander or the military administration.</string>
+    <string name="gart_strip_title">Hardening today</string>
+    <string name="gart_strip_all">All done today: %1$d of %2$d ✓</string>
+    <string name="widget_gart_start">Choose your daily hardening habits</string>
+    <string name="widget_gart_desc">How many hardening habits are done today, without names</string>
+    <string name="practice_core">The main ones</string>
+    <string name="practice_core_hint">The most important, from different cards</string>
+    <string name="practice_t_alarm">Alerts and strikes</string>
+    <string name="practice_t_alarm_hint">Shelter, ballistic missiles, drones, suspicious objects</string>
+    <string name="practice_t_aid">First aid</string>
+    <string name="practice_t_aid_hint">Bleeding, unconsciousness, burns</string>
+    <string name="practice_t_fire">Fire and rubble</string>
+    <string name="practice_t_fire_hint">Fire at home, smoke, a person under rubble</string>
+    <string name="practice_t_hazard">Chemicals and radiation</string>
+    <string name="practice_t_hazard_hint">Chlorine, a radiation accident</string>
+    <string name="practice_t_home">No power, leaving</string>
+    <string name="practice_t_home_hint">Generators, fake evacuation orders</string>
+    <string name="practice_choose">Choose what to check: the main ones mixed, or one theme.</string>
+    <string name="practice_count">situations: %1$d</string>
+    <string name="practice_more_coming">Situations from the guide will be added step by step, each with its source.</string>
 </resources>
