@@ -1124,7 +1124,7 @@
     <string name="roles_intro">Choose who you are now: several roles or none. A role suggests your next step and where to find support. Change it any time.</string>
     <string name="roles_mine">My roles</string>
     <string name="roles_more_coming">Other roles — of work, learning and voice — will come step by step, each with official sources.</string>
-    <string name="roles_private">Roles are encrypted in “Mine”; only you see them. Only the “medic” mark is kept in settings, as before. No scores, no rankings.</string>
+    <string name="roles_private">Roles are encrypted in “Mine”; only you see them. Only the “I have medical training” mark is kept in settings, as before. No scores, no rankings.</string>
     <string name="circle_care">Care</string>
     <string name="circle_defence">Defence</string>
     <string name="circle_help">Help</string>
