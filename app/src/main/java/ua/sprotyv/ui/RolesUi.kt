@@ -293,11 +293,15 @@ fun rememberRoles(): Set<String>? {
 fun RolesScreen(nav: Nav) {
     val context = LocalContext.current
     val picked = rememberRoles() ?: return Loading()
+    // Only how many, for "My path" (never which roles): kept in step with what is chosen
+    androidx.compose.runtime.LaunchedEffect(picked.size) { if (HomePrefs.load(context).rolesCount != picked.size) HomePrefs.update(context) { it.copy(rolesCount = picked.size) } }
     fun change(id: String, on: Boolean) {
         if (id == ROLE_MEDIC) {
             HomePrefs.update(context) { it.copy(medic = on) }
             return
         }
+        // Service in the army: the facts about joining are shown by themselves for these roles (switched off any time)
+        if (on && id in setOf("dobro", "serving", "veteran")) HomePrefs.update(context) { it.copy(service = true) }
         PersonalStore.save("setting:$KEY_ROLES:" + java.util.UUID.randomUUID()) { db ->
             val now = parseRoles(db.settings().get(KEY_ROLES))
             db.settings().put(Setting(KEY_ROLES, org.json.JSONArray((if (on) now + id else now - id).sorted()).toString()))

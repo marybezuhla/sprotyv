@@ -233,6 +233,12 @@ val ButtonInset = 12.dp
  * One way in, as one card: the name in its colour, a line on what is inside, an arrow. For hubs
  * where a block would only repeat its own title above a single row.
  */
+/** A theme's icon: one line style for the whole app, in the colour of its block. */
+@Composable
+fun ThemeIcon(res: Int, tint: Tint) {
+    androidx.compose.material3.Icon(androidx.compose.ui.res.painterResource(res), contentDescription = null, tint = tint.ink, modifier = Modifier.size(24.dp))
+}
+
 @Composable
 fun HubCard(title: String, hint: String, tint: Tint, leading: (@Composable () -> Unit)? = null, onClick: () -> Unit) {
     androidx.compose.material3.Card(
