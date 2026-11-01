@@ -45,7 +45,7 @@ const val KEY_PATH = "path"
  * Steps that can be checked with situations (the card they come from). All answered right marks
  * the step done and "checked by a test", kept in the same encrypted path list as "<step>.test".
  */
-val PATH_CHECKS = mapOf("bleed" to "bleeding", "cpr" to "unconscious")
+val PATH_CHECKS = mapOf("bleed" to "bleeding", "cpr" to "unconscious", "facts" to "topic:facts", "rights" to "topic:rights")
 private const val TESTED = ".test"
 
 /** All situations of a step answered right: the step is done and checked. */

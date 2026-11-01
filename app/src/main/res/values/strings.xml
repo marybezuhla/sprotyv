@@ -1275,4 +1275,12 @@
     <string name="kid_sticker_got">Here is your Sunny sticker!</string>
     <string name="kid_show_grown_up">Show a grown-up nearby and tell them what you would do.</string>
     <string name="kid_stickers">Stickers: %1$d of %2$d</string>
+    <string name="practice_t_facts">News and scams</string>
+    <string name="practice_t_facts_hint">Fakes, deepfakes, cloned voices, what not to post</string>
+    <string name="practice_t_rights">Rights and duties</string>
+    <string name="practice_t_rights_hint">What the Constitution says about defending the country</string>
+    <string name="practice_open_guide">Open the guide section</string>
+    <string name="practice_open_const">Open the Constitution article</string>
+    <string name="practice_source_guide">Source: “Survival guide”, sec. %1$s</string>
+    <string name="practice_source_const">Source: Constitution of Ukraine, art. %1$s</string>
 </resources>
