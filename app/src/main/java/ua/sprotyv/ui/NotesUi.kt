@@ -60,7 +60,7 @@ object NoteInbox {
 private const val MAX_NOTE = 20_000
 private const val MAX_NOTE_TITLE = 200
 private const val MAX_NOTES = 500
-/** Letters in all notes together: about 3 MB in the copy at most, under the 4 MB a restore accepts. */
+/** Letters in all notes together: about 3 MB in the copy at most, well under the 32 MB a restore accepts. */
 private const val MAX_TOTAL = 1_400_000
 
 /**
