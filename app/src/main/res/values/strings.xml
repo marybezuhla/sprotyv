@@ -1288,7 +1288,7 @@
     <string name="map_title">Offline map</string>
     <string name="map_hint">All Ukraine, always with you</string>
     <string name="map_missing">The map is not in this build of the app.</string>
-    <string name="map_press">Press and hold a point on the map to open it in a map app with streets.</string>
+    <string name="map_press">Press and hold a point on the map to open it in a map app with streets. Offline apps keep the point on the phone.</string>
     <string name="map_open_in">Open in a map app</string>
     <string name="map_apps_intro">Streets, paths and routes with no internet: download the maps in the app beforehand.</string>
     <string name="situation_maps">Detailed maps without internet</string>
