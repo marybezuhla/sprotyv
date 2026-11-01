@@ -626,6 +626,7 @@
     <string name="mine_block_copies">Backup, printing, bookmarks</string>
     <string name="source_section">Source: “%1$s” %2$s, sec. %3$s</string>
     <string name="source_license">Licence: %1$s</string>
+    <string name="about_with_you">Ukraine is with you.</string>
     <string name="about_icons">Icons: OCHA Humanitarian Icons (UN Office for the Coordination of Humanitarian Affairs, CC0), Health Icons (healthicons.org, CC0), OpenMoji emoji (openmoji.org, CC BY-SA 4.0) and Material Symbols (Google, Apache 2.0).</string>
     <string name="ready_summary">Parts done: %1$d of %2$d</string>
     <string name="mine_block_trouble_desc">I am safe, medical card, trusted people, plan, screen for rescuers</string>
