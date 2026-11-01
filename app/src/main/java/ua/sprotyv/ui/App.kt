@@ -59,12 +59,16 @@ enum class Tab(val title: Int) {
     MINE(R.string.tile_mine),
 }
 
-private val Tab.icon: ImageVector @Composable get() = when (this) {
-    Tab.HOME -> Icons.Filled.Home
-    Tab.KNOW -> androidx.compose.ui.graphics.vector.ImageVector.vectorResource(R.drawable.ocha_learning)
-    Tab.WAY -> androidx.compose.ui.graphics.vector.ImageVector.vectorResource(R.drawable.ocha_training)
-    Tab.MINE -> Icons.Filled.Lock
-}
+/** One family of icons around the app's shield: outlined, and filled when the tab is open. */
+@Composable
+private fun Tab.icon(on: Boolean): ImageVector = androidx.compose.ui.graphics.vector.ImageVector.vectorResource(
+    when (this) {
+        Tab.HOME -> if (on) R.drawable.tab_home_on else R.drawable.tab_home
+        Tab.KNOW -> if (on) R.drawable.tab_know_on else R.drawable.tab_know
+        Tab.WAY -> if (on) R.drawable.tab_way_on else R.drawable.tab_way
+        Tab.MINE -> if (on) R.drawable.tab_mine_on else R.drawable.tab_mine
+    },
+)
 
 /**
  * The whole app: a back stack of screens over the home screen (simple mode) or over four tabs
@@ -210,7 +214,7 @@ fun App() {
                     NavigationBarItem(
                         selected = t == tab,
                         onClick = { tabName = t.name },
-                        icon = { Icon(t.icon, contentDescription = null) },
+                        icon = { Icon(t.icon(t == tab), contentDescription = null) },
                         label = { Text(stringResource(t.title)) },
                         alwaysShowLabel = true,
                     )
