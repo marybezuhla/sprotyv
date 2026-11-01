@@ -17,27 +17,20 @@ import ua.sprotyv.home.Group
 fun WayHub(nav: Nav) {
     val prefs = HomePrefs.state.collectAsState().value
     Text(stringResource(R.string.way_intro), style = MaterialTheme.typography.bodyLarge)
+    // One card per way in: no block repeating its own title above a single row
+    if (prefs?.let { gartToday(it.gart) } != null) GartStrip(nav)
+    else HubCard(stringResource(R.string.gart_title), stringResource(R.string.gart_hint), Group.PREPARE.tint()) { nav.go(Route.Mine(MinePart.GART)) }
     // "Who I am now": which roles, only inside "Mine"; here just the way in
-    Block(stringResource(R.string.roles_title), Group.PREPARE, tint = resist(), padded = false) {
-        BlockRow(stringResource(R.string.roles_title), stringResource(R.string.roles_hint), first = true) { nav.go(Route.Mine(MinePart.ROLES)) }
-    }
-    Block(stringResource(R.string.gart_title), Group.PREPARE, padded = false) {
-        BlockRow(stringResource(R.string.gart_title), stringResource(R.string.gart_hint), first = true) { nav.go(Route.Mine(MinePart.GART)) }
-    }
+    HubCard(stringResource(R.string.roles_title), stringResource(R.string.roles_hint), resist()) { nav.go(Route.Mine(MinePart.ROLES)) }
     val share = prefs?.path?.let(::pathShare)
-    Block(
-        stringResource(R.string.path_title), Group.PREPARE, tint = resist(), padded = false,
-        summary = share?.let { (d, t) -> stringResource(R.string.path_summary, d, t) },
+    HubCard(
+        stringResource(R.string.path_title),
+        share?.let { (d, t) -> stringResource(R.string.path_summary, d, t) } ?: stringResource(R.string.path_open_hint),
+        resist(),
         leading = share?.let { (d, t) -> { ReadyRing(d.toFloat() / t, "$d/$t") } },
-    ) {
-        BlockRow(stringResource(R.string.path_week_open), stringResource(R.string.path_open_hint), first = true) { nav.go(Route.Mine(MinePart.PATH)) }
-        BlockRow(stringResource(R.string.resist_title), stringResource(R.string.resist_hint)) { nav.go(Route.Resistance) }
-    }
-    Block(stringResource(R.string.np_live_on_title), Group.LEAVE, padded = false) {
-        BlockRow(stringResource(R.string.np_title), stringResource(R.string.np_live_on_hint), first = true) { nav.go(Route.Mine(MinePart.NEW_PLACE)) }
-    }
-    Block(stringResource(R.string.practice_title), Group.PREPARE, padded = false) {
-        BlockRow(stringResource(R.string.practice_title), stringResource(R.string.practice_hint), first = true) { nav.go(Route.PracticeRoute("")) }
-    }
+    ) { nav.go(Route.Mine(MinePart.PATH)) }
+    HubCard(stringResource(R.string.resist_title), stringResource(R.string.resist_hint), resist()) { nav.go(Route.Resistance) }
+    HubCard(stringResource(R.string.np_live_on_title), stringResource(R.string.np_live_on_hint), Group.LEAVE.tint()) { nav.go(Route.Mine(MinePart.NEW_PLACE)) }
+    HubCard(stringResource(R.string.practice_title), stringResource(R.string.practice_hint), Group.PREPARE.tint()) { nav.go(Route.PracticeRoute("")) }
     Text(stringResource(R.string.way_private), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 }

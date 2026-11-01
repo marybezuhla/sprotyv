@@ -21,7 +21,7 @@ import ua.sprotyv.R
 object Widgets {
     private val PROVIDERS = listOf(
         NowWidget::class.java, RunningWidget::class.java, PathWidget::class.java, TileWidget::class.java,
-        ServicesWidget::class.java, KidWidget::class.java, SafeWidget::class.java, KitWidget::class.java,
+        ServicesWidget::class.java, KidWidget::class.java, SafeWidget::class.java, KitWidget::class.java, GartWidget::class.java,
     )
 
     /** Draws every placed widget again (a count started or stopped, the path changed, trip mode). */
@@ -43,6 +43,7 @@ object Widgets {
         each(KidWidget::class.java) { kid(app) }
         each(SafeWidget::class.java) { safe(app) }
         each(KitWidget::class.java) { kit(app) }
+        each(GartWidget::class.java) { gart(app) }
         // Choices left by widgets removed while nothing was told (the neutral icon)
         try { TileWidgets.keepOnly(app, ids(app, manager, TileWidget::class.java)) } catch (e: Exception) { }
     }
@@ -138,6 +139,22 @@ object Widgets {
         }
         v.setViewVisibility(R.id.w_empty, if (list.isEmpty()) View.VISIBLE else View.GONE)
         v.setOnClickPendingIntent(R.id.w_root, open(context, "now", 2))
+        return v
+    }
+
+    /** "Daily hardening today: 1 of 3": counts only, never which habits (the home screen is seen by others). */
+    private fun gart(context: Context): RemoteViews {
+        val v = RemoteViews(context.packageName, R.layout.widget_gart)
+        val prefs = HomePrefs.load(context)
+        val today = gartToday(prefs.gart)
+        val text = when {
+            // Trip mode: a neutral line, never a word that trip mode is on
+            prefs.trip || today == null -> context.getString(R.string.widget_gart_start)
+            today.first >= today.second -> context.getString(R.string.gart_strip_all, today.first, today.second)
+            else -> context.getString(R.string.gart_today_count, today.first, today.second)
+        }
+        v.setTextViewText(R.id.w_text, text)
+        v.setOnClickPendingIntent(R.id.w_root, open(context, if (prefs.trip) "now" else "gart", 9))
         return v
     }
 
@@ -309,5 +326,10 @@ class RunningWidget : AppWidgetProvider() {
 
 /** "This week's step": the level of My path, in counts only. */
 class PathWidget : AppWidgetProvider() {
+    override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) = Widgets.update(context)
+}
+
+/** "Daily hardening today": the count of today's habits, in counts only. */
+class GartWidget : AppWidgetProvider() {
     override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) = Widgets.update(context)
 }

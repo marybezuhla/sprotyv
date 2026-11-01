@@ -31,6 +31,8 @@ object HomePrefs {
         val path: String = "",
         /** The last level of "My path" whose completion was already said on the home screen (-1: none). */
         val pathCelebrated: Int = -1,
+        /** "Daily hardening" today as last seen ("20393:1/3": the day, done, chosen): counts only, never which habits. */
+        val gart: String = "",
         /** Trip mode: the owner's data and sensitive sources are off every screen (see [Trip]). */
         val trip: Boolean = false,
         /** The owner has medical training: first-aid procedures open as the full official text. */
@@ -51,6 +53,7 @@ object HomePrefs {
     private const val READINESS_HIDDEN = "readiness_hidden"
     private const val PATH = "path_share"
     private const val PATH_CELEBRATED = "path_celebrated"
+    private const val GART = "gart_share"
     private const val TRIP = "trip"
     private const val MEDIC = "medic"
     private const val SERVICE = "service"
@@ -73,6 +76,7 @@ object HomePrefs {
             readinessHidden = p.getBoolean(READINESS_HIDDEN, false),
             path = p.getString(PATH, null).orEmpty().take(40),
             pathCelebrated = p.getInt(PATH_CELEBRATED, -1),
+            gart = p.getString(GART, null).orEmpty().take(30),
             trip = p.getBoolean(TRIP, false),
             medic = p.getBoolean(MEDIC, false),
             service = p.getBoolean(SERVICE, false),
@@ -135,6 +139,7 @@ object HomePrefs {
             .putBoolean(READINESS_HIDDEN, next.readinessHidden)
             .putString(PATH, next.path)
             .putInt(PATH_CELEBRATED, next.pathCelebrated)
+            .putString(GART, next.gart)
             .putBoolean(TRIP, next.trip)
             .putBoolean(MEDIC, next.medic)
             .putBoolean(SERVICE, next.service)

@@ -593,6 +593,8 @@ fun FullHome(content: Content?, pins: List<String>, nav: Nav, onSettings: () -> 
         item(span = { GridItemSpan(maxLineSpan) }) { ActiveStrip(nav) }
         tileRows(fixed, cols) { info, m -> TileCard(info, big = false, modifier = m) { nav.go(info.route) } }
         item(span = { GridItemSpan(maxLineSpan) }) { ReadinessStrip(nav) }
+        // Today's daily hardening, when habits are chosen: counts only, a tap to tick them
+        item(span = { GridItemSpan(maxLineSpan) }) { GartStrip(nav) }
         item(span = { GridItemSpan(maxLineSpan) }) {
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 8.dp)) {
                 Text(

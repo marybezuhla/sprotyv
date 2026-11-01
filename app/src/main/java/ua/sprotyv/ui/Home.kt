@@ -39,6 +39,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -69,14 +70,16 @@ fun CallBar(edge: Boolean = true) {
             Button(
                 onClick = { Reach.dial(context, Service.UNIFIED.number) },
                 colors = ButtonDefaults.buttonColors(containerColor = DangerRed, contentColor = Color.White),
-                modifier = Modifier.weight(1f).heightIn(min = 56.dp),
+                modifier = Modifier.weight(1f).heightIn(min = 56.dp).semantics(mergeDescendants = true) {},
             ) {
                 Icon(Icons.Filled.Call, contentDescription = null)
                 Spacer(Modifier.width(8.dp))
-                Text(stringResource(R.string.call_112), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                // One line always: with large text just "112" (the phone icon says the rest), never a word broken in two
+                val big = androidx.compose.ui.platform.LocalDensity.current.fontScale > 1.15f
+                Text(stringResource(if (big) R.string.kid_call_112 else R.string.call_112), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, maxLines = 1, softWrap = false)
             }
             OutlinedButton(onClick = { others = true }, modifier = Modifier.heightIn(min = 56.dp)) {
-                Text(stringResource(R.string.call_others), style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(R.string.call_others), style = MaterialTheme.typography.titleMedium, maxLines = 1, softWrap = false)
             }
         }
     }

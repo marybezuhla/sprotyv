@@ -405,12 +405,13 @@ object Opening {
         "supplies" -> Route.SuppliesRoute
         "kit" -> Route.Mine(MinePart.KIT)
         "path" -> Route.Mine(MinePart.PATH)
+        "gart" -> Route.Mine(MinePart.GART)
         "safe" -> Route.Open(Section.SAFE)
         "kidcall" -> Route.Mine(MinePart.KID_CALL)
         else -> if (TILE.matches(t)) tileRoute(t.removePrefix("tile/")) else t.removePrefix("note/").toLongOrNull()?.let { Route.NoteEdit(it) }
     }
 
-    private val FIXED = setOf("bleeding", "now", "alarm", "power", "supplies", "kit", "path", "safe", "kidcall")
+    private val FIXED = setOf("bleeding", "now", "alarm", "power", "supplies", "kit", "path", "gart", "safe", "kidcall")
     /** A tile the owner put on the home screen as a widget. */
     private val TILE = Regex("^tile/(card|chapter|tool|link):[A-Za-z0-9_-]{1,40}$")
 

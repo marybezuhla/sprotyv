@@ -127,6 +127,10 @@
             <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_path_info" />
         </receiver>
+        <receiver android:name=".ui.GartWidget" android:exported="true" android:permission="android.permission.BIND_APPWIDGET" android:label="@string/gart_strip_title">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_gart_info" />
+        </receiver>
         <receiver android:name=".ui.TileWidget" android:exported="true" android:permission="android.permission.BIND_APPWIDGET" android:label="@string/widget_tile_label">
             <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_tile_info" />

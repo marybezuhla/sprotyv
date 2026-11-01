@@ -102,8 +102,8 @@ fun ReadinessBlock(content: Content?, nav: Nav) {
     val whole = if (known) rows.map { it.second!!.fraction }.average().toFloat() else 0f
     val partsDone = rows.count { it.second?.complete == true }
     val nextPart = rows.firstOrNull { it.second?.complete == false }
-    val summary = if (!known) null else stringResource(R.string.ready_summary, partsDone, rows.size) + " · " +
-        (if (nextPart == null) stringResource(R.string.ready_all) else stringResource(R.string.ready_next, stringResource(nextPart.first)))
+    // The ring says how many parts; the line under the title only the next step
+    val summary = if (!known) null else (if (nextPart == null) stringResource(R.string.ready_all) else stringResource(R.string.ready_next, stringResource(nextPart.first)))
     Block(
         stringResource(R.string.ready_title), ua.sprotyv.home.Group.MINE,
         foldable = true, summary = summary,
@@ -116,15 +116,8 @@ fun ReadinessBlock(content: Content?, nav: Nav) {
             val peopleDetail = peopleFlags?.let { (safe, ice) ->
                 stringResource(R.string.ready_people_detail, if (safe) yes else no, if (ice) yes else no)
             }
+            // Each part opens from here: this block is the one way into preparing (no second list of the same)
             rows.forEach { (title, p, route) -> ReadyRow(stringResource(title), p, if (title == R.string.people) peopleDetail else null) { nav.go(route) } }
-            if (rows.all { it.second != null }) {
-                val next = rows.firstOrNull { it.second?.complete == false }
-                Text(
-                    if (next == null) stringResource(R.string.ready_all) else stringResource(R.string.ready_next, stringResource(next.first)),
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.SemiBold,
-                )
-            }
         }
     }
 }
