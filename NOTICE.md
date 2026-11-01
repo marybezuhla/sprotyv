@@ -41,5 +41,7 @@
 
 ## Mapsforge
 
-Offline map drawing: Mapsforge (https://github.com/mapsforge/mapsforge), LGPL-3.0. Map data, when
-the owner opens a map file: © OpenStreetMap contributors, ODbL 1.0.
+Offline map drawing: Mapsforge (https://github.com/mapsforge/mapsforge), LGPL-3.0, with its built-in
+render themes (mapsforge-themes, LGPL-3.0). The theme symbols are drawn with AndroidSVG
+(https://github.com/BigBadaboom/androidsvg), Apache License 2.0. Map data, when the owner opens a
+map file: © OpenStreetMap contributors, ODbL 1.0.
