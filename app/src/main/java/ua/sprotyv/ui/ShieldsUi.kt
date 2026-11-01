@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -101,14 +102,16 @@ fun ShieldsScreen(nav: Nav) {
     // Big steps: some seen from what is already ticked, the rest on the owner's own word
     val pathKeys = p.first()
     fun auto(key: String) = pathKeys?.contains("\"$key\"") == true
-    fun marked(m: String, title: Int, icon: Int, group: Group?, big: Boolean, auto: Boolean = false) =
-        ShieldItem("step:$m", title, if (auto) R.string.shield_how_auto else R.string.shield_how_mark, group, icon, if (auto || m in st.marked) 2 else 0, big = big, mark = m.takeIf { !auto })
+    // byPath: seen from "My path" (no tick of its own); otherwise ticked on the owner's word
+    fun marked(m: String, title: Int, icon: Int, group: Group?, big: Boolean, byPath: Boolean? = null) =
+        ShieldItem("step:$m", title, if (byPath != null) R.string.shield_how_auto else R.string.shield_how_mark, group, icon,
+            if (byPath == true || (byPath == null && m in st.marked)) 2 else 0, big = big, mark = m.takeIf { byPath == null })
     val big = listOf(
         marked("rescue", R.string.step_rescue, R.drawable.ocha_help, Group.FIRST_AID, true),
         marked("left", R.string.step_left, R.drawable.ocha_internally_displaced, Group.LEAVE, true),
         marked("newlife", R.string.step_newlife, R.drawable.ocha_house, Group.LEAVE, true),
-        marked("course", R.string.step_course, R.drawable.ocha_learning, Group.FIRST_AID, true, auto = auto("course")),
-        marked("teach", R.string.step_teach, R.drawable.ocha_users, Group.FIRST_AID, true, auto = auto("teach")),
+        marked("course", R.string.step_course, R.drawable.ocha_learning, Group.FIRST_AID, true, byPath = auto("course")),
+        marked("teach", R.string.step_teach, R.drawable.ocha_users, Group.FIRST_AID, true, byPath = auto("teach")),
         marked("volunteer", R.string.step_volunteer, R.drawable.ocha_group, null, true),
         marked("defence", R.string.step_defence, R.drawable.ocha_security, null, true),
     )
@@ -158,7 +161,7 @@ private fun ShieldBadge(s: ShieldItem) {
     val how = stringResource(s.how)
     val state = stringResource(when (s.level) { 2 -> R.string.shield_earned; 1 -> R.string.shield_half; else -> R.string.shield_not_yet })
     Column(
-        Modifier.width(96.dp).clearAndSetSemantics { contentDescription = "$title: $state. $how" },
+        Modifier.width(100.dp).semantics { contentDescription = "$title: $state" },
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(Modifier.size(64.dp), contentAlignment = Alignment.Center) {
@@ -208,8 +211,13 @@ private fun ShieldBadge(s: ShieldItem) {
         // On the owner's word: a tick; counts: "+1" (and "−1" for a slip of the finger)
         s.mark?.let { m ->
             val on = s.level == 2
-            androidx.compose.material3.TextButton(onClick = { Steps.change { st -> st.copy(marked = if (on) st.marked - m else st.marked + m) } }, modifier = Modifier.heightIn(min = 48.dp)) {
-                Text(stringResource(if (on) R.string.shield_unmark else R.string.shield_mark), style = MaterialTheme.typography.labelLarge)
+            androidx.compose.material3.TextButton(
+                onClick = { Steps.change { st -> st.copy(marked = if (on) st.marked - m else st.marked + m) } },
+                contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 4.dp),
+                modifier = Modifier.heightIn(min = 48.dp),
+            ) {
+                // One line always: the word never breaks
+                Text(stringResource(if (on) R.string.shield_unmark else R.string.shield_mark), style = MaterialTheme.typography.labelLarge, maxLines = 1, softWrap = false)
             }
         }
         s.counter?.let { c ->
