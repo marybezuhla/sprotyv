@@ -21,7 +21,9 @@ object Trip {
         "bring-kids-back", "children-of-war", "minjust", "superhumans", "unbroken",
     )
 
-    fun hides(route: Route): Boolean = route.personal || route == Route.Scan || route == Route.Resistance || route == Route.HistoryRoute || route is Route.Story
+    fun hides(route: Route): Boolean = route.personal || route == Route.Scan || route == Route.Resistance || route == Route.HistoryRoute || route is Route.Story ||
+        // Which messengers are installed, and the defence words: not for a checkpoint
+        route == Route.Comms
 
     fun hides(link: Link): Boolean = link.group in HIDDEN_GROUPS || link.id in HIDDEN_LINKS
 }

@@ -50,7 +50,7 @@ fun CommsScreen(nav: Nav) {
                 m.facts.forEach {
                     Row { Text("•", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(end = 8.dp)); Text(stringResource(it), style = ReadingText, modifier = Modifier.weight(1f)) }
                 }
-                val there = Reach.installed(context, m.pkg)
+                val there = androidx.compose.runtime.remember(m.pkg) { Reach.installed(context, m.pkg) }
                 OutlinedButton(
                     onClick = { if (!there || !Reach.launch(context, m.pkg)) Reach.open(context, m.site, toolbarColor = toolbar) },
                     modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
