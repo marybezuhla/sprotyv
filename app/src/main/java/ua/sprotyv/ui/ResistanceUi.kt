@@ -221,7 +221,7 @@ fun PathScreen(nav: Nav) {
         }
     }
     val stepsStored by remember { PersonalStore.observe { db -> db.settings().observe(KEY_STEPS).map { listOf(it) } } }.collectAsStateWithLifecycle(null)
-    val steps = stepsStored?.let { Steps.parse(it.first()) }
+    val owned = stepsStored?.let { Steps.parse(it.first()) }
     val today = java.time.LocalDate.now().toEpochDay()
     val count = path.count { it.key in done }
     // Only the count leaves "Mine", for the home screen and "Resistance"
@@ -279,7 +279,7 @@ fun PathScreen(nav: Nav) {
                         Text(stringResource(s.words), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = doneText(on))
                         // A step that can be checked: the mark when passed, or the way to the check
                         if (s.key in PATH_CHECKS) {
-                            if (s.key + TESTED in done && !(steps?.repeatDue(s.key, today) == true)) {
+                            if (s.key + TESTED in done && !(owned?.repeatDue(s.key, today) == true)) {
                                 Text(stringResource(R.string.path_tested), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             } else if (s.key + TESTED in done) {
                                 // Passed a while ago: a quiet offer to repeat, nothing taken away
