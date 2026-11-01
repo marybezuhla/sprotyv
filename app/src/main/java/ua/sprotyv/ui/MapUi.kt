@@ -58,7 +58,7 @@ object MapFiles {
 /**
  * "Map": a map that works with no network at all — streets, buildings, paths, drawn on the phone
  * from a file. The tiles drawn are kept only in memory, never on disk, so no trace of which places
- * were looked at is left behind.
+ * were looked at is left behind (only the theme's general symbols are cached, and cleared on leaving).
  */
 @Composable
 fun MapScreen(nav: Nav) {
@@ -89,7 +89,8 @@ fun MapScreen(nav: Nav) {
             Text(stringResource(R.string.map_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             return@Frame
         }
-        OfflineMap(u, Modifier.fillMaxWidth().height(520.dp)) { broken = true }
+        // A new file is a new map view: the old one is closed and nothing of it is reused
+        androidx.compose.runtime.key(u) { OfflineMap(u, Modifier.fillMaxWidth().height(520.dp)) { broken = true } }
         Text(stringResource(R.string.map_osm), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         OutlinedButton(onClick = { pick.launch(arrayOf("*/*")) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text(stringResource(R.string.map_other_file)) }
     }
@@ -121,6 +122,9 @@ private class MapHolder {
     private var view: MapView? = null
 
     fun open(context: Context, uri: Uri, mapView: MapView): Boolean = try {
+        // Only a ".map" file is tried as a map
+        val name = context.contentResolver.query(uri, arrayOf(android.provider.OpenableColumns.DISPLAY_NAME), null, null, null)?.use { c -> if (c.moveToFirst()) c.getString(0) else null }
+        require(name == null || name.endsWith(".map", ignoreCase = true))
         val fd = requireNotNull(context.contentResolver.openFileDescriptor(uri, "r"))
         pfd = fd
         val file = MapFile(FileInputStream(fd.fileDescriptor))
@@ -146,5 +150,7 @@ private class MapHolder {
         runCatching { pfd?.close() }
         view = null; store = null; pfd = null
         runCatching { AndroidGraphicFactory.clearResourceMemoryCache() }
+        // The theme's symbols Mapsforge keeps as small pictures in the app's files: cleared too
+        runCatching { AndroidGraphicFactory.clearResourceFileCache() }
     }
 }
