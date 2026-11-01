@@ -1198,4 +1198,5 @@
     <string name="practice_choose">Оберіть, що перевірити: основне впереміш або одну тему.</string>
     <string name="practice_count">ситуацій: %1$d</string>
     <string name="practice_more_coming">Ситуації з довідника додаватимемо поступово, кожну — з посиланням на джерело.</string>
+    <string name="widget_neutral">Відкрити «Спротив»</string>
 </resources>

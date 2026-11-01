@@ -182,6 +182,8 @@ object Notify {
 
         // A "Running now" widget is redrawn when a wait ends or a count expires, notifications or not
         plan(app, "widget", if (Widgets.hasRunning(app)) widgetDue(app, now) else null)
+        // A new day: the hardening widget starts again at zero (never yesterday's "all done")
+        plan(app, "midnight", if (Widgets.hasGart(app)) java.time.LocalDate.now().plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli() + 60_000 else null)
 
         val counts = shows(app, Kind.COUNTS)
         plan(app, "shelter", Since.SHELTER.get(app, now).takeIf { counts && it != 0L }?.let { nextMark(it, SHELTER_MARKS, now) })
@@ -295,6 +297,7 @@ object Notify {
                 if (shows(app, Kind.KIT)) post(app, ID_KIT, REMINDERS, "kit", app.getString(R.string.notify_kit_title), app.getString(R.string.notify_kit_text), private = true)
             }
             name == "widget" -> {}
+            name == "midnight" -> {}
             name.startsWith("note/") -> name.removePrefix("note/").toLongOrNull()?.let { id ->
                 notes(app).edit().remove(id.toString()).apply()
                 changed.value++

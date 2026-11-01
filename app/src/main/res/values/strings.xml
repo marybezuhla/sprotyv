@@ -1192,4 +1192,5 @@
     <string name="practice_choose">Choose what to check: the main ones mixed, or one theme.</string>
     <string name="practice_count">situations: %1$d</string>
     <string name="practice_more_coming">Situations from the guide will be added step by step, each with its source.</string>
+    <string name="widget_neutral">Open Sprotyv</string>
 </resources>
