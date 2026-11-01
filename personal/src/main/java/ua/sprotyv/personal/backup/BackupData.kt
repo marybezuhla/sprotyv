@@ -31,6 +31,11 @@ object BackupData {
 
     /** Our files nest four levels at most; anything deeper is refused before parsing. */
     private const val MAX_DEPTH = 6
+    /** Values in the whole file (commas and brackets outside strings): far above any real copy, so a crafted one cannot fill memory. */
+    private const val MAX_VALUES = 200_000
+    /** The notes limits the app keeps, held on restore too. */
+    const val MAX_NOTES = 500
+    const val MAX_NOTES_TEXT = 1_400_000
     private const val MAX_HOME = 40
     private const val MAX_HOME_TEXT = 2_000
     private val HOME_KEY = Regex("^[a-z_]{1,30}$")
@@ -152,6 +157,7 @@ object BackupData {
                 require(s.kit.map { it.key }.toSet().size == s.kit.size)
                 require(s.settings.map { it.key }.toSet().size == s.settings.size)
                 require(s.notes.map { it.id }.toSet().size == s.notes.size)
+                require(s.notes.size <= MAX_NOTES && s.notes.sumOf { it.title.length.toLong() + it.text.length } <= MAX_NOTES_TEXT)
             }
         }
     }
@@ -200,11 +206,12 @@ object BackupData {
         return root
     }
 
-    /** Counts brackets outside strings; true when nesting stays within [MAX_DEPTH]. */
+    /** Counts brackets and values outside strings; true when nesting stays within [MAX_DEPTH] and values within [MAX_VALUES]. */
     internal fun shallow(bytes: ByteArray): Boolean {
         var depth = 0
         var inString = false
         var escaped = false
+        var values = 0
         for (b in bytes) {
             val c = b.toInt().toChar()
             if (inString) {
@@ -217,7 +224,8 @@ object BackupData {
             }
             when (c) {
                 '"' -> inString = true
-                '{', '[' -> if (++depth > MAX_DEPTH) return false
+                '{', '[' -> { if (++depth > MAX_DEPTH) return false; if (++values > MAX_VALUES) return false }
+                ',' -> if (++values > MAX_VALUES) return false
                 '}', ']' -> depth--
             }
         }

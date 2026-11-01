@@ -59,9 +59,9 @@ object NoteInbox {
 
 private const val MAX_NOTE = 20_000
 private const val MAX_NOTE_TITLE = 200
-private const val MAX_NOTES = 500
+private const val MAX_NOTES = ua.sprotyv.personal.backup.BackupData.MAX_NOTES
 /** Letters in all notes together: about 3 MB in the copy at most, under the 8 MB a restore accepts. */
-private const val MAX_TOTAL = 1_400_000
+private const val MAX_TOTAL = ua.sprotyv.personal.backup.BackupData.MAX_NOTES_TEXT
 
 /**
  * "My notes": free text, encrypted with the rest of "Mine", carried by the encrypted copy, hidden
