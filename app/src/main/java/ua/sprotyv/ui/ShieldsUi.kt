@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -117,7 +118,7 @@ private fun ShieldBadge(s: ShieldItem) {
                     1 -> {
                         // Half way: the lower half filled
                         drawPath(shield, tint.container.copy(alpha = 0.35f))
-                        androidx.compose.ui.graphics.drawscope.clipRect(top = hgt * 0.5f) { drawPath(shield, tint.container) }
+                        clipRect(top = hgt * 0.5f) { drawPath(shield, tint.container) }
                         drawPath(shield, tint.ink, style = Stroke(width = 2.dp.toPx()))
                     }
                     else -> drawPath(shield, outline, style = Stroke(width = 1.5.dp.toPx(), pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(floatArrayOf(6f, 6f))))
