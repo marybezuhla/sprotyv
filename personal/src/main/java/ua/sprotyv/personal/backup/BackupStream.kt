@@ -31,11 +31,13 @@ object BackupStream {
     /** The file, at most: far above any real copy, a bound on what a crafted one can make the phone read. */
     const val MAX_FILE_BYTES = 1L shl 30
     /** Unpacked, at most: a small crafted file can never unpack into something endless. */
-    const val MAX_PLAIN_BYTES = 2L shl 30
+    const val MAX_PLAIN_BYTES = 256L shl 20
 
     /** The key for one file, held only while it is written or until a restore is confirmed or dropped. */
     class Key internal constructor(internal val header: ByteArray, internal val ikm: ByteArray) {
+        /** Our copy is cleared; Tink keeps its own until the memory is reused, which the JVM cannot prevent. */
         fun wipe() = ikm.fill(0)
+        internal val aead by lazy { AesGcmHkdfStreaming(ikm, "HmacSha256", 32, SEGMENT_BYTES, 0) }
         /** True when [h] is the header this key was made for. */
         fun matches(h: ByteArray): Boolean = h.contentEquals(header)
     }
@@ -68,14 +70,12 @@ object BackupStream {
         return h
     }
 
-    private fun aead(key: Key) = AesGcmHkdfStreaming(key.ikm, "HmacSha256", 32, SEGMENT_BYTES, 0)
-
     private fun aad(key: Key) = key.header + LABEL
 
     /** Writes the header to [out]; what is then written to the result is compressed and encrypted. Closing it finishes the file. */
     fun writer(out: OutputStream, key: Key): OutputStream {
         out.write(key.header)
-        return GZIPOutputStream(aead(key).newEncryptingStream(out, aad(key)), 64 * 1024)
+        return GZIPOutputStream(key.aead.newEncryptingStream(out, aad(key)), 64 * 1024)
     }
 
     /**
@@ -83,7 +83,7 @@ object BackupStream {
      * a wrong password or any change in the file shows as [BackupCrypto.WrongPasswordOrDamaged].
      */
     fun reader(input: InputStream, key: Key): InputStream {
-        val decrypted = aead(key).newDecryptingStream(Bounded(input, MAX_FILE_BYTES - HEADER_BYTES), aad(key))
+        val decrypted = key.aead.newDecryptingStream(Bounded(input, MAX_FILE_BYTES - HEADER_BYTES), aad(key))
         return Failing(Bounded(GZIPInputStream(Failing(decrypted), 64 * 1024), MAX_PLAIN_BYTES))
     }
 

@@ -104,6 +104,34 @@ class BackupStreamTest {
         assertTrue(!BackupStream.isStream(old))
     }
 
+    @Test fun partsCutSwappedOrRepeatedAreRefused() {
+        // Random bytes do not compress: more than three 1 MiB parts
+        val data = ByteArray(3_500_000).also { java.util.Random(7).nextBytes(it) }
+        val key = BackupStream.newKey(pw, fast)
+        val out = ByteArrayOutputStream()
+        BackupStream.writer(out, key).use { it.write(data) }
+        val file = out.toByteArray()
+        fun readAll(f: ByteArray): ByteArray {
+            val input = ByteArrayInputStream(f)
+            val k = BackupStream.keyFor(BackupStream.readHeader(input), pw, fast)
+            return BackupStream.reader(input, k).readBytes()
+        }
+        assertTrue(readAll(file).contentEquals(data))
+        val seg = 1 shl 20
+        val h = BackupStream.HEADER_BYTES
+        // Parts 2 and 3 start at h + 1 MiB and h + 2 MiB (the first part holds Tink's own header)
+        val p1 = h + seg; val p2 = h + 2 * seg
+        expect<BackupCrypto.WrongPasswordOrDamaged> { readAll(file.copyOf(p2)) }
+        expect<BackupCrypto.WrongPasswordOrDamaged> { readAll(file.copyOf(p1)) }
+        val swapped = file.copyOf().also { f ->
+            val a = file.copyOfRange(p1, p1 + seg); val b = file.copyOfRange(p2, p2 + seg)
+            b.copyInto(f, p1); a.copyInto(f, p2)
+        }
+        expect<BackupCrypto.WrongPasswordOrDamaged> { readAll(swapped) }
+        val repeated = file.copyOf().also { f -> file.copyOfRange(p1, p1 + seg).copyInto(f, p2) }
+        expect<BackupCrypto.WrongPasswordOrDamaged> { readAll(repeated) }
+    }
+
     private inline fun <reified E : Throwable> expect(block: () -> Unit) {
         try {
             block()

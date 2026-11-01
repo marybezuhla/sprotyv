@@ -99,7 +99,7 @@ object BackupJobs {
      */
     sealed class Opened(val created: Long, val people: Int, val notes: Int, val records: Int, val skipped: Int, val home: Map<String, String>) {
         class Piece(val snap: BackupData.Snapshot) : Opened(snap.created, snap.people.size, snap.notes.size, snap.records, 0, snap.home)
-        class Stream(val uri: Uri, val key: BackupStream.Key, val summary: BackupLines.Summary) :
+        class Stream(val uri: Uri, val key: BackupStream.Key, val summary: BackupLines.Summary, val fingerprint: ByteArray) :
             Opened(summary.created, summary.people, summary.notes, summary.records, summary.skipped, summary.home)
 
         fun wipe() { if (this is Stream) key.wipe() }
@@ -219,7 +219,11 @@ object BackupJobs {
                 pw.fill(' ')
             }
         }
-        if (!started) pw.fill(' ')
+        if (!started) {
+            pw.fill(' ')
+            // Busy with another copy: the empty file the save dialog made does not stay behind
+            scope.launch { if (isNewDocument(app, uri)) deleteQuietly(app, uri) }
+        }
     }
 
     /** Removes the file the save dialog made; says so if the file app does not allow it. */
@@ -241,8 +245,9 @@ object BackupJobs {
                     suspend fun tryWith(p: CharArray): Opened {
                         val key = withContext(Dispatchers.Default) { BackupStream.keyFor(head, p) }
                         try {
-                            val summary = readCopy(app, uri, key) { BackupLines.read(it) { } }
-                            return Opened.Stream(uri, key, summary)
+                            val md = java.security.MessageDigest.getInstance("SHA-256")
+                            val summary = readCopy(app, uri, key, md) { BackupLines.read(it) { } }
+                            return Opened.Stream(uri, key, summary, md.digest())
                         } catch (e: Throwable) {
                             key.wipe()
                             throw e
@@ -274,6 +279,8 @@ object BackupJobs {
                 }
                 // The screen was left meanwhile: nothing decrypted stays behind
                 if (mine == generation) setPending(opened) else opened.wipe()
+                // Left in between the check and the setting: wiped all the same
+                if (mine != generation) setPending(null)
                 null
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
@@ -299,18 +306,21 @@ object BackupJobs {
         val app = context.applicationContext
         val snap = _pending.value ?: return
         _pending.value = null
-        job {
+        val started = job {
             // Changes still waiting to be saved would land on top of the restored data
             PersonalStore.dropPending("")
             // Never later and unseen: if the data does not open in time, nothing is replaced.
             // A streamed copy is read again from the file and checked once more while it goes in;
             // anything different from what the owner saw changes nothing
             val ok = try {
-                withTimeoutOrNull(120_000) {
+                withTimeoutOrNull(600_000) {
                     PersonalStore.read { db ->
                         when (snap) {
                             is Opened.Piece -> BackupData.replaceAll(db, snap.snap, BACKED_UP_SETTINGS)
-                            is Opened.Stream -> readCopy(app, snap.uri, snap.key) { BackupLines.restore(db, it, BACKED_UP_SETTINGS, snap.summary) }
+                            is Opened.Stream -> {
+                                val md = java.security.MessageDigest.getInstance("SHA-256")
+                                readCopy(app, snap.uri, snap.key, md) { BackupLines.restore(db, it, BACKED_UP_SETTINGS, snap.summary) { md.digest().contentEquals(snap.fingerprint) } }
+                            }
                         }
                         true
                     }
@@ -336,6 +346,8 @@ object BackupJobs {
                 else -> R.string.backup_restored
             }
         }
+        // Still busy with the opening: the question stays, so the owner can say yes again
+        if (!started) _pending.value = snap
     }
 
     fun cancelRestore() { setPending(null) }
@@ -442,12 +454,12 @@ private fun readUpTo(input: java.io.InputStream, n: Int): ByteArray {
     return out.copyOf(got)
 }
 
-/** Opens a streamed copy with [key] and hands its content, read in parts, to [block]. */
-private suspend fun <T> readCopy(context: Context, uri: Uri, key: BackupStream.Key, block: suspend (java.io.Reader) -> T): T =
+/** Opens a streamed copy with [key] and hands its content, read in parts, to [block]; [digest] sees every byte of it. */
+private suspend fun <T> readCopy(context: Context, uri: Uri, key: BackupStream.Key, digest: java.security.MessageDigest, block: suspend (java.io.Reader) -> T): T =
     withContext(Dispatchers.IO) {
         (context.contentResolver.openInputStream(uri) ?: throw BackupCrypto.NotABackup()).use { input ->
             if (!key.matches(BackupStream.readHeader(input))) throw BackupCrypto.NotABackup()
-            java.io.InputStreamReader(BackupStream.reader(input, key), Charsets.UTF_8).use { block(it) }
+            java.io.InputStreamReader(java.security.DigestInputStream(BackupStream.reader(input, key), digest), Charsets.UTF_8).use { block(it) }
         }
     }
 

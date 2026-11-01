@@ -1,6 +1,7 @@
 package ua.sprotyv.personal.backup
 
 import androidx.room.withTransaction
+import kotlinx.coroutines.ensureActive
 import org.json.JSONObject
 import ua.sprotyv.personal.PersonalDb
 import java.io.Reader
@@ -20,7 +21,9 @@ import java.io.Writer
 object BackupLines {
     const val FORMAT = 2
     /** One line at most: a full medical card is about 140 000 letters. */
-    private const val MAX_LINE = 512 * 1024
+    private const val MAX_LINE = 1024 * 1024
+    /** Records of unknown kinds at most: a newer copy has a few new kinds, not a flood. */
+    private const val MAX_SKIPPED = 100_000
     private val KIND = Regex("^[a-z_]{1,30}$")
 
     /** What a copy holds, counted while it was checked. Two readings of the same file give the same summary. */
@@ -71,6 +74,8 @@ object BackupLines {
         var count = 0; var skipped = 0
         var home = emptyMap<String, String>()
         while (true) {
+            // Stops promptly when the work is cancelled (the screen left, a time limit)
+            kotlin.coroutines.coroutineContext.ensureActive()
             val o = parse(lines.next() ?: throw BackupData.Incompatible())
             val t = o.optString("t")
             if (t == "end") {
@@ -93,7 +98,7 @@ object BackupLines {
                         require(notes.add(it.id) && notes.size <= BackupData.MAX_NOTES && notesText <= BackupData.MAX_NOTES_TEXT)
                     }
                     "home" -> { require(++homeSeen == 1); home = BackupData.homeOf(v); null }
-                    else -> { skipped++; null }
+                    else -> { require(++skipped <= MAX_SKIPPED); null }
                 }
             }
             if (record != null) each(record)
@@ -103,14 +108,15 @@ object BackupLines {
 
     /**
      * Replaces all of the owner's data with the copy read from [r], all or nothing: everything is
-     * checked again while it goes in, and must match what the owner saw ([expected]); otherwise
-     * nothing changes.
+     * checked again while it goes in, and must match what the owner saw ([expected], and
+     * [sameContent] for the fingerprint of the content); otherwise nothing changes.
      */
-    suspend fun restore(db: PersonalDb, r: Reader, settings: Set<String>, expected: Summary) {
+    suspend fun restore(db: PersonalDb, r: Reader, settings: Set<String>, expected: Summary, sameContent: () -> Boolean) {
         db.withTransaction {
             BackupData.clearAll(db, settings)
             val got = read(r) { BackupData.put(db, it, settings) }
-            if (got != expected) throw BackupData.Incompatible()
+            // The same records, and byte for byte the same content as when it was opened
+            if (got != expected || !sameContent()) throw BackupData.Incompatible()
         }
     }
 
