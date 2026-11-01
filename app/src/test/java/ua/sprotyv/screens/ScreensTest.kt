@@ -47,6 +47,7 @@ import ua.sprotyv.ui.SimpleHome
 import ua.sprotyv.ui.SituationScreen
 import ua.sprotyv.ui.SprotyvTheme
 import ua.sprotyv.ui.ThemeChoice
+import ua.sprotyv.ui.WayHub
 import java.io.File
 
 /**
@@ -79,7 +80,13 @@ class ScreensTest {
 
     private fun mode(m: Mode) = HomePrefs.update(app) { it.copy(mode = m, pins = Preset.GENERAL.pins) }
 
-    private fun shot(name: String, dark: Boolean = false, body: @Composable () -> Unit) = ActivityScenario.launch(ComponentActivity::class.java).use { scenario ->
+    private fun shot(name: String, dark: Boolean = false, big: Boolean = false, body: @Composable () -> Unit) = run {
+        // "big": the phone's text size raised, as many people set it
+        if (big) org.robolectric.RuntimeEnvironment.setFontScale(1.3f)
+        try { draw(name, dark, body) } finally { if (big) org.robolectric.RuntimeEnvironment.setFontScale(1f) }
+    }
+
+    private fun draw(name: String, dark: Boolean, body: @Composable () -> Unit) = ActivityScenario.launch(ComponentActivity::class.java).use { scenario ->
         scenario.onActivity { activity ->
             activity.setContent {
                 SprotyvTheme(if (dark) ThemeChoice.DARK else ThemeChoice.LIGHT) {
@@ -139,4 +146,21 @@ class ScreensTest {
     @Test fun delegate() = shot("22-delegate-bleeding") { DelegateScreen(content, 4, nav) }
     @Test fun handover() = shot("23-handover") { HandoverScreen(nav) }
     @Test fun resistance() { HomePrefs.update(app) { it.copy(mode = Mode.FULL, service = true) }; shot("21-resistance") { ResistanceScreen(content, nav) } }
+
+    // Counters running, the way hub, and large text: where uneven type shows first
+    private fun since(name: String, minutes: Long) = app.getSharedPreferences(name, android.content.Context.MODE_PRIVATE).edit().putLong("since", System.currentTimeMillis() - minutes * 60_000).commit()
+    private fun clear(vararg names: String) = names.forEach { app.getSharedPreferences(it, android.content.Context.MODE_PRIVATE).edit().clear().commit() }
+    @Test fun powerRunning() {
+        since("blackout", 95); since("heating", 26 * 60)
+        try { shot("24-power-running-dark", dark = true) { PowerScreen(content, nav) } } finally { clear("blackout", "heating") }
+    }
+    @Test fun powerRunningBig() {
+        since("blackout", 300); since("heating", 50 * 60)
+        try { shot("24-power-running-big", big = true) { PowerScreen(content, nav) } } finally { clear("blackout", "heating") }
+    }
+    @Test fun way() { mode(Mode.FULL); shot("25-way-dark", dark = true) { Frame("Мій шлях", {}) { WayHub(nav) } } }
+    @Test fun homeFullBig() { mode(Mode.FULL); shot("26-home-full-big", big = true) { FullHome(content, Preset.GENERAL.pins, nav, {}, {}, {}) } }
+    @Test fun cardBig() { mode(Mode.FULL); shot("27-card-bleeding-big", dark = true, big = true) { CardScreen(content, "bleeding", nav) } }
+    @Test fun guideTableBig() = shot("28-guide-9-3-big", dark = true, big = true) { GuideSectionScreen(content, "9.3", nav) }
+    @Test fun practiceCheck() { mode(Mode.FULL); shot("29-practice-check-dark", dark = true) { PracticeScreen(content, "bleeding", nav, check = "bleed") } }
 }
