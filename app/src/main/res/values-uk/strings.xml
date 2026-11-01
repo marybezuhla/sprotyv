@@ -632,6 +632,7 @@
     <string name="mine_block_copies">Копія, друк, закладки</string>
     <string name="source_section">Джерело: «%1$s» %2$s, п. %3$s</string>
     <string name="source_license">Ліцензія: %1$s</string>
+    <string name="about_with_you">Україна з тобою.</string>
     <string name="about_icons">Піктограми: OCHA Humanitarian Icons (Управління ООН з координації гуманітарних справ, CC0), Health Icons (healthicons.org, CC0), емодзі OpenMoji (openmoji.org, CC BY-SA 4.0) і Material Symbols (Google, Apache 2.0).</string>
     <string name="ready_summary">Готово частин: %1$d з %2$d</string>
     <string name="mine_block_trouble_desc">Я в безпеці, медкартка, довірені люди, план, екран для рятувальника</string>
