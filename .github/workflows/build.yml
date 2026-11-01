@@ -52,6 +52,9 @@ jobs:
             exit 1
           fi
 
+      - name: Built-in maps (checked against maps.lock)
+        run: bash scripts/maps/fetch.sh
+
       - name: Test
         shell: bash
         run: |
@@ -118,6 +121,9 @@ jobs:
             echo "::error::gradle/verification-metadata.xml is missing. Run 'Refresh dependency checksums' and review it."
             exit 1
           fi
+
+      - name: Built-in maps (checked against maps.lock)
+        run: bash scripts/maps/fetch.sh
 
       - name: Build (unsigned)
         env:
