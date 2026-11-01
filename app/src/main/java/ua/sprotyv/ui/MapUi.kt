@@ -31,13 +31,25 @@ import java.io.File
 
 /** The overview of all Ukraine, built into the app like the Constitution: no download, no files to open. */
 object Overview {
-    /** Copied once out of the app's own files so the map reader can read it directly. */
+    /**
+     * Copied out of the app's own files so the map reader can read it directly: again after every
+     * install or update of the app (a new map may have the same size), through a temporary file so
+     * a copy cut short is never read, and one copy at a time.
+     */
+    @Synchronized
     fun file(c: Context): File? = try {
         val dir = File(c.noBackupFilesDir, "maps").apply { mkdirs() }
         val out = File(dir, "overview.map")
+        val mark = File(dir, "overview.installed")
+        @Suppress("DEPRECATION")
+        val installed = c.packageManager.getPackageInfo(c.packageName, 0).lastUpdateTime.toString()
         c.assets.openFd("maps/overview.map").use { afd ->
-            if (!out.exists() || out.length() != afd.length) {
-                afd.createInputStream().use { input -> out.outputStream().use { input.copyTo(it) } }
+            val current = out.exists() && out.length() == afd.length && runCatching { mark.readText() }.getOrNull() == installed
+            if (!current) {
+                val tmp = File(dir, "overview.map.tmp")
+                afd.createInputStream().use { input -> tmp.outputStream().use { input.copyTo(it) } }
+                check(tmp.length() == afd.length && tmp.renameTo(out))
+                mark.writeText(installed)
             }
         }
         out
@@ -45,14 +57,20 @@ object Overview {
         null
     }
 
-    /** An earlier version let the owner open map files: whatever it kept about them is let go. */
+    /**
+     * An earlier version let the owner open oblast map files and kept their addresses: those, and
+     * only those, are let go, and the settings file that held them is deleted. Once, at start.
+     */
     fun forgetOpenedFiles(c: Context) {
+        if (!File(c.applicationInfo.dataDir, "shared_prefs/map.xml").exists()) return
         runCatching {
-            c.contentResolver.persistedUriPermissions.forEach { p ->
-                runCatching { c.contentResolver.releasePersistableUriPermission(p.uri, android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION) }
+            val p = c.applicationContext.getSharedPreferences("map", Context.MODE_PRIVATE)
+            val kept = p.getStringSet("uris", emptySet()).orEmpty() + listOfNotNull(p.getString("uri", null))
+            kept.forEach { u ->
+                runCatching { c.contentResolver.releasePersistableUriPermission(android.net.Uri.parse(u), android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION) }
             }
         }
-        runCatching { c.applicationContext.getSharedPreferences("map", Context.MODE_PRIVATE).edit().clear().apply() }
+        runCatching { c.applicationContext.deleteSharedPreferences("map") }
     }
 }
 
@@ -67,7 +85,7 @@ fun MapScreen(nav: Nav) {
     var ready by remember { mutableStateOf(false) }
     var broken by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
-        overview = withContext(Dispatchers.IO) { Overview.forgetOpenedFiles(context); Overview.file(context) }
+        overview = withContext(Dispatchers.IO) { Overview.file(context) }
         ready = true
     }
     Frame(stringResource(R.string.map_title), nav::back) {

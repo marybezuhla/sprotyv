@@ -19,9 +19,6 @@ jobs:
       # Read by every Java start, whatever the launcher script does (the JVM says "Picked up" in the log)
       JAVA_TOOL_OPTIONS: -Xmx13g
     steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
-        with:
-          persist-credentials: false
       - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         with:
           distribution: temurin
@@ -37,15 +34,14 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get update -q
-          sudo apt-get install -y -q osmium-tool osmosis python3
+          sudo apt-get install -y -q osmium-tool osmosis
           osmosis -v 2>&1 | head -3 || true
           mkdir -p ~/.openstreetmap/osmosis/plugins
           J=mapsforge-map-writer-0.25.0-jar-with-dependencies.jar
           U=https://repo1.maven.org/maven2/org/mapsforge/mapsforge-map-writer/0.25.0
           curl -sSfL -o "$J" "$U/$J"
-          curl -sSfL -o "$J.sha1" "$U/$J.sha1"
-          echo "$(cat "$J.sha1" | cut -c1-40)  $J" | sha1sum -c -
-          sha256sum "$J"
+          # A fixed SHA-256, written here: not one fetched from the same server as the file
+          echo "c132d97d492707b30f2bf0c594ce9009eac9a8bde4e6be8ad97a005a506f4b68  $J" | sha256sum -c -
           mv "$J" ~/.openstreetmap/osmosis/plugins/
 
       - name: OpenStreetMap data for Ukraine (checked against its MD5)
