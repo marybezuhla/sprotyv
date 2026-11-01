@@ -1,0 +1,133 @@
+name: Build maps
+
+# Builds the offline maps from OpenStreetMap: a light overview of all Ukraine (built into the app)
+# and a detailed map per oblast (opened by the owner from a file). Run by hand, or by pushing the
+# maps-build branch. Publishes them as a release with their SHA-256 sums. No app code runs here.
+on:
+  workflow_dispatch:
+  push:
+    branches: [maps-build]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Room on the disk
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL || true
+          df -h /
+
+      - name: Tools (osmium, osmosis, the Mapsforge writer)
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -q
+          sudo apt-get install -y -q osmium-tool osmosis python3
+          osmosis -v 2>&1 | head -3 || true
+          mkdir -p ~/.openstreetmap/osmosis/plugins
+          J=mapsforge-map-writer-0.25.0-jar-with-dependencies.jar
+          U=https://repo1.maven.org/maven2/org/mapsforge/mapsforge-map-writer/0.25.0
+          curl -sSfL -o "$J" "$U/$J"
+          curl -sSfL -o "$J.sha1" "$U/$J.sha1"
+          echo "$(cat "$J.sha1" | cut -c1-40)  $J" | sha1sum -c -
+          sha256sum "$J"
+          mv "$J" ~/.openstreetmap/osmosis/plugins/
+
+      - name: OpenStreetMap data for Ukraine (checked against its MD5)
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p work && cd work
+          curl -sSfL -o ukraine.osm.pbf https://download.geofabrik.de/europe/ukraine-latest.osm.pbf
+          curl -sSfL -o ukraine.md5 https://download.geofabrik.de/europe/ukraine-latest.osm.pbf.md5
+          echo "$(cut -d' ' -f1 ukraine.md5)  ukraine.osm.pbf" | md5sum -c -
+          osmium fileinfo -e ukraine.osm.pbf | grep -E "Timestamp|Number of" | head -8 || true
+          ls -la
+
+      - name: Oblasts (their boundaries from the data itself)
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd work
+          osmium tags-filter ukraine.osm.pbf r/boundary=administrative -o adm.osm.pbf
+          osmium export adm.osm.pbf --geometry-types=polygon -f geojsonseq -o adm.geojsonseq
+          python3 ../scripts/maps/oblasts.py adm.geojsonseq extracts.json oblasts.json
+          cat oblasts.json | head -80
+
+      - name: Detailed maps, one per oblast
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd work
+          mkdir -p out obl
+          osmium extract -c extracts.json -d obl ukraine.osm.pbf --overwrite
+          for f in obl/*.osm.pbf; do
+            id=$(basename "$f" .osm.pbf)
+            osmosis -q --rbf file="$f" --mapfile-writer file="out/$id.map" type=hd threads=4 preferred-languages=uk,en
+            ls -la "out/$id.map"
+          done
+
+      - name: Overview of all Ukraine (built into the app)
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd work
+          # Only what helps to find one's way: settlements, main roads, rail, rivers, water, forests, boundaries
+          osmium tags-filter ukraine.osm.pbf \
+            n/place=city,town,village \
+            w/highway=motorway,trunk,primary,secondary,motorway_link,trunk_link \
+            w/railway=rail w/waterway=river w/natural=water r/natural=water \
+            w/landuse=forest r/landuse=forest w/natural=wood r/natural=wood \
+            r/boundary=administrative w/boundary=administrative \
+            -o overview.osm.pbf --overwrite
+          osmosis -q --rbf file=overview.osm.pbf --mapfile-writer file=out/overview.map type=hd threads=4 \
+            preferred-languages=uk,en zoom-interval-conf=5,0,7,9,8,10,11,11,12
+          ls -la out
+
+      - name: Sums and sizes
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd work/out
+          sha256sum *.map > SHA256SUMS
+          cp ../oblasts.json .
+          du -h *.map | sort -h
+          du -ch *.map | tail -1
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: maps
+          path: work/out/
+          retention-days: 7
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: maps
+          path: out
+      - name: Publish as a release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="maps-$(date -u +%Y%m%d)-${{ github.run_number }}"
+          gh release create "$tag" out/* --repo "${{ github.repository }}" --title "Мапи $(date -u +%d.%m.%Y)" \
+            --notes "Офлайн-мапи з OpenStreetMap (© учасники OpenStreetMap, ODbL). overview.map вшивається в застосунок; файли областей відкриваються в «Спротиві». Суми SHA-256 — у SHA256SUMS." --prerelease
