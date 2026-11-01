@@ -16,7 +16,6 @@ object Reach {
     const val WHATSAPP_BUSINESS = "com.whatsapp.w4b"
     const val SIGNAL = "org.thoughtcrime.securesms"
 
-    /** Opens the dialer with the number filled in; the person presses call. */
     /** Opens an app already on the phone; false when it is not there (nothing is installed from here). */
     fun launch(context: Context, pkg: String): Boolean = try {
         val i = context.packageManager.getLaunchIntentForPackage(pkg)
@@ -28,6 +27,7 @@ object Reach {
         context.packageManager.getLaunchIntentForPackage(pkg) != null
     } catch (e: Exception) { false }
 
+    /** Opens the dialer with the number filled in; the person presses call. */
     fun dial(context: Context, number: String) =
         start(context, Intent(Intent.ACTION_DIAL, Uri.parse(Links.tel(number))))
 
