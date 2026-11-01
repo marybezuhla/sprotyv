@@ -72,6 +72,10 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.9.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
 
+    // Offline maps drawn on the phone from a ".map" file (Mapsforge: LGPL-3.0, plain Java, no network)
+    implementation("org.mapsforge:mapsforge-map-android:0.31.0")
+    implementation("org.mapsforge:mapsforge-themes:0.31.0")
+
     // QR codes, made and read on the phone (ZXing core: Apache 2.0, plain Java, no network, no Google services)
     implementation("com.google.zxing:core:3.5.3")
 

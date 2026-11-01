@@ -1284,4 +1284,17 @@
     <string name="practice_source_guide">Source: “Survival guide”, sec. %1$s</string>
     <string name="practice_source_const">Source: Constitution of Ukraine, art. %1$s</string>
     <string name="path_repeat">✓ Checked · you can repeat the test</string>
+    <string name="map_title">Offline map</string>
+    <string name="map_hint">Streets and paths even without connection</string>
+    <string name="map_intro">The map is drawn right on the phone from a file — with no internet and no connection. The file is downloaded once, while the network works.</string>
+    <string name="map_how">How to add a map</string>
+    <string name="map_how_1">Open the map files page and download the Ukraine file (ukraine.map) in your browser.</string>
+    <string name="map_how_2">Wait until it finishes: it is large, Wi‑Fi is better.</string>
+    <string name="map_how_3">Tap “Open map file” and choose the downloaded file.</string>
+    <string name="map_where">Where to download the map</string>
+    <string name="map_open_file">Open map file</string>
+    <string name="map_other_file">Choose another map file</string>
+    <string name="map_broken">This file could not be opened as a map. Choose a file ending in .map.</string>
+    <string name="map_note">Smaller maps by oblast will come later. Sprotyv downloads nothing itself and does not know where you are.</string>
+    <string name="map_osm">Map data © OpenStreetMap contributors (ODbL). The map is a reference, not a signal: act on alerts.</string>
 </resources>

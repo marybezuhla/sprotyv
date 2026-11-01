@@ -1290,4 +1290,17 @@
     <string name="practice_source_guide">Джерело: «Довідник виживання», п. %1$s</string>
     <string name="practice_source_const">Джерело: Конституція України, ст. %1$s</string>
     <string name="path_repeat">✓ Перевірено · можна повторити тест</string>
+    <string name="map_title">Мапа без інтернету</string>
+    <string name="map_hint">Вулиці й стежки навіть без зв’язку</string>
+    <string name="map_intro">Мапа малюється просто на телефоні з файлу — без інтернету й без зв’язку. Файл завантажують один раз, поки мережа є.</string>
+    <string name="map_how">Як додати мапу</string>
+    <string name="map_how_1">Відкрийте сторінку файлів мап і завантажте файл України (ukraine.map) у браузері.</string>
+    <string name="map_how_2">Дочекайтеся, поки файл завантажиться: він великий, краще через Wi‑Fi.</string>
+    <string name="map_how_3">Натисніть «Відкрити файл мапи» й виберіть завантажений файл.</string>
+    <string name="map_where">Де завантажити мапу</string>
+    <string name="map_open_file">Відкрити файл мапи</string>
+    <string name="map_other_file">Вибрати інший файл мапи</string>
+    <string name="map_broken">Цей файл не вдалося відкрити як мапу. Виберіть файл з розширенням .map.</string>
+    <string name="map_note">Мапи з окремими областями, меншого розміру, додамо згодом. «Спротив» сам нічого не завантажує й не знає, де ви.</string>
+    <string name="map_osm">Дані мапи © учасники OpenStreetMap (ODbL). Мапа — довідка, а не сигнал: на тривогу діють за тривогою.</string>
 </resources>
