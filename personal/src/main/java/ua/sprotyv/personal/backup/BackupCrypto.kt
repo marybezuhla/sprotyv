@@ -28,8 +28,11 @@ object BackupCrypto {
     internal val PROFILES = listOf(DEFAULT)
 
     const val MIN_PASSWORD_LENGTH = 16
-    /** Far above any real backup (no photos in it yet); keeps memory use safe on small phones. */
-    const val MAX_FILE_BYTES = 4L * 1024 * 1024
+    /**
+     * Far above any real backup (text only, no photos yet), with room to grow. The whole file is
+     * read and decrypted in memory, so it stays small enough for any phone the app runs on.
+     */
+    const val MAX_FILE_BYTES = 32L * 1024 * 1024
 
     private const val SALT_BYTES = 16
     private const val NONCE_BYTES = 12
