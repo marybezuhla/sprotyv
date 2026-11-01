@@ -1245,7 +1245,7 @@
     <string name="experience_support">If remembering is hard — where to find support</string>
     <string name="shield_how_count">Counts itself</string>
     <string name="held_blackout">Power cuts</string>
-    <string name="held_heating">Days without heat</string>
+    <string name="held_heating">Heating cuts</string>
     <string name="held_shelter">Alerts in the shelter</string>
     <string name="held_gart">Hardening days</string>
     <string name="held_body">Months of the body check</string>

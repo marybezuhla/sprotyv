@@ -395,8 +395,3 @@ fun experienceTemplate(context: android.content.Context): String =
         context.getString(R.string.experience_helped) + " \n" +
         context.getString(R.string.experience_next) + " "
 
-/** The first experience written down: the "It was needed" shield (only words added count, not the empty form). */
-fun experienceWritten(notes: List<Note>, context: android.content.Context): Boolean {
-    val empty = experienceTemplate(context).replace(Regex("\\s+"), "")
-    return notes.any { n -> val t = (n.title + "\n" + n.text); t.contains(EXPERIENCE_MARK.trim()) && t.replace(Regex("\\s+"), "").length > empty.length + 10 }
-}

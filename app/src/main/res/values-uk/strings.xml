@@ -1251,7 +1251,7 @@
     <string name="experience_support">Якщо згадувати важко — де знайти підтримку</string>
     <string name="shield_how_count">Рахується сама</string>
     <string name="held_blackout">Відключення світла</string>
-    <string name="held_heating">Дні без тепла</string>
+    <string name="held_heating">Відключення тепла</string>
     <string name="held_shelter">Тривоги в укритті</string>
     <string name="held_gart">Дні гарту</string>
     <string name="held_body">Місяці перевірки тіла</string>

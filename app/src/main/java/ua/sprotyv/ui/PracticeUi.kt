@@ -62,6 +62,7 @@ fun PracticeScreen(content: Content?, cardId: String, nav: Nav, check: String? =
     Frame(stringResource(if (check != null) R.string.path_check else R.string.practice_title), nav::back) {
         if (content == null) return@Frame Loading()
         val topic = TOPICS.firstOrNull { "topic:" + it.id == cardId }
+        val practiceCtx = androidx.compose.ui.platform.LocalContext.current
         val list = if (topic != null) pick(content.practice, topic) else content.practice.filter { it.card == cardId }
         if (list.isEmpty()) return@Frame Broken()
         val kid = cardId.startsWith("kid-")
@@ -71,7 +72,7 @@ fun PracticeScreen(content: Content?, cardId: String, nav: Nav, check: String? =
 
         if (index >= list.size) {
             // A theme answered without a mistake: its shield in "My shields"
-            if (topic != null && rightCount == list.size) androidx.compose.runtime.LaunchedEffect(topic.id) { Steps.change { s -> s.copy(topics = s.topics + topic.id) } }
+            if (topic != null && rightCount == list.size) androidx.compose.runtime.LaunchedEffect(topic.id) { Steps.practice(practiceCtx, topic = topic.id) }
             if (check != null) {
                 val all = rightCount == list.size
                 if (all) androidx.compose.runtime.LaunchedEffect(check) { markPathTested(check) }
@@ -144,7 +145,7 @@ fun PracticeScreen(content: Content?, cardId: String, nav: Nav, check: String? =
                 else -> ""
             }
             OutlinedButton(
-                onClick = { if (!answered) { chosen = i; if (o.right) { rightCount++; Steps.change { s -> s.copy(solved = (s.solved + p.id).take(300).toSet()) } } } },
+                onClick = { if (!answered) { chosen = i; if (o.right) { rightCount++; Steps.practice(practiceCtx, solved = p.id) } } },
                 colors = ButtonDefaults.outlinedButtonColors(
                     containerColor = if (answered && o.right) doneTint().container else MaterialTheme.colorScheme.surface,
                     contentColor = MaterialTheme.colorScheme.onSurface,
