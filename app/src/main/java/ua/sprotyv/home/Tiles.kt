@@ -17,7 +17,7 @@ enum class Mode { SIMPLE, FULL, KID }
 /** Parts of the app that can be a tile. */
 enum class Tool {
     NOW, SAFE, ALARM, SITUATION, POWER, DIRECTORY, HOME_LIFE, GUIDE, SEARCH,
-    MINE, MEDICAL, PEOPLE, PLAN, KIT, SUPPLIES, RESCUER, PRINT, SCAN, PRACTICE, QR_TEXT, MOZ, RESIST, CONSTITUTION, HISTORY, NEW_PLACE, GART, COMMS, MAP, DRIVING,
+    MINE, MEDICAL, PEOPLE, PLAN, KIT, SUPPLIES, RESCUER, PRINT, SCAN, PRACTICE, QR_TEXT, MOZ, RESIST, CONSTITUTION, HISTORY, NEW_PLACE, GART, COMMS, DRIVING,
 }
 
 object Tiles {
@@ -82,7 +82,6 @@ enum class Preset(val pins: List<String>) {
         listOf(
             Tiles.card("air-alert"), Tiles.card("bleeding"), Tiles.tool(Tool.SITUATION), Tiles.card("blackout"),
             Tiles.tool(Tool.MEDICAL), Tiles.card("first-60"), Tiles.tool(Tool.KIT), Tiles.tool(Tool.SUPPLIES), Tiles.tool(Tool.GUIDE),
-            Tiles.tool(Tool.MAP),
         ),
     ),
     ELDER(
@@ -101,7 +100,7 @@ enum class Preset(val pins: List<String>) {
         listOf(
             Tiles.card("air-alert"), Tiles.tool(Tool.SITUATION), Tiles.card("drone"), Tiles.card("bleeding"), Tiles.card("leave-home"),
             Tiles.card("ballistic"), Tiles.card("suspicious"), Tiles.card("rubble"), Tiles.tool(Tool.KIT),
-            Tiles.tool(Tool.PLAN), Tiles.tool(Tool.MAP),
+            Tiles.tool(Tool.PLAN),
         ),
     ),
     WINTER(
@@ -149,7 +148,7 @@ enum class Group(val tiles: List<String>) {
             Tiles.chapter("ch11"), Tiles.chapter("ch13"), Tiles.chapter("ch14"), Tiles.chapter("ch15"),
         ),
     ),
-    SAFETY(listOf(Tiles.tool(Tool.MAP), Tiles.tool(Tool.COMMS), Tiles.chapter("ch17"), Tiles.chapter("ch18"), Tiles.chapter("ch28"))),
+    SAFETY(listOf(Tiles.tool(Tool.COMMS), Tiles.chapter("ch17"), Tiles.chapter("ch18"), Tiles.chapter("ch28"))),
     MINE(
         listOf(
             Tiles.tool(Tool.MINE), Tiles.tool(Tool.MEDICAL), Tiles.tool(Tool.RESCUER), Tiles.tool(Tool.PRINT),

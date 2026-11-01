@@ -11,11 +11,6 @@ class LinksTest {
         assertEquals("0501234567", Links.clean("050 123 45 67"))
     }
 
-    @Test fun placeForMapApps() {
-        assertEquals("geo:50.45010,30.52340?q=50.45010,30.52340", Links.geo(50.4501, 30.5234))
-        assertThrows(IllegalArgumentException::class.java) { Links.geo(91.0, 0.0) }
-    }
-
     @Test fun dialsEmergencyNumber() {
         assertEquals("tel:112", Links.tel("112"))
     }

@@ -7,7 +7,4 @@
 
 # Mapsforge reads its render themes and draws with classes found at run time; keep what it uses,
 # but let the online tile download classes (never used: release 1.0 has no internet) be removed
--keep class org.mapsforge.map.rendertheme.** { *; }
--keep class org.mapsforge.map.reader.** { *; }
--dontwarn org.mapsforge.**
 -dontwarn com.caverock.androidsvg.**
