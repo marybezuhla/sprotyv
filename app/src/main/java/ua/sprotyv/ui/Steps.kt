@@ -18,12 +18,24 @@ data class Steps(
     val counts: Map<String, Int> = emptyMap(),
     val topics: Set<String> = emptySet(),
     val solved: Set<String> = emptySet(),
+    /** Each path test passed: the day (epoch day) it was last passed and how many times. */
+    val checks: Map<String, Pair<Long, Int>> = emptyMap(),
 ) {
+    /**
+     * A gentle repeat: a week after the first pass, then a month after each next one. Spaced
+     * retrieval keeps knowledge longest (Cepeda et al. 2006); only offered, never pushed.
+     */
+    fun repeatDue(step: String, today: Long): Boolean {
+        val (day, times) = checks[step] ?: return false
+        return today - day >= (if (times <= 1) 7 else 30)
+    }
+
     fun json(): String = JSONObject()
         .put("marked", JSONArray(marked.sorted()))
         .put("counts", JSONObject().apply { counts.forEach { (k, v) -> put(k, v) } })
         .put("topics", JSONArray(topics.sorted()))
         .put("solved", JSONArray(solved.sorted()))
+        .put("checks", JSONObject().apply { checks.forEach { (k, v) -> put(k, JSONArray(listOf(v.first, v.second))) } })
         .toString()
 
     companion object {
@@ -46,6 +58,11 @@ data class Steps(
                     counts = COUNTS.associateWith { c.optInt(it, 0).coerceIn(0, 10_000) }.filterValues { it > 0 },
                     topics = set("topics", 30) { true },
                     solved = set("solved", 300) { true },
+                    checks = (o.optJSONObject("checks") ?: JSONObject()).let { ch ->
+                        ch.keys().asSequence().take(20).filter { ID.matches(it) }.mapNotNull { k ->
+                            ch.optJSONArray(k)?.let { a -> (a.optLong(0, 0L) to a.optInt(1, 0)).takeIf { it.first in 1..200_000 && it.second in 1..1_000 } }?.let { k to it }
+                        }.toMap()
+                    },
                 )
             } catch (e: Exception) {
                 Steps()
