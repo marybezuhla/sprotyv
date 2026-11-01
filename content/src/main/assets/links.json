@@ -1307,6 +1307,66 @@
   ]
  },
  {
+  "id": "tax-volunteers",
+  "group": "docs",
+  "kind": "official",
+  "title": "Реєстр волонтерів (податкова)",
+  "note": "Заява про включення до реєстру через Електронний кабінет із КЕП або на папері за формою 1-РВ.",
+  "url": "https://cabinet.tax.gov.ua",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
+  "id": "msp-eservices",
+  "group": "care",
+  "kind": "official",
+  "title": "Е-кабінет Мінсоцполітики",
+  "note": "Заяви на соціальні послуги, зокрема догляд, онлайн — без походу до соцзахисту.",
+  "url": "https://e-services.msp.gov.ua",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
+  "id": "pfu-portal",
+  "group": "care",
+  "kind": "official",
+  "title": "Портал Пенсійного фонду",
+  "note": "Заяви на пенсію, субсидію й довідки онлайн; потрібен електронний підпис.",
+  "url": "https://portal.pfu.gov.ua",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
+  "id": "elegant-course",
+  "group": "care",
+  "kind": "official",
+  "title": "Дія.Освіта: цифрові навички для старшого віку",
+  "note": "Безкоштовні відеоуроки: месенджери, пошук, запис до лікаря, як не потрапити на гачок шахраїв.",
+  "url": "https://osvita.diia.gov.ua/courses/basic-digital-skills-for-the-elegant-age",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
+  "id": "unicef-parents",
+  "group": "kids",
+  "kind": "independent",
+  "title": "ЮНІСЕФ: підтримка батьків і дітей",
+  "note": "Як допомогти дитині під час війни: вправи на дихання, розмови після важкого, безпека від мін.",
+  "url": "https://www.unicef.org/ukraine/parents-children-support-during-military-actions",
+  "app": "",
+  "phone": "",
+  "checkedOn": "2026-10-30",
+  "flags": []
+ },
+ {
   "id": "cpd",
   "group": "facts",
   "kind": "official",
