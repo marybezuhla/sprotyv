@@ -78,32 +78,42 @@ abstract class PersonalDb : RoomDatabase() {
             if (mark.exists() || !exists(context)) {
                 val db = try {
                     build(context, raw)
-                } catch (e: Exception) {
-                    // The mark is there but the file is still the old way: once more, the old way
+                } catch (e: net.zetetic.database.sqlcipher.SQLiteNotADatabaseException) {
+                    // Only "this key does not fit": the file may still be the old way (marked, but
+                    // re-encrypting did not commit). Any other trouble is reported as it is
                     if (!exists(context)) throw e
-                    return upgrade(context, passphrase, raw, mark)
+                    return otherKey(e) { upgrade(context, passphrase, raw, mark) }
                 }
-                if (!mark.exists()) mark.createNewFile()
+                runCatching { mark.createNewFile() }
                 return db
             }
             return try {
                 upgrade(context, passphrase, raw, mark)
-            } catch (e: Exception) {
+            } catch (e: net.zetetic.database.sqlcipher.SQLiteNotADatabaseException) {
                 // Already re-encrypted, but the mark was not written yet
-                build(context, raw).also { mark.createNewFile() }
+                otherKey(e) { build(context, raw).also { runCatching { mark.createNewFile() } } }
             }
+        }
+
+        /** The other key, tried only after "the key does not fit"; if it does not fit either, the first answer stands. */
+        private inline fun otherKey(first: Exception, block: () -> PersonalDb): PersonalDb = try {
+            block()
+        } catch (e: net.zetetic.database.sqlcipher.SQLiteNotADatabaseException) {
+            first.addSuppressed(e)
+            throw first
         }
 
         /** The old way once, re-encrypted with the raw key, the mark written, opened again the new way. */
         private fun upgrade(context: Context, passphrase: ByteArray, raw: ByteArray, mark: java.io.File): PersonalDb {
             val old = build(context, passphrase)
             try {
-                old.openHelper.writableDatabase.query("PRAGMA rekey = \"" + String(raw, Charsets.US_ASCII) + "\"").use { it.moveToFirst() }
+                // One call with the key as bytes: no copy of it as text, a full disk reported as such
+                (old.openHelper.writableDatabase as net.zetetic.database.sqlcipher.SQLiteDatabase).changePassword(raw)
             } finally {
                 old.close()
             }
             val db = build(context, raw)
-            mark.createNewFile()
+            runCatching { mark.createNewFile() }
             return db
         }
 
