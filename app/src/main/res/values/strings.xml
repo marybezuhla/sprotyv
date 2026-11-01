@@ -1218,8 +1218,8 @@
     <string name="role_milfamily_4">Commissioner for missing persons — 1698, Coordination Headquarters — 0 800 300 529, National Information Bureau — 1648. All free of charge.</string>
     <string name="role_milfamily_5">Free psychological help under a state programme is open to veterans\' families and to families of fallen defenders.</string>
     <string name="role_milfamily_6">Complaints about service go to the Military Ombudsman: skarha@milomb.gov.ua. Answer within 10 days, within 3 if life is at risk.</string>
-    <string name="role_veteran">Back from service</string>
-    <string name="role_veteran_hint">Veteran</string>
+    <string name="role_veteran">Veteran</string>
+    <string name="role_veteran_hint">I have combat experience — from 2014 to today</string>
     <string name="role_veteran_affirm">You have already given the country a great deal. Here: what you are entitled to, who helps with documents and where to recover.</string>
     <string name="role_veteran_facts_title">Status and support</string>
     <string name="role_veteran_source">Sources: Ministry of Defence (20.01.2026); Ministry of Veterans Affairs (13.12.2024, 30.07.2025, 10.04.2026). Checked 01.11.2026. Conditions change — check.</string>
