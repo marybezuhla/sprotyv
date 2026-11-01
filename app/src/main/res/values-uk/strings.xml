@@ -1199,4 +1199,27 @@
     <string name="practice_count">ситуацій: %1$d</string>
     <string name="practice_more_coming">Ситуації з довідника додаватимемо поступово, кожну — з посиланням на джерело.</string>
     <string name="widget_neutral">Відкрити «Спротив»</string>
+    <string name="comms_title">Зв’язок, коли мережа лягла</string>
+    <string name="comms_hint">Телефон до телефону й радіо без вишок</string>
+    <string name="comms_intro">Коли мобільний зв’язок і інтернет лягли, повідомлення можна передати напряму: з телефону на телефон або через невеликі радіомодулі. Домовтеся заздалегідь — потім буде пізно.</string>
+    <string name="comms_before">Заздалегідь</string>
+    <string name="comms_before_1">Встановіть застосунок, поки є інтернет.</string>
+    <string name="comms_before_2">Обміняйтеся контактами наживо й перевірте зв’язок разом.</string>
+    <string name="comms_before_3">Запишіть у план родини, де й о котрій зустрічаєтеся, якщо зв’язку немає.</string>
+    <string name="comms_to_plan">Відкрити план родини</string>
+    <string name="comms_briar">Briar: з телефону на телефон</string>
+    <string name="comms_briar_1">Месенджер без серверів і без номера телефону. Без інтернету передає повідомлення через Bluetooth або Wi‑Fi тим, хто поруч; з інтернетом — через Tor.</string>
+    <string name="comms_briar_2">Контакти додають заздалегідь, наживо: обидва сканують QR-код одне одного.</string>
+    <string name="comms_briar_3">Незалежний аудит безпеки провела компанія Cure53 (2017).</string>
+    <string name="comms_briar_4">З липня 2026 Briar у режимі підтримки: виходять лише важливі оновлення безпеки й виправлення. Може помітно витрачати заряд.</string>
+    <string name="comms_briar_source">Джерела: briarproject.org; F-Droid (версія 1.5.23, 31.10.2026); звіт Cure53 (20.03.2017); Zeli (15.07.2026). Перевірено 01.11.2026.</string>
+    <string name="comms_mesh">Meshtastic: радіо на кілометри</string>
+    <string name="comms_mesh_1">Окремі радіомодулі LoRa передають текст на кілометри без мобільного зв’язку. Телефон з’єднується з модулем через Bluetooth. Підходить громаді, ДФТГ, волонтерам.</string>
+    <string name="comms_mesh_2">Загальний канал за замовчуванням може читати будь-хто. Для своїх створіть окремий канал із власним ключем і час від часу міняйте ключ.</string>
+    <string name="comms_mesh_3">Особисті повідомлення шифруються ключами двох людей. Ключ співрозмовника звірте іншим способом, перш ніж писати важливе.</string>
+    <string name="comms_mesh_4">Якщо ключ колись витече, записані раніше повідомлення можна буде прочитати.</string>
+    <string name="comms_mesh_source">Джерело: meshtastic.org, «Encryption». Перевірено 01.11.2026.</string>
+    <string name="comms_open">Відкрити</string>
+    <string name="comms_where">Де встановити (офіційний сайт)</string>
+    <string name="comms_note">«Спротив» лише пояснює й відкриває ці застосунки: сам він не має ні інтернету, ні Bluetooth, ні радіо, тож ваші дані тут лишаються недосяжними.</string>
 </resources>
