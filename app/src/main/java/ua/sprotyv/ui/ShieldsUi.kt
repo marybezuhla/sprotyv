@@ -63,7 +63,8 @@ fun ShieldsScreen(nav: Nav) {
     val habits by remember { PersonalStore.observe { db -> db.settings().observe(KEY_HABITS).map { listOf(it) } } }.collectAsStateWithLifecycle(null)
     val path by remember { PersonalStore.observe { db -> db.settings().observe(KEY_PATH).map { listOf(it) } } }.collectAsStateWithLifecycle(null)
     val roles = rememberRoles() ?: return Loading()
-    val prefs = HomePrefs.state.collectAsStateWithLifecycle().value ?: return Loading()
+    val ctx = androidx.compose.ui.platform.LocalContext.current
+    val prefs = HomePrefs.state.collectAsStateWithLifecycle().value ?: HomePrefs.load(ctx)
     val notes by remember { PersonalStore.observe { db -> db.notes().observe() } }.collectAsStateWithLifecycle(null)
     val context = androidx.compose.ui.platform.LocalContext.current
     val h = habits ?: return Loading()

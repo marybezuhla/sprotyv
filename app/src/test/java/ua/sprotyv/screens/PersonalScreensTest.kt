@@ -114,7 +114,7 @@ class PersonalScreensTest {
                     }
                 }
                 // The database answers on its own threads: give it time, then draw
-                repeat(12) {
+                repeat(24) {
                     shadowOf(Looper.getMainLooper()).idle()
                     compose.waitForIdle()
                     Thread.sleep(50)
