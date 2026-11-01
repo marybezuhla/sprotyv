@@ -76,10 +76,10 @@ fun DelegateScreen(content: Content?, n: Int, nav: Nav) {
             Block(stringResource(R.string.delegate_step, s.n), Group.FIRST_AID) {
                 // The order's words; only the first letter made capital for reading
                 Text(s.text.replaceFirstChar { it.uppercase() }, style = MaterialTheme.typography.bodyLarge)
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                ChoiceRow {
                     Text(stringResource(R.string.delegate_who), style = MaterialTheme.typography.labelLarge)
                     HELPERS.forEach { h ->
-                        FilterChip(selected = (given[s.n] ?: 0) == h, onClick = { given[s.n] = h }, label = { Text(if (h == 0) stringResource(R.string.delegate_me) else "$h") }, modifier = Modifier.heightIn(min = 48.dp))
+                        FilterChip(selected = (given[s.n] ?: 0) == h, onClick = { given[s.n] = h }, label = { ChipText(if (h == 0) stringResource(R.string.delegate_me) else "$h") }, modifier = Modifier.heightIn(min = 48.dp))
                     }
                 }
             }
@@ -114,7 +114,6 @@ fun HandoverScreen(nav: Nav) {
     val tourniquets = remember { Tourniquets.all(context) }
     SecureScreen()
     Frame(stringResource(R.string.handover_title), nav::back) {
-        ScreenshotsStrip()
         Text(stringResource(R.string.handover_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Block(stringResource(R.string.handover_when), Group.FIRST_AID) {
             Text(when_?.let(::clockOf) ?: "—", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
@@ -129,7 +128,7 @@ fun HandoverScreen(nav: Nav) {
                     FilterChip(selected = done.any { it.first == a }, onClick = {
                         val i = done.indexOfFirst { it.first == a }
                         if (i >= 0) done.removeAt(i) else done.add(a to System.currentTimeMillis())
-                    }, label = { Text(stringResource(a)) }, modifier = Modifier.heightIn(min = 48.dp))
+                    }, label = { ChipText(stringResource(a)) }, modifier = Modifier.heightIn(min = 48.dp))
                 }
             }
             done.forEach { (a, t) -> Text("${clockOf(t)} — ${stringResource(a)}", style = MaterialTheme.typography.bodyLarge) }

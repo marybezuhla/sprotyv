@@ -255,3 +255,15 @@ fun HubCard(title: String, hint: String, tint: Tint, leading: (@Composable () ->
         }
     }
 }
+
+/** A choice's words: one line, never a word broken in two (a row of choices wraps instead). */
+@Composable
+fun ChipText(text: String) = Text(text, maxLines = 1, softWrap = false)
+
+/** A row of choices that goes on to a new line when the words do not fit (large text, English). */
+@OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
+@Composable
+fun ChoiceRow(content: @Composable () -> Unit) = androidx.compose.foundation.layout.FlowRow(
+    horizontalArrangement = Arrangement.spacedBy(8.dp),
+    verticalArrangement = Arrangement.spacedBy(8.dp),
+) { content() }

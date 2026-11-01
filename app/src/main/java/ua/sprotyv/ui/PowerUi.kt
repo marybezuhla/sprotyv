@@ -133,16 +133,16 @@ fun ChargeBlock() {
     var size by rememberSaveable { mutableIntStateOf(Charge.BANKS[1]) }
     Block(stringResource(R.string.charge_title), ua.sprotyv.home.Group.HOME_LIFE, foldable = true) {
         run {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                FilterChip(selected = !station, onClick = { station = false; size = Charge.BANKS[1] }, label = { Text(stringResource(R.string.charge_bank)) }, modifier = Modifier.heightIn(min = 48.dp))
-                FilterChip(selected = station, onClick = { station = true; size = Charge.STATIONS[1] }, label = { Text(stringResource(R.string.charge_station)) }, modifier = Modifier.heightIn(min = 48.dp))
+            ChoiceRow {
+                FilterChip(selected = !station, onClick = { station = false; size = Charge.BANKS[1] }, label = { ChipText(stringResource(R.string.charge_bank)) }, modifier = Modifier.heightIn(min = 48.dp))
+                FilterChip(selected = station, onClick = { station = true; size = Charge.STATIONS[1] }, label = { ChipText(stringResource(R.string.charge_station)) }, modifier = Modifier.heightIn(min = 48.dp))
             }
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 (if (station) Charge.STATIONS else Charge.BANKS).forEach { v ->
                     FilterChip(
                         selected = size == v,
                         onClick = { size = v },
-                        label = { Text(stringResource(if (station) R.string.charge_wh else R.string.charge_mah, "%,d".format(v).replace(',', ' '))) },
+                        label = { ChipText(stringResource(if (station) R.string.charge_wh else R.string.charge_mah, "%,d".format(v).replace(',', ' '))) },
                         modifier = Modifier.heightIn(min = 48.dp),
                     )
                 }

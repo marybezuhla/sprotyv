@@ -101,7 +101,7 @@ fun NotesScreen(nav: Nav) {
     if (list.size > 3) {
         OutlinedTextField(
             value = query, onValueChange = { query = it.take(100) },
-            label = { Text(stringResource(R.string.notes_search)) }, singleLine = true, modifier = Modifier.fillMaxWidth(),
+            label = { ChipText(stringResource(R.string.notes_search)) }, singleLine = true, modifier = Modifier.fillMaxWidth(),
         )
     }
     val q = query.trim()
@@ -263,13 +263,13 @@ fun NoteEditScreen(id: Long, nav: Nav) {
     // A plain note or a list with boxes, as the owner likes; switching keeps every word
     val lines = text.lines()
     val list = isList(lines.drop(1))
-    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+    ChoiceRow {
         androidx.compose.material3.FilterChip(selected = !list, onClick = {
             if (list) { text = (listOf(lines.first()) + itemsOf(lines.drop(1)).map { it.text }).joinToString("\n"); save() }
-        }, label = { Text(stringResource(R.string.notes_kind_text)) }, modifier = Modifier.heightIn(min = 48.dp))
+        }, label = { ChipText(stringResource(R.string.notes_kind_text)) }, modifier = Modifier.heightIn(min = 48.dp))
         androidx.compose.material3.FilterChip(selected = list, onClick = {
             if (!list) { text = listText(lines.first(), lines.drop(1).filter { it.isNotBlank() }.map { Item(it, false) }.ifEmpty { listOf(Item("", false)) }); save() }
-        }, label = { Text(stringResource(R.string.notes_kind_list)) }, modifier = Modifier.heightIn(min = 48.dp))
+        }, label = { ChipText(stringResource(R.string.notes_kind_list)) }, modifier = Modifier.heightIn(min = 48.dp))
     }
     if (!list) {
         OutlinedTextField(
@@ -285,7 +285,7 @@ fun NoteEditScreen(id: Long, nav: Nav) {
         fun put(newName: String, newItems: List<Item>) { text = listText(newName, newItems).take(MAX_NOTE); save() }
         OutlinedTextField(
             value = name, onValueChange = { v -> put(v.replace("\n", " "), items) }, singleLine = true,
-            label = { Text(stringResource(R.string.notes_list_name)) }, textStyle = MaterialTheme.typography.titleMedium,
+            label = { ChipText(stringResource(R.string.notes_list_name)) }, textStyle = MaterialTheme.typography.titleMedium,
             modifier = Modifier.fillMaxWidth().focusRequester(focus),
         )
         // Not done first, done below, each keeping its own order

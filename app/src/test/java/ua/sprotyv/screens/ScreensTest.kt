@@ -49,6 +49,7 @@ import ua.sprotyv.ui.SprotyvTheme
 import ua.sprotyv.ui.ThemeChoice
 import ua.sprotyv.ui.WayHub
 import ua.sprotyv.ui.CommsScreen
+import ua.sprotyv.ui.SettingsScreen
 import java.io.File
 
 /**
@@ -165,4 +166,7 @@ class ScreensTest {
     @Test fun guideTableBig() = shot("28-guide-9-3-big", dark = true, big = true) { GuideSectionScreen(content, "9.3", nav) }
     @Test fun practiceCheck() { mode(Mode.FULL); shot("29-practice-check-dark", dark = true) { PracticeScreen(content, "bleeding", nav, check = "bleed") } }
     @Test fun comms() = shot("30-comms-dark", dark = true) { CommsScreen(nav) }
+    // Settings in English with large text: rows of choices must wrap, never break a word
+    @Test fun settingsBig() { mode(Mode.FULL); shot("31-settings-big", big = true) { SettingsScreen(HomePrefs.load(app), nav) } }
+    @Test fun moz() { mode(Mode.FULL); shot("32-moz-big", big = true) { MozScreen(content, 4, nav) } }
 }

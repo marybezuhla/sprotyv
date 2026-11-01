@@ -1164,12 +1164,12 @@ private fun LanguageChoice() {
         return
     }
     val current = androidx.appcompat.app.AppCompatDelegate.getApplicationLocales().toLanguageTags()
-    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+    ChoiceRow {
         listOf("" to R.string.lang_phone, "uk" to R.string.lang_uk, "en" to R.string.lang_en).forEach { (tag, label) ->
             androidx.compose.material3.FilterChip(
                 selected = current.substringBefore('-') == tag,
                 onClick = { androidx.appcompat.app.AppCompatDelegate.setApplicationLocales(androidx.core.os.LocaleListCompat.forLanguageTags(tag)) },
-                label = { Text(stringResource(label)) }, modifier = Modifier.heightIn(min = 48.dp),
+                label = { ChipText(stringResource(label)) }, modifier = Modifier.heightIn(min = 48.dp),
             )
         }
     }

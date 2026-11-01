@@ -70,6 +70,7 @@ fun Frame(title: String, onBack: () -> Unit, bottom: (@Composable () -> Unit)? =
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.weight(1f).padding(start = if (inTab) 12.dp else 0.dp).semantics { heading() },
             )
+            ScreenshotsMark()
             CornerCall()
         }
         Column(
@@ -99,11 +100,16 @@ fun SectionScreen(section: Section, onBack: () -> Unit) {
 /**
  * No screenshots, screen recordings or app-switcher pictures while the owner's data is on screen.
  * Removed again on leaving, so the guide and cards can still be captured and shared.
- * The owner may allow them in settings (off by default, kept until changed); every
- * screen that calls this also shows [ScreenshotsStrip], so it is never allowed unseen.
+ * The owner may allow them in settings (off by default, kept until changed); while allowed, every
+ * screen that calls this shows a small camera in its title bar, so it is never allowed unseen.
  */
 @Composable
 fun SecureScreen() {
+    // Counted while on screen, so the title bar knows to show the camera mark
+    DisposableEffect(Unit) {
+        SecureScreens.open.intValue++
+        onDispose { SecureScreens.open.intValue-- }
+    }
     val activity = LocalContext.current as? Activity ?: return
     val allowed = HomePrefs.state.collectAsStateWithLifecycle().value?.screenshots == true
     if (allowed) return
@@ -135,7 +141,6 @@ fun Personal(title: Int, state: Opened?, nav: Nav, content: @Composable () -> Un
     val wasReady = seen[0]
     SecureScreen()
     Frame(stringResource(title), nav::back) {
-        ScreenshotsStrip()
         if (saveFailed) {
             Text(stringResource(R.string.save_failed), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.error)
         }
@@ -200,26 +205,31 @@ private fun StartFresh(onStartFresh: () -> Unit) {
     }
 }
 
-/** While screenshots of the owner's screens are allowed, every one of them says so, with a way to stop. */
+/** How many screens with the owner's data are showing now (see [SecureScreen]). */
+object SecureScreens {
+    val open = androidx.compose.runtime.mutableIntStateOf(0)
+}
+
+/**
+ * While screenshots of the owner's screens are allowed: a small camera in the title bar of each of
+ * them — seen, but quiet. A tap says what it means and offers to switch it off.
+ */
 @Composable
-fun ScreenshotsStrip() {
+fun ScreenshotsMark() {
     val context = LocalContext.current
     val allowed = HomePrefs.state.collectAsStateWithLifecycle().value?.screenshots == true
-    if (!allowed) return
-    // Always there while allowed, in the colour of "Mine": what is on, and a way to switch it off
-    val tint = ua.sprotyv.home.Group.MINE.tint()
-    androidx.compose.material3.Card(
-        colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = tint.container, contentColor = MaterialTheme.colorScheme.onSurface),
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-        androidx.compose.foundation.layout.Row(
-            Modifier.fillMaxWidth().heightIn(min = 48.dp).padding(start = 16.dp, end = 4.dp),
-            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
-        ) {
-            Text(stringResource(R.string.screenshots_banner), style = MaterialTheme.typography.bodyLarge, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, color = tint.ink, modifier = Modifier.weight(1f))
-            androidx.compose.material3.TextButton(onClick = { HomePrefs.update(context) { it.copy(screenshots = false) } }, modifier = Modifier.heightIn(min = 48.dp)) {
-                Text(stringResource(R.string.screenshots_turn_off))
-            }
-        }
+    if (!allowed || SecureScreens.open.intValue <= 0) return
+    var asking by remember { androidx.compose.runtime.mutableStateOf(false) }
+    IconButton(onClick = { asking = true }, modifier = Modifier.heightIn(min = 48.dp)) {
+        Icon(androidx.compose.ui.graphics.vector.ImageVector.vectorResource(R.drawable.ic_camera_on), contentDescription = stringResource(R.string.screenshots_banner), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+    if (asking) {
+        androidx.compose.material3.AlertDialog(
+            onDismissRequest = { asking = false },
+            title = { Text(stringResource(R.string.screenshots_banner)) },
+            text = { Text(stringResource(R.string.screenshots_mark_text)) },
+            confirmButton = { androidx.compose.material3.TextButton(onClick = { HomePrefs.update(context) { it.copy(screenshots = false) }; asking = false }) { Text(stringResource(R.string.screenshots_turn_off)) } },
+            dismissButton = { androidx.compose.material3.TextButton(onClick = { asking = false }) { Text(stringResource(R.string.screenshots_keep)) } },
+        )
     }
 }
