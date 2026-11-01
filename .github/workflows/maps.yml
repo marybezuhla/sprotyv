@@ -44,6 +44,10 @@ jobs:
           echo "$(cat "$J.sha1" | cut -c1-40)  $J" | sha1sum -c -
           sha256sum "$J"
           mv "$J" ~/.openstreetmap/osmosis/plugins/
+          # The Debian osmosis script takes its Java options from this file (an env var is overwritten)
+          echo 'JAVACMD_OPTIONS="-Xmx12g"' > ~/.osmosisrc
+          cp ~/.osmosisrc ~/.osmosis
+          grep -n 'JAVACMD\|osmosisrc\|\.osmosis' "$(command -v osmosis)" | head || true
 
       - name: OpenStreetMap data for Ukraine (checked against its MD5)
         shell: bash
@@ -72,17 +76,15 @@ jobs:
           set -euo pipefail
           cd work
           mkdir -p out
-          export JAVACMD_OPTIONS="-Xmx6g"
-          # Only what helps to find one's way: settlements, main roads, rail, rivers, water, forests, boundaries
+          # Only what helps to find one's way: settlements, main roads, rail, rivers, big water, boundaries
           osmium tags-filter ukraine.osm.pbf \
             n/place=city,town,village \
-            w/highway=motorway,trunk,primary,secondary,motorway_link,trunk_link \
-            w/railway=rail w/waterway=river w/natural=water r/natural=water \
-            w/landuse=forest r/landuse=forest w/natural=wood r/natural=wood \
+            w/highway=motorway,trunk,primary,motorway_link,trunk_link \
+            w/railway=rail w/waterway=river r/natural=water \
             r/admin_level=2,4 \
             -o overview.osm.pbf --overwrite
           osmosis -q --rbf file=overview.osm.pbf --mapfile-writer file=out/overview.map type=hd threads=4 \
-            preferred-languages=uk,en zoom-interval-conf=5,0,7,9,8,10,11,11,12
+            preferred-languages=uk,en zoom-interval-conf=5,0,7,9,8,11 simplification-factor=5
           ls -la out
 
       - name: Detailed maps, one per oblast
@@ -92,15 +94,17 @@ jobs:
           cd work
           mkdir -p out obl
           free -h
-          export JAVACMD_OPTIONS="-Xmx6g"
           # One oblast at a time: a pass over the data each, so the memory stays small
           python3 -c 'import json;[print(e["output"][:-8], ",".join(map(str,e["bbox"]))) for e in json.load(open("extracts.json"))["extracts"]]' |
           while read -r id box; do
             osmium extract -b "$box" -o "obl/$id.osm.pbf" --overwrite ukraine.osm.pbf
-            osmosis -q --rbf file="obl/$id.osm.pbf" --mapfile-writer file="out/$id.map" type=hd threads=4 preferred-languages=uk,en
+            osmosis -q --rbf file="obl/$id.osm.pbf" --mapfile-writer file="out/$id.map" type=hd threads=4 preferred-languages=uk,en \
+              || { echo "FAILED $id"; rm -f "out/$id.map"; echo "$id" >> failed.txt; }
             rm "obl/$id.osm.pbf"
-            ls -la "out/$id.map"
+            ls -la "out/$id.map" || true
           done
+          # Every oblast or none: a missing one stops the release
+          if [ -s failed.txt ]; then echo "Failed: $(cat failed.txt)"; exit 1; fi
 
       - name: Sums and sizes
         if: always()
