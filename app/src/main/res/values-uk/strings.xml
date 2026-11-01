@@ -1277,5 +1277,5 @@
     <string name="shields_counts">Мої лічильники</string>
     <string name="shield_next">Далі — %1$d</string>
     <string name="shield_mark">Позначити</string>
-    <string name="shield_unmark">Зняти позначку</string>
+    <string name="shield_unmark">Зняти</string>
 </resources>
