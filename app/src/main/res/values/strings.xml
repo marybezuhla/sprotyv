@@ -1192,7 +1192,7 @@
     <string name="role_neighbours_hint">Neighbours, friends, peer support</string>
     <string name="role_neighbours_affirm">You already notice who is struggling and do not pass by. That is what holds a community together.</string>
     <string name="role_neighbours_facts_title">Helping without burning out</string>
-    <string name="role_neighbours_source">Sources: WHO; Ministry of Education; Cabinet resolution No. 587 of 01.06.2020; Interfax-Ukraine (18.01.2026). Checked 01.11.2026. Conditions change, so it's worth checking.</string>
+    <string name="role_neighbours_source">Sources: WHO; Ministry of Education; Cabinet resolution No. 587 of 01.06.2020; Interfax-Ukraine (18.01.2026). Checked 01.11.2026. Conditions change, so it\'s worth checking.</string>
     <string name="role_neighbours_1">Psychological first aid, as the WHO describes it, is calm presence, careful listening without pressure and help finding support.</string>
     <string name="role_neighbours_2">The “How are you?” programme gives advice on supporting yourself and those close to you.</string>
     <string name="role_neighbours_3">A lonely older neighbour can get home care as a social service: the community\'s social protection office takes the application, Diia too.</string>
@@ -1201,7 +1201,7 @@
     <string name="role_teacher_hint">School, kindergarten, university, clubs and courses</string>
     <string name="role_teacher_affirm">You keep ordinary life going for children and adults — lessons, timetables, faith in tomorrow. That holds the country up.</string>
     <string name="role_teacher_facts_title">Teaching in wartime</string>
-    <string name="role_teacher_source">Sources: Ministry of Education (14.09.2026, 21.05.2026); Suspilne (13.08.2024); Ukrainian Institute for Education Development (28.09.2026). Checked 01.11.2026. Conditions change, so it's worth checking.</string>
+    <string name="role_teacher_source">Sources: Ministry of Education (14.09.2026, 21.05.2026); Suspilne (13.08.2024); Ukrainian Institute for Education Development (28.09.2026). Checked 01.11.2026. Conditions change, so it\'s worth checking.</string>
     <string name="role_teacher_1">Per Ministry of Education guidance, an alert alone does not cancel a lesson: in a safe shelter teaching can go on.</string>
     <string name="role_teacher_2">If alerts take more than two hours a day for several days running, the Ministry advises teaching in the shelter or online.</string>
     <string name="role_teacher_3">Per the Ministry\'s guidance, a lesson can go on when every pupil and teacher is in a safe place.</string>
@@ -1211,7 +1211,7 @@
     <string name="role_research_hint">Science, engineering, IT, defence tech</string>
     <string name="role_research_affirm">Your knowledge already works for the country\'s future — in a lab, in code or in a workshop.</string>
     <string name="role_research_facts_title">Grants and programmes</string>
-    <string name="role_research_source">Sources: European Commission (09.06.2022, 2025); National Research Foundation of Ukraine (2026); Ministry of Defence (2026). Checked 01.11.2026. Conditions change, so it's worth checking.</string>
+    <string name="role_research_source">Sources: European Commission (09.06.2022, 2025); National Research Foundation of Ukraine (2026); Ministry of Defence (2026). Checked 01.11.2026. Conditions change, so it\'s worth checking.</string>
     <string name="role_research_1">Ukraine has been associated with Horizon Europe since 9 June 2022: Ukrainian researchers take part on equal terms with EU institutions.</string>
     <string name="role_research_2">The National Research Foundation of Ukraine funds projects through open calls; terms are on its site.</string>
     <string name="role_research_3">Researchers forced to leave are supported by the European Commission\'s MSCA4Ukraine fellowships.</string>
@@ -1220,7 +1220,7 @@
     <string name="role_infra_hint">Energy, water, telecom, railways, transport</string>
     <string name="role_infra_affirm">When the lights come on and the water runs, that is your work, often under strikes. Thank you.</string>
     <string name="role_infra_facts_title">Reservation and safety</string>
-    <string name="role_infra_source">Sources: Ministry of Defence; Ministry of Energy (02.04.2026, 10.09.2026). Checked 01.11.2026. Conditions change, so it's worth checking.</string>
+    <string name="role_infra_source">Sources: Ministry of Defence; Ministry of Energy (02.04.2026, 10.09.2026). Checked 01.11.2026. Conditions change, so it\'s worth checking.</string>
     <string name="role_infra_1">Reservation through Diia is filed by an employer with valid critical-enterprise status; the employee files nothing.</string>
     <string name="role_infra_2">Reservation has salary requirements and limits on staff numbers; it\'s worth asking your employer about the terms.</string>
     <string name="role_infra_3">Emergency repair workers received state aid by company lists; those left out could be added through Diia.</string>
@@ -1232,14 +1232,14 @@
     <string name="role_business_source">Sources: Ministry of Economy (04.02.2026, 26.03.2026); Government (25.03.2026); Ministry of Digital Transformation. Checked 01.11.2026. Conditions change, so it\'s worth checking.</string>
     <string name="role_business_1">The state humanitarian demining programme fully pays for clearing farmland once the Humanitarian Demining Centre confirms contamination.</string>
     <string name="role_business_2">Demining requests are filed through the State Agrarian Register.</string>
-    <string name="role_business_3">Grants for orchards and greenhouses are filed through Diia: up to 50% of costs, up to 80% in frontline communities. Applications paused on 16 October 2026; reopening is planned for 2027.</string>
+    <string name="role_business_3">Grants for orchards and greenhouses are filed through Diia: up to 50\% of costs, up to 80\% in frontline communities. Applications paused on 16 October 2026; reopening is planned for 2027.</string>
     <string name="role_business_4">Grants for starting a business change; it\'s worth checking amounts and terms in Diia.</string>
     <string name="role_business_5">Diia.Business offers entrepreneurs free consultations and has regional centres.</string>
     <string name="role_localgov">I serve my community</string>
     <string name="role_localgov_hint">Local government, social services, rescuers, police</string>
     <string name="role_localgov_affirm">You hold the community together when everyone is struggling. Your work is often unseen, but nothing works without it.</string>
     <string name="role_localgov_facts_title">Good to know</string>
-    <string name="role_localgov_source">Sources: Cabinet resolution No. 1401 (amended 19.01.2026); Interfax-Ukraine (18.01.2026); National Agency on Civil Service (22.07.2026). Checked 01.11.2026. Conditions change, so it's worth checking.</string>
+    <string name="role_localgov_source">Sources: Cabinet resolution No. 1401 (amended 19.01.2026); Interfax-Ukraine (18.01.2026); National Agency on Civil Service (22.07.2026). Checked 01.11.2026. Conditions change, so it\'s worth checking.</string>
     <string name="role_localgov_1">Points of Invincibility work under Cabinet resolution No. 1401 of 17.12.2022; communities are advised to organise them.</string>
     <string name="role_localgov_2">In January 2026 more than 13,500 Points of Invincibility were working across the country.</string>
     <string name="role_localgov_3">A business that can shelter people registers on the Nezlamnist site and, once checked, appears on the map of Points of Invincibility.</string>
@@ -1248,7 +1248,7 @@
     <string name="role_culture_hint">Artists, writers, journalists, bloggers, libraries, museums</string>
     <string name="role_culture_affirm">You keep what makes us a people — language, memory, truth. That is resistance without weapons.</string>
     <string name="role_culture_facts_title">Good to know</string>
-    <string name="role_culture_source">Sources: Ministry of Culture (2022, 18.02.2026); National Union of Journalists; Ukrainian Cultural Foundation; Centre for Countering Disinformation. Checked 01.11.2026. Conditions change, so it's worth checking.</string>
+    <string name="role_culture_source">Sources: Ministry of Culture (2022, 18.02.2026); National Union of Journalists; Ukrainian Cultural Foundation; Centre for Countering Disinformation. Checked 01.11.2026. Conditions change, so it\'s worth checking.</string>
     <string name="role_culture_1">A damaged or destroyed monument can be photographed and sent to the Ministry of Culture; the material helps criminal cases.</string>
     <string name="role_culture_2">Museum collections within 50 km of the contact line are evacuated and placed at least 75 km from it.</string>
     <string name="role_culture_3">The journalists\' union solidarity centres help media workers with housing, a workplace, protective gear and first aid kits.</string>
@@ -1258,7 +1258,7 @@
     <string name="role_student_hint">Students and those learning a new profession</string>
     <string name="role_student_affirm">You are building the future the country will need. Studying is a contribution too.</string>
     <string name="role_student_facts_title">What can help</string>
-    <string name="role_student_source">Sources: Ministry of Health (07.07.2023); Ministry of Education (2026); State Employment Service (2026). Checked 01.11.2026. Conditions change, so it's worth checking.</string>
+    <string name="role_student_source">Sources: Ministry of Health (07.07.2023); Ministry of Education (2026); State Employment Service (2026). Checked 01.11.2026. Conditions change, so it\'s worth checking.</string>
     <string name="role_student_1">Free psychological help is available in clinics under the medical guarantees programme; the NHSU map helps find them.</string>
     <string name="role_student_2">A psychiatrist at a clinic can be seen without a referral.</string>
     <string name="role_student_3">State study grants for applicants change every year; terms and amounts are on the Ministry of Education site.</string>
@@ -1267,7 +1267,7 @@
     <string name="role_abroad_hint">Keeping in touch, helping from there, coming back</string>
     <string name="role_abroad_affirm">Your role is everywhere. You keep the connection and the language, and you help — that is resistance too.</string>
     <string name="role_abroad_facts_title">Good to know</string>
-    <string name="role_abroad_source">Sources: Ministry of Social Policy (31.07.2026); Ministry of Education (2024); Foreign Ministry; law No. 4924-IX. Checked 01.11.2026. Conditions change, so it's worth checking.</string>
+    <string name="role_abroad_source">Sources: Ministry of Social Policy (31.07.2026); Ministry of Education (2024); Foreign Ministry; law No. 4924-IX. Checked 01.11.2026. Conditions change, so it\'s worth checking.</string>
     <string name="role_abroad_1">The EU extended temporary protection for Ukrainians until 4 March 2028; new applicants face extra requirements, so it\'s worth checking.</string>
     <string name="role_abroad_2">The Ministry of Social Policy is opening Unity Centres abroad for information and advice.</string>
     <string name="role_abroad_3">From any country one can help Ukraine through the official UNITED24 platform.</string>
@@ -1278,7 +1278,7 @@
     <string name="role_serving_hint">Service member</string>
     <string name="role_serving_affirm">You hold the front. Here: your rights, where to turn, and how to look after yourself and your family.</string>
     <string name="role_serving_facts_title">Rights and support</string>
-    <string name="role_serving_source">Sources: Ministry of Defence (2026); Ministry of Justice (29.04.2025); Government. Checked 01.11.2026. Conditions change, so it's worth checking.</string>
+    <string name="role_serving_source">Sources: Ministry of Defence (2026); Ministry of Justice (29.04.2025); Government. Checked 01.11.2026. Conditions change, so it\'s worth checking.</string>
     <string name="role_serving_1">Army+ is the Ministry of Defence\'s app: electronic reports, the military registration document, certificates, transfers, training courses.</string>
     <string name="role_serving_2">Reports, including for leave, are filed in Army+; the list of reports keeps growing.</string>
     <string name="role_serving_3">Complaints about service go to the Military Ombudsman: skarha@milomb.gov.ua. An ordinary complaint within 10 days, within 3 if life or health is at risk.</string>
@@ -1310,7 +1310,7 @@
     <string name="role_grandparent_hint">Grandma or grandpa</string>
     <string name="role_grandparent_affirm">Your experience and calm already hold the family. Here: how to stay safe from scammers and where to find help.</string>
     <string name="role_grandparent_facts_title">Pension and safety</string>
-    <string name="role_grandparent_source">Sources: Pension Fund (2026); Cyber Police (10.10.2026); Ministry of Digital Transformation (12.06.2023). Checked 01.11.2026. Conditions change, so it's worth checking.</string>
+    <string name="role_grandparent_source">Sources: Pension Fund (2026); Cyber Police (10.10.2026); Ministry of Digital Transformation (12.06.2023). Checked 01.11.2026. Conditions change, so it\'s worth checking.</string>
     <string name="role_grandparent_1">The Pension Fund answers through one contact centre: 0 800 503 753. It never asks for card details by phone.</string>
     <string name="role_grandparent_2">A pension or housing subsidy can be applied for online on the Pension Fund portal, with an electronic signature.</string>
     <string name="role_grandparent_3">A call says a relative is in a crash or at the police and asks for money? Hang up and call the relative yourself.</string>
@@ -1321,7 +1321,7 @@
     <string name="role_carer_hint">Older, ill or disabled</string>
     <string name="role_carer_affirm">Every day you already hold someone who cannot manage alone. Here: what help the state gives and where to find strength for yourself.</string>
     <string name="role_carer_facts_title">Help for carers</string>
-    <string name="role_carer_source">Sources: law “On social services”; Cabinet of Ministers resolution No. 1040 of 06.10.2021; Ministry of Social Policy. Checked 01.11.2026. Conditions change, so it's worth checking.</string>
+    <string name="role_carer_source">Sources: law “On social services”; Cabinet of Ministers resolution No. 1040 of 06.10.2021; Ministry of Social Policy. Checked 01.11.2026. Conditions change, so it\'s worth checking.</string>
     <string name="role_carer_1">Someone who cares for an older person, a person with a disability, a seriously ill person or a disabled child and has trained in care can, under certain conditions, receive a care compensation — for instance if not employed and not self-employed.</string>
     <string name="role_carer_2">Apply at an administrative services centre (TsNAP), the community\'s social protection office, by post, or online if Diia already offers it.</string>
     <string name="role_carer_3">Needed: a doctor\'s finding on the person\'s condition, passports, tax numbers and the carer\'s written consent.</string>
@@ -1331,7 +1331,7 @@
     <string name="role_milfamily_hint">Family of a defender</string>
     <string name="role_milfamily_affirm">You already hold the home front for your closest person — that is service too. Here: the family\'s rights and where to turn when there is no contact.</string>
     <string name="role_milfamily_facts_title">Family rights and search</string>
-    <string name="role_milfamily_source">Sources: Ministry of Veterans Affairs (30.07.2025, 20.05.2026); Ministry of Defence (30.04.2026, 02.01.2026); Ministry of Internal Affairs (29.01.2025); Ombudsman\'s Office leaflet for relatives (12.11.2025). Checked 01.11.2026. Conditions change, so it's worth checking.</string>
+    <string name="role_milfamily_source">Sources: Ministry of Veterans Affairs (30.07.2025, 20.05.2026); Ministry of Defence (30.04.2026, 02.01.2026); Ministry of Internal Affairs (29.01.2025); Ombudsman\'s Office leaflet for relatives (12.11.2025). Checked 01.11.2026. Conditions change, so it\'s worth checking.</string>
     <string name="role_milfamily_1">The family of a fallen defender can apply for family-member status at any administrative services centre (TsNAP), online too, wherever they live.</string>
     <string name="role_milfamily_2">If a court has declared a missing defender dead or established the fact of death, the court decision is the ground for the certificate; no military medical board finding is needed.</string>
     <string name="role_milfamily_3">If a loved one is missing, the police (102) or the Commissioner\'s representative takes the report; blood relatives give a DNA sample for the search.</string>
@@ -1342,7 +1342,7 @@
     <string name="role_veteran_hint">I have combat experience — from 2014 to today</string>
     <string name="role_veteran_affirm">You have already given the country a great deal. Here: what you are entitled to, who helps with documents and where to recover.</string>
     <string name="role_veteran_facts_title">Status and support</string>
-    <string name="role_veteran_source">Sources: Ministry of Defence (20.01.2026); Ministry of Veterans Affairs (13.12.2024, 30.07.2025, 10.04.2026). Checked 01.11.2026. Conditions change, so it's worth checking.</string>
+    <string name="role_veteran_source">Sources: Ministry of Defence (20.01.2026); Ministry of Veterans Affairs (13.12.2024, 30.07.2025, 10.04.2026). Checked 01.11.2026. Conditions change, so it\'s worth checking.</string>
     <string name="role_veteran_1">Combatant status is mostly granted automatically: the military unit enters the data in the Unified Register of War Veterans, no application needed.</string>
     <string name="role_veteran_2">If that did not happen, the unit prepares a certificate and a commission at the military command decides within 30 days.</string>
     <string name="role_veteran_3">With the status, a digital veteran ID can be opened in Diia and used for benefits without a paper document.</string>
@@ -1353,7 +1353,7 @@
     <string name="role_volunteer_hint">I help the army, people or animals</string>
     <string name="role_volunteer_affirm">Your help already keeps someone going. Here: how to do it safely and honestly, with strength left for the long run.</string>
     <string name="role_volunteer_facts_title">Good to know</string>
-    <string name="role_volunteer_source">Sources: State Tax Service leaflet on the Register of Volunteers (2025); Cabinet of Ministers resolution No. 263; Cyber Police (20.08.2025). Checked 01.11.2026. Conditions change, so it's worth checking.</string>
+    <string name="role_volunteer_source">Sources: State Tax Service leaflet on the Register of Volunteers (2025); Cabinet of Ministers resolution No. 263; Cyber Police (20.08.2025). Checked 01.11.2026. Conditions change, so it\'s worth checking.</string>
     <string name="role_volunteer_1">Volunteering is governed by the law “On volunteer activity”.</string>
     <string name="role_volunteer_2">You can ask to be added to the tax service\'s Register of Volunteers: through the Electronic Cabinet with a qualified e-signature, or on paper with form 1-RV.</string>
     <string name="role_volunteer_3">If there is no reason to refuse, the tax service adds the person within one working day.</string>
@@ -1363,7 +1363,7 @@
     <string name="role_donor_hint">Or want to start</string>
     <string name="role_donor_affirm">Your blood already saves the wounded and the ill — quietly and for real. Here: who can give and what rights a donor has.</string>
     <string name="role_donor_facts_title">Who can give</string>
-    <string name="role_donor_source">Sources: Ministry of Health (10.01.2023); Labour Code, art. 124; State Labour Service (2026); Ukrainian Transplant Coordination Centre. Checked 01.11.2026. Conditions change, so it's worth checking.</string>
+    <string name="role_donor_source">Sources: Ministry of Health (10.01.2023); Labour Code, art. 124; State Labour Service (2026); Ukrainian Transplant Coordination Centre. Checked 01.11.2026. Conditions change, so it\'s worth checking.</string>
     <string name="role_donor_1">Citizens of Ukraine from 18 can give blood, as can foreigners and stateless people with a permanent residence permit.</string>
     <string name="role_donor_2">A whole-blood donor weighs at least 50 kg. The blood centre\'s doctor tells about contraindications and the gap between donations.</string>
     <string name="role_donor_3">On the day of donation an employee is released from work with pay kept, and gets one more day of rest after it (Labour Code, art. 124).</string>
