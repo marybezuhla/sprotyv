@@ -1250,10 +1250,10 @@
     <string name="shield_how_life">Запишіть досвід у нотатках</string>
     <string name="experience_support">Якщо згадувати важко — де знайти підтримку</string>
     <string name="shield_how_count">Рахується сама</string>
-    <string name="held_blackout">Пережиті відключення світла</string>
-    <string name="held_heating">Пережиті дні без тепла</string>
+    <string name="held_blackout">Відключення світла</string>
+    <string name="held_heating">Дні без тепла</string>
     <string name="held_shelter">Тривоги в укритті</string>
-    <string name="held_gart">Дні «Щоденного гарту»</string>
+    <string name="held_gart">Дні гарту</string>
     <string name="held_body">Місяці перевірки тіла</string>
     <string name="shield_how_topic">Тема без помилок</string>
     <string name="shield_solved">Розв’язані ситуації</string>
