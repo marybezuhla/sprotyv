@@ -168,17 +168,13 @@ fun RoleScreen(r: Role, content: Content?, nav: Nav) {
     val context = LocalContext.current
     val toolbar = MaterialTheme.colorScheme.surface.toArgb()
     Text(stringResource(r.affirm), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-    if (r.pathLevel != null) {
-        Block(stringResource(R.string.role_steps_title), Group.PREPARE, tint = resist(), padded = false) {
-            BlockRow(stringResource(R.string.role_steps_open), stringResource(R.string.role_steps_hint), first = true) { nav.go(Route.Mine(MinePart.PATH)) }
-        }
-    }
+    if (r.pathLevel != null) HubCard(stringResource(R.string.role_steps_title), stringResource(R.string.role_steps_hint), resist()) { nav.go(Route.Mine(MinePart.PATH)) }
     if (r.facts.isNotEmpty() && r.factsTitle != null) FactsBlock(stringResource(r.factsTitle), r.facts, r.source)
     if (r.more.isNotEmpty() && r.moreTitle != null) FactsBlock(stringResource(r.moreTitle), r.more, r.moreSource)
     if (content == null) return Loading()
-    r.links.forEach { g ->
-        val links = content.links.filter { it.group == g }
-        if (links.isEmpty()) return@forEach
+    // Where to turn: one block, whatever groups the links come from
+    val links = r.links.flatMap { g -> content.links.filter { it.group == g } }.distinctBy { it.id }
+    if (links.isNotEmpty()) {
         Block(stringResource(R.string.role_where), Group.PREPARE, tint = resist(), padded = false, foldable = true, summary = stringResource(R.string.shelf_count, links.size)) {
             links.forEach { link -> LinkRow(link) { openLink(context, link, toolbar) } }
         }

@@ -258,7 +258,7 @@ fun PathScreen(nav: Nav) {
         if (steps.isEmpty()) return@forEachIndexed
         val got = steps.count { it.key in done }
         Block(stringResource(title), Group.PREPARE, tint = resist(), padded = false, foldable = true, startOpen = level == firstLevel, trailing = {
-            Text((if (got == steps.size) "✓ " else "") + stringResource(R.string.ready_count, got, steps.size), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+            Text((if (got == steps.size) "✓\u2002" else "") + stringResource(R.string.ready_count, got, steps.size), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
         }) {
             steps.forEachIndexed { i, s ->
                 if (i > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
@@ -285,7 +285,7 @@ fun PathScreen(nav: Nav) {
                     // A small book: where to learn it, so the step's words keep the width
                     s.learn?.let { r ->
                         androidx.compose.material3.IconButton(onClick = { nav.go(r) }, modifier = Modifier.size(48.dp)) {
-                            androidx.compose.material3.Icon(androidx.compose.ui.graphics.vector.ImageVector.vectorResource(R.drawable.ocha_learning), contentDescription = stringResource(R.string.path_learn), tint = resist().ink)
+                            androidx.compose.material3.Icon(androidx.compose.ui.graphics.vector.ImageVector.vectorResource(R.drawable.tab_know), contentDescription = stringResource(R.string.path_learn), tint = resist().ink)
                         }
                     }
                 }

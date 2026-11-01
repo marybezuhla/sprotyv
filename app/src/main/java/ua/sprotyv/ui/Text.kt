@@ -221,10 +221,11 @@ fun doneText(@Suppress("UNUSED_PARAMETER") done: Boolean): androidx.compose.ui.g
 
 
 /**
- * Where the words beside a checkbox start (the box's 48 dp and 12 dp on each side). Everything
- * under such a row — dots, bars, buttons — starts here too, so every line keeps one left edge.
+ * Where the words beside a checkbox start (the box's 24 dp and 12 dp on each side, as measured on
+ * the drawn screens). Everything under such a row — dots, bars, buttons — starts here too, so
+ * every line keeps one left edge.
  */
-val CheckIndent = 72.dp
+val CheckIndent = 48.dp
 /** A text button's own padding, taken off so its words also start at [CheckIndent]. */
 val ButtonInset = 12.dp
 

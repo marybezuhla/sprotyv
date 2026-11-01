@@ -171,10 +171,8 @@ fun KitScreen(content: Content?, nav: Nav) {
             Spacer(Modifier.width(16.dp))
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Text(stringResource(if (done == total) R.string.kit_full else R.string.kit_packed, done, total), style = MaterialTheme.typography.titleLarge, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
-                androidx.compose.material3.LinearProgressIndicator(
-                    progress = { if (total == 0) 0f else done.toFloat() / total }, color = blue.ink, trackColor = MaterialTheme.colorScheme.surface,
-                    modifier = Modifier.fillMaxWidth().height(10.dp).clip(androidx.compose.foundation.shape.RoundedCornerShape(5.dp)),
-                )
+                // The same bar as every count in the app
+                Bar(if (total == 0) 0f else done.toFloat() / total, blue.ink)
                 Text(stringResource(R.string.kit_intro), style = MaterialTheme.typography.bodyMedium)
             }
         }
