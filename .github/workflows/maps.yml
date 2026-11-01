@@ -66,47 +66,55 @@ jobs:
           python3 ../scripts/maps/oblasts.py adm.geojsonseq extracts.json oblasts.json
           cat oblasts.json | head -80
 
-      - name: Detailed maps, one per oblast
-        shell: bash
-        run: |
-          set -euo pipefail
-          cd work
-          mkdir -p out obl
-          osmium extract -c extracts.json -d obl ukraine.osm.pbf --overwrite
-          for f in obl/*.osm.pbf; do
-            id=$(basename "$f" .osm.pbf)
-            osmosis -q --rbf file="$f" --mapfile-writer file="out/$id.map" type=hd threads=4 preferred-languages=uk,en
-            ls -la "out/$id.map"
-          done
-
       - name: Overview of all Ukraine (built into the app)
         shell: bash
         run: |
           set -euo pipefail
           cd work
+          mkdir -p out
+          export JAVACMD_OPTIONS="-Xmx6g"
           # Only what helps to find one's way: settlements, main roads, rail, rivers, water, forests, boundaries
           osmium tags-filter ukraine.osm.pbf \
             n/place=city,town,village \
             w/highway=motorway,trunk,primary,secondary,motorway_link,trunk_link \
             w/railway=rail w/waterway=river w/natural=water r/natural=water \
             w/landuse=forest r/landuse=forest w/natural=wood r/natural=wood \
-            r/boundary=administrative w/boundary=administrative \
+            r/admin_level=2,4 \
             -o overview.osm.pbf --overwrite
           osmosis -q --rbf file=overview.osm.pbf --mapfile-writer file=out/overview.map type=hd threads=4 \
             preferred-languages=uk,en zoom-interval-conf=5,0,7,9,8,10,11,11,12
           ls -la out
 
+      - name: Detailed maps, one per oblast
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd work
+          mkdir -p out obl
+          free -h
+          export JAVACMD_OPTIONS="-Xmx6g"
+          # One oblast at a time: a pass over the data each, so the memory stays small
+          python3 -c 'import json;[print(e["output"][:-8], ",".join(map(str,e["bbox"]))) for e in json.load(open("extracts.json"))["extracts"]]' |
+          while read -r id box; do
+            osmium extract -b "$box" -o "obl/$id.osm.pbf" --overwrite ukraine.osm.pbf
+            osmosis -q --rbf file="obl/$id.osm.pbf" --mapfile-writer file="out/$id.map" type=hd threads=4 preferred-languages=uk,en
+            rm "obl/$id.osm.pbf"
+            ls -la "out/$id.map"
+          done
+
       - name: Sums and sizes
+        if: always()
         shell: bash
         run: |
           set -euo pipefail
           cd work/out
-          sha256sum *.map > SHA256SUMS
-          cp ../oblasts.json .
+          sha256sum *.map > SHA256SUMS || true
+          cp ../oblasts.json . || true
           du -h *.map | sort -h
           du -ch *.map | tail -1
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
         with:
           name: maps
           path: work/out/
