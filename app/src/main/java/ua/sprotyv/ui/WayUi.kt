@@ -20,6 +20,8 @@ fun WayHub(nav: Nav) {
     // One card per way in: no block repeating its own title above a single row
     if (prefs?.let { gartToday(it.gart) } != null) GartStrip(nav)
     else HubCard(stringResource(R.string.gart_title), stringResource(R.string.gart_hint), Group.PREPARE.tint()) { nav.go(Route.Mine(MinePart.GART)) }
+    // What has really been done, as shields: inside "Mine"; here just the way in
+    HubCard(stringResource(R.string.shields_title), stringResource(R.string.shields_hint), resist()) { nav.go(Route.Mine(MinePart.SHIELDS)) }
     // "Who I am now": which roles, only inside "Mine"; here just the way in
     HubCard(stringResource(R.string.roles_title), stringResource(R.string.roles_hint), resist()) { nav.go(Route.Mine(MinePart.ROLES)) }
     val share = prefs?.path?.let(::pathShare)

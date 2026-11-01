@@ -1218,4 +1218,20 @@
     <string name="comms_note">Sprotyv only explains and opens these apps: it has no internet, Bluetooth or radio of its own, so your data here stays out of reach.</string>
     <string name="screenshots_mark_text">Screens with your personal data can be captured or recorded now. It is your choice; switch it off here or in settings.</string>
     <string name="screenshots_keep">Keep</string>
+    <string name="shields_title">My shields</string>
+    <string name="shields_hint">What you really can do and have done</string>
+    <string name="shields_intro">A shield appears by itself when a thing is really done: a habit made your own, a level of the path, a test without mistakes, a part of readiness finished.</string>
+    <string name="shields_count">Earned: %1$d of %2$d</string>
+    <string name="shields_never_lost">A shield once earned stays for good, even after a break. No rankings, no comparisons.</string>
+    <string name="shields_habits">Habits</string>
+    <string name="shields_path">My path</string>
+    <string name="shields_tests">Checked by a test</string>
+    <string name="shields_ready">Readiness</string>
+    <string name="shield_how_habit">21 days — half, 66 — full</string>
+    <string name="shield_how_level">All steps of the level</string>
+    <string name="shield_how_test">A test without mistakes</string>
+    <string name="shield_how_ready">Everything in this part</string>
+    <string name="shield_earned">earned</string>
+    <string name="shield_half">half</string>
+    <string name="shield_not_yet">still ahead</string>
 </resources>
