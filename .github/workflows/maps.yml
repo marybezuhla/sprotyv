@@ -94,13 +94,17 @@ jobs:
           mkdir -p out obl
           free -h
           # One oblast at a time: a pass over the data each, so the memory stays small
-          python3 -c 'import json;[print(e["output"][:-8], ",".join(map(str,e["bbox"]))) for e in json.load(open("extracts.json"))["extracts"]]' |
-          while read -r id box; do
+          # The writer gets the oblast's box itself (lat,lon order): left to guess it from the data, one
+          # far-away point makes the box, and the tiles kept in memory, enormous
+          python3 -c 'import json;[print(e["output"][:-8], ",".join(map(str,e["bbox"])), ",".join(map(str,[e["bbox"][1],e["bbox"][0],e["bbox"][3],e["bbox"][2]]))) for e in json.load(open("extracts.json"))["extracts"]]' |
+          while read -r id box wbox; do
             osmium extract -b "$box" -o "obl/$id.osm.pbf" --overwrite ukraine.osm.pbf
-            osmosis -q --rbf file="obl/$id.osm.pbf" --mapfile-writer file="out/$id.map" type=hd threads=2 preferred-languages=uk,en \
+            osmosis -q --rbf file="obl/$id.osm.pbf" --mapfile-writer file="out/$id.map" type=hd threads=2 preferred-languages=uk,en bbox="$wbox" \
               || { echo "FAILED $id"; rm -f "out/$id.map"; echo "$id" >> failed.txt; }
             rm "obl/$id.osm.pbf"
             ls -la "out/$id.map" || true
+            # Three failures in a row mean the settings are wrong: stop rather than spend hours
+            if [ "$(wc -l < failed.txt 2>/dev/null || echo 0)" -ge 3 ] && [ ! -e "out/$id.map" ]; then echo "Stopping early"; break; fi
           done
           # Every oblast or none: a missing one stops the release
           if [ -s failed.txt ]; then echo "Failed: $(cat failed.txt)"; exit 1; fi
