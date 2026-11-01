@@ -1244,10 +1244,10 @@
     <string name="shield_how_life">Write the experience in notes</string>
     <string name="experience_support">If remembering is hard — where to find support</string>
     <string name="shield_how_count">Counts itself</string>
-    <string name="held_blackout">Power cuts lived through</string>
-    <string name="held_heating">Days without heat lived through</string>
+    <string name="held_blackout">Power cuts</string>
+    <string name="held_heating">Days without heat</string>
     <string name="held_shelter">Alerts in the shelter</string>
-    <string name="held_gart">Days of daily hardening</string>
+    <string name="held_gart">Hardening days</string>
     <string name="held_body">Months of the body check</string>
     <string name="shield_how_topic">A theme without mistakes</string>
     <string name="shield_solved">Situations solved</string>
