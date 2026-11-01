@@ -37,7 +37,7 @@ enum class Circle(val title: Int) { CARE(R.string.circle_care), DEFENCE(R.string
 /**
  * One role: not a label but a person's place, and the next step from there. [facts] are short
  * lines from official sources ([source] says which and when checked); [links] are groups of the
- * link list; [pathLevel] is the role's own block in "My path".
+ * link list, or single links as "#id"; [pathLevel] is the role's own block in "My path".
  */
 class Role(
     val id: String,
@@ -173,7 +173,7 @@ fun RoleScreen(r: Role, content: Content?, nav: Nav) {
     if (r.more.isNotEmpty() && r.moreTitle != null) FactsBlock(stringResource(r.moreTitle), r.more, r.moreSource)
     if (content == null) return Loading()
     // Where to turn: one block, whatever groups the links come from
-    val links = r.links.flatMap { g -> content.links.filter { it.group == g } }.distinctBy { it.id }
+    val links = r.links.flatMap { g -> content.links.filter { if (g.startsWith("#")) it.id == g.drop(1) else it.group == g } }.distinctBy { it.id }
     if (links.isNotEmpty()) {
         Block(stringResource(R.string.role_where), Group.PREPARE, tint = resist(), padded = false, foldable = true, summary = stringResource(R.string.shelf_count, links.size)) {
             links.forEach { link -> LinkRow(link) { openLink(context, link, toolbar) } }
