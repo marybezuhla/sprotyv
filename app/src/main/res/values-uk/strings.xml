@@ -750,6 +750,7 @@
     <string name="resist_learn_intro">Державні програми й громадські організації поруч: країна тримається і на тих, і на тих. Центри підготовки до нацспротиву є в багатьох областях — свій шукайте на сайті обласної ради чи військової адміністрації. Біля кожного — хто веде.</string>
     <string name="resist_resilience_title">Стійкість</string>
     <string name="resist_resilience_intro">Як підтримати себе й інших, коли страшно, і як не піддатися маніпуляціям.</string>
+    <string name="service_where">Куди звернутися щодо служби</string>
     <string name="service_title">Служба у війську (18+)</string>
     <string name="service_toggle">Показувати, як працює вступ на службу</string>
     <string name="service_hint">Лише факти з офіційних джерел, права й ризики. Рішення — тільки ваше.</string>

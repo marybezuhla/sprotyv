@@ -332,7 +332,7 @@ fun RolesScreen(nav: Nav) {
         val got = roles.count { it.id in picked }
         // Circumstances are not chosen like roles: said so, gently, before them
         if (circle == Circle.SITUATION) Text(stringResource(R.string.roles_situation_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        Block(stringResource(circle.title), Group.PREPARE, tint = resist(), padded = false, foldable = true, startOpen = got > 0 || mine.isEmpty(),
+        Block(stringResource(circle.title), Group.PREPARE, tint = resist(), padded = false, foldable = true, startOpen = false,
             trailing = { if (got > 0) Text(stringResource(R.string.ready_count, got, roles.size), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold) }) {
             roles.forEachIndexed { i, r ->
                 if (i > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
@@ -351,7 +351,6 @@ fun RolesScreen(nav: Nav) {
             }
         }
     }
-    Text(stringResource(R.string.roles_more_coming), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     Text(stringResource(R.string.roles_private), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 }
 
