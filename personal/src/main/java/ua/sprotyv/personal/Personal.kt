@@ -112,7 +112,7 @@ object Personal {
     private fun setAside(context: Context) {
         val stamp = System.currentTimeMillis()
         val db = context.getDatabasePath(PersonalDb.FILE_NAME)
-        listOf("", "-wal", "-shm", "-journal").forEach { suffix ->
+        listOf("", "-wal", "-shm", "-journal", PersonalDb.RAW_MARK).forEach { suffix ->
             val f = File(db.path + suffix)
             if (f.exists() && !f.renameTo(File(db.path + suffix + ".lost-$stamp"))) error("Could not set the data aside")
         }
