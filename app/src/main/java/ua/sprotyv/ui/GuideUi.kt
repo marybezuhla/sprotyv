@@ -116,7 +116,7 @@ fun ChapterScreen(content: Content?, id: String, nav: Nav) {
         Blocks(chapter.intro)
         // The sections in one plate of the chapter's colour
         Block(stringResource(R.string.guide_sections), groupOf(ua.sprotyv.home.Tiles.chapter(chapter.id)), padded = false) {
-            chapter.sections.forEachIndexed { i, s -> BlockRow((if (s.num.isNotBlank()) s.num + ". " else "") + s.title, first = i == 0) { nav.go(Route.GuideSection(s.num)) } }
+            chapter.sections.forEachIndexed { i, s -> BlockRow((if (s.num.isNotBlank()) shownNum(s.num) + ". " else "") + s.title, first = i == 0) { nav.go(Route.GuideSection(s.num)) } }
         }
     }
 }
@@ -130,7 +130,7 @@ fun GuideSectionScreen(content: Content?, num: String, nav: Nav) {
         val chapter = content.guide.chapters.firstOrNull { it.label.endsWith(" $num") }
         if (chapter != null) return ChapterScreen(content, chapter.id, nav)
     }
-    Frame(found?.second?.let { "${it.num}. ${it.title}" } ?: "", nav::back) {
+    Frame(found?.second?.let { "${shownNum(it.num)}. ${it.title}" } ?: "", nav::back) {
         if (content == null) return@Frame Loading()
         if (content.guideBroken) return@Frame Broken()
         if (found == null) return@Frame Text(stringResource(R.string.not_found))
@@ -301,6 +301,17 @@ fun FigureView(f: Block.Figure) {
     }
 }
 
+/**
+ * A section number as shown: the appendices are numbered with Ukrainian letters (А.1, Б.2, Г.3),
+ * which in English read as A, B, C, D. The number itself stays the key for links.
+ */
+@Composable
+internal fun shownNum(num: String): String {
+    if (androidx.compose.ui.platform.LocalConfiguration.current.locales[0].language != "en") return num
+    val first = when (num.firstOrNull()) { 'А' -> 'A'; 'Б' -> 'B'; 'В' -> 'C'; 'Г' -> 'D'; else -> return num }
+    return first + num.drop(1)
+}
+
 /** The words last searched, in memory only, so coming back from a section shows the same results. */
 private object SearchMemory {
     @Volatile var query: String = ""
@@ -339,7 +350,7 @@ fun SearchScreen(content: Content?, nav: Nav) {
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text("${h.section.num}. ${h.section.title}", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                    Text("${shownNum(h.section.num)}. ${h.section.title}", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                     Text(h.snippet, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }

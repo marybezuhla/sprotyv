@@ -646,6 +646,7 @@
     <string name="qr_text_code_desc">QR code with your text</string>
     <string name="qr_text_bright">Turn the screen brightness up and hold the phone steady.</string>
     <string name="qr_text_clear">Clear the text</string>
+    <string name="mine_block_me">Who I am now and what is done</string>
     <string name="mine_block_now">Tell your people</string>
     <string name="mine_block_health">Health and rescue</string>
     <string name="mine_block_health_desc">Medical card, screen for rescuers</string>

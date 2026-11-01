@@ -652,6 +652,7 @@
     <string name="qr_text_code_desc">QR-код із вашим текстом</string>
     <string name="qr_text_bright">Підвищіть яскравість екрана й тримайте телефон рівно.</string>
     <string name="qr_text_clear">Стерти текст</string>
+    <string name="mine_block_me">Хто я зараз і що вже зроблено</string>
     <string name="mine_block_now">Повідомити своїх</string>
     <string name="mine_block_health">Здоров’я й порятунок</string>
     <string name="mine_block_health_desc">Медкартка, екран для рятувальника</string>
