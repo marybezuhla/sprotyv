@@ -1216,4 +1216,6 @@
     <string name="comms_open">Open</string>
     <string name="comms_where">Where to install (official site)</string>
     <string name="comms_note">Sprotyv only explains and opens these apps: it has no internet, Bluetooth or radio of its own, so your data here stays out of reach.</string>
+    <string name="screenshots_mark_text">Screens with your personal data can be captured or recorded now. It is your choice; switch it off here or in settings.</string>
+    <string name="screenshots_keep">Keep</string>
 </resources>

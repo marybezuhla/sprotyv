@@ -62,7 +62,7 @@ fun MozListScreen(content: Content?, nav: Nav) {
         var query by rememberSaveable { mutableStateOf("") }
         androidx.compose.material3.OutlinedTextField(
             value = query, onValueChange = { query = it.take(60) }, singleLine = true,
-            label = { Text(stringResource(R.string.moz_search)) }, modifier = Modifier.fillMaxWidth(),
+            label = { ChipText(stringResource(R.string.moz_search)) }, modifier = Modifier.fillMaxWidth(),
         )
         val q = query.trim()
         if (q.length >= 2) {
@@ -116,9 +116,9 @@ fun MozScreen(content: Content?, n: Int, nav: Nav) {
         if (moz == null || p == null) return@Frame Broken()
         val medic = HomePrefs.state.collectAsState().value?.medic == true
         var full by rememberSaveable(n) { mutableStateOf(medic) }
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            FilterChip(selected = !full, onClick = { full = false }, label = { Text(stringResource(R.string.moz_steps)) }, modifier = Modifier.heightIn(min = 48.dp))
-            FilterChip(selected = full, onClick = { full = true }, label = { Text(stringResource(R.string.moz_full)) }, modifier = Modifier.heightIn(min = 48.dp))
+        ChoiceRow {
+            FilterChip(selected = !full, onClick = { full = false }, label = { ChipText(stringResource(R.string.moz_steps)) }, modifier = Modifier.heightIn(min = 48.dp))
+            FilterChip(selected = full, onClick = { full = true }, label = { ChipText(stringResource(R.string.moz_full)) }, modifier = Modifier.heightIn(min = 48.dp))
         }
         if (full) FullText(p, medic) else Steps(p)
         SourceBox(stringResource(R.string.moz_source_line, moz.act, p.n), moz.license, reviewedBy = "")

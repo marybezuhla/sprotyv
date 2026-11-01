@@ -1222,4 +1222,6 @@
     <string name="comms_open">Відкрити</string>
     <string name="comms_where">Де встановити (офіційний сайт)</string>
     <string name="comms_note">«Спротив» лише пояснює й відкриває ці застосунки: сам він не має ні інтернету, ні Bluetooth, ні радіо, тож ваші дані тут лишаються недосяжними.</string>
+    <string name="screenshots_mark_text">Екрани з особистими даними зараз можна сфотографувати чи записати. Це ваш вибір; вимкнути можна тут або в налаштуваннях.</string>
+    <string name="screenshots_keep">Лишити</string>
 </resources>

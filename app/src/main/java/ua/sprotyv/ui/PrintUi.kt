@@ -440,7 +440,6 @@ fun ScanScreen(nav: Nav) {
 
     SecureScreen()
     Frame(stringResource(R.string.scan_title), nav::back) {
-        ScreenshotsStrip()
         Text(stringResource(R.string.scan_intro), style = MaterialTheme.typography.bodyLarge)
         Button(onClick = {
             scanned = null; notFound = false; noCamera = false
