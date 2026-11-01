@@ -312,6 +312,16 @@ LINKS = [
     link("howareu-resilience", "resilience", "official", "«Ти як?»: ментальне здоров’я",
          "Всеукраїнська програма ментального здоров’я: як підтримати себе й близьких і де знайти допомогу.",
          url="https://howareu.com"),
+    # Detailed maps without internet: open apps on OpenStreetMap data (maps downloaded beforehand)
+    link("comaps", "maps", "volunteer", "CoMaps",
+         "Мапи вулиць, маршрути й пошук без інтернету. Громадський неприбутковий проєкт, відгалуження Organic Maps; без реклами й стеження.",
+         url="https://www.comaps.app"),
+    link("organicmaps", "maps", "independent", "Organic Maps",
+         "Мапи вулиць і маршрути без інтернету, без реклами. Через суперечки щодо керування проєктом частина розробників створила CoMaps.",
+         url="https://organicmaps.app"),
+    link("osmand", "maps", "independent", "OsmAnd",
+         "Найбільше можливостей: мапи без інтернету, рельєф, стежки, маршрути. Частина функцій платна.",
+         url="https://osmand.net", flags=("paid",)),
     # Fakes
     link("cpd", "facts", "official", "Центр протидії дезінформації",
          "Спростування фейків і попередження про ворожі канали та боти.",
@@ -331,7 +341,7 @@ if __name__ == "__main__":
     out = os.path.join(os.path.dirname(__file__), "..", "..", "content", "src", "main", "assets", "links.json")
     assert len({l["id"] for l in LINKS}) == len(LINKS)
     for l in LINKS:
-        assert l["group"] in ("threats", "front", "help", "evac", "search", "mind", "rights", "facts", "power") + DIRECTORY + RESIST, l["id"]
+        assert l["group"] in ("threats", "front", "help", "evac", "search", "mind", "rights", "facts", "power", "maps") + DIRECTORY + RESIST, l["id"]
         assert len(l["note"]) <= 200, l["id"]
     with open(out, "w", encoding="utf-8") as f:
         json.dump(LINKS, f, ensure_ascii=False, indent=1)

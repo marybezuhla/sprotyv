@@ -92,6 +92,16 @@ object Reach {
         start(context, intent)
     }
 
+    /**
+     * A place shown in a map app on the phone (CoMaps, OsmAnd, any that opens "geo:" addresses).
+     * The person picks the app each time; only the two numbers go to it, nothing else.
+     */
+    fun place(context: Context, lat: Double, lon: Double, title: CharSequence) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(Links.geo(lat, lon)))
+        // Android's own chooser: it also says so itself when no map app is on the phone
+        start(context, Intent.createChooser(intent, title))
+    }
+
     private fun fromPlay(context: Context, app: String): Boolean = try {
         context.packageManager.getInstallSourceInfo(app).installingPackageName == "com.android.vending"
     } catch (e: Exception) {
@@ -168,6 +178,13 @@ object Links {
     }
 
     fun tel(number: String) = "tel:" + clean(number)
+
+    /** A place as a "geo:" address with a pin and no name: five decimals (about a metre), dot as separator. */
+    fun geo(lat: Double, lon: Double): String {
+        require(lat in -90.0..90.0 && lon in -180.0..180.0) { "Not a place" }
+        val p = String.format(java.util.Locale.ROOT, "%.5f,%.5f", lat, lon)
+        return "geo:$p?q=$p"
+    }
 
     fun smsTo(numbers: List<String>): String {
         val kept = numbers.map(::clean).filter { it.removePrefix("+").isNotEmpty() }

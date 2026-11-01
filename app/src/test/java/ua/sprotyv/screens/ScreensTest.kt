@@ -170,5 +170,5 @@ class ScreensTest {
     // Settings in English with large text: rows of choices must wrap, never break a word
     @Test fun settingsBig() { mode(Mode.FULL); shot("31-settings-big", big = true) { SettingsScreen(HomePrefs.load(app), nav) } }
     @Test fun moz() { mode(Mode.FULL); shot("32-moz-big", big = true) { MozScreen(content, 4, nav) } }
-    @Test fun mapEmpty() = shot("33-map-empty-dark", dark = true) { MapScreen(nav) }
+    @Test fun mapEmpty() = shot("33-map-empty-dark", dark = true) { MapScreen(null, nav) }
 }
