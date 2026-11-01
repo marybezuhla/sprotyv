@@ -17,6 +17,17 @@ object Reach {
     const val SIGNAL = "org.thoughtcrime.securesms"
 
     /** Opens the dialer with the number filled in; the person presses call. */
+    /** Opens an app already on the phone; false when it is not there (nothing is installed from here). */
+    fun launch(context: Context, pkg: String): Boolean = try {
+        val i = context.packageManager.getLaunchIntentForPackage(pkg)
+        if (i == null) false else { context.startActivity(i.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)); true }
+    } catch (e: Exception) { false }
+
+    /** Whether an app is on the phone (only the packages named in the manifest's queries can be seen). */
+    fun installed(context: Context, pkg: String): Boolean = try {
+        context.packageManager.getLaunchIntentForPackage(pkg) != null
+    } catch (e: Exception) { false }
+
     fun dial(context: Context, number: String) =
         start(context, Intent(Intent.ACTION_DIAL, Uri.parse(Links.tel(number))))
 

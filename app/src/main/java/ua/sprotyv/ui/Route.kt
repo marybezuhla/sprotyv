@@ -42,6 +42,8 @@ sealed interface Route {
     data object Handover : Route
     /** "What would you do?" for one card, or for all adult cards when [card] is empty. */
     data class PracticeRoute(val card: String) : Route
+    /** "When the network is down": phone-to-phone and radio messengers, set up in advance. */
+    data object Comms : Route
     /** "Check yourself" for one step of "My path": that step's situations; all right marks it as checked. */
     data class PathCheck(val step: String) : Route
     /** One role's page ("Who I am now"): kept in "Mine". */
@@ -83,6 +85,7 @@ sealed interface Route {
         is Delegate -> "delegate:$n"
         Handover -> "handover"
         is PracticeRoute -> "practice:$card"
+        Comms -> "comms"
         is PathCheck -> "pathcheck:$step"
         is RoleRoute -> "role:$id"
         is External -> "external:$id"
@@ -118,6 +121,7 @@ sealed interface Route {
                 "constitution" -> if (value.isEmpty()) ConstitutionRoute("") else value.takeIf { it.matches(Regex("^\\d{1,3}(-\\d)?$")) }?.let(::ConstitutionRoute)
                 "moz" -> if (value.isEmpty()) MozList else value.toIntOrNull()?.takeIf { it in 1..60 }?.let(::Moz)
                 "practice" -> PracticeRoute(value)
+                "comms" -> Comms
                 "pathcheck" -> value.takeIf { it in PATH_CHECKS }?.let(::PathCheck)
                 "role" -> value.takeIf { it in ROLES }?.let(::RoleRoute)
                 // Never reopened after the app is restored: that would open a page unasked

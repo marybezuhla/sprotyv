@@ -27,6 +27,9 @@
         <package android:name="ua.gov.mvs.service112" />
         <!-- Firefox Focus erases pages on closing: used for "Situation" when installed -->
         <package android:name="org.mozilla.focus" />
+        <!-- "When the network is down": opens these messengers when installed (Briar, Meshtastic) -->
+        <package android:name="org.briarproject.briar.android" />
+        <package android:name="com.geeksville.mesh" />
         <package android:name="org.mozilla.klar" />
         <!-- Google Play: whether a link to Firefox Focus there can be offered -->
         <package android:name="com.android.vending" />

@@ -1193,4 +1193,27 @@
     <string name="practice_count">situations: %1$d</string>
     <string name="practice_more_coming">Situations from the guide will be added step by step, each with its source.</string>
     <string name="widget_neutral">Open Sprotyv</string>
+    <string name="comms_title">When the network is down</string>
+    <string name="comms_hint">Phone to phone, and radio without towers</string>
+    <string name="comms_intro">When mobile service and the internet are down, messages can still go directly: phone to phone, or through small radio modules. Agree in advance — later it is too late.</string>
+    <string name="comms_before">In advance</string>
+    <string name="comms_before_1">Install the app while there is internet.</string>
+    <string name="comms_before_2">Exchange contacts in person and test the connection together.</string>
+    <string name="comms_before_3">Write in your family plan where and when you meet if there is no connection.</string>
+    <string name="comms_to_plan">Open the family plan</string>
+    <string name="comms_briar">Briar: phone to phone</string>
+    <string name="comms_briar_1">A messenger with no servers and no phone number. Without internet it passes messages over Bluetooth or Wi‑Fi to people nearby; with internet, over Tor.</string>
+    <string name="comms_briar_2">Contacts are added in advance, in person: you scan each other’s QR codes.</string>
+    <string name="comms_briar_3">An independent security audit was done by Cure53 (2017).</string>
+    <string name="comms_briar_4">Since July 2026 Briar is in maintenance mode: only essential security updates and fixes. It can use noticeable battery.</string>
+    <string name="comms_briar_source">Sources: briarproject.org; F-Droid (version 1.5.23, 31.10.2026); Cure53 report (20.03.2017); Zeli (15.07.2026). Checked 01.11.2026.</string>
+    <string name="comms_mesh">Meshtastic: radio over kilometres</string>
+    <string name="comms_mesh_1">Separate LoRa radio modules carry text over kilometres without mobile service. The phone connects to the module over Bluetooth. Suits a community, a DFTG, volunteers.</string>
+    <string name="comms_mesh_2">Anyone can read the default shared channel. For your people, make a separate channel with its own key and change the key from time to time.</string>
+    <string name="comms_mesh_3">Direct messages are encrypted with the two people’s keys. Check your contact’s key another way before writing anything important.</string>
+    <string name="comms_mesh_4">If a key ever leaks, messages recorded earlier can be read.</string>
+    <string name="comms_mesh_source">Source: meshtastic.org, “Encryption”. Checked 01.11.2026.</string>
+    <string name="comms_open">Open</string>
+    <string name="comms_where">Where to install (official site)</string>
+    <string name="comms_note">Sprotyv only explains and opens these apps: it has no internet, Bluetooth or radio of its own, so your data here stays out of reach.</string>
 </resources>

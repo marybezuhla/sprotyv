@@ -48,6 +48,7 @@ import ua.sprotyv.ui.SituationScreen
 import ua.sprotyv.ui.SprotyvTheme
 import ua.sprotyv.ui.ThemeChoice
 import ua.sprotyv.ui.WayHub
+import ua.sprotyv.ui.CommsScreen
 import java.io.File
 
 /**
@@ -163,4 +164,5 @@ class ScreensTest {
     @Test fun cardBig() { mode(Mode.FULL); shot("27-card-bleeding-big", dark = true, big = true) { CardScreen(content, "bleeding", nav) } }
     @Test fun guideTableBig() = shot("28-guide-9-3-big", dark = true, big = true) { GuideSectionScreen(content, "9.3", nav) }
     @Test fun practiceCheck() { mode(Mode.FULL); shot("29-practice-check-dark", dark = true) { PracticeScreen(content, "bleeding", nav, check = "bleed") } }
+    @Test fun comms() = shot("30-comms-dark", dark = true) { CommsScreen(nav) }
 }
