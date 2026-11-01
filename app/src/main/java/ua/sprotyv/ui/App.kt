@@ -288,6 +288,7 @@ private fun Screen(
         Route.Handover -> HandoverScreen(nav)
         is Route.PracticeRoute -> PracticeScreen(content, top.card, nav)
         Route.Comms -> CommsScreen(nav)
+        Route.MapRoute -> MapScreen(nav)
         is Route.PathCheck -> PATH_CHECKS[top.step]?.let { PracticeScreen(content, it, nav, check = top.step) }
         is Route.External -> {}
         Route.Sections -> Frame(stringResource(R.string.add_tile), nav::back) {

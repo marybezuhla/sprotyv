@@ -38,3 +38,8 @@
   `scripts/content/moz441/`) — the 29 first-aid procedures of order No. 441 of the Ministry of Health of
   Ukraine, 09.03.2022 (registered 28.03.2022, No. 356/37692), from moz.gov.ua, word for word. An
   official document, not protected by copyright (Law of Ukraine No. 2811-IX, art. 8).
+
+## Mapsforge
+
+Offline map drawing: Mapsforge (https://github.com/mapsforge/mapsforge), LGPL-3.0. Map data, when
+the owner opens a map file: © OpenStreetMap contributors, ODbL 1.0.
