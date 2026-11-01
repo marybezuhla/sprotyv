@@ -1272,4 +1272,7 @@
     <string name="shield_next">Next — %1$d</string>
     <string name="shield_mark">Mark</string>
     <string name="shield_unmark">Unmark</string>
+    <string name="kid_sticker_got">Here is your Sunny sticker!</string>
+    <string name="kid_show_grown_up">Show a grown-up nearby and tell them what you would do.</string>
+    <string name="kid_stickers">Stickers: %1$d of %2$d</string>
 </resources>

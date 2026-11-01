@@ -31,6 +31,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
@@ -117,12 +118,20 @@ fun KidHome(content: Content?, nav: Nav, onGrownUp: () -> Unit) {
                 Column {
                     // Small and plain on purpose: for the grown-up, behind the phone's PIN
                     TextButton(onClick = onGrownUp, modifier = Modifier.align(Alignment.End).heightIn(min = 48.dp)) { Text(stringResource(R.string.kid_grown_up)) }
+                    // The sticker album: one little Sunny for each situation played through
+                    val got = KidStickers.all(androidx.compose.ui.platform.LocalContext.current)
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Sunny(64.dp)
                         Spacer(Modifier.width(12.dp))
                         Column(Modifier.weight(1f)) {
                             Text(stringResource(R.string.kid_hello), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
                             Text(stringResource(R.string.kid_hello_hint), style = MaterialTheme.typography.bodyLarge)
+                        }
+                    }
+                    if (cards.isNotEmpty()) {
+                        Row(Modifier.padding(top = 12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text(stringResource(R.string.kid_stickers, got.count { id -> cards.any { it.id == id } }, cards.take(7).size), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(end = 8.dp))
+                            cards.take(7).forEach { c -> if (c.id in got) Sunny(24.dp, happy = true) else androidx.compose.foundation.layout.Box(Modifier.size(24.dp).then(androidx.compose.ui.Modifier.border(1.dp, MaterialTheme.colorScheme.outlineVariant, androidx.compose.foundation.shape.CircleShape)).clearAndSetSemantics { }) }
                         }
                     }
                 }
@@ -313,5 +322,19 @@ internal fun KidCardBody(card: ua.sprotyv.content.Card, content: ua.sprotyv.cont
             }
         }
         androidx.compose.material3.OutlinedButton(onClick = { step = 0 }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.again)) }
+    }
+}
+
+
+/**
+ * The child's stickers: which situations were played through in "What would you do?". Only card
+ * ids, on this phone; nothing about the child. Finishing earns it, never being right.
+ */
+object KidStickers {
+    private fun prefs(c: android.content.Context) = c.applicationContext.getSharedPreferences("kid_stickers", android.content.Context.MODE_PRIVATE)
+    fun all(c: android.content.Context): Set<String> = prefs(c).getStringSet("got", emptySet()).orEmpty().filter { it.matches(Regex("^kid-[a-z0-9-]{1,30}$")) }.toSet()
+    fun add(c: android.content.Context, id: String) {
+        if (!id.matches(Regex("^kid-[a-z0-9-]{1,30}$"))) return
+        prefs(c).edit().putStringSet("got", (all(c) + id).take(30).toSet()).apply()
     }
 }
