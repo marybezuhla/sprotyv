@@ -238,7 +238,8 @@ private val SCIENCE = listOf(
 @Composable
 private fun ActiveHabit(h: Habit, done: Set<Long>, today: Long, nav: Nav, onTick: (Boolean) -> Unit, onDrop: () -> Unit) {
     val on = today in done
-    val tint = if (h.pillar.resist) resist() else h.pillar.group.tint()
+    // The block's own colour for dots and bar, as for every "done" in the app (never a second code)
+    val tint = doneTint()
     Column(Modifier.fillMaxWidth().padding(bottom = 8.dp)) {
         Row(
             Modifier.fillMaxWidth().heightIn(min = 56.dp).doneRow(on).toggleable(value = on, role = Role.Checkbox, onValueChange = onTick).padding(end = 8.dp),
@@ -259,7 +260,7 @@ private fun ActiveHabit(h: Habit, done: Set<Long>, today: Long, nav: Nav, onTick
         }
         val count = done.size
         Column(Modifier.padding(start = CheckIndent, end = 16.dp, top = 8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            LinearProgressIndicator(progress = { (count / ROOTED_DAYS.toFloat()).coerceAtMost(1f) }, color = tint.ink, trackColor = MaterialTheme.colorScheme.outlineVariant, modifier = Modifier.fillMaxWidth())
+            Bar(count / ROOTED_DAYS.toFloat(), tint.ink)
             Text(stringResource(stage(count)) + " · " + stringResource(R.string.gart_days, count, ROOTED_DAYS), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         Row(Modifier.padding(start = CheckIndent - ButtonInset)) {

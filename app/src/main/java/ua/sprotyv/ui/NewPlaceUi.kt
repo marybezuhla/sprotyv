@@ -87,7 +87,7 @@ fun NewPlaceScreen(content: Content?, nav: Nav) {
         val group = if (stage == NewPlace.Stage.LATER) Group.PREPARE else Group.LEAVE
         Block(stringResource(stage.title), group, tint = if (stage == NewPlace.Stage.LATER) resist() else null, padded = false, foldable = true,
             startOpen = stage == firstStage, trailing = {
-                Text((if (got == steps.size) "✓ " else "") + stringResource(R.string.ready_count, got, steps.size), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+                Text((if (got == steps.size) "✓\u2002" else "") + stringResource(R.string.ready_count, got, steps.size), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
             }) {
             if (stage == NewPlace.Stage.LATER) Text(stringResource(R.string.np_live_on), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(16.dp))
             if (stage == NewPlace.Stage.ABROAD) Text(stringResource(R.string.np_abroad_intro), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(16.dp))
@@ -118,7 +118,8 @@ private fun StepRow(s: NewPlace.Step, on: Boolean, expanded: Boolean, onExpand: 
         }
     }
     if (!expanded) return
-    androidx.compose.foundation.layout.Column(Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp), verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)) {
+    // The opened step's words start under its name, on the same left edge
+    androidx.compose.foundation.layout.Column(Modifier.padding(start = CheckIndent, end = 16.dp, bottom = 12.dp), verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)) {
         Text(s.text, style = ReadingText)
         Text(stringResource(R.string.np_where, s.where), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
         stepRoute(s.route)?.let { r -> androidx.compose.material3.OutlinedButton(onClick = { nav.go(r) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text(stringResource(R.string.np_open_in_app)) } }
