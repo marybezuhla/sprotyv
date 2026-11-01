@@ -252,7 +252,7 @@ private fun ActiveHabit(h: Habit, done: Set<Long>, today: Long, nav: Nav, onTick
             }
         }
         // The last two weeks as dots: done is filled, missed is only empty, never red
-        Row(Modifier.padding(start = CheckIndent, end = 16.dp).clearAndSetSemantics { }, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        Row(Modifier.padding(start = CheckIndent, end = 16.dp, top = 8.dp).clearAndSetSemantics { }, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             (13 downTo 0).forEach { back ->
                 val d = today - back
                 Box(Modifier.size(12.dp).background(if (d in done) tint.ink else MaterialTheme.colorScheme.outlineVariant, CircleShape))
