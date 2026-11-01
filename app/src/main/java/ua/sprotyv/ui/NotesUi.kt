@@ -263,8 +263,13 @@ fun NoteEditScreen(id: Long, nav: Nav) {
     DisposableEffect(first.id) {
         onDispose {
             val gone = first.id
+            // "My experience" opened and left as it came (only the questions): nothing was written, so it goes too
+            val untouched = experienceTemplate(context).lines().map { it.trim() }
             PersonalStore.save("note-empty:$gone") { db ->
-                db.notes().get(gone)?.let { n -> if (n.title.isBlank() && n.text.isBlank()) db.notes().delete(gone) }
+                db.notes().get(gone)?.let { n ->
+                    val lines = listOf(n.title, n.text).filter { it.isNotBlank() }.joinToString("\n").lines().map { it.trim() }.filter { it.isNotEmpty() }
+                    if (lines.isEmpty() || lines == untouched.filter { it.isNotEmpty() }) db.notes().delete(gone)
+                }
             }
         }
     }

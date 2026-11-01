@@ -301,21 +301,27 @@ fun FigureView(f: Block.Figure) {
     }
 }
 
+/** The words last searched, in memory only, so coming back from a section shows the same results. */
+private object SearchMemory {
+    @Volatile var query: String = ""
+}
+
 /** Offline search over the whole guide; results show where the words were found. */
 @Composable
 fun SearchScreen(content: Content?, nav: Nav) {
-    var query by rememberSaveable { mutableStateOf("") }
+    var query by remember { mutableStateOf(SearchMemory.query) }
     val focus = remember { FocusRequester() }
     Frame(stringResource(R.string.search_guide), nav::back) {
         OutlinedTextField(
             value = query,
-            onValueChange = { query = it.take(80) },
+            onValueChange = { query = it.take(80); SearchMemory.query = query },
             label = { Text(stringResource(R.string.search_hint)) },
             singleLine = true,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
             modifier = Modifier.fillMaxWidth().focusRequester(focus),
         )
-        LaunchedEffect(Unit) { focus.requestFocus() }
+        // The keyboard only for a new search; coming back to results, they show first
+        LaunchedEffect(Unit) { if (query.isEmpty()) focus.requestFocus() }
         if (content == null) return@Frame Loading()
         if (content.guideBroken) return@Frame Broken()
         val result by produceState(query to emptyList<ua.sprotyv.content.Hit>(), query) {
