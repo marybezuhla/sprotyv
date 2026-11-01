@@ -163,6 +163,9 @@ fun ResistanceScreen(content: Content?, nav: Nav) {
         val links = content.links
         // Where to learn: official, civic and volunteer side by side, each marked
         LinkGroup(stringResource(R.string.resist_learn_title), stringResource(R.string.resist_learn_intro), links.filter { it.group == "learn" }, toolbar, context)
+        // Skills of the future: drones and cyber, each school marked who runs it
+        LinkGroup(stringResource(R.string.resist_drones_title), stringResource(R.string.resist_drones_intro), links.filter { it.group == "drones" }, toolbar, context)
+        LinkGroup(stringResource(R.string.resist_cyber_title), stringResource(R.string.resist_cyber_intro), links.filter { it.group == "cyber" }, toolbar, context)
         // Resilience: its own entries, then fact-checkers from "Situation" (one list, never two copies)
         LinkGroup(stringResource(R.string.resist_resilience_title), stringResource(R.string.resist_resilience_intro), links.filter { it.group == "resilience" || it.group == "facts" }, toolbar, context)
         // Support the country: donations to the largest funds, bonds, blood, reporting

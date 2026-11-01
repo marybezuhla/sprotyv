@@ -13,7 +13,7 @@ CHECKED = "2026-10-30"
 
 FLAGS = {"unknown_author", "ads", "beta", "collects_data", "paid", "paused"}
 DIRECTORY = ("idp", "money", "docs", "kids", "veterans", "health", "care")
-RESIST = ("learn", "service", "resilience", "support")
+RESIST = ("learn", "service", "resilience", "support", "drones", "cyber")
 
 def link(id, group, kind, title, note, url="", app="", phone="", flags=()):
     assert set(flags) <= FLAGS, id
@@ -338,6 +338,48 @@ LINKS = [
     link("unicef-parents", "kids", "independent", "ЮНІСЕФ: підтримка батьків і дітей",
          "Як допомогти дитині під час війни: вправи на дихання, розмови після важкого, безпека від мін.",
          url="https://www.unicef.org/ukraine/parents-children-support-during-military-actions"),
+    # Knowledge without internet
+    link("kiwix", "maps", "ngo", "Kiwix: Вікіпедія без інтернету",
+         "Відкрита програма некомерційної асоціації зі Швейцарії. Завантажте українську Вікіпедію через Wi‑Fi заздалегідь: повна — гігабайти, без фото — вчетверо менша.",
+         url="https://kiwix.org"),
+    # Serving now
+    link("armyplus", "service", "official", "«Армія+»: застосунок для військових",
+         "Міноборони: електронні рапорти, військово-обліковий документ, довідки, переведення, навчальні курси.",
+         url="https://aplus.mod.gov.ua/viiskovo-oblikovyi-dokument"),
+    link("mil-rights", "rights", "official", "Порушено права військового: куди звертатися",
+         "Роз'яснення Мін'юсту: телефони Генштабу, Міноборони, ДБР і безоплатної правничої допомоги.",
+         url="https://www.kmu.gov.ua/news/porushennia-prav-viiskovosluzhbovtsiv-kudy-zvernutysia-po-dopomohu"),
+    link("mil-proxy", "docs", "official", "Довіреність і заповіт військового без нотаріуса",
+         "Мін'юст: що може посвідчити командир частини і за яких умов.",
+         url="https://www.kmu.gov.ua/news/miniust-roziasniuie-iak-viiskovym-oformyty-zapovit-i-dovirenist-bez-notariusa"),
+    # Skills for defence
+    link("brave1", "cyber", "official", "Brave1: гранти для оборонних розробників",
+         "Кластер оборонних технологій: безповоротні гранти, тестування й відгуки військових. Права на розробку лишаються вашими.",
+         url="https://brave1.gov.ua"),
+    link("digital-team", "cyber", "official", "Digital Team Міноборони: ІТ-вакансії у війську",
+         "Понад 2000 вакансій для ІТ-фахівців у Силах оборони; заявку подають на сайті.",
+         url="https://digitalteam.mod.gov.ua"),
+    link("diia-cyber", "cyber", "official", "Дія.Освіта: кібергігієна",
+         "Безкоштовні короткі курси й тренажери: фішинг, шахраї, безпека під час війни. Для дорослих, підлітків і батьків.",
+         url="https://osvita.diia.gov.ua/courses/kibergigiena-ak-zahistitisa-vid-fisingu"),
+    link("diia-cyber-analyst", "cyber", "official", "Дія.Освіта: аналітик з кібербезпеки",
+         "Безкоштовний онлайн-серіал з Cisco Talos для початківців: з чого почати професію.",
+         url="https://osvita.diia.gov.ua/courses/cybersecurity-analyst"),
+    link("netacad", "cyber", "independent", "Cisco Networking Academy",
+         "Безкоштовні онлайн-курси, частина українською: вступ до кібербезпеки, мережі, Python. У власному темпі.",
+         url="https://www.netacad.com"),
+    link("dcz-voucher", "cyber", "official", "Ваучер на навчання ІТ і кібербезпеки",
+         "Державна служба зайнятості оплачує ліцензовані програми для людей 45+, ВПО, ветеранів, людей з інвалідністю, звільнених з полону. Лінія 1518.",
+         url="https://www.dcz.gov.ua/profnavch/voucher"),
+    link("set-cyber", "cyber", "independent", "SET University: кіберзахист з грантами",
+         "Приватний університет: магістратура з кіберзахисту, повні й часткові гранти для військових, ветеранів, родин, жінок.",
+         url="https://www.setuniversity.edu.ua/landings/grants/", flags=("paid",)),
+    link("epam-campus", "cyber", "independent", "EPAM Campus",
+         "Безкоштовні курси для початківців від ІТ-компанії, окрема програма «ІТ для ветеранів». Часто потрібна англійська.",
+         url="https://campus.epam.com"),
+    link("prometheus", "cyber", "ngo", "Prometheus",
+         "Українська платформа: багато безкоштовних онлайн-курсів, зокрема університетські курси з ІТ і кібербезпеки.",
+         url="https://prometheus.org.ua"),
     # Fakes
     link("cpd", "facts", "official", "Центр протидії дезінформації",
          "Спростування фейків і попередження про ворожі канали та боти.",
