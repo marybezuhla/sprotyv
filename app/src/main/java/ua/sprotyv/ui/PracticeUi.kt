@@ -50,6 +50,8 @@ private val TOPICS = listOf(
     Topic("fire", R.string.practice_t_fire, R.string.practice_t_fire_hint, listOf("home-fire", "rubble")),
     Topic("hazard", R.string.practice_t_hazard, R.string.practice_t_hazard_hint, listOf("chemical", "radiation")),
     Topic("home", R.string.practice_t_home, R.string.practice_t_home_hint, listOf("blackout", "leave-home")),
+    Topic("facts", R.string.practice_t_facts, R.string.practice_t_facts_hint, listOf("guide:18.3", "guide:18.4", "guide:18.5")),
+    Topic("rights", R.string.practice_t_rights, R.string.practice_t_rights_hint, listOf("const:65", "const:17", "const:64")),
 )
 
 private fun pick(all: List<ua.sprotyv.content.Practice>, t: Topic) =
@@ -85,8 +87,9 @@ fun PracticeScreen(content: Content?, cardId: String, nav: Nav, check: String? =
                     if (!all) OutlinedButton(onClick = { index = 0; rightCount = 0 }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.again)) }
                     Button(onClick = nav::back, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.practice_finish)) }
                 }
-                if (!all) TextButton(onClick = { nav.go(Route.CardRoute(cardId)) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.practice_open_card)) }
-                content.card(cardId)?.let { Source(it) }
+                val first = list.firstOrNull()?.card ?: cardId
+                if (!all) TextButton(onClick = { nav.go(whereFrom(first)) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(openWords(first))) }
+                SourceOf(content, first)
                 return@Frame
             }
             if (kid) {
@@ -190,14 +193,14 @@ fun PracticeScreen(content: Content?, cardId: String, nav: Nav, check: String? =
             Button(onClick = { index++ }, modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp)) {
                 Text(stringResource(if (index + 1 < list.size) R.string.practice_next else R.string.practice_finish), style = MaterialTheme.typography.titleMedium)
             }
-            TextButton(onClick = { nav.go(Route.CardRoute(p.card)) }, modifier = Modifier.heightIn(min = 48.dp)) {
-                Text(stringResource(R.string.practice_open_card))
+            TextButton(onClick = { nav.go(whereFrom(p.card)) }, modifier = Modifier.heightIn(min = 48.dp)) {
+                Text(stringResource(openWords(p.card)))
             }
         }
 
         Text(stringResource(R.string.practice_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         // The same source and review status as the card it comes from
-        content.card(p.card)?.let { Source(it) }
+        SourceOf(content, p.card)
     }
 }
 
@@ -222,3 +225,28 @@ private fun PracticeChoice(content: Content?, nav: Nav) {
 
 /** The practice themes, for the shields: id and name. */
 internal val PRACTICE_TOPICS: List<Pair<String, Int>> get() = TOPICS.map { it.id to it.title }
+
+
+/** Where a situation's words come from: its card, its guide section or its Constitution article. */
+private fun whereFrom(card: String): Route =
+    ua.sprotyv.content.PracticeReader.sectionOf(card)?.let { Route.GuideSection(it) }
+        ?: ua.sprotyv.content.PracticeReader.articleOf(card)?.let { Route.ConstitutionRoute(it) }
+        ?: Route.CardRoute(card)
+
+private fun openWords(card: String): Int = when {
+    card.startsWith("guide:") -> R.string.practice_open_guide
+    card.startsWith("const:") -> R.string.practice_open_const
+    else -> R.string.practice_open_card
+}
+
+/** The source line: the card's own, or the guide's or the Constitution's. */
+@Composable
+private fun SourceOf(content: Content, card: String) {
+    val section = ua.sprotyv.content.PracticeReader.sectionOf(card)
+    val article = ua.sprotyv.content.PracticeReader.articleOf(card)
+    when {
+        section != null -> Text(stringResource(R.string.practice_source_guide, section), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        article != null -> Text(stringResource(R.string.practice_source_const, article), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        else -> content.card(card)?.let { Source(it) }
+    }
+}

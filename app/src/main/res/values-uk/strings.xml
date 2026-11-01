@@ -1281,4 +1281,12 @@
     <string name="kid_sticker_got">Ось твоя наліпка із Соняшником!</string>
     <string name="kid_show_grown_up">Покажи дорослому, який поруч, і розкажи, що ти зробиш.</string>
     <string name="kid_stickers">Наліпки: %1$d з %2$d</string>
+    <string name="practice_t_facts">Новини й шахраї</string>
+    <string name="practice_t_facts_hint">Фейки, дипфейки, клони голосу, що не публікувати</string>
+    <string name="practice_t_rights">Права й обов’язки</string>
+    <string name="practice_t_rights_hint">Що каже Конституція про захист країни</string>
+    <string name="practice_open_guide">Відкрити розділ довідника</string>
+    <string name="practice_open_const">Відкрити статтю Конституції</string>
+    <string name="practice_source_guide">Джерело: «Довідник виживання», п. %1$s</string>
+    <string name="practice_source_const">Джерело: Конституція України, ст. %1$s</string>
 </resources>

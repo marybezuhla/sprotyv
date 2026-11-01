@@ -20,6 +20,10 @@ data class Practice(
 object PracticeReader {
     private val ID = Regex("^[a-z0-9-]{1,40}$")
 
+    /** Where a situation's words come from: a card, a guide section or a Constitution article. */
+    fun sectionOf(card: String): String? = card.removePrefix("guide:").takeIf { card.startsWith("guide:") }
+    fun articleOf(card: String): String? = card.removePrefix("const:").takeIf { card.startsWith("const:") }
+
     /** Strict: three answers, exactly one right, each tied to a real step of a built-in card. */
     fun parse(json: String, cards: List<Card>): List<Practice> {
         val a = JSONArray(json)
@@ -39,8 +43,16 @@ object PracticeReader {
                 },
             ).also { p ->
                 require(ID.matches(p.id)) { "Bad id" }
-                val card = requireNotNull(byId[p.card]) { "Unknown card" }
-                require(p.step in card.steps.indices) { "Unknown step" }
+                // A situation from a card's step, or from a guide section ("guide:18.4") or a
+                // Constitution article ("const:65"): its words come only from there
+                if (p.card.startsWith("guide:")) {
+                    require(Regex("^guide:\\d{1,2}\\.\\d{1,2}$").matches(p.card)) { "Bad section" }
+                } else if (p.card.startsWith("const:")) {
+                    require(Regex("^const:\\d{1,3}$").matches(p.card)) { "Bad article" }
+                } else {
+                    val card = requireNotNull(byId[p.card]) { "Unknown card" }
+                    require(p.step in card.steps.indices) { "Unknown step" }
+                }
                 require(p.situation.length in 1..200) { "Bad situation" }
                 require(p.options.size == 3 && p.options.count { it.right } == 1) { "Three answers, one right" }
                 require(p.options.all { it.text.length in 1..160 && it.why.length in 1..200 }) { "Bad answer" }

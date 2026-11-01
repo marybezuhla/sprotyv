@@ -414,6 +414,190 @@
   ]
  },
  {
+  "id": "facts-voice",
+  "card": "guide:18.3",
+  "step": 0,
+  "situation": "An unknown number calls in your child's voice: “I'm in trouble, send money now and tell no one.”",
+  "options": [
+   {
+    "text": "I ask for the family code word; if they can't say it, I call back on the known number.",
+    "right": true,
+    "why": "A few seconds of a recording from social media are enough to fake a voice."
+   },
+   {
+    "text": "I send the money at once — what if it's true?",
+    "right": false,
+    "why": "A request to send money “urgently and tell no one” is always a sign of fraud."
+   },
+   {
+    "text": "I send half, to be safe.",
+    "right": false,
+    "why": "A request to send money “urgently and tell no one” is always a sign of fraud. Check with the code word."
+   }
+  ]
+ },
+ {
+  "id": "facts-video",
+  "card": "guide:18.4",
+  "step": 0,
+  "situation": "A video spreads in a chat: the mayor orders everyone to leave at once through a “corridor”.",
+  "options": [
+   {
+    "text": "I check it with two independent official channels before acting or sharing.",
+    "right": true,
+    "why": "One channel can be hacked; a video of an official ordering evacuation is a classic deepfake."
+   },
+   {
+    "text": "I forward it to everyone in case they missed it.",
+    "right": false,
+    "why": "Don't pass on anything unchecked, even “just in case” — panic in queues and on roads kills."
+   },
+   {
+    "text": "I believe it — I can see the mayor's face.",
+    "right": false,
+    "why": "A video of “the president or mayor” ordering surrender or evacuation is a classic deepfake. Check two official channels."
+   }
+  ]
+ },
+ {
+  "id": "facts-strike",
+  "card": "guide:18.5",
+  "step": 0,
+  "situation": "There was a strike nearby. You want to post a video so everyone knows.",
+  "options": [
+   {
+    "text": "I won't post it; I'll wait for the official report.",
+    "right": true,
+    "why": "The enemy assesses hits and adjusts the next strike."
+   },
+   {
+    "text": "I'll post it without saying where.",
+    "right": false,
+    "why": "Photos and videos of strike damage are not posted: the enemy assesses hits and adjusts the next strike."
+   },
+   {
+    "text": "I'll post it — only a building is in the frame.",
+    "right": false,
+    "why": "Don't post strike damage. If air defence, soldiers or vehicles are in the frame, it is also a criminal offence."
+   }
+  ]
+ },
+ {
+  "id": "facts-payout",
+  "card": "guide:18.3",
+  "step": 0,
+  "situation": "A message arrives: “Get your compensation — enter your card details at this link.”",
+  "options": [
+   {
+    "text": "I don't open it: I apply for payments only in the official app or a site I open myself.",
+    "right": true,
+    "why": "Links promising “compensation” or “aid” that ask for card details steal accounts."
+   },
+   {
+    "text": "I'll enter the details — there's a coat of arms.",
+    "right": false,
+    "why": "Such links steal accounts. Payments only through official apps and sites you open yourself."
+   },
+   {
+    "text": "I'll forward it to the neighbours so they get it too.",
+    "right": false,
+    "why": "Links asking for card details for “compensation” steal accounts. Don't spread them."
+   }
+  ]
+ },
+ {
+  "id": "rights-duty",
+  "card": "const:65",
+  "step": 0,
+  "situation": "What does the Constitution say about defending the Motherland?",
+  "options": [
+   {
+    "text": "Defending the Motherland, independence and territorial integrity is a duty of the citizens of Ukraine.",
+    "right": true,
+    "why": "Article 65. Article 17 calls defending sovereignty the concern of the whole Ukrainian people."
+   },
+   {
+    "text": "It is only the military's business.",
+    "right": false,
+    "why": "Article 65: it is a duty of citizens; Article 17: the concern of the whole Ukrainian people."
+   },
+   {
+    "text": "The Constitution says nothing about it.",
+    "right": false,
+    "why": "It does: Articles 65 and 17."
+   }
+  ]
+ },
+ {
+  "id": "rights-forces",
+  "card": "const:17",
+  "step": 0,
+  "situation": "To whom does the Constitution entrust the defence of Ukraine?",
+  "options": [
+   {
+    "text": "To the Armed Forces of Ukraine.",
+    "right": true,
+    "why": "Article 17: defence, protection of sovereignty and territorial integrity are entrusted to the Armed Forces of Ukraine."
+   },
+   {
+    "text": "To any armed groups of citizens.",
+    "right": false,
+    "why": "Article 17: armed formations not provided for by law are prohibited."
+   },
+   {
+    "text": "To foreign military bases.",
+    "right": false,
+    "why": "Article 17: foreign military bases are not permitted."
+   }
+  ]
+ },
+ {
+  "id": "rights-wartime",
+  "card": "const:64",
+  "step": 0,
+  "situation": "Can rights and freedoms be restricted under martial law?",
+  "options": [
+   {
+    "text": "Some can, with a stated period; some rights cannot be restricted at all.",
+    "right": true,
+    "why": "Article 64 lists the rights that are not restricted even under martial law."
+   },
+   {
+    "text": "Yes, any of them and for any time.",
+    "right": false,
+    "why": "Article 64: only some restrictions, and with a stated period."
+   },
+   {
+    "text": "No, there can be no restrictions.",
+    "right": false,
+    "why": "Article 64 allows some restrictions with a stated period."
+   }
+  ]
+ },
+ {
+  "id": "rights-families",
+  "card": "const:17",
+  "step": 0,
+  "situation": "Who provides social protection for service members and their families?",
+  "options": [
+   {
+    "text": "The state: it is written in the Constitution.",
+    "right": true,
+    "why": "Article 17: the state provides social protection for service members and their families."
+   },
+   {
+    "text": "Only the families themselves.",
+    "right": false,
+    "why": "Article 17: the state provides social protection for service members and their families."
+   },
+   {
+    "text": "No one: it is not provided for.",
+    "right": false,
+    "why": "It is: Article 17."
+   }
+  ]
+ },
+ {
   "id": "burn-child",
   "card": "burn",
   "step": 3,
