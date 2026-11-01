@@ -1234,4 +1234,13 @@
     <string name="shield_earned">earned</string>
     <string name="shield_half">half</string>
     <string name="shield_not_yet">still ahead</string>
+    <string name="experience_new">Write down an experience: it was needed in life</string>
+    <string name="experience_title">My experience</string>
+    <string name="experience_what">What happened:</string>
+    <string name="experience_helped">What helped:</string>
+    <string name="experience_next">Next time:</string>
+    <string name="shields_life">It was needed</string>
+    <string name="shield_life">Knowledge helped in life</string>
+    <string name="shield_how_life">Write the experience in notes</string>
+    <string name="experience_support">If remembering is hard — where to find support</string>
 </resources>

@@ -97,6 +97,17 @@ fun NotesScreen(nav: Nav) {
             if (id > 0) main.post { nav.go(Route.NoteEdit(id)) }
         }
     }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.notes_new)) }
+    // "My experience": when the guide was needed in life — only when the owner wants to write it
+    val context = androidx.compose.ui.platform.LocalContext.current
+    androidx.compose.material3.OutlinedButton(enabled = !full, onClick = {
+        val main = android.os.Handler(android.os.Looper.getMainLooper())
+        val text = experienceTemplate(context)
+        PersonalStore.save("note-new:" + java.util.UUID.randomUUID()) { db ->
+            val id = db.notes().save(Note(text = text, updatedAt = System.currentTimeMillis()))
+            if (id > 0) main.post { nav.go(Route.NoteEdit(id)) }
+        }
+    }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text(stringResource(R.string.experience_new)) }
+    androidx.compose.material3.TextButton(onClick = { nav.go(Route.Situation) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.experience_support)) }
     if (full) Text(stringResource(R.string.notes_full), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.error)
     if (list.size > 3) {
         OutlinedTextField(
@@ -367,4 +378,25 @@ fun NoteEditScreen(id: Long, nav: Nav) {
             dismissButton = { TextButton(onClick = { confirmDelete = false }) { Text(stringResource(R.string.cancel)) } },
         )
     }
+}
+
+
+/** "My experience" notes start with this mark, so they can be told apart and counted for a shield. */
+const val EXPERIENCE_MARK = "◆ "
+
+/**
+ * A short look back, as rescuers and medics do after a call: what happened, what helped, what to
+ * do differently. Calmly reviewing it keeps the skill and gives back a sense of control; it can also
+ * be a hard memory, so it is never asked for, and support is one tap away on the notes screen.
+ */
+fun experienceTemplate(context: android.content.Context): String =
+    EXPERIENCE_MARK + context.getString(R.string.experience_title) + "\n" +
+        context.getString(R.string.experience_what) + " \n" +
+        context.getString(R.string.experience_helped) + " \n" +
+        context.getString(R.string.experience_next) + " "
+
+/** The first experience written down: the "It was needed" shield (only words added count, not the empty form). */
+fun experienceWritten(notes: List<Note>, context: android.content.Context): Boolean {
+    val empty = experienceTemplate(context).replace(Regex("\\s+"), "")
+    return notes.any { n -> val t = (n.title + "\n" + n.text); t.contains(EXPERIENCE_MARK.trim()) && t.replace(Regex("\\s+"), "").length > empty.length + 10 }
 }
