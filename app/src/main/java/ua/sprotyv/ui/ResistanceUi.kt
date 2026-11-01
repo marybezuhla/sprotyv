@@ -222,8 +222,8 @@ fun PathScreen(nav: Nav) {
     val context = LocalContext.current
     androidx.compose.runtime.LaunchedEffect(done, path.size) {
         // Counts per level, in the order of the levels; nothing about which steps
-        // The roles' own blocks stay in "Mine": not even their counts leave it (the medic one did before roles)
-        val share = PATH_LEVELS.indices.filter { it <= PATH_LEVEL_MEDIC }.map { l -> path.filter { it.level == l } }.filter { it.isNotEmpty() }
+        // The roles' own blocks stay in "Mine": not even their counts leave it, the medic one included
+        val share = PATH_LEVELS.indices.filter { it < PATH_LEVEL_MEDIC }.map { l -> path.filter { it.level == l } }.filter { it.isNotEmpty() }
             .joinToString(",") { steps -> "${steps.count { it.key in done }}/${steps.size}" }
         if (HomePrefs.load(context).path != share) { HomePrefs.update(context) { it.copy(path = share) }; Widgets.update(context) }
     }

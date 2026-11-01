@@ -1127,7 +1127,7 @@
     <string name="roles_intro">Оберіть, хто ви зараз: кілька ролей або жодної. Роль підкаже ваш наступний крок і де знайти підтримку. Змінити можна будь-коли.</string>
     <string name="roles_mine">Мої ролі</string>
     <string name="roles_more_coming">Ролі турботи, допомоги, праці й голосу додаватимемо поступово, кожну — з офіційними джерелами.</string>
-    <string name="roles_private">Ролі зашифровано в «Моє». Їх бачите лише ви; оцінок і рейтингів немає.</string>
+    <string name="roles_private">Ролі зашифровано в «Моє»; їх бачите лише ви. Лише позначка «медик» зберігається в налаштуваннях, як і раніше. Оцінок і рейтингів немає.</string>
     <string name="circle_care">Турбота</string>
     <string name="circle_defence">Захист</string>
     <string name="circle_help">Допомога</string>
