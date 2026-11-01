@@ -44,6 +44,7 @@ sealed interface Route {
     data class PracticeRoute(val card: String) : Route
     /** "When the network is down": phone-to-phone and radio messengers, set up in advance. */
     data object Comms : Route
+    data object Driving : Route
     /** The offline map, drawn from a file the owner chose. */
     data object MapRoute : Route
     /** "Check yourself" for one step of "My path": that step's situations; all right marks it as checked. */
@@ -88,6 +89,7 @@ sealed interface Route {
         Handover -> "handover"
         is PracticeRoute -> "practice:$card"
         Comms -> "comms"
+        Driving -> "driving"
         MapRoute -> "map"
         is PathCheck -> "pathcheck:$step"
         is RoleRoute -> "role:$id"
@@ -125,6 +127,7 @@ sealed interface Route {
                 "moz" -> if (value.isEmpty()) MozList else value.toIntOrNull()?.takeIf { it in 1..60 }?.let(::Moz)
                 "practice" -> PracticeRoute(value)
                 "comms" -> Comms
+                "driving" -> Driving
                 "map" -> MapRoute
                 "pathcheck" -> value.takeIf { it in PATH_CHECKS }?.let(::PathCheck)
                 "role" -> value.takeIf { it in ROLES }?.let(::RoleRoute)

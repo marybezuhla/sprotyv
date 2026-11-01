@@ -282,6 +282,7 @@ private val Tool.title: Int get() = when (this) {
     Tool.NEW_PLACE -> R.string.np_title
     Tool.GART -> R.string.gart_title
     Tool.COMMS -> R.string.comms_title
+    Tool.DRIVING -> R.string.driving_title
     Tool.MAP -> R.string.map_title
 }
 
@@ -313,6 +314,7 @@ private val Tool.hint: Int get() = when (this) {
     Tool.NEW_PLACE -> R.string.np_hint
     Tool.GART -> R.string.gart_hint
     Tool.COMMS -> R.string.comms_hint
+    Tool.DRIVING -> R.string.driving_hint
     Tool.MAP -> R.string.map_hint
 }
 
@@ -366,6 +368,7 @@ private val TOOL_ICONS = mapOf(
     Tool.RESCUER to R.drawable.ocha_health,
     Tool.GART to R.drawable.ocha_training,
     Tool.COMMS to R.drawable.ocha_walkie_talkie,
+    Tool.DRIVING to R.drawable.ic_car,
     Tool.MAP to R.drawable.ocha_map,
     Tool.PRINT to R.drawable.ocha_table,
 )
@@ -415,6 +418,7 @@ val Tool.route: Route get() = when (this) {
     Tool.NEW_PLACE -> Route.Mine(MinePart.NEW_PLACE)
     Tool.GART -> Route.Mine(MinePart.GART)
     Tool.COMMS -> Route.Comms
+    Tool.DRIVING -> Route.Driving
     Tool.MAP -> Route.MapRoute
 }
 
