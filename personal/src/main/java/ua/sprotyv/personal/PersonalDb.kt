@@ -61,19 +61,82 @@ abstract class PersonalDb : RoomDatabase() {
     companion object {
         const val FILE_NAME = "personal.db"
 
-        /** Opens the encrypted database. Call off the main thread. */
+        /**
+         * Opens the encrypted database. Call off the main thread.
+         *
+         * The passphrase is 32 random bytes, so it is given to SQLCipher as a raw 256-bit key
+         * (x'…'): SQLCipher's password stretching (PBKDF2, 256 000 rounds) adds nothing to a key that
+         * is already random, and only made "Mine" slow to open. A database made before is opened
+         * the old way once and re-encrypted with the raw key (PRAGMA rekey, all or nothing); a mark
+         * next to the file says which way it is. Should the mark and the file ever disagree (the
+         * app stopped between the two), the other way is tried before anything is said to be wrong.
+         */
         fun open(context: Context, passphrase: ByteArray): PersonalDb {
             System.loadLibrary("sqlcipher")
+            val raw = rawKey(passphrase)
+            val mark = java.io.File(context.getDatabasePath(FILE_NAME).path + RAW_MARK)
+            if (mark.exists() || !exists(context)) {
+                val db = try {
+                    build(context, raw)
+                } catch (e: Exception) {
+                    // The mark is there but the file is still the old way: once more, the old way
+                    if (!exists(context)) throw e
+                    return upgrade(context, passphrase, raw, mark)
+                }
+                if (!mark.exists()) mark.createNewFile()
+                return db
+            }
+            return try {
+                upgrade(context, passphrase, raw, mark)
+            } catch (e: Exception) {
+                // Already re-encrypted, but the mark was not written yet
+                build(context, raw).also { mark.createNewFile() }
+            }
+        }
+
+        /** The old way once, re-encrypted with the raw key, the mark written, opened again the new way. */
+        private fun upgrade(context: Context, passphrase: ByteArray, raw: ByteArray, mark: java.io.File): PersonalDb {
+            val old = build(context, passphrase)
+            try {
+                old.openHelper.writableDatabase.query("PRAGMA rekey = \"" + String(raw, Charsets.US_ASCII) + "\"").use { it.moveToFirst() }
+            } finally {
+                old.close()
+            }
+            val db = build(context, raw)
+            mark.createNewFile()
+            return db
+        }
+
+        private fun build(context: Context, key: ByteArray): PersonalDb {
             val db = Room.databaseBuilder(context.applicationContext, PersonalDb::class.java, FILE_NAME)
                 // Third argument: write-ahead logging off. With TRUNCATE no second file with
                 // recent pages stays next to the database.
-                .openHelperFactory(SupportOpenHelperFactory(passphrase, Hardening, false))
+                .openHelperFactory(SupportOpenHelperFactory(key, Hardening, false))
                 .setJournalMode(JournalMode.TRUNCATE)
                 .build()
             // Open now, so a wrong key fails here and not later on a screen
-            db.openHelper.writableDatabase
+            try {
+                db.openHelper.writableDatabase
+            } catch (e: Exception) {
+                db.close()
+                throw e
+            }
             return db
         }
+
+        /** x'<64 hex digits>': SQLCipher's form for a raw 256-bit key. */
+        internal fun rawKey(passphrase: ByteArray): ByteArray {
+            require(passphrase.size == 32)
+            val hex = "0123456789abcdef"
+            val out = ByteArray(2 + 64 + 1)
+            out[0] = 'x'.code.toByte(); out[1] = '\''.code.toByte()
+            passphrase.forEachIndexed { i, b -> val v = b.toInt() and 0xFF; out[2 + 2 * i] = hex[v shr 4].code.toByte(); out[3 + 2 * i] = hex[v and 0x0F].code.toByte() }
+            out[66] = '\''.code.toByte()
+            return out
+        }
+
+        /** Next to the database: it is encrypted with the raw key. */
+        const val RAW_MARK = ".raw"
 
         fun exists(context: Context): Boolean = context.getDatabasePath(FILE_NAME).exists()
     }
