@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The themed (one-colour) icon: the plain shield. Drawn inside the 66 dp safe zone of the 108 dp icon. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="@color/icon_foreground"
+        android:pathData="M54,28 L76,36 L76,52 C76,66 67,76 54,81 C41,76 32,66 32,52 L32,36 Z" />
+</vector>

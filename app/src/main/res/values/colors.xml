@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="background">#FFF7F6F2</color>
-    <color name="icon_background">#FF0057B7</color>
+    <color name="icon_background">#FF0B3D91</color>
+    <!-- The shield: a light rim and a yellow field -->
+    <color name="icon_rim">#FFF6EBD7</color>
+    <color name="icon_field">#FFFFC72C</color>
     <color name="icon_foreground">#FFFFD700</color>
     <color name="icon_neutral_bg">#FF5F6368</color>
     <color name="w_urgent_bg">#FFFFDDBF</color>
