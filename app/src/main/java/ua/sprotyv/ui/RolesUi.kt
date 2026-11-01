@@ -144,7 +144,7 @@ val ROLES: Map<String, Role> = listOf(
     Role(
         "instructor", Circle.HELP, R.string.role_instructor, R.string.role_instructor_hint, R.string.role_instructor_affirm,
         factsTitle = R.string.role_instructor_facts_title,
-        facts = listOf(R.string.role_instructor_1, R.string.role_instructor_2, R.string.role_instructor_3, R.string.role_instructor_4),
+        facts = listOf(R.string.role_instructor_1, R.string.role_instructor_2, R.string.role_instructor_3),
         source = R.string.role_instructor_source,
         links = listOf("#redcross", "#redcross-centres", "#medcat", "#prometheus-fa"),
     ),
