@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- The themed (one-colour) icon: the plain shield. Drawn inside the 66 dp safe zone of the 108 dp icon. -->
+<!-- The themed (one-colour) icon: the same shield, rim and field, with the ring left open. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
@@ -7,5 +7,9 @@
     android:viewportHeight="108">
     <path
         android:fillColor="@color/icon_foreground"
-        android:pathData="M54,28 L76,36 L76,52 C76,66 67,76 54,81 C41,76 32,66 32,52 L32,36 Z" />
+        android:fillType="evenOdd"
+        android:pathData="M54.54,29.51 C57.03,30.91 58.12,31.31 72.77,36.17 Q75.96,37.23 75.96,38.63 L75.96,53.78 C75.96,59.97 69.96,73.5 56.23,81.22 Q54,82.39 51.77,81.22 C38.04,73.5 32.04,59.97 32.04,53.78 L32.04,38.63 Q32.04,37.23 35.23,36.17 C49.88,31.31 50.97,30.91 53.46,29.51 Q54,29.21 54.54,29.51 Z M54.85,33.54 C58.8,35.36 59.73,35.69 70.39,39.12 Q72.71,39.86 72.71,40.76 L72.71,49.9 C72.71,62.11 66.19,70.44 55.69,77.62 Q54,78.75 52.31,77.62 C41.81,70.44 35.29,62.11 35.29,49.9 L35.29,40.76 Q35.29,39.86 37.61,39.12 C48.27,35.69 49.2,35.36 53.15,33.54 Q54,33.15 54.85,33.54 Z" />
+    <path
+        android:fillColor="@color/icon_foreground"
+        android:pathData="M54.34,36.14 C55.92,37.07 56.73,37.38 67.88,41.27 Q70.31,42.12 70.31,42.82 L70.31,47.9 C70.31,61.5 65.07,67.73 55.54,74.76 Q54,75.88 52.46,74.76 C42.93,67.73 37.69,61.5 37.69,47.9 L37.69,42.82 Q37.69,42.12 40.12,41.27 C51.27,37.38 52.08,37.07 53.66,36.14 Q54,35.94 54.34,36.14 Z" />
 </vector>
