@@ -63,6 +63,8 @@ class Main : ComponentActivity() {
         // from it within three minutes, the data closes anyway
         if (!isChangingConfigurations && Away.expected) closeLater.postDelayed(closeNow, 3 * 60_000L)
         if (!isChangingConfigurations && !Away.expected) {
+            // Drafts are kept in memory only for a turn of the screen, never while the app is away
+            EditGuard.drafts.clear()
             PersonalStore.close()
             // Settings lock again; not while Android's own PIN window is what covers the app
             Guard.close()

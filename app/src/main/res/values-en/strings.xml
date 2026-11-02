@@ -84,7 +84,7 @@
     <string name="med_blood">Blood group</string>
     <string name="med_blood_hint">e.g. A(II) Rh+</string>
     <string name="med_pregnancy">Pregnancy</string>
-    <string name="med_pregnancy_hint">For example: 28 weeks</string>
+    <string name="med_pregnancy_hint">For example: 28 weeks. This line comes first in the code for rescuers, so keep it up to date.</string>
     <string name="med_allergies">Allergies</string>
     <string name="med_medicines">Medicines you take</string>
     <string name="med_medicines_hint">Name, dose, how often</string>

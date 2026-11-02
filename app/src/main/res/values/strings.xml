@@ -84,7 +84,7 @@
     <string name="med_blood">Група крові</string>
     <string name="med_blood_hint">Наприклад: A(II) Rh+</string>
     <string name="med_pregnancy">Вагітність</string>
-    <string name="med_pregnancy_hint">Наприклад: 28 тижнів</string>
+    <string name="med_pregnancy_hint">Наприклад: 28 тижнів. Цей рядок іде першим у код для рятувальників, тож оновлюйте його.</string>
     <string name="med_allergies">Алергії</string>
     <string name="med_medicines">Ліки, які ви приймаєте</string>
     <string name="med_medicines_hint">Назва, доза, як часто</string>

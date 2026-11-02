@@ -51,6 +51,7 @@ object HomePrefs {
     private const val DYNAMIC = "dynamic"
     private const val CALL_BAR = "call_bar"
     private const val SCREENSHOTS = "screenshots"
+    private const val SCREENSHOTS_RESET = "screenshots_off_030"
     private const val READINESS = "readiness"
     private const val READINESS_HIDDEN = "readiness_hidden"
     private const val PATH = "path_share"
@@ -67,6 +68,9 @@ object HomePrefs {
     fun load(context: Context): State {
         flow.value?.let { return it }
         val p = context.applicationContext.getSharedPreferences(FILE, Context.MODE_PRIVATE)
+        // Version 0.3.0: screenshots are off by default. Once, for everyone, also where the old
+        // default was written down by any change of settings; the owner can allow them again
+        if (!p.getBoolean(SCREENSHOTS_RESET, false)) p.edit().putBoolean(SCREENSHOTS, false).putBoolean(SCREENSHOTS_RESET, true).apply()
         val s = State(
             mode = Mode.entries.firstOrNull { it.name == p.getString(MODE, null) },
             pins = Pins.parse(p.getString(PINS, null)),

@@ -220,7 +220,7 @@ private fun PersonDialog(start: Person, onDone: () -> Unit) {
     val valid = p.name.isNotBlank() && ua.sprotyv.reach.Links.clean(p.phone).removePrefix("+").length >= 3
     AlertDialog(
         onDismissRequest = onDone,
-        properties = androidx.compose.ui.window.DialogProperties(dismissOnClickOutside = false),
+        properties = androidx.compose.ui.window.DialogProperties(dismissOnClickOutside = false, dismissOnBackPress = false),
         title = { Text(stringResource(if (start.id == 0L) R.string.add_person else R.string.edit_person)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
