@@ -355,6 +355,8 @@ fun RescuerQrScreen(nav: Nav) {
         Button(onClick = { nav.go(Route.Mine(MinePart.MEDICAL)) }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.medical_card)) }
         return
     }
+    // Held out to a rescuer: the screen stays on while the code is shown
+    KeepScreenOn()
     val code = remember(card, people) { RescuerCode.text(card, people.filter { it.ice }, labels(context)) }
     val text = code.text
     val bitmap = remember(text) { qrBitmap(text, 640) }

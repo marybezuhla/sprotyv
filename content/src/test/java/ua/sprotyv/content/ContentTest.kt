@@ -191,6 +191,15 @@ class ContentTest {
         }
     }
 
+    @Test fun noChildDosesPerWeight() {
+        // Doses for children only after a paediatrician's review: no "per kilogram" amounts in the shown texts
+        val dose = Regex("(м?г|g|mg)\\s*/\\s*(кг|kg)", RegexOption.IGNORE_CASE)
+        listOf("guide.json", "en/guide.json", "cards.json", "en/cards.json").forEach { name ->
+            val text = File(assets, name).readText()
+            assertTrue("a per-kilogram dose in $name", !dose.containsMatchIn(text))
+        }
+    }
+
     @Test fun guideKeepsItsDisclaimer() {
         assertTrue(guide.disclaimer.isNotEmpty())
     }

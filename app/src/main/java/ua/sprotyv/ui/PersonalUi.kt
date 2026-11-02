@@ -1,6 +1,8 @@
 package ua.sprotyv.ui
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.layout.Column
@@ -223,7 +225,8 @@ private fun PersonDialog(start: Person, onDone: () -> Unit) {
         properties = androidx.compose.ui.window.DialogProperties(dismissOnClickOutside = false, dismissOnBackPress = false),
         title = { Text(stringResource(if (start.id == 0L) R.string.add_person else R.string.edit_person)) },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            // Scrolls: with large text or the keyboard up the switches below must still be reachable
+            Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Field(stringResource(R.string.person_name), p.name, { p = p.copy(name = it) })
                 Field(stringResource(R.string.person_phone), p.phone, { p = p.copy(phone = it) }, phone = true, hint = "+380…")
                 if (!p.phone.trim().startsWith("+") && !ua.sprotyv.reach.Links.clean(p.phone).let { it.length == 10 && it.startsWith("0") } && p.phone.isNotBlank()) {
