@@ -1198,9 +1198,11 @@ private fun LanguageChoice() {
     Text(stringResource(R.string.lang_content_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 }
 
-/** The name at the top of home: "Notes" while the neutral icon is on, so a glance at the open app says no more than its icon. */
+/** The name at the top of home: "Notes" with the neutral icon or in trip mode, so a glance at the open app says no more than its icon. */
 @Composable
 fun appTitle(): String {
     val context = androidx.compose.ui.platform.LocalContext.current
-    return stringResource(if (Neutral.isOn(context)) R.string.neutral_name else R.string.app_name)
+    val trip = HomePrefs.state.collectAsState().value?.trip == true
+    val neutral = remember(trip) { Neutral.isOn(context) }
+    return stringResource(if (neutral || trip) R.string.neutral_name else R.string.app_name)
 }
