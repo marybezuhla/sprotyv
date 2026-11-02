@@ -494,7 +494,18 @@ private fun PasswordField(label: String, value: String, onChange: (String) -> Un
 @Composable
 private fun ShownPassword(text: String) {
     Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), modifier = Modifier.fillMaxWidth()) {
-        Text(text, style = MaterialTheme.typography.titleLarge, fontFamily = FontFamily.Monospace, modifier = Modifier.padding(16.dp))
+        androidx.compose.foundation.layout.Column(Modifier.padding(16.dp)) {
+            Text(text, style = MaterialTheme.typography.titleLarge, fontFamily = FontFamily.Monospace)
+            // The same words one by one, numbered: easier to copy onto paper and to dictate
+            val words = text.split("-")
+            if (words.size > 1) {
+                Text(
+                    words.mapIndexed { i, w -> "${i + 1}. $w" }.joinToString("\n"),
+                    style = MaterialTheme.typography.bodyLarge, fontFamily = FontFamily.Monospace,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 8.dp),
+                )
+            }
+        }
     }
 }
 

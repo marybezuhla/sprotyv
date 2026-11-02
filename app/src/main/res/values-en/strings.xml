@@ -291,7 +291,7 @@
     <string name="backup_last">Last backup: %1$s</string>
     <string name="backup_busy">Working… This takes a few seconds.</string>
     <string name="backup_save_title">Save a backup</string>
-    <string name="backup_suggested">The password is six random words. Write it on paper and keep it apart from the phone.</string>
+    <string name="backup_suggested">The password is six random English words joined by dashes, typed in small Latin letters. Write it on paper and keep it apart from the phone.</string>
     <string name="backup_another">Other words</string>
     <string name="backup_own">My own password</string>
     <string name="backup_use_suggested">Suggested password</string>
