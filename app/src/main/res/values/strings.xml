@@ -3,7 +3,7 @@
     <string name="app_name">Sprotyv</string>
 
     <string name="tile_alarm">Air alert</string>
-    <string name="tile_alarm_hint">Status, threat, one action</string>
+    <string name="tile_alarm_hint">Is there an alert, and what to do</string>
     <string name="tile_now">What to do now</string>
     <string name="tile_now_hint">Bleeding, drone, fire, rubble</string>
     <string name="tile_home_life">Life in a crisis</string>
@@ -12,7 +12,7 @@
     <string name="tile_safe_hint">Fine, need help or can\'t talk</string>
     <string name="tile_guide">Guide</string>
     <string name="tile_guide_hint">Survival and medicine, offline</string>
-    <string name="tile_mine">Mine</string>
+    <string name="tile_mine">My data</string>
     <string name="tile_mine_hint">Medical card, plan, kit</string>
 
     <string name="call_112">Call 112</string>
@@ -46,7 +46,6 @@
     <string name="previous">Back a step</string>
     <string name="done_next">Done, next</string>
     <string name="all_steps">Show all steps</string>
-    <string name="one_at_a_time">One step at a time</string>
     <string name="all_done">All steps done.</string>
     <string name="again">From the start</string>
     <string name="in_detail">In detail in the guide</string>
@@ -59,7 +58,6 @@
     <string name="search_hint">For example: tourniquet, water, drone</string>
     <string name="search_none">Nothing found. Try another word.</string>
     <string name="about_guide">About the guide</string>
-    <string name="guide_attribution">%1$s %2$s · %3$s</string>
     <string name="callout_critical">Important</string>
     <string name="callout_warning">Caution</string>
     <string name="callout_tip">Tip</string>
@@ -93,7 +91,6 @@
     <string name="ice_title">Contact in an emergency</string>
     <string name="ice_none">Not chosen yet. In Trusted people, switch on “Contact in an emergency”.</string>
     <string name="ice_short">emergency contact</string>
-    <string name="saved_automatically">Saved automatically.</string>
     <string name="people_intro">Who gets your “I am safe” message and whom to call if something happens to you.</string>
     <string name="add_person">Add a person</string>
     <string name="edit_person">Change</string>
@@ -143,7 +140,6 @@
     <string name="plan_practice">Twice a year walk the routes to the shelter and the meeting points, by day and in the evening.</string>
     <string name="add_row">Add</string>
     <string name="delete_row">Delete</string>
-    <string name="kit_progress">Ready: %1$d of %2$d</string>
     <string name="kit_intro">The list from the guide. Tick what is already in the bag. Each adult needs their own bag.</string>
     <string name="kit_reviewed_on">Last checked: %1$s</string>
     <string name="kit_next_check">Next check: %1$s</string>
@@ -154,11 +150,10 @@
     <string name="supplies_intro">Start small: three days is a goal anyone can reach. Then two weeks, then a month.</string>
     <string name="supplies_people">People: %1$d</string>
     <string name="supplies_days">Days: %1$d</string>
-    <string name="supplies_water">Water: %1$d litres</string>
     <string name="supplies_water_note">4 litres a person a day: 2 to drink, 2 for cooking and washing.</string>
     <string name="supplies_food">Food</string>
     <string name="supplies_rotation">Buy what you usually eat, 20–30% more than the norm, and put new stock at the back: then nothing expires.</string>
-    <string name="save_failed">The last change could not be saved. Check that the phone has free space, then change it again.</string>
+    <string name="save_failed">The last change could not be saved. Check that the phone has free space, then try again.</string>
     <string name="needs_update_title">Your data needs an app update</string>
     <string name="needs_update_text">This version cannot open your saved data. Nothing was deleted. Install the next update; the guide, cards and calls work as usual.</string>
     <string name="read_failed">Could not read your data. Nothing was changed. Go back and open it again.</string>
@@ -211,14 +206,11 @@
     <string name="rescuer_contact">Contact</string>
     <string name="scan_warn_encoded">The address has encoded characters (%); check it carefully.</string>
     <string name="tab_home">Home</string>
-    <string name="tab_sections">Sections</string>
     <string name="settings">Settings</string>
     <string name="my_home">My home screen</string>
     <string name="edit">Change</string>
     <string name="home_empty">Your tiles will be here. Add what you need from Sections.</string>
     <string name="add_from_sections">Add from Sections</string>
-    <string name="pin_add">Add</string>
-    <string name="pin_added">On home</string>
     <string name="pin_add_desc">Add to home: %1$s</string>
     <string name="pin_remove_desc">Remove from home: %1$s</string>
     <string name="pins_full">The home screen is full. Remove a tile to add a new one.</string>
@@ -251,7 +243,7 @@
     <string name="preset_general">General</string>
     <string name="preset_general_hint">Alert, bleeding, power cut, medical card</string>
     <string name="preset_elder">Older person</string>
-    <string name="preset_elder_hint">Medical card, alert, power cut, own people</string>
+    <string name="preset_elder_hint">Medical card, alert, power cut, trusted people</string>
     <string name="preset_parents">Parents of young children</string>
     <string name="preset_parents_hint">Children in a crisis, first aid, supplies</string>
     <string name="preset_frontline">Frontline community</string>
@@ -319,7 +311,6 @@
     <string name="plan_code_hint">An encrypted code for a relative\'s phone</string>
     <string name="plan_code_intro">A relative points Sprotyv\'s camera at this code and types the password. The whole family plan is then on their phone.</string>
     <string name="plan_code_password">The password is four words. Say it aloud; never send it with the code.</string>
-    <string name="plan_code_make">Show the code</string>
     <string name="plan_code_empty">Fill in the family plan first.</string>
     <string name="plan_code_too_long">The plan is too long for a code. Shorten the notes or rules and try again.</string>
     <string name="plan_code_how">On the relative\'s phone: “Mine” → “Scan a QR code” → photograph this screen → type the password.</string>
@@ -332,12 +323,11 @@
     <string name="plan_code_rows">Rules and roles: %1$d</string>
     <string name="plan_code_take">Make this plan mine</string>
     <string name="plan_code_replace">Your current family plan will be replaced by this one. Continue?</string>
-    <string name="plan_code_saved">Plan saved.</string>
     <string name="backup_no_memory">The phone ran out of memory. Close other apps and try again.</string>
     <string name="backup_again">Not saved: the screen restarted. Press “Save backup” again.</string>
     <string name="backup_delete_by_hand">That did not work. An unfinished backup file was left; please delete it by hand.</string>
     <string name="plan_code_show_password">Show the password again</string>
-    <string name="plan_code_said">Password said — show the code</string>
+    <string name="plan_code_said">Next: show the code</string>
     <string name="mode_kid">Child</string>
     <string name="mode_kid_hint">For a child aged 6–10: pictures, a call to family and 112</string>
     <string name="kid_lock_advice">On a child\'s phone, turn on the settings lock so the look is not changed by accident.</string>
@@ -345,7 +335,6 @@
     <string name="kid_setup_text">The child will see seven pictures with short tips, a “Call my family” button and 112. Add family numbers in “Trusted people” in the full look. Locking the settings with the phone\'s PIN is advised.</string>
     <string name="kid_setup_lock">Done, lock with the PIN</string>
     <string name="kid_setup_later">Done, no lock</string>
-    <string name="kid_title">What to do?</string>
     <string name="kid_grown_up">For grown-ups</string>
     <string name="kid_call_family">Call my family</string>
     <string name="kid_call_112">112</string>
@@ -372,7 +361,7 @@
     <string name="safe_status_quiet">I can\'t talk</string>
     <string name="safe_help_message">I need help. Call or write as soon as you can.</string>
     <string name="safe_quiet_message">I can\'t talk, but I\'m reachable. Write, don\'t call.</string>
-    <string name="tourniquet_on">⏱ Tourniquet on — keep the time</string>
+    <string name="tourniquet_on">⏱ Tourniquet on: note the time</string>
     <string name="tourniquet_since">Since then: %1$d h %2$02d min</string>
     <string name="tourniquet_write">Write this time with a marker on the tourniquet or the casualty\'s forehead. Never loosen it: only a medic removes it. Tell the medics the time. Several wounded: write the time on each tourniquet — the phone may run flat.</string>
     <string name="tourniquet_mark">T %1$s</string>
@@ -464,9 +453,6 @@
     <string name="blackout_hint">Tap, and Sprotyv will count the time and tell you how long the fridge and freezer still keep cold.</string>
     <string name="blackout_start">Power gone — start counting</string>
     <string name="blackout_for">No power for %1$s (since %2$s)</string>
-    <string name="blackout_fridge">Fridge, kept shut: ~%1$d h</string>
-    <string name="blackout_freezer_full">Full freezer: ~%1$d h</string>
-    <string name="blackout_freezer_half">Half-full freezer: ~%1$d h</string>
     <string name="blackout_left">%1$s left</string>
     <string name="blackout_up">time is up</string>
     <string name="blackout_fridge_over">Over 4 hours without power: throw away meat, fish, eggs and milk from the fridge.</string>
@@ -476,7 +462,7 @@
     <string name="blackout_source">Source: %1$s, checked %2$s</string>
     <string name="minutes_short">%1$d min</string>
     <string name="hours_minutes_short">%1$d h %2$d min</string>
-    <string name="charge_title">My charge</string>
+    <string name="charge_title">How long the charge lasts</string>
     <string name="charge_bank">Power bank</string>
     <string name="charge_station">Charging station</string>
     <string name="charge_mah">%1$s mAh</string>
@@ -490,6 +476,10 @@
     <plurals name="charge_charges">
         <item quantity="one">%1$d charge</item>
         <item quantity="other">%1$d charges</item>
+    </plurals>
+    <plurals name="notify_heat_days">
+        <item quantity="one">No heating for %1$d day</item>
+        <item quantity="other">No heating for %1$d days</item>
     </plurals>
     <plurals name="charge_hours">
         <item quantity="one">%1$d hour</item>
@@ -530,7 +520,6 @@
     <string name="neutral_confirm_title">Turn on “Notes”?</string>
     <string name="neutral_confirm_text">You may need to add the home-screen icon again: look for “Notes”. Remember this — in danger the app must be found fast. It is not a hiding place: the open app looks like Sprotyv, and the phone\'s settings still call it Sprotyv. Remove Sprotyv\'s widgets and pinned shortcuts from the home screen, if there are any.</string>
     <string name="neutral_confirm_yes">Turn on</string>
-    <string name="trip_title">Trip</string>
     <string name="trip_toggle">Trip mode</string>
     <string name="trip_hint">For when the phone may end up in the wrong hands: leaving occupied areas, a threat of capture or abduction, theft. Hides “Mine” (medical card, people, plan, supplies), “I am safe”, front maps, the search for prisoners and the missing, veterans\' services, war crimes and human rights, deported children, papers from the occupied areas and care for the wounded. Turning it off needs the phone\'s PIN (or nothing, if the phone\'s screen lock is removed). The guide stays.</string>
     <string name="trip_no_lock">First set a screen lock on the phone (PIN or password): without it anyone could turn trip mode off.</string>
@@ -594,14 +583,14 @@
     <string name="heat_leave">When to leave</string>
     <string name="heat_leave_when">over 2 days</string>
     <string name="heat_leave_do">Below +5° in the flat for over 2 days is a reason for families with children, older or ill people to leave.</string>
-    <string name="heat_co">A fuel heater only with a flue or ventilation: carbon monoxide.</string>
+    <string name="heat_co">Use a fuel heater only with a flue or fresh air, or you can be poisoned by carbon monoxide.</string>
     <string name="heat_back">The heat is back</string>
     <string name="shelter_title">In a shelter?</string>
     <string name="shelter_start">I am in a shelter, start counting</string>
     <string name="shelter_for">In the shelter %1$s (since %2$s)</string>
     <string name="shelter_short">If you stay long, tips will show here.</string>
     <string name="shelter_air">Air the room in the pauses. A candle going out means too little oxygen.</string>
-    <string name="shelter_warm">Mats and blankets: concrete draws the heat out.</string>
+    <string name="shelter_warm">Sit on mats or blankets: concrete draws the heat out.</string>
     <string name="shelter_duties">Share the duties: who listens to the radio, who is with the children, who sees to the water.</string>
     <string name="shelter_out">We are out</string>
     <string name="counter_source">“Survival guide”, sec. %1$s</string>
@@ -628,16 +617,11 @@
     <string name="shelf_on_home">on home: %1$d</string>
     <string name="shelf_fold">fold</string>
     <string name="shelf_unfold">unfold</string>
-    <string name="mine_block_trouble">In case of trouble</string>
-    <string name="mine_block_home">Supplies and bookmarks</string>
     <string name="mine_block_copies">Backup, printing, bookmarks</string>
     <string name="source_section">Source: “%1$s” %2$s, sec. %3$s</string>
     <string name="source_license">Licence: %1$s</string>
     <string name="about_with_you">Ukraine is with you.</string>
     <string name="about_icons">Icons: OCHA Humanitarian Icons (UN Office for the Coordination of Humanitarian Affairs, CC0), Health Icons (healthicons.org, CC0), OpenMoji emoji (openmoji.org, CC BY-SA 4.0) and Material Symbols (Google, Apache 2.0).</string>
-    <string name="ready_summary">Parts done: %1$d of %2$d</string>
-    <string name="mine_block_trouble_desc">I am safe, medical card, trusted people, plan, screen for rescuers</string>
-    <string name="mine_block_home_desc">Emergency bag, supplies at home, bookmarks</string>
     <string name="mine_block_copies_desc">Backup, printing, bookmarks, codes</string>
     <string name="lock_mine_unknown">The lock’s state could not be read just now. Open “Mine” once and come back here.</string>
     <string name="settings_other_hands">If the phone is in the wrong hands</string>
@@ -655,8 +639,6 @@
     <string name="mine_block_now">Tell your people</string>
     <string name="mine_block_health">Health and rescue</string>
     <string name="mine_block_health_desc">Medical card, screen for rescuers</string>
-    <string name="mine_block_prepare">Preparation</string>
-    <string name="mine_block_prepare_desc">Trusted people, family plan, bag, supplies</string>
     <string name="colour_title">What the colours mean</string>
     <string name="colour_danger">Orange: danger, act now</string>
     <string name="colour_health">Green: safety, health, first aid, rescue and leaving</string>
@@ -695,8 +677,6 @@
     <string name="notes_empty">No notes yet.</string>
     <string name="notes_nothing_found">Nothing found.</string>
     <string name="notes_untitled">Untitled</string>
-    <string name="notes_title">Title</string>
-    <string name="notes_text">Text</string>
     <string name="notes_pin">Pin to the top</string>
     <string name="notes_as_qr">Show as a QR code</string>
     <string name="notes_too_long_for_qr">Too long for a QR code: shorten it to pass on.</string>
@@ -722,7 +702,6 @@
     <string name="role_learn">Learn to defend</string>
     <string name="role_learn_hint">Your path of readiness, step by step</string>
     <string name="path_title">My path of readiness</string>
-    <string name="path_open">Open my path</string>
     <string name="path_open_hint">Concrete skills and deeds; only you see your ticks</string>
     <string name="path_summary">Done: %1$d of %2$d</string>
     <string name="path_intro">Tick what you can already do or have done. Encrypted in “Mine”; no one else sees it, no rankings.</string>
@@ -756,13 +735,10 @@
     <string name="service_hint">Only facts from official sources, rights and risks. The decision is yours alone.</string>
     <string name="service_facts_title">How joining the service works</string>
     <string name="service_fact_1">You can serve under contract or through mobilisation. Recruitment lets you choose a unit and a post that fits your skills.</string>
-    <string name="service_fact_2">Ages 18–25: contract only: a short 1–2 year contract, a one-off payment of UAH 1 million and a year’s deferral after service.</string>
     <string name="service_fact_3">The way in: vacancy → interview → the commander’s letter of recommendation → medical board and psychological test (referral in Reserv+) → 51 days of basic training → the unit that gave the letter.</string>
     <string name="service_fact_4">A letter from a priority unit guarantees service there; others need the General Staff’s approval. Ask the recruiter whether the unit is on the list.</string>
     <string name="service_fact_5">Service means risk to life and health. If your rights are violated: the recruiter, the Ministry of Defence hotline 1512, the Office of the Military Ombudsman.</string>
-    <string name="service_source">Source: Ministry of Defence, “A conscious choice: how recruitment works in 2026”, 04.03.2026. Checked 31.10.2026. Terms change: check with a recruiter.</string>
     <string name="resist_principles">No pressure, rankings or reminders. Nothing here is sent to anyone. Hidden in trip mode.</string>
-    <string name="backup_too_big">The copy is too large to restore: shorten or delete notes and try again.</string>
     <string name="backup_replace_notes">Notes in the copy: %1$d.</string>
     <string name="notes_full">There are very many notes: delete some so the backup keeps working.</string>
     <string name="notes_read_failed">The note could not be read just now. Go back and try again.</string>
@@ -812,8 +788,6 @@
     <string name="active_wait">Do not go back for %1$d more min</string>
     <string name="active_wait_done">%1$d min passed: follow the all-clear</string>
     <string name="active_heat">No heat for %1$s</string>
-    <string name="notes_open">Open notes</string>
-    <string name="notes_count">Notes: %1$d</string>
     <string name="handover_to_notes">Save to my notes</string>
     <string name="handover_note_title">For the crew, %1$s</string>
     <string name="notes_text_hint">The first line is the note\'s name</string>
@@ -821,7 +795,7 @@
     <string name="notes_others">Other notes</string>
     <string name="notify_title">Notifications</string>
     <string name="notify_hint">All off until you turn them on. Works offline. Times are approximate: Android may move them by a few minutes. Reminders from notes, supplies and the go-bag show none of your words, and none in trip mode.</string>
-    <string name="notify_kind_tourniquet">Tourniquet: its time in the shade and a reminder every hour</string>
+    <string name="notify_kind_tourniquet">Tourniquet: the time shown in the notification shade and a reminder every hour</string>
     <string name="notify_kind_wait">After a strike: when the waiting time is up</string>
     <string name="notify_kind_counts">Shelter, no power, no heating: when it is time to act</string>
     <string name="notify_kind_supplies">Supplies: when something runs out</string>
@@ -840,7 +814,6 @@
     <string name="notify_wait_text">Leave only after the all-clear.</string>
     <string name="notify_shelter_title">In the shelter for over an hour</string>
     <string name="notify_power_title">No power for %1$d h</string>
-    <string name="notify_heat_title">No heating for %1$d days</string>
     <string name="notify_supplies_title">Supplies: something runs out soon</string>
     <string name="notify_supplies_text">See what to replace in Mine → Supplies.</string>
     <string name="notify_kit_title">Time to check the go-bag</string>
@@ -859,7 +832,6 @@
     <string name="path_week_well_done">Well done. Every skill is someone you will be able to help.</string>
     <string name="path_week_all">You have walked the whole path. Share your skills: teach one person.</string>
     <string name="path_week_open">This week\'s step and my path</string>
-    <string name="path_home">My path: %1$d of %2$d · this week\'s step</string>
     <string name="path_home_all">My path is complete</string>
     <string name="resist_support_title">Support the country</string>
     <string name="resist_support_intro">Money, blood, vigilance. Donate only through official sites: scammers copy well-known funds.</string>
@@ -871,7 +843,7 @@
     <string name="backup_settings_row">Make a backup or restore</string>
     <string name="backup_settings_hint">All of Mine in one encrypted file. Use it to move to a new phone.</string>
     <string name="kid_112_ask">Do you need help right now?</string>
-    <string name="kid_112_ask_hint">112 is for trouble: a fire, someone is hurt, you are lost and nobody is near. Say your name, where you are and what happened.</string>
+    <string name="kid_112_ask_hint">112 is for trouble: a fire, someone is hurt, you don’t know where you are and nobody is near. Say your name, where you are and what happened.</string>
     <string name="kid_112_yes">Yes, call 112</string>
     <string name="kid_112_no">No, by mistake</string>
     <string name="kid_step_next">Next</string>
@@ -894,7 +866,7 @@
     <string name="inspire_1a">You have looked after yourself. Now agree with your family where to meet and how to let each other know.</string>
     <string name="inspire_1b">A family that knows the plan does not panic. The next step is together.</string>
     <string name="inspire_2a">Your family is ready. Now neighbours and your community: together we are stronger.</string>
-    <string name="inspire_2b">A community holds on people who know each other. You are one of them.</string>
+    <string name="inspire_2b">A community is held together by people who know each other. You are one of them.</string>
     <string name="inspire_3a">You are already someone your community can lean on. Next: knowing how to defend the country.</string>
     <string name="inspire_3b">Knowing your rights and duties is part of resistance too.</string>
     <string name="inspire_4a">Your medical knowledge is strength for everyone around you. Share it.</string>
@@ -918,7 +890,7 @@
     <string name="widget_count_label">Count shield</string>
     <string name="widget_count_desc">One of your good deeds from “My shields” with a “+1” button</string>
     <string name="widget_count_pick">Which count to show?</string>
-    <string name="widget_count_pick_hint">The home screen shows only the number on a shield and “+1”; the name can be switched on below. The number updates when you open “Mine”. In trip mode the widget shows only “Open Sprotyv”.</string>
+    <string name="widget_count_pick_hint">The home screen shows only the number on a shield and “+1”; the name can be switched on below. The number updates when you open My data. In trip mode the widget shows only “Open Sprotyv”.</string>
     <string name="widget_count_show_name">Show the name</string>
     <string name="widget_tile_pick">What should the widget show?</string>
     <string name="widget_tile_pick_hint">The widget shows only the name; a tap opens it.</string>
@@ -931,7 +903,7 @@
     <string name="widget_kit_open">Tap to open</string>
     <string name="widget_kid_siren">Siren</string>
     <string name="widget_kid_fire">Fire</string>
-    <string name="widget_kid_lost">Lost</string>
+    <string name="widget_kid_lost">I don’t know where I am</string>
     <string name="widget_kid_call">Family</string>
     <string name="shortcut_now">What to do</string>
     <string name="shortcut_safe">I am safe</string>
@@ -962,7 +934,7 @@
     <string name="const_all">The whole Constitution</string>
     <string name="const_retrieved">text retrieved %1$s</string>
     <string name="const_no_changes">text unchanged</string>
-    <string name="const_official">The official text, unchanged. The official interpretation of the Constitution is given by the Constitutional Court (Article 147). For help, ask a lawyer or free legal aid.</string>
+    <string name="const_official">The official text, unchanged. Only the Constitutional Court can officially interpret the Constitution (Article 147). For help, ask a lawyer or free legal aid.</string>
     <string name="history_title">Why resist</string>
     <string name="history_hint">Stories from the past: when people held and when they did not</string>
     <string name="history_intro">True stories from Ukraine and the world, in Ukrainian. Each on one screen: what happened, how it ended and what it teaches. Sources and the date checked are under each.</string>
@@ -1001,7 +973,7 @@
     <string name="widget_tourniquets">Tourniquets: %1$d · first %2$s</string>
     <string name="np_title">New place</string>
     <string name="np_hint">After leaving home: step by step</string>
-    <string name="np_intro">You have left home — what next? Steps for the first days, week, month and after, in Ukrainian. Tick what is done: only you see it.</string>
+    <string name="np_intro">You have left home: what next? Steps for the first days, week, month and after, in Ukrainian. Tick what is done: only you see it.</string>
     <string name="np_progress_title">My way in the new place</string>
     <string name="np_progress_hint">One step at a time. Skip what does not apply to you.</string>
     <string name="np_days">First 3 days</string>
@@ -1136,7 +1108,6 @@
     <string name="roles_hint">Your roles in the resistance: steps, facts and support for you</string>
     <string name="roles_intro">Choose who you are now: several roles or none. A role suggests your next step and where to find support. Change it any time.</string>
     <string name="roles_mine">My roles</string>
-    <string name="roles_more_coming">Roles will keep growing, each with official sources and a check date.</string>
     <string name="roles_private">Roles are encrypted in “Mine”; only you see them. Only the “I treat and save” mark is kept in settings, as before. No scores, no rankings.</string>
     <string name="circle_care">Care</string>
     <string name="circle_defence">Defence</string>
@@ -1153,7 +1124,6 @@
     <string name="role_medic_hint">Doctor, nurse, paramedic</string>
     <string name="role_medic_affirm">Your knowledge saves lives. Even more when shared: teach the people around you.</string>
     <string name="role_steps_title">My steps</string>
-    <string name="role_steps_open">Open my path</string>
     <string name="role_steps_hint">This role’s block is now in “My path”</string>
     <string name="role_where">Where to turn</string>
     <string name="role_long_title">How to hold on for long</string>
@@ -1200,8 +1170,8 @@
     <string name="role_frontline_source">Sources: Ministry of Development (14.01.2026); Government (07.03.2023). Checked 01.11.2026. Conditions change, so it\'s worth checking.</string>
     <string name="role_frontline_1">Mandatory evacuation of children is announced by the Coordination Headquarters; children leave together with parents or legal guardians.</string>
     <string name="role_frontline_2">Transit centres help with documents, payments, medical and psychological support, and then free temporary housing.</string>
-    <string name="role_frontline_3">News of evacuation is best taken from official sources: the regional military administration, the State Emergency Service, the city council.</string>
-    <string name="role_frontline_4">Paper copies of documents and a meeting place agreed with family in advance help.</string>
+    <string name="role_frontline_3">Get news of evacuation only from official sources: the regional military administration, the State Emergency Service, the city council.</string>
+    <string name="role_frontline_4">Make paper copies of documents and agree a meeting place with family in advance.</string>
     <string name="role_baby">Expecting a baby or have a little one</string>
     <string name="role_baby_hint">Pregnancy, a child\'s first years</string>
     <string name="role_baby_affirm">You protect a new life even now. Here: what the state guarantees you and your baby.</string>
@@ -1217,7 +1187,7 @@
     <string name="role_disability_source">Sources: Ministry of Social Policy (28.10.2025, 14.01.2026). Checked 01.11.2026. Conditions change, so it\'s worth checking.</string>
     <string name="role_disability_1">People with limited mobility can get a referral for long-term care and accommodation for up to 12 months right at the evacuation point.</string>
     <string name="role_disability_2">After evacuation the Ministry of Social Policy and communities help with transport to hospitals and specialised facilities.</string>
-    <string name="role_elder">I am of advanced age</string>
+    <string name="role_elder">I am an older person</string>
     <string name="role_elder_hint">Pension, health, evacuation</string>
     <string name="role_elder_affirm">Your experience is a support for others. Here: pension, help and evacuation for those who find it hard to move.</string>
     <string name="role_elder_facts_title">Pension and help</string>
@@ -1225,7 +1195,7 @@
     <string name="role_elder_1">A pension is paid wherever the person is, after a move too.</string>
     <string name="role_elder_2">The Pension Fund answers through one contact centre: 0 800 503 753.</string>
     <string name="role_elder_3">Older people with limited mobility get help with evacuation from civic organisations, East SOS among them.</string>
-    <string name="role_loss">I have lost someone close</string>
+    <string name="role_loss">Someone close to me was killed or has died</string>
     <string name="role_loss_hint">Support in grief</string>
     <string name="role_loss_affirm">We are so sorry. Here: where to find support, when you are ready.</string>
     <string name="role_loss_facts_title">Where to find support</string>
@@ -1380,7 +1350,7 @@
     <string name="role_grandparent_5">If money is already sent, call the bank and the police — 102 — at once.</string>
     <string name="role_grandparent_6">A free course by the Ministry of Digital Transformation teaches messengers, to stay in touch with grandchildren.</string>
     <string name="role_carer">Caring for someone close</string>
-    <string name="role_carer_hint">Older, ill or disabled</string>
+    <string name="role_carer_hint">An older, ill or disabled person</string>
     <string name="role_carer_affirm">Every day you already hold someone who cannot manage alone. Here: what help the state gives and where to find strength for yourself.</string>
     <string name="role_carer_facts_title">Help for carers</string>
     <string name="role_carer_source">Sources: law “On social services”; Cabinet of Ministers resolution No. 1040 of 06.10.2021; Ministry of Social Policy. Checked 01.11.2026. Conditions change, so it\'s worth checking.</string>
@@ -1397,7 +1367,7 @@
     <string name="role_milfamily_1">The family of a fallen defender can apply for family-member status at any administrative services centre (TsNAP), online too, wherever they live.</string>
     <string name="role_milfamily_2">If a court has declared a missing defender dead or established the fact of death, the court decision is the ground for the certificate; no military medical board finding is needed.</string>
     <string name="role_milfamily_3">If a loved one is missing, the police (102) or the Commissioner\'s representative takes the report; blood relatives give a DNA sample for the search.</string>
-    <string name="role_milfamily_4">Commissioner for missing persons — 1698, Coordination Headquarters — 0 800 300 529, National Information Bureau — 1648. All free of charge.</string>
+    <string name="role_milfamily_4">Missing persons: the Commissioner 1698, the Coordination Headquarters 0 800 300 529, the National Information Bureau 1648. All free of charge.</string>
     <string name="role_milfamily_5">Free psychological help under a state programme is open to veterans\' families and to families of fallen defenders.</string>
     <string name="role_milfamily_6">Complaints about service go to the Military Ombudsman: skarha@milomb.gov.ua. Answer within 10 days, within 3 if life is at risk.</string>
     <string name="role_veteran">Veteran</string>
@@ -1448,7 +1418,6 @@
     <string name="practice_t_home">No power, leaving</string>
     <string name="practice_t_home_hint">Generators, fake evacuation orders</string>
     <string name="practice_choose">Choose what to check: the main ones mixed, or one theme.</string>
-    <string name="practice_count">situations: %1$d</string>
     <string name="practice_more_coming">Situations from the guide will be added step by step, each with its source.</string>
     <string name="widget_neutral">Open Sprotyv</string>
     <string name="comms_title">When the network is down</string>
@@ -1501,11 +1470,8 @@
     <string name="experience_what">What happened:</string>
     <string name="experience_helped">What helped:</string>
     <string name="experience_next">Next time:</string>
-    <string name="shields_life">It was needed</string>
-    <string name="shield_life">Knowledge helped in life</string>
-    <string name="shield_how_life">Write the experience in notes</string>
     <string name="experience_support">If remembering is hard — where to find support</string>
-    <string name="shield_how_count">Counts itself</string>
+    <string name="shield_how_count">Counts by itself</string>
     <string name="held_blackout">Power cuts</string>
     <string name="held_heating">Heating cuts</string>
     <string name="held_shelter">Alerts in the shelter</string>
@@ -1536,7 +1502,6 @@
     <string name="shields_big">Big steps</string>
     <string name="shields_small">Small steps</string>
     <string name="shields_counts">My counts</string>
-    <string name="shield_next">Next — %1$d</string>
     <string name="shield_mark">Mark</string>
     <string name="shield_unmark">Unmark</string>
     <string name="kid_sticker_got">Here is your Sunny sticker!</string>
@@ -1575,7 +1540,7 @@
     <string name="weapons_own_3">At home a weapon is kept in a metal box or safe so that others have no access. At a summer house or another temporary place it must be unloaded and the police told.</string>
     <string name="weapons_own_4">Moved house? Within 30 days, apply to the police at your new address.</string>
     <string name="weapons_own_5">The weapon permit is in Diia. Paper permits issued before 23.06.2023 had to be entered in the Unified Weapons Register by 26.06.2026. If your permit is not in Diia, contact the police.</string>
-    <string name="weapons_own_source">Sources: Instruction approved by Ministry of Internal Affairs order No. 622, pp. 7.6, 12.1, 12.12; Cabinet of Ministers of Ukraine; National Police of Ukraine (Ternopil region, 2026); Diia. Checked 02.11.2026.</string>
+    <string name="weapons_own_source">Sources: Instruction approved by Ministry of Internal Affairs order No. 622, pp. 7.6, 12.1, 12.12; Cabinet of Ministers of Ukraine; National Police of Ukraine; Diia. Checked 02.11.2026.</string>
     <string name="weapons_law_title">Liability</string>
     <string name="weapons_law_1">Carrying, keeping, acquiring, passing on or selling a firearm (except a smoothbore hunting gun), ammunition or explosives without a permit is punished by 3 to 7 years in prison.</string>
     <string name="weapons_law_2">Bladed weapons without a permit (daggers, Finnish knives, knuckle-dusters and the like): from a fine up to 3 years in prison.</string>
@@ -1627,5 +1592,5 @@
     <string name="driving_where">Official sources</string>
     <string name="chapter_evacuation_car">Evacuation on foot and by car</string>
     <string name="chapter_evacuation_car_hint">Chapter 26 of the guide</string>
-    <string name="situation_maps">Without internet: maps and knowledge</string>
+    <string name="situation_maps">Apps without internet: maps and Wikipedia</string>
 </resources>

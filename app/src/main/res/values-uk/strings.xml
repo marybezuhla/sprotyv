@@ -11,7 +11,7 @@
     <string name="tile_safe">Я в безпеці</string>
     <string name="tile_safe_hint">Усе гаразд, потрібна допомога, не можу говорити</string>
     <string name="tile_guide">Довідник</string>
-    <string name="tile_guide_hint">Виживання й медицина, офлайн</string>
+    <string name="tile_guide_hint">Виживання й медицина без інтернету</string>
     <string name="tile_mine">Моє</string>
     <string name="tile_mine_hint">Медкартка, план, валіза</string>
 
@@ -46,7 +46,6 @@
     <string name="previous">Крок назад</string>
     <string name="done_next">Готово, далі</string>
     <string name="all_steps">Показати всі кроки</string>
-    <string name="one_at_a_time">Крок за кроком</string>
     <string name="all_done">Усі кроки виконано.</string>
     <string name="again">З початку</string>
     <string name="in_detail">Детально в довіднику</string>
@@ -59,7 +58,6 @@
     <string name="search_hint">Наприклад: турнікет, вода, дрон</string>
     <string name="search_none">Нічого не знайдено. Спробуйте інше слово.</string>
     <string name="about_guide">Про довідник</string>
-    <string name="guide_attribution">%1$s %2$s · %3$s</string>
     <string name="callout_critical">Важливо</string>
     <string name="callout_warning">Обережно</string>
     <string name="callout_tip">Порада</string>
@@ -93,7 +91,6 @@
     <string name="ice_title">Контакт на випадок біди</string>
     <string name="ice_none">Ще не обрано. У «Довірених людях» увімкніть «Контакт на випадок біди».</string>
     <string name="ice_short">контакт на випадок біди</string>
-    <string name="saved_automatically">Зберігається автоматично.</string>
     <string name="people_intro">Хто отримає ваше «Я в безпеці» і кому дзвонити, якщо з вами щось станеться.</string>
     <string name="add_person">Додати людину</string>
     <string name="edit_person">Змінити</string>
@@ -143,7 +140,6 @@
     <string name="plan_practice">Раз на пів року пройдіть маршрути до укриття й точок збору пішки, вдень і ввечері.</string>
     <string name="add_row">Додати</string>
     <string name="delete_row">Видалити</string>
-    <string name="kit_progress">Готово: %1$d з %2$d</string>
     <string name="kit_intro">Список із довідника. Позначайте, що вже є у валізі. Кожному дорослому — своя валіза.</string>
     <string name="kit_reviewed_on">Остання перевірка: %1$s</string>
     <string name="kit_next_check">Наступна перевірка: %1$s</string>
@@ -154,7 +150,6 @@
     <string name="supplies_intro">Почніть з малого: три доби під силу кожному. Потім два тижні, потім місяць.</string>
     <string name="supplies_people">Людей: %1$d</string>
     <string name="supplies_days">Днів: %1$d</string>
-    <string name="supplies_water">Вода: %1$d л</string>
     <string name="supplies_water_note">4 л на людину на день: 2 л пити, 2 л на готування й гігієну.</string>
     <string name="supplies_food">Їжа</string>
     <string name="supplies_rotation">Купуйте те, що зазвичай їсте, на 20–30% понад норму, а нове ставте вглиб полиці — тоді нічого не протермінується.</string>
@@ -211,14 +206,11 @@
     <string name="rescuer_contact">Контакт</string>
     <string name="scan_warn_encoded">В адресі є закодовані символи (%); перевірте її уважно.</string>
     <string name="tab_home">Головна</string>
-    <string name="tab_sections">Розділи</string>
     <string name="settings">Налаштування</string>
     <string name="my_home">Головний екран</string>
     <string name="edit">Змінити</string>
     <string name="home_empty">Тут будуть ваші плитки. Додайте потрібне з розділів.</string>
     <string name="add_from_sections">Додати з розділів</string>
-    <string name="pin_add">Додати</string>
-    <string name="pin_added">На головній</string>
     <string name="pin_add_desc">Додати на головну: %1$s</string>
     <string name="pin_remove_desc">Прибрати з головної: %1$s</string>
     <string name="pins_full">На головній уже максимум плиток. Приберіть якусь, щоб додати нову.</string>
@@ -319,7 +311,6 @@
     <string name="plan_code_hint">Зашифрований код для телефону родича</string>
     <string name="plan_code_intro">Родич наводить камеру «Спротиву» на цей код і вводить пароль. Так увесь сімейний план опиниться на телефоні родича.</string>
     <string name="plan_code_password">Пароль — чотири слова. Скажіть його голосом, не надсилайте разом із кодом.</string>
-    <string name="plan_code_make">Показати код</string>
     <string name="plan_code_empty">Спершу заповніть сімейний план.</string>
     <string name="plan_code_too_long">План задовгий для коду. Скоротіть нотатки чи правила й спробуйте ще раз.</string>
     <string name="plan_code_how">На телефоні родича: «Моє» → «Зчитати QR-код» → сфотографувати цей екран → ввести пароль.</string>
@@ -332,7 +323,6 @@
     <string name="plan_code_rows">Правил і ролей: %1$d</string>
     <string name="plan_code_take">Узяти цей план собі</string>
     <string name="plan_code_replace">Ваш теперішній сімейний план буде замінено цим. Продовжити?</string>
-    <string name="plan_code_saved">План збережено.</string>
     <string name="backup_no_memory">Телефону забракло пам\'яті. Закрийте інші застосунки й спробуйте ще раз.</string>
     <string name="backup_again">Копію не збережено: екран перезапустився. Натисніть «Зберегти копію» ще раз.</string>
     <string name="backup_delete_by_hand">Не вдалося. Недописаний файл копії лишився — видаліть його вручну.</string>
@@ -345,7 +335,6 @@
     <string name="kid_setup_text">Дитина бачитиме сім картинок із короткими порадами, кнопку «Подзвонити своїм» і 112. Номери своїх додайте в «Довірені люди» в повному вигляді. Радимо захистити налаштування PIN-кодом телефону.</string>
     <string name="kid_setup_lock">Готово, захистити PIN-кодом</string>
     <string name="kid_setup_later">Готово, без захисту</string>
-    <string name="kid_title">Що робити?</string>
     <string name="kid_grown_up">Для дорослих</string>
     <string name="kid_call_family">Подзвонити своїм</string>
     <string name="kid_call_112">112</string>
@@ -422,7 +411,7 @@
     <string name="dir_veterans">Ветеранам і родинам</string>
     <string name="dir_health">Здоров\'я й реабілітація</string>
     <string name="dir_care">Літнім і людям з інвалідністю</string>
-    <string name="practice_title">Що зробиш?</string>
+    <string name="practice_title">Що зробите?</string>
     <string name="practice_hint">Навчальні ситуації за картками: перевірте себе</string>
     <string name="practice_of">Ситуація %1$d з %2$d</string>
     <string name="practice_q">Що зробите?</string>
@@ -437,7 +426,7 @@
     <string name="practice_open_card">Відкрити картку</string>
     <string name="practice_done">Готово. Повторіть за кілька днів: так краще запам’ятовується.</string>
     <string name="practice_note">Це навчання. У справжній біді відкривайте картку.</string>
-    <string name="practice_card">Перевірити себе: що зробиш?</string>
+    <string name="practice_card">Перевірити себе: що зробите?</string>
     <string name="practice_card_kid">Пограймо: що зробиш?</string>
     <string name="pin_legend">＋ — додати на головну, ✓ — уже на головній.</string>
     <string name="supplies_dash_title">На скільки вистачить</string>
@@ -463,12 +452,9 @@
     <string name="supplies_clear_until">Прибрати</string>
     <string name="power_schedules">Графіки за областями</string>
     <string name="blackout_title">Світло зникло?</string>
-    <string name="blackout_hint">Натисніть, і «Спротив» рахуватиме час та підкаже, скільки ще холодильник і морозилка триматимуть холод.</string>
+    <string name="blackout_hint">Натисніть, і «Спротив» лічитиме час та підкаже, скільки ще холодильник і морозилка триматимуть холод.</string>
     <string name="blackout_start">Світло зникло — почати відлік</string>
     <string name="blackout_for">Світла немає %1$s (з %2$s)</string>
-    <string name="blackout_fridge">Закритий холодильник: ~%1$d год</string>
-    <string name="blackout_freezer_full">Морозилка повна: ~%1$d год</string>
-    <string name="blackout_freezer_half">Морозилка наполовину: ~%1$d год</string>
     <string name="blackout_left">ще %1$s</string>
     <string name="blackout_up">час минув</string>
     <string name="blackout_fridge_over">Понад 4 год без світла: м’ясо, рибу, яйця, молоко з холодильника краще викинути.</string>
@@ -494,6 +480,12 @@
         <item quantity="few">%1$d зарядки</item>
         <item quantity="many">%1$d зарядок</item>
         <item quantity="other">%1$d зарядки</item>
+    </plurals>
+    <plurals name="notify_heat_days">
+        <item quantity="one">Без опалення %1$d доба</item>
+        <item quantity="few">Без опалення %1$d доби</item>
+        <item quantity="many">Без опалення %1$d діб</item>
+        <item quantity="other">Без опалення %1$d доби</item>
     </plurals>
     <plurals name="charge_hours">
         <item quantity="one">%1$d година</item>
@@ -536,7 +528,6 @@
     <string name="neutral_confirm_title">Увімкнути «Нотатки»?</string>
     <string name="neutral_confirm_text">Іконку на головному екрані, можливо, доведеться додати знову: шукайте «Нотатки». Запам’ятайте це — у небезпеці застосунок треба знайти швидко. Це не схованка: відкритий застосунок виглядає як «Спротив», а в налаштуваннях телефона назва лишається «Спротив». Приберіть із головного екрана віджети й закріплені швидкі дії «Спротиву», якщо вони там є.</string>
     <string name="neutral_confirm_yes">Увімкнути</string>
-    <string name="trip_title">Поїздка</string>
     <string name="trip_toggle">Режим поїздки</string>
     <string name="trip_hint">На випадок, коли телефон може опинитися в чужих руках: виїзд з окупації, загроза полону чи викрадення, крадіжка. Ховає «Моє» (медкартку, людей, план, запаси), «Я в безпеці», мапи фронту, пошук полонених і зниклих, ветеранські служби, воєнні злочини й права людини, депортованих дітей, документи з окупованих територій і допомогу пораненим. Вимкнути можна лише PIN-кодом телефона (або без нього, якщо з телефона знято блокування екрана). Довідник лишається.</string>
     <string name="trip_no_lock">Спершу встановіть блокування екрана телефона (PIN або пароль): без нього режим поїздки міг би вимкнути будь-хто.</string>
@@ -591,7 +582,7 @@
     <string name="tile_heat_out">тепла немає %1$s</string>
     <string name="tile_shelter">В укритті %1$s</string>
     <string name="heat_title">Немає опалення?</string>
-    <string name="heat_hint">Натисніть, і «Спротив» рахуватиме дні та підкаже, що робити.</string>
+    <string name="heat_hint">Натисніть, і «Спротив» лічитиме дні та підкаже, що робити.</string>
     <string name="heat_start">Опалення вимкнули</string>
     <string name="heat_for">Без опалення %1$s (з %2$s)</string>
     <string name="heat_pipes">Труби можуть замерзнути</string>
@@ -600,7 +591,7 @@
     <string name="heat_leave">Коли варто виїхати</string>
     <string name="heat_leave_when">понад 2 доби</string>
     <string name="heat_leave_do">Нижче +5° у квартирі понад 2 доби — привід виїхати родинам з дітьми, літніми, хворими.</string>
-    <string name="heat_co">Обігрівач на паливі — лише з димоходом або вентиляцією: чадний газ.</string>
+    <string name="heat_co">Паливний обігрівач вмикайте лише з димоходом або провітрюванням, інакше можна отруїтися чадним газом.</string>
     <string name="heat_back">Тепло повернулося</string>
     <string name="shelter_title">Ви в укритті?</string>
     <string name="shelter_start">Я в укритті — почати відлік</string>
@@ -634,16 +625,11 @@
     <string name="shelf_on_home">на головній: %1$d</string>
     <string name="shelf_fold">згорнути</string>
     <string name="shelf_unfold">розгорнути</string>
-    <string name="mine_block_trouble">На випадок біди</string>
-    <string name="mine_block_home">Запаси й закладки</string>
     <string name="mine_block_copies">Копія, друк, закладки</string>
     <string name="source_section">Джерело: «%1$s» %2$s, п. %3$s</string>
     <string name="source_license">Ліцензія: %1$s</string>
     <string name="about_with_you">Україна з тобою.</string>
     <string name="about_icons">Піктограми: OCHA Humanitarian Icons (Управління ООН з координації гуманітарних справ, CC0), Health Icons (healthicons.org, CC0), емодзі OpenMoji (openmoji.org, CC BY-SA 4.0) і Material Symbols (Google, Apache 2.0).</string>
-    <string name="ready_summary">Готово частин: %1$d з %2$d</string>
-    <string name="mine_block_trouble_desc">Я в безпеці, медкартка, довірені люди, план, екран для рятувальника</string>
-    <string name="mine_block_home_desc">Тривожна валіза, запаси вдома, закладки</string>
     <string name="mine_block_copies_desc">Резервна копія, друк, закладки, коди</string>
     <string name="lock_mine_unknown">Стан замка зараз не вдалося прочитати. Відкрийте «Моє» один раз і поверніться сюди.</string>
     <string name="settings_other_hands">Якщо телефон у чужих руках</string>
@@ -661,8 +647,6 @@
     <string name="mine_block_now">Повідомити своїх</string>
     <string name="mine_block_health">Здоров’я й порятунок</string>
     <string name="mine_block_health_desc">Медкартка, екран для рятувальника</string>
-    <string name="mine_block_prepare">Підготовка</string>
-    <string name="mine_block_prepare_desc">Довірені люди, план родини, валіза, запаси</string>
     <string name="colour_title">Що означають кольори</string>
     <string name="colour_danger">Помаранчевий — небезпека, діяти зараз</string>
     <string name="colour_health">Зелений — безпека, здоров’я, перша допомога, порятунок і виїзд</string>
@@ -701,8 +685,6 @@
     <string name="notes_empty">Нотаток ще немає.</string>
     <string name="notes_nothing_found">Нічого не знайдено.</string>
     <string name="notes_untitled">Без назви</string>
-    <string name="notes_title">Назва</string>
-    <string name="notes_text">Текст</string>
     <string name="notes_pin">Закріпити вгорі</string>
     <string name="notes_as_qr">Показати QR-кодом</string>
     <string name="notes_too_long_for_qr">Задовга для QR-коду: скоротіть, щоб передати.</string>
@@ -728,7 +710,6 @@
     <string name="role_learn">Вчитися захищати</string>
     <string name="role_learn_hint">Ваш шлях готовності: крок за кроком</string>
     <string name="path_title">Мій шлях готовності</string>
-    <string name="path_open">Відкрити мій шлях</string>
     <string name="path_open_hint">Конкретні навички й справи; позначки бачите лише ви</string>
     <string name="path_summary">Зроблено: %1$d з %2$d</string>
     <string name="path_intro">Позначайте те, що вже вмієте чи зробили. Зашифровано в «Моє»; ніхто інший цього не бачить, жодних рейтингів.</string>
@@ -762,13 +743,10 @@
     <string name="service_hint">Лише факти з офіційних джерел, права й ризики. Рішення — тільки ваше.</string>
     <string name="service_facts_title">Як працює вступ на службу</string>
     <string name="service_fact_1">Служити можна за контрактом або через мобілізацію. Рекрутинг дає змогу обрати підрозділ і посаду за вашим фахом.</string>
-    <string name="service_fact_2">18–25 років — лише за контрактом: короткий контракт на 1–2 роки, одноразова виплата 1 млн грн і відстрочка на рік після служби.</string>
     <string name="service_fact_3">Шлях: вакансія → співбесіда → рекомендаційний лист командира → ВЛК і психологічне тестування (направлення — у Резерв+) → базова підготовка 51 день → частина, що дала лист.</string>
     <string name="service_fact_4">Лист від частини пріоритетного комплектування гарантує службу саме там; для інших потрібне погодження Генштабу. Питайте рекрутера, чи входить частина до переліку.</string>
     <string name="service_fact_5">Служба — це ризик для життя й здоров’я. Якщо ваші права порушують: рекрутер, гаряча лінія Міноборони 1512, Офіс Військового омбудсмана.</string>
-    <string name="service_source">Джерело: Міноборони, «Свідомий вибір: як працює рекрутинг у 2026 році», 04.03.2026. Перевірено 31.10.2026. Умови змінюються — уточнюйте в рекрутера.</string>
     <string name="resist_principles">Без тиску, рейтингів і нагадувань. Нічого звідси не передається нікому. У режимі поїздки розділ сховано.</string>
-    <string name="backup_too_big">Копія завелика, щоб її можна було відновити: скоротіть нотатки або видаліть непотрібні й спробуйте ще раз.</string>
     <string name="backup_replace_notes">Нотаток у копії: %1$d.</string>
     <string name="notes_full">Нотаток уже дуже багато: видаліть непотрібні, щоб резервна копія лишалася робочою.</string>
     <string name="notes_read_failed">Нотатку зараз не вдалося прочитати. Поверніться й спробуйте ще раз.</string>
@@ -818,8 +796,6 @@
     <string name="active_wait">Не повертайтеся ще %1$d хв</string>
     <string name="active_wait_done">%1$d хв минуло: орієнтуйтеся на відбій</string>
     <string name="active_heat">Тепла немає %1$s</string>
-    <string name="notes_open">Відкрити нотатки</string>
-    <string name="notes_count">Нотаток: %1$d</string>
     <string name="handover_to_notes">Зберегти в мої нотатки</string>
     <string name="handover_note_title">Для бригади, %1$s</string>
     <string name="notes_text_hint">Перший рядок — назва нотатки</string>
@@ -846,7 +822,6 @@
     <string name="notify_wait_text">Виходьте лише після відбою.</string>
     <string name="notify_shelter_title">Ви в укритті вже понад годину</string>
     <string name="notify_power_title">Без світла %1$d год</string>
-    <string name="notify_heat_title">Без тепла %1$d доби</string>
     <string name="notify_supplies_title">Запаси: скоро спливає термін</string>
     <string name="notify_supplies_text">Перевірте, що замінити, у «Моє» → «Запаси».</string>
     <string name="notify_kit_title">Час перевірити тривожну валізу</string>
@@ -865,7 +840,6 @@
     <string name="path_week_well_done">Чудово. Кожне вміння — це хтось, кому ви зможете допомогти.</string>
     <string name="path_week_all">Ви пройшли весь шлях. Поділіться вміннями з іншими: навчіть когось одного.</string>
     <string name="path_week_open">Крок тижня й мій шлях</string>
-    <string name="path_home">Мій шлях: %1$d з %2$d · крок тижня</string>
     <string name="path_home_all">Мій шлях пройдено</string>
     <string name="resist_support_title">Підтримати країну</string>
     <string name="resist_support_intro">Гроші, кров, пильність. Донатьте лише через офіційні сайти: шахраї роблять копії відомих фондів.</string>
@@ -877,7 +851,7 @@
     <string name="backup_settings_row">Створити копію або відновити</string>
     <string name="backup_settings_hint">Усі дані з «Моє» в одному зашифрованому файлі. Через нього — перехід на новий телефон.</string>
     <string name="kid_112_ask">Тобі зараз потрібна допомога?</string>
-    <string name="kid_112_ask_hint">112 — для біди: пожежа, хтось поранений, ти загубився і нікого немає поруч. Скажи своє ім\'я, де ти і що сталося.</string>
+    <string name="kid_112_ask_hint">112 — для біди: пожежа, хтось поранений, ти не знаєш, де ти, і нікого немає поруч. Скажи своє ім’я, де ти і що сталося.</string>
     <string name="kid_112_yes">Так, дзвонити 112</string>
     <string name="kid_112_no">Ні, помилково</string>
     <string name="kid_step_next">Далі</string>
@@ -900,7 +874,7 @@
     <string name="inspire_1a">Ви вже подбали про себе. Тепер домовтеся з рідними, де зустрітися і як дати знати.</string>
     <string name="inspire_1b">Родина, яка знає план, не панікує. Наступний крок — разом.</string>
     <string name="inspire_2a">Ваша родина готова. Тепер сусіди й громада: разом ми сильніші.</string>
-    <string name="inspire_2b">Громада тримається на людях, які знають одне одного. Ви — одна з них.</string>
+    <string name="inspire_2b">Громада тримається на людях, які знають одне одного. І ви серед них.</string>
     <string name="inspire_3a">Ви вже опора для громади. Наступне — знати, як захищати країну.</string>
     <string name="inspire_3b">Знати свої права й обов’язки — теж частина спротиву.</string>
     <string name="inspire_4a">Ваші знання медика — сила для всіх поруч. Поділіться ними.</string>
@@ -924,7 +898,7 @@
     <string name="widget_count_label">Щит-лічильник</string>
     <string name="widget_count_desc">Одна ваша добра справа з «Моїх щитів» і кнопка «+1»</string>
     <string name="widget_count_pick">Який лічильник показати?</string>
-    <string name="widget_count_pick_hint">На головному екрані буде лише число на щиті й «+1»; назву можна ввімкнути нижче. Число оновиться, коли відкриєте «Моє». У режимі «Поїздка» віджет показує лише «Відкрити «Спротив»».</string>
+    <string name="widget_count_pick_hint">На головному екрані буде лише число на щиті й «+1»; назву можна ввімкнути нижче. Число оновиться, коли відкриєте «Моє». У режимі поїздки віджет показує лише «Відкрити Спротив».</string>
     <string name="widget_count_show_name">Показувати назву</string>
     <string name="widget_tile_pick">Що показати на віджеті?</string>
     <string name="widget_tile_pick_hint">Віджет показуватиме лише назву; дотик відкриє вибране.</string>
@@ -937,7 +911,7 @@
     <string name="widget_kit_open">Торкніться, щоб відкрити</string>
     <string name="widget_kid_siren">Сирена</string>
     <string name="widget_kid_fire">Вогонь</string>
-    <string name="widget_kid_lost">Загубився</string>
+    <string name="widget_kid_lost">Не знаю, де я</string>
     <string name="widget_kid_call">Своїм</string>
     <string name="shortcut_now">Що робити</string>
     <string name="shortcut_safe">Я в безпеці</string>
@@ -968,7 +942,7 @@
     <string name="const_all">Уся Конституція</string>
     <string name="const_retrieved">текст отримано %1$s</string>
     <string name="const_no_changes">текст не змінено</string>
-    <string name="const_official">Офіційний текст без змін. Офіційне тлумачення Конституції здійснює Конституційний Суд (стаття 147). По допомогу — до юриста або безоплатної правничої допомоги.</string>
+    <string name="const_official">Офіційний текст без змін. Офіційно тлумачити Конституцію може лише Конституційний Суд (стаття 147). По допомогу звертайтеся до юриста або до безоплатної правничої допомоги.</string>
     <string name="history_title">Навіщо спротив</string>
     <string name="history_hint">Історії з минулого: коли вистояли і коли ні</string>
     <string name="history_intro">Правдиві історії з України і світу. Кожна — на один екран: що сталося, чим закінчилося і чого вчить. Під кожною — джерела й дата перевірки.</string>
@@ -1007,7 +981,7 @@
     <string name="widget_tourniquets">Турнікети: %1$d · перший %2$s</string>
     <string name="np_title">Нове місце</string>
     <string name="np_hint">Після виїзду: крок за кроком</string>
-    <string name="np_intro">Виїхали з дому — і що далі? Тут кроки на перші дні, тиждень, місяць і далі. Відмічайте зроблене: це видно лише вам.</string>
+    <string name="np_intro">Виїхали з дому, і що далі? Тут кроки на перші дні, тиждень, місяць і далі. Позначайте зроблене: це бачите лише ви.</string>
     <string name="np_progress_title">Мій шлях на новому місці</string>
     <string name="np_progress_hint">Один крок за раз. Що не стосується вас — пропускайте.</string>
     <string name="np_days">Перші 3 дні</string>
@@ -1028,7 +1002,7 @@
     <string name="tourniquet_note_unsaved">Не збережено. Запишіть це на турнікеті.</string>
     <string name="gart_title">Щоденний гарт</string>
     <string name="gart_hint">Маленькі дії, що тримають вас і ваших близьких</string>
-    <string name="gart_intro">Маленькі щоденні дії, що додають сил вам і близьким. Візьміть до п’яти й відмічайте зроблене. Пропуск нічого не обнуляє.</string>
+    <string name="gart_intro">Маленькі щоденні дії, що додають сил вам і близьким. Візьміть до п’яти й позначайте зроблене. Пропуск нічого не обнуляє.</string>
     <string name="gart_today">Мій гарт сьогодні</string>
     <string name="gart_today_count">Сьогодні %1$d з %2$d</string>
     <string name="gart_none">Ще нічого не обрано. Розгорніть групу нижче й візьміть одну-дві звички.</string>
@@ -1057,7 +1031,7 @@
     <string name="gart_body_doctor">Якщо є хвороби серця чи суглобів, вагітність або нещодавня травма — порадьтеся з лікарем, яке навантаження вам підходить. Орієнтир ВООЗ для дорослих: 150–300 хвилин помірного руху на тиждень і вправи на силу щонайменше двічі на тиждень; після 65 — ще вправи на рівновагу 3 дні на тиждень. Будь-який рух кращий, ніж жодного.</string>
     <string name="gart_why">Чому це працює</string>
     <string name="gart_why_hint">Що каже наука</string>
-    <string name="gart_why_1">Звичка стає автоматичною здебільшого приблизно за 66 днів, а залежно від людини й звички — від 18 до понад 200. Тому тут рахуються дні, коли ви це зробили, а не серія без пропусків.</string>
+    <string name="gart_why_1">Звичка стає автоматичною здебільшого приблизно за 66 днів, а залежно від людини й звички — від 18 до понад 200. Тому тут ми лічимо дні, коли ви це зробили, а не серію без пропусків.</string>
     <string name="gart_why_2">Один пропущений день на формування звички майже не впливає — тож нічого не обнуляється.</string>
     <string name="gart_why_3">План «якщо — то», прив\'язаний до того, що ви вже робите щодня, помітно підвищує шанс, що ви справді це зробите.</string>
     <string name="gart_why_4">Перші п\'ять груп спираються на п\'ять основ, що допомагають людям триматися після катастроф: безпека, спокій, віра, що ви і ваша громада можете діяти, зв\'язок із людьми і надія. Шоста група — тіло.</string>
@@ -1071,7 +1045,7 @@
     <string name="tab_know">Знання</string>
     <string name="tab_way">Мій шлях</string>
     <string name="way_intro">Тут ваші звички, кроки й ролі. Маленька справа щодня додає сил вам і тим, хто поруч.</string>
-    <string name="way_private">Ваші відмітки зберігаються зашифровано в «Моєму» і нікуди не надсилаються.</string>
+    <string name="way_private">Ваші позначки зберігаються зашифровано в «Моєму» і нікуди не надсилаються.</string>
     <string name="lang_title">Мова · Language</string>
     <string name="lang_phone">Як у телефоні</string>
     <string name="lang_uk">Українська</string>
@@ -1092,7 +1066,7 @@
     <string name="habit_breath_plan">Коли під час тривоги я вже в укритті — дихаю повільно дві хвилини.</string>
     <string name="habit_sleep">Лягати щодня в один час</string>
     <string name="habit_sleep_plan">Коли настає мій час сну — вимикаю екран і кладу телефон на зарядку.</string>
-    <string name="habit_practice">Одна ситуація «Що б ви зробили?»</string>
+    <string name="habit_practice">Одна ситуація «Що зробите?»</string>
     <string name="habit_practice_plan">Коли їду в транспорті чи чекаю — проходжу одну ситуацію.</string>
     <string name="habit_skill">Повторити одну дію: турнікет, вузол, номер служби</string>
     <string name="habit_skill_plan">Коли дивлюся вечірні новини — повторюю одну дію з карток.</string>
@@ -1142,7 +1116,6 @@
     <string name="roles_hint">Ваші ролі в спротиві: кроки, факти й підтримка саме для вас</string>
     <string name="roles_intro">Оберіть, хто ви зараз: кілька ролей або жодної. Роль підкаже ваш наступний крок і де знайти підтримку. Змінити можна будь-коли.</string>
     <string name="roles_mine">Мої ролі</string>
-    <string name="roles_more_coming">Ролі доповнюватимуться; кожна — з офіційними джерелами й датою перевірки.</string>
     <string name="roles_private">Ролі зашифровано в «Моє»; їх бачите лише ви. Лише позначка «Лікую й рятую» зберігається в налаштуваннях, як і раніше. Оцінок і рейтингів немає.</string>
     <string name="circle_care">Турбота</string>
     <string name="circle_defence">Захист</string>
@@ -1150,7 +1123,7 @@
     <string name="circle_work">Праця</string>
     <string name="circle_voice">Голос і пам’ять</string>
     <string name="role_dobro">Готуюся до служби</string>
-    <string name="role_dobro_hint">Доброволець чи доброволиця: думаю про службу або вже вирішив, вирішила</string>
+    <string name="role_dobro_hint">Думаю про службу добровольцем або вже маю рішення</string>
     <string name="role_dobro_affirm">Ви думаєте про найважче — захищати країну. Рішення лише ваше, а тут — факти, права й підготовка.</string>
     <string name="role_dftg">Захищаю свою громаду в ДФТГ</string>
     <string name="role_dftg_hint">Добровольче формування територіальної громади</string>
@@ -1159,7 +1132,6 @@
     <string name="role_medic_hint">Лікар, медсестра, фельдшер, парамедик</string>
     <string name="role_medic_affirm">Ваші знання рятують життя. Ще більше — коли ними діляться: навчіть людей поруч.</string>
     <string name="role_steps_title">Мої кроки</string>
-    <string name="role_steps_open">Відкрити мій шлях</string>
     <string name="role_steps_hint">Блок цієї ролі вже з’явився у «Моєму шляху»</string>
     <string name="role_where">Куди звернутися</string>
     <string name="role_long_title">Як витримати довго</string>
@@ -1195,7 +1167,7 @@
     <string name="role_dftg_5">Звичайна участь у ДФТГ не оплачується. Хто виконував бойові завдання за розпорядженням ТрО, може отримати статус учасника бойових дій.</string>
     <string name="role_dftg_6">Офіційних підтверджень, що членство в ДФТГ дає відстрочку від мобілізації, немає.</string>
     <string name="resist_drones_title">Дрони: де навчитися</string>
-    <string name="resist_drones_intro">Школи й курси для цивільних, по областях</string>
+    <string name="resist_drones_intro">Школи й курси для цивільних за областями</string>
     <string name="resist_cyber_title">Кібербезпека й ІТ: де навчитися</string>
     <string name="resist_cyber_intro">Навички майбутнього для кожного: від кібергігієни до професії</string>
     <string name="role_dftg_source">Джерела: Міноборони (14.03.2025, 10.07.2025); Суспільне (19.08.2025). Перевірено 01.11.2026. Умови змінюються — уточнюйте в командира ДФТГ чи військової адміністрації.</string>
@@ -1206,8 +1178,8 @@
     <string name="role_frontline_source">Джерела: Мінрозвитку (14.01.2026); уряд (07.03.2023). Перевірено 01.11.2026. Умови змінюються — варто уточнювати.</string>
     <string name="role_frontline_1">Обов’язкову евакуацію дітей оголошує Координаційний штаб; діти виїжджають разом із батьками або законними представниками.</string>
     <string name="role_frontline_2">У транзитних центрах допомагають із документами, виплатами, медичною й психологічною підтримкою, а потім можна отримати безоплатне тимчасове житло.</string>
-    <string name="role_frontline_3">Про евакуацію варто дізнаватися з офіційних джерел: обласна військова адміністрація, ДСНС, міська рада.</string>
-    <string name="role_frontline_4">Допомагає мати паперові копії документів і заздалегідь домовитися з рідними про місце зустрічі.</string>
+    <string name="role_frontline_3">Про евакуацію дізнавайтеся лише з офіційних джерел: обласна військова адміністрація, ДСНС, міська рада.</string>
+    <string name="role_frontline_4">Зробіть паперові копії документів і заздалегідь домовтеся з рідними про місце зустрічі.</string>
     <string name="role_baby">Чекаю дитину або маю малюка</string>
     <string name="role_baby_hint">Вагітність, перші роки дитини</string>
     <string name="role_baby_affirm">Ви бережете нове життя навіть зараз. Тут — що гарантує держава вам і малюку.</string>
@@ -1221,17 +1193,17 @@
     <string name="role_disability_affirm">Ви знаєте свої потреби краще за всіх. Тут — допомога, на яку можна розраховувати, зокрема під час евакуації.</string>
     <string name="role_disability_facts_title">Допомога й евакуація</string>
     <string name="role_disability_source">Джерела: Мінсоцполітики (28.10.2025, 14.01.2026). Перевірено 01.11.2026. Умови змінюються — варто уточнювати.</string>
-    <string name="role_disability_1">Людям, які мало рухаються, направлення на тривалий догляд і проживання до 12 місяців можна оформити просто на пункті евакуації.</string>
+    <string name="role_disability_1">Людям з обмеженою рухливістю направлення на тривалий догляд і проживання до 12 місяців можна оформити просто на пункті евакуації.</string>
     <string name="role_disability_2">Після евакуації Мінсоцполітики разом із громадами допомагає з транспортом до лікарень і спеціалізованих закладів.</string>
-    <string name="role_elder">Маю поважний вік</string>
+    <string name="role_elder">Я літня людина</string>
     <string name="role_elder_hint">Пенсія, здоров’я, евакуація</string>
     <string name="role_elder_affirm">Ваш досвід — опора для інших. Тут — пенсія, допомога й евакуація для тих, кому важко рухатися.</string>
     <string name="role_elder_facts_title">Пенсія й допомога</string>
     <string name="role_elder_source">Джерела: Мінсоцполітики; Пенсійний фонд (2026). Перевірено 01.11.2026. Умови змінюються — варто уточнювати.</string>
     <string name="role_elder_1">Пенсію виплачують незалежно від того, де людина перебуває, зокрема після переїзду.</string>
     <string name="role_elder_2">Пенсійний фонд консультує через єдиний контакт-центр: 0 800 503 753.</string>
-    <string name="role_elder_3">Літнім людям, які мало рухаються, з евакуацією допомагають громадські організації, зокрема «Схід SOS».</string>
-    <string name="role_loss">Втратив чи втратила близьку людину</string>
+    <string name="role_elder_3">Літнім людям з обмеженою рухливістю з евакуацією допомагають громадські організації, зокрема «Схід SOS».</string>
+    <string name="role_loss">У мене загинула чи померла близька людина</string>
     <string name="role_loss_hint">Підтримка в горі</string>
     <string name="role_loss_affirm">Нам дуже шкода. Тут — де знайти підтримку, коли будете готові.</string>
     <string name="role_loss_facts_title">Де знайти підтримку</string>
@@ -1243,7 +1215,7 @@
     <string name="strength_title">Скільки сил зараз</string>
     <string name="strength_hint">Коли сил мало, «Мій шлях» не квапить: спершу подбати про себе.</string>
     <string name="strength_low">Мало</string>
-    <string name="strength_normal">Звичайно</string>
+    <string name="strength_normal">Як завжди</string>
     <string name="strength_high">Багато</string>
     <string name="path_week_low">Сил зараз мало — це нормально. Цей тиждень можна присвятити собі: сон, рух, люди поруч.</string>
     <string name="path_week_show_anyway">Усе одно показати крок</string>
@@ -1403,7 +1375,7 @@
     <string name="role_milfamily_1">Родина загиблого захисника може подати заяву на статус члена сім\'ї в будь-якому ЦНАП, також електронно, незалежно від місця проживання.</string>
     <string name="role_milfamily_2">Якщо суд оголосив зниклого безвісти захисника померлим або встановив факт смерті, рішення суду — підстава для посвідчення; висновок ВЛК не потрібен.</string>
     <string name="role_milfamily_3">Якщо рідна людина зникла безвісти, заяву приймає поліція (102) або представник Уповноваженого; кровні родичі здають зразок ДНК для пошуку.</string>
-    <string name="role_milfamily_4">Уповноважений з питань зниклих безвісти — 1698, Координаційний штаб — 0 800 300 529, Національне інформбюро — 1648. Усе безоплатно.</string>
+    <string name="role_milfamily_4">Зниклі безвісти: Уповноважений 1698, Координаційний штаб 0 800 300 529, Національне інформбюро 1648. Усе безоплатно.</string>
     <string name="role_milfamily_5">Безоплатна психологічна допомога за державною програмою доступна й родинам ветеранів, і родинам загиблих захисників.</string>
     <string name="role_milfamily_6">Скарги щодо служби приймає Військовий омбудсман: skarha@milomb.gov.ua. Відповідь — до 10 днів, коли є загроза життю — до 3 днів.</string>
     <string name="role_veteran">Ветеран чи ветеранка</string>
@@ -1454,7 +1426,6 @@
     <string name="practice_t_home">Без світла й виїзд</string>
     <string name="practice_t_home_hint">Генератор, фейкові накази про евакуацію</string>
     <string name="practice_choose">Оберіть, що перевірити: основне впереміш або одну тему.</string>
-    <string name="practice_count">ситуацій: %1$d</string>
     <string name="practice_more_coming">Ситуації з довідника додаватимемо поступово, кожну — з посиланням на джерело.</string>
     <string name="widget_neutral">Відкрити «Спротив»</string>
     <string name="comms_title">Зв’язок, коли мережа лягла</string>
@@ -1507,11 +1478,8 @@
     <string name="experience_what">Що сталося:</string>
     <string name="experience_helped">Що допомогло:</string>
     <string name="experience_next">Наступного разу:</string>
-    <string name="shields_life">Знадобилося</string>
-    <string name="shield_life">Знання допомогли в житті</string>
-    <string name="shield_how_life">Запишіть досвід у нотатках</string>
     <string name="experience_support">Якщо згадувати важко — де знайти підтримку</string>
-    <string name="shield_how_count">Рахується сама</string>
+    <string name="shield_how_count">Лічиться сама</string>
     <string name="held_blackout">Відключення світла</string>
     <string name="held_heating">Відключення тепла</string>
     <string name="held_shelter">Тривоги в укритті</string>
@@ -1542,7 +1510,6 @@
     <string name="shields_big">Великі кроки</string>
     <string name="shields_small">Маленькі кроки</string>
     <string name="shields_counts">Мої лічильники</string>
-    <string name="shield_next">Далі — %1$d</string>
     <string name="shield_mark">Позначити</string>
     <string name="shield_unmark">Зняти</string>
     <string name="kid_sticker_got">Ось твоя наліпка із Соняшником!</string>
@@ -1581,7 +1548,7 @@
     <string name="weapons_own_3">Удома зброя зберігається в металевому ящику чи сейфі, щоб сторонні не мали доступу. На дачі чи в іншому тимчасовому місці вона має бути розрядженою, а поліцію треба повідомити.</string>
     <string name="weapons_own_4">Переїхали? Протягом 30 днів подайте заяву до поліції за новою адресою.</string>
     <string name="weapons_own_5">Дозвіл на зброю є в «Дії». Паперові дозволи, видані до 23.06.2023, мали бути внесені в Єдиний реєстр зброї до 26.06.2026. Якщо вашого дозволу немає в «Дії», зверніться до поліції.</string>
-    <string name="weapons_own_source">Джерела: Інструкція, затверджена наказом МВС № 622, пп. 7.6, 12.1, 12.12; Кабінет Міністрів України; Національна поліція України (Тернопільщина, 2026); «Дія». Перевірено 02.11.2026.</string>
+    <string name="weapons_own_source">Джерела: Інструкція, затверджена наказом МВС № 622, пп. 7.6, 12.1, 12.12; Кабінет Міністрів України; Національна поліція України; «Дія». Перевірено 02.11.2026.</string>
     <string name="weapons_law_title">Відповідальність</string>
     <string name="weapons_law_1">Носіння, зберігання, придбання, передача чи збут вогнепальної зброї (крім гладкоствольної мисливської), набоїв чи вибухівки без дозволу карається позбавленням волі від 3 до 7 років.</string>
     <string name="weapons_law_2">За холодну зброю без дозволу (кинджали, фінські ножі, кастети тощо) — від штрафу до 3 років позбавлення волі.</string>
@@ -1633,5 +1600,5 @@
     <string name="driving_where">Офіційні джерела</string>
     <string name="chapter_evacuation_car">Евакуація пішки та автомобілем</string>
     <string name="chapter_evacuation_car_hint">Розділ 26 довідника</string>
-    <string name="situation_maps">Без інтернету: мапи й знання</string>
+    <string name="situation_maps">Застосунки без інтернету: мапи й Вікіпедія</string>
 </resources>

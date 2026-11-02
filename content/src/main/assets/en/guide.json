@@ -9,7 +9,7 @@
  "source": "https://github.com/snegireff/dovidnyk-vyzhyvannia",
  "commit": "6a3c6fb6e7ecd160e864232d0f1a47cd928fe928",
  "license": "CC BY-SA 4.0",
- "changes": "Converted for display in the app: markup changed, figures kept as images, the sections of Appendix A numbered A.1–A.5, the cover disclaimer moved to “About the guide”, the rest of the cover, the contents and the note pages left out. Three figures from open sources added (public domain; author in the caption): fig. 11.2, 15.5, 15.6. English translation by Sprotyv from the Ukrainian original (CC BY-SA 4.0); the meaning of the chapters is unchanged.",
+ "changes": "Converted for display in the app: markup changed, figures kept as images, the sections of Appendix A numbered A.1–A.5, the cover disclaimer moved to “About the guide”, the rest of the cover, the contents and the note pages left out. Three figures from open sources added (public domain; author in the caption): fig. 11.2, 15.5, 15.6. English translation by Sprotyv from the Ukrainian original (CC BY-SA 4.0); the meaning of the chapters is unchanged, except: in 4.8 and 14.4 official websites, apps and ways named by the OVA instead of chatbots and Telegram channels (the app does not recommend Telegram); in 13.1 and 18.1 CoMaps, Organic Maps or OsmAnd instead of maps.me; in the table of 6.2 the doses for children replaced by a reference to the official Ministry of Health announcement or a doctor (doses for children appear in the app only after a paediatrician's review).",
  "chapters": [
   {
    "id": "ch1",
@@ -1577,7 +1577,7 @@
        "kind": "bullets",
        "items": [
         {
-         "text": "Report every drone you see (101, 102, the chatbots of your oblast's Oblast Military Administration (OVA) / Armed Forces of Ukraine — write them down on paper in advance). This saves others."
+         "text": "Report every drone you see (101, 102 or other official ways named by your oblast's Military Administration (OVA); write them down on paper in advance). This saves others."
         },
         {
          "text": "Use your region's official monitoring channels, not hearsay: fake “drone maps” and rumours are a weapon too (chapter 18)."
@@ -1873,22 +1873,8 @@
         {
          "head": false,
          "cells": [
-          "Children 3–12 years",
-          "62.5 mg"
-         ]
-        },
-        {
-         "head": false,
-         "cells": [
-          "Children 1 month – 3 years",
-          "32 mg"
-         ]
-        },
-        {
-         "head": false,
-         "cells": [
-          "Infants under 1 month",
-          "16 mg"
+          "Children under 13",
+          "The dose for children is given by the official Ministry of Health announcement or a doctor"
          ]
         },
         {
@@ -3946,7 +3932,7 @@
          "text": "Step pairs: count every left step; ~65 pairs = 100 m on flat ground. This is how you measure distance covered without GPS."
         },
         {
-         "text": "**GPS spoofing:** if the navigator shows you at sea, in another city, or the point \"jumps\", the signal has been faked (widespread in the combat zone and near military sites). Trust the compass, the paper map and road signs; offline maps on your phone (Organic Maps, maps.me) work without internet, but GPS coordinates can still lie."
+         "text": "**GPS spoofing:** if the navigator shows you at sea, in another city, or the point \"jumps\", the signal has been faked (widespread in the combat zone and near military sites). Trust the compass, the paper map and road signs; offline maps on your phone (CoMaps, Organic Maps or OsmAnd) work without internet, but GPS coordinates can still lie."
         }
        ]
       }
@@ -4184,7 +4170,7 @@
          "text": "**SMS via satellite in Ukraine:** Starlink Direct to Cell from Kyivstar (since November 2025). A 4G smartphone (Android, or iPhone 13+ with iOS 26.2+) with a Kyivstar 4G SIM, where there is no ground network, connects by itself to the \"Kyivstar | SpaceX\" network (on iPhone the status bar shows SAT) and sends and receives ordinary SMS; delivery takes 3–10 min. Automatic network selection and open sky are needed. It does NOT work in the occupied territories, in the combat zone or in the border strip. This is an addition to other channels, not a replacement: agree with your family about SMS in advance."
         },
         {
-         "text": "**Official channels:** write down on paper the frequencies of Ukrainian Radio for your oblast and the names of the official Telegram channels of the Oblast Military Administration (OVA)/DSNS. The two-source rule for any \"evacuation orders\" — chapter 18."
+         "text": "**Official channels:** write down on paper the frequencies of Ukrainian Radio for your oblast and the addresses of the official websites and apps of the Oblast Military Administration (OVA)/DSNS. The two-source rule for any \"evacuation orders\" — chapter 18."
         },
         {
          "text": "**A radio receiver** is the main source of official information during a blackout. Listen at set times (official announcements are usually at the top of the hour)."
@@ -4980,7 +4966,7 @@
          "text": "**A paper list** of phone numbers, addresses, doctors, policy and account numbers, passwords to critical services (in a sealed envelope in your cache)."
         },
         {
-         "text": "**Offline copies:** maps of your oblast in an offline app (Organic Maps, maps.me) and a paper map; this book — on paper; audiobooks/games for children — downloaded, not \"streamed\"."
+         "text": "**Offline copies:** maps of your oblast in an offline app (CoMaps, Organic Maps or OsmAnd) and a paper map; this book — on paper; audiobooks/games for children — downloaded, not \"streamed\"."
         },
         {
          "text": "**Information without a network:** a battery-powered radio remains the only channel when the internet is down. Frequencies — on paper (sec. 14.4)."

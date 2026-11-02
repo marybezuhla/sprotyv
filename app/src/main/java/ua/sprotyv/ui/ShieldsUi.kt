@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.heightIn
@@ -110,7 +112,7 @@ fun ShieldsScreen(nav: Nav, openGroups: Boolean = false) {
         ShieldItem("step:$m", title, if (byPath != null) R.string.shield_how_auto else R.string.shield_how_mark, group, icon,
             if (byPath == true || (byPath == null && m in st.marked)) 2 else 0, big = big, mark = m.takeIf { byPath == null })
     val big = listOf(
-        marked("rescue", R.string.step_rescue, R.drawable.ocha_help, Group.FIRST_AID, true),
+        marked("rescue", R.string.step_rescue, R.drawable.hi_cpr, Group.FIRST_AID, true),
         marked("left", R.string.step_left, R.drawable.ocha_internally_displaced, Group.LEAVE, true),
         marked("newlife", R.string.step_newlife, R.drawable.ocha_house, Group.LEAVE, true),
         marked("course", R.string.step_course, R.drawable.ocha_learning, Group.FIRST_AID, true, byPath = auto("course")),
@@ -119,14 +121,14 @@ fun ShieldsScreen(nav: Nav, openGroups: Boolean = false) {
         marked("defence", R.string.step_defence, R.drawable.ocha_security, null, true),
     )
     val small = listOf(
-        marked("donate", R.string.step_donate, R.drawable.ocha_help, null, false),
+        marked("donate", R.string.step_donate, R.drawable.ocha_non_food_items, null, false),
         marked("twosources", R.string.step_twosources, R.drawable.ocha_public_information, Group.GUIDE, false),
     )
     val counters = listOf(
         counted("count:blood", R.string.count_blood, R.drawable.ocha_health, st.counts["blood"] ?: 0, true, Group.FIRST_AID, "blood"),
         counted("count:shifts", R.string.count_shifts, R.drawable.ocha_group, st.counts["shifts"] ?: 0, true, null, "shifts"),
         counted("count:taught", R.string.count_taught, R.drawable.ocha_users, st.counts["taught"] ?: 0, true, Group.FIRST_AID, "taught"),
-        counted("count:donated", R.string.count_donated, R.drawable.ocha_help, st.counts["donated"] ?: 0, false, null, "donated"),
+        counted("count:donated", R.string.count_donated, R.drawable.ocha_non_food_items, st.counts["donated"] ?: 0, false, null, "donated"),
         counted("count:helped", R.string.count_helped, R.drawable.ocha_internally_displaced, st.counts["helped"] ?: 0, false, Group.LEAVE, "helped"),
         counted("count:courses", R.string.count_courses, R.drawable.ocha_learning, st.counts["courses"] ?: 0, true, Group.PREPARE, "courses"),
         counted("count:animals", R.string.count_animals, R.drawable.ic_leaf, st.counts["animals"] ?: 0, true, null, "animals"),
@@ -170,8 +172,9 @@ fun ShieldsScreen(nav: Nav, openGroups: Boolean = false) {
 private fun ShieldGrid(list: List<ShieldItem>) {
     Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
         list.chunked(2).forEach { row ->
-            androidx.compose.foundation.layout.Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                row.forEach { ShieldBadge(it, Modifier.weight(1f)) }
+            // Both of a row as tall as the taller one, so their buttons sit on one line
+            androidx.compose.foundation.layout.Row(Modifier.fillMaxWidth().height(androidx.compose.foundation.layout.IntrinsicSize.Max), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                row.forEach { ShieldBadge(it, Modifier.weight(1f).fillMaxHeight()) }
                 if (row.size == 1) androidx.compose.foundation.layout.Spacer(Modifier.weight(1f))
             }
         }
@@ -229,11 +232,12 @@ private fun ShieldBadge(s: ShieldItem, modifier: Modifier = Modifier) {
                 Icon(ImageVector.vectorResource(s.icon), contentDescription = null, tint = if (s.level > 0) tint.ink else outline, modifier = Modifier.size(24.dp))
             }
         }
-        Text(title, style = MaterialTheme.typography.labelMedium, textAlign = TextAlign.Center, maxLines = 4, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis, color = if (s.level > 0) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(title, style = MaterialTheme.typography.labelMedium, textAlign = TextAlign.Center, minLines = 2, maxLines = 4, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis, color = if (s.level > 0) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant)
         // Counts say nothing more than their name: no "still to go"
         if (s.level < 2 && s.mark == null && s.count == null && s.counter == null && !s.id.startsWith("held:") && s.id != "solved") {
             Text(how, style = MaterialTheme.typography.labelMedium, textAlign = TextAlign.Center, maxLines = 3, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
+        androidx.compose.foundation.layout.Spacer(Modifier.weight(1f))
         // On the owner's word: a tick; counts: "+1" (and "−1" for a slip of the finger)
         s.mark?.let { m ->
             val on = s.level == 2

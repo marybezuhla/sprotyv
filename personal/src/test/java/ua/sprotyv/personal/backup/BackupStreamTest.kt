@@ -17,7 +17,7 @@ class BackupStreamTest {
     private val snapshot = BackupData.Snapshot(
         created = 1_700_000_000_000,
         medical = MedicalCard(bloodGroup = "A(II) Rh+", notes = "рядок\nдругий"),
-        people = listOf(Person(id = 3, name = "Олена", phone = "+380501234567", ice = true)),
+        people = listOf(Person(id = 3, name = "Контакт 1", phone = "+380000000101", ice = true)),
         plan = null, rows = emptyList(), kit = emptyList(), settings = emptyList(),
         home = mapOf("mode" to "FULL"),
         notes = (1L..300L).map { Note(id = it, title = "Нотатка $it", text = "текст ".repeat(400), pinned = false, updatedAt = it) },

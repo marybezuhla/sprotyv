@@ -144,7 +144,7 @@ class PersonalScreensTest {
     @Test fun gartBig() = shot("41-gart-big", big = true) { Frame("Щоденний гарт", {}) { GartScreen(nav) } }
     @Test fun path() = shot("42-path-dark", dark = true) { Frame("Мій шлях готовності", {}) { PathScreen(nav) } }
     @Test fun roles() = shot("43-roles-dark", dark = true) { Frame("Хто я зараз", {}) { RolesScreen(nav) } }
-    @Test fun roleDftg() = shot("44-role-dftg-dark", dark = true) { Frame("ДФТГ", {}) { RoleScreen(ROLES.getValue("dftg"), content, nav) } }
+    @Test fun roleVolunteer() = shot("44-role-volunteer-dark", dark = true) { Frame("Волонтерю", {}) { RoleScreen(ROLES.getValue("volunteer"), content, nav) } }
     @Test fun roleDobro() = shot("44-role-dobro") { Frame("Доброволець / доброволиця", {}) { RoleScreen(ROLES.getValue("dobro"), content, nav) } }
     @Test fun medical() = shot("45-medical-dark", dark = true) { Frame("Медкартка", {}) { MedicalScreen() } }
     @Test fun people() = shot("46-people") { Frame("Довірені люди", {}) { PeopleScreen() } }

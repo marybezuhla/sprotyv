@@ -17,7 +17,7 @@ class QrTest {
     }
 
     @Test fun ukrainianTextSurvivesTheRoundTrip() {
-        val text = "Група крові: A(II) Rh+\nАлергії: пеніцилін, горіхи\nКонтакт: Олена +380501234567"
+        val text = "Група крові: A(II) Rh+\nАлергії: пеніцилін, горіхи\nКонтакт: Контакт 1 +380000000101"
         assertEquals(text, roundTrip(text))
     }
 
@@ -61,20 +61,20 @@ class QrTest {
     @Test fun contactComesBeforeLongMedicines() {
         val long = "дуже довгий опис ".repeat(20)
         val card = MedicalCard(bloodGroup = "A", allergies = long, medicines = long, conditions = long)
-        val r = RescuerCode.text(card, listOf(Person(name = "Олена", phone = "+380501234567", ice = true)), labels)
-        assertTrue(r.text, "Олена +380501234567" in r.text)
+        val r = RescuerCode.text(card, listOf(Person(name = "Контакт 1", phone = "+380000000101", ice = true)), labels)
+        assertTrue(r.text, "Контакт 1 +380000000101" in r.text)
     }
 
     @Test fun plainTextAndPhones() {
         assertTrue(Scanned.of("Просто текст") is Scanned.Plain)
-        assertEquals("+380501234567", (Scanned.of("tel:+380501234567") as Scanned.Phone).number)
+        assertEquals("+380000000101", (Scanned.of("tel:+380000000101") as Scanned.Phone).number)
     }
 
     private val labels = RescuerCode.Labels("МЕДКАРТКА", "Група крові", "Алергії", "Ліки", "Стани", "Контакт")
 
     @Test fun rescuerCodeHasOnlyTheEssentials() {
         val card = MedicalCard(name = "Тест Тестович", birthDate = "1 березня 1950", bloodGroup = "O(I) Rh−", allergies = "немає", notes = "особисте, не для коду")
-        val r = RescuerCode.text(card, listOf(Person(name = "Олена", phone = "+380501234567", ice = true)), labels)
+        val r = RescuerCode.text(card, listOf(Person(name = "Контакт 1", phone = "+380000000101", ice = true)), labels)
         val text = r.text
         assertTrue(!r.cut)
         assertTrue(text.startsWith("МЕДКАРТКА"))
@@ -82,7 +82,7 @@ class QrTest {
         assertTrue("Тест Тестович" !in text)
         assertTrue("1950" !in text)
         assertTrue("Група крові: O(I) Rh−" in text)
-        assertTrue("Контакт: Олена +380501234567" in text)
+        assertTrue("Контакт: Контакт 1 +380000000101" in text)
         assertTrue("особисте" !in text)
         assertEquals(text, roundTrip(text))
     }
