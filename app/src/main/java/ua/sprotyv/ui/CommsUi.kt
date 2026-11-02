@@ -9,6 +9,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -41,14 +42,14 @@ fun CommsScreen(nav: Nav) {
         // In advance: the one thing that cannot be done later
         Block(stringResource(R.string.comms_before), Group.SAFETY) {
             listOf(R.string.comms_before_1, R.string.comms_before_2, R.string.comms_before_3).forEach {
-                Row { Text("•", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(end = 8.dp)); Text(stringResource(it), style = ReadingText, modifier = Modifier.weight(1f)) }
+                Row { Text("•", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(end = 8.dp).clearAndSetSemantics { }); Text(stringResource(it), style = ReadingText, modifier = Modifier.weight(1f)) }
             }
             OutlinedButton(onClick = { nav.go(Route.Mine(MinePart.PLAN)) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text(stringResource(R.string.comms_to_plan)) }
         }
         MESSENGERS.forEach { m ->
             Block(stringResource(m.title), Group.SAFETY, foldable = true) {
                 m.facts.forEach {
-                    Row { Text("•", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(end = 8.dp)); Text(stringResource(it), style = ReadingText, modifier = Modifier.weight(1f)) }
+                    Row { Text("•", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(end = 8.dp).clearAndSetSemantics { }); Text(stringResource(it), style = ReadingText, modifier = Modifier.weight(1f)) }
                 }
                 val there = androidx.compose.runtime.remember(m.pkg) { Reach.installed(context, m.pkg) }
                 OutlinedButton(

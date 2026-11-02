@@ -111,6 +111,8 @@ private fun ServicesDialog(onClose: () -> Unit) {
         confirmButton = { TextButton(onClick = onClose) { Text(stringResource(R.string.back)) } },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                // The phone's own dialler opens with the number: the call itself is one more tap
+                Text(stringResource(R.string.call_dial_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Service.entries.forEach { service ->
                     OutlinedButton(
                         onClick = { onClose(); Reach.dial(context, service.number) },

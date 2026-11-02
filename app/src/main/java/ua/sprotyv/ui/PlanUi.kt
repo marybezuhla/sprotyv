@@ -186,7 +186,7 @@ fun KitScreen(content: Content?, nav: Nav) {
             Text("🎒", fontSize = 48.sp, modifier = Modifier.clearAndSetSemantics { })
             Spacer(Modifier.width(16.dp))
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text(stringResource(if (done == total) R.string.kit_full else R.string.kit_packed, done, total), style = MaterialTheme.typography.titleLarge, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
+                Text(stringResource(if (total > 0 && done == total) R.string.kit_full else R.string.kit_packed, done, total), style = MaterialTheme.typography.titleLarge, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
                 // The same bar as every count in the app
                 Bar(if (total == 0) 0f else done.toFloat() / total, blue.ink)
                 Text(stringResource(R.string.kit_intro), style = MaterialTheme.typography.bodyMedium)

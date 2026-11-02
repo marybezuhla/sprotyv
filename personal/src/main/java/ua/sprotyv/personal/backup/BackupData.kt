@@ -33,9 +33,13 @@ object BackupData {
     private const val MAX_DEPTH = 6
     /** Values in the whole file (commas and brackets outside strings): far above any real copy, so a crafted one cannot fill memory. */
     private const val MAX_VALUES = 200_000
-    /** The notes limits the app keeps, held on restore too. */
+    /**
+     * The notes limits the app keeps, held on restore too. The text limit covers every note at its
+     * longest (500 × 20 000 letters, plus titles), so a copy of whatever the app lets one write is
+     * always taken back; streamed copies are read in parts, so the size costs no extra memory.
+     */
     const val MAX_NOTES = 500
-    const val MAX_NOTES_TEXT = 1_400_000
+    const val MAX_NOTES_TEXT = 10_200_000
     internal const val MAX_HOME = 40
     internal const val MAX_HOME_TEXT = 2_000
     internal val HOME_KEY = Regex("^[a-z_]{1,30}$")

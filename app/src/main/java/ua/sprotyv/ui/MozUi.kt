@@ -25,6 +25,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -180,7 +181,7 @@ private fun StepLine(step: Moz441.Item) {
 @Composable
 private fun Bullet(item: Moz441.Item) {
     Row {
-        Text("•", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.width(20.dp))
+        Text("•", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.width(20.dp).clearAndSetSemantics { })
         Column(Modifier.weight(1f)) {
             Text(item.text, style = ReadingText)
             item.items.forEach { Text("${it.n}) ${it.text}", style = ReadingText) }

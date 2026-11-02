@@ -559,7 +559,7 @@ fun TileCard(info: TileInfo, big: Boolean, status: String? = null, modifier: Mod
 fun SimpleHome(content: Content?, pins: List<String>, nav: Nav, onSettings: () -> Unit) {
     Column(Modifier.fillMaxSize().statusBarsPadding()) {
         Row(Modifier.fillMaxWidth().padding(start = 16.dp, end = 4.dp, top = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text(stringResource(R.string.app_name), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
+            Text(appTitle(), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
             TextButton(onClick = onSettings, modifier = Modifier.heightIn(min = 48.dp)) {
                 Icon(Icons.Filled.Settings, contentDescription = null)
                 Spacer(Modifier.width(6.dp))
@@ -602,7 +602,7 @@ fun FullHome(content: Content?, pins: List<String>, nav: Nav, onSettings: () -> 
     ) {
         item(span = { GridItemSpan(maxLineSpan) }) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(stringResource(R.string.app_name), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
+                Text(appTitle(), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
                 // Search the guide from anywhere on the home screen, one tap
                 IconButton(onClick = { nav.go(Route.Search) }, modifier = Modifier.size(48.dp)) {
                     Icon(Icons.Filled.Search, contentDescription = stringResource(R.string.search_guide))
@@ -1048,7 +1048,7 @@ fun WelcomeScreen(nav: Nav) {
             Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            Text(stringResource(R.string.app_name), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
+            Text(appTitle(), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
             tileInfo(Tiles.tool(Tool.NOW), null)?.let { info -> TileCard(info, big = true) { nav.go(info.route) } }
             if (step == 0 || mode == null) {
                 Text(stringResource(R.string.welcome_mode_q), style = MaterialTheme.typography.titleLarge, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, modifier = Modifier.semantics { heading() })
@@ -1196,4 +1196,11 @@ private fun LanguageChoice() {
         }
     }
     Text(stringResource(R.string.lang_content_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+}
+
+/** The name at the top of home: "Notes" while the neutral icon is on, so a glance at the open app says no more than its icon. */
+@Composable
+fun appTitle(): String {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    return stringResource(if (Neutral.isOn(context)) R.string.neutral_name else R.string.app_name)
 }

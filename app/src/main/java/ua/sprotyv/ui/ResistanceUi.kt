@@ -1,6 +1,7 @@
 package ua.sprotyv.ui
 
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
 
 import androidx.compose.foundation.layout.size
 
@@ -181,7 +182,7 @@ fun ResistanceScreen(content: Content?, nav: Nav) {
         if (prefs?.service == true) {
             Block(stringResource(R.string.service_facts_title), Group.PREPARE, tint = resist(), foldable = true) {
                 listOf(R.string.service_fact_1, R.string.role_dobro_contracts, R.string.role_dobro_tro, R.string.service_fact_3, R.string.service_fact_4, R.string.service_fact_5, R.string.role_dobro_rights).forEach {
-                    Row { Text("•", modifier = Modifier.padding(end = 8.dp)); Text(stringResource(it), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f)) }
+                    Row { Text("•", modifier = Modifier.padding(end = 8.dp).clearAndSetSemantics { }); Text(stringResource(it), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f)) }
                 }
                 Text(stringResource(R.string.role_dobro_source), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }

@@ -16,7 +16,7 @@
 - **Спротив:** ролі й обставини, шлях готовності, щоденний гарт, щити й лічильники добрих справ; Конституція, Правила дорожнього руху й «Зброя і закон» повним текстом.
 - **Віджети** на головний екран, зокрема щит-лічильник.
 - **Два вигляди:** простий (шість великих кнопок) і повний (вкладки, усі розділи, власна головна з плитками). Можна налаштувати телефон для рідних і захистити налаштування PIN-кодом телефону.
-- **Подзвонити:** 112, 101, 102, 103, 104 одним дотиком на кожному екрані.
+- **Подзвонити:** 112, 101, 102, 103, 104 на кожному екрані: дотик відкриває набір номера.
 - **Тривоги** — з версії 1.1. До того тримайте офіційний застосунок «Повітряна тривога» й слухайте сирени.
 
 ## Прозорість
@@ -54,7 +54,7 @@ A free Android app: what to do right now when it is dangerous, and how to prepar
 - **Resistance:** roles and circumstances, a readiness path, daily resilience, shields and counts of good deeds; the Constitution, the Rules of the Road and "Weapons and the law" in full.
 - **Widgets** for the home screen, a count shield among them.
 - **Two looks:** simple (six large buttons) and full (tabs, all sections, your own home screen of tiles). A phone can be set up for a relative, with settings locked by the phone's PIN.
-- **Call:** 112, 101, 102, 103, 104 in one tap on every screen.
+- **Call:** 112, 101, 102, 103, 104 on every screen: a tap opens the dialler with the number.
 - **Air alerts** from version 1.1. Until then keep the official "Air Alert" app and listen to the sirens.
 
 ## Transparency
