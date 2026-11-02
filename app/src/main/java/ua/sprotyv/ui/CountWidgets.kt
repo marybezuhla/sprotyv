@@ -102,10 +102,12 @@ object CountWidgets {
     }
 
     /** "+1" from the home screen, kept until "Mine" opens. */
-    fun plus(c: Context, counter: String) = synchronized(this) {
+    fun plus(c: Context, counter: String) {
         if (counter !in KEYS) return
-        val p = prefs(c)
-        p.edit().putInt("p:$counter", (p.getInt("p:$counter", 0) + 1).coerceAtMost(MAX)).commit()
+        synchronized(this) {
+            val p = prefs(c)
+            p.edit().putInt("p:$counter", (p.getInt("p:$counter", 0) + 1).coerceAtMost(MAX)).commit()
+        }
     }
 
     /** What waits, read without taking it: it is taken ([settle]) only once it is in the encrypted counts. */
@@ -115,11 +117,13 @@ object CountWidgets {
     }
 
     /** Taps now stored encrypted: exactly those are taken away, so one made meanwhile stays. */
-    fun settle(c: Context, stored: Map<String, Int>) = synchronized(this) {
-        val p = prefs(c)
-        val e = p.edit()
-        stored.forEach { (k, n) -> val left = p.getInt("p:$k", 0) - n; if (left > 0) e.putInt("p:$k", left) else e.remove("p:$k") }
-        e.commit()
+    fun settle(c: Context, stored: Map<String, Int>) {
+        synchronized(this) {
+            val p = prefs(c)
+            val e = p.edit()
+            stored.forEach { (k, n) -> val left = p.getInt("p:$k", 0) - n; if (left > 0) e.putInt("p:$k", left) else e.remove("p:$k") }
+            e.commit()
+        }
     }
 
     /**
