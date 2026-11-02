@@ -84,6 +84,8 @@ private val PATH = listOf(
     PathStep("help", 2, R.string.path_help, Route.Resistance),
     PathStep("course", 2, R.string.path_course, Route.Resistance),
     PathStep("basics", 3, R.string.path_basics, Route.Resistance),
+    // Drone schools by region are in "Resistance"
+    PathStep("drones", 3, R.string.path_drones, Route.Resistance),
     PathStep("centre", 3, R.string.path_centre, Route.Resistance),
     PathStep("rights", 3, R.string.path_rights, Route.Resistance),
     // Only with "I have medical training" on

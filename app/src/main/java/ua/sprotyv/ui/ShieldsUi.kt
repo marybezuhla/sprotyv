@@ -124,6 +124,11 @@ fun ShieldsScreen(nav: Nav, openGroups: Boolean = false) {
         counted("count:blood", R.string.count_blood, R.drawable.ocha_health, st.counts["blood"] ?: 0, true, Group.FIRST_AID, "blood"),
         counted("count:shifts", R.string.count_shifts, R.drawable.ocha_group, st.counts["shifts"] ?: 0, true, null, "shifts"),
         counted("count:taught", R.string.count_taught, R.drawable.ocha_users, st.counts["taught"] ?: 0, true, Group.FIRST_AID, "taught"),
+        counted("count:donated", R.string.count_donated, R.drawable.ocha_help, st.counts["donated"] ?: 0, false, null, "donated"),
+        counted("count:helped", R.string.count_helped, R.drawable.ocha_internally_displaced, st.counts["helped"] ?: 0, false, Group.LEAVE, "helped"),
+        counted("count:courses", R.string.count_courses, R.drawable.ocha_learning, st.counts["courses"] ?: 0, true, Group.PREPARE, "courses"),
+        counted("count:animals", R.string.count_animals, R.drawable.ic_leaf, st.counts["animals"] ?: 0, true, null, "animals"),
+        counted("count:thanks", R.string.count_thanks, R.drawable.ic_heart, st.counts["thanks"] ?: 0, false, null, "thanks"),
     )
     val groups = listOf(
         R.string.shields_held to held,
