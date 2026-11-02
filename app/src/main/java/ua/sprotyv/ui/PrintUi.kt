@@ -194,7 +194,9 @@ private fun servicesLines(context: Context): List<String> = Service.entries.map 
 /** The action cards on paper: nothing personal, for the fridge, the bag and the shelter wall. */
 fun cardsPdf(context: Context, content: Content): ByteArray {
     val s: (Int) -> String = { context.getString(it) }
-    val pdf = Pdf(s(R.string.app_name) + " · " + LocalDate.now())
+    // A paper in a pocket: with the neutral icon or in trip mode it does not name the app
+    val quiet = Neutral.isOn(context) || HomePrefs.load(context).trip
+    val pdf = Pdf(s(if (quiet) R.string.neutral_name else R.string.app_name) + " · " + LocalDate.now())
     pdf.title(s(R.string.print_cards_title))
     pdf.heading(s(R.string.print_services))
     servicesLines(context).forEach { pdf.text(it) }
@@ -552,6 +554,8 @@ private fun photoUri(context: Context, file: File): Uri =
 private fun decodeUri(context: Context, uri: Uri): String? = try {
     val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
     context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, bounds) }
+    // Not a picture this phone can read: nothing to decode (never a full-size guess)
+    if (bounds.outWidth <= 0 || bounds.outHeight <= 0) return null
     var sample = 1
     // Large enough for the family plan code (about 137 squares a side) taken from a screen
     while (maxOf(bounds.outWidth, bounds.outHeight) / sample > 2400) sample *= 2

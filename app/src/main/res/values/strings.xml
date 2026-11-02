@@ -114,6 +114,7 @@
     <string name="a11y_more_water">Плюс літр води</string>
     <string name="a11y_prev_month">Попередній місяць</string>
     <string name="a11y_next_month">Наступний місяць</string>
+    <string name="call_dial_hint">Відкриється набір номера: натисніть кнопку дзвінка.</string>
     <string name="save">Зберегти</string>
     <string name="cancel">Скасувати</string>
     <string name="safe_default_message">Я в безпеці. Зв’яжуся пізніше.</string>

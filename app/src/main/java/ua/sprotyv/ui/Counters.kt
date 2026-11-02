@@ -238,7 +238,7 @@ private fun CounterCard(title: String, group: ua.sprotyv.home.Group = ua.sprotyv
 private fun Advice(text: String, now: Boolean) {
     // A bullet with the text hanging beside it, so every line starts at the same edge
     Row {
-        Text("•", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(end = 8.dp))
+        Text("•", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(end = 8.dp).clearAndSetSemantics { })
         Text(
             text,
             style = ReadingText,

@@ -114,6 +114,7 @@
     <string name="a11y_more_water">One litre of water more</string>
     <string name="a11y_prev_month">Previous month</string>
     <string name="a11y_next_month">Next month</string>
+    <string name="call_dial_hint">The dialler opens with the number: tap the call button.</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="safe_default_message">I am safe. I will get in touch later.</string>

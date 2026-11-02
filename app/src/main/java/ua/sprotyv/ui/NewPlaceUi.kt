@@ -4,6 +4,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -126,7 +127,7 @@ private fun StepRow(s: NewPlace.Step, on: Boolean, expanded: Boolean, onExpand: 
         s.sources.forEach { src ->
             Text(
                 "↗ " + src.title, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.fillMaxWidth().heightIn(min = 40.dp).padding(vertical = 4.dp).then(Modifier.toggleable(value = false, role = Role.Button) { Reach.open(context, src.url) }),
+                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).clickable(role = Role.Button) { Reach.open(context, src.url) }.padding(vertical = 4.dp),
             )
         }
         if (s.sources.isNotEmpty()) Text(stringResource(R.string.history_checked, s.checked), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)

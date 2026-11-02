@@ -150,8 +150,9 @@ object GuideSearch {
             val norm = normalize(text)
             if (words.all { norm.contains(it) }) {
                 val at = norm.indexOf(words[0])
-                val from = maxOf(0, at - 60)
-                val to = minOf(text.length, at + 120)
+                // Lower case can change a text's length (rare letters): the cut stays inside the text
+                val from = (at - 60).coerceIn(0, text.length)
+                val to = (at + 120).coerceIn(from, text.length)
                 val snippet = (if (from > 0) "…" else "") + text.substring(from, to).replace('\n', ' ').trim() + (if (to < text.length) "…" else "")
                 hits += Hit(c, s, snippet)
             }

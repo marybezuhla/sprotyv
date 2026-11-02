@@ -6,6 +6,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -46,7 +47,7 @@ private val DRIVING_LINKS = listOf("hsc-tests", "hsc-licence", "hsc-schools", "h
 internal fun Facts(title: Int, group: Group, facts: List<Int>, source: Int, startOpen: Boolean = false) {
     Block(stringResource(title), group, foldable = true, startOpen = startOpen) {
         facts.forEach {
-            Row { Text("•", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(end = 8.dp)); Text(stringResource(it), style = ReadingText, modifier = Modifier.weight(1f)) }
+            Row { Text("•", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(end = 8.dp).clearAndSetSemantics { }); Text(stringResource(it), style = ReadingText, modifier = Modifier.weight(1f)) }
         }
         Text(stringResource(source), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }

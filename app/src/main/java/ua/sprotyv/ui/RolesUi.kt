@@ -14,6 +14,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -395,7 +396,7 @@ fun RoleScreen(r: Role, content: Content?, nav: Nav) {
 private fun FactsBlock(title: String, facts: List<Int>, source: Int?) {
     Block(title, Group.PREPARE, tint = resist(), foldable = true) {
         facts.forEach {
-            Row { Text("•", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(end = 8.dp)); Text(stringResource(it), style = ReadingText, modifier = Modifier.weight(1f)) }
+            Row { Text("•", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(end = 8.dp).clearAndSetSemantics { }); Text(stringResource(it), style = ReadingText, modifier = Modifier.weight(1f)) }
         }
         source?.let { Text(stringResource(it), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) }
     }
