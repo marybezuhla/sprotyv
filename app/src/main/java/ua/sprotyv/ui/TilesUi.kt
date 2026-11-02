@@ -1000,6 +1000,7 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
         }
         Block(stringResource(R.string.colour_title), ua.sprotyv.home.Group.GUIDE, foldable = true) { ColourLegend() }
         Block(stringResource(R.string.settings_about), ua.sprotyv.home.Group.GUIDE, foldable = true) {
+            AboutApp()
             BlockRow(stringResource(R.string.about_guide), first = true) { nav.go(Route.About) }
             FeedbackBlock()
         }
@@ -1206,3 +1207,23 @@ fun appTitle(): String {
     val neutral = remember(trip) { Neutral.isOn(context) }
     return stringResource(if (neutral || trip) R.string.neutral_name else R.string.app_name)
 }
+
+/** The app's own notices, as the GPL asks of an interactive program: version, licence, no warranty, where the source is. */
+@Composable
+private fun AboutApp() {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val version = remember { runCatching { context.packageManager.getPackageInfo(context.packageName, 0).versionName }.getOrNull().orEmpty() }
+    androidx.compose.foundation.text.selection.SelectionContainer {
+        androidx.compose.foundation.layout.Column(verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(6.dp)) {
+            Text(stringResource(R.string.about_app_version, version), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.about_app_licence), style = MaterialTheme.typography.bodyMedium)
+            Text(stringResource(R.string.about_app_libraries), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
+    androidx.compose.material3.OutlinedButton(
+        onClick = { ua.sprotyv.reach.Reach.open(context, SOURCE_URL) },
+        modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
+    ) { Text(stringResource(R.string.about_app_source)) }
+}
+
+private const val SOURCE_URL = "https://github.com/Marybezu/sprotyv"

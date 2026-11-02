@@ -1,7 +1,11 @@
 # Third-party material
 
-- SQLCipher for Android (Zetetic), AndroidX, Jetpack Compose, Material Components and Kotlin
-  libraries are used as dependencies under their own licences.
+- SQLCipher for Android (Zetetic, https://www.zetetic.net/sqlcipher/), BSD-style licence: the
+  encrypted database.
+- Google Tink (https://github.com/tink-crypto/tink-java), Apache License 2.0: streaming encryption
+  of backups.
+- AndroidX, Jetpack Compose, Room and Material Components (Google), Apache License 2.0.
+- Kotlin standard library and kotlinx.coroutines (JetBrains), Apache License 2.0.
 - Bouncy Castle (https://www.bouncycastle.org), MIT-style licence, provides Argon2id for
   password-protected backups and the family plan code.
 - `app/src/main/assets/eff_large_wordlist.txt` — the EFF Long Wordlist by the Electronic
@@ -13,7 +17,12 @@
   "Довідник виживання" 2.3 (https://github.com/snegireff/dovidnyk-vyzhyvannia), licensed under
   CC BY-SA 4.0. Changes: converted for display in the app by `scripts/build_guide.py` (markup
   changed, figures rendered as pictures by `scripts/render_figures.js`, cover, table of contents
-  and blank note forms left out); the text itself is unchanged. Three public-domain pictures
+  and blank note forms left out). The text is unchanged except: in 4.8 and 14.4 official websites,
+  apps and ways named by the regional military administration instead of chatbots and Telegram
+  channels; in 13.1 and 18.1 CoMaps, Organic Maps or OsmAnd instead of maps.me; in the table of 6.2
+  the doses for children replaced by a reference to the official announcement or a doctor (until a
+  paediatrician's review). `content/src/main/assets/en/guide.json` is an English translation by
+  Sprotyv, also under CC BY-SA 4.0. Three public-domain pictures
   from Wikimedia Commons were added (figures 11.2, 15.5, 15.6; authors in the captions and in
   `scripts/figures-extra/SOURCE.md`). This material stays under
   CC BY-SA 4.0 with its authorship kept, separate from the GPL-3.0 code.
@@ -38,6 +47,9 @@
   `scripts/content/moz441/`) — the 29 first-aid procedures of order No. 441 of the Ministry of Health of
   Ukraine, 09.03.2022 (registered 28.03.2022, No. 356/37692), from moz.gov.ua, word for word. An
   official document, not protected by copyright (Law of Ukraine No. 2811-IX, art. 8).
+- `content/src/main/assets/constitution.json` (built by `scripts/content/constitution.py`) — the
+  Constitution of Ukraine, edition of 01.01.2020, from zakon.rada.gov.ua, word for word. An official
+  document, not protected by copyright (Law of Ukraine No. 2811-IX, art. 8). Source: Verkhovna Rada of Ukraine.
 - `content/src/main/assets/pdr.json` (built by `scripts/content/pdr.py` from the page kept in
   `scripts/content/pdr/`) — the Rules of the Road of Ukraine (Cabinet of Ministers resolution No. 1306,
   10.10.2001), edition of 14.10.2026, from zakon.rada.gov.ua, word for word without the amendment notes.

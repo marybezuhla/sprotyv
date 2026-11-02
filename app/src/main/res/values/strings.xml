@@ -57,6 +57,10 @@
     <string name="search_guide">Пошук у довіднику</string>
     <string name="search_hint">Наприклад: турнікет, вода, дрон</string>
     <string name="search_none">Нічого не знайдено. Спробуйте інше слово.</string>
+    <string name="about_app_version">«Спротив» %1$s</string>
+    <string name="about_app_licence">© 2026 автори «Спротиву». Вільна програма за ліцензією GNU GPL 3.0: її можна поширювати й змінювати на умовах цієї ліцензії. Без жодних гарантій. Вміст довідника — CC BY-SA 4.0; джерела й автори вказані в самому вмісті та у файлі NOTICE.md у сирцевому коді.</string>
+    <string name="about_app_libraries">Бібліотеки: SQLCipher (Zetetic, BSD), Google Tink, ZXing, AndroidX і Jetpack Compose, Kotlin (Apache 2.0), Bouncy Castle (MIT). Список слів для паролів — EFF (CC BY 3.0 US).</string>
+    <string name="about_app_source">Сирцевий код і ліцензія (відкриється в браузері)</string>
     <string name="about_guide">Про довідник</string>
     <string name="callout_critical">Важливо</string>
     <string name="callout_warning">Обережно</string>

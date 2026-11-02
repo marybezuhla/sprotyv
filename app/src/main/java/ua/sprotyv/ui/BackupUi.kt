@@ -288,6 +288,9 @@ object BackupJobs {
                 R.string.backup_wrong_password
             } catch (e: BackupCrypto.FileUnreadable) {
                 R.string.backup_unreadable
+            } catch (e: java.io.IOException) {
+                // Opening the file or reading its first bytes failed: the file, not the password
+                R.string.backup_unreadable
             } catch (e: BackupData.FromNewer) {
                 R.string.backup_from_newer
             } catch (e: OutOfMemoryError) {

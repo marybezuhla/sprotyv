@@ -1,7 +1,11 @@
 **«Спротив» 1.0.** Завантажте .apk нижче на телефоні й відкрийте його, або додайте репозиторій в Obtainium. Потрібен Android 12 або новіший. «Спротив» працює без інтернету й не замінює офіційних вказівок служб і сирен.
 
-Що є: картки «Що робити зараз», довідник виживання й медицини, процедури МОЗ, Конституція, Правила дорожнього руху й «Зброя і закон» повним текстом; «Моє» — медкартка, план родини, довірені люди, тривожна валіза, запаси, нотатки, усе зашифровано; резервна копія з паролем; ролі, шлях готовності, щоденний гарт, щити й лічильники добрих справ; віджети; простий і повний вигляд, дитячий режим, режим поїздки й нейтральна іконка.
+Що є: картки «Що робити зараз», довідник виживання й медицини, процедури МОЗ, Конституція й Правила дорожнього руху повним текстом, стислий виклад «Зброя і закон»; «Моє» — медкартка, план родини, довірені люди, тривожна валіза, запаси, нотатки, усе зашифровано; резервна копія з паролем; ролі, шлях готовності, щоденний гарт, щити й лічильники добрих справ; віджети; простий і повний вигляд, дитячий режим, режим поїздки й нейтральна іконка.
 
-Резервні копії з версій 0.3 і новіших відновлюйте в 0.3.0 або новішій.
+Версія 1.0 відновлює копії з 0.2 і новіших. Копію з 1.0 відновлюйте у версії 1.0 або новішій.
 
 **Sprotyv 1.0.** Download the .apk below on your phone and open it, or add this repository to Obtainium. Requires Android 12 or newer. Sprotyv works without internet and does not replace official instructions or sirens.
+
+What is there: "What to do now" cards, a survival and first-aid guide, the Ministry of Health procedures, the Constitution and the Rules of the Road in full, a short summary of "Weapons and the law"; My data — medical card, family plan, trusted people, go-bag, supplies, notes, all encrypted; a backup with a password; roles, a readiness path, daily resilience, shields and counts of good deeds; widgets; simple and full looks, a kids' mode, trip mode and a neutral icon.
+
+Version 1.0 restores backups from 0.2 and later. Restore a backup made with 1.0 in version 1.0 or later.
