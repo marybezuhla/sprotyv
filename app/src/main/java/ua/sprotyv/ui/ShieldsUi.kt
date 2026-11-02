@@ -5,10 +5,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -136,14 +137,14 @@ fun ShieldsScreen(nav: Nav) {
     )
     val earned = groups.sumOf { (_, l) -> l.count { it.level == 2 } }
     val all = groups.sumOf { (_, l) -> l.size }
-    Text(stringResource(R.string.shields_intro), style = ReadingText)
-    Block(stringResource(R.string.shields_title), Group.PREPARE, tint = resist(), summary = stringResource(R.string.shields_count, earned, all), leading = { ReadyRing(if (all == 0) 0f else earned.toFloat() / all, "$earned") }) {
-        Text(stringResource(R.string.shields_never_lost), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    // How shields come: folded, one tap away; the count is what shows first
+    Block(stringResource(R.string.shields_title), Group.PREPARE, tint = resist(), foldable = true, summary = stringResource(R.string.shields_count, earned, all), leading = { ReadyRing(if (all == 0) 0f else earned.toFloat() / all, "$earned") }) {
+        Text(stringResource(R.string.shields_about), style = ReadingText)
     }
     // What is already earned, together at the top; the groups below show the way to the rest
     val got = groups.flatMap { it.second }.filter { it.level == 2 }
     if (got.isNotEmpty()) Block(stringResource(R.string.shields_earned_title), Group.PREPARE, tint = resist()) {
-        FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) { got.forEach { ShieldBadge(it) } }
+        ShieldGrid(got)
     }
     groups.forEachIndexed { gi, (title, list) ->
         if (list.isEmpty()) return@forEachIndexed
@@ -152,8 +153,19 @@ fun ShieldsScreen(nav: Nav) {
         }) {
             // Counts are kept by hand: said so, so nobody waits for them to fill by themselves
             if (title == R.string.shields_counts) Text(stringResource(R.string.shields_counts_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                list.forEach { ShieldBadge(it) }
+            ShieldGrid(list)
+        }
+    }
+}
+
+/** Two shields to a row in equal halves, so the rows sit in the middle; a lone last one is centred too. */
+@Composable
+private fun ShieldGrid(list: List<ShieldItem>) {
+    Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+        list.chunked(2).forEach { row ->
+            androidx.compose.foundation.layout.Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                row.forEach { ShieldBadge(it, Modifier.weight(1f)) }
+                if (row.size == 1) androidx.compose.foundation.layout.Spacer(Modifier.weight(1f))
             }
         }
     }
@@ -161,15 +173,14 @@ fun ShieldsScreen(nav: Nav) {
 
 /** A shield of the app's own shape: filled when earned, half filled half way, a pale outline before. */
 @Composable
-private fun ShieldBadge(s: ShieldItem) {
+private fun ShieldBadge(s: ShieldItem, modifier: Modifier = Modifier) {
     val tint = s.group?.tint() ?: resist()
     val outline = MaterialTheme.colorScheme.outlineVariant
     val title = stringResource(s.title)
     val how = stringResource(s.how)
     val state = stringResource(when (s.level) { 2 -> R.string.shield_earned; 1 -> R.string.shield_half; else -> R.string.shield_not_yet })
     Column(
-        // Two to a row on a phone: names fit whole words, the buttons stay on one line
-        Modifier.width(140.dp).semantics { contentDescription = "$title: $state" },
+        modifier.semantics { contentDescription = "$title: $state" },
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(Modifier.size(64.dp), contentAlignment = Alignment.Center) {
@@ -211,7 +222,7 @@ private fun ShieldBadge(s: ShieldItem) {
                 Icon(ImageVector.vectorResource(s.icon), contentDescription = null, tint = if (s.level > 0) tint.ink else outline, modifier = Modifier.size(24.dp))
             }
         }
-        Text(title, style = MaterialTheme.typography.labelMedium, textAlign = TextAlign.Center, maxLines = 3, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis, color = if (s.level > 0) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(title, style = MaterialTheme.typography.labelMedium, textAlign = TextAlign.Center, maxLines = 4, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis, color = if (s.level > 0) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant)
         // Counts say nothing more than their name: no "still to go"
         if (s.level < 2 && s.mark == null && s.count == null && s.counter == null && !s.id.startsWith("held:") && s.id != "solved") {
             Text(how, style = MaterialTheme.typography.labelMedium, textAlign = TextAlign.Center, maxLines = 3, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -229,10 +240,22 @@ private fun ShieldBadge(s: ShieldItem) {
             }
         }
         s.counter?.let { c ->
-            androidx.compose.foundation.layout.Row {
-                val pad = androidx.compose.foundation.layout.PaddingValues(horizontal = 8.dp)
-                androidx.compose.material3.TextButton(onClick = { Steps.change { st -> st.copy(counts = st.counts + (c to ((st.counts[c] ?: 0) - 1).coerceAtLeast(0))) } }, contentPadding = pad, modifier = Modifier.heightIn(min = 48.dp)) { Text("−1", maxLines = 1, softWrap = false) }
-                androidx.compose.material3.TextButton(onClick = { Steps.change { st -> st.copy(counts = st.counts + (c to ((st.counts[c] ?: 0) + 1).coerceAtMost(10_000))) } }, contentPadding = pad, modifier = Modifier.heightIn(min = 48.dp)) { Text("+1", maxLines = 1, softWrap = false) }
+            // One pill: "−1" for a slip of the finger, "+1" for each time
+            androidx.compose.material3.Surface(
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(50),
+                color = tint.container.copy(alpha = 0.5f),
+                modifier = Modifier.padding(top = 8.dp),
+            ) {
+                androidx.compose.foundation.layout.Row(verticalAlignment = Alignment.CenterVertically) {
+                    val pad = androidx.compose.foundation.layout.PaddingValues(horizontal = 16.dp)
+                    androidx.compose.material3.TextButton(onClick = { Steps.change { st -> st.copy(counts = st.counts + (c to ((st.counts[c] ?: 0) - 1).coerceAtLeast(0))) } }, contentPadding = pad, modifier = Modifier.heightIn(min = 48.dp)) {
+                        Text("−1", style = MaterialTheme.typography.titleMedium, color = tint.ink, maxLines = 1, softWrap = false)
+                    }
+                    androidx.compose.foundation.layout.Box(Modifier.size(width = 1.dp, height = 24.dp).background(tint.ink.copy(alpha = 0.3f)))
+                    androidx.compose.material3.TextButton(onClick = { Steps.change { st -> st.copy(counts = st.counts + (c to ((st.counts[c] ?: 0) + 1).coerceAtMost(10_000))) } }, contentPadding = pad, modifier = Modifier.heightIn(min = 48.dp)) {
+                        Text("+1", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, color = tint.ink, maxLines = 1, softWrap = false)
+                    }
+                }
             }
         }
     }

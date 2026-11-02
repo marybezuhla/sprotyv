@@ -1473,14 +1473,13 @@
     <string name="screenshots_keep">Лишити</string>
     <string name="shields_title">Мої щити</string>
     <string name="shields_hint">Що вже справді вмієте й зробили</string>
-    <string name="shields_intro">Щит з’являється сам, коли справу зроблено насправді: звичка стала своєю, рівень шляху пройдено, тест без помилок, частину готовності завершено.</string>
     <string name="shields_count">Здобуто: %1$d з %2$d</string>
     <string name="shields_earned_title">Уже здобуто</string>
     <string name="shields_counts_hint">Лічильники ведете ви: натисніть «+1», коли здали кров, відпрацювали зміну чи когось навчили. «−1» — якщо натиснули помилково.</string>
     <string name="roles_chosen">Обрано: %1$d</string>
     <string name="way_roles_title">Мої ролі</string>
     <string name="way_roles_none">Ще не обрано: оберіть, хто ви зараз</string>
-    <string name="shields_never_lost">Перерва нічого не забирає: дні гарту й пройдені кроки лишаються. Щит знімається лише разом із вашою галочкою, тож випадкове натискання легко виправити. Жодних рейтингів і порівнянь.</string>
+    <string name="shields_about">Кожен щит — те, що ви вже вмієте й зробили для себе, рідних і громади. Більшість щитів з’являються самі: звичка стала своєю, рівень шляху пройдено, тест складено без помилок, частину готовності завершено. Великі кроки й лічильники позначаєте ви. Перерва нічого не забирає, а випадкову позначку легко зняти. Щити лише ваші: без рейтингів і порівнянь.</string>
     <string name="shields_habits">Звички</string>
     <string name="shields_path">Мій шлях</string>
     <string name="shields_tests">Перевірено тестом</string>
