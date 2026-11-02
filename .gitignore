@@ -8,7 +8,8 @@ build/
 *.keystore
 captures/
 .kotlin/
-/signing/*.jks
+/signing/
+CLAUDE.md
 __pycache__/
 *.pyc
 
