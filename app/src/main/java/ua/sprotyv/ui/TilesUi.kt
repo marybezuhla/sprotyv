@@ -322,6 +322,7 @@ private val Tool.hint: Int get() = when (this) {
 private val CARD_ICONS = mapOf(
     "bleeding" to R.drawable.hi_blood_drop,
     "unconscious" to R.drawable.hi_cpr,
+    "choking" to R.drawable.om_person,
     "burn" to R.drawable.hi_burn,
     "chemical" to R.drawable.hi_poison,
     "radiation" to R.drawable.hi_hazardous,
@@ -795,6 +796,7 @@ val Preset.title: Int get() = when (this) {
     Preset.ELDER -> R.string.preset_elder
     Preset.PARENTS -> R.string.preset_parents
     Preset.FRONTLINE -> R.string.preset_frontline
+    Preset.TEEN -> R.string.preset_teen
     Preset.WINTER -> R.string.preset_winter
 }
 
@@ -803,6 +805,7 @@ private val Preset.hint: Int get() = when (this) {
     Preset.ELDER -> R.string.preset_elder_hint
     Preset.PARENTS -> R.string.preset_parents_hint
     Preset.FRONTLINE -> R.string.preset_frontline_hint
+    Preset.TEEN -> R.string.preset_teen_hint
     Preset.WINTER -> R.string.preset_winter_hint
 }
 

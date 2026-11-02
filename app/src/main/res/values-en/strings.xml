@@ -83,11 +83,13 @@
     <string name="med_birth_hint">e.g. 1 March 1950</string>
     <string name="med_blood">Blood group</string>
     <string name="med_blood_hint">e.g. A(II) Rh+</string>
+    <string name="med_pregnancy">Pregnancy</string>
+    <string name="med_pregnancy_hint">For example: 28 weeks</string>
     <string name="med_allergies">Allergies</string>
     <string name="med_medicines">Medicines you take</string>
     <string name="med_medicines_hint">Name, dose, how often</string>
     <string name="med_conditions">Illnesses and conditions</string>
-    <string name="med_notes">Other (implants, pregnancy, devices)</string>
+    <string name="med_notes">Other (implants, devices)</string>
     <string name="ice_title">Contact in an emergency</string>
     <string name="ice_none">Not chosen yet. In Trusted people, switch on “Contact in an emergency”.</string>
     <string name="ice_short">emergency contact</string>
@@ -248,6 +250,8 @@
     <string name="preset_parents_hint">Children in a crisis, first aid, supplies</string>
     <string name="preset_frontline">Frontline community</string>
     <string name="preset_frontline_hint">Alert, drones, bleeding, leaving</string>
+    <string name="preset_teen">Teenager</string>
+    <string name="preset_teen_hint">Alert, first aid, keeping in touch with family</string>
     <string name="preset_winter">Blackout and winter</string>
     <string name="preset_winter_hint">Power, heat, water, supplies</string>
     <string name="mode_title">Look</string>

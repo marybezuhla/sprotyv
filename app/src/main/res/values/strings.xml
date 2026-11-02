@@ -83,11 +83,13 @@
     <string name="med_birth_hint">Наприклад: 1 березня 1950</string>
     <string name="med_blood">Група крові</string>
     <string name="med_blood_hint">Наприклад: A(II) Rh+</string>
+    <string name="med_pregnancy">Вагітність</string>
+    <string name="med_pregnancy_hint">Наприклад: 28 тижнів</string>
     <string name="med_allergies">Алергії</string>
     <string name="med_medicines">Ліки, які ви приймаєте</string>
     <string name="med_medicines_hint">Назва, доза, як часто</string>
     <string name="med_conditions">Хвороби й стани</string>
-    <string name="med_notes">Інше (імпланти, вагітність, пристрої)</string>
+    <string name="med_notes">Інше (імпланти, пристрої)</string>
     <string name="ice_title">Контакт на випадок біди</string>
     <string name="ice_none">Ще не обрано. У «Довірених людях» увімкніть «Контакт на випадок біди».</string>
     <string name="ice_short">контакт на випадок біди</string>
@@ -248,6 +250,8 @@
     <string name="preset_parents_hint">Діти в кризі, перша допомога, запаси</string>
     <string name="preset_frontline">Прифронтова громада</string>
     <string name="preset_frontline_hint">Тривога, дрони, кровотеча, виїзд</string>
+    <string name="preset_teen">Підліток</string>
+    <string name="preset_teen_hint">Тривога, перша допомога, зв’язок зі своїми</string>
     <string name="preset_winter">Блекаут і зима</string>
     <string name="preset_winter_hint">Світло, тепло, вода, запаси</string>
     <string name="mode_title">Вигляд</string>

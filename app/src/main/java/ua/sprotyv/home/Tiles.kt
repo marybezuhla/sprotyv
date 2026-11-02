@@ -103,6 +103,13 @@ enum class Preset(val pins: List<String>) {
             Tiles.tool(Tool.PLAN),
         ),
     ),
+    /** A teenager on their own at home or at school: what to do, first aid, staying in touch, checking news. */
+    TEEN(
+        listOf(
+            Tiles.card("air-alert"), Tiles.card("bleeding"), Tiles.card("unconscious"), Tiles.card("home-fire"),
+            Tiles.card("drone"), Tiles.tool(Tool.PEOPLE), Tiles.tool(Tool.COMMS), Tiles.tool(Tool.PRACTICE), Tiles.chapter("ch18"),
+        ),
+    ),
     WINTER(
         listOf(
             Tiles.card("blackout"), Tiles.tool(Tool.POWER), Tiles.tool(Tool.SUPPLIES), Tiles.chapter("ch12"), Tiles.chapter("ch8"),
@@ -127,7 +134,7 @@ enum class Group(val tiles: List<String>) {
     ),
     FIRST_AID(
         listOf(
-            Tiles.card("bleeding"), Tiles.card("unconscious"), Tiles.card("burn"), Tiles.tool(Tool.MOZ),
+            Tiles.card("bleeding"), Tiles.card("unconscious"), Tiles.card("choking"), Tiles.card("burn"), Tiles.tool(Tool.MOZ),
             Tiles.chapter("ch7"), Tiles.chapter("ch21"),
         ),
     ),
