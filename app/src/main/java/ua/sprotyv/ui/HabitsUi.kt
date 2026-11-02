@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
@@ -233,7 +234,7 @@ fun GartScreen(nav: Nav) {
         }
         SCIENCE.forEach { (title, url) ->
             Text("↗ $title", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.fillMaxWidth().heightIn(min = 40.dp).toggleable(value = false, role = Role.Button) { Reach.open(context, url) }.padding(vertical = 6.dp))
+                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).clickable(role = Role.Button) { Reach.open(context, url) }.padding(vertical = 6.dp))
         }
     }
 }

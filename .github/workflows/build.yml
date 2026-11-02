@@ -244,10 +244,12 @@ jobs:
           openssl enc -d -aes-256-cbc -pbkdf2 -iter 600000 -in "$RUNNER_TEMP/ks.enc" -out "$RUNNER_TEMP/sprotyv.jks" -pass file:"$RUNNER_TEMP/p"
           rm "$RUNNER_TEMP/p" "$RUNNER_TEMP/ks.enc"
           mkdir -p out
-          "$BT/zipalign" -P 16 -f 4 unsigned/app-release-unsigned.apk "$RUNNER_TEMP/aligned.apk"
+          # Signed exactly as built, nothing rewritten first: then an independent build of the same
+          # source (F-Droid's) matches ours byte for byte apart from the signature. Checked, not changed
+          "$BT/zipalign" -c -P 16 4 unsigned/app-release-unsigned.apk
           OUT="out/sprotyv-$VERSION.apk"
           "$BT/apksigner" sign --ks "$RUNNER_TEMP/sprotyv.jks" --ks-key-alias sprotyv \
-            --ks-pass env:STORE --key-pass env:STORE --out "$OUT" "$RUNNER_TEMP/aligned.apk"
+            --ks-pass env:STORE --key-pass env:STORE --out "$OUT" unsigned/app-release-unsigned.apk
           rm -f "$RUNNER_TEMP/sprotyv.jks"
           # The certificate must be exactly Sprotyv's own
           "$BT/apksigner" verify --print-certs "$OUT" | tee certs.txt

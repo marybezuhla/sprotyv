@@ -106,7 +106,7 @@ fun NowScreen(content: Content?, nav: Nav) {
         rest.filter { it.id == "first-60" }.forEach { card -> CardRow(card) { nav.go(Route.CardRoute(card.id)) } }
         if (aid.isNotEmpty()) Heading(R.string.group_first_aid)
         aid.forEach { card -> CardRow(card) { nav.go(Route.CardRoute(card.id)) } }
-        Heading(R.string.now_dangers)
+        if (rest.any { it.id != "first-60" }) Heading(R.string.now_dangers)
         rest.filter { it.id != "first-60" }.forEach { card -> CardRow(card) { nav.go(Route.CardRoute(card.id)) } }
         CardsPdfButton(content)
     }

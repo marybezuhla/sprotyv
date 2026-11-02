@@ -67,16 +67,16 @@ fun Loading() {
     }
 }
 
-/**
- * The one style for a block's title on every screen: larger and bolder than anything inside the
- * block, so the eye finds the block first and then reads it top down.
- */
 /** A heading inside a screen, said as a heading by TalkBack. */
 @Composable
 fun Heading(text: Int) {
     Text(stringResource(text), style = BlockTitle, modifier = Modifier.padding(top = 8.dp).semantics { heading() })
 }
 
+/**
+ * The one style for a block's title on every screen: larger and bolder than anything inside the
+ * block, so the eye finds the block first and then reads it top down.
+ */
 val BlockTitle: androidx.compose.ui.text.TextStyle
     @Composable get() = MaterialTheme.typography.titleMedium.copy(
         fontSize = androidx.compose.ui.unit.TextUnit(18f, androidx.compose.ui.unit.TextUnitType.Sp),

@@ -44,9 +44,10 @@ class Main : ComponentActivity() {
         Guard.close()
     }
 
-    /** Typed or scanned text waiting in memory goes with the data: drafts and the three inboxes. */
+    /** Typed or scanned text waiting in memory goes with the data: drafts, the three inboxes, the last search. */
     private fun forgetTyped() {
         EditGuard.drafts.clear()
+        SearchMemory.query = ""
         QrInbox.text = ""
         NoteInbox.title = ""
         NoteInbox.text = ""

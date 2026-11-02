@@ -42,6 +42,8 @@ import ua.sprotyv.ui.Nav
 import ua.sprotyv.ui.NowScreen
 import ua.sprotyv.ui.KitScreen
 import ua.sprotyv.ui.Route
+import ua.sprotyv.ui.SearchMemory
+import ua.sprotyv.ui.SearchScreen
 import ua.sprotyv.ui.ShieldsScreen
 import ua.sprotyv.ui.SprotyvTheme
 import ua.sprotyv.ui.ThemeChoice
@@ -108,7 +110,10 @@ class StoreScreensTest {
         shot(dir, "5") { Frame(title(R.string.medical_card), {}) { MedicalScreen() } }
         shot(dir, "6", dark = true) { Frame(title(R.string.kit), {}) { KitScreen(content, nav) } }
         shot(dir, "7") { Frame(title(R.string.shields_title), {}) { ShieldsScreen(nav) } }
-        shot(dir, "8", dark = true) { FullHome(content, Preset.GENERAL.pins, nav, {}, {}, {}) }
+        // Search, as someone in a hurry types it
+        SearchMemory.query = if (lang == "en") "tourniquet" else "турнікет"
+        shot(dir, "8", dark = true) { SearchScreen(content, nav) }
+        SearchMemory.query = ""
     }
 
     private fun shot(dir: String, name: String, dark: Boolean = false, body: @Composable () -> Unit) {

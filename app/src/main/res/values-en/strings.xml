@@ -59,7 +59,7 @@
     <string name="search_none">Nothing found. Try another word.</string>
     <string name="about_app_version">Sprotyv %1$s</string>
     <string name="about_app_licence">© 2026 the Sprotyv authors. Free software under the GNU GPL 3.0: you may share and change it under that licence. No warranty of any kind. The guide\'s content is CC BY-SA 4.0; sources and authors are named in the content itself and in NOTICE.md in the source code.</string>
-    <string name="about_app_libraries">Libraries: SQLCipher (Zetetic, BSD), Google Tink, ZXing, AndroidX and Jetpack Compose, Kotlin (Apache 2.0), Bouncy Castle (MIT). Password word list: EFF (CC BY 3.0 US).</string>
+    <string name="about_app_libraries">Libraries: SQLCipher (Zetetic, BSD), Google Tink, ZXing, AndroidX and Jetpack Compose, Kotlin (Apache 2.0), Bouncy Castle (MIT), Protocol Buffers (BSD). Password word list: EFF (CC BY 3.0 US).</string>
     <string name="about_app_source">Source code and licence (opens in the browser)</string>
     <string name="about_app_texts">Licence texts</string>
     <string name="about_guide">About the guide</string>
@@ -137,7 +137,7 @@
     <string name="plan_point2_hint">If you cannot stay near home</string>
     <string name="plan_point3">3. Outside the town</string>
     <string name="plan_point3_hint">If the town must be left</string>
-    <string name="plan_go_between">Go-between</string>
+    <string name="plan_go_between">Out-of-area contact</string>
     <string name="plan_go_between_hint">A relative in another town or country whom everyone calls when they cannot reach each other.</string>
     <string name="plan_if_then">If — then</string>
     <string name="plan_if_then_hint">Write it plainly: “if… then…”. Such a plan is easier to remember and follow.</string>
@@ -725,7 +725,7 @@
     <string name="path_open_hint">Concrete skills and deeds; only you see your ticks</string>
     <string name="path_summary">Done: %1$d of %2$d</string>
     <string name="path_intro">Tick what you can already do or have done. Encrypted in “My data”; no one else sees it, no rankings.</string>
-    <string name="path_level_personal">Me</string>
+    <string name="path_level_personal">Myself</string>
     <string name="path_level_family">My family</string>
     <string name="path_level_civic">My community</string>
     <string name="path_level_defence">My country</string>
@@ -1021,10 +1021,10 @@
     <string name="np_live_on_hint">New place after leaving: steps, rights, community</string>
     <string name="guide_sections">Sections</string>
     <string name="tourniquet_note_unsaved">Not saved. Write it on the tourniquet.</string>
-    <string name="gart_title">Daily hardening</string>
+    <string name="gart_title">Daily resilience</string>
     <string name="gart_hint">Small actions that hold you and your close ones</string>
     <string name="gart_intro">Small daily actions that add strength to you and those close to you. Take up to five and tick what is done. A missed day resets nothing.</string>
-    <string name="gart_today">My hardening today</string>
+    <string name="gart_today">My resilience today</string>
     <string name="gart_today_count">Today %1$d of %2$d</string>
     <string name="gart_none">Nothing chosen yet. Open a group below and take one or two habits.</string>
     <string name="gart_full">%1$d chosen: a few habits are easier to keep than many. To take a new one, put one aside.</string>
@@ -1428,10 +1428,10 @@
     <string name="role_donor_3">On the day of donation an employee is released from work with pay kept, and gets one more day of rest after it (Labour Code, art. 124).</string>
     <string name="role_donor_4">Since 26 January 2026 some benefits ended, such as 100% sick pay and the Honorary Donor supplement; the guarantees of Labour Code art. 124 remain. Ask the blood centre what else changed.</string>
     <string name="role_donor_5">The donor platform shows which blood group your region lacks and where to give.</string>
-    <string name="gart_strip_title">Hardening today</string>
+    <string name="gart_strip_title">Resilience today</string>
     <string name="gart_strip_all">All done today: %1$d of %2$d ✓</string>
-    <string name="widget_gart_start">Choose your daily hardening habits</string>
-    <string name="widget_gart_desc">How many hardening habits are done today, without names</string>
+    <string name="widget_gart_start">Choose your daily resilience habits</string>
+    <string name="widget_gart_desc">How many resilience habits are done today, without names</string>
     <string name="practice_core">The main ones</string>
     <string name="practice_core_hint">The most important, from different cards</string>
     <string name="practice_t_alarm">Alerts and strikes</string>
@@ -1502,7 +1502,7 @@
     <string name="held_blackout">Power cuts</string>
     <string name="held_heating">Heating cuts</string>
     <string name="held_shelter">Alerts in the shelter</string>
-    <string name="held_gart">Hardening days</string>
+    <string name="held_gart">Resilience days</string>
     <string name="held_body">Months of the body check</string>
     <string name="shield_how_topic">A theme without mistakes</string>
     <string name="shield_solved">Situations solved</string>
@@ -1570,7 +1570,7 @@
     <string name="weapons_own_source">Sources: Instruction approved by Ministry of Internal Affairs order No. 622, pp. 7.6, 12.1, 12.12; Cabinet of Ministers of Ukraine; National Police of Ukraine; Diia. Checked 02.11.2026.</string>
     <string name="weapons_law_title">Liability</string>
     <string name="weapons_law_1">Carrying, keeping, acquiring, passing on or selling a firearm (except a smoothbore hunting gun), ammunition or explosives without a permit is punished by 3 to 7 years in prison.</string>
-    <string name="weapons_law_2">Bladed weapons without a permit (daggers, Finnish knives, knuckle-dusters and the like): from a fine up to 3 years in prison.</string>
+    <string name="weapons_law_2">Bladed weapons without a permit (daggers, finka-type knives, knuckle-dusters and the like): from a fine up to 3 years in prison.</string>
     <string name="weapons_law_3">Making, converting or repairing a firearm unlawfully, or changing its markings: 3 to 7 years; again or by a group by prior conspiracy, 5 to 10; as an organised group, 8 to 12.</string>
     <string name="weapons_law_4">These articles apply during martial law too. The lawful way for a found weapon is to hand it in or declare it to the police.</string>
     <string name="weapons_law_source">Source: Criminal Code of Ukraine, arts. 263, 263-1 (current text, zakon.rada.gov.ua); Law No. 2114-IX. Checked 02.11.2026. For your own situation, ask a lawyer or free legal aid.</string>
