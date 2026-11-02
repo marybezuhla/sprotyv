@@ -40,7 +40,7 @@ import ua.sprotyv.ui.HomePrefs
 import ua.sprotyv.ui.MedicalScreen
 import ua.sprotyv.ui.Nav
 import ua.sprotyv.ui.NowScreen
-import ua.sprotyv.ui.PlanScreen
+import ua.sprotyv.ui.KitScreen
 import ua.sprotyv.ui.Route
 import ua.sprotyv.ui.ShieldsScreen
 import ua.sprotyv.ui.SprotyvTheme
@@ -106,7 +106,7 @@ class StoreScreensTest {
         HomePrefs.update(app) { it.copy(mode = Mode.FULL) }
         shot(dir, "4") { GuideSectionScreen(content, "2.5", nav) }
         shot(dir, "5") { Frame(title(R.string.medical_card), {}) { MedicalScreen() } }
-        shot(dir, "6", dark = true) { Frame(title(R.string.family_plan), {}) { PlanScreen() } }
+        shot(dir, "6", dark = true) { Frame(title(R.string.kit), {}) { KitScreen(content, nav) } }
         shot(dir, "7") { Frame(title(R.string.shields_title), {}) { ShieldsScreen(nav) } }
         shot(dir, "8", dark = true) { FullHome(content, Preset.GENERAL.pins, nav, {}, {}, {}) }
     }
