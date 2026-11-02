@@ -155,7 +155,7 @@ fun ShieldsScreen(nav: Nav, openGroups: Boolean = false) {
     }
     groups.forEachIndexed { gi, (title, list) ->
         if (list.isEmpty()) return@forEachIndexed
-        Block(stringResource(title), Group.PREPARE, tint = resist(), foldable = true, startOpen = openGroups && title in listOf(R.string.shields_counts, R.string.shields_tests), trailing = {
+        Block(stringResource(title), Group.PREPARE, tint = resist(), foldable = true, startOpen = openGroups && title == R.string.shields_counts, trailing = {
             Text(stringResource(R.string.ready_count, list.count { it.level == 2 }, list.size), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
         }) {
             // Counts are kept by hand: said so, so nobody waits for them to fill by themselves
