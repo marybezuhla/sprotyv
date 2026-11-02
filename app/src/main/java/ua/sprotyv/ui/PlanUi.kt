@@ -116,11 +116,6 @@ fun PlanScreen() {
 }
 
 @Composable
-private fun Heading(text: Int) {
-    Text(stringResource(text), style = BlockTitle, modifier = Modifier.padding(top = 8.dp).semantics { heading() })
-}
-
-@Composable
 private fun Rows(kind: String, firstLabel: Int, secondLabel: Int, firstHint: Int, secondHint: Int) {
     val loaded by remember(kind) { PersonalStore.observe { it.plan().observeRows(kind) } }.collectAsStateWithLifecycle(null)
     val rows = loaded ?: return Loading()

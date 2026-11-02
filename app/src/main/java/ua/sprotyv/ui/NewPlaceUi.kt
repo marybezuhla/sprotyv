@@ -109,7 +109,7 @@ private fun StepRow(s: NewPlace.Step, on: Boolean, expanded: Boolean, onExpand: 
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Checkbox(checked = on, onCheckedChange = null, modifier = Modifier.padding(horizontal = 12.dp), colors = doneCheckbox())
-        Text(s.title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = doneText(on), modifier = Modifier.weight(1f))
+        Text(s.title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f))
         // A small arrow, so the step's name keeps the width
         androidx.compose.material3.IconButton(onClick = onExpand, modifier = Modifier.size(48.dp)) {
             androidx.compose.material3.Icon(

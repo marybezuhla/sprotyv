@@ -295,7 +295,7 @@ fun PathScreen(nav: Nav) {
                 ) {
                     Checkbox(checked = on, onCheckedChange = null, modifier = Modifier.padding(horizontal = 12.dp), colors = doneCheckbox())
                     androidx.compose.foundation.layout.Column(Modifier.weight(1f)) {
-                        Text(stringResource(s.words), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = doneText(on))
+                        Text(stringResource(s.words), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface)
                         // A step that can be checked: the mark when passed, or the way to the check
                         if (s.key in PATH_CHECKS) {
                             if (s.key + TESTED in done && !(owned?.repeatDue(s.key, today) == true)) {

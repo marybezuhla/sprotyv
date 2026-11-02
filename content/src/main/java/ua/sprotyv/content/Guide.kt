@@ -161,6 +161,16 @@ object GuideSearch {
         return hits.sortedByDescending { h -> words.all { normalize(h.section.title).contains(it) } }.take(MAX_HITS)
     }
 
+    /** Action cards with all the words in their title or steps; title matches first. */
+    fun cards(cards: List<Card>, query: String): List<Card> {
+        val words = normalize(query).split(Regex("\\s+")).filter { it.length >= 2 }.take(6)
+        if (words.isEmpty()) return emptyList()
+        return cards.filter { c ->
+            val norm = normalize(c.title + "\n" + c.steps.joinToString("\n") { it.action + "\n" + it.why })
+            words.all { norm.contains(it) }
+        }.sortedByDescending { c -> words.all { normalize(c.title).contains(it) } }
+    }
+
     private fun textOf(blocks: List<Block>): String = buildString {
         for (b in blocks) when (b) {
             is Block.Paragraph -> appendLine(b.text)

@@ -92,13 +92,22 @@ fun CardRow(card: Card, onClick: () -> Unit) {
     }
 }
 
-/** "What to do now": every card, in the order of the built-in file. */
+/** The cards of first aid; the rest are dangers and events. */
+internal val FIRST_AID_CARDS = setOf("bleeding", "unconscious", "choking", "burn")
+
+/** "What to do now": every card, grouped, each group in the order of the built-in file. */
 @Composable
 fun NowScreen(content: Content?, nav: Nav) {
     Frame(stringResource(R.string.tile_now), nav::back) {
         if (content == null) return@Frame Loading()
         if (content.cardsBroken) return@Frame Broken()
-        content.cards.forEach { card -> CardRow(card) { nav.go(Route.CardRoute(card.id)) } }
+        // "The first 60 seconds" first, then first aid together, then the dangers, each under its heading
+        val (aid, rest) = content.cards.partition { it.id in FIRST_AID_CARDS }
+        rest.filter { it.id == "first-60" }.forEach { card -> CardRow(card) { nav.go(Route.CardRoute(card.id)) } }
+        if (aid.isNotEmpty()) Heading(R.string.group_first_aid)
+        aid.forEach { card -> CardRow(card) { nav.go(Route.CardRoute(card.id)) } }
+        Heading(R.string.now_dangers)
+        rest.filter { it.id != "first-60" }.forEach { card -> CardRow(card) { nav.go(Route.CardRoute(card.id)) } }
         CardsPdfButton(content)
     }
 }

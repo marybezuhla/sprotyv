@@ -7,7 +7,7 @@ Aerial targets: only as their sources publish them; nothing on air defence, shoo
 
     python3 scripts/content/links.py   -> content/src/main/assets/links.json
 """
-import json, os, re
+import json, os, re, sys
 
 CHECKED = "2026-10-30"
 
@@ -554,5 +554,17 @@ if __name__ == "__main__":
         assert len(l["note"]) <= 200, l["id"]
     with open(out, "w", encoding="utf-8") as f:
         json.dump(LINKS, f, ensure_ascii=False, indent=1)
+        f.write("\n")
+    # The English file: the same links, titles and notes from links_en.py; every link must have them
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from links_en import EN
+    assert set(EN) == {l["id"] for l in LINKS}, set(EN) ^ {l["id"] for l in LINKS}
+    english = []
+    for l in LINKS:
+        title, note = EN[l["id"]]
+        assert 0 < len(title) <= 80 and 0 < len(note) <= 200, l["id"]
+        english.append(dict(l, title=title, note=note))
+    with open(os.path.join(os.path.dirname(out), "en", "links.json"), "w", encoding="utf-8") as f:
+        json.dump(english, f, ensure_ascii=False, indent=1)
         f.write("\n")
     print(len(LINKS), "links")

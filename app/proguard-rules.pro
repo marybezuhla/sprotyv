@@ -3,5 +3,4 @@
 
 # SQLCipher: called from its native library by name
 -keep class net.zetetic.** { *; }
--keepclassmembers class * { native <methods>; }
 

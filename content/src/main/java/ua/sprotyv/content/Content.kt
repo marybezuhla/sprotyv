@@ -85,7 +85,7 @@ class Content(
                 load("guide.json", true, GuideReader::parse),
                 cards,
                 kids,
-                load("links.json", false, LinksReader::parse),
+                load("links.json", true, LinksReader::parse),
                 load("practice.json", true) { PracticeReader.parse(it, cards.orEmpty() + kids.orEmpty()) },
                 load("moz441.json", false, Moz441Reader::parse),
                 load("constitution.json", false, ConstitutionReader::parse),

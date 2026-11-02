@@ -335,12 +335,19 @@ fun SearchScreen(content: Content?, nav: Nav) {
         LaunchedEffect(Unit) { if (query.isEmpty()) focus.requestFocus() }
         if (content == null) return@Frame Loading()
         if (content.guideBroken) return@Frame Broken()
-        val result by produceState(query to emptyList<ua.sprotyv.content.Hit>(), query) {
-            value = query to withContext(Dispatchers.Default) { GuideSearch.search(content.guide, query) }
+        val result by produceState(Triple(query, emptyList<ua.sprotyv.content.Card>(), emptyList<ua.sprotyv.content.Hit>()), query) {
+            value = withContext(Dispatchers.Default) { Triple(query, GuideSearch.cards(content.cards, query), GuideSearch.search(content.guide, query)) }
         }
-        val hits = result.second
-        if (result.first == query && query.trim().length >= 2 && hits.isEmpty()) {
+        val cards = result.second
+        val hits = result.third
+        if (result.first == query && query.trim().length >= 2 && hits.isEmpty() && cards.isEmpty()) {
             Text(stringResource(R.string.search_none), style = MaterialTheme.typography.bodyLarge)
+        }
+        // The short action cards first: in a hurry they are what is wanted; the guide's sections below
+        if (cards.isNotEmpty()) {
+            Heading(R.string.tile_now)
+            cards.forEach { card -> CardRow(card) { nav.go(Route.CardRoute(card.id)) } }
+            if (hits.isNotEmpty()) Heading(R.string.search_in_guide)
         }
         hits.forEach { h ->
             Card(

@@ -425,7 +425,7 @@ private fun isNewDocument(context: Context, uri: Uri): Boolean = try {
     }
 }
 
-private fun deleteQuietly(context: Context, uri: Uri): Boolean = try {
+internal fun deleteQuietly(context: Context, uri: Uri): Boolean = try {
     DocumentsContract.deleteDocument(context.contentResolver, uri)
 } catch (e: Exception) {
     false
@@ -512,11 +512,6 @@ private fun ShownPassword(text: String) {
             }
         }
     }
-}
-
-@Composable
-private fun Heading(text: Int) {
-    Text(stringResource(text), style = BlockTitle, modifier = Modifier.padding(top = 8.dp).semantics { heading() })
 }
 
 /** The word list, read off the main thread; null for the first moment. */
