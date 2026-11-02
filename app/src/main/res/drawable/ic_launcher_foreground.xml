@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- The shield: a light rim, a thin ring of the blue, and a yellow field. Drawn inside the 66 dp
-     safe zone of the 108 dp icon. -->
+<!-- The shield: a light rim, a ring of the background showing through, and a yellow field. Traced
+     from the approved artwork: its circle is the icon's 72 dp visible circle. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <group android:pivotX="54" android:pivotY="54" android:scaleX="1.06" android:scaleY="1.06">
     <path
         android:fillColor="@color/icon_rim"
-        android:pathData="M54,26 L77,33 L77,52 C77,67 67,77 54,83 C41,77 31,67 31,52 L31,33 Z" />
-    <path
-        android:fillColor="@color/icon_background"
-        android:pathData="M54,30.4 L73.2,36.2 L73.2,52 C73.2,64.6 64.8,73.2 54,78.6 C43.2,73.2 34.8,64.6 34.8,52 L34.8,36.2 Z" />
+        android:fillType="evenOdd"
+        android:pathData="M54.54,29.51 C57.03,30.91 58.12,31.31 72.77,36.17 Q75.96,37.23 75.96,38.63 L75.96,53.78 C75.96,59.97 69.96,73.5 56.23,81.22 Q54,82.39 51.77,81.22 C38.04,73.5 32.04,59.97 32.04,53.78 L32.04,38.63 Q32.04,37.23 35.23,36.17 C49.88,31.31 50.97,30.91 53.46,29.51 Q54,29.21 54.54,29.51 Z M54.85,33.54 C58.8,35.36 59.73,35.69 70.39,39.12 Q72.71,39.86 72.71,40.76 L72.71,49.9 C72.71,62.11 66.19,70.44 55.69,77.62 Q54,78.75 52.31,77.62 C41.81,70.44 35.29,62.11 35.29,49.9 L35.29,40.76 Q35.29,39.86 37.61,39.12 C48.27,35.69 49.2,35.36 53.15,33.54 Q54,33.15 54.85,33.54 Z" />
     <path
         android:fillColor="@color/icon_field"
-        android:pathData="M54,34 L70,38.8 L70,52 C70,62.6 63,70 54,74.8 C45,70 38,62.6 38,52 L38,38.8 Z" />
-    </group>
+        android:pathData="M54.34,36.14 C55.92,37.07 56.73,37.38 67.88,41.27 Q70.31,42.12 70.31,42.82 L70.31,47.9 C70.31,61.5 65.07,67.73 55.54,74.76 Q54,75.88 52.46,74.76 C42.93,67.73 37.69,61.5 37.69,47.9 L37.69,42.82 Q37.69,42.12 40.12,41.27 C51.27,37.38 52.08,37.07 53.66,36.14 Q54,35.94 54.34,36.14 Z" />
 </vector>
