@@ -32,7 +32,7 @@
     <string name="try_again_text">Nothing was changed. Try again in a moment.</string>
     <string name="try_again">Try again</string>
     <string name="key_lost_title">Your saved data cannot be opened</string>
-    <string name="key_lost_text">The key to it is no longer on this phone, for example after a reset or damage to the key file. The guide, cards and calls work as usual. A fresh start sets the old data aside on the phone without deleting it, but Sprotyv will not be able to open it again.</string>
+    <string name="key_lost_text">The key to it is no longer on this phone, for example after a reset or damage to the key file. The guide, cards and calls work as usual. A fresh start sets the old data aside on the phone without deleting it, but Sprotyv will not be able to open it again. To get them back, start afresh and restore a backup: My data → Backup. This also happens after the screen lock was removed.</string>
     <string name="key_lost_fresh">Start fresh</string>
     <string name="key_lost_fresh_confirm">Set the old data aside and start fresh? Sprotyv will not be able to open the old data.</string>
     <string name="key_lost_keep">Not now</string>
@@ -108,6 +108,12 @@
     <string name="discard_text">What you changed is not saved yet.</string>
     <string name="discard">Discard</string>
     <string name="keep_editing">Keep editing</string>
+    <string name="a11y_fewer_people">Fewer people</string>
+    <string name="a11y_more_people">More people</string>
+    <string name="a11y_less_water">One litre of water less</string>
+    <string name="a11y_more_water">One litre of water more</string>
+    <string name="a11y_prev_month">Previous month</string>
+    <string name="a11y_next_month">Next month</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="safe_default_message">I am safe. I will get in touch later.</string>
@@ -858,6 +864,7 @@
     <string name="resist_all_rights">Rights of service members and families, lawyers, veterans\' lines</string>
     <string name="shelf_resist_desc">Everyone\'s part, where to learn, supporting the country, resilience</string>
     <string name="print_choose">What goes on paper</string>
+    <string name="lock_mine_forgot">Forgot the phone’s PIN? It is recovered in the phone’s settings. If the screen lock was removed, this data cannot be opened any more; it can be brought back from a backup.</string>
     <string name="lock_mine_112_hint">The medical card and «I am safe» are behind the lock too. Calling 112 always works.</string>
     <string name="kit_packed">Packed %1$d of %2$d</string>
     <string name="kit_full">The bag is packed: %1$d of %2$d</string>

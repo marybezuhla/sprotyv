@@ -149,9 +149,9 @@ object RescuerCode {
         val title: String,
         val blood: String,
         val allergies: String,
-        val pregnancy: String = "",
         val medicines: String,
         val conditions: String,
         val contact: String,
+        val pregnancy: String = "",
     )
 }

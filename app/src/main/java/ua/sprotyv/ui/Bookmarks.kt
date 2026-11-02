@@ -151,6 +151,9 @@ object Incoming {
 
     fun take(intent: Intent?) {
         if (intent?.action != Intent.ACTION_SEND) return
+        // Only through "Share → Sprotyv", and only while that way in is on: the other entries (open
+        // to other apps for the home screen) never bring a page in
+        if (intent.component?.className != "ua.sprotyv.ShareIn") { intent.action = null; return }
         // Reopened from the recent apps: the share was already handled (or dropped) then
         if (intent.flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY != 0) {
             intent.action = null

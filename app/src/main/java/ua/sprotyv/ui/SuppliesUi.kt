@@ -110,9 +110,9 @@ fun SuppliesScreen(content: Content?, nav: Nav) {
 
     // For whom and for how long
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        OutlinedButton(onClick = { if (s.people > 1) change { it.copy(people = (it.people - 1).coerceAtLeast(1)) } }, modifier = Modifier.heightIn(min = 56.dp)) { Text("−") }
+        OutlinedButton(onClick = { if (s.people > 1) change { it.copy(people = (it.people - 1).coerceAtLeast(1)) } }, modifier = Modifier.heightIn(min = 56.dp).a11yLabel(R.string.a11y_fewer_people)) { Text("−") }
         Text(stringResource(R.string.supplies_people, s.people), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
-        OutlinedButton(onClick = { if (s.people < 20) change { it.copy(people = (it.people + 1).coerceAtMost(20)) } }, modifier = Modifier.heightIn(min = 56.dp)) { Text("+") }
+        OutlinedButton(onClick = { if (s.people < 20) change { it.copy(people = (it.people + 1).coerceAtMost(20)) } }, modifier = Modifier.heightIn(min = 56.dp).a11yLabel(R.string.a11y_more_people)) { Text("+") }
     }
     ChoiceRow {
         Supplies.LEVELS.forEach { d ->
@@ -127,9 +127,9 @@ fun SuppliesScreen(content: Content?, nav: Nav) {
     Text(stringResource(R.string.supplies_water_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     Text(stringResource(R.string.supplies_water_have), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        OutlinedButton(onClick = { change { it.copy(water = (it.water - 1).coerceAtLeast(0)) } }, modifier = Modifier.heightIn(min = 48.dp)) { Text("−1") }
+        OutlinedButton(onClick = { change { it.copy(water = (it.water - 1).coerceAtLeast(0)) } }, modifier = Modifier.heightIn(min = 48.dp).a11yLabel(R.string.a11y_less_water)) { Text("−1") }
         Text(stringResource(R.string.supplies_litres, s.water), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-        OutlinedButton(onClick = { change { it.copy(water = (it.water + 1).coerceAtMost(2000)) } }, modifier = Modifier.heightIn(min = 48.dp)) { Text("+1") }
+        OutlinedButton(onClick = { change { it.copy(water = (it.water + 1).coerceAtMost(2000)) } }, modifier = Modifier.heightIn(min = 48.dp).a11yLabel(R.string.a11y_more_water)) { Text("+1") }
         OutlinedButton(onClick = { change { it.copy(water = (it.water + 5).coerceAtMost(2000)) } }, modifier = Modifier.heightIn(min = 48.dp)) { Text("+5") }
     }
     UntilButton(MySupplies.month(s.waterUntil)) { picking = MySupplies.WATER }
@@ -212,9 +212,9 @@ private fun MonthDialog(start: YearMonth, onDone: (YearMonth?) -> Unit, onCancel
         title = { Text(stringResource(R.string.supplies_pick_month)) },
         text = {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                OutlinedButton(onClick = { m = m.minusMonths(1) }, modifier = Modifier.heightIn(min = 56.dp)) { Text("−") }
+                OutlinedButton(onClick = { m = m.minusMonths(1) }, modifier = Modifier.heightIn(min = 56.dp).a11yLabel(R.string.a11y_prev_month)) { Text("−") }
                 Text(monthText(m), style = MaterialTheme.typography.headlineSmall)
-                OutlinedButton(onClick = { m = m.plusMonths(1) }, modifier = Modifier.heightIn(min = 56.dp)) { Text("+") }
+                OutlinedButton(onClick = { m = m.plusMonths(1) }, modifier = Modifier.heightIn(min = 56.dp).a11yLabel(R.string.a11y_next_month)) { Text("+") }
             }
         },
         confirmButton = { TextButton(onClick = { onDone(m) }) { Text(stringResource(R.string.save)) } },
