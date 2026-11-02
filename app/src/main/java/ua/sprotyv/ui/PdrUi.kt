@@ -95,7 +95,7 @@ fun PdrSectionScreen(content: Content?, num: String, nav: Nav) {
                 OutlinedButton(onClick = { nav.replace(Route.PdrRoute(next.num)) }, modifier = Modifier.weight(1f).heightIn(min = 56.dp)) { Text(stringResource(R.string.pdr_section, next.num) + " →") }
             }
         }
-        OutlinedButton(onClick = { nav.go(Route.PdrRoute("")) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.pdr_all)) }
+        OutlinedButton(onClick = nav::back, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.pdr_all)) }
         PdrSource(p)
     }
 }

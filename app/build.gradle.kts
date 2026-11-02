@@ -26,8 +26,7 @@ android {
 
     buildTypes {
         release {
-            // Unused library code (such as a map library's online download classes) is cut out of the
-            // app; names are kept as they are (no obfuscation), so reports and reviews stay readable
+            // Unused code is cut out of the app; names are kept as they are (no obfuscation), so reports and reviews stay readable
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             // Left unsigned here; signed later in a separate step that runs no build code

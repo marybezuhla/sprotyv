@@ -89,7 +89,10 @@ fun NotesScreen(nav: Nav) {
     // Room for the encrypted copy: the whole of the notes stays well within what a restore accepts
     val total = list.sumOf { it.title.length + it.text.length }
     val full = list.size >= MAX_NOTES || total >= MAX_TOTAL
-    Button(enabled = !full, onClick = {
+    // One new note per tap: further taps wait until its screen has opened
+    var creating by remember { mutableStateOf(false) }
+    Button(enabled = !full && !creating, onClick = {
+        creating = true
         // The note exists before its screen opens, so it has one id whatever happens to the screen
         val main = android.os.Handler(android.os.Looper.getMainLooper())
         PersonalStore.save("note-new:" + java.util.UUID.randomUUID()) { db ->

@@ -12,5 +12,3 @@ captures/
 __pycache__/
 *.pyc
 
-# Maps fetched at build time (scripts/maps/fetch.sh)
-/app/src/main/assets/maps/

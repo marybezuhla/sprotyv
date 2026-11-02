@@ -109,6 +109,7 @@ fun MozListScreen(content: Content?, nav: Nav) {
  */
 @Composable
 fun MozScreen(content: Content?, n: Int, nav: Nav) {
+    KeepScreenOn()
     val p = content?.moz441?.procedure(n)
     Frame(p?.short ?: stringResource(R.string.moz_title), nav::back) {
         if (content == null) return@Frame Loading()

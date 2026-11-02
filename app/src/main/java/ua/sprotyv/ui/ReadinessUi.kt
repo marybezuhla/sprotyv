@@ -191,7 +191,6 @@ fun ReadinessStrip(nav: Nav) {
     }
     if (parts.size != READY_PARTS.size) return
     val done = parts.count { it.complete }
-    val doneColour = ua.sprotyv.home.Group.PREPARE.tint().ink
     val going = ua.sprotyv.home.Group.PREPARE.tint().ink
     val track = MaterialTheme.colorScheme.outlineVariant
     Card(

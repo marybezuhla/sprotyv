@@ -24,8 +24,6 @@ class Pdf(private val footer: String) {
         data class Text(val text: String, val bold: Boolean = false) : Part
         data class Field(val label: String, val value: String) : Part
         data class Picture(val bitmap: Bitmap, val sizePt: Int) : Part
-        data object Gap : Part
-        data object PageBreak : Part
     }
 
     private val parts = ArrayList<Part>()
@@ -36,8 +34,6 @@ class Pdf(private val footer: String) {
     fun heading(t: String) = add(Part.Heading(t))
     fun text(t: String, bold: Boolean = false) = apply { if (t.isNotBlank()) parts += Part.Text(t, bold) }
     fun field(label: String, value: String) = apply { if (value.isNotBlank()) parts += Part.Field(label, value) }
-    fun gap() = add(Part.Gap)
-    fun pageBreak() = add(Part.PageBreak)
 
     fun build(): ByteArray {
         val doc = PdfDocument()
@@ -89,8 +85,6 @@ class Pdf(private val footer: String) {
                 is Part.Text -> block(part.text, if (part.bold) bold else regular, before = 0f, after = 4f, keepWithNext = 0f)
                 is Part.Field -> block("${part.label}: ${part.value}", regular, before = 0f, after = 3f, keepWithNext = 0f, boldPrefix = part.label.length + 1)
                 is Part.Picture -> picture(part.bitmap, part.sizePt.toFloat())
-                Part.Gap -> { canvas(); y += 8f }
-                Part.PageBreak -> newPage()
             }
         }
 

@@ -322,7 +322,9 @@ object Notify {
     private fun open(c: Context, target: String, code: Int): PendingIntent =
         PendingIntent.getActivity(
             c, code,
-            Intent(c, Main::class.java).putExtra(Opening.EXTRA, target).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP),
+            Intent(c, Main::class.java).putExtra(Opening.EXTRA, target).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                // Each notification its own intent: never mistaken for a widget's with the same number
+                .setData(android.net.Uri.parse("sprotyv-notify:$target")),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
 

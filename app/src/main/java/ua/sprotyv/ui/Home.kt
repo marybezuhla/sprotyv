@@ -96,7 +96,7 @@ fun CornerCall() {
     if (shown) return
     var open by rememberSaveable { mutableStateOf(false) }
     IconButton(onClick = { open = true }, modifier = Modifier.size(48.dp)) {
-        Icon(Icons.Filled.Call, contentDescription = stringResource(R.string.call_services), tint = DangerRed)
+        Icon(Icons.Filled.Call, contentDescription = stringResource(R.string.call_services), tint = DangerInk)
     }
     if (open) ServicesDialog { open = false }
 }
@@ -122,7 +122,7 @@ private fun ServicesDialog(onClose: () -> Unit) {
                                 service.number,
                                 style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Bold,
-                                color = if (service == Service.UNIFIED) DangerRed else MaterialTheme.colorScheme.onSurface,
+                                color = if (service == Service.UNIFIED) DangerInk else MaterialTheme.colorScheme.onSurface,
                                 modifier = Modifier.width(56.dp),
                             )
                             Text(stringResource(service.name()), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f))
