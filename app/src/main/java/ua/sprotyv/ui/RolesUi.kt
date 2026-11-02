@@ -183,7 +183,7 @@ val ROLES: Map<String, Role> = listOf(
     Role(
         "infra", Circle.WORK, R.string.role_infra, R.string.role_infra_hint, R.string.role_infra_affirm,
         factsTitle = R.string.role_infra_facts_title,
-        facts = listOf(R.string.role_infra_1, R.string.role_infra_2, R.string.role_infra_3, R.string.role_infra_4),
+        facts = listOf(R.string.role_infra_1, R.string.role_infra_2, R.string.role_infra_4),
         source = R.string.role_infra_source,
         links = listOf("#booking", "#energy-safety", "#howareu"),
     ),
@@ -204,7 +204,7 @@ val ROLES: Map<String, Role> = listOf(
     Role(
         "culture", Circle.VOICE, R.string.role_culture, R.string.role_culture_hint, R.string.role_culture_affirm,
         factsTitle = R.string.role_culture_facts_title,
-        facts = listOf(R.string.role_culture_1, R.string.role_culture_2, R.string.role_culture_3, R.string.role_culture_4, R.string.role_culture_5),
+        facts = listOf(R.string.role_culture_2, R.string.role_culture_3, R.string.role_culture_4, R.string.role_culture_5),
         source = R.string.role_culture_source,
         links = listOf("#ucf", "#nsju", "#imi", "facts"),
     ),
