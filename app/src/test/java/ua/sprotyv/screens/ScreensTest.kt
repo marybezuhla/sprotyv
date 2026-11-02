@@ -49,6 +49,9 @@ import ua.sprotyv.ui.SprotyvTheme
 import ua.sprotyv.ui.ThemeChoice
 import ua.sprotyv.ui.WayHub
 import ua.sprotyv.ui.CommsScreen
+import ua.sprotyv.ui.PdrScreen
+import ua.sprotyv.ui.PdrSectionScreen
+import ua.sprotyv.ui.WeaponsScreen
 import ua.sprotyv.ui.SettingsScreen
 import java.io.File
 

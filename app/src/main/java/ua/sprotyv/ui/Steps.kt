@@ -93,6 +93,19 @@ data class Steps(
             p.edit().clear().apply()
         }
 
+        /** "+1" from count widgets, added to the encrypted counts while "Mine" is open; the widgets' copy follows. */
+        fun flushCounts(context: android.content.Context) {
+            if (PersonalStore.state.value !is Opened.Ready) return
+            val app = context.applicationContext
+            val pending = CountWidgets.takePending(app)
+            if (pending.isEmpty()) return
+            change { s ->
+                val next = s.copy(counts = (s.counts.keys + pending.keys).associateWith { ((s.counts[it] ?: 0) + (pending[it] ?: 0)).coerceAtMost(10_000) })
+                CountWidgets.mirror(app, next.counts)
+                next
+            }
+        }
+
         /** A change, saved only while "Mine" is open. */
         fun change(f: (Steps) -> Steps) {
             if (PersonalStore.state.value !is Opened.Ready) return

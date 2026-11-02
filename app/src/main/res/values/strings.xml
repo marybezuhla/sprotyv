@@ -915,6 +915,11 @@
     <string name="widget_tile_label">Part of Sprotyv</string>
     <string name="widget_tile_desc">Any card, guide chapter or tool</string>
     <string name="widget_tile_choose">Tap to choose</string>
+    <string name="widget_count_label">Count shield</string>
+    <string name="widget_count_desc">One of your good deeds from “My shields” with a “+1” button</string>
+    <string name="widget_count_pick">Which count to show?</string>
+    <string name="widget_count_pick_hint">The home screen shows only the number on a shield and “+1”. The number updates when you open “Mine”. In trip mode the widget shows nothing.</string>
+    <string name="widget_count_show_name">Show the name</string>
     <string name="widget_tile_pick">What should the widget show?</string>
     <string name="widget_tile_pick_hint">The widget shows only the name; a tap opens it.</string>
     <string name="widget_services_label">Emergency numbers</string>
