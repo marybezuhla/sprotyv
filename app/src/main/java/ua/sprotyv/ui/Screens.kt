@@ -116,8 +116,8 @@ fun SecureScreen() {
     if (Build.VERSION.SDK_INT >= 34) {
         DisposableEffect(activity) {
             val view = activity.window.decorView
-            view.accessibilityDataSensitive = android.view.View.ACCESSIBILITY_DATA_SENSITIVE_YES
-            onDispose { view.accessibilityDataSensitive = android.view.View.ACCESSIBILITY_DATA_SENSITIVE_AUTO }
+            view.setAccessibilityDataSensitive(android.view.View.ACCESSIBILITY_DATA_SENSITIVE_YES)
+            onDispose { view.setAccessibilityDataSensitive(android.view.View.ACCESSIBILITY_DATA_SENSITIVE_AUTO) }
         }
     }
     val allowed = HomePrefs.state.collectAsStateWithLifecycle().value?.screenshots == true

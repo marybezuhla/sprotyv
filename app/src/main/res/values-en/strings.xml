@@ -171,6 +171,7 @@
     <string name="needs_update_title">Your data needs an app update</string>
     <string name="needs_update_text">This version cannot open your saved data. Nothing was deleted. Install the next update; the guide, cards and calls work as usual.</string>
     <string name="read_failed">Could not read your data. Nothing was changed. Go back and open it again.</string>
+    <string name="person_need">To save, a name and a number (at least 3 digits) are needed.</string>
     <string name="person_phone_format">Write the number with the country code, e.g. +380…, or as 0XXXXXXXXX: otherwise WhatsApp may open the wrong chat.</string>
     <string name="safe_each">To each person</string>
     <string name="rescuer_screen">Code for rescuers</string>

@@ -171,6 +171,7 @@
     <string name="needs_update_title">Потрібно оновити застосунок</string>
     <string name="needs_update_text">Ця версія не може відкрити ваші збережені дані. Нічого не видалено. Встановіть наступне оновлення; довідник, картки й дзвінки працюють як звичайно.</string>
     <string name="read_failed">Не вдалося прочитати ваші дані. Нічого не змінено. Поверніться й відкрийте ще раз.</string>
+    <string name="person_need">Щоб зберегти, потрібні ім’я й номер (хоча б 3 цифри).</string>
     <string name="person_phone_format">Запишіть номер з кодом країни, наприклад +380…, або як 0XXXXXXXXX — інакше WhatsApp може відкрити не той чат.</string>
     <string name="safe_each">Кожному окремо</string>
     <string name="rescuer_screen">Код для рятувальників</string>

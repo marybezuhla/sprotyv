@@ -195,7 +195,13 @@ fun MedicalScreen() {
     val ice = rememberPeople().orEmpty().filter { it.ice }
     Block(stringResource(R.string.ice_title), ua.sprotyv.home.Group.FIRST_AID) {
         if (ice.isEmpty()) Text(stringResource(R.string.ice_none), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        ice.forEach { Text("${it.name} · ${it.phone}", style = MaterialTheme.typography.bodyLarge) }
+        // A tap opens the dialler with the number, as the 112 button does
+        val context = androidx.compose.ui.platform.LocalContext.current
+        ice.forEach { p ->
+            TextButton(onClick = { ua.sprotyv.reach.Reach.dial(context, p.phone) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp), contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 0.dp)) {
+                Text("${p.name} · ${p.phone}", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.fillMaxWidth())
+            }
+        }
     }
 }
 
@@ -232,6 +238,8 @@ private fun PersonDialog(start: Person, onDone: () -> Unit) {
                 if (!p.phone.trim().startsWith("+") && !ua.sprotyv.reach.Links.clean(p.phone).let { it.length == 10 && it.startsWith("0") } && p.phone.isNotBlank()) {
                     Text(stringResource(R.string.person_phone_format), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.error)
                 }
+                // Why Save is greyed out, said plainly
+                if (!valid) Text(stringResource(R.string.person_need), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Field(stringResource(R.string.person_relation), p.relation, { p = p.copy(relation = it) })
                 Toggle(stringResource(R.string.person_safe_list), p.safeList) { p = p.copy(safeList = it) }
                 Toggle(stringResource(R.string.person_ice), p.ice) { p = p.copy(ice = it) }
