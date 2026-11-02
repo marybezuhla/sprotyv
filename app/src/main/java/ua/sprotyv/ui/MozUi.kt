@@ -90,7 +90,7 @@ fun MozListScreen(content: Content?, nav: Nav) {
                     Text(
                         "${p.n}) Порядок ${p.title}",
                         style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.padding(start = 16.dp).heightIn(min = 32.dp).clickable { nav.go(Route.Moz(p.n)) },
+                        modifier = Modifier.padding(start = 16.dp).heightIn(min = 48.dp).clickable(role = androidx.compose.ui.semantics.Role.Button) { nav.go(Route.Moz(p.n)) },
                     )
                 }
                 o.points.forEach { Text(it, style = MaterialTheme.typography.bodyMedium) }

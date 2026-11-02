@@ -43,6 +43,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -65,16 +66,19 @@ fun CallBar(edge: Boolean = true) {
     val context = LocalContext.current
     // Very large text: the two buttons one above the other, so "112" always has the full width
     val stacked = androidx.compose.ui.platform.LocalDensity.current.fontScale > 1.3f
+    // Said in full by TalkBack even when only "112" fits on the button
+    val callLabel = stringResource(R.string.call_112)
     val call: @Composable (Modifier) -> Unit = { m ->
         Button(
             onClick = { Reach.dial(context, Service.UNIFIED.number) },
             colors = ButtonDefaults.buttonColors(containerColor = DangerRed, contentColor = Color.White),
-            modifier = m.heightIn(min = 56.dp).semantics(mergeDescendants = true) {},
+            modifier = m.heightIn(min = 56.dp).semantics(mergeDescendants = true) { contentDescription = callLabel },
         ) {
             Icon(Icons.Filled.Call, contentDescription = null)
             Spacer(Modifier.width(8.dp))
             // One line always: with large text just "112" (the phone icon says the rest), never a word broken in two
-            val big = androidx.compose.ui.platform.LocalDensity.current.fontScale > 1.15f
+            // (stacked, the button has the full width again, so the full words fit)
+            val big = androidx.compose.ui.platform.LocalDensity.current.fontScale > 1.15f && !stacked
             Text(stringResource(if (big) R.string.kid_call_112 else R.string.call_112), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, maxLines = 1, softWrap = false)
         }
     }

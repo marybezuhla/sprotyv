@@ -313,7 +313,7 @@ internal fun shownNum(num: String): String {
 }
 
 /** The words last searched, in memory only, so coming back from a section shows the same results. */
-private object SearchMemory {
+internal object SearchMemory {
     @Volatile var query: String = ""
 }
 
@@ -334,9 +334,12 @@ fun SearchScreen(content: Content?, nav: Nav) {
         // The keyboard only for a new search; coming back to results, they show first
         LaunchedEffect(Unit) { if (query.isEmpty()) focus.requestFocus() }
         if (content == null) return@Frame Loading()
-        if (content.guideBroken) return@Frame Broken()
+        // One file that could not be read never hides the other: cards are searched without the guide
+        if (content.guideBroken && content.cardsBroken) return@Frame Broken()
         val result by produceState(Triple(query, emptyList<ua.sprotyv.content.Card>(), emptyList<ua.sprotyv.content.Hit>()), query) {
-            value = withContext(Dispatchers.Default) { Triple(query, GuideSearch.cards(content.cards, query), GuideSearch.search(content.guide, query)) }
+            value = withContext(Dispatchers.Default) {
+                Triple(query, GuideSearch.cards(content.cards, query), if (content.guideBroken) emptyList() else GuideSearch.search(content.guide, query))
+            }
         }
         val cards = result.second
         val hits = result.third

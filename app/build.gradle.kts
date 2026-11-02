@@ -6,7 +6,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
-// The version is set by hand in version.txt (x.y.z); the code follows from it: 1.2.4 → 10204
+// The version is set by hand in version.txt (x.y.z); the code below follows from it: 1.2.4 → 10204
 val appVersion = rootProject.file("version.txt").readText().trim().also {
     require(Regex("^\\d{1,2}\\.\\d{1,2}\\.\\d{1,2}$").matches(it)) { "version.txt must be x.y.z" }
 }
@@ -20,7 +20,8 @@ android {
         applicationId = "ua.sprotyv"
         minSdk = 31
         targetSdk = 36
-        versionCode = appVersionCode
+        // Written out as a number, because F-Droid's update check reads it from this file; checked below
+        versionCode = 10000
         versionName = appVersion
     }
 
@@ -103,3 +104,6 @@ dependencies {
 tasks.configureEach {
     if (name.contains("ArtProfile")) enabled = false
 }
+
+// The number above must follow version.txt (x.y.z → x*10000 + y*100 + z)
+require(android.defaultConfig.versionCode == appVersionCode) { "versionCode must be $appVersionCode for version $appVersion" }
