@@ -71,6 +71,12 @@ fun Loading() {
  * The one style for a block's title on every screen: larger and bolder than anything inside the
  * block, so the eye finds the block first and then reads it top down.
  */
+/** A heading inside a screen, said as a heading by TalkBack. */
+@Composable
+fun Heading(text: Int) {
+    Text(stringResource(text), style = BlockTitle, modifier = Modifier.padding(top = 8.dp).semantics { heading() })
+}
+
 val BlockTitle: androidx.compose.ui.text.TextStyle
     @Composable get() = MaterialTheme.typography.titleMedium.copy(
         fontSize = androidx.compose.ui.unit.TextUnit(18f, androidx.compose.ui.unit.TextUnitType.Sp),
@@ -217,8 +223,6 @@ fun Modifier.doneRow(done: Boolean): Modifier =
 fun doneCheckbox(): androidx.compose.material3.CheckboxColors =
     androidx.compose.material3.CheckboxDefaults.colors(checkedColor = doneTint().ink, checkmarkColor = MaterialTheme.colorScheme.surface)
 
-@Composable
-fun doneText(@Suppress("UNUSED_PARAMETER") done: Boolean): androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.onSurface
 
 
 /**

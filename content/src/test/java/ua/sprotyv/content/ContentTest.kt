@@ -166,6 +166,12 @@ class ContentTest {
         assertEquals("deepstatemap.live", LinksReader.host("https://deepstatemap.live"))
     }
 
+    @Test fun englishLinksMatchTheOriginal() {
+        val uk = LinksReader.parse(File(assets, "links.json").readText())
+        val en = LinksReader.parse(File(assets, "en/links.json").readText())
+        assertEquals(uk.map { it.id to it.url + it.phone }, en.map { it.id to it.url + it.phone })
+    }
+
     @Test fun stepPictogramsExist() {
         val drawn = File("../app/src/main/res/drawable").list()!!.filter { it.startsWith("pict_") }.map { it.removePrefix("pict_").removeSuffix(".xml") }.toSet()
         val used = cards.flatMap { it.steps }.map { it.icon }.filter { it.isNotEmpty() }
@@ -214,6 +220,9 @@ class ContentTest {
     @Test fun searchFindsTourniquet() {
         val hits = GuideSearch.search(guide, "турнікет")
         assertTrue(hits.any { it.section.num == "7.2" })
+        // The action card comes up too, before the guide
+        assertTrue(GuideSearch.cards(adultCards, "Турнікет").any { it.id == "bleeding" })
+        assertTrue(GuideSearch.cards(adultCards, "x").isEmpty())
     }
 
     @Test fun searchIgnoresApostropheAndCase() {

@@ -79,8 +79,6 @@ private fun Tab.icon(on: Boolean): ImageVector = androidx.compose.ui.graphics.ve
 fun App() {
     val context = LocalContext.current
     val activity = context as Activity
-    // Small and read once; the home screen needs it before anything is drawn
-    remember { HomePrefs.load(context) }
     val prefs = HomePrefs.state.collectAsState().value ?: HomePrefs.load(context)
     val unlocked by Guard.unlocked.collectAsState()
 

@@ -218,7 +218,7 @@ fun GartScreen(nav: Nav) {
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Checkbox(checked = on, onCheckedChange = null, modifier = Modifier.padding(horizontal = 12.dp), colors = doneCheckbox())
-                        Text(stringResource(words), style = MaterialTheme.typography.bodyLarge, color = doneText(on), modifier = Modifier.weight(1f))
+                        Text(stringResource(words), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f))
                     }
                 }
                 Text(stringResource(R.string.gart_body_doctor), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(16.dp))
@@ -257,7 +257,7 @@ private fun ActiveHabit(h: Habit, done: Set<Long>, today: Long, nav: Nav, onTick
         ) {
             Checkbox(checked = on, onCheckedChange = null, modifier = Modifier.padding(horizontal = 12.dp), colors = doneCheckbox())
             Column(Modifier.weight(1f)) {
-                Text(stringResource(h.title), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = doneText(on))
+                Text(stringResource(h.title), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface)
                 Text(stringResource(h.plan), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }

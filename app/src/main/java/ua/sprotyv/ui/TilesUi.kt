@@ -579,11 +579,10 @@ fun SimpleHome(content: Content?, pins: List<String>, nav: Nav, onSettings: () -
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             // Only tiles that can be shown count towards the six, so the screen matches the editor
-            val fixed = Tiles.FIXED.mapNotNull { tileInfo(it, content) }
-            val chosen = pins.mapNotNull { tileInfo(it, content) }.take(Tiles.SIMPLE_CHOSEN)
+            val shown = Pins.simple(pins.filter { tileInfo(it, content) != null }).mapNotNull { tileInfo(it, content) }
             val now = remember { System.currentTimeMillis() }
             ActiveStrip(nav)
-            (fixed + chosen).forEach { info -> TileCard(info, big = true, status = tileStatus(info.id, now)) { nav.go(info.route) } }
+            shown.forEach { info -> TileCard(info, big = true, status = tileStatus(info.id, now)) { nav.go(info.route) } }
         }
         CallBar()
     }

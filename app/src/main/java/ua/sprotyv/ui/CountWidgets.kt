@@ -184,8 +184,7 @@ object CountWidgets {
 }
 
 /** One count of "My shields" with "+1". */
-class CountWidget : AppWidgetProvider() {
-    override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) = Widgets.update(context)
+class CountWidget : SimpleWidget() {
     override fun onDeleted(context: Context, ids: IntArray) {
         val manager = AppWidgetManager.getInstance(context) ?: return
         val left = (manager.getAppWidgetIds(ComponentName(context, CountWidget::class.java)) ?: IntArray(0)).filter { it !in ids }.toIntArray()

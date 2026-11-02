@@ -318,7 +318,7 @@ fun NoteEditScreen(id: Long, nav: Nav) {
                         value = it0.text,
                         onValueChange = { v -> put(name, items.toMutableList().also { l -> l[i] = it0.copy(text = v.replace("\n", " ")) }) },
                         textStyle = MaterialTheme.typography.bodyLarge.copy(
-                            color = doneText(it0.done),
+                            color = MaterialTheme.colorScheme.onSurface,
                         ),
                         cursorBrush = androidx.compose.ui.graphics.SolidColor(MaterialTheme.colorScheme.primary),
                         modifier = Modifier.weight(1f).heightIn(min = 48.dp).padding(vertical = 12.dp),

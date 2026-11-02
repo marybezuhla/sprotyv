@@ -58,14 +58,14 @@ object Widgets {
         } catch (e: Exception) { }
     }
 
-    /** True when a "Running now" widget is on the home screen (its counts need redrawing on time). */
     /** A "Daily hardening" widget is placed: it is redrawn just after midnight, when today starts at zero. */
-    fun hasGart(context: Context): Boolean = try {
-        (AppWidgetManager.getInstance(context.applicationContext)?.let { ids(context.applicationContext, it, GartWidget::class.java) }?.size ?: 0) > 0
-    } catch (e: Exception) { false }
+    fun hasGart(context: Context): Boolean = has(context, GartWidget::class.java)
 
-    fun hasRunning(context: Context): Boolean = try {
-        (AppWidgetManager.getInstance(context.applicationContext)?.let { ids(context.applicationContext, it, RunningWidget::class.java) }?.size ?: 0) > 0
+    /** True when a "Running now" widget is on the home screen (its counts need redrawing on time). */
+    fun hasRunning(context: Context): Boolean = has(context, RunningWidget::class.java)
+
+    private fun has(context: Context, cls: Class<*>): Boolean = try {
+        (AppWidgetManager.getInstance(context.applicationContext)?.let { ids(context.applicationContext, it, cls) }?.size ?: 0) > 0
     } catch (e: Exception) { false }
 
     /** Off the phone's widget list while the neutral icon is on: they would show the name Sprotyv. */
@@ -91,19 +91,8 @@ object Widgets {
     private fun ids(context: Context, manager: AppWidgetManager, cls: Class<*>): IntArray =
         manager.getAppWidgetIds(ComponentName(context, cls)) ?: IntArray(0)
 
-    /**
-     * Opens Sprotyv at a fixed place; the same words a notification uses ([Opening]). Request codes
-     * from 1000 up belong to widgets; notifications use those below 1000 ([Notify]).
-     */
-    private fun open(context: Context, target: String, code: Int): PendingIntent =
-        PendingIntent.getActivity(
-            context, 1000 + code,
-            Intent(context, Main::class.java).putExtra(Opening.EXTRA, target).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP),
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
-        )
-
     private fun now(context: Context) = RemoteViews(context.packageName, R.layout.widget_now).apply {
-        setOnClickPendingIntent(R.id.w_root, open(context, "now", 1))
+        setOnClickPendingIntent(R.id.w_root, openFor(context, "now", 1))
     }
 
     private class Count(val words: String, val since: Long, val down: Boolean, val target: String)
@@ -147,12 +136,12 @@ object Widgets {
             val base = SystemClock.elapsedRealtime() + (c.since - now)
             v.setChronometer(ids.second, base, null, true)
             v.setChronometerCountDown(ids.second, c.down)
-            v.setOnClickPendingIntent(row, open(context, c.target, 10 + i))
+            v.setOnClickPendingIntent(row, openFor(context, c.target, 10 + i))
         }
         v.setViewVisibility(R.id.w_empty, if (list.isEmpty()) View.VISIBLE else View.GONE)
         // Two or more counts: they take the room of the heading (the widget is one row high unless made bigger)
         v.setViewVisibility(R.id.w_head, if (list.size >= 2) View.GONE else View.VISIBLE)
-        v.setOnClickPendingIntent(R.id.w_root, open(context, "now", 2))
+        v.setOnClickPendingIntent(R.id.w_root, openFor(context, "now", 2))
         return v
     }
 
@@ -169,7 +158,7 @@ object Widgets {
             else -> context.getString(R.string.gart_today_count, today.first, today.second)
         }
         v.setTextViewText(R.id.w_text, text)
-        v.setOnClickPendingIntent(R.id.w_root, open(context, if (prefs.trip) "now" else "gart", 9))
+        v.setOnClickPendingIntent(R.id.w_root, openFor(context, if (prefs.trip) "now" else "gart", 9))
         return v
     }
 
@@ -187,7 +176,7 @@ object Widgets {
             else -> context.getString(R.string.widget_path_level, context.getString(names.getOrElse(current) { names.last() }), levels[current].first, levels[current].second)
         }
         v.setTextViewText(R.id.w_text, text)
-        v.setOnClickPendingIntent(R.id.w_root, open(context, if (prefs.trip) "now" else "path", 3))
+        v.setOnClickPendingIntent(R.id.w_root, openFor(context, if (prefs.trip) "now" else "path", 3))
         return v
     }
 }
@@ -309,48 +298,36 @@ internal fun Widgets.openFor(c: Context, target: String, code: Int, widget: Int?
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
     )
 
-/** Any part of Sprotyv, chosen when the widget is placed. */
-class TileWidget : AppWidgetProvider() {
+/** A widget that only needs redrawing with the rest; each kind is its own class for the launcher. */
+open class SimpleWidget : AppWidgetProvider() {
     override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) = Widgets.update(context)
+}
+
+/** Any part of Sprotyv, chosen when the widget is placed. */
+class TileWidget : SimpleWidget() {
     override fun onDeleted(context: Context, ids: IntArray) = TileWidgets.remove(context, ids)
 }
 
 /** Emergency numbers: the dialler, never a call. */
-class ServicesWidget : AppWidgetProvider() {
-    override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) = Widgets.update(context)
-}
+class ServicesWidget : SimpleWidget()
 
 /** A child's widget: four big pictures. */
-class KidWidget : AppWidgetProvider() {
-    override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) = Widgets.update(context)
-}
+class KidWidget : SimpleWidget()
 
 /** "I am safe": the way to the message, never the message. */
-class SafeWidget : AppWidgetProvider() {
-    override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) = Widgets.update(context)
-}
+class SafeWidget : SimpleWidget()
 
 /** The go-bag in counts. */
-class KitWidget : AppWidgetProvider() {
-    override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) = Widgets.update(context)
-}
+class KitWidget : SimpleWidget()
 
 /** "What to do now": a big orange way in. */
-class NowWidget : AppWidgetProvider() {
-    override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) = Widgets.update(context)
-}
+class NowWidget : SimpleWidget()
 
 /** "Running now": the live counts, or a calm "nothing is running". */
-class RunningWidget : AppWidgetProvider() {
-    override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) = Widgets.update(context)
-}
+class RunningWidget : SimpleWidget()
 
 /** "This week's step": the level of My path, in counts only. */
-class PathWidget : AppWidgetProvider() {
-    override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) = Widgets.update(context)
-}
+class PathWidget : SimpleWidget()
 
 /** "Daily hardening today": the count of today's habits, in counts only. */
-class GartWidget : AppWidgetProvider() {
-    override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) = Widgets.update(context)
-}
+class GartWidget : SimpleWidget()

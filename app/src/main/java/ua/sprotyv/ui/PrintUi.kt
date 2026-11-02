@@ -248,7 +248,7 @@ object Exports {
                 false
             }
             if (!ok) {
-                try { android.provider.DocumentsContract.deleteDocument(app.contentResolver, uri) } catch (e: Exception) { }
+                deleteQuietly(app, uri)
             }
             _result.value = kind to if (ok) R.string.print_saved else R.string.print_failed
         }
@@ -293,7 +293,7 @@ fun PrintScreen(content: Content?) {
             if (list.isEmpty()) Text(stringResource(R.string.notes_empty), style = MaterialTheme.typography.bodyMedium)
             list.forEach { n ->
                 androidx.compose.foundation.layout.Row(
-                    Modifier.fillMaxWidth().heightIn(min = 48.dp).androidx_toggle(n.id in noteIds) { on -> noteIds = if (on) noteIds + n.id else noteIds - n.id }
+                    Modifier.fillMaxWidth().heightIn(min = 48.dp).toggleable(value = n.id in noteIds, role = androidx.compose.ui.semantics.Role.Checkbox) { on -> noteIds = if (on) noteIds + n.id else noteIds - n.id }
                         .padding(start = 8.dp),
                     verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
                 ) {
@@ -575,5 +575,3 @@ private fun decodeUri(context: Context, uri: Uri): String? = try {
     null
 }
 
-private fun Modifier.androidx_toggle(on: Boolean, change: (Boolean) -> Unit): Modifier =
-    this.then(Modifier.toggleable(value = on, role = androidx.compose.ui.semantics.Role.Checkbox, onValueChange = change))

@@ -148,7 +148,7 @@ fun SuppliesScreen(content: Content?, nav: Nav) {
             Checkbox(checked = have, onCheckedChange = { on -> change { it.copy(have = if (on) it.have + key else it.have - key) } }, colors = doneCheckbox())
             Column(Modifier.weight(1f).padding(top = 12.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                 Row {
-                    Text(line.what, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = doneText(have), modifier = Modifier.weight(1f))
+                    Text(line.what, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f))
                     Text(line.amount, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
                 }
                 if (line.note.isNotBlank()) Text(line.note, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
