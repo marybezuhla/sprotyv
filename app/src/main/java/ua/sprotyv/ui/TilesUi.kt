@@ -283,6 +283,7 @@ private val Tool.title: Int get() = when (this) {
     Tool.GART -> R.string.gart_title
     Tool.COMMS -> R.string.comms_title
     Tool.DRIVING -> R.string.driving_title
+    Tool.WEAPONS -> R.string.weapons_title
 }
 
 private val Tool.hint: Int get() = when (this) {
@@ -314,6 +315,7 @@ private val Tool.hint: Int get() = when (this) {
     Tool.GART -> R.string.gart_hint
     Tool.COMMS -> R.string.comms_hint
     Tool.DRIVING -> R.string.driving_hint
+    Tool.WEAPONS -> R.string.weapons_hint
 }
 
 /** Cards and tools with a picture of their own (Health Icons, public domain), clearer than the group's. */
@@ -367,6 +369,7 @@ private val TOOL_ICONS = mapOf(
     Tool.GART to R.drawable.ocha_training,
     Tool.COMMS to R.drawable.ocha_walkie_talkie,
     Tool.DRIVING to R.drawable.ic_car,
+    Tool.WEAPONS to R.drawable.ocha_security,
     Tool.PRINT to R.drawable.ocha_table,
 )
 
@@ -416,6 +419,7 @@ val Tool.route: Route get() = when (this) {
     Tool.GART -> Route.Mine(MinePart.GART)
     Tool.COMMS -> Route.Comms
     Tool.DRIVING -> Route.Driving
+    Tool.WEAPONS -> Route.Weapons
 }
 
 /** The group a tile belongs to: the first that names it. "What to do now" and "I am safe" have their own. */

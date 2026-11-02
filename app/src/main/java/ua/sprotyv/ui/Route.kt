@@ -47,6 +47,7 @@ sealed interface Route {
     /** "When the network is down": phone-to-phone and radio messengers, set up in advance. */
     data object Comms : Route
     data object Driving : Route
+    data object Weapons : Route
     /** The offline map, drawn from a file the owner chose. */
     /** "Check yourself" for one step of "My path": that step's situations; all right marks it as checked. */
     data class PathCheck(val step: String) : Route
@@ -92,6 +93,7 @@ sealed interface Route {
         is PracticeRoute -> "practice:$card"
         Comms -> "comms"
         Driving -> "driving"
+        Weapons -> "weapons"
         is PathCheck -> "pathcheck:$step"
         is RoleRoute -> "role:$id"
         is External -> "external:$id"
@@ -130,6 +132,7 @@ sealed interface Route {
                 "practice" -> PracticeRoute(value)
                 "comms" -> Comms
                 "driving" -> Driving
+                "weapons" -> Weapons
                 "pathcheck" -> value.takeIf { it in PATH_CHECKS }?.let(::PathCheck)
                 "role" -> value.takeIf { it in ROLES }?.let(::RoleRoute)
                 // Never reopened after the app is restored: that would open a page unasked
