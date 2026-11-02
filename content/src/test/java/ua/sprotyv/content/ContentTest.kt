@@ -44,6 +44,17 @@ class ContentTest {
         assertEquals("XV", c.sections.last().num)
     }
 
+    @Test fun rulesOfTheRoadAreWhole() {
+        val p = PdrReader.parse(File(assets, "pdr.json").readText())
+        assertEquals((1..34).map { it.toString() }, p.sections.map { it.num })
+        val text = p.sections.flatMap { it.blocks }.filterIsInstance<Pdr.Para>().map { it.text }
+        assertTrue(text.first().startsWith("1.1. Ці Правила"))
+        assertTrue(text.any { it.startsWith("12.4.") })
+        // Notes on amendments are left out, the rules' own words stay
+        assertTrue(text.none { "{" in it || "}" in it })
+        assertTrue(p.sections.flatMap { it.blocks }.filterIsInstance<Pdr.Table>().size >= 5)
+    }
+
     @Test fun childCardsAreShortAndApart() {
         assertTrue("kid cards", kidCards.size >= 6)
         kidCards.forEach { card ->

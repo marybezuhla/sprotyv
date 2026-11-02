@@ -287,6 +287,7 @@ private fun Screen(
         is Route.Moz -> MozScreen(content, top.n, nav)
         Route.HistoryRoute -> HistoryScreen(content, nav)
         is Route.Story -> StoryScreen(content, top.id, nav)
+        is Route.PdrRoute -> if (top.section.isEmpty()) PdrScreen(content, nav) else PdrSectionScreen(content, top.section, nav)
         is Route.ConstitutionRoute -> if (top.article.isEmpty()) ConstitutionScreen(content, nav) else ConstitutionArticleScreen(content, top.article, nav)
         is Route.Delegate -> DelegateScreen(content, top.n, nav)
         Route.Handover -> HandoverScreen(nav)

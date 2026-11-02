@@ -1569,6 +1569,16 @@
     <string name="driving_licence_6">Перше посвідчення діє два роки, потім його міняють на посвідчення на 30 років.</string>
     <string name="driving_licence_7">Офіційні екзаменаційні питання й відповіді безкоштовно відкриті на сайті Головного сервісного центру МВС.</string>
     <string name="driving_licence_source">Джерела: Головний сервісний центр МВС (07.04.2025, 18.09.2025, 10.03.2026, 27.08.2026, 11.09.2026). Перевірено 02.11.2026. Умови змінюються — варто уточнювати.</string>
+    <string name="pdr_title">Правила дорожнього руху</string>
+    <string name="pdr_hint">Повний текст, без інтернету</string>
+    <string name="pdr_intro">Офіційні Правила дорожнього руху України, чинна редакція. Шукайте за словом або номером пункту, наприклад 12.4.</string>
+    <string name="pdr_search">Пошук у Правилах</string>
+    <string name="pdr_found">Знайдено: %1$d</string>
+    <string name="pdr_sections">Розділи</string>
+    <string name="pdr_section">Розділ %1$s</string>
+    <string name="pdr_all">Усі розділи</string>
+    <string name="pdr_official">Офіційний текст без приміток про зміни. Щодо штрафів і суперечок зверніться до юриста або до безоплатної правової допомоги.</string>
+    <string name="pdr_no_pictures">зображень знаків і розмітки немає; розділи 33 і 34 описують їх словами</string>
     <string name="driving_where">Офіційні джерела</string>
     <string name="chapter_evacuation_car">Евакуація пішки та автомобілем</string>
     <string name="chapter_evacuation_car_hint">Розділ 26 довідника</string>
