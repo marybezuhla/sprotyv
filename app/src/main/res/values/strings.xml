@@ -291,7 +291,7 @@
     <string name="backup_last">Остання копія: %1$s</string>
     <string name="backup_busy">Зачекайте кілька секунд…</string>
     <string name="backup_save_title">Зберегти копію</string>
-    <string name="backup_suggested">Пароль — шість випадкових слів. Запишіть його на папері й тримайте окремо від телефона.</string>
+    <string name="backup_suggested">Пароль — шість випадкових англійських слів через дефіс. Набирайте латинськими малими літерами. Запишіть його на папері й тримайте окремо від телефона.</string>
     <string name="backup_another">Інші слова</string>
     <string name="backup_own">Свій пароль</string>
     <string name="backup_use_suggested">Запропонований пароль</string>
