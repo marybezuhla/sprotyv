@@ -41,8 +41,9 @@ fun DrivingScreen(content: Content?, nav: Nav) {
 
 private val DRIVING_LINKS = listOf("hsc-tests", "hsc-licence", "hsc-schools", "hsc-queue", "diia-licence")
 
+/** A foldable block of short facts with its sources and date below; shared by Driving and Weapons. */
 @Composable
-private fun Facts(title: Int, group: Group, facts: List<Int>, source: Int, startOpen: Boolean = false) {
+internal fun Facts(title: Int, group: Group, facts: List<Int>, source: Int, startOpen: Boolean = false) {
     Block(stringResource(title), group, foldable = true, startOpen = startOpen) {
         facts.forEach {
             Row { Text("•", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(end = 8.dp)); Text(stringResource(it), style = ReadingText, modifier = Modifier.weight(1f)) }
