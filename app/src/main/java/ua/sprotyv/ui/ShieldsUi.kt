@@ -74,7 +74,7 @@ private fun readinessShields(shares: String): List<ShieldItem> {
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ShieldsScreen(nav: Nav) {
+fun ShieldsScreen(nav: Nav, openGroups: Boolean = false) {
     val habits by remember { PersonalStore.observe { db -> db.settings().observe(KEY_HABITS).map { listOf(it) } } }.collectAsStateWithLifecycle(null)
     val path by remember { PersonalStore.observe { db -> db.settings().observe(KEY_PATH).map { listOf(it) } } }.collectAsStateWithLifecycle(null)
     val stepsStored by remember { PersonalStore.observe { db -> db.settings().observe(KEY_STEPS).map { listOf(it) } } }.collectAsStateWithLifecycle(null)
@@ -148,7 +148,7 @@ fun ShieldsScreen(nav: Nav) {
     }
     groups.forEachIndexed { gi, (title, list) ->
         if (list.isEmpty()) return@forEachIndexed
-        Block(stringResource(title), Group.PREPARE, tint = resist(), foldable = true, startOpen = false, trailing = {
+        Block(stringResource(title), Group.PREPARE, tint = resist(), foldable = true, startOpen = openGroups && title in listOf(R.string.shields_counts, R.string.shields_tests), trailing = {
             Text(stringResource(R.string.ready_count, list.count { it.level == 2 }, list.size), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
         }) {
             // Counts are kept by hand: said so, so nobody waits for them to fill by themselves
