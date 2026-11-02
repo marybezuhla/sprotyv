@@ -39,8 +39,18 @@ class Main : ComponentActivity() {
     private val closeLater = android.os.Handler(android.os.Looper.getMainLooper())
     private val closeNow = Runnable {
         Away.back()
+        forgetTyped()
         PersonalStore.close()
         Guard.close()
+    }
+
+    /** Typed or scanned text waiting in memory goes with the data: drafts and the three inboxes. */
+    private fun forgetTyped() {
+        EditGuard.drafts.clear()
+        QrInbox.text = ""
+        NoteInbox.title = ""
+        NoteInbox.text = ""
+        PlanInbox.text = null
     }
 
     override fun onNewIntent(intent: android.content.Intent) {
@@ -64,7 +74,7 @@ class Main : ComponentActivity() {
         if (!isChangingConfigurations && Away.expected) closeLater.postDelayed(closeNow, 3 * 60_000L)
         if (!isChangingConfigurations && !Away.expected) {
             // Drafts are kept in memory only for a turn of the screen, never while the app is away
-            EditGuard.drafts.clear()
+            forgetTyped()
             PersonalStore.close()
             // Settings lock again; not while Android's own PIN window is what covers the app
             Guard.close()

@@ -238,10 +238,13 @@ object BackupData {
                 '"' -> inString = true
                 '{', '[' -> { if (++depth > MAX_DEPTH) return false; if (++values > MAX_VALUES) return false }
                 ',' -> if (++values > MAX_VALUES) return false
-                '}', ']' -> depth--
+                '}', ']' -> if (--depth < 0) return false
+                // Android's JSON reader also takes single-quoted strings and comments; Sprotyv never
+                // writes them, and inside them a bracket would slip past this count, so they are refused
+                '\'', '/', '#' -> return false
             }
         }
-        return true
+        return depth == 0 && !inString
     }
 
     private inline fun <T> guard(block: () -> T): T = try {

@@ -111,6 +111,15 @@ fun SecureScreen() {
         onDispose { SecureScreens.open.intValue-- }
     }
     val activity = LocalContext.current as? Activity ?: return
+    // Apps that read the screen through accessibility (other than real aids such as TalkBack, which
+    // Android marks as accessibility tools) see nothing of these screens, screenshots allowed or not
+    if (Build.VERSION.SDK_INT >= 34) {
+        DisposableEffect(activity) {
+            val view = activity.window.decorView
+            view.accessibilityDataSensitive = android.view.View.ACCESSIBILITY_DATA_SENSITIVE_YES
+            onDispose { view.accessibilityDataSensitive = android.view.View.ACCESSIBILITY_DATA_SENSITIVE_AUTO }
+        }
+    }
     val allowed = HomePrefs.state.collectAsStateWithLifecycle().value?.screenshots == true
     if (allowed) return
     DisposableEffect(activity) {
@@ -141,6 +150,9 @@ fun Personal(title: Int, state: Opened?, nav: Nav, content: @Composable () -> Un
     androidx.compose.runtime.LaunchedEffect(state is Opened.Ready) { if (state is Opened.Ready) { Steps.flush(context); Steps.flushCounts(context) } }
     if (state != null && state !is Opened.Ready) seen[0] = false
     val wasReady = seen[0]
+    // With the lock on, nothing of the closed data is drawn again before the owner confirms: the
+    // half-filled screen is given up rather than shown to whoever holds the phone
+    val lockedNow = remember(state == null) { state == null && wasReady && PersonalStore.lockMode(context)?.locked == true }
     SecureScreen()
     Frame(stringResource(title), nav::back) {
         if (saveFailed) {
@@ -152,7 +164,7 @@ fun Personal(title: Int, state: Opened?, nav: Nav, content: @Composable () -> Un
         // One call site for the content: while the data closes and reopens (a file picker, a
         // camera), the screen and everything it remembers stays as it is
         when {
-            state is Opened.Ready || (state == null && wasReady) -> content()
+            state is Opened.Ready || (state == null && wasReady && !lockedNow) -> content()
             state == null -> {
                 // Opening never takes long: if it seems stuck, the owner can start it again
                 var slow by remember { androidx.compose.runtime.mutableStateOf(false) }

@@ -40,8 +40,9 @@ import javax.crypto.spec.GCMParameterSpec
  *   database when it leaves the screen;
  * - a phone with no screen lock, or kept unlocked by Smart Lock, gives no lock protection at all.
  *
- * Nothing here ever deletes a key or a file: a key judged lost is set aside, never erased, so a
- * wrong judgement can still be undone.
+ * Nothing here deletes a file, and a key judged lost is set aside, never erased, so a wrong
+ * judgement can still be undone. The one key ever deleted is the old one after the lock was
+ * changed and the new wrapping written ([finishRewrap]).
  *
  * File format 2: version, flags (bit 0 locked, bit 1 PIN only), alias, IV, wrapped passphrase.
  * Format 1 (older installs) has no flags. The header is bound to the ciphertext as associated
@@ -233,16 +234,24 @@ class KeyVault(context: Context) {
     @Volatile var lastError: Throwable? = null
 
     /**
-     * Step 2: the same passphrase is stored wrapped with the new key, atomically. The old key
-     * entry is kept (nothing here deletes a key); it no longer has anything to open.
+     * Step 2: the same passphrase is stored wrapped with the new key, atomically. Then the old key
+     * entry is deleted: the file it wrapped is gone, so it has nothing left to open, and a copy of
+     * that file left on the phone's storage must not open without the new protection. This is the
+     * one place a key is deleted, and only once the new wrapping is written.
      */
     @Synchronized
     fun finishRewrap(confirmed: Cipher, alias: String, mode: Mode, passphrase: ByteArray) {
         require(passphrase.size == PASSPHRASE_BYTES)
-        require(keyStore().containsAlias(alias)) { "New key missing" }
+        val store = keyStore()
+        require(store.containsAlias(alias)) { "New key missing" }
+        val oldAlias = try { readWrapped().alias } catch (e: Exception) { null }
         confirmed.updateAAD(header(FORMAT_VERSION, mode, alias))
         val data = confirmed.doFinal(passphrase)
         writeWrapped(Wrapped(FORMAT_VERSION, mode, alias, confirmed.iv, data))
+        // Only a different, Sprotyv-made entry; a failure here leaves a key that opens nothing current
+        if (oldAlias != null && oldAlias != alias && ALIAS.matches(oldAlias)) {
+            try { store.deleteEntry(oldAlias) } catch (e: Exception) { lastError = e }
+        }
     }
 
     /**

@@ -128,6 +128,13 @@ class BackupTest {
         assertTrue(BackupData.shallow("{\"a\":\"[[[[[[[[[[\\\"[[[[\"}".toByteArray()))
         // Millions of empty objects: refused before parsing, so memory stays small
         assertFalse(BackupData.shallow(("[" + "{},".repeat(300_000) + "{}]").toByteArray()))
+        // Comments and single-quoted strings could hide a closing bracket from the count: refused
+        assertFalse(BackupData.shallow("{\"a\":[/*]]]*/[[[]]]}".toByteArray()))
+        assertFalse(BackupData.shallow("{'a':']]]'}".toByteArray()))
+        assertFalse(BackupData.shallow("{\"a\":1}# ]]]".toByteArray()))
+        // More closing than opening brackets, or unfinished text
+        assertFalse(BackupData.shallow("]]{\"a\":[[[]]]}".toByteArray()))
+        assertFalse(BackupData.shallow("{\"a\":\"b}".toByteArray()))
     }
 
     @Test fun duplicatesAndWrongShapesAreRefused() {

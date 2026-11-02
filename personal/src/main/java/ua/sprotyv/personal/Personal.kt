@@ -63,7 +63,12 @@ object Personal {
             // Data without a key file cannot be opened; it is never overwritten
             if (PersonalDb.exists(context)) return Opened.KeyLost
             val fresh = vault.create()
-            return Opened.Ready(PersonalDb.open(context, fresh.passphrase), fresh.softwareKey)
+            return try {
+                Opened.Ready(PersonalDb.open(context, fresh.passphrase), fresh.softwareKey)
+            } finally {
+                // The database keeps only its own form of the key; this copy is wiped at once
+                fresh.passphrase.fill(0)
+            }
         }
         return withPassphrase(context, vault.unwrap()) { vault.lockedKeyLost() }
     }
@@ -89,6 +94,9 @@ object Personal {
                 Opened.Damaged
             } catch (e: Exception) {
                 Opened.TryAgain
+            } finally {
+                // The database keeps only its own form of the key; this copy is wiped at once
+                u.passphrase.fill(0)
             }
         }
     }
