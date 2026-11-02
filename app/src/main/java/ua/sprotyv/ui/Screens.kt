@@ -152,7 +152,7 @@ fun Personal(title: Int, state: Opened?, nav: Nav, content: @Composable () -> Un
     val wasReady = seen[0]
     // With the lock on, nothing of the closed data is drawn again before the owner confirms: the
     // half-filled screen is given up rather than shown to whoever holds the phone
-    val lockedNow = remember(state == null) { state == null && wasReady && PersonalStore.lockMode(context)?.locked == true }
+    val lockedNow = remember(state == null) { state == null && wasReady && PersonalStore.lockMode(context)?.locked != false }
     SecureScreen()
     Frame(stringResource(title), nav::back) {
         if (saveFailed) {

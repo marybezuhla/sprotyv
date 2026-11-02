@@ -300,7 +300,7 @@ object PersonalStore {
             val mode = KeyVault.Mode(locked = true, pinOnly = pinOnly)
             try {
                 val (cipher, alias) = vault.cipherForRewrap(mode, strongBox = !strongBoxFailed)
-                LockChange(cipher, alias, mode, u.passphrase)
+                LockChange(cipher, alias, mode, u.passphrase, vault.currentAlias())
             } catch (e: Exception) {
                 u.passphrase.fill(0)
                 throw e
@@ -347,7 +347,7 @@ object PersonalStore {
         } else {
             try {
                 val (cipher, alias) = vault.cipherForRewrap(target, strongBox = !strongBoxFailed)
-                LockChange(cipher, alias, target, u.passphrase)
+                LockChange(cipher, alias, target, u.passphrase, vault.currentAlias())
             } catch (e: Exception) {
                 u.passphrase.fill(0)
                 throw e
@@ -364,7 +364,7 @@ object PersonalStore {
         scope.launch {
             val ok = mutex.withLock {
                 try {
-                    KeyVault(app).finishRewrap(change.cipher, change.alias, change.mode, change.passphrase)
+                    KeyVault(app).finishRewrap(change.cipher, change.alias, change.mode, change.passphrase, change.oldAlias)
                     lockTrouble = null
                     true
                 } catch (t: Throwable) {
@@ -405,6 +405,8 @@ class LockChange internal constructor(
     internal val alias: String,
     val mode: KeyVault.Mode,
     internal val passphrase: ByteArray,
+    // The key the change started from, deleted once the new wrapping is on the disk
+    internal val oldAlias: String?,
 ) {
     /** Cancelled: the passphrase copy is wiped at once. */
     fun discard() = passphrase.fill(0)
