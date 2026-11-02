@@ -165,6 +165,9 @@ class ScreensTest {
     @Test fun cardBig() { mode(Mode.FULL); shot("27-card-bleeding-big", dark = true, big = true) { CardScreen(content, "bleeding", nav) } }
     @Test fun guideTableBig() = shot("28-guide-9-3-big", dark = true, big = true) { GuideSectionScreen(content, "9.3", nav) }
     @Test fun practiceCheck() { mode(Mode.FULL); shot("29-practice-check-dark", dark = true) { PracticeScreen(content, "bleeding", nav, check = "bleed") } }
+    @Test fun pdr() = shot("33-pdr") { PdrScreen(content, nav) }
+    @Test fun pdrTable() = shot("33-pdr-22-dark", dark = true) { PdrSectionScreen(content, "22", nav) }
+    @Test fun weapons() = shot("34-weapons") { WeaponsScreen(nav) }
     @Test fun comms() = shot("30-comms-dark", dark = true) { CommsScreen(nav) }
     // Settings in English with large text: rows of choices must wrap, never break a word
     @Test fun settingsBig() { mode(Mode.FULL); shot("31-settings-big", big = true) { SettingsScreen(HomePrefs.load(app), nav) } }
