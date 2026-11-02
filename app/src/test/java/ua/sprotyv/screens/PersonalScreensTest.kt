@@ -156,5 +156,7 @@ class PersonalScreensTest {
     @Test fun safe() = shot("52-safe") { Frame("Я в безпеці", {}) { SafeScreen(nav) } }
     @Test fun shields() = shot("53-shields-dark", dark = true) { Frame("Мої щити", {}) { ShieldsScreen(nav) } }
     @Test fun shieldsLight() = shot("53-shields") { Frame("Мої щити", {}) { ShieldsScreen(nav) } }
+    @Test fun shieldsBig() = shot("53-shields-big", big = true) { Frame("Мої щити", {}) { ShieldsScreen(nav, openGroups = true) } }
+    @Test fun medicalBig() = shot("45-medical-big", big = true) { Frame("Медкартка", {}) { MedicalScreen() } }
     @Test fun shieldsOpen() = shot("53-shields-open-dark", dark = true) { Frame("Мої щити", {}) { ShieldsScreen(nav, openGroups = true) } }
 }

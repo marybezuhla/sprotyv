@@ -171,6 +171,8 @@ class ScreensTest {
     @Test fun pdr() = shot("33-pdr") { PdrScreen(content, nav) }
     @Test fun pdrTable() = shot("33-pdr-22-dark", dark = true) { PdrSectionScreen(content, "22", nav) }
     @Test fun weapons() = shot("34-weapons") { WeaponsScreen(nav) }
+    @Test fun pdrBig() = shot("33-pdr-1-big", big = true) { PdrSectionScreen(content, "1", nav) }
+    @Test fun weaponsBig() = shot("34-weapons-big", dark = true, big = true) { WeaponsScreen(nav) }
     @Test fun comms() = shot("30-comms-dark", dark = true) { CommsScreen(nav) }
     // Settings in English with large text: rows of choices must wrap, never break a word
     @Test fun settingsBig() { mode(Mode.FULL); shot("31-settings-big", big = true) { SettingsScreen(HomePrefs.load(app), nav) } }
