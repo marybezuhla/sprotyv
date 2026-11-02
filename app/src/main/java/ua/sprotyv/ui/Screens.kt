@@ -120,16 +120,42 @@ fun SecureScreen() {
             onDispose { view.setAccessibilityDataSensitive(android.view.View.ACCESSIBILITY_DATA_SENSITIVE_AUTO) }
         }
     }
+    // The recent-apps picture never shows these screens, even with screenshots allowed: it would
+    // show the data to whoever holds the phone, past the lock on "My data"
+    if (Build.VERSION.SDK_INT >= 33) {
+        DisposableEffect(activity) {
+            activity.setRecentsScreenshotEnabled(false)
+            onDispose { activity.setRecentsScreenshotEnabled(true) }
+        }
+    }
     val allowed = HomePrefs.state.collectAsStateWithLifecycle().value?.screenshots == true
     if (allowed) return
     DisposableEffect(activity) {
         activity.window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
-        if (Build.VERSION.SDK_INT >= 33) activity.setRecentsScreenshotEnabled(false)
-        onDispose {
-            activity.window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
-            if (Build.VERSION.SDK_INT >= 33) activity.setRecentsScreenshotEnabled(true)
-        }
+        onDispose { activity.window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE) }
     }
+}
+
+/**
+ * Text typed under here is not learned by the keyboard (names, illnesses, notes would otherwise go
+ * into its own dictionary, which may be synced to an account). Covers dialogs opened inside too.
+ */
+@OptIn(androidx.compose.ui.ExperimentalComposeUiApi::class)
+@Composable
+fun NoKeyboardLearning(content: @Composable () -> Unit) {
+    androidx.compose.ui.platform.InterceptPlatformTextInput(
+        interceptor = { request, next ->
+            val private = object : androidx.compose.ui.platform.PlatformTextInputMethodRequest {
+                override fun createInputConnection(outAttributes: android.view.inputmethod.EditorInfo): android.view.inputmethod.InputConnection {
+                    val connection = request.createInputConnection(outAttributes)
+                    outAttributes.imeOptions = outAttributes.imeOptions or android.view.inputmethod.EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING
+                    return connection
+                }
+            }
+            next.startInputMethod(private)
+        },
+        content = content,
+    )
 }
 
 /**
@@ -164,7 +190,7 @@ fun Personal(title: Int, state: Opened?, nav: Nav, content: @Composable () -> Un
         // One call site for the content: while the data closes and reopens (a file picker, a
         // camera), the screen and everything it remembers stays as it is
         when {
-            state is Opened.Ready || (state == null && wasReady && !lockedNow) -> content()
+            state is Opened.Ready || (state == null && wasReady && !lockedNow) -> NoKeyboardLearning(content)
             state == null -> {
                 // Opening never takes long: if it seems stuck, the owner can start it again
                 var slow by remember { androidx.compose.runtime.mutableStateOf(false) }
