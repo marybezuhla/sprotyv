@@ -294,6 +294,8 @@ fun SafeScreen(nav: Nav) {
         is Loaded.Value -> l.value
     }
     var text by remember(stored) { mutableStateOf(stored.ifBlank { defaultText }) }
+    // The owner's own "I am fine" as last typed: coming back to it from another status shows it, not the old one
+    var okText by remember(stored) { mutableStateOf(stored.ifBlank { defaultText }) }
     // Three ready messages: "I am fine" (the owner's own words, saved), "I need help", "I can't talk"
     var status by remember { mutableStateOf(SafeStatus.OK) }
     val helpText = stringResource(R.string.safe_help_message)
@@ -311,7 +313,7 @@ fun SafeScreen(nav: Nav) {
             onClick = {
                 status = st
                 text = when (st) {
-                    SafeStatus.OK -> stored.ifBlank { defaultText }
+                    SafeStatus.OK -> okText
                     SafeStatus.HELP -> helpText
                     SafeStatus.QUIET -> quietText
                 }
@@ -334,6 +336,7 @@ fun SafeScreen(nav: Nav) {
         text = it
         // Only "I am fine" is kept as the owner's own words; the other two are written fresh each time
         if (status == SafeStatus.OK) {
+            okText = it
             PersonalStore.save("setting:$KEY_SAFE_MESSAGE") { db -> db.settings().put(ua.sprotyv.personal.Setting(KEY_SAFE_MESSAGE, it)) }
         }
     }, multiline = true)

@@ -119,9 +119,8 @@ data class Steps(
             }
         }
 
-        /** A change, saved only while "Mine" is open. */
+        /** A change, saved only while "Mine" is open; tried otherwise too, so a lost tick is said, never silent. */
         fun change(f: (Steps) -> Steps) {
-            if (PersonalStore.state.value !is Opened.Ready) return
             PersonalStore.save("setting:$KEY_STEPS:" + java.util.UUID.randomUUID()) { db ->
                 db.settings().put(Setting(KEY_STEPS, f(parse(db.settings().get(KEY_STEPS))).json()))
             }

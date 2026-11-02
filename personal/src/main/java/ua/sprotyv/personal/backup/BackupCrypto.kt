@@ -46,6 +46,9 @@ object BackupCrypto {
     /** Too small or too large to be one of ours. */
     class NotABackup : Exception()
 
+    /** The file itself could not be read (a cloud file not downloaded, a card taken out): not a wrong password. */
+    class FileUnreadable : RuntimeException()
+
     /**
      * What a file is for, bound into the encryption: a backup never opens as a plan code and the
      * other way round, even with the same password.
