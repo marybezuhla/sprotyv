@@ -40,7 +40,7 @@ data class Steps(
 
     companion object {
         val MARKS = listOf("rescue", "left", "newlife", "volunteer", "defence", "donate", "twosources")
-        val COUNTS = listOf("blood", "shifts", "taught")
+        val COUNTS = listOf("blood", "shifts", "taught", "donated", "helped", "courses", "animals", "thanks")
         private val ID = Regex("^[a-z0-9:-]{1,60}$")
 
         /** Anything odd is dropped; numbers kept in sane bounds. */

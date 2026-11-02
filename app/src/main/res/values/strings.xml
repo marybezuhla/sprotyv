@@ -104,6 +104,11 @@
     <string name="person_ice">Contact in an emergency</string>
     <string name="delete_person">Delete</string>
     <string name="delete_person_confirm">Delete %1$s from the list?</string>
+    <string name="not_filled">Not filled in</string>
+    <string name="discard_title">Discard changes?</string>
+    <string name="discard_text">What you changed is not saved yet.</string>
+    <string name="discard">Discard</string>
+    <string name="keep_editing">Keep editing</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="safe_default_message">I am safe. I will get in touch later.</string>
@@ -738,6 +743,7 @@
     <string name="path_course">I took an in-person first-aid course</string>
     <string name="path_basics">I took a course in the basics of national resistance</string>
     <string name="path_centre">I know where the resistance training centre in my region is</string>
+    <string name="path_drones">I took a drone operator course</string>
     <string name="path_rights">I know my rights and duties in defence</string>
     <string name="path_learn">Where to learn</string>
     <string name="resist_learn_title">Where to learn in person</string>
@@ -1469,7 +1475,7 @@
     <string name="shields_hint">What you really can do and have done</string>
     <string name="shields_count">Earned: %1$d of %2$d</string>
     <string name="shields_earned_title">Already earned</string>
-    <string name="shields_counts_hint">You keep these counts: tap “+1” when you gave blood, worked a shift or taught someone. “−1” if tapped by mistake.</string>
+    <string name="shields_counts_hint">Small good deeds hold the country together too. Tap “+1” each time you do one; “−1” if tapped by mistake.</string>
     <string name="roles_chosen">Chosen: %1$d</string>
     <string name="way_roles_title">My roles</string>
     <string name="way_roles_none">None chosen yet: choose who you are now</string>
@@ -1515,6 +1521,11 @@
     <string name="step_twosources">News checked by two sources</string>
     <string name="count_blood">Blood given</string>
     <string name="count_shifts">Volunteer shifts and trips</string>
+    <string name="count_donated">Donations for defence</string>
+    <string name="count_helped">Help to people nearby</string>
+    <string name="count_courses">Courses and trainings</string>
+    <string name="count_animals">Animals rescued</string>
+    <string name="count_thanks">Thanks to defenders</string>
     <string name="count_taught">People taught first aid</string>
     <string name="shields_held">We hold on</string>
     <string name="shields_big">Big steps</string>

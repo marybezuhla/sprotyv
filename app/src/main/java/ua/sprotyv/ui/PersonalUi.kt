@@ -126,7 +126,7 @@ fun MineHub(nav: Nav, content: ua.sprotyv.content.Content?) {
     Text(stringResource(R.string.mine_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 }
 
-/** A text field that saves on every change. */
+/** A text field; what happens to each change is up to the caller. */
 @Composable
 fun Field(
     label: String,
@@ -165,30 +165,35 @@ fun MedicalScreen() {
         Loaded.Failed -> return ReadFailed()
         is Loaded.Value -> l.value
     }
-    var card by remember(start) { mutableStateOf(start) }
-    fun change(next: MedicalCard) {
-        card = next
-        val saved = next.copy(updatedAt = System.currentTimeMillis())
-        PersonalStore.save("medical") { it.medical().save(saved) }
-    }
     Text(stringResource(R.string.medical_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    // The card in the green of health; the contacts below in the same green
-    Block(stringResource(R.string.medical_card), ua.sprotyv.home.Group.FIRST_AID) {
-    Field(stringResource(R.string.med_name), card.name, { change(card.copy(name = it)) })
-    Field(stringResource(R.string.med_birth), card.birthDate, { change(card.copy(birthDate = it)) }, hint = stringResource(R.string.med_birth_hint))
-    Field(stringResource(R.string.med_blood), card.bloodGroup, { change(card.copy(bloodGroup = it)) }, hint = stringResource(R.string.med_blood_hint))
-    Field(stringResource(R.string.med_allergies), card.allergies, { change(card.copy(allergies = it)) }, multiline = true)
-    Field(stringResource(R.string.med_medicines), card.medicines, { change(card.copy(medicines = it)) }, multiline = true, hint = stringResource(R.string.med_medicines_hint))
-    Field(stringResource(R.string.med_conditions), card.conditions, { change(card.copy(conditions = it)) }, multiline = true)
-    Field(stringResource(R.string.med_notes), card.notes, { change(card.copy(notes = it)) }, multiline = true)
-    }
+    // Shown as text; changed only through "Change" and "Save", so a stray tap edits nothing
+    EditableBlock("medical", stringResource(R.string.medical_card), ua.sprotyv.home.Group.FIRST_AID, start,
+        onSave = { next -> val saved = next.copy(updatedAt = System.currentTimeMillis()); PersonalStore.save("medical") { it.medical().save(saved) } },
+        view = { card ->
+            ReadField(stringResource(R.string.med_name), card.name)
+            ReadField(stringResource(R.string.med_birth), card.birthDate)
+            ReadField(stringResource(R.string.med_blood), card.bloodGroup)
+            ReadField(stringResource(R.string.med_allergies), card.allergies)
+            ReadField(stringResource(R.string.med_medicines), card.medicines)
+            ReadField(stringResource(R.string.med_conditions), card.conditions)
+            ReadField(stringResource(R.string.med_notes), card.notes)
+        },
+        edit = { card, change ->
+            Field(stringResource(R.string.med_name), card.name, { change(card.copy(name = it)) })
+            Field(stringResource(R.string.med_birth), card.birthDate, { change(card.copy(birthDate = it)) }, hint = stringResource(R.string.med_birth_hint))
+            Field(stringResource(R.string.med_blood), card.bloodGroup, { change(card.copy(bloodGroup = it)) }, hint = stringResource(R.string.med_blood_hint))
+            Field(stringResource(R.string.med_allergies), card.allergies, { change(card.copy(allergies = it)) }, multiline = true)
+            Field(stringResource(R.string.med_medicines), card.medicines, { change(card.copy(medicines = it)) }, multiline = true, hint = stringResource(R.string.med_medicines_hint))
+            Field(stringResource(R.string.med_conditions), card.conditions, { change(card.copy(conditions = it)) }, multiline = true)
+            Field(stringResource(R.string.med_notes), card.notes, { change(card.copy(notes = it)) }, multiline = true)
+        },
+    )
 
     val ice = rememberPeople().orEmpty().filter { it.ice }
     Block(stringResource(R.string.ice_title), ua.sprotyv.home.Group.FIRST_AID) {
         if (ice.isEmpty()) Text(stringResource(R.string.ice_none), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         ice.forEach { Text("${it.name} · ${it.phone}", style = MaterialTheme.typography.bodyLarge) }
     }
-    Text(stringResource(R.string.saved_automatically), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 }
 
 /** Trusted people: who gets "I am safe" and who is the emergency contact. */

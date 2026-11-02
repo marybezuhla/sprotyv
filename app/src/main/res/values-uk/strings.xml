@@ -104,6 +104,11 @@
     <string name="person_ice">Контакт на випадок біди</string>
     <string name="delete_person">Видалити</string>
     <string name="delete_person_confirm">Видалити %1$s зі списку?</string>
+    <string name="not_filled">Не заповнено</string>
+    <string name="discard_title">Відкинути зміни?</string>
+    <string name="discard_text">Те, що ви змінили, ще не збережено.</string>
+    <string name="discard">Відкинути</string>
+    <string name="keep_editing">Продовжити</string>
     <string name="save">Зберегти</string>
     <string name="cancel">Скасувати</string>
     <string name="safe_default_message">Я в безпеці. Зв’яжуся пізніше.</string>
@@ -744,6 +749,7 @@
     <string name="path_course">Пройдено курс першої допомоги наживо</string>
     <string name="path_basics">Пройдено курс основ національного спротиву</string>
     <string name="path_centre">Знаю, де центр підготовки до нацспротиву в моїй області</string>
+    <string name="path_drones">Пройдено курс керування дронами</string>
     <string name="path_rights">Знаю свої права й обов’язки щодо оборони</string>
     <string name="path_learn">Де вчитися</string>
     <string name="resist_learn_title">Де вчитися наживо</string>
@@ -1475,7 +1481,7 @@
     <string name="shields_hint">Що вже справді вмієте й зробили</string>
     <string name="shields_count">Здобуто: %1$d з %2$d</string>
     <string name="shields_earned_title">Уже здобуто</string>
-    <string name="shields_counts_hint">Лічильники ведете ви: натисніть «+1», коли здали кров, відпрацювали зміну чи когось навчили. «−1» — якщо натиснули помилково.</string>
+    <string name="shields_counts_hint">Маленькі добрі справи теж тримають країну. Натисніть «+1» щоразу, коли зробили таку справу; «−1» — якщо натиснули помилково.</string>
     <string name="roles_chosen">Обрано: %1$d</string>
     <string name="way_roles_title">Мої ролі</string>
     <string name="way_roles_none">Ще не обрано: оберіть, хто ви зараз</string>
@@ -1521,6 +1527,11 @@
     <string name="step_twosources">Перевірка новини двома джерелами</string>
     <string name="count_blood">Здача крові</string>
     <string name="count_shifts">Волонтерські зміни й виїзди</string>
+    <string name="count_donated">Донати на оборону</string>
+    <string name="count_helped">Допомога людям поруч</string>
+    <string name="count_courses">Курси й тренування</string>
+    <string name="count_animals">Врятовані тварини</string>
+    <string name="count_thanks">Подяки захисникам і захисницям</string>
     <string name="count_taught">Навчені першої допомоги люди</string>
     <string name="shields_held">Тримаємося</string>
     <string name="shields_big">Великі кроки</string>

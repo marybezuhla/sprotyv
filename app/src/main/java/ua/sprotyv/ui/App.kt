@@ -120,7 +120,11 @@ fun App() {
             saved = stack.map(Route::save) + route.save()
         }
         // Built from what could be read, so an unreadable entry never makes Back look stuck
-        override fun back() { saved = stack.dropLast(1).map(Route::save) }
+        override fun back() {
+            // Something typed and not saved: ask first
+            if (EditGuard.isDirty) { EditGuard.asking = true; return }
+            saved = stack.dropLast(1).map(Route::save)
+        }
         override fun home() { saved = emptyList() }
         override fun replace(route: Route) {
             if (trip && Trip.hides(route)) return
@@ -177,6 +181,7 @@ fun App() {
     // Back from another tab first returns to "Home", then leaves the app
     BackHandler(enabled = top == null && full && tab != Tab.HOME) { tabName = Tab.HOME.name }
 
+    EditGuardDialog { nav.back() }
     if (top != null) return Screen(top, content, prefs, personal, nav, ::guarded)
 
     when (prefs.mode) {

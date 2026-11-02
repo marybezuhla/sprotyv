@@ -70,24 +70,36 @@ fun PlanScreen() {
         Loaded.Failed -> return ReadFailed()
         is Loaded.Value -> l.value
     }
-    var plan by remember(start) { mutableStateOf(start) }
-    fun change(next: FamilyPlan) {
-        plan = next
+    fun store(next: FamilyPlan) {
         val saved = next.copy(updatedAt = System.currentTimeMillis())
         PersonalStore.save("plan") { it.plan().save(saved) }
     }
+    // Each part shown as text and changed only with "Change" and "Save". Every block saves the
+    // plan as now stored with only its own part replaced, so two blocks never undo each other
+    var plan by remember(start) { mutableStateOf(start) }
     Text(stringResource(R.string.plan_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    // Each part of the plan in the blue of preparation
-    Block(stringResource(R.string.plan_points), ua.sprotyv.home.Group.PREPARE, foldable = true) {
-        Field(stringResource(R.string.plan_point1), plan.point1, { change(plan.copy(point1 = it)) }, hint = stringResource(R.string.plan_point1_hint))
-        Field(stringResource(R.string.plan_point2), plan.point2, { change(plan.copy(point2 = it)) }, hint = stringResource(R.string.plan_point2_hint))
-        Field(stringResource(R.string.plan_point3), plan.point3, { change(plan.copy(point3 = it)) }, hint = stringResource(R.string.plan_point3_hint))
-    }
-    Block(stringResource(R.string.plan_go_between), ua.sprotyv.home.Group.PREPARE, foldable = true) {
-        Text(stringResource(R.string.plan_go_between_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        Field(stringResource(R.string.person_name), plan.goBetweenName, { change(plan.copy(goBetweenName = it)) })
-        Field(stringResource(R.string.person_phone), plan.goBetweenPhone, { change(plan.copy(goBetweenPhone = it)) }, phone = true)
-    }
+    EditableBlock("plan:points", stringResource(R.string.plan_points), ua.sprotyv.home.Group.PREPARE, Triple(plan.point1, plan.point2, plan.point3), foldable = true,
+        onSave = { (a, b, c) -> plan = plan.copy(point1 = a, point2 = b, point3 = c); store(plan) },
+        view = { (a, b, c) ->
+            ReadField(stringResource(R.string.plan_point1), a); ReadField(stringResource(R.string.plan_point2), b); ReadField(stringResource(R.string.plan_point3), c)
+        },
+        edit = { (a, b, c), change ->
+            Field(stringResource(R.string.plan_point1), a, { change(Triple(it, b, c)) }, hint = stringResource(R.string.plan_point1_hint))
+            Field(stringResource(R.string.plan_point2), b, { change(Triple(a, it, c)) }, hint = stringResource(R.string.plan_point2_hint))
+            Field(stringResource(R.string.plan_point3), c, { change(Triple(a, b, it)) }, hint = stringResource(R.string.plan_point3_hint))
+        },
+    )
+    EditableBlock("plan:between", stringResource(R.string.plan_go_between), ua.sprotyv.home.Group.PREPARE, plan.goBetweenName to plan.goBetweenPhone, foldable = true,
+        onSave = { (n, ph) -> plan = plan.copy(goBetweenName = n, goBetweenPhone = ph); store(plan) },
+        view = { (n, ph) ->
+            Text(stringResource(R.string.plan_go_between_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            ReadField(stringResource(R.string.person_name), n); ReadField(stringResource(R.string.person_phone), ph)
+        },
+        edit = { (n, ph), change ->
+            Field(stringResource(R.string.person_name), n, { change(it to ph) })
+            Field(stringResource(R.string.person_phone), ph, { change(n to it) }, phone = true)
+        },
+    )
     Block(stringResource(R.string.plan_if_then), ua.sprotyv.home.Group.PREPARE, foldable = true) {
         Text(stringResource(R.string.plan_if_then_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Rows(PlanRow.KIND_IF_THEN, R.string.plan_if, R.string.plan_then, R.string.plan_if_example, R.string.plan_then_example)
@@ -95,11 +107,12 @@ fun PlanScreen() {
     Block(stringResource(R.string.plan_roles), ua.sprotyv.home.Group.PREPARE, foldable = true) {
         Rows(PlanRow.KIND_ROLE, R.string.plan_who, R.string.plan_does, R.string.plan_who_example, R.string.plan_does_example)
     }
-    Block(stringResource(R.string.plan_notes), ua.sprotyv.home.Group.PREPARE, foldable = true) {
-        Field(stringResource(R.string.plan_notes), plan.notes, { change(plan.copy(notes = it)) }, multiline = true)
-    }
+    EditableBlock("plan:notes", stringResource(R.string.plan_notes), ua.sprotyv.home.Group.PREPARE, plan.notes, foldable = true,
+        onSave = { n -> plan = plan.copy(notes = n); store(plan) },
+        view = { n -> ReadField(stringResource(R.string.plan_notes), n) },
+        edit = { n, change -> Field(stringResource(R.string.plan_notes), n, change, multiline = true) },
+    )
     Text(stringResource(R.string.plan_practice), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    Text(stringResource(R.string.saved_automatically), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 }
 
 @Composable
