@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "I am safe": the way to the message, never the message -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/w_root" android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@drawable/w_shape_green" android:gravity="center" android:orientation="vertical" android:padding="6dp">
+    <FrameLayout android:layout_width="36dp" android:layout_height="36dp" android:background="@drawable/w_badge_green">
+        <ImageView android:layout_width="match_parent" android:layout_height="match_parent" android:padding="7dp"
+            android:src="@drawable/ocha_assembly_point" android:tint="@color/w_green_bg" android:importantForAccessibility="no" />
+    </FrameLayout>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="@string/tile_safe"
+        android:textColor="@color/w_green_ink" android:textSize="12sp" android:textStyle="bold" android:gravity="center" android:maxLines="2" />
+</LinearLayout>

@@ -150,6 +150,8 @@ object Widgets {
             v.setOnClickPendingIntent(row, open(context, c.target, 10 + i))
         }
         v.setViewVisibility(R.id.w_empty, if (list.isEmpty()) View.VISIBLE else View.GONE)
+        // Two or more counts: they take the room of the heading (the widget is one row high unless made bigger)
+        v.setViewVisibility(R.id.w_head, if (list.size >= 2) View.GONE else View.VISIBLE)
         v.setOnClickPendingIntent(R.id.w_root, open(context, "now", 2))
         return v
     }
@@ -197,17 +199,20 @@ object TileWidgets {
     private fun prefs(c: Context) = c.applicationContext.getSharedPreferences("widget_tiles", Context.MODE_PRIVATE)
     private val ID = Regex("^(card|chapter|tool|link):[A-Za-z0-9_-]{1,40}$")
 
-    class Chosen(val id: String, val title: String, val tone: String)
+    /** [icon]: the name of the part's picture among the app's own (only ours: checked by the pattern and looked up there). */
+    class Chosen(val id: String, val title: String, val tone: String, val icon: String?)
+    private val ICON = Regex("^(ocha|hi|om|ic|tab|pict)_[a-z0-9_]{1,40}$")
 
     fun get(c: Context, widget: Int): Chosen? {
         val v = prefs(c).getString(widget.toString(), null)?.split('\u0001') ?: return null
-        if (v.size != 3 || !ID.matches(v[0])) return null
-        return Chosen(v[0], v[1].take(80), v[2])
+        if (v.size !in 3..4 || !ID.matches(v[0])) return null
+        return Chosen(v[0], v[1].take(80), v[2], v.getOrNull(3)?.takeIf { ICON.matches(it) })
     }
 
-    fun set(c: Context, widget: Int, id: String, title: String, tone: String) {
+    fun set(c: Context, widget: Int, id: String, title: String, tone: String, icon: String? = null) {
         if (!ID.matches(id)) return
-        prefs(c).edit().putString(widget.toString(), listOf(id, title.take(80).replace('\u0001', ' '), tone).joinToString("\u0001")).apply()
+        val parts = listOf(id, title.take(80).replace('\u0001', ' '), tone) + listOfNotNull(icon?.takeIf { ICON.matches(it) })
+        prefs(c).edit().putString(widget.toString(), parts.joinToString("\u0001")).apply()
     }
 
     fun remove(c: Context, widgets: IntArray) = prefs(c).edit().apply { widgets.forEach { remove(it.toString()) } }.apply()
@@ -239,7 +244,9 @@ internal fun Widgets.tile(c: Context, widget: Int): RemoteViews {
     // Trip mode: what it hides is not named on the home screen either (links all, to be sure)
     val chosen = TileWidgets.get(c, widget)?.takeUnless { HomePrefs.load(c).trip && TileWidgets.tripHides(it.id) }
     val v = RemoteViews(c.packageName, layoutFor(chosen?.tone ?: "plain"))
-    v.setTextViewText(R.id.w_mark, when (chosen?.tone) { "urgent" -> "⚠"; "green" -> "✚"; "blue" -> "▣"; "khaki" -> "⛉"; else -> "📖" })
+    // The part's own picture, as inside the app; the colour's general one if it has none
+    val icon = chosen?.icon?.let { name -> c.resources.getIdentifier(name, "drawable", c.packageName).takeIf { it != 0 } }
+    if (icon != null) v.setImageViewResource(R.id.w_icon, icon)
     v.setTextViewText(R.id.w_title, chosen?.title ?: c.getString(R.string.widget_tile_choose))
     v.setOnClickPendingIntent(R.id.w_root, openFor(c, if (chosen != null) "tile/" + chosen.id else "now", 100, widget))
     return v
@@ -267,9 +274,7 @@ internal fun Widgets.kid(c: Context): RemoteViews {
 }
 
 internal fun Widgets.safe(c: Context): RemoteViews {
-    val v = RemoteViews(c.packageName, R.layout.widget_tile_green)
-    v.setTextViewText(R.id.w_mark, "➤")
-    v.setTextViewText(R.id.w_title, c.getString(R.string.tile_safe))
+    val v = RemoteViews(c.packageName, R.layout.widget_safe)
     v.setOnClickPendingIntent(R.id.w_root, openFor(c, "safe", 45))
     return v
 }

@@ -373,6 +373,17 @@ private val TOOL_ICONS = mapOf(
     Tool.PRINT to R.drawable.ocha_table,
 )
 
+/** The picture of a part by its id, as a drawable of the app's own; null for those drawn with a system icon. */
+internal fun tileIconRes(id: String): Int? {
+    val (kind, value) = id.split(":", limit = 2).takeIf { it.size == 2 } ?: return null
+    return when (kind) {
+        "card" -> CARD_ICONS[value]
+        "chapter" -> CHAPTER_ICONS[value]
+        "tool" -> Tool.entries.firstOrNull { it.name == value }?.let { TOOL_ICONS[it] }
+        else -> null
+    }
+}
+
 private val Tool.icon: ImageVector? get() = when (this) {
     Tool.NOW -> Icons.Filled.Warning
     Tool.SAFE -> Icons.Filled.CheckCircle

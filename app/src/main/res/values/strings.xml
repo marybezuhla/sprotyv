@@ -884,6 +884,9 @@
     <string name="widget_now_desc">One big button to the action cards</string>
     <string name="widget_running_desc">Tourniquet, the wait after a strike, shelter, power: a live count</string>
     <string name="widget_path_desc">The level of My path, without details</string>
+    <string name="widget_gart_sample">Today: 1 of 3</string>
+    <string name="widget_path_sample">My family: 2 of 3</string>
+    <string name="widget_kit_sample">Packed 12 of 20</string>
     <string name="widget_tile_label">Part of Sprotyv</string>
     <string name="widget_tile_desc">Any card, guide chapter or tool</string>
     <string name="widget_tile_choose">Tap to choose</string>

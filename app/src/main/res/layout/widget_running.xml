@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- "Running now": live counts from their own screens (only times, never personal records) -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/w_root" android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@drawable/w_shape_urgent" android:orientation="vertical" android:padding="12dp">
-    <TextView android:id="@+id/w_title" android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:text="@string/active_title" android:textColor="@color/w_urgent_ink" android:textSize="16sp" android:textStyle="bold" />
+    android:background="@drawable/w_shape_urgent" android:orientation="vertical" android:paddingHorizontal="12dp" android:paddingVertical="8dp">
+    <LinearLayout android:id="@+id/w_head" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+        <FrameLayout android:layout_width="32dp" android:layout_height="32dp" android:background="@drawable/w_badge_urgent">
+            <ImageView android:layout_width="match_parent" android:layout_height="match_parent" android:padding="6dp"
+            android:src="@drawable/om_siren" android:tint="@color/w_urgent_bg" android:importantForAccessibility="no" />
+        </FrameLayout>
+        <TextView android:id="@+id/w_title" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:layout_marginStart="10dp"
+            android:text="@string/active_title" android:textColor="@color/w_urgent_ink" android:textSize="15sp" android:textStyle="bold" />
+    </LinearLayout>
     <LinearLayout android:id="@+id/w_row1" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal"
         android:gravity="center_vertical" android:paddingVertical="4dp" android:visibility="gone">
         <TextView android:id="@+id/w_label1" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
@@ -26,5 +32,5 @@
             android:textColor="@color/w_urgent_ink" android:textSize="18sp" android:textStyle="bold" />
     </LinearLayout>
     <TextView android:id="@+id/w_empty" android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingTop="4dp"
-        android:text="@string/widget_nothing_running" android:textColor="@color/w_urgent_ink" android:textSize="15sp" />
+        android:text="@string/widget_nothing_running" android:textColor="@color/w_urgent_ink" android:textSize="13sp" android:maxLines="2" android:ellipsize="end" />
 </LinearLayout>

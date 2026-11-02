@@ -68,7 +68,8 @@ class TileWidgetSetup : ComponentActivity() {
             SprotyvTheme(prefs.theme, prefs.dynamic) {
                 Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     Picker { id, title, tone ->
-                        TileWidgets.set(this, widget, id, title, tone)
+                        val icon = tileIconRes(id)?.let { runCatching { resources.getResourceEntryName(it) }.getOrNull() }
+                        TileWidgets.set(this, widget, id, title, tone, icon)
                         Widgets.update(this)
                         setResult(Activity.RESULT_OK, Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widget))
                         finish()

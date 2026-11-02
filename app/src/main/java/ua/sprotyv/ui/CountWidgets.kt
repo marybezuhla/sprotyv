@@ -161,6 +161,7 @@ object CountWidgets {
             // Trip mode: a neutral way in, no number, no name; not chosen yet: the way to choose
             v.setTextViewText(R.id.w_number, "")
             v.setTextViewText(R.id.w_title, c.getString(if (trip) R.string.widget_neutral else R.string.widget_tile_choose))
+            v.setViewVisibility(R.id.w_title, View.VISIBLE)
             v.setViewVisibility(R.id.w_plus, View.GONE)
             v.setOnClickPendingIntent(R.id.w_root, Widgets.openFor(c, "now", 300 + (widget % 500)))
             return v
