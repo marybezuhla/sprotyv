@@ -124,6 +124,7 @@ fun LockedView(pinOnly: Boolean) {
         if (trouble) Text(stringResource(R.string.lock_mine_trouble), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.error, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
         Button(onClick = ::ask, enabled = !busy, modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp)) { Text(title, style = MaterialTheme.typography.titleMedium) }
         Text(stringResource(R.string.lock_mine_112_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+        Text(stringResource(R.string.lock_mine_forgot), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
     }
 }
 

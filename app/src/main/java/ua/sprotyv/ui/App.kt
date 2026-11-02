@@ -117,6 +117,8 @@ fun App() {
             }
             // Trip mode: what it hides does not open, whatever leads there
             if (trip && Trip.hides(route)) return
+            // Something typed and not saved (a notification or a share may lead away): ask first
+            if (EditGuard.isDirty) { EditGuard.then = route; EditGuard.asking = true; return }
             saved = stack.map(Route::save) + route.save()
         }
         // Built from what could be read, so an unreadable entry never makes Back look stuck
@@ -125,7 +127,10 @@ fun App() {
             if (EditGuard.isDirty) { EditGuard.asking = true; return }
             saved = stack.dropLast(1).map(Route::save)
         }
-        override fun home() { saved = emptyList() }
+        override fun home() {
+            if (EditGuard.isDirty) { EditGuard.then = Route.Open(Section.NOW); EditGuard.goHome = true; EditGuard.asking = true; return }
+            saved = emptyList()
+        }
         override fun replace(route: Route) {
             if (trip && Trip.hides(route)) return
             saved = stack.dropLast(1).map(Route::save) + route.save()
@@ -181,7 +186,16 @@ fun App() {
     // Back from another tab first returns to "Home", then leaves the app
     BackHandler(enabled = top == null && full && tab != Tab.HOME) { tabName = Tab.HOME.name }
 
-    EditGuardDialog { nav.back() }
+    EditGuardDialog {
+        val to = EditGuard.then
+        val home = EditGuard.goHome
+        EditGuard.then = null; EditGuard.goHome = false
+        when {
+            home -> nav.home()
+            to != null -> nav.go(to)
+            else -> nav.back()
+        }
+    }
     if (top != null) return Screen(top, content, prefs, personal, nav, ::guarded)
 
     when (prefs.mode) {

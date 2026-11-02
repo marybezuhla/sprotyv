@@ -34,9 +34,18 @@ import ua.sprotyv.R
 object EditGuard {
     private val dirty = mutableStateSetOf<String>()
     var asking by mutableStateOf(false)
+    /** Where to go once the owner agrees to drop the changes; null: back. */
+    var then: Route? = null
+    /** The owner asked for the home screen. */
+    var goHome = false
+    /**
+     * Drafts by block, in memory only (never in the saved state Android may write out): a turn
+     * of the screen or a change of theme keeps what was typed. Gone when saved, cancelled or dropped.
+     */
+    internal val drafts = HashMap<String, Any?>()
     val isDirty: Boolean get() = dirty.isNotEmpty()
     fun mark(key: String, changed: Boolean) { if (changed) dirty.add(key) else dirty.remove(key) }
-    fun clear() { dirty.clear(); asking = false }
+    fun clear() { dirty.clear(); drafts.clear(); asking = false }
 }
 
 /** The question Back asks while something is unsaved. */
@@ -44,11 +53,11 @@ object EditGuard {
 fun EditGuardDialog(leave: () -> Unit) {
     if (!EditGuard.asking) return
     AlertDialog(
-        onDismissRequest = { EditGuard.asking = false },
+        onDismissRequest = { EditGuard.asking = false; EditGuard.then = null; EditGuard.goHome = false },
         title = { Text(stringResource(R.string.discard_title)) },
         text = { Text(stringResource(R.string.discard_text)) },
         confirmButton = { TextButton(onClick = { EditGuard.clear(); leave() }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.discard)) } },
-        dismissButton = { TextButton(onClick = { EditGuard.asking = false }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.keep_editing)) } },
+        dismissButton = { TextButton(onClick = { EditGuard.asking = false; EditGuard.then = null; EditGuard.goHome = false }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.keep_editing)) } },
     )
 }
 
@@ -69,9 +78,15 @@ fun <T> EditableBlock(
 ) {
     var saved by remember(stored) { mutableStateOf(stored) }
     var editing by rememberSaveable(key) { mutableStateOf(false) }
-    var draft by remember(saved, editing) { mutableStateOf(saved) }
-    LaunchedEffect(draft, saved, editing) { EditGuard.mark(key, editing && draft != saved) }
-    DisposableEffect(key) { onDispose { EditGuard.mark(key, false) } }
+    @Suppress("UNCHECKED_CAST")
+    var draft by remember(saved, editing) { mutableStateOf(if (editing) (EditGuard.drafts[key] as? T) ?: saved else saved) }
+    // Leaving for good (not a turn of the screen): nothing of the draft stays, not even in memory
+    val activity = androidx.compose.ui.platform.LocalContext.current as? android.app.Activity
+    DisposableEffect(key) { onDispose { if (activity?.isChangingConfigurations != true) { EditGuard.mark(key, false); EditGuard.drafts.remove(key) } } }
+    LaunchedEffect(draft, saved, editing) {
+        EditGuard.mark(key, editing && draft != saved)
+        if (editing && draft != saved) EditGuard.drafts[key] = draft else EditGuard.drafts.remove(key)
+    }
     Block(title, group, foldable = foldable, startOpen = !foldable || editing) {
         if (!editing) {
             SelectionContainer { Column(verticalArrangement = Arrangement.spacedBy(12.dp)) { view(saved) } }
@@ -79,8 +94,8 @@ fun <T> EditableBlock(
         } else {
             edit(draft) { draft = it }
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                OutlinedButton(onClick = { editing = false }, modifier = Modifier.weight(1f).heightIn(min = 48.dp)) { Text(stringResource(R.string.cancel)) }
-                Button(onClick = { onSave(draft); saved = draft; editing = false }, modifier = Modifier.weight(1f).heightIn(min = 48.dp)) { Text(stringResource(R.string.save)) }
+                OutlinedButton(onClick = { EditGuard.drafts.remove(key); editing = false }, modifier = Modifier.weight(1f).heightIn(min = 48.dp)) { Text(stringResource(R.string.cancel)) }
+                Button(onClick = { onSave(draft); saved = draft; EditGuard.drafts.remove(key); editing = false }, modifier = Modifier.weight(1f).heightIn(min = 48.dp)) { Text(stringResource(R.string.save)) }
             }
         }
     }

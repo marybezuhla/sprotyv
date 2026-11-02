@@ -301,7 +301,12 @@ fun RolesScreen(nav: Nav) {
             return
         }
         // Service in the army: the facts about joining are shown by themselves for these roles (switched off any time)
-        if (on && id in setOf("dobro", "serving", "veteran")) HomePrefs.update(context) { it.copy(service = true) }
+        // and off again when the last of them is unpicked, so no hint of them stays outside "Mine"
+        val serviceRoles = setOf("dobro", "serving", "veteran")
+        if (id in serviceRoles) {
+            val left = (if (on) picked + id else picked - id).any { it in serviceRoles }
+            if (HomePrefs.load(context).service != left) HomePrefs.update(context) { it.copy(service = left) }
+        }
         PersonalStore.save("setting:$KEY_ROLES:" + java.util.UUID.randomUUID()) { db ->
             val now = parseRoles(db.settings().get(KEY_ROLES))
             db.settings().put(Setting(KEY_ROLES, org.json.JSONArray((if (on) now + id else now - id).sorted()).toString()))

@@ -276,6 +276,29 @@
   ]
  },
  {
+  "id": "choking-silent",
+  "card": "choking",
+  "step": 1,
+  "situation": "At lunch someone suddenly grabs their throat and cannot speak or cough.",
+  "options": [
+   {
+    "text": "I tell them I will help and give up to 5 blows between the shoulder blades.",
+    "right": true,
+    "why": "As the Ministry of Health procedure says: back blows first, then abdominal thrusts, alternating."
+   },
+   {
+    "text": "I give them water to drink.",
+    "right": false,
+    "why": "Water will not help. Back blows first, then abdominal thrusts."
+   },
+   {
+    "text": "I wait for them to cough it up.",
+    "right": false,
+    "why": "They cannot cough: act at once, with blows between the shoulder blades."
+   }
+  ]
+ },
+ {
   "id": "unconscious-gasps",
   "card": "unconscious",
   "step": 4,

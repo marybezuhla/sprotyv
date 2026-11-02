@@ -32,7 +32,7 @@
     <string name="try_again_text">Нічого не змінено. Спробуйте ще раз за мить.</string>
     <string name="try_again">Спробувати ще раз</string>
     <string name="key_lost_title">Збережені дані не відкриваються</string>
-    <string name="key_lost_text">Ключа до них більше немає на цьому телефоні, наприклад після скидання налаштувань або пошкодження файлу ключа. Довідник, картки й дзвінки працюють як звичайно. Якщо почати з нуля, старі дані залишаться відкладеними на телефоні, нічого не видаляється, але відкрити їх «Спротив» уже не зможе.</string>
+    <string name="key_lost_text">Ключа до них більше немає на цьому телефоні, наприклад після скидання налаштувань або пошкодження файлу ключа. Довідник, картки й дзвінки працюють як звичайно. Якщо почати з нуля, старі дані залишаться відкладеними на телефоні, нічого не видаляється, але відкрити їх «Спротив» уже не зможе. Щоб повернути їх, почніть з нуля й відновіть резервну копію: «Моє» → «Резервна копія». Так буває й після зняття блокування екрана.</string>
     <string name="key_lost_fresh">Почати з нуля</string>
     <string name="key_lost_fresh_confirm">Відкласти старі дані й почати з нуля? Відкрити старі дані «Спротив» уже не зможе.</string>
     <string name="key_lost_keep">Не зараз</string>
@@ -108,6 +108,12 @@
     <string name="discard_text">Те, що ви змінили, ще не збережено.</string>
     <string name="discard">Відкинути</string>
     <string name="keep_editing">Продовжити</string>
+    <string name="a11y_fewer_people">Менше людей</string>
+    <string name="a11y_more_people">Більше людей</string>
+    <string name="a11y_less_water">Мінус літр води</string>
+    <string name="a11y_more_water">Плюс літр води</string>
+    <string name="a11y_prev_month">Попередній місяць</string>
+    <string name="a11y_next_month">Наступний місяць</string>
     <string name="save">Зберегти</string>
     <string name="cancel">Скасувати</string>
     <string name="safe_default_message">Я в безпеці. Зв’яжуся пізніше.</string>
@@ -866,6 +872,7 @@
     <string name="resist_all_rights">Права військових і родин, юристи, ветеранські лінії</string>
     <string name="shelf_resist_desc">Внесок кожного, де вчитися, як підтримати країну, стійкість</string>
     <string name="print_choose">Що буде на папері</string>
+    <string name="lock_mine_forgot">Не пам’ятаєте PIN-код телефону? Його відновлюють у налаштуваннях телефону. Якщо блокування екрана зняли, ці дані вже не відкрити; їх можна повернути з резервної копії.</string>
     <string name="lock_mine_112_hint">Медкартка й «Я в безпеці» теж за замком. Дзвінок 112 працює завжди.</string>
     <string name="kit_packed">Зібрано %1$d з %2$d</string>
     <string name="kit_full">Валіза зібрана: %1$d з %2$d</string>

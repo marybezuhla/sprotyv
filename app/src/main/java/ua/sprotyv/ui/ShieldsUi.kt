@@ -259,11 +259,13 @@ private fun ShieldBadge(s: ShieldItem, modifier: Modifier = Modifier) {
             ) {
                 androidx.compose.foundation.layout.Row(verticalAlignment = Alignment.CenterVertically) {
                     val pad = androidx.compose.foundation.layout.PaddingValues(horizontal = 16.dp)
-                    androidx.compose.material3.TextButton(onClick = { Steps.change { st -> st.copy(counts = st.counts + (c to ((st.counts[c] ?: 0) - 1).coerceAtLeast(0))) } }, contentPadding = pad, modifier = Modifier.heightIn(min = 48.dp)) {
+                    androidx.compose.material3.TextButton(onClick = { Steps.change { st -> st.copy(counts = st.counts + (c to ((st.counts[c] ?: 0) - 1).coerceAtLeast(0))) } }, contentPadding = pad,
+                        modifier = Modifier.heightIn(min = 48.dp).semantics { contentDescription = "−1: $title" }) {
                         Text("−1", style = MaterialTheme.typography.titleMedium, color = tint.ink, maxLines = 1, softWrap = false)
                     }
                     androidx.compose.foundation.layout.Box(Modifier.size(width = 1.dp, height = 24.dp).background(tint.ink.copy(alpha = 0.3f)))
-                    androidx.compose.material3.TextButton(onClick = { Steps.change { st -> st.copy(counts = st.counts + (c to ((st.counts[c] ?: 0) + 1).coerceAtMost(10_000))) } }, contentPadding = pad, modifier = Modifier.heightIn(min = 48.dp)) {
+                    androidx.compose.material3.TextButton(onClick = { Steps.change { st -> st.copy(counts = st.counts + (c to ((st.counts[c] ?: 0) + 1).coerceAtMost(10_000))) } }, contentPadding = pad,
+                        modifier = Modifier.heightIn(min = 48.dp).semantics { contentDescription = "+1: $title" }) {
                         Text("+1", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, color = tint.ink, maxLines = 1, softWrap = false)
                     }
                 }

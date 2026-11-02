@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -273,3 +274,10 @@ fun ChoiceRow(content: @Composable () -> Unit) = androidx.compose.foundation.lay
     horizontalArrangement = Arrangement.spacedBy(8.dp),
     verticalArrangement = Arrangement.spacedBy(8.dp),
 ) { content() }
+
+/** A spoken name for a button whose own text is only a sign ("−", "+"), so TalkBack says what it changes. */
+@Composable
+fun Modifier.a11yLabel(text: Int): Modifier {
+    val t = androidx.compose.ui.res.stringResource(text)
+    return this.then(Modifier.semantics { contentDescription = t })
+}
