@@ -21,8 +21,6 @@ class Main : ComponentActivity() {
         // photo just taken may be waiting to be read
         if (savedInstanceState == null) clearScans(this)
         HomePrefs.load(this)
-        // What the earlier offline map left on the phone goes
-        if (savedInstanceState == null) OldMapFiles.forget(this)
         // A page shared from a browser; only on a fresh start, never again when Android restores the app
         if (savedInstanceState == null) Incoming.take(intent)
         // A notification's tap; and the notifications' alarms planned again from what is on
