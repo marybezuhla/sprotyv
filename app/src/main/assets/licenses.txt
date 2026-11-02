@@ -1,4 +1,4 @@
-=== Sprotyv — GNU General Public License 3.0 ===
+=== Sprotyv — GNU General Public License, version 3 or (at your option) any later version ===
 
 GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007

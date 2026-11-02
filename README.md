@@ -32,7 +32,7 @@
 - **Межі порад:** застосунок дає загальні рекомендації й не замінює лікаря, рятувальників, офіційних вказівок і сирен.
 - **Як створено:** код написано за допомогою ШІ (Claude, Anthropic) під керівництвом і з тестуванням автора.
 
-Kotlin · Jetpack Compose · Room · SQLCipher. Сторонні матеріали — [NOTICE.md](NOTICE.md). Ліцензія коду GPL-3.0.
+Kotlin · Jetpack Compose · Room · SQLCipher. Сторонні матеріали — [NOTICE.md](NOTICE.md). Ліцензія коду GPL-3.0-or-later (GNU GPL версії 3 або новішої).
 
 ---
 
@@ -70,4 +70,4 @@ A free Android app: what to do right now when it is dangerous, and how to prepar
 - **Advice limits:** general advice; it does not replace a doctor, rescuers, official instructions or sirens.
 - **How it was made:** written with AI assistance (Claude, Anthropic), directed and tested by the author.
 
-Kotlin · Jetpack Compose · Room · SQLCipher. Third-party material: [NOTICE.md](NOTICE.md). Code licence GPL-3.0.
+Kotlin · Jetpack Compose · Room · SQLCipher. Third-party material: [NOTICE.md](NOTICE.md). Code licence GPL-3.0-or-later.
