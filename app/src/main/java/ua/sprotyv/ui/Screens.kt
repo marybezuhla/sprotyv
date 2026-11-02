@@ -145,7 +145,7 @@ fun SecureScreen() {
 fun NoKeyboardLearning(content: @Composable () -> Unit) {
     androidx.compose.ui.platform.InterceptPlatformTextInput(
         interceptor = { request, next ->
-            val private = object : androidx.compose.ui.platform.PlatformTextInputMethodRequest {
+            val private = object : androidx.compose.ui.platform.PlatformTextInputMethodRequest by request {
                 override fun createInputConnection(outAttributes: android.view.inputmethod.EditorInfo): android.view.inputmethod.InputConnection {
                     val connection = request.createInputConnection(outAttributes)
                     outAttributes.imeOptions = outAttributes.imeOptions or android.view.inputmethod.EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING

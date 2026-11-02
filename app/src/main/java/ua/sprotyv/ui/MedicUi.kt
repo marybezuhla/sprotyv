@@ -113,6 +113,8 @@ fun HandoverScreen(nav: Nav) {
     val done = remember { mutableStateListOf<Pair<Int, Long>>() }
     val tourniquets = remember { Tourniquets.all(context) }
     SecureScreen()
+    // Typed text here is not learned by the keyboard
+    NoKeyboardLearning {
     Frame(stringResource(R.string.handover_title), nav::back) {
         Text(stringResource(R.string.handover_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Block(stringResource(R.string.handover_when), Group.FIRST_AID) {
@@ -154,6 +156,7 @@ fun HandoverScreen(nav: Nav) {
             nav.go(Route.Mine(MinePart.NOTES))
         }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.handover_to_notes)) }
         Text(stringResource(R.string.handover_kept_nowhere), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
     }
 }
 
