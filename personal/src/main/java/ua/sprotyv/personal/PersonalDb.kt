@@ -59,6 +59,18 @@ abstract class PersonalDb : RoomDatabase() {
     abstract fun kit(): KitDao
     abstract fun notes(): NoteDao
 
+    // The key this copy was opened with, wiped when it closes (SQLCipher holds it only while open)
+    @Volatile private var key: ByteArray? = null
+
+    override fun close() {
+        try {
+            super.close()
+        } finally {
+            key?.fill(0)
+            key = null
+        }
+    }
+
     companion object {
         const val FILE_NAME = "personal.db"
 
@@ -133,6 +145,8 @@ abstract class PersonalDb : RoomDatabase() {
                 db.close()
                 throw e
             }
+            // Only once it opened: a key that did not fit may still be tried the other way
+            db.key = key
             return db
         }
 

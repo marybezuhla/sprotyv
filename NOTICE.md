@@ -48,6 +48,10 @@
   `scripts/content/moz441/`) — the 29 first-aid procedures of order No. 441 of the Ministry of Health of
   Ukraine, 09.03.2022 (registered 28.03.2022, No. 356/37692), from moz.gov.ua, word for word. An
   official document, not protected by copyright (Law of Ukraine No. 2811-IX, art. 8).
+- An exception to the rule that doses for children appear only after a paediatrician's review, decided
+  by the author: official texts are kept word for word. So order No. 441 keeps its own advice for
+  children (sugar for a child with low blood sugar), and the guide's iodine table (6.2) keeps its row
+  "adults and teenagers from 13 years" as the guide gives it.
 - `content/src/main/assets/constitution.json` (built by `scripts/content/constitution.py`) — the
   Constitution of Ukraine, edition of 01.01.2020, from zakon.rada.gov.ua, word for word. An official
   document, not protected by copyright (Law of Ukraine No. 2811-IX, art. 8). Source: Verkhovna Rada of Ukraine.
