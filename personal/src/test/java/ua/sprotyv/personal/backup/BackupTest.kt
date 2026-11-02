@@ -21,8 +21,8 @@ class BackupTest {
     private val snapshot = BackupData.Snapshot(
         created = 1_700_000_000_000,
         medical = MedicalCard(bloodGroup = "A(II) Rh+", allergies = "немає", notes = "рядок\nдругий \"лапки\""),
-        people = listOf(Person(id = 3, name = "Олена", phone = "+380501234567", ice = true)),
-        plan = FamilyPlan(point1 = "Біля школи", goBetweenPhone = "+380671112233"),
+        people = listOf(Person(id = 3, name = "Контакт 1", phone = "+380000000101", ice = true)),
+        plan = FamilyPlan(point1 = "Біля школи", goBetweenPhone = "+380000000102"),
         rows = listOf(PlanRow(id = 5, kind = PlanRow.KIND_IF_THEN, first = "Немає зв'язку", second = "Йдемо до точки 1", sort = 1)),
         kit = listOf(KitCheck("abc", true, 42)),
         settings = listOf(Setting("safe_message", "Я в безпеці")),

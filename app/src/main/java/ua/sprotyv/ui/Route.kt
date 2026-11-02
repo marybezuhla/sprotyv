@@ -48,7 +48,6 @@ sealed interface Route {
     data object Comms : Route
     data object Driving : Route
     data object Weapons : Route
-    /** The offline map, drawn from a file the owner chose. */
     /** "Check yourself" for one step of "My path": that step's situations; all right marks it as checked. */
     data class PathCheck(val step: String) : Route
     /** One role's page ("Who I am now"): kept in "Mine". */

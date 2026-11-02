@@ -285,7 +285,7 @@ object Notify {
             name == "heat" -> Since.HEAT.get(app, now).takeIf { it != 0L && shows(app, Kind.COUNTS) }?.let { s ->
                 reached(s, HEAT_MARKS, now)?.let { h ->
                     val text = if (h == 24L) R.string.heat_pipes_do else R.string.heat_leave_do
-                    post(app, ID_HEAT, REMINDERS, "power", app.getString(R.string.notify_heat_title, (h / 24).toInt()), app.getString(text))
+                    post(app, ID_HEAT, REMINDERS, "power", (h / 24).toInt().let { d -> app.resources.getQuantityString(R.plurals.notify_heat_days, d, d) }, app.getString(text))
                 }
             }
             name == "supplies" -> {

@@ -31,7 +31,7 @@ data class Link(
         val DIRECTORY = listOf("idp", "money", "docs", "kids", "veterans", "health", "care")
         val GROUPS = listOf("threats", "front", "help", "evac", "search", "mind", "rights", "facts", "power", MAPS, ROLES) + DIRECTORY + RESIST
         const val POWER = "power"
-        /** Open map apps with detailed offline maps: in "Situation" and on the map screen. */
+        /** Open map apps with detailed offline maps, and Kiwix: in "Situation". */
         const val MAPS = "maps"
         /** Shown only on the role pages that list them, not in "Situation" or "Where to turn". */
         const val ROLES = "roles"

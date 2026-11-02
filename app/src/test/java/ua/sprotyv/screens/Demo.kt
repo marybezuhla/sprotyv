@@ -81,7 +81,7 @@ object Demo {
             Setting(KEY_SUPPLIES, supplies.toJson()),
             Setting(KEY_PATH, org.json.JSONArray(path.sorted()).toString()),
             Setting(KEY_HABITS, habits()),
-            Setting(KEY_ROLES, org.json.JSONArray(listOf("dftg")).toString()),
+            Setting(KEY_ROLES, org.json.JSONArray(listOf("volunteer", "donor", "parent")).toString()),
         ) + Bookmarks.toPages(bookmarks)!!.mapIndexed { i, page -> Setting(Bookmarks.KEYS[i], page) }
         val notes = (1..10).map { i ->
             Note(

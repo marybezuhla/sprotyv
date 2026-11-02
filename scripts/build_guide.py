@@ -33,6 +33,39 @@ BLOCK_CALLOUTS = {"warning", "tip", "critical", "note"}
 MAX_TEXT = 20000
 
 
+def replace_text(chapters, pairs):
+    """Exact replacements in the text, everywhere; each must be found at least once, or the script stops."""
+    blob = json.dumps(chapters, ensure_ascii=False)
+    for old, new in pairs:
+        o, n = json.dumps(old, ensure_ascii=False)[1:-1], json.dumps(new, ensure_ascii=False)[1:-1]
+        if blob.count(o) < 1:
+            sys.exit(f"Not found in the guide: {old}")
+        blob = blob.replace(o, n)
+    chapters[:] = json.loads(blob)
+
+
+def child_doses_out(chapters, children_row):
+    """
+    Sprotyv's own rule: doses for children only from an official source after a paediatrician's
+    review. Until then the children's rows of the potassium iodide table (6.2) become one row that
+    points to the official announcement or a doctor. Fails loudly if the table changes upstream.
+    """
+    for c in chapters:
+        for s in c["sections"]:
+            if s["num"] != "6.2":
+                continue
+            for b in s["blocks"]:
+                for x in b.get("blocks", []) + [b]:
+                    if x.get("t") != "table":
+                        continue
+                    rows = x["rows"]
+                    kids = [i for i, r in enumerate(rows) if not r["head"] and r["cells"][0].lower().startswith(("діти", "немовлят", "children", "infants"))]
+                    if kids:
+                        x["rows"] = rows[:kids[0]] + [{"head": False, "cells": children_row}] + [r for i, r in enumerate(rows) if i > kids[-1]]
+                        return
+    sys.exit("The potassium iodide table in 6.2 was not found")
+
+
 class Node:
     def __init__(self, tag, attrs, parent=None):
         self.tag = tag
@@ -406,6 +439,15 @@ def main():
     if not disclaimer:
         sys.exit("The cover disclaimer was not found")
 
+    # Sprotyv's own changes, each named in "changes" below
+    child_doses_out(chapters, ["Діти до 13 років", "Дозу для дітей називає офіційне оголошення МОЗ або лікар"])
+    replace_text(chapters, [
+        ("та назви офіційних Telegram-каналів ОВА/ДСНС", "та адреси офіційних сайтів і застосунків ОВА/ДСНС"),
+        ("(101, 102, чат-боти ОВА/ЗСУ вашої області, запишіть їх на папір заздалегідь)",
+         "(101, 102 або інші офіційні способи, які називає ОВА вашої області; запишіть їх на папір заздалегідь)"),
+        ("(Organic Maps, maps.me)", "(CoMaps, Organic Maps або OsmAnd)"),  # 13.1 and 18.1
+    ])
+
     guide = {
         "title": "Довідник виживання",
         "disclaimer": disclaimer,
@@ -416,7 +458,11 @@ def main():
         "changes": "Перетворено для показу в застосунку: розмітку змінено, рисунки збережено як зображення, "
                    "розділам Додатку А додано номери А.1–А.5, застереження з обкладинки перенесено в «Про довідник», "
                    "решту обкладинки, зміст і бланки нотаток не включено. Додано три рисунки з відкритих джерел "
-                   "(суспільне надбання; автор — у підписі): рис. 11.2, 15.5, 15.6. Текст розділів не змінено.",
+                   "(суспільне надбання; автор — у підписі): рис. 11.2, 15.5, 15.6. Текст розділів не змінено, крім такого: "
+                   "у п. 4.8 і 14.4 замість чат-ботів і Telegram-каналів — офіційні сайти, застосунки й способи, які називає ОВА "
+                   "(застосунок не радить Telegram); у п. 13.1 і 18.1 замість maps.me — CoMaps, Organic Maps або OsmAnd; у таблиці п. 6.2 "
+                   "дози для дітей замінено відсилкою до офіційного оголошення МОЗ або лікаря (дози для дітей у застосунку — "
+                   "лише після рецензії педіатра).",
         "chapters": chapters,
     }
     os.makedirs(args.out, exist_ok=True)
