@@ -313,6 +313,7 @@
     <string name="backup_existing">This file already holds something. Choose a new name: older backups are never written over.</string>
     <string name="backup_wrong_password">Wrong password, or the file is damaged. Check the keyboard layout and stray letters or spaces.</string>
     <string name="backup_from_newer">This backup was made by a newer Sprotyv. Update the app first.</string>
+    <string name="backup_unreadable">The file could not be read. If it is in the cloud or on a memory card, save it to the phone first and try again.</string>
     <string name="backup_not_ours">This is not a Sprotyv backup, or the file is damaged.</string>
     <string name="backup_restored">Your data is restored.</string>
     <string name="backup_restored_partly">Restored. This copy was made by a newer Sprotyv: what this version knows is back; update the app to bring the rest.</string>

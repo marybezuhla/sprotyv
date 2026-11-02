@@ -286,6 +286,8 @@ object BackupJobs {
                 throw e
             } catch (e: BackupCrypto.WrongPasswordOrDamaged) {
                 R.string.backup_wrong_password
+            } catch (e: BackupCrypto.FileUnreadable) {
+                R.string.backup_unreadable
             } catch (e: BackupData.FromNewer) {
                 R.string.backup_from_newer
             } catch (e: OutOfMemoryError) {

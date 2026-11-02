@@ -83,7 +83,7 @@ object BackupStream {
      * a wrong password or any change in the file shows as [BackupCrypto.WrongPasswordOrDamaged].
      */
     fun reader(input: InputStream, key: Key): InputStream {
-        val decrypted = key.aead.newDecryptingStream(Bounded(input, MAX_FILE_BYTES - HEADER_BYTES), aad(key))
+        val decrypted = key.aead.newDecryptingStream(Bounded(Source(input), MAX_FILE_BYTES - HEADER_BYTES), aad(key))
         return Failing(Bounded(GZIPInputStream(Failing(decrypted), 64 * 1024), MAX_PLAIN_BYTES))
     }
 
@@ -93,6 +93,15 @@ object BackupStream {
         override fun read(): Int = super.read().also { if (it >= 0 && ++count > limit) throw BackupCrypto.NotABackup() }
         override fun read(b: ByteArray, off: Int, len: Int): Int = super.read(b, off, len).also { if (it > 0) { count += it; if (count > limit) throw BackupCrypto.NotABackup() } }
         override fun skip(n: Long): Long = throw java.io.IOException("No skipping")
+    }
+
+    /**
+     * The file as the phone gives it: a failure to read it is said as such (unchecked, so neither
+     * Tink nor gzip turns it into "wrong password or damaged").
+     */
+    private class Source(input: InputStream) : FilterInputStream(input) {
+        override fun read(): Int = try { super.read() } catch (e: java.io.IOException) { throw BackupCrypto.FileUnreadable() }
+        override fun read(b: ByteArray, off: Int, len: Int): Int = try { super.read(b, off, len) } catch (e: java.io.IOException) { throw BackupCrypto.FileUnreadable() }
     }
 
     /** Tink and gzip say "wrong" as an IOException; the screen says it in one way, never with details. */
