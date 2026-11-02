@@ -20,7 +20,8 @@
   and blank note forms left out). The text is unchanged except: in 4.8 and 14.4 official websites,
   apps and ways named by the regional military administration instead of chatbots and Telegram
   channels; in 13.1 and 18.1 CoMaps, Organic Maps or OsmAnd instead of maps.me; in the table of 6.2
-  the doses for children replaced by a reference to the official announcement or a doctor (until a
+  the doses for children replaced by a reference to the official announcement or a doctor, and in
+  7.13 the activated charcoal dose for children by a reference to 103 or a doctor (until a
   paediatrician's review). `content/src/main/assets/en/guide.json` is an English translation by
   Sprotyv, also under CC BY-SA 4.0. Three public-domain pictures
   from Wikimedia Commons were added (figures 11.2, 15.5, 15.6; authors in the captions and in

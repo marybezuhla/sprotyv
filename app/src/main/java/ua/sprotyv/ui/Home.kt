@@ -1,6 +1,8 @@
 package ua.sprotyv.ui
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -60,26 +63,38 @@ fun CallBar(edge: Boolean = true) {
         return
     }
     val context = LocalContext.current
-    Surface(tonalElevation = 3.dp, modifier = Modifier.fillMaxWidth()) {
-        Row(
-            // At the screen's edge it keeps clear of the system bar; above the tabs it does not need to
-            (if (edge) Modifier.navigationBarsPadding() else Modifier).padding(horizontal = 16.dp, vertical = 12.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalAlignment = Alignment.CenterVertically,
+    // Very large text: the two buttons one above the other, so "112" always has the full width
+    val stacked = androidx.compose.ui.platform.LocalDensity.current.fontScale > 1.3f
+    val call: @Composable (Modifier) -> Unit = { m ->
+        Button(
+            onClick = { Reach.dial(context, Service.UNIFIED.number) },
+            colors = ButtonDefaults.buttonColors(containerColor = DangerRed, contentColor = Color.White),
+            modifier = m.heightIn(min = 56.dp).semantics(mergeDescendants = true) {},
         ) {
-            Button(
-                onClick = { Reach.dial(context, Service.UNIFIED.number) },
-                colors = ButtonDefaults.buttonColors(containerColor = DangerRed, contentColor = Color.White),
-                modifier = Modifier.weight(1f).heightIn(min = 56.dp).semantics(mergeDescendants = true) {},
-            ) {
-                Icon(Icons.Filled.Call, contentDescription = null)
-                Spacer(Modifier.width(8.dp))
-                // One line always: with large text just "112" (the phone icon says the rest), never a word broken in two
-                val big = androidx.compose.ui.platform.LocalDensity.current.fontScale > 1.15f
-                Text(stringResource(if (big) R.string.kid_call_112 else R.string.call_112), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, maxLines = 1, softWrap = false)
+            Icon(Icons.Filled.Call, contentDescription = null)
+            Spacer(Modifier.width(8.dp))
+            // One line always: with large text just "112" (the phone icon says the rest), never a word broken in two
+            val big = androidx.compose.ui.platform.LocalDensity.current.fontScale > 1.15f
+            Text(stringResource(if (big) R.string.kid_call_112 else R.string.call_112), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, maxLines = 1, softWrap = false)
+        }
+    }
+    val rest: @Composable (Modifier) -> Unit = { m ->
+        OutlinedButton(onClick = { others = true }, modifier = m.heightIn(min = 56.dp)) {
+            Text(stringResource(R.string.call_others), style = MaterialTheme.typography.titleMedium, maxLines = 1, softWrap = false)
+        }
+    }
+    Surface(tonalElevation = 3.dp, modifier = Modifier.fillMaxWidth()) {
+        // At the screen's edge it keeps clear of the system bar; above the tabs it does not need to
+        val pad = (if (edge) Modifier.navigationBarsPadding() else Modifier).padding(horizontal = 16.dp, vertical = 12.dp)
+        if (stacked) {
+            Column(pad, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                call(Modifier.fillMaxWidth())
+                rest(Modifier.fillMaxWidth())
             }
-            OutlinedButton(onClick = { others = true }, modifier = Modifier.heightIn(min = 56.dp)) {
-                Text(stringResource(R.string.call_others), style = MaterialTheme.typography.titleMedium, maxLines = 1, softWrap = false)
+        } else {
+            Row(pad, horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                call(Modifier.weight(1f))
+                rest(Modifier)
             }
         }
     }
@@ -110,7 +125,7 @@ private fun ServicesDialog(onClose: () -> Unit) {
         title = { Text(stringResource(R.string.call_services)) },
         confirmButton = { TextButton(onClick = onClose) { Text(stringResource(R.string.back)) } },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 // The phone's own dialler opens with the number: the call itself is one more tap
                 Text(stringResource(R.string.call_dial_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Service.entries.forEach { service ->
@@ -125,7 +140,8 @@ private fun ServicesDialog(onClose: () -> Unit) {
                                 style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Bold,
                                 color = if (service == Service.UNIFIED) DangerInk else MaterialTheme.colorScheme.onSurface,
-                                modifier = Modifier.width(56.dp),
+                                softWrap = false,
+                                modifier = Modifier.widthIn(min = 56.dp).padding(end = 8.dp),
                             )
                             Text(stringResource(service.name()), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f))
                         }

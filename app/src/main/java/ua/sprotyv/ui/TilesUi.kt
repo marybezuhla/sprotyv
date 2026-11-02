@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -542,7 +544,7 @@ fun TileCard(info: TileInfo, big: Boolean, status: String? = null, modifier: Mod
                 IconBadge(info.icon, if (marked) Tint(MaterialTheme.colorScheme.surface, u.edge) else if (safe) Tint(MaterialTheme.colorScheme.surface, green.ink) else Tint(MaterialTheme.colorScheme.surface, own.ink), 36.dp)
                 Spacer(Modifier.width(10.dp))
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                    Text(info.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                    Text(info.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, maxLines = 3, overflow = TextOverflow.Ellipsis)
                     if (status != null) {
                         Text(status, style = MaterialTheme.typography.bodyMedium.copy(textAlign = androidx.compose.ui.text.style.TextAlign.Start), color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold, maxLines = 2)
                     } else if (info.hint.isNotBlank()) {
@@ -560,10 +562,15 @@ fun SimpleHome(content: Content?, pins: List<String>, nav: Nav, onSettings: () -
     Column(Modifier.fillMaxSize().statusBarsPadding()) {
         Row(Modifier.fillMaxWidth().padding(start = 16.dp, end = 4.dp, top = 8.dp), verticalAlignment = Alignment.CenterVertically) {
             Text(appTitle(), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
-            TextButton(onClick = onSettings, modifier = Modifier.heightIn(min = 48.dp)) {
-                Icon(Icons.Filled.Settings, contentDescription = null)
-                Spacer(Modifier.width(6.dp))
-                Text(stringResource(R.string.settings), style = MaterialTheme.typography.titleMedium)
+            // With very large text the word would squeeze the title: then the gear alone, still named aloud
+            if (androidx.compose.ui.platform.LocalDensity.current.fontScale > 1.3f) {
+                IconButton(onClick = onSettings, modifier = Modifier.size(48.dp)) { Icon(Icons.Filled.Settings, contentDescription = stringResource(R.string.settings)) }
+            } else {
+                TextButton(onClick = onSettings, modifier = Modifier.heightIn(min = 48.dp)) {
+                    Icon(Icons.Filled.Settings, contentDescription = null)
+                    Spacer(Modifier.width(6.dp))
+                    Text(stringResource(R.string.settings), style = MaterialTheme.typography.titleMedium)
+                }
             }
             CornerCall()
         }
@@ -592,7 +599,7 @@ fun FullHome(content: Content?, pins: List<String>, nav: Nav, onSettings: () -> 
     val mine = pins.mapNotNull { tileInfo(it, content) }
     // Compact tiles two (or three) to a row, as before; one only when the text is made huge
     val cfg = androidx.compose.ui.platform.LocalConfiguration.current
-    val cols = if (cfg.fontScale >= 1.6f) 1 else ((cfg.screenWidthDp - 20) / 160).coerceIn(2, 3)
+    val cols = if (cfg.fontScale >= 1.3f) 1 else ((cfg.screenWidthDp - 20) / 160).coerceIn(2, 3)
     LazyVerticalGrid(
         columns = GridCells.Fixed(1),
         contentPadding = PaddingValues(16.dp),
@@ -1224,6 +1231,35 @@ private fun AboutApp() {
         onClick = { ua.sprotyv.reach.Reach.open(context, SOURCE_URL) },
         modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
     ) { Text(stringResource(R.string.about_app_source)) }
+    // The full licence texts travel inside the app, as the licences ask; read here without a network
+    var texts by remember { androidx.compose.runtime.mutableStateOf(false) }
+    androidx.compose.material3.OutlinedButton(onClick = { texts = true }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
+        Text(stringResource(R.string.about_app_texts))
+    }
+    if (texts) LicenceTexts { texts = false }
+}
+
+@Composable
+private fun LicenceTexts(onClose: () -> Unit) {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val parts = remember {
+        runCatching { context.assets.open("licenses.txt").bufferedReader().use { it.readText() } }.getOrDefault("")
+            .split(Regex("\\n\\s*\\n")).filter { it.isNotBlank() }
+    }
+    androidx.compose.ui.window.Dialog(onDismissRequest = onClose, properties = androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth = false)) {
+        androidx.compose.material3.Surface(Modifier.fillMaxSize()) {
+            androidx.compose.foundation.layout.Column(Modifier.statusBarsPadding().then(Modifier.windowInsetsPadding(androidx.compose.foundation.layout.WindowInsets.navigationBars))) {
+                androidx.compose.foundation.lazy.LazyColumn(Modifier.weight(1f).fillMaxWidth(), contentPadding = PaddingValues(16.dp), verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)) {
+                    items(parts.size) { i ->
+                        val p = parts[i]
+                        if (p.startsWith("===")) Text(p.trim('=', ' '), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 8.dp))
+                        else Text(p.trim(), style = MaterialTheme.typography.bodySmall)
+                    }
+                }
+                androidx.compose.material3.TextButton(onClick = onClose, modifier = Modifier.align(Alignment.End).padding(8.dp).heightIn(min = 48.dp)) { Text(stringResource(R.string.back)) }
+            }
+        }
+    }
 }
 
 private const val SOURCE_URL = "https://github.com/Marybezu/sprotyv"

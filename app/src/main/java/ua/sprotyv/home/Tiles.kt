@@ -106,7 +106,7 @@ enum class Preset(val pins: List<String>) {
     /** A teenager on their own at home or at school: what to do, first aid, staying in touch, checking news. */
     TEEN(
         listOf(
-            Tiles.card("air-alert"), Tiles.card("bleeding"), Tiles.card("unconscious"), Tiles.card("home-fire"),
+            Tiles.card("air-alert"), Tiles.card("bleeding"), Tiles.card("unconscious"), Tiles.card("choking"), Tiles.card("home-fire"),
             Tiles.card("drone"), Tiles.tool(Tool.PEOPLE), Tiles.tool(Tool.COMMS), Tiles.tool(Tool.PRACTICE), Tiles.chapter("ch18"),
         ),
     ),
