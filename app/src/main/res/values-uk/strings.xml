@@ -892,6 +892,9 @@
     <string name="widget_now_desc">Одна велика кнопка до карток дій</string>
     <string name="widget_running_desc">Турнікет, очікування після удару, укриття, світло — живий відлік</string>
     <string name="widget_path_desc">Рівень «Мого шляху» без подробиць</string>
+    <string name="widget_gart_sample">Сьогодні: 1 з 3</string>
+    <string name="widget_path_sample">Моя родина: 2 з 3</string>
+    <string name="widget_kit_sample">Зібрано 12 з 20</string>
     <string name="widget_tile_label">Частина «Спротиву»</string>
     <string name="widget_tile_desc">Будь-яка картка, розділ довідника чи інструмент</string>
     <string name="widget_tile_choose">Торкніться, щоб вибрати</string>

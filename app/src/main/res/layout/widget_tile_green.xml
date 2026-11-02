@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- A part of Sprotyv the owner chose for the home screen: its name only -->
+<!-- A part of Sprotyv the owner chose for the home screen: its picture and name only -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/w_root" android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@drawable/w_shape_green" android:gravity="center_vertical" android:orientation="horizontal" android:padding="12dp">
-    <TextView android:id="@+id/w_mark" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="26sp"
-        android:importantForAccessibility="no" />
-    <TextView android:id="@+id/w_title" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:layout_marginStart="10dp"
-        android:textColor="@color/w_green_ink" android:textSize="17sp" android:textStyle="bold" android:maxLines="2" android:ellipsize="end" />
+    android:background="@drawable/w_shape_green" android:gravity="center_vertical" android:orientation="horizontal" android:paddingHorizontal="12dp" android:paddingVertical="8dp">
+    <FrameLayout android:layout_width="40dp" android:layout_height="40dp" android:background="@drawable/w_badge_green">
+        <ImageView android:id="@+id/w_icon" android:layout_width="match_parent" android:layout_height="match_parent" android:padding="8dp"
+            android:src="@drawable/ocha_health" android:tint="@color/w_green_bg" android:importantForAccessibility="no" />
+    </FrameLayout>
+    <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:layout_marginStart="10dp" android:orientation="vertical">
+        <TextView android:id="@+id/w_title" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/widget_tile_label"
+            android:textColor="@color/w_green_ink" android:textSize="15sp" android:textStyle="bold" android:maxLines="2" android:ellipsize="end" />
+    </LinearLayout>
 </LinearLayout>

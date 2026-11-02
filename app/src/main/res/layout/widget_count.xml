@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- A count of "My shields": the number on a shield, its name if the owner wants it, and "+1" -->
+<!-- A count of "My shields": a small shield with the number, "+1" under it, the name if the owner wants it -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/w_root" android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@drawable/w_shape_khaki" android:gravity="center" android:orientation="vertical" android:padding="8dp">
-    <FrameLayout android:layout_width="56dp" android:layout_height="56dp">
-        <ImageView android:layout_width="match_parent" android:layout_height="match_parent" android:src="@drawable/w_shield" android:importantForAccessibility="no" />
-        <TextView android:id="@+id/w_number" android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center"
-            android:paddingBottom="4dp" android:textColor="@color/w_khaki_ink" android:textSize="18sp" android:textStyle="bold" android:maxLines="1" />
+    android:gravity="center" android:orientation="vertical">
+    <FrameLayout android:layout_width="56dp" android:layout_height="72dp">
+        <ImageView android:layout_width="56dp" android:layout_height="64dp" android:src="@drawable/w_shield" android:scaleType="fitCenter" android:importantForAccessibility="no" />
+        <TextView android:id="@+id/w_number" android:layout_width="56dp" android:layout_height="52dp" android:gravity="center"
+            android:text="3" android:textColor="@color/w_khaki_ink" android:textSize="18sp" android:textStyle="bold" android:maxLines="1" />
+        <TextView android:id="@+id/w_plus" android:layout_width="wrap_content" android:layout_height="26dp" android:layout_gravity="bottom|center_horizontal"
+            android:background="@drawable/w_shape_plus" android:minWidth="44dp" android:gravity="center" android:paddingHorizontal="10dp"
+            android:text="+1" android:textColor="@color/w_khaki_bg" android:textSize="13sp" android:textStyle="bold" />
     </FrameLayout>
-    <TextView android:id="@+id/w_title" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center"
-        android:textColor="@color/w_khaki_ink" android:textSize="13sp" android:maxLines="2" android:ellipsize="end" />
-    <TextView android:id="@+id/w_plus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp"
-        android:background="@drawable/w_shape_plus" android:minWidth="64dp" android:minHeight="36dp" android:gravity="center" android:paddingHorizontal="16dp"
-        android:text="+1" android:textColor="@color/w_khaki_bg" android:textSize="16sp" android:textStyle="bold" />
+    <TextView android:id="@+id/w_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2dp"
+        android:background="@drawable/w_shape_khaki" android:paddingHorizontal="8dp" android:paddingVertical="2dp" android:gravity="center"
+        android:textColor="@color/w_khaki_ink" android:textSize="11sp" android:maxLines="2" android:ellipsize="end" android:visibility="gone" />
 </LinearLayout>
