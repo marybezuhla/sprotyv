@@ -2,7 +2,7 @@
 
 Безкоштовний застосунок для Android: що робити просто зараз, коли небезпечно, і як підготуватися заздалегідь. Українська та англійська. Без реклами, акаунтів і стеження.
 
-> **Статус: тестова версія.** Завантажте .apk з [Releases](../../releases) або додайте репозиторій в Obtainium. Помилки й побажання: [Issues](../../issues).
+> **Версія 1.0.** Завантажте .apk з [Releases](../../releases) або додайте репозиторій в Obtainium. Помилки й побажання: [Issues](../../issues).
 
 **Вимоги:** Android 12 або новіший. Інтернет не потрібен.
 
@@ -40,7 +40,7 @@ Kotlin · Jetpack Compose · Room · SQLCipher. Сторонні матеріа�
 
 A free Android app: what to do right now when it is dangerous, and how to prepare in advance. Ukrainian and English. No ads, no accounts, no tracking.
 
-> **Status: test version.** Download the .apk from [Releases](../../releases) or add this repository to Obtainium. Bugs and wishes: [Issues](../../issues).
+> **Version 1.0.** Download the .apk from [Releases](../../releases) or add this repository to Obtainium. Bugs and wishes: [Issues](../../issues).
 
 **Requirements:** Android 12 or newer. No internet needed.
 
