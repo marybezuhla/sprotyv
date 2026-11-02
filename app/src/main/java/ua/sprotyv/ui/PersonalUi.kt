@@ -144,8 +144,7 @@ fun Field(
         placeholder = if (hint.isNotBlank()) ({ Text(hint) }) else null,
         singleLine = !multiline,
         minLines = if (multiline) 2 else 1,
-        // No autocorrect. Compose cannot yet ask the keyboard not to learn from what is typed
-        // (Android's no-personalised-learning flag); noted as a known limit
+        // No autocorrect; on the owner's screens the keyboard is also asked not to learn (NoKeyboardLearning)
         keyboardOptions = KeyboardOptions(
             keyboardType = if (phone) KeyboardType.Phone else KeyboardType.Text,
             capitalization = if (phone) KeyboardCapitalization.None else KeyboardCapitalization.Sentences,

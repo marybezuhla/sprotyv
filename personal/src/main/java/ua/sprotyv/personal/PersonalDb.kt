@@ -87,6 +87,11 @@ abstract class PersonalDb : RoomDatabase() {
         fun open(context: Context, passphrase: ByteArray): PersonalDb {
             System.loadLibrary("sqlcipher")
             val raw = rawKey(passphrase)
+            // Kept by the open database (and wiped when it closes); if nothing opened, wiped now
+            return try { openWith(context, passphrase, raw) } catch (t: Throwable) { raw.fill(0); throw t }
+        }
+
+        private fun openWith(context: Context, passphrase: ByteArray, raw: ByteArray): PersonalDb {
             val mark = java.io.File(context.getDatabasePath(FILE_NAME).path + RAW_MARK)
             if (mark.exists() || !exists(context)) {
                 val db = try {

@@ -169,7 +169,8 @@ class ContentTest {
     @Test fun englishLinksMatchTheOriginal() {
         val uk = LinksReader.parse(File(assets, "links.json").readText())
         val en = LinksReader.parse(File(assets, "en/links.json").readText())
-        assertEquals(uk.map { it.id to it.url + it.phone }, en.map { it.id to it.url + it.phone })
+        // Only the words differ: what a link opens, how it is grouped, hidden or marked stays the same
+        assertEquals(uk.map { it.copy(title = "", note = "") }, en.map { it.copy(title = "", note = "") })
     }
 
     @Test fun stepPictogramsExist() {
