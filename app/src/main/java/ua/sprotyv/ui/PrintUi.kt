@@ -81,6 +81,7 @@ private fun labels(context: Context) = RescuerCode.Labels(
     title = context.getString(R.string.rescuer_title),
     blood = context.getString(R.string.med_blood),
     allergies = context.getString(R.string.med_allergies),
+    pregnancy = context.getString(R.string.med_pregnancy),
     medicines = context.getString(R.string.rescuer_medicines),
     conditions = context.getString(R.string.rescuer_conditions),
     contact = context.getString(R.string.rescuer_contact),
@@ -152,6 +153,7 @@ private fun medicalPart(pdf: Pdf, s: (Int) -> String, d: OwnerData) {
     pdf.heading(s(R.string.medical_card))
     pdf.field(s(R.string.med_name), d.card.name)
     pdf.field(s(R.string.med_birth), d.card.birthDate)
+    pdf.field(s(R.string.med_pregnancy), d.card.pregnancy)
     pdf.field(s(R.string.med_blood), d.card.bloodGroup)
     pdf.field(s(R.string.med_allergies), d.card.allergies)
     pdf.field(s(R.string.med_medicines), d.card.medicines)
@@ -346,7 +348,7 @@ fun RescuerQrScreen(nav: Nav) {
         Loaded.Failed -> return ReadFailed()
         is Loaded.Value -> l.value
     }
-    if (card.bloodGroup.isBlank() && card.allergies.isBlank() && card.medicines.isBlank() && card.conditions.isBlank()) {
+    if (card.pregnancy.isBlank() && card.bloodGroup.isBlank() && card.allergies.isBlank() && card.medicines.isBlank() && card.conditions.isBlank()) {
         Text(stringResource(R.string.rescuer_empty), style = MaterialTheme.typography.bodyLarge)
         Button(onClick = { nav.go(Route.Mine(MinePart.MEDICAL)) }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.medical_card)) }
         return

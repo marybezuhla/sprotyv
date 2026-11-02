@@ -253,6 +253,43 @@
   ]
  },
  {
+  "id": "choking",
+  "title": "Person choking",
+  "guide": [
+   "7.11"
+  ],
+  "call": "103",
+  "source": "Order of the Ministry of Health of Ukraine No. 441 of 09.03.2022, procedure 3; \"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 7.11; English translation by Sprotyv",
+  "checkedOn": "2026-11-02",
+  "reviewedBy": "",
+  "steps": [
+   {
+    "action": "Can cough or speak: ask them to keep coughing and stay close.",
+    "why": "Coughing is the best way to push out what is stuck."
+   },
+   {
+    "action": "Cannot breathe, speak or cough: tell them you will help, and give up to 5 blows with the heel of your hand between the shoulder blades.",
+    "why": ""
+   },
+   {
+    "action": "No luck: up to 5 abdominal thrusts. Hold them from behind, fist above the navel, pull sharply in and up. Alternate with back blows.",
+    "why": "For a pregnant or large person: chest thrusts, not abdominal."
+   },
+   {
+    "action": "A baby: face down along your forearm, 5 pats between the shoulder blades, then 5 presses with two fingers on the breastbone. Alternate.",
+    "why": ""
+   },
+   {
+    "action": "Lost consciousness: lay them on something firm, call 103 and start CPR. Before each breath look in the mouth: if you see the object, remove it with a finger.",
+    "why": ""
+   },
+   {
+    "action": "It worked: still call 103 and follow the dispatcher.",
+    "why": "The Ministry of Health procedure says a medic must check the person."
+   }
+  ]
+ },
+ {
   "id": "burn",
   "title": "Burn",
   "guide": [

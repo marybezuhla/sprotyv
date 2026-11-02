@@ -41,14 +41,15 @@ interface SettingDao {
 
 /**
  * The owner's own data, always encrypted with SQLCipher. Every layout change gets a migration,
- * never a wipe: versions 2 and 3 only add tables (3: notes), so Room's automatic migrations from
+ * never a wipe: versions 2 and 3 only add tables (3: notes), version 4 adds one column with a default
+ * (the pregnancy line of the medical card), so Room's automatic migrations from
  * the committed layouts (personal/schemas) are exact.
  */
 @Database(
     entities = [Setting::class, MedicalCard::class, Person::class, FamilyPlan::class, PlanRow::class, KitCheck::class, Note::class],
-    version = 3,
+    version = 4,
     exportSchema = true,
-    autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3)],
+    autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3), AutoMigration(from = 3, to = 4)],
 )
 abstract class PersonalDb : RoomDatabase() {
     abstract fun settings(): SettingDao

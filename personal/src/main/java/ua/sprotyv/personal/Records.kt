@@ -24,6 +24,8 @@ data class MedicalCard(
     val medicines: String = "",
     val conditions: String = "",
     val notes: String = "",
+    /** Pregnancy and its term, in the owner's words: shown first to rescuers. Added in layout 4. */
+    @androidx.room.ColumnInfo(defaultValue = "") val pregnancy: String = "",
     val updatedAt: Long = 0,
 )
 

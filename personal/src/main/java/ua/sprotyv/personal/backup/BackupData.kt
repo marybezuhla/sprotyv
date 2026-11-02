@@ -264,6 +264,8 @@ object BackupData {
         name = text(m, "name"), birthDate = text(m, "birthDate"), bloodGroup = text(m, "bloodGroup"),
         allergies = text(m, "allergies"), medicines = text(m, "medicines"), conditions = text(m, "conditions"),
         notes = text(m, "notes"), updatedAt = m.optLong("updatedAt", 0),
+        // Copies made before the line existed simply have none
+        pregnancy = if (m.has("pregnancy")) text(m, "pregnancy") else "",
     )
 
     internal fun personOf(p: JSONObject) = Person(
@@ -281,6 +283,7 @@ object BackupData {
     internal fun medical(m: MedicalCard) = JSONObject()
         .put("name", m.name).put("birthDate", m.birthDate).put("bloodGroup", m.bloodGroup).put("allergies", m.allergies)
         .put("medicines", m.medicines).put("conditions", m.conditions).put("notes", m.notes).put("updatedAt", m.updatedAt)
+        .put("pregnancy", m.pregnancy)
 
     internal fun person(p: Person) = JSONObject()
         .put("id", p.id).put("name", p.name).put("phone", p.phone).put("relation", p.relation)

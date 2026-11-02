@@ -121,6 +121,7 @@ object RescuerCode {
                 add("$label: " + if (v.length > FIELD) safeTake(v, FIELD - 1) + "…" else v)
             }
             // Most needed first: lines at the end are the ones dropped if it does not fit
+            line(labels.pregnancy, card.pregnancy)
             line(labels.blood, card.bloodGroup)
             line(labels.allergies, card.allergies)
             ice.take(1).forEach { line(labels.contact, "${it.name} ${it.phone}") }
@@ -148,6 +149,7 @@ object RescuerCode {
         val title: String,
         val blood: String,
         val allergies: String,
+        val pregnancy: String = "",
         val medicines: String,
         val conditions: String,
         val contact: String,
