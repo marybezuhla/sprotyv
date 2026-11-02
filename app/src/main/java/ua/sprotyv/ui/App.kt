@@ -117,8 +117,9 @@ fun App() {
             }
             // Trip mode: what it hides does not open, whatever leads there
             if (trip && Trip.hides(route)) return
-            // Something typed and not saved (a notification or a share may lead away): ask first
-            if (EditGuard.isDirty) { EditGuard.then = route; EditGuard.asking = true; return }
+            // Something typed and not saved (a notification or a share may lead away): ask first.
+            // Never before help in danger: a card or "what to do now" opens at once
+            if (EditGuard.isDirty && route !is Route.CardRoute && route !is Route.Open && route !is Route.Moz) { EditGuard.then = route; EditGuard.asking = true; return }
             saved = stack.map(Route::save) + route.save()
         }
         // Built from what could be read, so an unreadable entry never makes Back look stuck

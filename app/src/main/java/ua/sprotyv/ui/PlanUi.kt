@@ -136,7 +136,7 @@ private fun Rows(kind: String, firstLabel: Int, secondLabel: Int, firstHint: Int
         var r by remember(start) { mutableStateOf(start) }
         AlertDialog(
             onDismissRequest = { editing = null },
-            properties = androidx.compose.ui.window.DialogProperties(dismissOnClickOutside = false),
+            properties = androidx.compose.ui.window.DialogProperties(dismissOnClickOutside = false, dismissOnBackPress = false),
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Field(stringResource(firstLabel), r.first, { r = r.copy(first = it) }, multiline = true, hint = stringResource(firstHint))
