@@ -86,6 +86,8 @@ fun ShieldsScreen(nav: Nav, openGroups: Boolean = false) {
     val st = Steps.parse((stepsStored ?: return Loading()).first())
     val pathDone = pathShields(p.first(), roles)
     val (gartDays, bodyMonths) = gartTotals(h.first())
+    // Count widgets show a plain copy of their own count only
+    androidx.compose.runtime.LaunchedEffect(st.counts) { CountWidgets.mirror(ctx, st.counts) }
     fun counted(id: String, title: Int, icon: Int, n: Int, rare: Boolean, group: Group?, counter: String? = null): ShieldItem {
         // Every single time counts: the exact number is on the shield; the marks passed are only notches
         return ShieldItem(id, title, R.string.shield_how_count, group, icon, if (n > 0) 2 else 0, count = n.takeIf { it > 0 }, counter = counter, notches = marksPassed(n, rare))

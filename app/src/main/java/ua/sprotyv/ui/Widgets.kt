@@ -22,6 +22,7 @@ object Widgets {
     private val PROVIDERS = listOf(
         NowWidget::class.java, RunningWidget::class.java, PathWidget::class.java, TileWidget::class.java,
         ServicesWidget::class.java, KidWidget::class.java, SafeWidget::class.java, KitWidget::class.java, GartWidget::class.java,
+        CountWidget::class.java,
     )
 
     /** Draws every placed widget again (a count started or stopped, the path changed, trip mode). */
@@ -44,8 +45,10 @@ object Widgets {
         each(SafeWidget::class.java) { safe(app) }
         each(KitWidget::class.java) { kit(app) }
         each(GartWidget::class.java) { gart(app) }
+        each(CountWidget::class.java) { CountWidgets.draw(app, it) }
         // Choices left by widgets removed while nothing was told (the neutral icon)
         try { TileWidgets.keepOnly(app, ids(app, manager, TileWidget::class.java)) } catch (e: Exception) { }
+        try { CountWidgets.keepOnly(app, ids(app, manager, CountWidget::class.java)) } catch (e: Exception) { }
     }
 
     /** Every placed widget emptied: some launchers keep the last picture of a removed widget. */

@@ -154,6 +154,14 @@
             <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_kit_info" />
         </receiver>
+        <receiver android:name=".ui.CountWidget" android:exported="true" android:permission="android.permission.BIND_APPWIDGET" android:label="@string/widget_count_label">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_count_info" />
+        </receiver>
+        <receiver android:name=".ui.CountPlus" android:exported="false" />
+        <activity android:name=".ui.CountWidgetSetup" android:exported="true" android:excludeFromRecents="true" android:taskAffinity="">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" /></intent-filter>
+        </activity>
         <!-- Choosing the part of Sprotyv a widget opens: reached by the launcher when the widget is placed;
              it accepts only Sprotyv's own widgets -->
         <activity android:name=".ui.TileWidgetSetup" android:exported="true" android:excludeFromRecents="true" android:taskAffinity="">
