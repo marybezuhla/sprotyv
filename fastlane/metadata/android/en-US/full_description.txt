@@ -17,4 +17,4 @@ The app has no internet permission. Personal data is kept in an encrypted databa
 
 It does not replace a doctor, rescuers, official instructions or sirens.
 
-Free software under the GNU GPL 3.0; the guide's content is CC BY-SA 4.0.
+Free software under the GNU GPL 3.0 or later; the guide's content is CC BY-SA 4.0.

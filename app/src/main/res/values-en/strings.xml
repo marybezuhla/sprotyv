@@ -58,7 +58,7 @@
     <string name="search_hint">For example: tourniquet, water, drone</string>
     <string name="search_none">Nothing found. Try another word.</string>
     <string name="about_app_version">Sprotyv %1$s</string>
-    <string name="about_app_licence">© 2026 the Sprotyv authors. Free software under the GNU GPL 3.0: you may share and change it under that licence. No warranty of any kind. The guide\'s content is CC BY-SA 4.0; sources and authors are named in the content itself and in NOTICE.md in the source code.</string>
+    <string name="about_app_licence">© 2026 the Sprotyv authors. Free software under the GNU GPL, version 3 or (at your option) any later version: you may share and change it under that licence. No warranty of any kind. The guide\'s content is CC BY-SA 4.0; sources and authors are named in the content itself and in NOTICE.md in the source code.</string>
     <string name="about_app_libraries">Libraries: SQLCipher (Zetetic, BSD), Google Tink, ZXing, AndroidX and Jetpack Compose, Kotlin (Apache 2.0), Bouncy Castle (MIT), Protocol Buffers (BSD). Password word list: EFF (CC BY 3.0 US).</string>
     <string name="about_app_source">Source code and licence (opens in the browser)</string>
     <string name="about_app_texts">Licence texts</string>
