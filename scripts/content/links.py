@@ -15,7 +15,7 @@ FLAGS = {"unknown_author", "ads", "beta", "collects_data", "paid", "paused"}
 DIRECTORY = ("idp", "money", "docs", "kids", "veterans", "health", "care")
 RESIST = ("learn", "service", "resilience", "support", "drones", "cyber")
 
-def link(id, group, kind, title, note, url="", app="", phone="", flags=()):
+def link(id, group, kind, title, note, url="", app="", phone="", flags=(), checked=CHECKED):
     assert set(flags) <= FLAGS, id
     assert kind in ("official", "volunteer", "independent", "ngo"), id
     assert re.fullmatch(r"[a-z0-9-]{1,40}", id), id
@@ -26,7 +26,7 @@ def link(id, group, kind, title, note, url="", app="", phone="", flags=()):
     assert not phone or re.fullmatch(r"[0-9]{3,10}", phone), id
     assert 0 < len(title) <= 80 and 0 < len(note) <= 200, id
     return {"id": id, "group": group, "kind": kind, "title": title, "note": note,
-            "url": url, "app": app, "phone": phone, "checkedOn": CHECKED, "flags": list(flags)}
+            "url": url, "app": app, "phone": phone, "checkedOn": checked, "flags": list(flags)}
 
 LINKS = [
     # Air threats
@@ -250,15 +250,52 @@ LINKS = [
     link("redcross", "learn", "ngo", "Червоний Хрест України: курси першої допомоги",
          "Навчання першої допомоги для всіх охочих у багатьох містах; сертифікат. Ціну й розклад уточнюйте на сайті.",
          url="https://redcross.org.ua/fat/", flags=("paid",)),
+    # Regional centres for national resistance: every oblast with an official page or phone, checked 2026-11-02
+    link("vn-sprotyv", "learn", "official", "Вінниччина: центр підготовки до нацспротиву",
+         "Обласний центр: базовий курс 48 годин, 14 тем, для всіх від 18 років без підготовки; безкоштовно, сертифікат після заліку.",
+         url="https://osite.vin.gov.ua/departament-oboron-roboty/76996-prokhodzhennia-kursu-z-natsionalnoho-sprotyvu-mozhlyvosti-dlia-meshkantsiv-oblasti", checked="2026-11-02"),
+    link("vl-sprotyv", "learn", "official", "Волинь: центр підготовки до нацспротиву",
+         "Обласний центр: базовий курс 48 годин або повний 108 годин, безкоштовно, для всіх від 18 років, групи по 20–25 людей.",
+         url="https://voladm.gov.ua/new/volinskiy-oblasniy-centr-pidgotovki-naselennya-do-nacionalnogo-sprotivu-rozpochinaye-aktivno-pracyuvati/", checked="2026-11-02"),
+    link("dp-sprotyv", "learn", "official", "Дніпропетровщина: центр підготовки до нацспротиву",
+         "Обласний центр: курс 48 або 100 годин за програмою Міноборони, безкоштовно, для мешканців 18–60 років. Запис телефоном.",
+         phone="0964654882", checked="2026-11-02"),
+    link("zt-sprotyv", "learn", "official", "Житомирщина: центр підготовки до нацспротиву",
+         "Обласний центр: тактика, тактична медицина, мінна безпека, дрони, вогнева підготовка. Тривалість і умови уточнюйте.",
+         url="https://oda.zht.gov.ua/news/na-zhytomyrshhyni-tryvaye-pidgotovka-gromadyan-do-natsionalnogo-sprotyvu/", checked="2026-11-02"),
+    link("zk-sprotyv", "learn", "official", "Закарпаття: центр підготовки до нацспротиву",
+         "Обласний центр: програма на 3 місяці, безкоштовно, для всіх від 18 років без верхньої межі віку; сертифікат.",
+         url="https://zakarpat-rada.gov.ua/catalog/zakarpatskyj-oblasnyj-tsentr-pidgotovky-naselennya-do-natsionalnogo-sprotyvu/", checked="2026-11-02"),
+    link("if-sprotyv", "learn", "official", "Прикарпаття: центр підготовки до нацспротиву",
+         "Обласний центр: курс 48 годин. Умови й розклад уточнюйте.",
+         url="https://www.if.gov.ua/news/v-oblasti-rozpochav-svoiu-robotu-tsentr-pidhotovky-hromadian-do-natsionalnoho-sprotyvu", checked="2026-11-02"),
+    link("ko-sprotyv", "learn", "official", "Київщина: центр підготовки до нацспротиву",
+         "Обласний центр: безкоштовний базовий курс 110 годин за 7 тижнів, переважно у вихідні, 16 напрямів.",
+         url="https://koda.gov.ua/110-godyn-navchannya-i-praktyky-na-kyyivshhyni-startuvav-17-j-bazovyj-kurs-pidgotovky-do-naczionalnogo-sprotyvu/", checked="2026-11-02"),
+    link("kyiv-sprotyv", "learn", "official", "Київ: центр підготовки до нацспротиву",
+         "Міський центр: безкоштовно цілий рік — одноденні заняття, базовий курс 48 годин, поглиблений 108 годин.",
+         url="https://kyiv-defenders.com.ua/", checked="2026-11-02"),
+    link("lv-sprotyv", "learn", "official", "Львівщина: центр «Захист Львівщини»",
+         "Обласний центр підготовки до нацспротиву: навчання в громадах області. Тривалість і умови уточнюйте.",
+         url="https://lvivoblrada.gov.ua/zakhyst-lvivshchyny-proviv-navchannya-dlya/", checked="2026-11-02"),
+    link("od-sprotyv", "learn", "official", "Одещина: центр підготовки до нацспротиву",
+         "Обласний центр: безкоштовний базовий курс 48 годин (близько 6 тижнів, 14 напрямів) для громадян від 18 років.",
+         url="https://guns.od.gov.ua/zanyattya-z-vijskovoyi-pidgotovky/", checked="2026-11-02"),
+    link("pl-sprotyv", "learn", "official", "Полтавщина: центр підготовки до нацспротиву",
+         "Обласний центр: безкоштовний курс 48 годин для дорослих, сертифікат після навчання.",
+         url="https://sprotyv.pl.ua", checked="2026-11-02"),
     link("kh-sprotyv", "learn", "official", "Харківщина: центр підготовки до нацспротиву",
          "Обласний центр: загальновійськові курси 48 або 108 годин для цивільних 18–60 років, безкоштовно, зазвичай щосуботи.",
-         url="https://oblrada-kharkiv.gov.ua/oblasnyj-czentr-pidgotovky-naselennya-do-naczionalnogo-sprotyvu/"),
+         url="https://oblrada-kharkiv.gov.ua/oblasnyj-czentr-pidgotovky-naselennya-do-naczionalnogo-sprotyvu/", checked="2026-11-02"),
     link("km-sprotyv", "learn", "official", "Хмельниччина: центр підготовки до нацспротиву",
          "Обласний центр: 7 тижнів базової підготовки — тактика, медицина, топографія, зв'язок. Заняття безкоштовні.",
-         url="https://sprotyv.km.ua"),
-    link("pl-sprotyv", "learn", "official", "Полтавщина: центр підготовки до нацспротиву",
-         "Обласний центр: тактична медицина, безпека й евакуація, дії в надзвичайних ситуаціях, психологічна стійкість.",
-         url="https://sprotyv.pl.ua"),
+         url="https://sprotyv.km.ua", checked="2026-11-02"),
+    link("ck-sprotyv", "learn", "official", "Черкащина: центр підготовки до нацспротиву",
+         "Обласний центр: усі заняття безкоштовні — модулі по 2–4 години, коротка програма 48 годин або повна 108 годин.",
+         url="https://nacsprotyv.ck.ua", checked="2026-11-02"),
+    link("cn-sprotyv", "learn", "official", "Чернігівщина: центр підготовки до нацспротиву",
+         "Обласний центр: безкоштовне навчання з сертифікатом для мешканців області.",
+         url="https://chor.gov.ua/zv-yazki-z-gromadskistyu/item/14134-pro-stvorennia-komunalnoho-zakladu-chernihivskyi-oblasnyi-tsentr", checked="2026-11-02"),
     link("prytula-readiness", "learn", "ngo", "Фонд Притули: Центр готовності цивільних",
          "Тренінги для цивільних у різних містах: домедична допомога та інші навички. Участь за донат.",
          url="https://prytulafoundation.org/help-army/direction/czentr-gotovnosti-czivilnih"),

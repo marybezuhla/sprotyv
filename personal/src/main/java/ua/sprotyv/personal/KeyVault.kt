@@ -240,19 +240,24 @@ class KeyVault(context: Context) {
      * one place a key is deleted, and only once the new wrapping is written.
      */
     @Synchronized
-    fun finishRewrap(confirmed: Cipher, alias: String, mode: Mode, passphrase: ByteArray) {
+    fun finishRewrap(confirmed: Cipher, alias: String, mode: Mode, passphrase: ByteArray, oldAlias: String?) {
         require(passphrase.size == PASSPHRASE_BYTES)
         val store = keyStore()
         require(store.containsAlias(alias)) { "New key missing" }
-        val oldAlias = try { readWrapped().alias } catch (e: Exception) { null }
+        // The key file must still be the one this change started from (a fresh start in between, say)
+        require(currentAlias() == oldAlias) { "Key file changed meanwhile" }
         confirmed.updateAAD(header(FORMAT_VERSION, mode, alias))
         val data = confirmed.doFinal(passphrase)
-        writeWrapped(Wrapped(FORMAT_VERSION, mode, alias, confirmed.iv, data))
-        // Only a different, Sprotyv-made entry; a failure here leaves a key that opens nothing current
-        if (oldAlias != null && oldAlias != alias && ALIAS.matches(oldAlias)) {
+        val durable = writeWrapped(Wrapped(FORMAT_VERSION, mode, alias, confirmed.iv, data))
+        // Only once the new file is surely on the disk, and only a different, Sprotyv-made entry;
+        // otherwise the old key stays and simply opens nothing current
+        if (durable && oldAlias != null && oldAlias != alias && ALIAS.matches(oldAlias)) {
             try { store.deleteEntry(oldAlias) } catch (e: Exception) { lastError = e }
         }
     }
+
+    /** The alias named in the key file now, or null if there is none or it cannot be read. */
+    fun currentAlias(): String? = try { readWrapped().alias } catch (e: Exception) { null }
 
     /**
      * Sets the key file aside under a new name (never deletes it, never deletes the keystore
@@ -306,7 +311,7 @@ class KeyVault(context: Context) {
         return bytes.toByteArray()
     }
 
-    private fun writeWrapped(w: Wrapped) {
+    private fun writeWrapped(w: Wrapped): Boolean {
         try {
             FileOutputStream(tmp).use { stream ->
                 val out = DataOutputStream(stream)
@@ -322,7 +327,7 @@ class KeyVault(context: Context) {
                 stream.fd.sync()
             }
             if (!tmp.renameTo(file)) error("Could not save the wrapped key")
-            syncDirectory(file.parentFile!!)
+            return syncDirectory(file.parentFile!!)
         } finally {
             tmp.delete()
         }
@@ -349,13 +354,13 @@ class KeyVault(context: Context) {
             Wrapped(version, mode, alias, iv, data)
         }
 
-    private fun syncDirectory(dir: File) {
-        try {
-            val fd = Os.open(dir.path, OsConstants.O_RDONLY, 0)
-            try { Os.fsync(fd) } finally { Os.close(fd) }
-        } catch (e: Exception) {
-            // Best effort; the file itself is already synced
-        }
+    /** True when the folder's new entry is surely on the disk. Best effort: the file itself is already synced. */
+    private fun syncDirectory(dir: File): Boolean = try {
+        val fd = Os.open(dir.path, OsConstants.O_RDONLY, 0)
+        try { Os.fsync(fd) } finally { Os.close(fd) }
+        true
+    } catch (e: Exception) {
+        false
     }
 
     private fun createKey(alias: String, mode: Mode): SecretKey = try {
