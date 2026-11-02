@@ -54,7 +54,7 @@ object CountWidgets {
         "helped" to R.string.count_helped, "taught" to R.string.count_taught, "courses" to R.string.count_courses,
         "animals" to R.string.count_animals, "thanks" to R.string.count_thanks,
     )
-    private val KEYS = COUNTERS.map { it.first }.toSet()
+    private val KEYS = COUNTERS.map { it.first }.filter { it in Steps.COUNTS }.toSet()
     const val ACTION_PLUS = "ua.sprotyv.widget.COUNT_PLUS"
     private const val MAX = 10_000
 
@@ -90,7 +90,11 @@ object CountWidgets {
 
     /** The encrypted counts as now stored: copied only for the counts that have a widget. */
     fun mirror(c: Context, counts: Map<String, Int>) {
+        // Nothing copied while the neutral icon is on or in trip mode, or with no widget placed
+        if (Neutral.isOn(c)) return forgetCopies(c)
+        if (HomePrefs.load(c).trip) return forgetNumbers(c)
         val still = used(c)
+        if (still.isEmpty() && prefs(c).all.keys.none { it.startsWith("n:") }) return
         val e = prefs(c).edit()
         KEYS.forEach { k -> if (k in still) e.putInt("n:$k", (counts[k] ?: 0).coerceIn(0, MAX)) else e.remove("n:$k") }
         e.apply()
@@ -98,18 +102,41 @@ object CountWidgets {
     }
 
     /** "+1" from the home screen, kept until "Mine" opens. */
-    fun plus(c: Context, counter: String) {
+    fun plus(c: Context, counter: String) = synchronized(this) {
         if (counter !in KEYS) return
         val p = prefs(c)
-        p.edit().putInt("p:$counter", (p.getInt("p:$counter", 0) + 1).coerceAtMost(MAX)).apply()
+        p.edit().putInt("p:$counter", (p.getInt("p:$counter", 0) + 1).coerceAtMost(MAX)).commit()
     }
 
-    /** What waits, taken out: added to the encrypted counts by the caller. */
-    fun takePending(c: Context): Map<String, Int> {
+    /** What waits, read without taking it: it is taken ([settle]) only once it is in the encrypted counts. */
+    fun peekPending(c: Context): Map<String, Int> = synchronized(this) {
         val p = prefs(c)
-        val out = KEYS.associateWith { p.getInt("p:$it", 0).coerceIn(0, MAX) }.filterValues { it > 0 }
-        if (out.isNotEmpty()) p.edit().apply { out.keys.forEach { remove("p:$it") } }.apply()
-        return out
+        KEYS.associateWith { p.getInt("p:$it", 0).coerceIn(0, MAX) }.filterValues { it > 0 }
+    }
+
+    /** Taps now stored encrypted: exactly those are taken away, so one made meanwhile stays. */
+    fun settle(c: Context, stored: Map<String, Int>) = synchronized(this) {
+        val p = prefs(c)
+        val e = p.edit()
+        stored.forEach { (k, n) -> val left = p.getInt("p:$k", 0) - n; if (left > 0) e.putInt("p:$k", left) else e.remove("p:$k") }
+        e.commit()
+    }
+
+    /**
+     * Every choice and copied number gone (the neutral icon, the last widget removed). Taps that
+     * still wait are kept: they are only numbers, and they go into "Mine" when it next opens.
+     */
+    fun forgetCopies(c: Context) {
+        val p = prefs(c)
+        val e = p.edit()
+        p.all.keys.filter { it.startsWith("w:") || it.startsWith("n:") }.forEach { e.remove(it) }
+        e.apply()
+    }
+
+    private fun forgetNumbers(c: Context) {
+        val p = prefs(c)
+        val gone = p.all.keys.filter { it.startsWith("n:") }
+        if (gone.isNotEmpty()) p.edit().apply { gone.forEach { remove(it) } }.apply()
     }
 
     /** The number shown: the copy plus what waits. Null before "Mine" first gave a number. */
@@ -124,6 +151,8 @@ object CountWidgets {
         val v = RemoteViews(c.packageName, R.layout.widget_count)
         val chosen = get(c, widget)
         val trip = HomePrefs.load(c).trip
+        // Trip mode: the copied numbers are not kept either; "Mine" gives them back afterwards
+        if (trip) forgetNumbers(c)
         if (trip || chosen == null) {
             // Trip mode: a neutral way in, no number, no name; not chosen yet: the way to choose
             v.setTextViewText(R.id.w_number, "")
@@ -154,8 +183,12 @@ class CountWidget : AppWidgetProvider() {
     override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) = Widgets.update(context)
     override fun onDeleted(context: Context, ids: IntArray) {
         val manager = AppWidgetManager.getInstance(context) ?: return
-        CountWidgets.keepOnly(context, manager.getAppWidgetIds(ComponentName(context, CountWidget::class.java)) ?: IntArray(0))
+        val left = (manager.getAppWidgetIds(ComponentName(context, CountWidget::class.java)) ?: IntArray(0)).filter { it !in ids }.toIntArray()
+        CountWidgets.keepOnly(context, left)
     }
+
+    /** The last one removed: nothing copied stays. */
+    override fun onDisabled(context: Context) = CountWidgets.forgetCopies(context)
 
 }
 
@@ -197,7 +230,7 @@ class CountWidgetSetup : ComponentActivity() {
             val prefs = HomePrefs.state.collectAsState().value ?: HomePrefs.load(this)
             SprotyvTheme(prefs.theme, prefs.dynamic) {
                 Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    var showName by remember { mutableStateOf(CountWidgets.get(this, widget)?.showName ?: true) }
+                    var showName by remember { mutableStateOf(CountWidgets.get(this, widget)?.showName ?: false) }
                     Column(
                         Modifier.fillMaxSize().statusBarsPadding().verticalScroll(rememberScrollState()).padding(16.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp),

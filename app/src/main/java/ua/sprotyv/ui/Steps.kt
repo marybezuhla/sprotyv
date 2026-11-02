@@ -89,20 +89,33 @@ data class Steps(
             val solved = p.getStringSet("solved", emptySet()).orEmpty().filter { ID.matches(it) }
             val topics = p.getStringSet("topics", emptySet()).orEmpty().filter { ID.matches(it) }
             if (solved.isEmpty() && topics.isEmpty()) return
-            change { s -> s.copy(solved = (s.solved + solved).take(300).toSet(), topics = (s.topics + topics).take(30).toSet()) }
-            p.edit().clear().apply()
+            if (PersonalStore.state.value !is Opened.Ready) return
+            // Taken from where they waited only once stored, and only those: a failed save loses nothing
+            PersonalStore.save("steps-practice") { db ->
+                val s = parse(db.settings().get(KEY_STEPS))
+                db.settings().put(Setting(KEY_STEPS, s.copy(solved = (s.solved + solved).take(300).toSet(), topics = (s.topics + topics).take(30).toSet()).json()))
+                p.edit().putStringSet("solved", p.getStringSet("solved", emptySet()).orEmpty() - solved.toSet())
+                    .putStringSet("topics", p.getStringSet("topics", emptySet()).orEmpty() - topics.toSet()).commit()
+            }
         }
 
-        /** "+1" from count widgets, added to the encrypted counts while "Mine" is open; the widgets' copy follows. */
+        /**
+         * "+1" from count widgets added to the encrypted counts, then taken from where they waited,
+         * all in one save: a failed save loses no tap. The widgets' copy follows what is stored.
+         * Also called each time "Mine" opens, so the copy is right after a restore or a fresh start.
+         */
         fun flushCounts(context: android.content.Context) {
             if (PersonalStore.state.value !is Opened.Ready) return
             val app = context.applicationContext
-            val pending = CountWidgets.takePending(app)
-            if (pending.isEmpty()) return
-            change { s ->
-                val next = s.copy(counts = (s.counts.keys + pending.keys).associateWith { ((s.counts[it] ?: 0) + (pending[it] ?: 0)).coerceAtMost(10_000) })
+            PersonalStore.save("steps-counts") { db ->
+                val pending = CountWidgets.peekPending(app)
+                val s = parse(db.settings().get(KEY_STEPS))
+                val next = if (pending.isEmpty()) s else s.copy(counts = (s.counts.keys + pending.keys).associateWith { ((s.counts[it] ?: 0) + (pending[it] ?: 0)).coerceAtMost(10_000) })
+                if (pending.isNotEmpty()) {
+                    db.settings().put(Setting(KEY_STEPS, next.json()))
+                    CountWidgets.settle(app, pending)
+                }
                 CountWidgets.mirror(app, next.counts)
-                next
             }
         }
 

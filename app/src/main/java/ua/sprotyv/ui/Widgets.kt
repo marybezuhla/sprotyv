@@ -72,7 +72,11 @@ object Widgets {
     fun sync(context: Context) {
         val app = context.applicationContext
         // Emptied first, while they can still be reached
-        if (Neutral.isOn(app)) AppWidgetManager.getInstance(app)?.let { blankAll(app, it) }
+        if (Neutral.isOn(app)) {
+            AppWidgetManager.getInstance(app)?.let { blankAll(app, it) }
+            // Nothing a widget chose or copied stays on the phone either
+            try { CountWidgets.forgetCopies(app); TileWidgets.keepOnly(app, IntArray(0)) } catch (e: Exception) { }
+        }
         val want = if (Neutral.isOn(app)) PackageManager.COMPONENT_ENABLED_STATE_DISABLED else PackageManager.COMPONENT_ENABLED_STATE_ENABLED
         PROVIDERS.forEach { cls ->
             try {
