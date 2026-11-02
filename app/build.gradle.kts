@@ -6,7 +6,11 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
-val ciVersionCode = System.getenv("VERSION_CODE")?.toIntOrNull() ?: 1
+// The version is set by hand in version.txt (x.y.z); the code follows from it: 1.2.4 → 10204
+val appVersion = rootProject.file("version.txt").readText().trim().also {
+    require(Regex("^\\d{1,2}\\.\\d{1,2}\\.\\d{1,2}$").matches(it)) { "version.txt must be x.y.z" }
+}
+val appVersionCode = appVersion.split(".").map(String::toInt).let { (a, b, c) -> a * 10_000 + b * 100 + c }
 
 android {
     namespace = "ua.sprotyv"
@@ -16,8 +20,8 @@ android {
         applicationId = "ua.sprotyv"
         minSdk = 31
         targetSdk = 36
-        versionCode = ciVersionCode
-        versionName = "0.1.$ciVersionCode"
+        versionCode = appVersionCode
+        versionName = appVersion
     }
 
     buildTypes {
@@ -37,6 +41,12 @@ android {
 
     buildFeatures {
         compose = true
+    }
+
+    // No encrypted list of dependencies inside the APK (only Google Play can read it)
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
     }
 
     testOptions {

@@ -2,15 +2,19 @@
 
 Безкоштовний застосунок для Android: що робити просто зараз, коли небезпечно, і як підготуватися заздалегідь. Українська та англійська. Без реклами, акаунтів і стеження.
 
-> **Статус: розробка.** Ще немає релізу для встановлення. Помилки й побажання: [Issues](../../issues).
+> **Статус: тестова версія.** Завантажте .apk з [Releases](../../releases) або додайте репозиторій в Obtainium. Помилки й побажання: [Issues](../../issues).
 
-## Що буде
+**Вимоги:** Android 12 або новіший. Інтернет не потрібен.
+
+## Що є
 
 - **Що робити зараз:** покрокові картки для тривоги, кровотечі, дрона, пожежі, завалу та інших ситуацій.
 - **Довідник** виживання й базової медицини для дорослих і дітей — повністю офлайн.
 - **Побут у кризі:** немає світла, тепла, води, газу чи зв'язку.
 - **Я в безпеці:** готове повідомлення рідним через WhatsApp, Signal або SMS.
-- **Моє:** медкартка, сімейний план, тривожна валіза — зашифровано, лише на телефоні.
+- **Моє:** медкартка, сімейний план, тривожна валіза, нотатки — зашифровано, лише на телефоні; резервна копія з паролем.
+- **Спротив:** ролі й обставини, шлях готовності, щоденний гарт, щити й лічильники добрих справ; Конституція, Правила дорожнього руху й «Зброя і закон» повним текстом.
+- **Віджети** на головний екран, зокрема щит-лічильник.
 - **Два вигляди:** простий (шість великих кнопок) і повний (вкладки, усі розділи, власна головна з плитками). Можна налаштувати телефон для рідних і захистити налаштування PIN-кодом телефону.
 - **Подзвонити:** 112, 101, 102, 103, 104 одним дотиком на кожному екрані.
 - **Тривоги** — з версії 1.1. До того тримайте офіційний застосунок «Повітряна тривога» й слухайте сирени.
@@ -36,15 +40,19 @@ Kotlin · Jetpack Compose · Room · SQLCipher. Сторонні матеріа�
 
 A free Android app: what to do right now when it is dangerous, and how to prepare in advance. Ukrainian and English. No ads, no accounts, no tracking.
 
-> **Status: in development.** No release to install yet. Bugs and wishes: [Issues](../../issues).
+> **Status: test version.** Download the .apk from [Releases](../../releases) or add this repository to Obtainium. Bugs and wishes: [Issues](../../issues).
 
-## What is coming
+**Requirements:** Android 12 or newer. No internet needed.
+
+## What is there
 
 - **What to do now:** step-by-step cards for an air alert, bleeding, a drone, fire, rubble and more.
 - **A guide** to survival and basic medicine for adults and children, fully offline.
 - **Life in a crisis:** no power, heat, water, gas or connection.
 - **I am safe:** a ready message to family through WhatsApp, Signal or SMS.
-- **Mine:** medical card, family plan, emergency kit — encrypted, on the phone only.
+- **My data:** medical card, family plan, go-bag, notes — encrypted, on the phone only; a backup with a password.
+- **Resistance:** roles and circumstances, a readiness path, daily resilience, shields and counts of good deeds; the Constitution, the Rules of the Road and "Weapons and the law" in full.
+- **Widgets** for the home screen, a count shield among them.
 - **Two looks:** simple (six large buttons) and full (tabs, all sections, your own home screen of tiles). A phone can be set up for a relative, with settings locked by the phone's PIN.
 - **Call:** 112, 101, 102, 103, 104 in one tap on every screen.
 - **Air alerts** from version 1.1. Until then keep the official "Air Alert" app and listen to the sirens.
