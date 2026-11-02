@@ -30,6 +30,8 @@ android {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             // Left unsigned here; signed later in a separate step that runs no build code
+            // Reproducible builds (F-Droid compares its own build with ours): no git details in the APK
+            vcsInfo.include = false
         }
     }
 
@@ -55,6 +57,7 @@ android {
     }
     packaging {
         jniLibs {
+            // SQLCipher's native library stored compressed: a smaller download
             useLegacyPackaging = true
         }
     }
@@ -93,4 +96,10 @@ dependencies {
     testImplementation("androidx.compose.ui:ui-test-manifest")
     testImplementation("androidx.test.ext:junit:1.2.1")
     testImplementation("org.robolectric:robolectric:4.16.1")
+}
+
+// Reproducible builds: the start-up profile AGP writes into the APK can differ from build to build
+// (it is a speed hint only, the app works the same without it)
+tasks.configureEach {
+    if (name.contains("ArtProfile")) enabled = false
 }

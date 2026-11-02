@@ -1,0 +1,20 @@
+A free civil-protection app for Ukraine: what to do right now when it is dangerous, and how to prepare in advance. Works without internet. No ads, no accounts, no tracking.
+
+<b>What is there</b>
+<ul>
+<li><b>What to do now:</b> step-by-step cards for air alerts, bleeding, choking, drones, fire, rubble and more. The screen stays on while your hands are busy.</li>
+<li><b>A guide</b> to survival and basic first aid, the Ministry of Health first-aid procedures, the Constitution and the Rules of the Road in full (the last three in Ukrainian).</li>
+<li><b>Daily life in a crisis:</b> no power, heat, water, gas or connection.</li>
+<li><b>I am safe:</b> a ready message to your family via WhatsApp, Signal or SMS.</li>
+<li><b>My data:</b> medical card, family plan, trusted people, go-bag, supplies, notes. All encrypted and kept only on the phone; a backup with a password.</li>
+<li><b>Readiness:</b> roles, a readiness path, daily resilience, shields and counts of good deeds; where to learn, including the regional centres for national resistance.</li>
+<li><b>Widgets,</b> simple and full looks, a kids' mode, trip mode and a neutral icon.</li>
+<li><b>112</b> on every screen; a tap opens the dialler.</li>
+</ul>
+
+<b>Privacy</b>
+The app has no internet permission. Personal data is kept in an encrypted database (SQLCipher) with its key in the phone's secure keystore. Android cloud backup is off.
+
+It does not replace a doctor, rescuers, official instructions or sirens.
+
+Free software under the GNU GPL 3.0; the guide's content is CC BY-SA 4.0.
