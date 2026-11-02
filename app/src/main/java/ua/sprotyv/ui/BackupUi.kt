@@ -333,6 +333,8 @@ object BackupJobs {
                 snap.wipe()
             }
             if (!ok) return@job R.string.backup_restore_failed
+            // Count widgets show the restored counts, not the old ones
+            runCatching { Steps.flushCounts(app) }
             // The look and set-up too, so nothing has to be set up again on a new phone
             // The data is back even if the look could not be set: never report that as a failure
             runCatching { withContext(Dispatchers.Main) { restoreHome(app, snap.home) } }

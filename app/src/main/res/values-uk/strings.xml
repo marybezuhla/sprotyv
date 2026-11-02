@@ -924,7 +924,7 @@
     <string name="widget_count_label">Щит-лічильник</string>
     <string name="widget_count_desc">Одна ваша добра справа з «Моїх щитів» і кнопка «+1»</string>
     <string name="widget_count_pick">Який лічильник показати?</string>
-    <string name="widget_count_pick_hint">На головному екрані буде лише число на щиті й «+1». Число оновиться, коли відкриєте «Моє». У режимі «Поїздка» віджет нічого не показує.</string>
+    <string name="widget_count_pick_hint">На головному екрані буде лише число на щиті й «+1»; назву можна ввімкнути нижче. Число оновиться, коли відкриєте «Моє». У режимі «Поїздка» віджет показує лише «Відкрити «Спротив»».</string>
     <string name="widget_count_show_name">Показувати назву</string>
     <string name="widget_tile_pick">Що показати на віджеті?</string>
     <string name="widget_tile_pick_hint">Віджет показуватиме лише назву; дотик відкриє вибране.</string>
