@@ -13,7 +13,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -236,7 +235,9 @@ private fun PersonDialog(start: Person, onDone: () -> Unit) {
             }
         },
         confirmButton = {
-            TextButton(enabled = valid, onClick = {
+            var sent by remember { mutableStateOf(false) }
+            TextButton(enabled = valid && !sent, onClick = {
+                sent = true
                 val saved = p.copy(name = p.name.trim(), phone = p.phone.trim(), relation = p.relation.trim())
                 PersonalStore.save("person:" + java.util.UUID.randomUUID()) { it.people().save(saved) }
                 onDone()
@@ -368,14 +369,6 @@ enum class SafeStatus(val title: Int, val mark: String) {
     OK(R.string.safe_status_ok, "✅"),
     HELP(R.string.safe_status_help, "🆘"),
     QUIET(R.string.safe_status_quiet, "🤫"),
-}
-
-@Composable
-fun CheckRow(text: String, checked: Boolean, onChange: (Boolean) -> Unit) {
-    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
-        Checkbox(checked = checked, onCheckedChange = onChange)
-        RichText(text, modifier = Modifier.weight(1f))
-    }
 }
 
 @Composable

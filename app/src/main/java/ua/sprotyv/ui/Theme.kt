@@ -18,6 +18,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 
 // Blue and yellow of the flag as accents; calm neutrals around them.
 // Red is kept for real danger now; "error" here is a burnt orange, never red.
@@ -26,6 +27,11 @@ val FlagYellow = Color(0xFFFFD700)
 
 /** Only for danger that is happening now (an alert, a "call now" button). */
 val DangerRed = Color(0xFFB3261E)
+
+/** Red as text or an icon on the screen's own background: lighter on dark ones, so it reads (WCAG AA). */
+val DangerInk: Color
+    @androidx.compose.runtime.Composable get() =
+        if (androidx.compose.material3.MaterialTheme.colorScheme.background.luminance() < 0.5f) Color(0xFFFF8A80) else DangerRed
 
 private val Light = lightColorScheme(
     primary = FlagBlue,
@@ -44,7 +50,7 @@ private val Light = lightColorScheme(
     onSurface = Color(0xFF1C1B19),
     surfaceVariant = Color(0xFFF1EFE8),
     onSurfaceVariant = Color(0xFF4A4945),
-    outline = Color(0xFFB9B7AE),
+    outline = Color(0xFF8A887F),
     outlineVariant = Color(0xFFE6E4DC),
     error = Color(0xFF9A4A00),
     onError = Color(0xFFFFFFFF),

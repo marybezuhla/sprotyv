@@ -113,7 +113,7 @@ fun PracticeScreen(content: Content?, cardId: String, nav: Nav, check: String? =
                 )
             }
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                OutlinedButton(onClick = { index = 0 }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.again)) }
+                OutlinedButton(onClick = { index = 0; rightCount = 0 }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.again)) }
                 Button(onClick = nav::back, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.practice_finish)) }
             }
             return@Frame
@@ -148,7 +148,7 @@ fun PracticeScreen(content: Content?, cardId: String, nav: Nav, check: String? =
                 else -> ""
             }
             OutlinedButton(
-                onClick = { if (!answered) { chosen = i; if (o.right) { rightCount++; Steps.practice(practiceCtx, solved = p.id) } } },
+                onClick = { if (chosen < 0) { chosen = i; if (o.right) { rightCount++; Steps.practice(practiceCtx, solved = p.id) } } },
                 colors = ButtonDefaults.outlinedButtonColors(
                     containerColor = if (answered && o.right) doneTint().container else MaterialTheme.colorScheme.surface,
                     contentColor = MaterialTheme.colorScheme.onSurface,

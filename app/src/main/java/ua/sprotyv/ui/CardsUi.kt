@@ -40,6 +40,7 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.background
@@ -108,6 +109,8 @@ fun NowScreen(content: Content?, nav: Nav) {
  */
 @Composable
 fun CardScreen(content: Content?, id: String, nav: Nav) {
+    // Hands are busy (pressure, CPR, waiting with someone): the screen does not go dark
+    KeepScreenOn()
     val card = content?.card(id)
     // A child's card: the child's own two buttons below (family, and 112 after a question)
     val kid = id.startsWith("kid-")
@@ -315,10 +318,21 @@ private fun TourniquetTime(nav: Nav? = null) {
                     singleLine = true, modifier = Modifier.fillMaxWidth(),
                 )
                 androidx.compose.foundation.layout.Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    // Put on before the tap: the time moved back
-                    OutlinedButton(onClick = { Tourniquets.shift(context, t.n, -5); changed() }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.tourniquet_earlier, 5), color = tint.ink) }
-                    OutlinedButton(onClick = { Tourniquets.remove(context, t.n); changed() }, modifier = Modifier.weight(1f).heightIn(min = 48.dp)) { Text(stringResource(R.string.tourniquet_handed), color = tint.ink) }
+                    // Put on before the tap: the time moved back; a slip is put right with "+5"
+                    OutlinedButton(onClick = { Tourniquets.shift(context, t.n, -5); changed() }, modifier = Modifier.weight(1f).heightIn(min = 48.dp)
+                        .semantics { contentDescription = context.getString(R.string.tourniquet_earlier_desc, 5) }) { Text(stringResource(R.string.tourniquet_earlier, 5), color = tint.ink) }
+                    OutlinedButton(onClick = { Tourniquets.shift(context, t.n, 5); changed() }, modifier = Modifier.weight(1f).heightIn(min = 48.dp)
+                        .semantics { contentDescription = context.getString(R.string.tourniquet_later_desc, 5) }) { Text(stringResource(R.string.tourniquet_later, 5), color = tint.ink) }
                 }
+                // Apart from the time buttons, and asked once: the time is what the medics need
+                var asking by remember(t.n) { mutableStateOf(false) }
+                OutlinedButton(onClick = { asking = true }, modifier = Modifier.fillMaxWidth().padding(top = 8.dp).heightIn(min = 48.dp)) { Text(stringResource(R.string.tourniquet_handed), color = tint.ink) }
+                if (asking) androidx.compose.material3.AlertDialog(
+                    onDismissRequest = { asking = false },
+                    text = { Text(stringResource(R.string.tourniquet_handed_ask, mark)) },
+                    confirmButton = { androidx.compose.material3.TextButton(onClick = { asking = false; Tourniquets.remove(context, t.n); changed() }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.tourniquet_handed_yes)) } },
+                    dismissButton = { androidx.compose.material3.TextButton(onClick = { asking = false }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.cancel)) } },
+                )
             }
         }
     } }
@@ -445,5 +459,15 @@ fun HomeLifeScreen(content: Content?, nav: Nav) {
         // Blackout, water, food, warmth, hygiene, health
         listOf("ch20", "ch8", "ch9", "ch12", "ch16", "ch21").mapNotNull { id -> content.guide.chapters.firstOrNull { it.id == id } }
             .forEach { ch -> ChapterRow(ch) { nav.go(Route.ChapterRoute(ch.id)) } }
+    }
+}
+
+/** While this screen is shown, the phone's screen stays on. */
+@Composable
+fun KeepScreenOn() {
+    val view = androidx.compose.ui.platform.LocalView.current
+    androidx.compose.runtime.DisposableEffect(view) {
+        view.keepScreenOn = true
+        onDispose { view.keepScreenOn = false }
     }
 }

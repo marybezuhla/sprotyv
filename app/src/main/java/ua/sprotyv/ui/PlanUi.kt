@@ -149,7 +149,9 @@ private fun Rows(kind: String, firstLabel: Int, secondLabel: Int, firstHint: Int
                 }
             },
             confirmButton = {
-                TextButton(enabled = r.first.isNotBlank() && r.second.isNotBlank(), onClick = {
+                var sent by remember { mutableStateOf(false) }
+                TextButton(enabled = r.first.isNotBlank() && r.second.isNotBlank() && !sent, onClick = {
+                    sent = true
                     val saved = r.copy(first = r.first.trim(), second = r.second.trim())
                     PersonalStore.save("plan:row:" + java.util.UUID.randomUUID()) { it.plan().saveRow(saved) }
                     editing = null

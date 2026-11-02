@@ -148,14 +148,14 @@ jobs:
             if grep -q "project :personal" "deps-$m.txt"; then echo "::error::$m depends on :personal"; exit 1; fi
           done
 
-      - name: Check that no network code is in the app (map library's online download removed)
+      - name: Check that no network code is in the app
         shell: bash
         run: |
           set -euo pipefail
           APK=app/build/outputs/apk/release/app-release-unsigned.apk
           unzip -o -q "$APK" 'classes*.dex' -d dex
           ls dex/classes*.dex >/dev/null || { echo "::error::No code found in the APK"; exit 1; }
-          # Class names of the library's online parts, and Java's URL connections from any library
+          # Java's URL and socket classes from any library
           # grep reads the files itself: a pipe from cat would be cut short and pass by mistake
           if grep -a -q -E 'Ljava/net/HttpURLConnection;|Ljava/net/URLConnection;|Ljava/net/Socket;|Ljava/net/DatagramSocket;|Ljavax/net/ssl/|Landroid/net/http/' dex/classes*.dex; then
             echo "::error::Network classes found in the APK"; exit 1
@@ -205,33 +205,6 @@ jobs:
           name: sprotyv-unsigned
           path: app/build/outputs/apk/release/app-release-unsigned.apk
 
-  # Saves the build log to the ci-logs branch. Runs no project code.
-  logs:
-    needs: [test, build]
-    if: always() && github.event_name != 'pull_request'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
-        continue-on-error: true
-        with:
-          name: build-log
-          path: log
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
-        continue-on-error: true
-        with:
-          name: test-log
-          path: log
-      - name: Push the log
-        shell: bash
-        env:
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          cd log
-          git init -q && git checkout -q -b ci-logs && git add . && git -c user.name=ci -c user.email=ci@localhost commit -qm "build log ${{ github.run_number }}"
-          git push -qf "https://x-access-token:${TOKEN}@github.com/${{ github.repository }}" ci-logs
-
   # Signs and publishes. Only for main, only in the "release" environment, and with no Gradle
   # or other third-party build code: just the Android SDK's own apksigner.
   release:
@@ -251,8 +224,12 @@ jobs:
           PASS: ${{ secrets.SPROTYV_SIGNING_PASS }}
           STORE: ${{ secrets.SPROTYV_STORE_PASS }}
           KEYSTORE: ${{ secrets.SPROTYV_KEYSTORE }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ needs.build.outputs.version }}
         run: |
-          if [ -n "$PASS" ] && [ -n "$STORE" ] && [ -n "$KEYSTORE" ]; then
+          if gh release view "v$VERSION" --repo "${{ github.repository }}" >/dev/null 2>&1; then
+            echo "::notice::v$VERSION is already published; raise version.txt for a new release."
+          elif [ -n "$PASS" ] && [ -n "$STORE" ] && [ -n "$KEYSTORE" ]; then
             echo "ready=true" >> "$GITHUB_OUTPUT"
           else
             echo "::warning::Signing secrets are not set; nothing is published."
