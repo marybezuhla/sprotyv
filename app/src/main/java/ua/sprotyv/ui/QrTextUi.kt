@@ -40,6 +40,8 @@ fun QrTextScreen(nav: Nav) {
     val bytes = text.toByteArray(Charsets.UTF_8).size
     val tooLong = bytes > Qr.MAX_PLAN_BYTES
     SecureScreen()
+    // Typed text here is not learned by the keyboard
+    NoKeyboardLearning {
     Frame(stringResource(R.string.qr_text_title), nav::back) {
         Text(stringResource(R.string.qr_text_intro), style = MaterialTheme.typography.bodyLarge)
         OutlinedTextField(
@@ -68,5 +70,6 @@ fun QrTextScreen(nav: Nav) {
             Text(stringResource(R.string.qr_text_bright), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             OutlinedButton(onClick = { text = "" }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.qr_text_clear)) }
         }
+    }
     }
 }

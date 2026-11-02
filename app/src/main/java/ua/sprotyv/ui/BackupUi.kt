@@ -607,14 +607,15 @@ fun BackupScreen() {
         BackupJobs.hold(pw)
         // A neutral name: the file does not say which app made it
         Away.forOwnWindow()
-        save.launch("backup-" + LocalDate.now() + ".bin")
+        // No file app to choose with: nothing left the screen after all
+        try { save.launch("backup-" + LocalDate.now() + ".bin") } catch (e: android.content.ActivityNotFoundException) { Away.back() }
     }, enabled = ready, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(if (busy) R.string.backup_busy else R.string.backup_save)) }
     Text(stringResource(R.string.backup_save_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
     }
     Block(stringResource(R.string.backup_restore_title), ua.sprotyv.home.Group.MINE) {
     Text(stringResource(R.string.backup_restore_intro), style = MaterialTheme.typography.bodyMedium)
-    OutlinedButton(onClick = { BackupJobs.clearNotice(); Away.forOwnWindow(); pick.launch(arrayOf("*/*")) }, enabled = !busy, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+    OutlinedButton(onClick = { BackupJobs.clearNotice(); Away.forOwnWindow(); try { pick.launch(arrayOf("*/*")) } catch (e: android.content.ActivityNotFoundException) { Away.back() } }, enabled = !busy, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
         Text(stringResource(R.string.backup_choose_file))
     }
     openUri?.let { uri ->

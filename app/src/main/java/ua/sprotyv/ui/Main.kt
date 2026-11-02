@@ -52,9 +52,9 @@ class Main : ComponentActivity() {
         NoteInbox.title = ""
         NoteInbox.text = ""
         PlanInbox.text = null
-        // A backup being written or read goes on (leaving never cuts one off); one waiting for a
-        // yes or no, with its password and decrypted data, is dropped
-        if (!BackupJobs.busy.value) BackupJobs.forget()
+        // A backup waiting for a yes or no, with its password and decrypted data, is dropped; one
+        // being written goes on (it holds its own copy) and one being read is thrown away when done
+        BackupJobs.forget()
     }
 
     override fun onNewIntent(intent: android.content.Intent) {
