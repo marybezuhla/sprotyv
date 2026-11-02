@@ -68,60 +68,32 @@ class Content(
             return synchronized(this) { loaded?.takeIf { loadedLang == lang } ?: read(context, lang).also { loaded = it; loadedLang = lang } }
         }
 
-        private fun read(context: Context, lang: String): Content = run {
-                val assets = context.applicationContext.assets
-                val guide = try {
-                    open(context, lang, "guide.json").bufferedReader().use { GuideReader.parse(it.readText()) }
-                } catch (e: Exception) {
-                    null
-                }
-                val cards = try {
-                    open(context, lang, "cards.json").bufferedReader().use { CardsReader.parse(it.readText()) }
-                } catch (e: Exception) {
-                    null
-                }
-                val kids = try {
-                    open(context, lang, "kid_cards.json").bufferedReader().use { CardsReader.parse(it.readText()) }
-                } catch (e: Exception) {
-                    null
-                }
-                val links = try {
-                    assets.open("links.json").bufferedReader().use { LinksReader.parse(it.readText()) }
-                } catch (e: Exception) {
-                    null
-                }
-                val practice = try {
-                    open(context, lang, "practice.json").bufferedReader().use { PracticeReader.parse(it.readText(), cards.orEmpty() + kids.orEmpty()) }
-                } catch (e: Exception) {
-                    null
-                }
-                val moz = try {
-                    assets.open("moz441.json").bufferedReader().use { Moz441Reader.parse(it.readText()) }
-                } catch (e: Exception) {
-                    null
-                }
-                val constitution = try {
-                    assets.open("constitution.json").bufferedReader().use { ConstitutionReader.parse(it.readText()) }
-                } catch (e: Exception) {
-                    null
-                }
-                val history = try {
-                    open(context, lang, "history.json").bufferedReader().use { HistoryReader.parse(it.readText()) }
-                } catch (e: Exception) {
-                    null
-                }
-                val newPlace = try {
-                    open(context, lang, "new_place.json").bufferedReader().use { NewPlaceReader.parse(it.readText()) }
-                } catch (e: Exception) {
-                    null
-                }
-                val pdr = try {
-                    assets.open("pdr.json").bufferedReader().use { PdrReader.parse(it.readText()) }
-                } catch (e: Exception) {
-                    null
-                }
-                Content(guide, cards, kids, links, practice, moz, constitution, history, newPlace, pdr)
+        private fun read(context: Context, lang: String): Content {
+            // One file at a time: a file that cannot be read (out of memory on a small phone
+            // included) leaves only its own part empty, never the first-aid cards
+            fun <T> load(name: String, localized: Boolean, parse: (String) -> T): T? = try {
+                val stream = if (localized) open(context, lang, name) else context.applicationContext.assets.open(name)
+                stream.bufferedReader().use { parse(it.readText()) }
+            } catch (e: Exception) {
+                null
+            } catch (e: OutOfMemoryError) {
+                null
             }
+            val cards = load("cards.json", true, CardsReader::parse)
+            val kids = load("kid_cards.json", true, CardsReader::parse)
+            return Content(
+                load("guide.json", true, GuideReader::parse),
+                cards,
+                kids,
+                load("links.json", false, LinksReader::parse),
+                load("practice.json", true) { PracticeReader.parse(it, cards.orEmpty() + kids.orEmpty()) },
+                load("moz441.json", false, Moz441Reader::parse),
+                load("constitution.json", false, ConstitutionReader::parse),
+                load("history.json", true, HistoryReader::parse),
+                load("new_place.json", true, NewPlaceReader::parse),
+                load("pdr.json", false, PdrReader::parse),
+            )
+        }
 
         private val EMPTY_GUIDE = Guide("", "", "", "", "", emptyList())
 
