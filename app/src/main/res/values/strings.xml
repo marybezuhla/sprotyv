@@ -1563,6 +1563,16 @@
     <string name="driving_licence_6">A first licence is valid for two years, then it is exchanged for one valid for 30 years.</string>
     <string name="driving_licence_7">The official exam questions and answers are open free of charge on the Main Service Centre\'s site.</string>
     <string name="driving_licence_source">Sources: Main Service Centre of the Interior Ministry (07.04.2025, 18.09.2025, 10.03.2026, 27.08.2026, 11.09.2026). Checked 02.11.2026. Conditions change, so it\'s worth checking.</string>
+    <string name="pdr_title">Rules of the Road</string>
+    <string name="pdr_hint">Full text, offline</string>
+    <string name="pdr_intro">The official Rules of the Road of Ukraine, current edition, in Ukrainian. Search by a word or a point number, for example 12.4.</string>
+    <string name="pdr_search">Search the rules</string>
+    <string name="pdr_found">Found: %1$d</string>
+    <string name="pdr_sections">Sections</string>
+    <string name="pdr_section">Section %1$s</string>
+    <string name="pdr_all">All sections</string>
+    <string name="pdr_official">The official text without the notes on amendments. For fines and disputes, ask a lawyer or free legal aid.</string>
+    <string name="pdr_no_pictures">pictures of signs and markings are not included; sections 33 and 34 describe them in words</string>
     <string name="driving_where">Official sources</string>
     <string name="chapter_evacuation_car">Evacuation on foot and by car</string>
     <string name="chapter_evacuation_car_hint">Chapter 26 of the guide</string>

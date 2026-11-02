@@ -23,6 +23,8 @@ class Content(
     val history: History? = null,
     /** "New place": steps after leaving home; null if they could not be read. */
     val newPlace: NewPlace? = null,
+    /** The Rules of the Road in full; null if they could not be read. */
+    val pdr: Pdr? = null,
 ) {
     val guideBroken get() = guideOrNull == null
     val cardsBroken get() = cardsOrNull == null
@@ -113,7 +115,12 @@ class Content(
                 } catch (e: Exception) {
                     null
                 }
-                Content(guide, cards, kids, links, practice, moz, constitution, history, newPlace)
+                val pdr = try {
+                    assets.open("pdr.json").bufferedReader().use { PdrReader.parse(it.readText()) }
+                } catch (e: Exception) {
+                    null
+                }
+                Content(guide, cards, kids, links, practice, moz, constitution, history, newPlace, pdr)
             }
 
         private val EMPTY_GUIDE = Guide("", "", "", "", "", emptyList())

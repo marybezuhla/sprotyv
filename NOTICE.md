@@ -38,4 +38,9 @@
   `scripts/content/moz441/`) — the 29 first-aid procedures of order No. 441 of the Ministry of Health of
   Ukraine, 09.03.2022 (registered 28.03.2022, No. 356/37692), from moz.gov.ua, word for word. An
   official document, not protected by copyright (Law of Ukraine No. 2811-IX, art. 8).
+- `content/src/main/assets/pdr.json` (built by `scripts/content/pdr.py` from the page kept in
+  `scripts/content/pdr/`) — the Rules of the Road of Ukraine (Cabinet of Ministers resolution No. 1306,
+  10.10.2001), edition of 14.10.2026, from zakon.rada.gov.ua, word for word without the amendment notes.
+  An official document, not protected by copyright (Law of Ukraine No. 2811-IX, art. 8); the site's
+  content is also under CC BY 4.0. Source: Verkhovna Rada of Ukraine.
 

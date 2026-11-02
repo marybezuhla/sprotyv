@@ -17,8 +17,8 @@ import ua.sprotyv.home.Group
 /**
  * "Driving": a skill everyone may need (to leave, to take a hurt person to help, to replace a driver
  * who cannot go on). What to do at a crash first, then road safety in numbers from WHO, then how to
- * get a licence, and the official places: the Rules of the Road and the exam questions are open on
- * official sites. Facts only from official sources, each block with its sources and date.
+ * get a licence, and the official places: the Rules of the Road are built in word for word, the exam
+ * questions are on the official site. Facts only from official sources, each block with its sources and date.
  */
 @Composable
 fun DrivingScreen(content: Content?, nav: Nav) {
@@ -29,7 +29,8 @@ fun DrivingScreen(content: Content?, nav: Nav) {
         Facts(R.string.driving_crash_title, Group.DANGER, listOf(R.string.driving_crash_1, R.string.driving_crash_2, R.string.driving_crash_3, R.string.driving_crash_4, R.string.driving_crash_5), R.string.driving_crash_source, startOpen = true)
         Facts(R.string.driving_safe_title, Group.FIRST_AID, listOf(R.string.driving_safe_1, R.string.driving_safe_2, R.string.driving_safe_3, R.string.driving_safe_4, R.string.driving_safe_5, R.string.driving_safe_6), R.string.driving_safe_source)
         Facts(R.string.driving_licence_title, Group.PREPARE, listOf(R.string.driving_licence_1, R.string.driving_licence_2, R.string.driving_licence_3, R.string.driving_licence_4, R.string.driving_licence_5, R.string.driving_licence_6, R.string.driving_licence_7), R.string.driving_licence_source)
-        BlockRow(stringResource(R.string.chapter_evacuation_car), stringResource(R.string.chapter_evacuation_car_hint), first = true) { nav.go(Route.ChapterRoute("ch26")) }
+        BlockRow(stringResource(R.string.pdr_title), stringResource(R.string.pdr_hint), first = true) { nav.go(Route.PdrRoute("")) }
+        BlockRow(stringResource(R.string.chapter_evacuation_car), stringResource(R.string.chapter_evacuation_car_hint)) { nav.go(Route.ChapterRoute("ch26")) }
         if (content == null) return@Frame Loading()
         val links = content.links.filter { it.id in DRIVING_LINKS }.sortedBy { DRIVING_LINKS.indexOf(it.id) }
         if (links.isNotEmpty()) Block(stringResource(R.string.driving_where), Group.PREPARE, padded = false, foldable = true, summary = stringResource(R.string.shelf_count, links.size)) {
@@ -38,7 +39,7 @@ fun DrivingScreen(content: Content?, nav: Nav) {
     }
 }
 
-private val DRIVING_LINKS = listOf("pdr", "hsc-tests", "hsc-licence", "hsc-schools", "hsc-queue", "diia-licence")
+private val DRIVING_LINKS = listOf("hsc-tests", "hsc-licence", "hsc-schools", "hsc-queue", "diia-licence")
 
 @Composable
 private fun Facts(title: Int, group: Group, facts: List<Int>, source: Int, startOpen: Boolean = false) {
