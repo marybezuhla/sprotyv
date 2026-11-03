@@ -395,7 +395,7 @@ private fun Why(why: String, key: String) {
 private fun StepNumber(n: Int, active: Boolean) {
     Box(
         // Grows with large text instead of clipping the number
-        Modifier.defaultMinSize(36.dp, 36.dp).clip(CircleShape)
+        Modifier.defaultMinSize(36.dp, 36.dp).aspectRatio(1f).clip(CircleShape)
             .background(if (active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primaryContainer),
         contentAlignment = Alignment.Center,
     ) {

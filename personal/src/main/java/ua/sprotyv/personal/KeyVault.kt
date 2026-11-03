@@ -41,8 +41,8 @@ import javax.crypto.spec.GCMParameterSpec
  * - a phone with no screen lock, or kept unlocked by Smart Lock, gives no lock protection at all.
  *
  * Nothing here deletes a file, and a key judged lost is set aside, never erased, so a wrong
- * judgement can still be undone. The one key ever deleted is the old one after the lock was
- * changed and the new wrapping written ([finishRewrap]).
+ * judgement can still be undone. Keys are deleted only when nothing can need them: the old one
+ * after a lock change ([finishRewrap]) and old ones no file names ([pruneOldKeys]).
  *
  * File format 2: version, flags (bit 0 locked, bit 1 PIN only), alias, IV, wrapped passphrase.
  * Format 1 (older installs) has no flags. The header is bound to the ciphertext as associated
@@ -268,9 +268,14 @@ class KeyVault(context: Context) {
     @Synchronized
     fun pruneOldKeys() {
         try {
+            val dir = file.parentFile ?: return
+            // Only once the current key file is surely on the disk (a lock change may have kept the old key for this)
+            if (!syncDirectory(dir)) return
             val current = readWrapped().alias
             val named = HashSet<String>().apply { add(current) }
-            file.parentFile?.listFiles { f -> f.name.startsWith("$WRAPPED_FILE.lost-") }?.forEach { f ->
+            // A folder that cannot be listed: nothing is pruned
+            val lost = dir.listFiles { f -> f.name.startsWith("$WRAPPED_FILE.lost-") } ?: return
+            lost.forEach { f ->
                 // A set-aside file that cannot be read: nothing is pruned at all
                 named += readWrapped(f).alias
             }

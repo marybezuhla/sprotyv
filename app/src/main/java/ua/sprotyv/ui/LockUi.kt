@@ -43,14 +43,14 @@ import ua.sprotyv.personal.LockChange
 import ua.sprotyv.personal.PersonalStore
 import javax.crypto.Cipher
 
+/** The last thing Android's window said went wrong; shown on the locked screen too, where it does not vanish. */
+val LockNotice = kotlinx.coroutines.flow.MutableStateFlow<String?>(null)
+
 /**
  * Asks the owner to confirm [cipher] in Android's own window: a fingerprint or the phone's PIN, or
  * the PIN only. Sprotyv never sees the PIN or the fingerprint; the key itself refuses to work
  * without this confirmation. [onDone] gets the confirmed cipher, or null when cancelled or failed.
  */
-/** The last thing Android's window said went wrong; shown on the locked screen too, where it does not vanish. */
-val LockNotice = kotlinx.coroutines.flow.MutableStateFlow<String?>(null)
-
 fun askOwner(activity: Activity, title: String, cipher: Cipher, pinOnly: Boolean, onDone: (Cipher?) -> Unit) {
     LockNotice.value = null
     val prompt = BiometricPrompt.Builder(activity)
@@ -64,6 +64,7 @@ fun askOwner(activity: Activity, title: String, cipher: Cipher, pinOnly: Boolean
     try {
         prompt.authenticate(BiometricPrompt.CryptoObject(cipher), CancellationSignal(), activity.mainExecutor, object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                LockNotice.value = null
                 // A fingerprint window may not even pause the app: the flag is cleared here, always
                 Away.back()
                 onDone(result.cryptoObject?.cipher)
