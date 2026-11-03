@@ -304,6 +304,16 @@ fun DocumentsScreen() {
 
     Text(stringResource(R.string.docs_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     val list = docs ?: return Loading()
+    if (list.isEmpty()) {
+        Text(stringResource(R.string.docs_none), style = MaterialTheme.typography.bodyLarge)
+    } else {
+        Block(stringResource(R.string.docs_title), Group.MINE, padded = false) {
+            list.forEachIndexed { i, d ->
+                val kind = stringResource(if (d.mime == "application/pdf") R.string.docs_kind_pdf else R.string.docs_kind_photo)
+                BlockRow(d.title, "$kind · ${sizeText(context, d.size)}", first = i == 0) { open = d }
+            }
+        }
+    }
     // The space, plainly: a thin bar in the colour of "My data", words for the numbers
     val used = list.sumOf { it.size }
     Block(stringResource(R.string.docs_space_title), Group.MINE) {
@@ -338,16 +348,6 @@ fun DocumentsScreen() {
         ) { Text(stringResource(R.string.docs_add_photo)) }
         if (busy) Text(stringResource(R.string.docs_busy), style = MaterialTheme.typography.bodyMedium)
         notice?.let { Text(stringResource(it), style = MaterialTheme.typography.bodyMedium) }
-    }
-    if (list.isEmpty()) {
-        Text(stringResource(R.string.docs_none), style = MaterialTheme.typography.bodyLarge)
-    } else {
-        Block(stringResource(R.string.docs_title), Group.MINE, padded = false) {
-            list.forEachIndexed { i, d ->
-                val kind = stringResource(if (d.mime == "application/pdf") R.string.docs_kind_pdf else R.string.docs_kind_photo)
-                BlockRow(d.title, "$kind · ${sizeText(context, d.size)}", first = i == 0) { open = d }
-            }
-        }
     }
     open?.let { d -> DocViewer(d) { open = null } }
 }
