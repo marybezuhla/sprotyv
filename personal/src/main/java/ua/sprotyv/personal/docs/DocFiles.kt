@@ -85,7 +85,7 @@ class DocFiles(val dir: File) {
      */
     fun sweep(keep: Set<String>, graceMs: Long = 10 * 60_000L) {
         val now = System.currentTimeMillis()
-        dir.listFiles()?.forEach { f -> if (f.name !in keep && now - f.lastModified() > graceMs) f.delete() }
+        dir.listFiles()?.forEach { f -> if (f.name !in keep && now - f.lastModified() >= graceMs) f.delete() }
     }
 
     companion object {
