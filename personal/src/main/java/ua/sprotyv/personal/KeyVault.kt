@@ -260,6 +260,32 @@ class KeyVault(context: Context) {
     fun currentAlias(): String? = try { readWrapped().alias } catch (e: Exception) { null }
 
     /**
+     * Old keys that open nothing any more (one left when a lock change could not be confirmed on
+     * the disk): Sprotyv's own entries that neither the key file nor a set-aside one names, made
+     * over an hour ago (so never a key a lock change is just preparing). Called once the data
+     * opened with the current file; any doubt keeps the key.
+     */
+    @Synchronized
+    fun pruneOldKeys() {
+        try {
+            val current = readWrapped().alias
+            val named = HashSet<String>().apply { add(current) }
+            file.parentFile?.listFiles { f -> f.name.startsWith("$WRAPPED_FILE.lost-") }?.forEach { f ->
+                // A set-aside file that cannot be read: nothing is pruned at all
+                named += readWrapped(f).alias
+            }
+            val store = keyStore()
+            val hourAgo = System.currentTimeMillis() - 60 * 60_000L
+            store.aliases().toList().filter { ALIAS.matches(it) && it !in named }.forEach { alias ->
+                val made = store.getCreationDate(alias)?.time ?: return@forEach
+                if (made < hourAgo) store.deleteEntry(alias)
+            }
+        } catch (e: Exception) {
+            lastError = e
+        }
+    }
+
+    /**
      * Sets the key file aside under a new name (never deletes it, never deletes the keystore
      * entry), so a fresh start can begin. Only after [unwrap] said [Unwrapped.Lost].
      */
@@ -294,7 +320,8 @@ class KeyVault(context: Context) {
 
     private fun isSoftware(key: SecretKey): Boolean = try {
         val info = SecretKeyFactory.getInstance(key.algorithm, ANDROID_KEYSTORE).getKeySpec(key, KeyInfo::class.java) as KeyInfo
-        info.securityLevel == KeyProperties.SECURITY_LEVEL_SOFTWARE
+        // Only a level Android names as secure hardware counts; "unknown" is said as software
+        info.securityLevel == KeyProperties.SECURITY_LEVEL_SOFTWARE || info.securityLevel == KeyProperties.SECURITY_LEVEL_UNKNOWN
     } catch (e: Exception) {
         // Could not tell: warn rather than claim secure hardware
         true
@@ -333,8 +360,10 @@ class KeyVault(context: Context) {
         }
     }
 
-    private fun readWrapped(): Wrapped =
-        DataInputStream(file.inputStream()).use { input ->
+    private fun readWrapped(): Wrapped = readWrapped(file)
+
+    private fun readWrapped(from: File): Wrapped =
+        DataInputStream(from.inputStream()).use { input ->
             val version = input.readUnsignedByte()
             require(version == 1 || version == FORMAT_VERSION) { "Unknown key file format" }
             val flags = if (version >= 2) input.readUnsignedByte() else 0
