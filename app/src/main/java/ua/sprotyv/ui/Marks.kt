@@ -43,12 +43,23 @@ object Marks {
         }
     }
 
-    /** For a backup's restore: an old backup's plain mark waits here until the data is open. */
-    fun keepLegacy(context: Context, home: Map<String, String>) {
-        val on = LEGACY.keys.filter { home[it]?.toBooleanStrictOrNull() == true }
-        if (on.isEmpty()) return
-        context.applicationContext.getSharedPreferences(LEGACY_FILE, Context.MODE_PRIVATE).edit()
-            .apply { on.forEach { putBoolean(it, true) } }.apply()
+    /** For a backup's restore (the data is open then): an old backup's plain marks go straight into the encrypted data. */
+    fun fromOldBackup(home: Map<String, String>) {
+        LEGACY.forEach { (old, key) -> if (home[old]?.toBooleanStrictOrNull() == true) set(key, true) }
+    }
+
+    /** Whether the encrypted data exists yet: screens that only read marks never create it. */
+    fun dataExists(context: Context): Boolean = PersonalStore.lockMode(context) != null
+
+    /** A mark shown on a screen outside "My data": the recent-apps picture then keeps it hidden, as on the data screens. */
+    @Composable
+    fun HideFromRecents(on: Boolean) {
+        val activity = LocalContext.current as? android.app.Activity ?: return
+        if (!on || android.os.Build.VERSION.SDK_INT < 33) return
+        androidx.compose.runtime.DisposableEffect(activity) {
+            activity.setRecentsScreenshotEnabled(false)
+            onDispose { activity.setRecentsScreenshotEnabled(true) }
+        }
     }
 }
 

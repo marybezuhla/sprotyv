@@ -182,7 +182,8 @@ class BackupStreamTest {
 
     @Test fun copyWithoutDocumentsSaysSo() {
         assertEquals(-1, open(seal(snapshot)).docs)
-        assertEquals(0, open(sealWithDocs(emptyList())).docs)
+        // An empty list writes no marker either, so restoring it leaves the phone's documents
+        assertEquals(-1, open(sealWithDocs(emptyList())).docs)
     }
 
     @Test fun aDocumentThatChangedIsNotWritten() {

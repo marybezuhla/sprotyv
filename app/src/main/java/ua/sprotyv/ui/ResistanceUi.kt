@@ -177,6 +177,7 @@ fun ResistanceScreen(content: Content?, nav: Nav) {
         // Military service: only for adults who choose to see it
         // The choice is kept encrypted in "My data": with its lock on, it shows after the fingerprint or PIN
         val serviceOn = rememberMark(KEY_SERVICE)
+        Marks.HideFromRecents(serviceOn)
         Block(stringResource(R.string.service_title), Group.PREPARE, tint = resist()) {
             if (marksOpen()) Toggle(stringResource(R.string.service_toggle), serviceOn) { on -> Marks.set(KEY_SERVICE, on) }
             Text(stringResource(if (marksOpen()) R.string.service_hint else R.string.service_closed), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)

@@ -329,7 +329,7 @@
     <string name="docs_share">Поділитися</string>
     <string name="docs_delete">Видалити</string>
     <string name="docs_share_title">Поділитися документом?</string>
-    <string name="docs_share_warning">Інший застосунок отримає незашифровану копію й може зберегти її в себе, у хмарі чи в листуванні. «Спротив» прибере свою копію, щойно ви повернетеся.</string>
+    <string name="docs_share_warning">Інший застосунок отримає незашифровану копію й може зберегти її в себе, у хмарі чи в листуванні. «Спротив» прибере свою копію за хвилину після того, як ви повернетеся.</string>
     <string name="docs_delete_title">Видалити документ?</string>
     <string name="docs_delete_text">Документ зникне з телефона назавжди. У вже зроблених резервних копіях він лишиться.</string>
     <string name="docs_page">Сторінка %1$d з %2$d</string>

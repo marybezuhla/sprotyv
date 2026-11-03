@@ -154,7 +154,9 @@ fun App() {
     }
 
     // On entering the owner's screens and on every return to the screen (leaving it closed the data)
-    val personalNow = !trip && (top?.let { it.personal || it.readsMarks } ?: (full && tab == Tab.MINE))
+    // Screens that only read marks open the data when it exists already (never create it)
+    val marksData = remember(top) { top?.readsMarks == true && Marks.dataExists(context) }
+    val personalNow = !trip && (top?.let { it.personal || (it.readsMarks && marksData) } ?: (full && tab == Tab.MINE))
     LifecycleStartEffect(personalNow) {
         if (personalNow) PersonalStore.open(context) else PersonalStore.close()
         onStopOrDispose { }

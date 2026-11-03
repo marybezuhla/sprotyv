@@ -205,7 +205,7 @@ object BackupJobs {
                     val summary = java.io.InputStreamReader(java.security.DigestInputStream(BackupStream.reader(input, k), read), Charsets.UTF_8).use { r ->
                         BackupLines.read(r) { }
                     }
-                    summary.records == snap.records && summary.skipped == 0 && summary.docs == (docs?.size ?: -1) && read.digest().contentEquals(wrote.digest())
+                    summary.records == snap.records && summary.skipped == 0 && summary.docs == (docs?.size?.takeIf { it > 0 } ?: -1) && read.digest().contentEquals(wrote.digest())
                 }
                 if (ok) {
                     PersonalStore.save("setting:$KEY_BACKUP_AT") { it.settings().put(ua.sprotyv.personal.Setting(KEY_BACKUP_AT, System.currentTimeMillis().toString())) }
