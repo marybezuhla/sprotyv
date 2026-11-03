@@ -13,6 +13,8 @@ import android.system.OsConstants
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Arrangement
@@ -260,22 +262,29 @@ object Docs {
     }
 
     fun share(context: Context, doc: Document, bytes: ByteArray) {
-        val dir = shareDir(context).apply { mkdirs() }
+        val app = context.applicationContext
         clearLater.removeCallbacksAndMessages(null)
-        clearShared(context)
-        val ext = if (doc.mime == "application/pdf") "pdf" else "jpg"
-        val name = doc.title.replace(Regex("[^\\p{L}\\p{N} ._-]"), "_").take(60).ifBlank { "document" } + "." + ext
-        val file = File(dir, name)
-        file.writeBytes(bytes)
-        val uri = FileProvider.getUriForFile(context, "${context.packageName}.files", file)
-        val send = Intent(Intent.ACTION_SEND).setType(doc.mime).putExtra(Intent.EXTRA_STREAM, uri).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        // Not "our own window": another app is in front, so the data closes as on any leaving
-        try {
-            context.startActivity(Intent.createChooser(send, null).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION))
-        } catch (e: Exception) {
-            file.delete()
+        // Written away from the screen's thread; the chooser opens from the screen itself
+        scope.launch {
+            val dir = shareDir(app).apply { mkdirs() }
+            clearShared(app)
+            val ext = if (doc.mime == "application/pdf") "pdf" else "jpg"
+            val name = doc.title.replace(Regex("[^\\p{L}\\p{N} ._-]"), "_").take(60).ifBlank { "document" } + "." + ext
+            val file = File(dir, name)
+            try { file.writeBytes(bytes) } catch (e: Exception) { file.delete(); return@launch }
+            withContext(Dispatchers.Main) {
+                val uri = FileProvider.getUriForFile(app, "${app.packageName}.files", file)
+                val send = Intent(Intent.ACTION_SEND).setType(doc.mime).putExtra(Intent.EXTRA_STREAM, uri).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                // Not "our own window": another app is in front, so the data closes as on any leaving
+                try {
+                    context.startActivity(Intent.createChooser(send, null).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION))
+                } catch (e: Exception) {
+                    file.delete()
+                }
+            }
         }
     }
+
 }
 
 private fun sizeText(context: Context, bytes: Long): String = android.text.format.Formatter.formatShortFileSize(context, bytes)
@@ -426,69 +435,118 @@ private fun DocViewer(info: DocInfo, onClose: () -> Unit) {
     }
 }
 
-/** A photo that can be pinched larger, to read small print. */
+/** A picture that can be pinched larger, to read small print; moved only within its own edges. */
 @Composable
-private fun PhotoView(bytes: ByteArray) {
-    val bitmap = remember(bytes) { BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.asImageBitmap() }
-    if (bitmap == null) return Text(stringResource(R.string.docs_failed), modifier = Modifier.padding(16.dp))
+private fun Zoomable(bitmap: androidx.compose.ui.graphics.ImageBitmap, description: String?) {
     var scale by remember { mutableFloatStateOf(1f) }
     var dx by remember { mutableFloatStateOf(0f) }
     var dy by remember { mutableFloatStateOf(0f) }
+    var size by remember { mutableStateOf(androidx.compose.ui.unit.IntSize.Zero) }
     val state = rememberTransformableState { zoom, pan, _ ->
         scale = (scale * zoom).coerceIn(1f, 6f)
-        dx += pan.x; dy += pan.y
+        val maxX = size.width * (scale - 1) / 2
+        val maxY = size.height * (scale - 1) / 2
+        dx = (dx + pan.x).coerceIn(-maxX, maxX)
+        dy = (dy + pan.y).coerceIn(-maxY, maxY)
     }
     Image(
-        bitmap = bitmap, contentDescription = null,
-        modifier = Modifier.fillMaxSize().transformable(state).graphicsLayer(scaleX = scale, scaleY = scale, translationX = dx, translationY = dy),
+        bitmap = bitmap, contentDescription = description,
+        modifier = Modifier.fillMaxSize().onSizeChanged { size = it }.transformable(state).graphicsLayer(scaleX = scale, scaleY = scale, translationX = dx, translationY = dy),
     )
+}
+
+/** A photo, decoded away from the screen's thread. */
+@Composable
+private fun PhotoView(bytes: ByteArray) {
+    val bitmap by produceState<androidx.compose.ui.graphics.ImageBitmap?>(null, bytes) {
+        value = withContext(Dispatchers.Default) { try { BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.asImageBitmap() } catch (e: OutOfMemoryError) { null } }
+    }
+    val b = bitmap ?: return Loading()
+    Zoomable(b, null)
 }
 
 /**
  * A PDF drawn page by page from memory: the bytes go into an anonymous in-memory file (never on
- * the storage) that Android's own PDF reader opens.
+ * the storage) that Android's own PDF reader opens. A tap on a page opens it larger, to zoom in.
  */
 @Composable
 private fun PdfPages(bytes: ByteArray) {
     val widthPx = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp.roundToPx() }
-    val renderer = remember(bytes) {
-        try {
-            val fd = Os.memfd_create("doc", 0)
-            try {
-                java.io.FileOutputStream(fd).write(bytes)
-                Os.lseek(fd, 0, OsConstants.SEEK_SET)
-                PdfRenderer(ParcelFileDescriptor.dup(fd))
-            } finally {
-                Os.close(fd)
-            }
-        } catch (e: Exception) {
-            null
+    val doc by produceState<PdfDoc?>(null, bytes) {
+        val opened = withContext(Dispatchers.IO) { PdfDoc.open(bytes) }
+        value = opened
+        awaitDispose { opened?.close() }
+    }
+    var failedToOpen by remember(bytes) { mutableStateOf(false) }
+    LaunchedEffect(bytes) { kotlinx.coroutines.delay(3_000); if (doc == null) failedToOpen = true }
+    val d = doc ?: return if (failedToOpen) Text(stringResource(R.string.docs_failed), modifier = Modifier.padding(16.dp)) else Loading()
+    var large by remember { mutableStateOf<Int?>(null) }
+    LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        items(d.pages) { i ->
+            val page by produceState<Bitmap?>(null, i) { value = withContext(Dispatchers.Default) { d.render(i, widthPx.coerceAtMost(1600)) } }
+            val label = stringResource(R.string.docs_page, i + 1, d.pages)
+            page?.let {
+                Image(it.asImageBitmap(), contentDescription = label, modifier = Modifier.fillMaxWidth().clickable(onClickLabel = stringResource(R.string.docs_zoom)) { large = i })
+            } ?: Loading()
         }
     }
-    DisposableEffect(renderer) { onDispose { try { renderer?.close() } catch (e: Exception) { } } }
-    if (renderer == null) return Text(stringResource(R.string.docs_failed), modifier = Modifier.padding(16.dp))
-    LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        items(renderer.pageCount) { i ->
-            val page by produceState<Bitmap?>(null, i) {
-                value = withContext(Dispatchers.Default) {
-                    synchronized(renderer) {
-                        try {
-                            renderer.openPage(i).use { p ->
-                                val w = widthPx.coerceAtMost(1600)
-                                val h = (w.toFloat() * p.height / p.width).toInt().coerceAtLeast(1)
-                                Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888).also {
-                                    it.eraseColor(android.graphics.Color.WHITE)
-                                    p.render(it, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
-                                }
-                            }
-                        } catch (e: Exception) {
-                            null
-                        }
+    large?.let { i ->
+        Dialog(onDismissRequest = { large = null }, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+            SensitiveWindow()
+            Surface(Modifier.fillMaxSize()) {
+                Column(Modifier.statusBarsPadding().navigationBarsPadding()) {
+                    TextButton(onClick = { large = null }, modifier = Modifier.align(Alignment.End).padding(8.dp).heightIn(min = 48.dp)) { Text(stringResource(R.string.back)) }
+                    val big by produceState<Bitmap?>(null, i) { value = withContext(Dispatchers.Default) { d.render(i, (widthPx * 2).coerceAtMost(2800)) } }
+                    Column(Modifier.weight(1f)) {
+                        big?.let { Zoomable(it.asImageBitmap(), stringResource(R.string.docs_page, i + 1, d.pages)) } ?: Loading()
                     }
                 }
             }
-            page?.let { Image(it.asImageBitmap(), contentDescription = stringResource(R.string.docs_page, i + 1, renderer.pageCount), modifier = Modifier.fillMaxWidth()) }
-                ?: Loading()
+        }
+    }
+}
+
+/** memfd_create's own close-on-exec flag (Linux MFD_CLOEXEC; not O_CLOEXEC). */
+private const val MFD_CLOEXEC = 1
+
+/** An open PDF: pages drawn one at a time, never while it closes. */
+private class PdfDoc private constructor(private val renderer: PdfRenderer) {
+    val pages: Int = renderer.pageCount
+    private var closed = false
+
+    fun render(i: Int, width: Int): Bitmap? = synchronized(this) {
+        if (closed) return null
+        try {
+            renderer.openPage(i).use { p ->
+                val h = (width.toFloat() * p.height / p.width).toInt().coerceIn(1, width * 4)
+                Bitmap.createBitmap(width, h, Bitmap.Config.ARGB_8888).also {
+                    it.eraseColor(android.graphics.Color.WHITE)
+                    p.render(it, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+                }
+            }
+        } catch (e: Throwable) {
+            null
+        }
+    }
+
+    fun close() = synchronized(this) {
+        closed = true
+        try { renderer.close() } catch (e: Exception) { }
+    }
+
+    companion object {
+        fun open(bytes: ByteArray): PdfDoc? = try {
+            // An anonymous file in memory, not inherited by anything this app starts
+            val fd = Os.memfd_create("doc", MFD_CLOEXEC)
+            try {
+                java.io.FileOutputStream(fd).write(bytes)
+                Os.lseek(fd, 0, OsConstants.SEEK_SET)
+                PdfDoc(PdfRenderer(ParcelFileDescriptor.dup(fd)))
+            } finally {
+                Os.close(fd)
+            }
+        } catch (e: Throwable) {
+            null
         }
     }
 }

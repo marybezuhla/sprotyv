@@ -332,6 +332,7 @@
     <string name="docs_share_warning">The other app gets an unencrypted copy and may keep it, in its cloud or in a chat. Sprotyv removes its own copy a minute after you come back.</string>
     <string name="docs_delete_title">Delete the document?</string>
     <string name="docs_delete_text">The document is removed from the phone for good. Backups already made still hold it.</string>
+    <string name="docs_zoom">Open larger</string>
     <string name="docs_page">Page %1$d of %2$d</string>
     <string name="docs_photo_title">Photo %1$s</string>
     <string name="docs_not_supported">Only a PDF or a photo can be added.</string>
