@@ -48,6 +48,8 @@ sealed interface Route {
     data object Comms : Route
     data object Driving : Route
     data object Weapons : Route
+    /** Phone numbers of services and helplines, by category. */
+    data object Phones : Route
     /** "Check yourself" for one step of "My path": that step's situations; all right marks it as checked. */
     data class PathCheck(val step: String) : Route
     /** One role's page ("Who I am now"): kept in "Mine". */
@@ -96,6 +98,7 @@ sealed interface Route {
         Comms -> "comms"
         Driving -> "driving"
         Weapons -> "weapons"
+        Phones -> "phones"
         is PathCheck -> "pathcheck:$step"
         is RoleRoute -> "role:$id"
         is External -> "external:$id"
@@ -135,6 +138,7 @@ sealed interface Route {
                 "comms" -> Comms
                 "driving" -> Driving
                 "weapons" -> Weapons
+                "phones" -> Phones
                 "pathcheck" -> value.takeIf { it in PATH_CHECKS }?.let(::PathCheck)
                 "role" -> value.takeIf { it in ROLES }?.let(::RoleRoute)
                 // Never reopened after the app is restored: that would open a page unasked

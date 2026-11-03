@@ -25,7 +25,12 @@ class Content(
     val newPlace: NewPlace? = null,
     /** The Rules of the Road in full; null if they could not be read. */
     val pdr: Pdr? = null,
+    private val phonesOrNull: List<Phone>? = null,
 ) {
+    /** Official and reputable phone lines, by category; empty if they could not be read. */
+    val phones: List<Phone> get() = phonesOrNull ?: emptyList()
+    val phonesBroken get() = phonesOrNull == null
+
     val guideBroken get() = guideOrNull == null
     val cardsBroken get() = cardsOrNull == null
     val guide: Guide get() = guideOrNull ?: EMPTY_GUIDE
@@ -92,6 +97,7 @@ class Content(
                 load("history.json", true, HistoryReader::parse),
                 load("new_place.json", true, NewPlaceReader::parse),
                 load("pdr.json", false, PdrReader::parse),
+                load("phones.json", true, PhonesReader::parse),
             )
         }
 

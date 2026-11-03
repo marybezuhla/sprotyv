@@ -16,7 +16,7 @@ class RouteAndKeysTest {
                 Route.SuppliesRoute, Route.Scan, Route.Settings, Route.EditTiles, Route.Sections, Route.Presets, Route.Situation,
                 Route.Power, Route.Directory, Route.QrText, Route.MozList, Route.Resistance, Route.NoteEdit(3), Route.Moz(4),
                 Route.ConstitutionRoute("17"), Route.PdrRoute("12"), Route.HistoryRoute, Route.Story("s1"), Route.Delegate(4),
-                Route.Handover, Route.PracticeRoute("bleeding"), Route.Comms, Route.Driving, Route.Weapons,
+                Route.Handover, Route.PracticeRoute("bleeding"), Route.Comms, Route.Phones, Route.Driving, Route.Weapons,
                 Route.PathCheck("bleed"), Route.RoleRoute("medic"),
             ))
         }
