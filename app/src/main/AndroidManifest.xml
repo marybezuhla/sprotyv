@@ -16,6 +16,9 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!-- Alarms are lost when the phone restarts: planned again from what is on -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- Other apps' floating windows are hidden over the screens of "My data" (no prompt): nothing
+         can lie over "Replace", "Start fresh" or the lock, or read what is under it -->
+    <uses-permission android:name="android.permission.HIDE_OVERLAY_WINDOWS" />
 
     <!-- Opening WhatsApp, Signal and the SMS app by name needs Android to tell they are installed -->
     <queries>

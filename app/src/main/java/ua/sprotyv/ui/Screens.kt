@@ -120,6 +120,11 @@ fun SecureScreen() {
             onDispose { view.setAccessibilityDataSensitive(android.view.View.ACCESSIBILITY_DATA_SENSITIVE_AUTO) }
         }
     }
+    // No other app's floating window lies over these screens (a fake button over "Replace", say)
+    DisposableEffect(activity) {
+        activity.window.setHideOverlayWindows(true)
+        onDispose { activity.window.setHideOverlayWindows(false) }
+    }
     // The recent-apps picture never shows these screens, even with screenshots allowed: it would
     // show the data to whoever holds the phone, past the lock on "My data"
     if (Build.VERSION.SDK_INT >= 33) {

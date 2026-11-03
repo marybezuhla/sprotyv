@@ -69,7 +69,40 @@ class Main : ComponentActivity() {
         Docs.clearSharedSoon(this)
         ShareIn.sync(this)
         closeLater.removeCallbacks(closeNow)
+        stopWatchingScreen()
         Away.back()
+    }
+
+    /**
+     * While the owner is in our own window (a picker, the camera) the data may stay open a while;
+     * with the lock on "My data", the phone's screen going off closes it at once, so a phone left
+     * there and unlocked again by someone else never shows it without the fingerprint or PIN.
+     */
+    private var screenOff: android.content.BroadcastReceiver? = null
+
+    private fun watchScreen() {
+        if (screenOff != null || ua.sprotyv.personal.PersonalStore.lockMode(this)?.locked != true) return
+        val r = object : android.content.BroadcastReceiver() {
+            override fun onReceive(c: android.content.Context, i: android.content.Intent) {
+                closeLater.removeCallbacks(closeNow)
+                closeNow.run()
+            }
+        }
+        val filter = android.content.IntentFilter(android.content.Intent.ACTION_SCREEN_OFF)
+        try {
+            if (android.os.Build.VERSION.SDK_INT >= 33) registerReceiver(r, filter, android.content.Context.RECEIVER_NOT_EXPORTED) else registerReceiver(r, filter)
+            screenOff = r
+        } catch (e: Exception) { }
+    }
+
+    private fun stopWatchingScreen() {
+        screenOff?.let { try { unregisterReceiver(it) } catch (e: Exception) { } }
+        screenOff = null
+    }
+
+    override fun onDestroy() {
+        stopWatchingScreen()
+        super.onDestroy()
     }
 
     /** Leaving the screen closes the owner's data and the settings; both open again when asked for. */
@@ -77,7 +110,7 @@ class Main : ComponentActivity() {
         super.onStop()
         // Gone into our own window (a file picker, the camera): if the owner does not come back
         // from it within three minutes, the data closes anyway
-        if (!isChangingConfigurations && Away.expected) closeLater.postDelayed(closeNow, 3 * 60_000L)
+        if (!isChangingConfigurations && Away.expected) { closeLater.postDelayed(closeNow, 3 * 60_000L); watchScreen() }
         if (!isChangingConfigurations && !Away.expected) {
             // Drafts are kept in memory only for a turn of the screen, never while the app is away
             forgetTyped()

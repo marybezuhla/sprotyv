@@ -82,6 +82,8 @@ object Personal {
             is KeyVault.Unwrapped.NeedsOwner -> if (lockedLost()) Opened.KeyLost else Opened.Locked(u.pinOnly)
             is KeyVault.Unwrapped.Ok -> try {
                 Opened.Ready(PersonalDb.open(context, u.passphrase), u.softwareKey)
+                    // The current key file just opened the data: old keys that open nothing can go
+                    .also { KeyVault(context).pruneOldKeys() }
             } catch (e: android.database.sqlite.SQLiteFullException) {
                 Opened.TryAgain
             } catch (e: android.database.sqlite.SQLiteDatabaseLockedException) {
