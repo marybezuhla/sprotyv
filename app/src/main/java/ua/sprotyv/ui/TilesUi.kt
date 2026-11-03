@@ -168,7 +168,7 @@ fun Group.tint(): Tint {
     }
 }
 
-private val Group.title: Int get() = when (this) {
+internal val Group.title: Int get() = when (this) {
     Group.DANGER -> R.string.group_danger
     Group.FIRST_AID -> R.string.group_first_aid
     Group.FAMILY -> R.string.group_family
@@ -204,13 +204,13 @@ val Shield: ImageVector by lazy {
 }
 
 /** The tiles that belong to resistance: they wear its mark wherever they are. */
-private fun isResist(id: String) = id == Tiles.tool(Tool.RESIST) || id == Tiles.tool(Tool.CONSTITUTION) || id == Tiles.tool(Tool.HISTORY)
+internal fun isResist(id: String) = id == Tiles.tool(Tool.RESIST) || id == Tiles.tool(Tool.CONSTITUTION) || id == Tiles.tool(Tool.HISTORY)
 
 /** A tile's badge colours: its group's, or resistance's khaki. */
 @Composable
 fun TileInfo.badge(): Tint = if (isResist(id)) resist() else tone.tint()
 
-private val Group.desc: Int get() = when (this) {
+internal val Group.desc: Int get() = when (this) {
     Group.DANGER -> R.string.group_danger_desc
     Group.FIRST_AID -> R.string.group_first_aid_desc
     Group.FAMILY -> R.string.group_family_desc
@@ -244,7 +244,7 @@ fun cardBadge(id: String): Pair<ImageVector, Tint> {
 }
 
 /** Each group's own humanitarian picture (OCHA), the same wherever the group is shown. */
-private val Group.icon: ImageVector @Composable get() = when (this) {
+internal val Group.icon: ImageVector @Composable get() = when (this) {
     Group.DANGER -> Icons.Filled.Warning
     Group.FIRST_AID -> ImageVector.vectorResource(R.drawable.ocha_health)
     Group.FAMILY -> ImageVector.vectorResource(R.drawable.ocha_users)
@@ -256,7 +256,7 @@ private val Group.icon: ImageVector @Composable get() = when (this) {
     Group.GUIDE -> ImageVector.vectorResource(R.drawable.ocha_learning)
 }
 
-private val Tool.title: Int get() = when (this) {
+internal val Tool.title: Int get() = when (this) {
     Tool.NOW -> R.string.tile_now
     Tool.SAFE -> R.string.tile_safe
     Tool.ALARM -> R.string.tile_alarm
@@ -288,7 +288,7 @@ private val Tool.title: Int get() = when (this) {
     Tool.WEAPONS -> R.string.weapons_title
 }
 
-private val Tool.hint: Int get() = when (this) {
+internal val Tool.hint: Int get() = when (this) {
     Tool.NOW -> R.string.tile_now_hint
     Tool.SAFE -> R.string.tile_safe_hint
     Tool.ALARM -> R.string.tile_alarm_hint
@@ -321,7 +321,7 @@ private val Tool.hint: Int get() = when (this) {
 }
 
 /** Cards and tools with a picture of their own (Health Icons, public domain), clearer than the group's. */
-private val CARD_ICONS = mapOf(
+internal val CARD_ICONS = mapOf(
     "bleeding" to R.drawable.hi_blood_drop,
     "unconscious" to R.drawable.hi_cpr,
     "choking" to R.drawable.om_person,
@@ -340,7 +340,7 @@ private val CARD_ICONS = mapOf(
 )
 
 /** Guide chapters with a picture of their own (OCHA and Health Icons), clearer than the group's. */
-private val CHAPTER_ICONS = mapOf(
+internal val CHAPTER_ICONS = mapOf(
     "ch1" to R.drawable.ocha_preparedness, "ch2" to R.drawable.ocha_non_food_items, "ch3" to R.drawable.ocha_shelter,
     "ch4" to R.drawable.hi_drone, "ch5" to R.drawable.ocha_mine, "ch6" to R.drawable.hi_hazardous, "ch7" to R.drawable.ocha_health,
     "ch8" to R.drawable.ocha_potable_water, "ch9" to R.drawable.ocha_food, "ch10" to R.drawable.ocha_stove, "ch11" to R.drawable.ocha_tent,
@@ -352,7 +352,7 @@ private val CHAPTER_ICONS = mapOf(
     "ch27" to R.drawable.ocha_insect_infestation, "ch28" to R.drawable.ocha_group, "ch29" to R.drawable.ocha_table,
     "ch30" to R.drawable.ocha_preparedness, "planA" to R.drawable.ocha_calendar, "abroad" to R.drawable.ocha_border_crossing,
 )
-private val TOOL_ICONS = mapOf(
+internal val TOOL_ICONS = mapOf(
     Tool.ALARM to R.drawable.hi_megaphone,
     Tool.MOZ to R.drawable.hi_cpr,
     Tool.KIT to R.drawable.hi_bandage_adhesive,
@@ -387,7 +387,7 @@ internal fun tileIconRes(id: String): Int? {
     }
 }
 
-private val Tool.icon: ImageVector? get() = when (this) {
+internal val Tool.icon: ImageVector? get() = when (this) {
     Tool.NOW -> Icons.Filled.Warning
     Tool.SAFE -> Icons.Filled.CheckCircle
     Tool.ALARM -> Icons.Filled.Notifications
@@ -655,7 +655,7 @@ fun FullHome(content: Content?, pins: List<String>, nav: Nav, onSettings: () -> 
  * Tiles side by side in rows of the same height, so a short tile never sits beside a tall one and
  * the screen does not look scattered. Each row is one full-width item of the grid.
  */
-private fun androidx.compose.foundation.lazy.grid.LazyGridScope.tileRows(
+internal fun androidx.compose.foundation.lazy.grid.LazyGridScope.tileRows(
     list: List<TileInfo>, cols: Int, tile: @Composable (TileInfo, Modifier) -> Unit,
 ) {
     list.chunked(cols).forEach { row ->
@@ -790,7 +790,7 @@ fun EditTilesScreen(content: Content?, mode: Mode?, pins: List<String>, nav: Nav
     }
 }
 
-private val ThemeChoice.title: Int get() = when (this) {
+internal val ThemeChoice.title: Int get() = when (this) {
     ThemeChoice.SYSTEM -> R.string.theme_system
     ThemeChoice.LIGHT -> R.string.theme_light
     ThemeChoice.DARK -> R.string.theme_dark
@@ -806,7 +806,7 @@ val Preset.title: Int get() = when (this) {
     Preset.WINTER -> R.string.preset_winter
 }
 
-private val Preset.hint: Int get() = when (this) {
+internal val Preset.hint: Int get() = when (this) {
     Preset.GENERAL -> R.string.preset_general_hint
     Preset.ELDER -> R.string.preset_elder_hint
     Preset.PARENTS -> R.string.preset_parents_hint
@@ -877,7 +877,7 @@ fun ModeChoice(selected: Mode?, onPick: (Mode) -> Unit) {
 
 /** A tiny drawing of the screen: three wide buttons, or a grid of tiles over a row of tabs. */
 @Composable
-private fun ModePicture(mode: Mode) {
+internal fun ModePicture(mode: Mode) {
     val ink = MaterialTheme.colorScheme.outline
     val accent = MaterialTheme.colorScheme.primary
     Column(
@@ -906,138 +906,6 @@ private fun ModePicture(mode: Mode) {
             }
         }
     }
-}
-
-/** Settings: the look, the tiles and the lock. */
-@Composable
-fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
-    val context = LocalContext.current
-    val canLock = Guard.available(context)
-    val locked = prefs.locked
-    Frame(stringResource(R.string.settings), nav::back) {
-        // Settings in a few calm blocks, each answering one question
-        Block(stringResource(R.string.mode_title), ua.sprotyv.home.Group.PREPARE, foldable = true) {
-        ModeChoice(prefs.mode) { m -> HomePrefs.update(context) { it.copy(mode = m) } }
-        if (prefs.mode != Mode.KID) {
-            Toggle(stringResource(R.string.call_bar_toggle), prefs.callBar) { on -> HomePrefs.update(context) { it.copy(callBar = on) } }
-            Text(stringResource(R.string.call_bar_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        }
-        if (prefs.mode == Mode.FULL) {
-            Toggle(stringResource(R.string.ready_on_home), !prefs.readinessHidden) { on -> HomePrefs.update(context) { it.copy(readinessHidden = !on) } }
-        }
-        }
-        Block(stringResource(R.string.lang_title), ua.sprotyv.home.Group.GUIDE, foldable = true) { LanguageChoice() }
-        Block(stringResource(R.string.theme_title), ua.sprotyv.home.Group.GUIDE, foldable = true) {
-        ThemeChoice.entries.forEach { t ->
-            val on = t == prefs.theme
-            Row(
-                Modifier.fillMaxWidth().heightIn(min = 48.dp)
-                    .selectable(selected = on, role = Role.RadioButton) { HomePrefs.update(context) { it.copy(theme = t) } },
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                RadioButton(selected = on, onClick = null)
-                Spacer(Modifier.width(12.dp))
-                Text(stringResource(t.title), style = MaterialTheme.typography.bodyLarge)
-            }
-        }
-        if (prefs.theme != ThemeChoice.CONTRAST) {
-            Toggle(stringResource(R.string.theme_dynamic), prefs.dynamic) { on -> HomePrefs.update(context) { it.copy(dynamic = on) } }
-            Text(stringResource(R.string.theme_dynamic_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        }
-        }
-        if (prefs.mode != Mode.KID) {
-            Block(stringResource(R.string.my_home), ua.sprotyv.home.Group.PREPARE, padded = false, foldable = true) {
-                BlockRow(stringResource(R.string.edit_tiles), stringResource(R.string.edit_tiles_hint), first = true) { nav.go(Route.EditTiles) }
-                BlockRow(stringResource(R.string.presets_title), stringResource(R.string.presets_hint)) { nav.go(Route.Presets) }
-            }
-        }
-        Block(stringResource(R.string.lock_title), ua.sprotyv.home.Group.MINE, foldable = true) {
-        if (prefs.mode == Mode.KID && !locked) {
-            Text(stringResource(R.string.kid_lock_advice), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
-        }
-        if (canLock) {
-            Toggle(stringResource(R.string.lock_toggle), locked) { on ->
-                // Settings are open now; turning the lock on does not shut them on the spot
-                if (on) Guard.keepOpen()
-                HomePrefs.update(context) { it.copy(locked = on) }
-            }
-        } else {
-            Text(stringResource(R.string.lock_no_screen_lock), style = MaterialTheme.typography.bodyLarge)
-        }
-        Text(stringResource(R.string.lock_explain), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        // Screenshots of the owner's screens: off by default, turned on only after reading what it means
-        var askScreenshots by rememberSaveable { mutableStateOf(false) }
-        Toggle(stringResource(R.string.screenshots_allow), prefs.screenshots) { on ->
-            if (on) askScreenshots = true else HomePrefs.update(context) { it.copy(screenshots = false) }
-        }
-        Text(stringResource(R.string.screenshots_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        if (askScreenshots) {
-            androidx.compose.material3.AlertDialog(
-                onDismissRequest = { askScreenshots = false },
-                title = { Text(stringResource(R.string.screenshots_confirm_title)) },
-                text = { Text(stringResource(R.string.screenshots_confirm_text)) },
-                confirmButton = {
-                    androidx.compose.material3.TextButton(onClick = {
-                        askScreenshots = false
-                        HomePrefs.update(context) { it.copy(screenshots = true) }
-                    }) { Text(stringResource(R.string.screenshots_confirm_yes)) }
-                },
-                dismissButton = { androidx.compose.material3.TextButton(onClick = { askScreenshots = false }) { Text(stringResource(R.string.cancel)) } },
-            )
-        }
-        }
-        Block(stringResource(R.string.lock_mine_title), ua.sprotyv.home.Group.MINE, foldable = true) { LockMineSettings() }
-        Block(stringResource(R.string.notify_title), ua.sprotyv.home.Group.PREPARE, foldable = true) { NotifySettings() }
-        // Backup and moving to a new phone, where people look for it;
-        // the screen itself is in "Mine", so trip mode hides it here too
-        if (!prefs.trip) {
-            Block(stringResource(R.string.backup_title), ua.sprotyv.home.Group.MINE, padded = false, foldable = true) {
-                BlockRow(stringResource(R.string.backup_settings_row), stringResource(R.string.backup_settings_hint), first = true) { nav.go(Route.Mine(MinePart.BACKUP)) }
-            }
-        }
-        Block(stringResource(R.string.settings_other_hands), ua.sprotyv.home.Group.DANGER, foldable = true) {
-            TripToggle(prefs.trip)
-            NeutralToggle()
-        }
-        // Medical training is a role, kept encrypted in "My data" (no longer a plain setting)
-        Block(stringResource(R.string.medic_title), ua.sprotyv.home.Group.FIRST_AID, foldable = true) {
-            Text(stringResource(R.string.medic_where), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            BlockRow(stringResource(R.string.roles_title), first = true) { nav.go(Route.Mine(MinePart.ROLES)) }
-        }
-        Block(stringResource(R.string.colour_title), ua.sprotyv.home.Group.GUIDE, foldable = true) { ColourLegend() }
-        Block(stringResource(R.string.settings_about), ua.sprotyv.home.Group.GUIDE, foldable = true) {
-            AboutApp()
-            BlockRow(stringResource(R.string.about_guide), first = true) { nav.go(Route.About) }
-            FeedbackBlock()
-        }
-    }
-}
-
-/** Feedback, and the last crash's technical description if there is one: shown in full, sent only by tap. */
-@Composable
-private fun FeedbackBlock() {
-    val context = LocalContext.current
-    var crash by remember { mutableStateOf(CrashLog.pending(context)) }
-    Text(stringResource(R.string.feedback_title), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, modifier = Modifier.semantics { heading() })
-    crash?.let { t ->
-        Text(stringResource(R.string.crash_title), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
-        Text(stringResource(R.string.crash_text), style = MaterialTheme.typography.bodyMedium)
-        Text(t, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            OutlinedButton(onClick = {
-                Feedback.open(context, context.getString(R.string.crash_issue_title), context.getString(R.string.crash_issue_body) + "\n\n```\n" + t + "\n```")
-                CrashLog.clear(context)
-                crash = null
-            }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.crash_send)) }
-            androidx.compose.material3.TextButton(onClick = { CrashLog.clear(context); crash = null }, modifier = Modifier.heightIn(min = 48.dp)) {
-                Text(stringResource(R.string.crash_no))
-            }
-        }
-    }
-    OutlinedButton(onClick = {
-        Feedback.open(context, context.getString(R.string.feedback_title), context.getString(R.string.feedback_body, Feedback.version(context)))
-    }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.feedback)) }
-    Text(stringResource(R.string.feedback_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 }
 
 /**
@@ -1091,73 +959,6 @@ fun WelcomeScreen(nav: Nav) {
     }
 }
 
-/** The neutral name and icon, turned on only after reading what it does and does not hide. */
-@Composable
-private fun NeutralToggle() {
-    val context = LocalContext.current
-    val activity = context as? android.app.Activity
-    var on by remember { mutableStateOf(Neutral.isOn(context)) }
-    var ask by rememberSaveable { mutableStateOf(false) }
-    Toggle(stringResource(R.string.neutral_toggle), on) { want ->
-        if (want) ask = true else { Neutral.set(context, false); on = false; activity?.let(Neutral::applyToTask) }
-    }
-    Text(stringResource(R.string.neutral_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    if (ask) {
-        androidx.compose.material3.AlertDialog(
-            onDismissRequest = { ask = false },
-            title = { Text(stringResource(R.string.neutral_confirm_title)) },
-            text = { Text(stringResource(R.string.neutral_confirm_text)) },
-            confirmButton = {
-                androidx.compose.material3.TextButton(onClick = {
-                    ask = false
-                    Neutral.set(context, true); on = true; activity?.let(Neutral::applyToTask)
-                }) { Text(stringResource(R.string.neutral_confirm_yes)) }
-            },
-            dismissButton = { androidx.compose.material3.TextButton(onClick = { ask = false }) { Text(stringResource(R.string.cancel)) } },
-        )
-    }
-}
-
-/**
- * Trip mode: on in one tap after reading what it does; off only with the phone's PIN, asked every
- * time. Needs a screen lock, or anyone could turn it off.
- */
-@Composable
-private fun TripToggle(on: Boolean) {
-    val context = LocalContext.current
-    val activity = context as? android.app.Activity
-    var ask by rememberSaveable { mutableStateOf(false) }
-    val canLock = Guard.available(context)
-    val prompt = stringResource(R.string.trip_off_prompt)
-    Toggle(stringResource(R.string.trip_toggle), on) { want ->
-        when {
-            want && canLock -> ask = true
-            !want && activity != null -> Guard.confirm(activity, prompt, ACTION_TRIP_OFF) { HomePrefs.update(context) { it.copy(trip = false) } }
-        }
-    }
-    Text(
-        stringResource(if (canLock) R.string.trip_hint else R.string.trip_no_lock),
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-    )
-    if (ask) {
-        androidx.compose.material3.AlertDialog(
-            onDismissRequest = { ask = false },
-            title = { Text(stringResource(R.string.trip_confirm_title)) },
-            text = { Text(stringResource(R.string.trip_confirm_text)) },
-            confirmButton = {
-                androidx.compose.material3.TextButton(onClick = {
-                    ask = false
-                    HomePrefs.update(context) { it.copy(trip = true) }
-                    // No plain copy of a shared document stays behind either
-                    Docs.clearShared(context)
-                }) { Text(stringResource(R.string.trip_confirm_yes)) }
-            },
-            dismissButton = { androidx.compose.material3.TextButton(onClick = { ask = false }) { Text(stringResource(R.string.cancel)) } },
-        )
-    }
-}
-
 /**
  * A tile's live state, when it has one: how long the power has been out, and how far the
  * owner's own parts are (the shares last seen in "Mine", never the records).
@@ -1183,84 +984,3 @@ fun tileStatus(id: String, now: Long): String? {
     val t = share.getOrNull(1)?.toIntOrNull() ?: return null
     return if (t > 0 && d >= t) stringResource(R.string.tile_ready) else stringResource(R.string.ready_count, d, t)
 }
-
-/**
- * The app's language, whatever the phone's: Ukrainian or English. Android 13 and later keep the
- * choice for this app alone; on older phones the phone's own language is used.
- */
-@Composable
-private fun LanguageChoice() {
-    if (android.os.Build.VERSION.SDK_INT < 33) {
-        Text(stringResource(R.string.lang_old_phone), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        return
-    }
-    val current = androidx.appcompat.app.AppCompatDelegate.getApplicationLocales().toLanguageTags()
-    ChoiceRow {
-        listOf("" to R.string.lang_phone, "uk" to R.string.lang_uk, "en" to R.string.lang_en).forEach { (tag, label) ->
-            androidx.compose.material3.FilterChip(
-                selected = current.substringBefore('-') == tag,
-                onClick = { androidx.appcompat.app.AppCompatDelegate.setApplicationLocales(androidx.core.os.LocaleListCompat.forLanguageTags(tag)) },
-                label = { ChipText(stringResource(label)) }, modifier = Modifier.heightIn(min = 48.dp),
-            )
-        }
-    }
-    Text(stringResource(R.string.lang_content_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-}
-
-/** The name at the top of home: "Notes" with the neutral icon or in trip mode, so a glance at the open app says no more than its icon. */
-@Composable
-fun appTitle(): String {
-    val context = androidx.compose.ui.platform.LocalContext.current
-    val trip = HomePrefs.state.collectAsState().value?.trip == true
-    val neutral = remember(trip) { Neutral.isOn(context) }
-    return stringResource(if (neutral || trip) R.string.neutral_name else R.string.app_name)
-}
-
-/** The app's own notices, as the GPL asks of an interactive program: version, licence, no warranty, where the source is. */
-@Composable
-private fun AboutApp() {
-    val context = androidx.compose.ui.platform.LocalContext.current
-    val version = remember { runCatching { context.packageManager.getPackageInfo(context.packageName, 0).versionName }.getOrNull().orEmpty() }
-    androidx.compose.foundation.text.selection.SelectionContainer {
-        androidx.compose.foundation.layout.Column(verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(6.dp)) {
-            Text(stringResource(R.string.about_app_version, version), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
-            Text(stringResource(R.string.about_app_licence), style = MaterialTheme.typography.bodyMedium)
-            Text(stringResource(R.string.about_app_libraries), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        }
-    }
-    androidx.compose.material3.OutlinedButton(
-        onClick = { ua.sprotyv.reach.Reach.open(context, SOURCE_URL) },
-        modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
-    ) { Text(stringResource(R.string.about_app_source)) }
-    // The full licence texts travel inside the app, as the licences ask; read here without a network
-    var texts by remember { androidx.compose.runtime.mutableStateOf(false) }
-    androidx.compose.material3.OutlinedButton(onClick = { texts = true }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
-        Text(stringResource(R.string.about_app_texts))
-    }
-    if (texts) LicenceTexts { texts = false }
-}
-
-@Composable
-private fun LicenceTexts(onClose: () -> Unit) {
-    val context = androidx.compose.ui.platform.LocalContext.current
-    val parts = remember {
-        runCatching { context.assets.open("licenses.txt").bufferedReader().use { it.readText() } }.getOrDefault("")
-            .split(Regex("\\n\\s*\\n")).filter { it.isNotBlank() }
-    }
-    androidx.compose.ui.window.Dialog(onDismissRequest = onClose, properties = androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth = false)) {
-        androidx.compose.material3.Surface(Modifier.fillMaxSize()) {
-            androidx.compose.foundation.layout.Column(Modifier.statusBarsPadding().then(Modifier.windowInsetsPadding(androidx.compose.foundation.layout.WindowInsets.navigationBars))) {
-                androidx.compose.foundation.lazy.LazyColumn(Modifier.weight(1f).fillMaxWidth(), contentPadding = PaddingValues(16.dp), verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)) {
-                    items(parts.size) { i ->
-                        val p = parts[i]
-                        if (p.startsWith("===")) Text(p.trim('=', ' '), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 8.dp))
-                        else Text(p.trim(), style = MaterialTheme.typography.bodySmall)
-                    }
-                }
-                androidx.compose.material3.TextButton(onClick = onClose, modifier = Modifier.align(Alignment.End).padding(8.dp).heightIn(min = 48.dp)) { Text(stringResource(R.string.back)) }
-            }
-        }
-    }
-}
-
-private const val SOURCE_URL = "https://github.com/Marybezu/sprotyv"
