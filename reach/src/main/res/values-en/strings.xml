@@ -2,4 +2,5 @@
 <resources>
     <string name="reach_no_app">This app is not installed on the phone</string>
     <string name="reach_no_number">No phone number</string>
+    <string name="reach_not_genuine">This app could not be confirmed as the real one, so the text was not handed to it. Send an SMS, or install the app from its official source.</string>
 </resources>

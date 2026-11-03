@@ -11,7 +11,7 @@
 - **Що робити зараз:** покрокові картки для тривоги, кровотечі, дрона, пожежі, завалу та інших ситуацій.
 - **Довідник** виживання й базової медицини для дорослих і дітей — повністю офлайн.
 - **Побут у кризі:** немає світла, тепла, води, газу чи зв'язку.
-- **Я в безпеці:** готове повідомлення рідним через WhatsApp, Signal або SMS.
+- **Я в безпеці:** готове повідомлення рідним через WhatsApp, Signal або SMS (WhatsApp і Signal отримують текст, лише якщо це справжні застосунки: перевіряється їхній підпис).
 - **Моє:** медкартка, сімейний план, тривожна валіза, нотатки, документи (скани й PDF, до 20 файлів) — зашифровано, лише на телефоні; резервна копія з паролем.
 - **Спротив:** ролі й обставини, шлях готовності, щоденний гарт, щити й лічильники добрих справ; Конституція й Правила дорожнього руху повним текстом, «Зброя і закон» — стислий виклад за законом.
 - **Віджети** на головний екран, зокрема щит-лічильник.
@@ -50,7 +50,7 @@ A free Android app: what to do right now when it is dangerous, and how to prepar
 - **What to do now:** step-by-step cards for an air alert, bleeding, a drone, fire, rubble and more.
 - **A guide** to survival and basic medicine for adults and children, fully offline.
 - **Life in a crisis:** no power, heat, water, gas or connection.
-- **I am safe:** a ready message to family through WhatsApp, Signal or SMS.
+- **I am safe:** a ready message to family through WhatsApp, Signal or SMS (WhatsApp and Signal get the text only if they are the genuine apps: their signature is checked).
 - **My data:** medical card, family plan, go-bag, notes, documents (scans and PDFs, up to 20 files) — encrypted, on the phone only; a backup with a password.
 - **Resistance:** roles and circumstances, a readiness path, daily resilience, shields and counts of good deeds; the Constitution and the Rules of the Road in full, "Weapons and the law" as a short summary of the law.
 - **Widgets** for the home screen, a count shield among them.
