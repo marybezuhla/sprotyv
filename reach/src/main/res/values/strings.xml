@@ -2,4 +2,5 @@
 <resources>
     <string name="reach_no_app">Цього застосунку немає на телефоні</string>
     <string name="reach_no_number">Немає номера телефону</string>
+    <string name="reach_not_genuine">Цей застосунок не вдалося перевірити як справжній, тож текст йому не передано. Надішліть SMS або встановіть застосунок з офіційного джерела.</string>
 </resources>

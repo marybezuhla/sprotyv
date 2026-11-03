@@ -39,15 +39,44 @@ object Reach {
     }
 
     /**
-     * Opens the chat with this person in the WhatsApp app itself (never a browser), text ready.
-     * Stage 3: also check the app's signing certificate, so a look-alike app cannot receive the text.
+     * The messenger is the real one: signed with its maker's own certificate (WhatsApp, Signal), or,
+     * where Sprotyv knows no certificate (WhatsApp Business), installed from Google Play. A
+     * look-alike installed from a file under the same name never receives the text.
+     */
+    fun genuine(context: Context, pkg: String): Boolean {
+        val pins = SIGNERS[pkg] ?: return fromPlay(context, pkg)
+        return try {
+            val info = context.packageManager.getPackageInfo(pkg, android.content.pm.PackageManager.GET_SIGNING_CERTIFICATES).signingInfo ?: return false
+            // Only one signer, and that one is the maker's (a rotated key keeps its history)
+            if (info.hasMultipleSigners()) return false
+            info.signingCertificateHistory.orEmpty().any { cert -> digests(cert.toByteArray()).any { it in pins } }
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    private fun digests(cert: ByteArray): List<String> = listOf("SHA-1", "SHA-256").map { alg ->
+        java.security.MessageDigest.getInstance(alg).digest(cert).joinToString("") { "%02x".format(it) }
+    }
+
+    /** The makers' signing certificates (as published: Signal on signal.org/android/apk; WhatsApp's long-standing one). */
+    private val SIGNERS = mapOf(
+        SIGNAL to setOf("29f34e5f27f211b424bc5bf9d67162c0eafba2da35af35c16416fc446276ba26"),
+        WHATSAPP to setOf("38a0f7d505fe18fec64fbf343ecaaaf310dbd799"),
+    )
+
+    /**
+     * Opens the chat with this person in the WhatsApp app itself (never a browser), text ready;
+     * only the genuine app ([genuine]) gets it.
      */
     fun whatsapp(context: Context, phone: String, text: String) {
         val link = try { Links.whatsapp(phone, text) } catch (e: IllegalArgumentException) { return noNumber(context) }
         val uri = Uri.parse(link)
-        if (!tryStart(context, Intent(Intent.ACTION_VIEW, uri).setPackage(WHATSAPP)) &&
-            !tryStart(context, Intent(Intent.ACTION_VIEW, uri).setPackage(WHATSAPP_BUSINESS))
-        ) notFound(context)
+        val apps = listOf(WHATSAPP, WHATSAPP_BUSINESS).filter { installed(context, it) }
+        if (apps.isEmpty()) return notFound(context)
+        val real = apps.filter { genuine(context, it) }
+        if (real.isEmpty()) return notGenuine(context)
+        if (real.none { tryStart(context, Intent(Intent.ACTION_VIEW, uri).setPackage(it)) }) notFound(context)
     }
 
     /**
@@ -59,6 +88,7 @@ object Reach {
             .setType("text/plain")
             .putExtra(Intent.EXTRA_TEXT, text)
             .setPackage(SIGNAL)
+        if (installed(context, SIGNAL) && !genuine(context, SIGNAL)) return notGenuine(context)
         if (!tryStart(context, intent)) notFound(context)
     }
 
@@ -166,6 +196,9 @@ object Reach {
 
     private fun notFound(context: Context) =
         Toast.makeText(context, R.string.reach_no_app, Toast.LENGTH_SHORT).show()
+
+    private fun notGenuine(context: Context) =
+        Toast.makeText(context, R.string.reach_not_genuine, Toast.LENGTH_LONG).show()
 
     private fun noNumber(context: Context) =
         Toast.makeText(context, R.string.reach_no_number, Toast.LENGTH_SHORT).show()
