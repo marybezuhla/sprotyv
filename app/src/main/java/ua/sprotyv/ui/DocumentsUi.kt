@@ -264,6 +264,8 @@ object Docs {
     fun share(context: Context, doc: Document, bytes: ByteArray) {
         val app = context.applicationContext
         clearLater.removeCallbacksAndMessages(null)
+        // Its own copy: the viewer wipes its bytes when it closes, which may be while this is written
+        val copy = bytes.copyOf()
         // Written away from the screen's thread; the chooser opens from the screen itself
         scope.launch {
             val dir = shareDir(app).apply { mkdirs() }
@@ -271,7 +273,7 @@ object Docs {
             val ext = if (doc.mime == "application/pdf") "pdf" else "jpg"
             val name = doc.title.replace(Regex("[^\\p{L}\\p{N} ._-]"), "_").take(60).ifBlank { "document" } + "." + ext
             val file = File(dir, name)
-            try { file.writeBytes(bytes) } catch (e: Exception) { file.delete(); return@launch }
+            try { file.writeBytes(copy) } catch (e: Exception) { file.delete(); return@launch } finally { copy.fill(0) }
             withContext(Dispatchers.Main) {
                 val uri = FileProvider.getUriForFile(app, "${app.packageName}.files", file)
                 val send = Intent(Intent.ACTION_SEND).setType(doc.mime).putExtra(Intent.EXTRA_STREAM, uri).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -458,10 +460,13 @@ private fun Zoomable(bitmap: androidx.compose.ui.graphics.ImageBitmap, descripti
 /** A photo, decoded away from the screen's thread. */
 @Composable
 private fun PhotoView(bytes: ByteArray) {
+    var failed by remember(bytes) { mutableStateOf(false) }
     val bitmap by produceState<androidx.compose.ui.graphics.ImageBitmap?>(null, bytes) {
-        value = withContext(Dispatchers.Default) { try { BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.asImageBitmap() } catch (e: OutOfMemoryError) { null } }
+        val decoded = withContext(Dispatchers.Default) { try { BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.asImageBitmap() } catch (e: OutOfMemoryError) { null } }
+        if (decoded == null) failed = true
+        value = decoded
     }
-    val b = bitmap ?: return Loading()
+    val b = bitmap ?: return if (failed) Text(stringResource(R.string.docs_failed), modifier = Modifier.padding(16.dp)) else Loading()
     Zoomable(b, null)
 }
 
@@ -472,13 +477,14 @@ private fun PhotoView(bytes: ByteArray) {
 @Composable
 private fun PdfPages(bytes: ByteArray) {
     val widthPx = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp.roundToPx() }
+    var failedToOpen by remember(bytes) { mutableStateOf(false) }
     val doc by produceState<PdfDoc?>(null, bytes) {
-        val opened = withContext(Dispatchers.IO) { PdfDoc.open(bytes) }
+        // Finished even if the viewer closes meanwhile, so it is always closed below
+        val opened = withContext(kotlinx.coroutines.NonCancellable + Dispatchers.IO) { PdfDoc.open(bytes) }
+        if (opened == null) failedToOpen = true
         value = opened
         awaitDispose { opened?.close() }
     }
-    var failedToOpen by remember(bytes) { mutableStateOf(false) }
-    LaunchedEffect(bytes) { kotlinx.coroutines.delay(3_000); if (doc == null) failedToOpen = true }
     val d = doc ?: return if (failedToOpen) Text(stringResource(R.string.docs_failed), modifier = Modifier.padding(16.dp)) else Loading()
     var large by remember { mutableStateOf<Int?>(null) }
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -491,7 +497,8 @@ private fun PdfPages(bytes: ByteArray) {
         }
     }
     large?.let { i ->
-        Dialog(onDismissRequest = { large = null }, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+        val screenshots = HomePrefs.state.collectAsStateWithLifecycle().value?.screenshots == true
+        Dialog(onDismissRequest = { large = null }, properties = DialogProperties(usePlatformDefaultWidth = false, securePolicy = if (screenshots) androidx.compose.ui.window.SecureFlagPolicy.Inherit else androidx.compose.ui.window.SecureFlagPolicy.SecureOn)) {
             SensitiveWindow()
             Surface(Modifier.fillMaxSize()) {
                 Column(Modifier.statusBarsPadding().navigationBarsPadding()) {
@@ -506,6 +513,8 @@ private fun PdfPages(bytes: ByteArray) {
     }
 }
 
+private const val MAX_PIXELS = 16_000_000L
+
 /** memfd_create's own close-on-exec flag (Linux MFD_CLOEXEC; not O_CLOEXEC). */
 private const val MFD_CLOEXEC = 1
 
@@ -518,8 +527,14 @@ private class PdfDoc private constructor(private val renderer: PdfRenderer) {
         if (closed) return null
         try {
             renderer.openPage(i).use { p ->
-                val h = (width.toFloat() * p.height / p.width).toInt().coerceIn(1, width * 4)
-                Bitmap.createBitmap(width, h, Bitmap.Config.ARGB_8888).also {
+                // At most 16 million pixels (a long page is drawn narrower), far below what Android can draw
+                var w = width
+                var h = (w.toFloat() * p.height / p.width).toInt().coerceAtLeast(1)
+                if (w.toLong() * h > MAX_PIXELS) {
+                    val k = kotlin.math.sqrt(MAX_PIXELS.toDouble() / (w.toLong() * h))
+                    w = (w * k).toInt().coerceAtLeast(1); h = (h * k).toInt().coerceAtLeast(1)
+                }
+                Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888).also {
                     it.eraseColor(android.graphics.Color.WHITE)
                     p.render(it, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
                 }

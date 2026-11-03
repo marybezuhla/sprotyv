@@ -39,6 +39,8 @@ class Main : ComponentActivity() {
     private val closeLater = android.os.Handler(android.os.Looper.getMainLooper())
     private val closeNow = Runnable {
         Away.back()
+        // A photo the camera was making for Documents is not kept plain once the data closes
+        java.io.File(cacheDir, "scan/doc.jpg").delete()
         forgetTyped()
         PersonalStore.close()
         Guard.close()
