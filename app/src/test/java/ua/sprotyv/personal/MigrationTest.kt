@@ -44,7 +44,7 @@ class MigrationTest {
             assertEquals("A(II) Rh+", card.bloodGroup)
             assertEquals("пилок", card.allergies)
             assertEquals("", card.pregnancy)
-            assertEquals(5, room.openHelper.readableDatabase.version)
+            assertEquals(6, room.openHelper.readableDatabase.version)
             // Layout 5 adds the documents table, empty
             assertEquals(0, runBlocking { room.documents().count() })
         } finally {
@@ -73,7 +73,7 @@ class MigrationTest {
             assertEquals("Я в безпеці", runBlocking { room.settings().get("safe_message") })
             assertEquals(0, runBlocking { room.notes().all().size })
             assertEquals(0, runBlocking { room.documents().count() })
-            assertEquals(5, room.openHelper.readableDatabase.version)
+            assertEquals(6, room.openHelper.readableDatabase.version)
         } finally {
             room.close()
             file.delete()

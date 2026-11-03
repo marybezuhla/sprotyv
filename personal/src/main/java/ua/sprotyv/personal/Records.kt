@@ -40,6 +40,8 @@ data class Person(
     val safeList: Boolean = true,
     /** Shown on the medical card as the contact in an emergency. */
     val ice: Boolean = false,
+    /** The owner's own order, most important first (lower first); then by name. */
+    @androidx.room.ColumnInfo(defaultValue = "0") val sort: Int = 0,
 )
 
 /** The family plan: one record with the meeting points and the go-between. */
@@ -100,8 +102,14 @@ interface MedicalDao {
 
 @Dao
 interface PeopleDao {
-    @Query("SELECT * FROM people ORDER BY name COLLATE NOCASE")
+    @Query("SELECT * FROM people ORDER BY sort, name COLLATE NOCASE")
     fun observe(): Flow<List<Person>>
+
+    @Query("SELECT COUNT(*) FROM people")
+    suspend fun count(): Int
+
+    @Query("UPDATE people SET sort = :sort WHERE id = :id")
+    suspend fun setSort(id: Long, sort: Int)
 
     @Upsert
     suspend fun save(person: Person): Long
