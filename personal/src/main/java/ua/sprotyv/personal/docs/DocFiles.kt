@@ -25,7 +25,7 @@ class DocFiles(val dir: File) {
 
     /** Writes one file as the bytes come; [finish] when all are in, [abort] to drop it. */
     inner class Writer internal constructor(private val limit: Long) {
-        val file: String = randomName()
+        val file: String = randomName().also { synchronized(writing) { writing += it } }
         private val key = ByteArray(KEY_BYTES).also { SecureRandom().nextBytes(it) }
         private val target = File(dir.apply { mkdirs() }, file)
         private var count = 0L
@@ -47,6 +47,7 @@ class DocFiles(val dir: File) {
             try { out.close() } catch (e: Exception) { }
             key.fill(0)
             target.delete()
+            done(file)
         }
     }
 
@@ -85,10 +86,17 @@ class DocFiles(val dir: File) {
      */
     fun sweep(keep: Set<String>, graceMs: Long = 10 * 60_000L) {
         val now = System.currentTimeMillis()
-        dir.listFiles()?.forEach { f -> if (f.name !in keep && now - f.lastModified() >= graceMs) f.delete() }
+        val busy = synchronized(writing) { writing.toSet() }
+        dir.listFiles()?.forEach { f -> if (f.name !in keep && f.name !in busy && now - f.lastModified() >= graceMs) f.delete() }
     }
 
+    /** A written file is named in the database now (or was dropped): sweeps may take it into account again. */
+    fun done(file: String) { synchronized(writing) { writing -= file } }
+
     companion object {
+        /** Files being written or waiting for their row: never swept, whatever their age. */
+        private val writing = HashSet<String>()
+
         /** No more than this many documents, each and in all at most so large: only the most valuable. */
         const val MAX_DOCS = 20
         // Decimal megabytes, as the phone itself shows sizes

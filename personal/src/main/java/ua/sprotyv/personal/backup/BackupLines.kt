@@ -160,7 +160,8 @@ object BackupLines {
                         docsSeen = 0
                         docsPromised = v.getInt("n")
                         require(docsPromised in 0..ua.sprotyv.personal.docs.DocFiles.MAX_DOCS)
-                        DocsMarker
+                        // An empty list replaces nothing: the phone's documents stay
+                        if (docsPromised > 0) DocsMarker else null
                     }
                     "doc" -> {
                         require(docsSeen >= 0)
@@ -206,6 +207,8 @@ object BackupLines {
     suspend fun restore(db: PersonalDb, r: Reader, settings: Set<String>, expected: Summary, files: ua.sprotyv.personal.docs.DocFiles, sameContent: () -> Boolean) {
         var writer: ua.sprotyv.personal.docs.DocFiles.Writer? = null
         var start: DocStart? = null
+        val made = ArrayList<String>()
+        var ok = false
         try {
             db.withTransaction {
                 BackupData.clearAll(db, settings)
@@ -223,6 +226,7 @@ object BackupLines {
                             val s = start!!
                             val w = writer!!.finish()
                             writer = null
+                            made += w.file
                             db.documents().add(ua.sprotyv.personal.Document(title = s.title, mime = s.mime, size = w.size, file = w.file, key = w.key, addedAt = s.addedAt))
                             w.key.fill(0)
                         }
@@ -232,8 +236,11 @@ object BackupLines {
                 // The same records, and byte for byte the same content as when it was opened
                 if (got != expected || !sameContent()) throw BackupData.Incompatible()
             }
+            ok = true
         } finally {
             writer?.abort()
+            // Files this restore wrote: named now if it went in, removed at once if it did not
+            made.forEach { if (!ok) files.delete(it); files.done(it) }
             // Files no row names (the old ones replaced, or new ones of a restore that did not finish) go
             // (recent files are spared: an import may be about to name its file; they go at a later sweep)
             try { files.sweep(db.documents().files().toSet()) } catch (e: Exception) { }
