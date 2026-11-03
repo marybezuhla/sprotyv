@@ -150,4 +150,80 @@ class BackupStreamTest {
         }
         throw AssertionError("A damaged file was taken as whole")
     }
+
+    // Documents: made-up bytes, as a file source would give them
+    private val docBytes = mapOf("a" to ByteArray(700_000) { (it % 251).toByte() }, "b" to ByteArray(10) { 7 })
+    private val docs = listOf(
+        ua.sprotyv.personal.Document(id = 1, title = "Документ 1", mime = "application/pdf", size = 700_000, file = "a", key = ByteArray(32), addedAt = 5),
+        ua.sprotyv.personal.Document(id = 2, title = "Фото 2", mime = "image/jpeg", size = 10, file = "b", key = ByteArray(32), addedAt = 6),
+    )
+
+    private fun sealWithDocs(list: List<ua.sprotyv.personal.Document> = docs, source: BackupLines.DocSource = BackupLines.DocSource { ByteArrayInputStream(docBytes.getValue(it.file)) }): ByteArray {
+        val key = BackupStream.newKey(pw, fast)
+        val out = ByteArrayOutputStream()
+        BackupStream.writer(out, key).bufferedWriter().use { BackupLines.write(snapshot, it, list, source) }
+        return out.toByteArray()
+    }
+
+    @Test fun documentsTravelWholeAndInOrder() {
+        val got = mutableListOf<Any>()
+        val s = open(sealWithDocs()) { got += it }
+        assertEquals(2, s.docs)
+        assertEquals(700_010L, s.docBytes)
+        // Documents do not change the owner's record count
+        assertEquals(snapshot.records, s.records)
+        val starts = got.filterIsInstance<BackupLines.DocStart>()
+        assertEquals(listOf("Документ 1", "Фото 2"), starts.map { it.title })
+        val first = got.dropWhile { it !is BackupLines.DocStart }.drop(1).takeWhile { it !is BackupLines.DocEnd }.filterIsInstance<BackupLines.DocPart>()
+        assertTrue(first.fold(ByteArray(0)) { a, p -> a + p.bytes }.contentEquals(docBytes.getValue("a")))
+        assertEquals(1, got.count { it === BackupLines.DocsMarker })
+        assertEquals(2, got.count { it === BackupLines.DocEnd })
+    }
+
+    @Test fun copyWithoutDocumentsSaysSo() {
+        assertEquals(-1, open(seal(snapshot)).docs)
+        assertEquals(0, open(sealWithDocs(emptyList())).docs)
+    }
+
+    @Test fun aDocumentThatChangedIsNotWritten() {
+        // The row says 10 bytes, the file gives 9: the copy is not made at all
+        val short = BackupLines.DocSource { ByteArrayInputStream(ByteArray(9)) }
+        try {
+            sealWithDocs(listOf(docs[1]), short)
+            throw AssertionError("Wrote a copy with a document of the wrong size")
+        } catch (e: java.io.IOException) {
+        }
+    }
+
+    @Test fun missingOrExtraDocumentPartsAreRefused() {
+        val text = String(open2(sealWithDocs()), Charsets.UTF_8)
+        val lines = text.lines().filter { it.isNotEmpty() }
+        val partLine = lines.indexOfFirst { it.contains("\"docpart\"") }
+        // Drop one part (and fix the count, so only the part check can refuse it)
+        val dropped = lines.toMutableList().apply { removeAt(partLine) }
+        expectIncompatible(dropped.fixEnd())
+        // The same part twice
+        val twice = lines.toMutableList().apply { add(partLine, lines[partLine]) }
+        expectIncompatible(twice.fixEnd())
+    }
+
+    private fun List<String>.fixEnd(): String {
+        val n = size - 2
+        return (dropLast(1) + "{\"t\":\"end\",\"n\":$n}").joinToString("\n", postfix = "\n")
+    }
+
+    private fun open2(file: ByteArray): ByteArray {
+        val input = ByteArrayInputStream(file)
+        val key = BackupStream.keyFor(BackupStream.readHeader(input), pw, fast)
+        return BackupStream.reader(input, key).readBytes()
+    }
+
+    private fun expectIncompatible(text: String) {
+        try {
+            runBlocking { BackupLines.read(text.reader()) { } }
+        } catch (e: BackupData.Incompatible) {
+            return
+        }
+        throw AssertionError("A copy with broken document parts was taken as whole")
+    }
 }

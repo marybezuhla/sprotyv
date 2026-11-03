@@ -1,0 +1,447 @@
+package ua.sprotyv.ui
+
+import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.pdf.PdfRenderer
+import android.net.Uri
+import android.os.ParcelFileDescriptor
+import android.provider.OpenableColumns
+import android.system.Os
+import android.system.OsConstants
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.rememberTransformableState
+import androidx.compose.foundation.gestures.transformable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import androidx.core.content.FileProvider
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import ua.sprotyv.R
+import ua.sprotyv.home.Group
+import ua.sprotyv.personal.DocInfo
+import ua.sprotyv.personal.Document
+import ua.sprotyv.personal.PersonalStore
+import ua.sprotyv.personal.docs.DocFiles
+import java.io.ByteArrayOutputStream
+import java.io.File
+
+/**
+ * Documents of the owner's own (a passport scan, test results), encrypted in "My data". Only the
+ * most valuable, and few: [DocFiles.MAX_DOCS] files, each and in all within a size. Large photos
+ * are made smaller (and lose their hidden details such as the place they were taken).
+ */
+object Docs {
+    /** Longest side of a kept photo: text on a scanned page stays readable. */
+    const val PHOTO_SIDE = 2400
+
+    /** Brings a picked file or photo in: checked, encrypted, then named in the database. Returns a notice or null. */
+    suspend fun import(context: Context, uri: Uri, fallbackTitle: String, typeHint: String? = null): Int? = withContext(Dispatchers.IO) {
+        val app = context.applicationContext
+        val files = DocFiles.of(app)
+        val type = typeHint ?: app.contentResolver.getType(uri).orEmpty()
+        val title = (displayName(app, uri)?.substringBeforeLast('.')?.trim()?.take(200)?.ifBlank { null } ?: fallbackTitle)
+        val mime = when {
+            type == "application/pdf" -> "application/pdf"
+            type.startsWith("image/") -> "image/jpeg"
+            else -> return@withContext R.string.docs_not_supported
+        }
+        val w: DocFiles.Written? = try {
+            if (mime == "application/pdf") {
+                app.contentResolver.openInputStream(uri)?.use { input ->
+                    val head = readUpTo(input, 5)
+                    if (String(head, Charsets.US_ASCII) != "%PDF-") return@withContext R.string.docs_not_supported
+                    files.write(java.io.SequenceInputStream(head.inputStream(), input))
+                }
+            } else {
+                val jpeg = shrink(app, uri) ?: return@withContext R.string.docs_not_supported
+                try { files.write(jpeg.inputStream()) } finally { jpeg.fill(0) }
+            }
+        } catch (e: DocFiles.TooLarge) {
+            return@withContext R.string.docs_too_large
+        } catch (e: OutOfMemoryError) {
+            return@withContext R.string.docs_failed
+        } catch (e: Exception) {
+            return@withContext R.string.docs_failed
+        }
+        if (w == null) return@withContext R.string.docs_failed
+        val notice = PersonalStore.read { db ->
+            val docs = db.documents()
+            when {
+                docs.count() >= DocFiles.MAX_DOCS -> R.string.docs_full_count
+                docs.bytes() + w.size > DocFiles.MAX_TOTAL_BYTES -> R.string.docs_full_space
+                else -> {
+                    docs.add(Document(title = title, mime = mime, size = w.size, file = w.file, key = w.key, addedAt = System.currentTimeMillis()))
+                    0
+                }
+            }
+        } ?: R.string.docs_failed
+        w.key.fill(0)
+        if (notice != 0) files.delete(w.file)
+        if (notice == 0) null else notice
+    }
+
+    /** A photo as a JPEG at most [PHOTO_SIDE] on its longest side, turned upright; only the picture is kept. */
+    private fun shrink(context: Context, uri: Uri): ByteArray? {
+        val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, bounds) }
+        if (bounds.outWidth <= 0 || bounds.outHeight <= 0) return null
+        var sample = 1
+        while (maxOf(bounds.outWidth, bounds.outHeight) / (sample * 2) >= PHOTO_SIDE) sample *= 2
+        val decoded = context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, BitmapFactory.Options().apply { inSampleSize = sample }) } ?: return null
+        val turn = context.contentResolver.openInputStream(uri)?.use { input ->
+            when (android.media.ExifInterface(input).getAttributeInt(android.media.ExifInterface.TAG_ORIENTATION, android.media.ExifInterface.ORIENTATION_NORMAL)) {
+                android.media.ExifInterface.ORIENTATION_ROTATE_90 -> 90f
+                android.media.ExifInterface.ORIENTATION_ROTATE_180 -> 180f
+                android.media.ExifInterface.ORIENTATION_ROTATE_270 -> 270f
+                else -> 0f
+            }
+        } ?: 0f
+        val scale = minOf(1f, PHOTO_SIDE.toFloat() / maxOf(decoded.width, decoded.height))
+        val m = android.graphics.Matrix().apply { postScale(scale, scale); postRotate(turn) }
+        val upright = Bitmap.createBitmap(decoded, 0, 0, decoded.width, decoded.height, m, true)
+        if (upright !== decoded) decoded.recycle()
+        val out = ByteArrayOutputStream()
+        upright.compress(Bitmap.CompressFormat.JPEG, 85, out)
+        upright.recycle()
+        return out.toByteArray()
+    }
+
+    private fun readUpTo(input: java.io.InputStream, n: Int): ByteArray {
+        val b = ByteArray(n)
+        var got = 0
+        while (got < n) {
+            val r = input.read(b, got, n - got)
+            if (r < 0) break
+            got += r
+        }
+        return b.copyOf(got)
+    }
+
+    private fun displayName(context: Context, uri: Uri): String? = try {
+        context.contentResolver.query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)?.use { c ->
+            if (c.moveToFirst()) c.getString(0) else null
+        }
+    } catch (e: Exception) {
+        null
+    }
+
+    /** The plain bytes of a document, read from its encrypted file (at most its size limit). */
+    suspend fun bytes(context: Context, id: Long): Pair<Document, ByteArray>? = withContext(Dispatchers.IO) {
+        val doc = PersonalStore.read { it.documents().get(id) } ?: return@withContext null
+        try {
+            doc to DocFiles.of(context).open(doc.file, doc.key).use { it.readBytes() }
+        } catch (e: Exception) {
+            null
+        } finally {
+            doc.key.fill(0)
+        }
+    }
+
+    fun delete(context: Context, id: Long) {
+        val app = context.applicationContext
+        PersonalStore.save("doc:delete:$id") { db ->
+            val doc = db.documents().get(id) ?: return@save
+            db.documents().delete(id)
+            DocFiles.of(app).delete(doc.file)
+            doc.key.fill(0)
+        }
+    }
+
+    fun rename(id: Long, title: String) {
+        val t = title.trim().take(200)
+        if (t.isEmpty()) return
+        PersonalStore.save("doc:rename:$id") { it.documents().rename(id, t) }
+    }
+
+    /** Copies handed to another app are plain: they are removed on the next return (after a minute) or start. */
+    private fun shareDir(context: Context) = File(context.applicationContext.cacheDir, "share")
+
+    fun clearShared(context: Context, olderThanMs: Long = 0) {
+        val now = System.currentTimeMillis()
+        shareDir(context).listFiles()?.forEach { if (now - it.lastModified() >= olderThanMs) it.delete() }
+    }
+
+    fun share(context: Context, doc: Document, bytes: ByteArray) {
+        val dir = shareDir(context).apply { mkdirs() }
+        clearShared(context)
+        val ext = if (doc.mime == "application/pdf") "pdf" else "jpg"
+        val name = doc.title.replace(Regex("[^\\p{L}\\p{N} ._-]"), "_").take(60).ifBlank { "document" } + "." + ext
+        val file = File(dir, name)
+        file.writeBytes(bytes)
+        val uri = FileProvider.getUriForFile(context, "${context.packageName}.files", file)
+        val send = Intent(Intent.ACTION_SEND).setType(doc.mime).putExtra(Intent.EXTRA_STREAM, uri).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        Away.forOwnWindow()
+        try {
+            context.startActivity(Intent.createChooser(send, null).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION))
+        } catch (e: Exception) {
+            Away.back()
+            file.delete()
+        }
+    }
+}
+
+private fun sizeText(context: Context, bytes: Long): String = android.text.format.Formatter.formatShortFileSize(context, bytes)
+
+@Composable
+fun DocumentsScreen() {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val docs by remember { PersonalStore.observe { it.documents().observe() } }.collectAsStateWithLifecycle(null)
+    var notice by remember { mutableStateOf<Int?>(null) }
+    var busy by remember { mutableStateOf(false) }
+    var open by remember { mutableStateOf<DocInfo?>(null) }
+    // A copy given to another app earlier is not kept
+    LaunchedEffect(Unit) { withContext(Dispatchers.IO) { Docs.clearShared(context, 60_000) } }
+    val photoTitle = stringResource(R.string.docs_photo_title, java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy")))
+    fun bring(uri: Uri, type: String? = null, cleanup: () -> Unit = {}) {
+        busy = true
+        notice = null
+        scope.launch {
+            notice = try { Docs.import(context, uri, photoTitle, type) } finally { withContext(Dispatchers.IO) { cleanup() }; busy = false }
+        }
+    }
+    val pick = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        Away.back()
+        if (uri != null) bring(uri)
+    }
+    val photo = remember { File(File(context.cacheDir, "scan").apply { mkdirs() }, "doc.jpg") }
+    val camera = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { ok ->
+        Away.back()
+        if (ok) bring(Uri.fromFile(photo), "image/jpeg") { photo.delete() } else photo.delete()
+    }
+
+    Text(stringResource(R.string.docs_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    val list = docs ?: return Loading()
+    // The space, plainly: a thin bar in the colour of "My data", words for the numbers
+    val used = list.sumOf { it.size }
+    Block(stringResource(R.string.docs_space_title), Group.MINE) {
+        LinearProgressIndicator(
+            progress = { (used.toFloat() / DocFiles.MAX_TOTAL_BYTES).coerceIn(0f, 1f) },
+            color = Group.MINE.tint().ink,
+            trackColor = MaterialTheme.colorScheme.surfaceVariant,
+            modifier = Modifier.fillMaxWidth(),
+            drawStopIndicator = {},
+        )
+        Text(
+            stringResource(R.string.docs_space, sizeText(context, used), sizeText(context, DocFiles.MAX_TOTAL_BYTES), list.size, DocFiles.MAX_DOCS),
+            style = MaterialTheme.typography.bodyMedium,
+        )
+        if (list.size >= DocFiles.MAX_DOCS - 2 || used >= DocFiles.MAX_TOTAL_BYTES * 9 / 10) {
+            Text(stringResource(R.string.docs_space_low), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
+    Block(stringResource(R.string.docs_add_title), Group.MINE) {
+        Text(stringResource(R.string.docs_add_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Button(
+            onClick = { Away.forOwnWindow(); try { pick.launch(arrayOf("application/pdf", "image/*")) } catch (e: android.content.ActivityNotFoundException) { Away.back() } },
+            enabled = !busy, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp),
+        ) { Text(stringResource(R.string.docs_add_file)) }
+        OutlinedButton(
+            onClick = {
+                val uri = FileProvider.getUriForFile(context, "${context.packageName}.files", photo)
+                Away.forOwnWindow()
+                try { camera.launch(uri) } catch (e: android.content.ActivityNotFoundException) { Away.back() }
+            },
+            enabled = !busy, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp),
+        ) { Text(stringResource(R.string.docs_add_photo)) }
+        if (busy) Text(stringResource(R.string.docs_busy), style = MaterialTheme.typography.bodyMedium)
+        notice?.let { Text(stringResource(it), style = MaterialTheme.typography.bodyMedium) }
+    }
+    if (list.isEmpty()) {
+        Text(stringResource(R.string.docs_none), style = MaterialTheme.typography.bodyLarge)
+    } else {
+        Block(stringResource(R.string.docs_title), Group.MINE, padded = false) {
+            list.forEachIndexed { i, d ->
+                val kind = stringResource(if (d.mime == "application/pdf") R.string.docs_kind_pdf else R.string.docs_kind_photo)
+                BlockRow(d.title, "$kind · ${sizeText(context, d.size)}", first = i == 0) { open = d }
+            }
+        }
+    }
+    open?.let { d -> DocViewer(d) { open = null } }
+}
+
+/** One document, full screen, read into memory only; never written out plain unless the owner shares it. */
+@Composable
+private fun DocViewer(info: DocInfo, onClose: () -> Unit) {
+    val context = LocalContext.current
+    val loaded by produceState<Pair<Document, ByteArray>?>(null, info.id) { value = Docs.bytes(context, info.id) }
+    var asking by remember { mutableStateOf<String?>(null) }
+    var title by remember { mutableStateOf(info.title) }
+    // Nothing of the plain bytes stays once the viewer closes
+    DisposableEffect(info.id) { onDispose { loaded?.second?.fill(0) } }
+    val screenshots = HomePrefs.state.collectAsStateWithLifecycle().value?.screenshots == true
+    // Its own window: kept off screenshots and away from screen-reading apps like the screen beneath
+    Dialog(onDismissRequest = onClose, properties = DialogProperties(usePlatformDefaultWidth = false, securePolicy = if (screenshots) androidx.compose.ui.window.SecureFlagPolicy.Inherit else androidx.compose.ui.window.SecureFlagPolicy.SecureOn)) {
+        SensitiveWindow()
+        Surface(Modifier.fillMaxSize()) {
+            Column(Modifier.statusBarsPadding().navigationBarsPadding()) {
+                Row(Modifier.fillMaxWidth().padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Text(info.title, style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f).padding(8.dp))
+                    TextButton(onClick = onClose, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.back)) }
+                }
+                Column(Modifier.weight(1f).fillMaxWidth()) {
+                    val l = loaded
+                    when {
+                        l == null -> Loading()
+                        l.first.mime == "application/pdf" -> PdfPages(l.second)
+                        else -> PhotoView(l.second)
+                    }
+                }
+                Row(Modifier.fillMaxWidth().padding(8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    TextButton(onClick = { asking = "rename" }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.docs_rename)) }
+                    TextButton(onClick = { asking = "share" }, enabled = loaded != null, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.docs_share)) }
+                    TextButton(onClick = { asking = "delete" }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.docs_delete)) }
+                }
+            }
+        }
+    }
+    when (asking) {
+        "share" -> AlertDialog(
+            onDismissRequest = { asking = null },
+            title = { Text(stringResource(R.string.docs_share_title)) },
+            text = { Text(stringResource(R.string.docs_share_warning)) },
+            confirmButton = { TextButton(onClick = { asking = null; loaded?.let { (d, b) -> Docs.share(context, d, b) } }) { Text(stringResource(R.string.docs_share)) } },
+            dismissButton = { TextButton(onClick = { asking = null }) { Text(stringResource(R.string.cancel)) } },
+        )
+        "delete" -> AlertDialog(
+            onDismissRequest = { asking = null },
+            title = { Text(stringResource(R.string.docs_delete_title)) },
+            text = { Text(stringResource(R.string.docs_delete_text)) },
+            confirmButton = { TextButton(onClick = { asking = null; Docs.delete(context, info.id); onClose() }) { Text(stringResource(R.string.docs_delete)) } },
+            dismissButton = { TextButton(onClick = { asking = null }) { Text(stringResource(R.string.cancel)) } },
+        )
+        "rename" -> AlertDialog(
+            onDismissRequest = { asking = null },
+            title = { Text(stringResource(R.string.docs_rename)) },
+            text = { OutlinedTextField(value = title, onValueChange = { title = it.take(200) }, singleLine = true, modifier = Modifier.fillMaxWidth()) },
+            confirmButton = { TextButton(onClick = { asking = null; Docs.rename(info.id, title) }, enabled = title.isNotBlank()) { Text(stringResource(R.string.save)) } },
+            dismissButton = { TextButton(onClick = { asking = null }) { Text(stringResource(R.string.cancel)) } },
+        )
+    }
+}
+
+/** A photo that can be pinched larger, to read small print. */
+@Composable
+private fun PhotoView(bytes: ByteArray) {
+    val bitmap = remember(bytes) { BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.asImageBitmap() }
+    if (bitmap == null) return Text(stringResource(R.string.docs_failed), modifier = Modifier.padding(16.dp))
+    var scale by remember { mutableFloatStateOf(1f) }
+    var dx by remember { mutableFloatStateOf(0f) }
+    var dy by remember { mutableFloatStateOf(0f) }
+    val state = rememberTransformableState { zoom, pan, _ ->
+        scale = (scale * zoom).coerceIn(1f, 6f)
+        dx += pan.x; dy += pan.y
+    }
+    Image(
+        bitmap = bitmap, contentDescription = null,
+        modifier = Modifier.fillMaxSize().transformable(state).graphicsLayer(scaleX = scale, scaleY = scale, translationX = dx, translationY = dy),
+    )
+}
+
+/**
+ * A PDF drawn page by page from memory: the bytes go into an anonymous in-memory file (never on
+ * the storage) that Android's own PDF reader opens.
+ */
+@Composable
+private fun PdfPages(bytes: ByteArray) {
+    val widthPx = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp.roundToPx() }
+    val renderer = remember(bytes) {
+        try {
+            val fd = Os.memfd_create("doc", 0)
+            try {
+                java.io.FileOutputStream(fd).write(bytes)
+                Os.lseek(fd, 0, OsConstants.SEEK_SET)
+                PdfRenderer(ParcelFileDescriptor.dup(fd))
+            } finally {
+                Os.close(fd)
+            }
+        } catch (e: Exception) {
+            null
+        }
+    }
+    DisposableEffect(renderer) { onDispose { try { renderer?.close() } catch (e: Exception) { } } }
+    if (renderer == null) return Text(stringResource(R.string.docs_failed), modifier = Modifier.padding(16.dp))
+    LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        items(renderer.pageCount) { i ->
+            val page by produceState<Bitmap?>(null, i) {
+                value = withContext(Dispatchers.Default) {
+                    synchronized(renderer) {
+                        try {
+                            renderer.openPage(i).use { p ->
+                                val w = widthPx.coerceAtMost(1600)
+                                val h = (w.toFloat() * p.height / p.width).toInt().coerceAtLeast(1)
+                                Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888).also {
+                                    it.eraseColor(android.graphics.Color.WHITE)
+                                    p.render(it, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+                                }
+                            }
+                        } catch (e: Exception) {
+                            null
+                        }
+                    }
+                }
+            }
+            page?.let { Image(it.asImageBitmap(), contentDescription = stringResource(R.string.docs_page, i + 1, renderer.pageCount), modifier = Modifier.fillMaxWidth()) }
+                ?: Loading()
+        }
+    }
+}
+
+/** Marks the window this is drawn in (a dialog's own) as not for screen-reading apps, as the data screens are. */
+@Composable
+fun SensitiveWindow() {
+    val view = androidx.compose.ui.platform.LocalView.current
+    if (android.os.Build.VERSION.SDK_INT >= 34) {
+        DisposableEffect(view) {
+            val root = view.rootView
+            root.setAccessibilityDataSensitive(android.view.View.ACCESSIBILITY_DATA_SENSITIVE_YES)
+            onDispose { }
+        }
+    }
+}

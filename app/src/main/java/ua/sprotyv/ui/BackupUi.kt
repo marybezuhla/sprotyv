@@ -57,6 +57,7 @@ import ua.sprotyv.personal.backup.BackupCrypto
 import ua.sprotyv.personal.backup.BackupData
 import ua.sprotyv.personal.backup.BackupLines
 import ua.sprotyv.personal.backup.BackupStream
+import ua.sprotyv.personal.docs.DocFiles
 import ua.sprotyv.personal.backup.PlanCode
 import ua.sprotyv.qr.Qr
 import java.io.ByteArrayOutputStream
@@ -97,10 +98,10 @@ object BackupJobs {
      * summary and key here (the data is read again from the file on "yes"); an older one-piece
      * copy keeps its decrypted data. Both only in memory, and only until yes or no.
      */
-    sealed class Opened(val created: Long, val people: Int, val notes: Int, val records: Int, val skipped: Int, val home: Map<String, String>) {
+    sealed class Opened(val created: Long, val people: Int, val notes: Int, val records: Int, val skipped: Int, val home: Map<String, String>, val docs: Int = -1, val docBytes: Long = 0) {
         class Piece(val snap: BackupData.Snapshot) : Opened(snap.created, snap.people.size, snap.notes.size, snap.records, 0, snap.home)
         class Stream(val uri: Uri, val key: BackupStream.Key, val summary: BackupLines.Summary, val fingerprint: ByteArray) :
-            Opened(summary.created, summary.people, summary.notes, summary.records, summary.skipped, summary.home)
+            Opened(summary.created, summary.people, summary.notes, summary.records, summary.skipped, summary.home, summary.docs, summary.docBytes)
 
         fun wipe() { if (this is Stream) key.wipe() }
     }
@@ -117,6 +118,9 @@ object BackupJobs {
      */
     val suggested = MutableStateFlow<String?>(null)
     val written = MutableStateFlow(false)
+
+    /** Documents go into the copy too (the owner can leave them out: a lighter file). */
+    val withDocs = MutableStateFlow(true)
 
     /** The password, kept until the file picker returns. Cleared after use. */
     @Volatile private var password: CharArray? = null
@@ -171,6 +175,7 @@ object BackupJobs {
         val started = job {
             var fresh = false
             var key: BackupStream.Key? = null
+            var docs: List<ua.sprotyv.personal.Document>? = null
             try {
                 fresh = isNewDocument(app, uri)
                 if (!fresh) return@job R.string.backup_existing
@@ -178,6 +183,9 @@ object BackupJobs {
                 val snap = withTimeoutOrNull(20_000) { PersonalStore.read { BackupData.read(it, BACKED_UP_SETTINGS) } }
                     ?.copy(home = homeForBackup(app))
                     ?: return@job removeNew(app, uri, R.string.backup_failed)
+                // The documents' rows (their keys only in memory, wiped below); their files are read as they are written
+                docs = if (withDocs.value) PersonalStore.read { it.documents().all() } ?: return@job removeNew(app, uri, R.string.backup_failed) else null
+                val files = DocFiles.of(app)
                 val k = withContext(Dispatchers.Default) { BackupStream.newKey(pw) }
                 key = k
                 // Written in parts, with a fingerprint of what went in, to compare with what reads back
@@ -185,7 +193,7 @@ object BackupJobs {
                 val out = app.contentResolver.openOutputStream(uri, "w") ?: return@job removeNew(app, uri, R.string.backup_failed)
                 out.use { o ->
                     java.io.OutputStreamWriter(java.security.DigestOutputStream(BackupStream.writer(o, k), wrote), Charsets.UTF_8).buffered().use { w ->
-                        BackupLines.write(snap, w)
+                        BackupLines.write(snap, w, docs) { d -> files.open(d.file, d.key) }
                     }
                 }
                 // Check what actually landed on the storage, not what we meant to write: it must
@@ -197,7 +205,7 @@ object BackupJobs {
                     val summary = java.io.InputStreamReader(java.security.DigestInputStream(BackupStream.reader(input, k), read), Charsets.UTF_8).use { r ->
                         BackupLines.read(r) { }
                     }
-                    summary.records == snap.records && summary.skipped == 0 && read.digest().contentEquals(wrote.digest())
+                    summary.records == snap.records && summary.skipped == 0 && summary.docs == (docs?.size ?: -1) && read.digest().contentEquals(wrote.digest())
                 }
                 if (ok) {
                     PersonalStore.save("setting:$KEY_BACKUP_AT") { it.settings().put(ua.sprotyv.personal.Setting(KEY_BACKUP_AT, System.currentTimeMillis().toString())) }
@@ -216,6 +224,7 @@ object BackupJobs {
                 else R.string.backup_failed
             } finally {
                 key?.wipe()
+                docs?.forEach { it.key.fill(0) }
                 pw.fill(' ')
             }
         }
@@ -324,7 +333,7 @@ object BackupJobs {
                             is Opened.Piece -> BackupData.replaceAll(db, snap.snap, BACKED_UP_SETTINGS)
                             is Opened.Stream -> {
                                 val md = java.security.MessageDigest.getInstance("SHA-256")
-                                readCopy(app, snap.uri, snap.key, md) { BackupLines.restore(db, it, BACKED_UP_SETTINGS, snap.summary) { md.digest().contentEquals(snap.fingerprint) } }
+                                readCopy(app, snap.uri, snap.key, md) { BackupLines.restore(db, it, BACKED_UP_SETTINGS, snap.summary, DocFiles.of(app)) { md.digest().contentEquals(snap.fingerprint) } }
                             }
                         }
                         true
@@ -602,6 +611,9 @@ fun BackupScreen() {
         }
     }
     Toggle(stringResource(R.string.backup_written), written) { BackupJobs.written.value = it }
+    val withDocs by BackupJobs.withDocs.collectAsStateWithLifecycle()
+    Toggle(stringResource(R.string.backup_with_docs), withDocs) { BackupJobs.withDocs.value = it }
+    Text(stringResource(R.string.backup_with_docs_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     val ready = written && !busy && pw.isNotEmpty() && (!own || (ownText == ownAgain && !BackupCrypto.isTooSimple(ownText.toCharArray())))
     Button(onClick = {
         BackupJobs.hold(pw)
@@ -634,7 +646,8 @@ fun BackupScreen() {
                     stringResource(R.string.backup_replace_text, date, snap.people, snap.records) +
                         (if (snap.skipped > 0) " " + stringResource(R.string.backup_replace_skipped) else "") +
                         (if (snap.home.isNotEmpty()) " " + stringResource(R.string.backup_replace_home) else "") +
-                        " " + stringResource(R.string.backup_replace_notes, snap.notes),
+                        " " + stringResource(R.string.backup_replace_notes, snap.notes) +
+                        " " + (if (snap.docs < 0) stringResource(R.string.backup_replace_no_docs) else stringResource(R.string.backup_replace_docs, snap.docs, android.text.format.Formatter.formatShortFileSize(context, snap.docBytes))),
                 )
             },
             confirmButton = {
