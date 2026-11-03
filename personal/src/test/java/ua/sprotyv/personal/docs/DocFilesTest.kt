@@ -40,6 +40,10 @@ class DocFilesTest {
         val files = DocFiles(tmp.newFolder("docs"))
         val a = files.write(ByteArray(10).inputStream())
         val b = files.write(ByteArray(10).inputStream())
+        // Until a file is named (or dropped) it is never swept
+        files.sweep(setOf(a.file), graceMs = 0)
+        assertTrue(java.io.File(files.dir, b.file).exists())
+        files.done(a.file); files.done(b.file)
         files.sweep(setOf(a.file), graceMs = 0)
         assertTrue(java.io.File(files.dir, a.file).exists())
         assertFalse(java.io.File(files.dir, b.file).exists())
@@ -48,7 +52,8 @@ class DocFilesTest {
     @Test fun sweepSparesFreshFiles() {
         val files = DocFiles(tmp.newFolder("docs"))
         val a = files.write(ByteArray(10).inputStream())
-        // Just written, no row yet (an import in progress): kept
+        files.done(a.file)
+        // Just written, named nowhere: kept for the grace time
         files.sweep(emptySet())
         assertTrue(java.io.File(files.dir, a.file).exists())
     }
