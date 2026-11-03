@@ -278,6 +278,8 @@ object BackupData {
     internal fun personOf(p: JSONObject) = Person(
         id = p.getLong("id").also { require(it > 0) }, name = text(p, "name"), phone = text(p, "phone"),
         relation = text(p, "relation"), safeList = p.getBoolean("safeList"), ice = p.getBoolean("ice"),
+        // Older copies have no order: everyone first, by name
+        sort = p.optInt("sort", 0).coerceIn(0, 10_000),
     )
 
     internal fun kit(k: KitCheck) = JSONObject().put("key", k.key).put("checked", k.checked).put("at", k.at)
@@ -294,7 +296,7 @@ object BackupData {
 
     internal fun person(p: Person) = JSONObject()
         .put("id", p.id).put("name", p.name).put("phone", p.phone).put("relation", p.relation)
-        .put("safeList", p.safeList).put("ice", p.ice)
+        .put("safeList", p.safeList).put("ice", p.ice).put("sort", p.sort)
 
     internal fun plan(p: FamilyPlan) = JSONObject()
         .put("point1", p.point1).put("point2", p.point2).put("point3", p.point3)

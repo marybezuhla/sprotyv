@@ -108,6 +108,17 @@ object Reach {
         if (!tryStart(context, intent)) notFound(context)
     }
 
+    /** Opens the chat with this number in Signal itself (the genuine app only); no text is filled in. */
+    fun signalTo(context: Context, phone: String) {
+        val link = try { Links.signalChat(phone) } catch (e: IllegalArgumentException) { return noNumber(context) }
+        if (!present(context, SIGNAL)) return notFound(context)
+        if (!genuine(context, SIGNAL)) return notGenuine(context)
+        if (!tryStart(context, Intent(Intent.ACTION_VIEW, Uri.parse(link)).setPackage(SIGNAL))) notFound(context)
+    }
+
+    /** One SMS to one person, text ready or empty. */
+    fun smsOne(context: Context, phone: String, text: String = "") = sms(context, listOf(phone), text)
+
     /**
      * Opens a trusted page outside Sprotyv: the source's own app when installed, else the phone's
      * browser as a Custom Tab, which looks part of Sprotyv but loads the page itself (Sprotyv has
@@ -247,6 +258,17 @@ object Links {
         if (!phone.trim().startsWith("+") && digits.length == 10 && digits.startsWith("0")) digits = "38$digits"
         require(digits.isNotEmpty()) { "No number" }
         return "https://wa.me/$digits?text=" + encode(text)
+    }
+
+    /**
+     * Signal's own link to the chat with a number (international form with +); Signal opens it
+     * itself. A Ukrainian local number becomes +380…
+     */
+    fun signalChat(phone: String): String {
+        var digits = clean(phone).removePrefix("+")
+        if (!phone.trim().startsWith("+") && digits.length == 10 && digits.startsWith("0")) digits = "38$digits"
+        require(digits.length >= 6) { "No number" }
+        return "https://signal.me/#p/+$digits"
     }
 
     /** Percent-encoding of the text as UTF-8, so any letter or emoji survives. */

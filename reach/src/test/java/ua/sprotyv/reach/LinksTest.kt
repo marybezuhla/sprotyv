@@ -40,4 +40,9 @@ class LinksTest {
         assertEquals("https://wa.me/380000000101?text=OK", Links.whatsapp("000 000 01 01", "OK"))
         assertEquals("https://wa.me/380000000101?text=OK", Links.whatsapp("+380000000101", "OK"))
     }
+
+    @Test fun signalChatLinks() {
+        assertEquals("https://signal.me/#p/+380000000101", Links.signalChat("+380 00 000 01 01"))
+        assertEquals("https://signal.me/#p/+380000000102", Links.signalChat("0000000102"))
+    }
 }
