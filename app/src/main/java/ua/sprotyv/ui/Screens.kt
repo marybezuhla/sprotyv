@@ -122,8 +122,9 @@ fun SecureScreen() {
     }
     // No other app's floating window lies over these screens (a fake button over "Replace", say)
     DisposableEffect(activity) {
-        activity.window.setHideOverlayWindows(true)
-        onDispose { activity.window.setHideOverlayWindows(false) }
+        // (a normal permission, granted with the app; without it nothing else changes)
+        val hidden = try { activity.window.setHideOverlayWindows(true); true } catch (e: SecurityException) { false }
+        onDispose { if (hidden) try { activity.window.setHideOverlayWindows(false) } catch (e: SecurityException) { } }
     }
     // The recent-apps picture never shows these screens, even with screenshots allowed: it would
     // show the data to whoever holds the phone, past the lock on "My data"
