@@ -1,0 +1,443 @@
+[
+ {
+  "id": "e-112",
+  "category": "emergency",
+  "title": "Single emergency number",
+  "note": "Fire, police, ambulance and gas services across Ukraine.",
+  "number": "112",
+  "source": "https://npu.gov.ua/news/zastosunok-112-ukraine-alternatyvnyi-sposib-vyklyku-ekstrenykh-sluzhb-bez-mobilnoho-zviazku",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "e-101",
+  "category": "emergency",
+  "title": "Fire and rescue (State Emergency Service)",
+  "note": "Fire, rescue, downed power lines, an explosive object found. 24/7.",
+  "number": "101",
+  "source": "https://ukc.gov.ua/a-dovidkova-informatsiya-a/kontakts-ovv/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "e-102",
+  "category": "emergency",
+  "title": "Police",
+  "note": "A crime or incident that needs police at once. 24/7.",
+  "number": "102",
+  "source": "https://npu.gov.ua/kontakti",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "e-103",
+  "category": "emergency",
+  "title": "Ambulance",
+  "note": "A threat to life or health. 24/7.",
+  "number": "103",
+  "source": "https://www.kmu.gov.ua/news/moz-rekomenduye-yak-povoditis-v-razi-avarij-v-budinkah",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "e-104",
+  "category": "emergency",
+  "title": "Gas emergency",
+  "note": "A smell or leak of gas. If the smell persists: 104 or 112.",
+  "number": "104",
+  "source": "https://www.kmu.gov.ua/news/moz-rekomenduye-yak-povoditis-v-razi-avarij-v-budinkah",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "ev-1548",
+  "category": "evacuation",
+  "title": "Crisis hotline",
+  "note": "Evacuation, housing and payments for displaced people, humanitarian aid, seized homes. 24/7, free.",
+  "number": "1548",
+  "source": "https://dp-reintegration.gov.ua/cilodobova-garyacha-liniya-z-krizovih-pitan-1548",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "ev-east-sos",
+  "category": "evacuation",
+  "title": "East SOS: evacuation",
+  "note": "Evacuation requests, including people with limited mobility; help for displaced people. Mon–Sat 08:00–18:00, free.",
+  "number": "0800332614",
+  "source": "https://east-sos.org/directions/call-center/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "ev-redcross",
+  "category": "evacuation",
+  "title": "Ukrainian Red Cross",
+  "note": "What help is available, support, tracing missing relatives. Daily 09:00–18:00, free.",
+  "number": "0800332656",
+  "source": "https://redcross.org.ua/news/2025/01/102989/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "ev-icrc",
+  "category": "evacuation",
+  "title": "ICRC (International Red Cross)",
+  "note": "Help for people affected by the war, tracing relatives. Mon–Fri 09:00–13:00 and 14:00–17:00, free.",
+  "number": "0800300155",
+  "source": "https://www.icrc.org/en/where-we-work/europe-central-asia/ukraine/help-useful-information-affected-people",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "m-npa",
+  "category": "mind",
+  "title": "National Psychological Association",
+  "note": "A free, confidential talk with a psychologist. Daily; hours differ between sources.",
+  "number": "0800100102",
+  "source": "https://help.npa-ua.org/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "m-pin",
+  "category": "mind",
+  "title": "People in Need support line",
+  "note": "Psychological support for adults and children. 24/7, free.",
+  "number": "0800210160",
+  "source": "https://ukraine.peopleinneed.net/ua/liniia-pidtrimki-10978gp",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "m-redcross",
+  "category": "mind",
+  "title": "Red Cross psychosocial support",
+  "note": "Emotional and psychosocial support. Free.",
+  "number": "0800333161",
+  "source": "https://www.icrc.org/en/where-we-work/europe-central-asia/ukraine/help-useful-information-affected-people",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "m-men",
+  "category": "mind",
+  "title": "Support line for men",
+  "note": "Stress, crisis, burnout. 14:00–06:00; free from mobiles.",
+  "number": "2345",
+  "source": "https://la-strada.org.ua/en/garyachi-liniyi",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "m-varto",
+  "category": "mind",
+  "title": "Varto zhyty crisis counselling",
+  "note": "Mon–Fri 11:00–19:00; free from lifecell and Vodafone. From Kyivstar: 093 170 72 19 (paid).",
+  "number": "5522",
+  "source": "https://bf.diia.gov.ua/articles/yak-otrymaty-psykholohichnu-dopomohu-v-umovakh-viiny",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "v-1547",
+  "category": "violence",
+  "title": "Violence and trafficking",
+  "note": "Domestic and gender-based violence, violence against children, trafficking; a psychologist is available. 24/7, free.",
+  "number": "1547",
+  "source": "https://www.msp.gov.ua/press-center/news/yakshcho-vy-postrazhdaly-vid-domashnoho-nasylstva-abo-staly-yoho-svidkom-ne-movchit!-telefonuyte-na-haryachu-liniyu-1547",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "v-1547-abroad",
+  "category": "violence",
+  "title": "Line 1547 from abroad",
+  "note": "The same as 1547, for calls from abroad. Paid.",
+  "number": "+380442841943",
+  "source": "https://www.msp.gov.ua/press-center/news/yakshcho-vy-postrazhdaly-vid-domashnoho-nasylstva-abo-staly-yoho-svidkom-ne-movchit!-telefonuyte-na-haryachu-liniyu-1547",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "v-lastrada",
+  "category": "violence",
+  "title": "La Strada: against violence",
+  "note": "Domestic violence, trafficking, discrimination. 24/7, free from mobiles and landlines.",
+  "number": "0800500335",
+  "source": "https://la-strada.org.ua/en/garyachi-liniyi",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "v-116123",
+  "category": "violence",
+  "title": "La Strada: short number",
+  "note": "The same as 0 800 500 335, from mobiles. 24/7, free.",
+  "number": "116123",
+  "source": "https://la-strada.org.ua/en/garyachi-liniyi",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "c-116111",
+  "category": "children",
+  "title": "Children's hotline",
+  "note": "Anonymous, for children and young people; advice for adults on children's rights. Free from mobiles.",
+  "number": "116111",
+  "source": "https://la-strada.org.ua/en/garyachi-liniyi",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "c-0800500225",
+  "category": "children",
+  "title": "Children's hotline (0 800)",
+  "note": "The same as 116 111, from mobiles and landlines.",
+  "number": "0800500225",
+  "source": "https://la-strada.org.ua/en/garyachi-liniyi",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "h-1677",
+  "category": "health",
+  "title": "National Health Service",
+  "note": "Free services, Affordable Medicines, facilities contracted by the NHSU.",
+  "number": "1677",
+  "source": "https://www.kmu.gov.ua/news/na-yaki-pitannya-vidpovidaye-kontakt-centr-nszu",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "h-moz",
+  "category": "health",
+  "title": "Ministry of Health hotline",
+  "note": "Questions and complaints about health care.",
+  "number": "0800505201",
+  "source": "https://ukc.gov.ua/a-dovidkova-informatsiya-a/kontakts-ovv/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "h-hiv",
+  "category": "health",
+  "title": "HIV/AIDS helpline",
+  "note": "Counsellors, psychologists, infectious-disease doctors. Free.",
+  "number": "0800500451",
+  "source": "https://www.phc.org.ua/en/activities/ongoing-projects/dont-give-aids-a-chance/hivaids-hotline",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "h-ost",
+  "category": "health",
+  "title": "Opioid substitution therapy",
+  "note": "Questions about substitution therapy. 09:00–18:00, free, anonymous.",
+  "number": "0800507727",
+  "source": "https://www.phc.org.ua/en/activities/ongoing-projects/dont-give-aids-a-chance/hivaids-hotline",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "s-sbu",
+  "category": "security",
+  "title": "Security Service (SBU)",
+  "note": "Sabotage, paid arson, suspicious people or objects, recruitment. Free from all operators.",
+  "number": "1516",
+  "source": "https://ssu.gov.ua/novyny/sbu-zaprovadyla-novyi-korotkyi-nomer-hariachoi-linii-1516",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "s-sbu-0800",
+  "category": "security",
+  "title": "SBU (previous number)",
+  "note": "Still working. Free.",
+  "number": "0800501482",
+  "source": "https://ssu.gov.ua/novyny/sbu-zaprovadyla-novyi-korotkyi-nomer-hariachoi-linii-1516",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "s-mod",
+  "category": "security",
+  "title": "Ministry of Defence",
+  "note": "For service members and families, including the recruitment centres (TCC) and service. 24/7; calls are recorded.",
+  "number": "1512",
+  "source": "https://mod.gov.ua/en/ministry-of-defence-of-ukraine-hotline",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "s-nib",
+  "category": "security",
+  "title": "National Information Bureau",
+  "note": "Report people captured, deported or missing, including children. 24/7.",
+  "number": "1648",
+  "source": "https://nib.gov.ua/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "s-nib-abroad",
+  "category": "security",
+  "title": "NIB from abroad",
+  "note": "The same as 1648, for calls from abroad. 24/7, paid.",
+  "number": "+380442878165",
+  "source": "https://nib.gov.ua/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "s-missing",
+  "category": "security",
+  "title": "Missing persons",
+  "note": "Commissioner for persons missing under special circumstances; the single register. Mon–Sat 09:00–18:00.",
+  "number": "1698",
+  "source": "https://www.kmu.gov.ua/news/hariachi-linii-ofisu-upovnovazhenoho-z-pytan-osib-znyklykh-bezvisty-za-osoblyvykh-obstavyn",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "s-pow",
+  "category": "security",
+  "title": "POW Coordination HQ",
+  "note": "Advice for families of captured or missing service members.",
+  "number": "0800300529",
+  "source": "https://www.kmu.gov.ua/news/yakshcho-liudyna-potrapyla-v-polon-kudy-povidomliaty",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "s-pow-sbu",
+  "category": "security",
+  "title": "Centre for search and release of POWs",
+  "note": "Prisoners of war, illegally detained civilians, deported children. Kyiv landline, paid.",
+  "number": "+380443211121",
+  "source": "https://ssu.gov.ua/obiednanyi-tsentr-z-koordynatsii-poshuku-ta-zvilnennia-viiskovopolonenykh-nezakonno-pozbavlenykh-voli-osib-vnaslidok-ahresii-proty-ukrainy",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "vt-1528",
+  "category": "veterans",
+  "title": "Unified veterans line",
+  "note": "Status and ID, benefits, psychological support, housing, work. Daily 08:00–20:00, free.",
+  "number": "1528",
+  "source": "https://www.kmu.gov.ua/news/1528-novyi-nomer-iedynoi-veteranskoi-linii",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "vt-uvf",
+  "category": "veterans",
+  "title": "Veterans Fund crisis line",
+  "note": "Psychological crisis support for veterans and families. 24/7, free.",
+  "number": "0800332029",
+  "source": "https://veteranfund.com.ua/en/2023/01/14/the-uvf-crisis-support-hotline/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "vt-hub",
+  "category": "veterans",
+  "title": "Veteran Hub",
+  "note": "Veterans, service members, families of captives and the missing. Daily 09:00–21:00; normal call rates.",
+  "number": "0673482868",
+  "source": "https://veteranhub.com.ua/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "st-1545",
+  "category": "state",
+  "title": "Government hotline",
+  "note": "Appeals to any government body. Free from the main operators.",
+  "number": "1545",
+  "source": "https://www.kmu.gov.ua/uryadova-garyacha-liniya-1545",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "st-1545-abroad",
+  "category": "state",
+  "title": "Government hotline from abroad",
+  "note": "The same as 1545, for calls from abroad. Paid.",
+  "number": "+380442841915",
+  "source": "https://www.kmu.gov.ua/uryadova-garyacha-liniya-1545",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "st-legal",
+  "category": "state",
+  "title": "Free legal aid",
+  "note": "A lawyer's advice Mon–Fri 08:00–18:00; reporting a detention 24/7. Free.",
+  "number": "0800213103",
+  "source": "https://legalaid.gov.ua/kliyentam/pro-bezoplatnu-pravovu-dopomogu-bpd/kontakt-czentr/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "st-legal-abroad",
+  "category": "state",
+  "title": "Legal aid from abroad",
+  "note": "The same, for calls from abroad. Paid.",
+  "number": "+380443631041",
+  "source": "https://legalaid.gov.ua/kliyentam/pro-bezoplatnu-pravovu-dopomogu-bpd/kontakt-czentr/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "st-ombudsman",
+  "category": "state",
+  "title": "Ombudsman",
+  "note": "Rights violated, including captured or deported civilians. Mon–Thu 09:00–18:00, Fri to 16:45; free.",
+  "number": "1678",
+  "source": "https://ombudsman.gov.ua/en/news/tags/diya",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "st-ombudsman-abroad",
+  "category": "state",
+  "title": "Ombudsman from abroad",
+  "note": "For calls from abroad. Paid.",
+  "number": "+380442997408",
+  "source": "https://ombudsman.gov.ua/en/news/tags/diya",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "st-pension",
+  "category": "state",
+  "title": "Pension Fund",
+  "note": "Pensions and social payments. Mon–Fri 08:00–20:00, Sat 08:00–14:00.",
+  "number": "0800503753",
+  "source": "https://www.pfu.gov.ua/2177797-rozshyreno-mozhlyvosti-kontakt-tsentru-pensijnogo-fondu-ukrayiny/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "st-social",
+  "category": "state",
+  "title": "National Social Service",
+  "note": "Social benefits and services.",
+  "number": "0800505213",
+  "source": "https://ukc.gov.ua/a-dovidkova-informatsiya-a/kontakts-ovv/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "st-diia",
+  "category": "state",
+  "title": "Diia support",
+  "note": "The Diia app and portal. Mobile number, normal call rates.",
+  "number": "0672580520",
+  "source": "https://thedigital.gov.ua/contacts",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "st-police",
+  "category": "state",
+  "title": "Police: non-emergency",
+  "note": "Police matters that don't need an immediate response. Mon–Fri 09:00–18:00. Emergencies: 102.",
+  "number": "0800500202",
+  "source": "https://npu.gov.ua/kontakti",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "st-cyber",
+  "category": "state",
+  "title": "Cyber police",
+  "note": "Fraud, cybercrime, status of a report. Mon–Thu 09:00–18:00, Fri to 17:00.",
+  "number": "0800505170",
+  "source": "https://cyberpolice.gov.ua/contacts/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "st-mvs",
+  "category": "state",
+  "title": "Ministry of Internal Affairs",
+  "note": "Appeals and enquiries to the Interior Ministry.",
+  "number": "1536",
+  "source": "https://mvs.gov.ua/en/work-with-citizens/telefonna-gariaca-liniia-mvs-ukrayini",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "st-border",
+  "category": "state",
+  "title": "Border Guard Service",
+  "note": "Questions about crossing the border. From abroad: +380 44 527 63 63.",
+  "number": "1598",
+  "source": "https://dpsu.gov.ua/uk/main-contacts",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "st-mfa",
+  "category": "state",
+  "title": "Foreign Ministry crisis line",
+  "note": "Ukrainian citizens in trouble abroad. Kyiv landline, paid.",
+  "number": "+380442381588",
+  "source": "https://ukc.gov.ua/a-dovidkova-informatsiya-a/kontakts-ovv/",
+  "checkedOn": "2026-11-03"
+ }
+]

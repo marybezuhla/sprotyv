@@ -221,6 +221,8 @@ fun App() {
                                 Icon(Icons.Filled.Search, contentDescription = null)
                                 Text("  " + stringResource(R.string.search_guide))
                             }
+                            // Phones at the top: the one place a number is needed in a hurry
+                            PhonesEntry(nav)
                             SectionsList(content, prefs.pins, nav) { id, on -> guarded((if (on) ACTION_PIN else ACTION_UNPIN) + id) }
                         }
                         Tab.WAY -> if (!trip) Frame(stringResource(R.string.tab_way), {}) { WayHub(nav) }
@@ -316,6 +318,7 @@ private fun Screen(
         Route.Comms -> CommsScreen(nav)
         Route.Driving -> DrivingScreen(content, nav)
         Route.Weapons -> WeaponsScreen(nav)
+        Route.Phones -> PhonesScreen(content, nav)
         is Route.PathCheck -> PATH_CHECKS[top.step]?.let { PracticeScreen(content, it, nav, check = top.step) }
         is Route.External -> {}
         Route.Sections -> Frame(stringResource(R.string.add_tile), nav::back) {

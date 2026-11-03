@@ -36,6 +36,7 @@ import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Edit
@@ -136,7 +137,7 @@ data class TileInfo(val id: String, val title: String, val hint: String, val ico
 fun toneOf(id: String): Group = when (id) {
     Tiles.tool(Tool.NOW), Tiles.tool(Tool.ALARM) -> Group.DANGER
     // "I am safe" is green: the colour of a safe condition on safety signs
-    Tiles.tool(Tool.SAFE), Tiles.tool(Tool.MEDICAL), Tiles.tool(Tool.RESCUER), Tiles.tool(Tool.DIRECTORY) -> Group.FIRST_AID
+    Tiles.tool(Tool.SAFE), Tiles.tool(Tool.MEDICAL), Tiles.tool(Tool.RESCUER), Tiles.tool(Tool.DIRECTORY), Tiles.tool(Tool.PHONES) -> Group.FIRST_AID
     Tiles.tool(Tool.MINE), Tiles.tool(Tool.PEOPLE), Tiles.tool(Tool.PLAN), Tiles.tool(Tool.SUPPLIES) -> Group.PREPARE
     // Copies of one's own data: blue, as "Mine"
     Tiles.tool(Tool.PRINT), Tiles.tool(Tool.SCAN), Tiles.tool(Tool.QR_TEXT) -> Group.MINE
@@ -286,6 +287,7 @@ internal val Tool.title: Int get() = when (this) {
     Tool.COMMS -> R.string.comms_title
     Tool.DRIVING -> R.string.driving_title
     Tool.WEAPONS -> R.string.weapons_title
+    Tool.PHONES -> R.string.phones_title
 }
 
 internal val Tool.hint: Int get() = when (this) {
@@ -318,6 +320,7 @@ internal val Tool.hint: Int get() = when (this) {
     Tool.COMMS -> R.string.comms_hint
     Tool.DRIVING -> R.string.driving_hint
     Tool.WEAPONS -> R.string.weapons_hint
+    Tool.PHONES -> R.string.phones_hint
 }
 
 /** Cards and tools with a picture of their own (Health Icons, public domain), clearer than the group's. */
@@ -394,6 +397,7 @@ internal val Tool.icon: ImageVector? get() = when (this) {
     Tool.SITUATION -> Icons.Filled.LocationOn
     Tool.POWER -> Icons.Filled.DateRange
     Tool.DIRECTORY -> Icons.Filled.Phone
+    Tool.PHONES -> Icons.Filled.Call
     Tool.SEARCH -> Icons.Filled.Search
     Tool.MEDICAL -> Icons.Filled.Favorite
     Tool.PEOPLE -> Icons.Filled.Person
@@ -434,6 +438,7 @@ val Tool.route: Route get() = when (this) {
     Tool.COMMS -> Route.Comms
     Tool.DRIVING -> Route.Driving
     Tool.WEAPONS -> Route.Weapons
+    Tool.PHONES -> Route.Phones
 }
 
 /** The group a tile belongs to: the first that names it. "What to do now" and "I am safe" have their own. */

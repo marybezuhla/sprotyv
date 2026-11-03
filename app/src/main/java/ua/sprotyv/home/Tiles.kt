@@ -17,7 +17,7 @@ enum class Mode { SIMPLE, FULL, KID }
 /** Parts of the app that can be a tile. */
 enum class Tool {
     NOW, SAFE, ALARM, SITUATION, POWER, DIRECTORY, HOME_LIFE, GUIDE, SEARCH,
-    MINE, MEDICAL, PEOPLE, PLAN, KIT, SUPPLIES, RESCUER, PRINT, SCAN, PRACTICE, QR_TEXT, MOZ, RESIST, CONSTITUTION, HISTORY, NEW_PLACE, GART, COMMS, DRIVING, WEAPONS,
+    MINE, MEDICAL, PEOPLE, PLAN, KIT, SUPPLIES, RESCUER, PRINT, SCAN, PRACTICE, QR_TEXT, MOZ, RESIST, CONSTITUTION, HISTORY, NEW_PLACE, GART, COMMS, DRIVING, WEAPONS, PHONES,
 }
 
 object Tiles {
@@ -138,7 +138,7 @@ enum class Group(val tiles: List<String>) {
             Tiles.chapter("ch7"), Tiles.chapter("ch21"),
         ),
     ),
-    FAMILY(listOf(Tiles.chapter("ch22"), Tiles.tool(Tool.PEOPLE), Tiles.tool(Tool.PLAN), Tiles.tool(Tool.DIRECTORY))),
+    FAMILY(listOf(Tiles.chapter("ch22"), Tiles.tool(Tool.PEOPLE), Tiles.tool(Tool.PLAN), Tiles.tool(Tool.DIRECTORY), Tiles.tool(Tool.PHONES))),
     HOME_LIFE(
         listOf(
             Tiles.card("blackout"), Tiles.tool(Tool.POWER), Tiles.tool(Tool.HOME_LIFE), Tiles.tool(Tool.SUPPLIES), Tiles.chapter("ch20"),

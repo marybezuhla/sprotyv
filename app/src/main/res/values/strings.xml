@@ -1680,4 +1680,21 @@
     <string name="chapter_evacuation_car">Евакуація пішки та автомобілем</string>
     <string name="chapter_evacuation_car_hint">Розділ 26 довідника</string>
     <string name="situation_maps">Застосунки без інтернету: мапи й Вікіпедія</string>
+    <string name="phones_title">Телефони</string>
+    <string name="phones_hint">Екстрені служби та гарячі лінії: один дотик — і номер у набирачі</string>
+    <string name="phones_intro">Торкніться рядка — відкриється набір номера; дзвінок почнеться лише після вашого підтвердження. Кожен номер перевірено на офіційному сайті; дата перевірки — під номером.</string>
+    <string name="phones_search">Пошук: служба, тема або номер</string>
+    <string name="phones_none">Нічого не знайдено. Екстрені служби — 112.</string>
+    <string name="phones_note">Номери змінюються. Якщо лінія не відповідає, спробуйте інший номер тієї ж теми; у небезпеці — 112. Номери з +380 — для дзвінків з-за кордону.</string>
+    <string name="phones_call">Подзвонити %1$s, %2$s</string>
+    <string name="phones_checked">%1$s, перевірено %2$s</string>
+    <string name="phones_cat_emergency">Екстрені служби</string>
+    <string name="phones_cat_evacuation">Евакуація та переселення</string>
+    <string name="phones_cat_mind">Психологічна підтримка</string>
+    <string name="phones_cat_violence">Насильство й торгівля людьми</string>
+    <string name="phones_cat_children">Діти</string>
+    <string name="phones_cat_health">Здоров\'я</string>
+    <string name="phones_cat_security">Безпека, полон, зниклі безвісти</string>
+    <string name="phones_cat_veterans">Ветерани й військові</string>
+    <string name="phones_cat_state">Держава, права, документи</string>
 </resources>

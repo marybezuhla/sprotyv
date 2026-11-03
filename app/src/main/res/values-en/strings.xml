@@ -1672,4 +1672,21 @@
     <string name="chapter_evacuation_car">Evacuation on foot and by car</string>
     <string name="chapter_evacuation_car_hint">Chapter 26 of the guide</string>
     <string name="situation_maps">Apps without internet: maps and Wikipedia</string>
+    <string name="phones_title">Phones</string>
+    <string name="phones_hint">Emergency services and hotlines: one tap puts the number in the dialler</string>
+    <string name="phones_intro">Tap a line to open the dialler; nothing is called until you confirm. Every number was checked on an official site; the date is under each number.</string>
+    <string name="phones_search">Search: service, topic or number</string>
+    <string name="phones_none">Nothing found. Emergency services: 112.</string>
+    <string name="phones_note">Numbers change. If a line does not answer, try another one on the same topic; in danger, call 112. Numbers starting +380 are for calling from abroad.</string>
+    <string name="phones_call">Call %1$s, %2$s</string>
+    <string name="phones_checked">%1$s, checked %2$s</string>
+    <string name="phones_cat_emergency">Emergency services</string>
+    <string name="phones_cat_evacuation">Evacuation and displacement</string>
+    <string name="phones_cat_mind">Psychological support</string>
+    <string name="phones_cat_violence">Violence and trafficking</string>
+    <string name="phones_cat_children">Children</string>
+    <string name="phones_cat_health">Health</string>
+    <string name="phones_cat_security">Security, captivity, missing persons</string>
+    <string name="phones_cat_veterans">Veterans and service members</string>
+    <string name="phones_cat_state">State, rights, documents</string>
 </resources>

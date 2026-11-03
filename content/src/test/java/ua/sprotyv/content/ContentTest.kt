@@ -166,6 +166,23 @@ class ContentTest {
         assertEquals("deepstatemap.live", LinksReader.host("https://deepstatemap.live"))
     }
 
+    @Test fun phonesAreCheckedAndMatchInEnglish() {
+        val uk = PhonesReader.parse(File(assets, "phones.json").readText())
+        val en = PhonesReader.parse(File(assets, "en/phones.json").readText())
+        assertEquals(uk.map { Triple(it.id, it.category, it.number) }, en.map { Triple(it.id, it.category, it.number) })
+        assertEquals(uk.map { it.source to it.checkedOn }, en.map { it.source to it.checkedOn })
+        // Every category has numbers; the single emergency number is there
+        assertEquals(Phone.CATEGORIES.toSet(), uk.map { it.category }.toSet())
+        assertTrue(uk.any { it.number == "112" && it.category == "emergency" })
+        // The same number is not listed twice
+        assertEquals(uk.size, uk.map { it.number }.toSet().size)
+        uk.forEach { assertTrue(it.id, it.source.startsWith("https://") && "t.me" !in it.source) }
+        assertEquals("0 800 213 103", PhonesReader.shown("0800213103"))
+        assertEquals("+380 44 284 19 15", PhonesReader.shown("+380442841915"))
+        assertEquals("067 258 05 20", PhonesReader.shown("0672580520"))
+        assertEquals("1548", PhonesReader.shown("1548"))
+    }
+
     @Test fun englishLinksMatchTheOriginal() {
         val uk = LinksReader.parse(File(assets, "links.json").readText())
         val en = LinksReader.parse(File(assets, "en/links.json").readText())
