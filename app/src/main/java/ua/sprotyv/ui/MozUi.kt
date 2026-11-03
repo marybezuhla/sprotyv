@@ -52,7 +52,7 @@ fun MozListScreen(content: Content?, nav: Nav) {
     Frame(stringResource(R.string.moz_title), nav::back) {
         if (content == null) return@Frame Loading()
         val moz = content.moz441 ?: return@Frame Broken()
-        val medic = HomePrefs.state.collectAsState().value?.medic == true
+        val medic = rememberMark(KEY_MEDIC)
         Text(stringResource(if (medic) R.string.moz_intro_medic else R.string.moz_intro), style = MaterialTheme.typography.bodyLarge)
         if (medic) {
             Block(stringResource(R.string.medic_tools), Group.FIRST_AID, padded = false) {
@@ -116,8 +116,10 @@ fun MozScreen(content: Content?, n: Int, nav: Nav) {
         if (content == null) return@Frame Loading()
         val moz = content.moz441
         if (moz == null || p == null) return@Frame Broken()
-        val medic = HomePrefs.state.collectAsState().value?.medic == true
+        val medic = rememberMark(KEY_MEDIC)
         var full by rememberSaveable(n) { mutableStateOf(medic) }
+        // The mark is read from the encrypted data a moment after the screen opens
+        androidx.compose.runtime.LaunchedEffect(medic) { if (medic) full = true }
         ChoiceRow {
             FilterChip(selected = !full, onClick = { full = false }, label = { ChipText(stringResource(R.string.moz_steps)) }, modifier = Modifier.heightIn(min = 48.dp))
             FilterChip(selected = full, onClick = { full = true }, label = { ChipText(stringResource(R.string.moz_full)) }, modifier = Modifier.heightIn(min = 48.dp))

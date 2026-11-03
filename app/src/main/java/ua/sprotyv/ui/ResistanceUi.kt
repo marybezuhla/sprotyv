@@ -175,11 +175,13 @@ fun ResistanceScreen(content: Content?, nav: Nav) {
         // Support the country: donations to the largest funds, bonds, blood, reporting
         LinkGroup(stringResource(R.string.resist_support_title), stringResource(R.string.resist_support_intro), links.filter { it.group == "support" }, toolbar, context)
         // Military service: only for adults who choose to see it
+        // The choice is kept encrypted in "My data": with its lock on, it shows after the fingerprint or PIN
+        val serviceOn = rememberMark(KEY_SERVICE)
         Block(stringResource(R.string.service_title), Group.PREPARE, tint = resist()) {
-            Toggle(stringResource(R.string.service_toggle), prefs?.service == true) { on -> HomePrefs.update(context) { it.copy(service = on) } }
-            Text(stringResource(R.string.service_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            if (marksOpen()) Toggle(stringResource(R.string.service_toggle), serviceOn) { on -> Marks.set(KEY_SERVICE, on) }
+            Text(stringResource(if (marksOpen()) R.string.service_hint else R.string.service_closed), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
-        if (prefs?.service == true) {
+        if (serviceOn) {
             Block(stringResource(R.string.service_facts_title), Group.PREPARE, tint = resist(), foldable = true) {
                 listOf(R.string.service_fact_1, R.string.role_dobro_contracts, R.string.role_dobro_tro, R.string.service_fact_3, R.string.service_fact_4, R.string.service_fact_5, R.string.role_dobro_rights).forEach {
                     Row { Text("•", modifier = Modifier.padding(end = 8.dp).clearAndSetSemantics { }); Text(stringResource(it), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f)) }

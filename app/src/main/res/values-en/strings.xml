@@ -687,8 +687,7 @@
     <string name="moz_card_button">Official Ministry procedure</string>
     <string name="moz_medic_note">These procedures set out what people without medical training do (point 1 of each). The full text is here so you know what people nearby will do and can hand them steps.</string>
     <string name="medic_title">Medical training</string>
-    <string name="medic_toggle">I have medical training</string>
-    <string name="medic_hint">Ministry procedures open at once as the full text in the order’s numbering. Steps for people nearby stay one tap away. For everyone else: the same words of the order, as steps.</string>
+    <string name="medic_where">The “I treat and save” mark is now kept encrypted in “My data” (Who I am now). With it, Ministry procedures open in full and the medic’s tools appear; with the lock on “My data”, after the fingerprint or PIN.</string>
     <string name="notes_title_screen">My notes</string>
     <string name="notes_hint">Anything you want to keep, encrypted</string>
     <string name="notes_intro">Notes for you only: addresses, numbers, arrangements. Encrypted with “My data”, in the backup, hidden in trip mode.</string>
@@ -752,6 +751,7 @@
     <string name="service_where">Where to turn about service</string>
     <string name="service_title">Military service (18+)</string>
     <string name="service_toggle">Show how joining the service works</string>
+    <string name="service_closed">This choice is kept encrypted in “My data”. Open “My data” to see or change it.</string>
     <string name="service_hint">Only facts from official sources, rights and risks. The decision is yours alone.</string>
     <string name="service_facts_title">How joining the service works</string>
     <string name="service_fact_1">You can serve under contract or through mobilisation. Recruitment lets you choose a unit and a post that fits your skills.</string>
@@ -1137,7 +1137,7 @@
     <string name="roles_hint">Your roles in the resistance: steps, facts and support for you</string>
     <string name="roles_intro">Choose who you are now: several roles or none. A role suggests your next step and where to find support. Change it any time.</string>
     <string name="roles_mine">My roles</string>
-    <string name="roles_private">Roles are encrypted in “My data”; only you see them. Only the “I treat and save” mark is kept in settings, as before. No scores, no rankings.</string>
+    <string name="roles_private">Roles, the “I treat and save” mark and the choice about service are encrypted in “My data”; only you see them. No scores, no rankings.</string>
     <string name="circle_care">Care</string>
     <string name="circle_defence">Defence</string>
     <string name="circle_help">Help</string>

@@ -999,10 +999,10 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
             TripToggle(prefs.trip)
             NeutralToggle()
         }
-        // Medical training: first-aid procedures as the full official text instead of steps
+        // Medical training is a role, kept encrypted in "My data" (no longer a plain setting)
         Block(stringResource(R.string.medic_title), ua.sprotyv.home.Group.FIRST_AID, foldable = true) {
-            Toggle(stringResource(R.string.medic_toggle), prefs.medic) { on -> HomePrefs.update(context) { it.copy(medic = on) } }
-            Text(stringResource(R.string.medic_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(stringResource(R.string.medic_where), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            BlockRow(stringResource(R.string.roles_title), first = true) { nav.go(Route.Mine(MinePart.ROLES)) }
         }
         Block(stringResource(R.string.colour_title), ua.sprotyv.home.Group.GUIDE, foldable = true) { ColourLegend() }
         Block(stringResource(R.string.settings_about), ua.sprotyv.home.Group.GUIDE, foldable = true) {

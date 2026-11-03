@@ -37,10 +37,6 @@ object HomePrefs {
         val gart: String = "",
         /** Trip mode: the owner's data and sensitive sources are off every screen (see [Trip]). */
         val trip: Boolean = false,
-        /** The owner has medical training: first-aid procedures open as the full official text. */
-        val medic: Boolean = false,
-        /** Facts about military service shown in "Resistance" (adults who chose to see them). */
-        val service: Boolean = false,
     )
 
     private const val FILE = "home"
@@ -59,8 +55,6 @@ object HomePrefs {
     private const val ROLES_COUNT = "roles_count"
     private const val GART = "gart_share"
     private const val TRIP = "trip"
-    private const val MEDIC = "medic"
-    private const val SERVICE = "service"
 
     private val flow = MutableStateFlow<State?>(null)
     val state: StateFlow<State?> = flow.asStateFlow()
@@ -86,8 +80,6 @@ object HomePrefs {
             rolesCount = p.getInt(ROLES_COUNT, 0).coerceIn(0, 50),
             gart = p.getString(GART, null).orEmpty().take(30),
             trip = p.getBoolean(TRIP, false),
-            medic = p.getBoolean(MEDIC, false),
-            service = p.getBoolean(SERVICE, false),
         )
         flow.value = s
         return s
@@ -108,8 +100,6 @@ object HomePrefs {
             put("dynamic", s.dynamic.toString())
             put("call_bar", s.callBar.toString())
             put("readiness_hidden", s.readinessHidden.toString())
-            put("medic", s.medic.toString())
-            put("service", s.service.toString())
             // "We hold on": the numbers lived through travel with the backup
             Held.KINDS.forEach { k -> put("held_$k", Held.get(context, k).toString()) }
         }
@@ -118,6 +108,8 @@ object HomePrefs {
     /** Applies a backup's look and set-up; anything unknown or malformed is left as it is. */
     fun import(context: Context, home: Map<String, String>) {
         if (home.isEmpty()) return
+        // Marks from an old backup move into the encrypted data when it next opens
+        Marks.keepLegacy(context, home)
         Held.KINDS.forEach { k -> home["held_$k"]?.toIntOrNull()?.let { Held.set(context, k, it) } }
         fun flag(k: String, now: Boolean) = home[k]?.toBooleanStrictOrNull() ?: now
         update(context) { s ->
@@ -129,8 +121,6 @@ object HomePrefs {
                 dynamic = flag("dynamic", s.dynamic),
                 callBar = flag("call_bar", s.callBar),
                 readinessHidden = flag("readiness_hidden", s.readinessHidden),
-                medic = flag("medic", s.medic),
-                service = flag("service", s.service),
             )
         }
     }
@@ -153,8 +143,6 @@ object HomePrefs {
             .putInt(ROLES_COUNT, next.rolesCount)
             .putString(GART, next.gart)
             .putBoolean(TRIP, next.trip)
-            .putBoolean(MEDIC, next.medic)
-            .putBoolean(SERVICE, next.service)
             .apply()
     }
 }
