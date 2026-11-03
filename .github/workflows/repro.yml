@@ -1,0 +1,86 @@
+name: Reproducible build check
+
+# Run by hand (or by pushing the repro-check branch): builds the unsigned APK twice, on different
+# machines, Java builds, folders, time zones and languages, then compares them byte for byte.
+# F-Droid builds the app itself and can publish it with our signature only if its build matches ours.
+on:
+  workflow_dispatch:
+  push:
+    branches: [repro-check]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - name: a
+            os: ubuntu-latest
+            java: temurin
+            dir: sprotyv
+            tz: UTC
+            lang: C.UTF-8
+          - name: b
+            os: ubuntu-22.04
+            java: zulu
+            dir: elsewhere/build-here
+            tz: Pacific/Auckland
+            lang: uk_UA.UTF-8
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 40
+    env:
+      TZ: ${{ matrix.tz }}
+      LANG: ${{ matrix.lang }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+          path: ${{ matrix.dir }}
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
+        with:
+          distribution: ${{ matrix.java }}
+          java-version: 17
+      - name: Install Gradle (checksum verified)
+        shell: bash
+        working-directory: ${{ matrix.dir }}
+        run: bash scripts/ci/install_gradle.sh
+      - name: Build (unsigned, no cache)
+        shell: bash
+        working-directory: ${{ matrix.dir }}
+        run: |
+          set -o pipefail
+          gradle --no-daemon --no-build-cache assembleRelease 2>&1 | tail -20
+          cp app/build/outputs/apk/release/app-release-unsigned.apk "$RUNNER_TEMP/${{ matrix.name }}.apk"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: apk-${{ matrix.name }}
+          path: ${{ runner.temp }}/${{ matrix.name }}.apk
+          retention-days: 3
+
+  compare:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          pattern: apk-*
+          merge-multiple: true
+          path: out
+      - name: Compare
+        shell: bash
+        run: |
+          cd out
+          sha256sum a.apk b.apk | tee -a "$GITHUB_STEP_SUMMARY"
+          if cmp -s a.apk b.apk; then
+            echo "SAME: the two builds are identical byte for byte" | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          echo "DIFFERENT: entries that differ:" | tee -a "$GITHUB_STEP_SUMMARY"
+          mkdir A B && (cd A && unzip -q ../a.apk) && (cd B && unzip -q ../b.apk)
+          diff -rq A B | tee -a "$GITHUB_STEP_SUMMARY" || true
+          # The zip layout itself (order, times, compression) when the contents are the same
+          zipinfo -v a.apk > a.txt; zipinfo -v b.apk > b.txt
+          diff a.txt b.txt | head -60 | tee -a "$GITHUB_STEP_SUMMARY" || true
+          exit 1
