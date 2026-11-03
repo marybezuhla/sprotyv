@@ -25,7 +25,7 @@
 
     <string name="back">Back</string>
     <string name="coming_soon">This section is being prepared. It will come in one of the next updates.</string>
-    <string name="alarm_not_yet">Alerts come in version 1.1. Until then keep the official “Air Alert” app and always listen to the sirens.</string>
+    <string name="alarm_not_yet">Sprotyv does not show alerts. Keep the official “Air Alert” app and always listen to the sirens.</string>
 
     <string name="opening">Opening…</string>
     <string name="try_again_title">Could not open your data yet</string>

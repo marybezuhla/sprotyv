@@ -52,7 +52,7 @@ LINKS = [
     # Help
     link("app-112", "help", "official", "112 Ukraine (МВС)",
          "Виклик 112 через інтернет, коли немає мобільного зв'язку. Увійдіть заздалегідь через ID.GOV.UA.",
-         url="https://play.google.com/store/apps/details?id=ua.gov.mvs.service112", app="ua.gov.mvs.service112"),
+         url="https://hsc.gov.ua/2025/12/18/zastosunok-112-vzhe-dostupnij-dlya-zavantazhennya-mvs-rozrobilo-ofitsijnij-servis-ekstrenoyi-dopomogi-yakij-pratsyuvatime-bez-mobilnogo-zv-yazku/", app="ua.gov.mvs.service112", checked="2026-11-03"),
     link("evacuation", "help", "official", "Лінія евакуації 1548",
          "Цілодобова державна гаряча лінія з кризових питань, зокрема евакуації.",
          phone="1548"),

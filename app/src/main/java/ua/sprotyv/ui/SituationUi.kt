@@ -128,7 +128,7 @@ fun SituationScreen(content: Content?, nav: Nav) {
             ),
             style = MaterialTheme.typography.bodyMedium,
         )
-        if (trace != Reach.Trace.FOCUS && trace != Reach.Trace.FOCUS_NOT_FROM_PLAY && Reach.hasPlay(context)) {
+        if (trace != Reach.Trace.FOCUS && trace != Reach.Trace.FOCUS_NOT_FROM_PLAY && Reach.hasPlay(context) && !Reach.fromFdroid(context)) {
             // Any phone, any main browser: Firefox Focus erases pages on closing
             androidx.compose.material3.TextButton(
                 onClick = { Reach.open(context, FOCUS_PAGE, toolbarColor = toolbar) },
