@@ -5,6 +5,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -201,8 +202,9 @@ private fun BlockView(b: Block) {
 @Composable
 private fun ItemView(mark: String, item: Item, depth: Int = 0) {
     Row(Modifier.padding(start = (depth * 16).dp)) {
-        val markModifier = Modifier.width(28.dp).let { m -> if (mark.first().isDigit()) m else m.clearAndSetSemantics { } }
-        Text(mark, style = MaterialTheme.typography.bodyLarge, modifier = markModifier)
+        // At least the usual width, more with large text, so "10." never wraps
+        val markModifier = Modifier.widthIn(min = 28.dp).padding(end = 4.dp).let { m -> if (mark.first().isDigit()) m else m.clearAndSetSemantics { } }
+        Text(mark, style = MaterialTheme.typography.bodyLarge, softWrap = false, modifier = markModifier)
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
             RichText(item.text, style = ReadingText)
             item.sub.forEach { ItemView("–", it, depth + 1) }

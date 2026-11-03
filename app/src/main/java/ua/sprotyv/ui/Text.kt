@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -109,6 +110,7 @@ fun Block(
 ) {
     val tint = tint ?: group.tint()
     var open by androidx.compose.runtime.saveable.rememberSaveable(title) { androidx.compose.runtime.mutableStateOf(startOpen) }
+    val foldState = stringResource(if (open) R.string.state_open else R.string.state_closed)
     androidx.compose.material3.Card(
         colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         border = androidx.compose.foundation.BorderStroke(1.dp, tint.container),
@@ -116,7 +118,9 @@ fun Block(
     ) {
         val header = Modifier.fillMaxWidth().background(tint.container)
         Row(
-            (if (foldable) header.clickable(onClickLabel = stringResource(if (open) R.string.shelf_fold else R.string.shelf_unfold)) { open = !open }.heightIn(min = 56.dp) else header)
+            (if (foldable) header.clickable(onClickLabel = stringResource(if (open) R.string.shelf_fold else R.string.shelf_unfold)) { open = !open }.heightIn(min = 56.dp)
+                // TalkBack says whether it is open, not only what a tap does
+                .semantics { stateDescription = foldState } else header)
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
