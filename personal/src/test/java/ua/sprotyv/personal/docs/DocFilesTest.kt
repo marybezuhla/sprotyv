@@ -40,8 +40,16 @@ class DocFilesTest {
         val files = DocFiles(tmp.newFolder("docs"))
         val a = files.write(ByteArray(10).inputStream())
         val b = files.write(ByteArray(10).inputStream())
-        files.sweep(setOf(a.file))
+        files.sweep(setOf(a.file), graceMs = 0)
         assertTrue(java.io.File(files.dir, a.file).exists())
         assertFalse(java.io.File(files.dir, b.file).exists())
+    }
+
+    @Test fun sweepSparesFreshFiles() {
+        val files = DocFiles(tmp.newFolder("docs"))
+        val a = files.write(ByteArray(10).inputStream())
+        // Just written, no row yet (an import in progress): kept
+        files.sweep(emptySet())
+        assertTrue(java.io.File(files.dir, a.file).exists())
     }
 }
