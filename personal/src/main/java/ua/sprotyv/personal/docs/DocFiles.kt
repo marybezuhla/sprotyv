@@ -91,8 +91,9 @@ class DocFiles(val dir: File) {
     companion object {
         /** No more than this many documents, each and in all at most so large: only the most valuable. */
         const val MAX_DOCS = 20
-        const val MAX_FILE_BYTES = 10L * 1024 * 1024
-        const val MAX_TOTAL_BYTES = 100L * 1024 * 1024
+        // Decimal megabytes, as the phone itself shows sizes
+        const val MAX_FILE_BYTES = 10_000_000L
+        const val MAX_TOTAL_BYTES = 100_000_000L
 
         private const val KEY_BYTES = 32
         private const val SEGMENT_BYTES = 64 * 1024
