@@ -6,7 +6,7 @@ A free civil-protection app for Ukraine: what to do right now when it is dangero
 <li><b>A guide</b> to survival and basic first aid, the Ministry of Health first-aid procedures, the Constitution and the Rules of the Road in full (the last three in Ukrainian).</li>
 <li><b>Daily life in a crisis:</b> no power, heat, water, gas or connection.</li>
 <li><b>I am safe:</b> a ready message to your family via WhatsApp, Signal or SMS.</li>
-<li><b>My data:</b> medical card, family plan, trusted people, go-bag, supplies, notes. All encrypted and kept only on the phone; a backup with a password.</li>
+<li><b>My data:</b> medical card, family plan, trusted people, go-bag, supplies, notes, documents (scans and PDFs). All encrypted and kept only on the phone; a backup with a password.</li>
 <li><b>Readiness:</b> roles, a readiness path, daily resilience, shields and counts of good deeds; where to learn, including the regional centres for national resistance.</li>
 <li><b>Widgets,</b> simple and full looks, a kids' mode, trip mode and a neutral icon.</li>
 <li><b>112</b> on every screen; a tap opens the dialler.</li>

@@ -1,0 +1,1 @@
+Documents in My data: scans and PDFs, each encrypted with its own key, viewed inside the app and kept in the backup. The "I treat and save" and service marks are now encrypted. Search finds cards, first aid is grouped, links in English.
