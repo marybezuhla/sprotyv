@@ -15,7 +15,7 @@ import java.io.File
 
 /**
  * A database in layout 3, as phones have it before version 0.3.0, opened by today's app: Room's
- * automatic migration adds the pregnancy line and keeps everything else. (Without encryption here:
+ * automatic migrations add the pregnancy line (4) and the documents table (5) and keep everything else. (Without encryption here:
  * the layout change is the same inside SQLCipher.)
  */
 @RunWith(RobolectricTestRunner::class)
@@ -23,7 +23,7 @@ import java.io.File
 class MigrationTest {
     private val app: Application = ApplicationProvider.getApplicationContext()
 
-    @Test fun layout3To4KeepsTheMedicalCard() {
+    @Test fun layout3ToTodayKeepsTheMedicalCard() {
         val schema = JSONObject(File("../personal/schemas/ua.sprotyv.personal.PersonalDb/3.json").readText()).getJSONObject("database")
         val file = app.getDatabasePath("migration-test.db").apply { parentFile?.mkdirs(); delete() }
         SQLiteDatabase.openOrCreateDatabase(file, null).use { db ->
@@ -44,7 +44,9 @@ class MigrationTest {
             assertEquals("A(II) Rh+", card.bloodGroup)
             assertEquals("пилок", card.allergies)
             assertEquals("", card.pregnancy)
-            assertEquals(4, room.openHelper.readableDatabase.version)
+            assertEquals(5, room.openHelper.readableDatabase.version)
+            // Layout 5 adds the documents table, empty
+            assertEquals(0, runBlocking { room.documents().count() })
         } finally {
             room.close()
             file.delete()
