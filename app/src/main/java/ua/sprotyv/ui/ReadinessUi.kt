@@ -3,6 +3,7 @@ package ua.sprotyv.ui
 import androidx.compose.runtime.LaunchedEffect
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.widthIn
 
 import androidx.compose.ui.draw.clip
 
@@ -223,7 +224,7 @@ fun ReadinessStrip(nav: Nav) {
                     Modifier.padding(end = 12.dp).clearAndSetSemantics { contentDescription = "${names[i]}: ${p.done} / ${p.total}" },
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text(names[i], style = MaterialTheme.typography.bodyMedium, modifier = Modifier.width(112.dp))
+                    Text(names[i], style = MaterialTheme.typography.bodyMedium, modifier = Modifier.widthIn(min = 112.dp, max = 180.dp))
                     Canvas(Modifier.weight(1f).height(8.dp)) {
                         val r = CornerRadius(size.height / 2)
                         drawRoundRect(track, cornerRadius = r)

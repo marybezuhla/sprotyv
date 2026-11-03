@@ -311,6 +311,8 @@
     <string name="backup_save">Зберегти копію</string>
     <string name="backup_save_note">Файл записується лише в нове місце й одразу перевіряється. Забутий пароль не відновити.</string>
     <string name="backup_restore_title">Відновити з копії</string>
+    <string name="state_open">Розгорнуто</string>
+    <string name="state_closed">Згорнуто</string>
     <string name="docs_title">Документи</string>
     <string name="docs_hint">Скани паспорта, свідоцтв, аналізів: зашифровано</string>
     <string name="docs_intro">Лише найцінніше: скан паспорта, свідоцтва, аналізи, виписки. Файли зашифровано, як і решту «Мого»; їх видно лише тут. Цифрові паспорт і посвідчення вже є в Дії.</string>

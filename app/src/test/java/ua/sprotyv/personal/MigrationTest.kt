@@ -52,4 +52,31 @@ class MigrationTest {
             file.delete()
         }
     }
+
+    /** The oldest layout (1, before 0.2) to today, step by step through every automatic migration. */
+    @Test fun layout1ToTodayKeepsSettings() {
+        val schema = JSONObject(File("../personal/schemas/ua.sprotyv.personal.PersonalDb/1.json").readText()).getJSONObject("database")
+        val file = app.getDatabasePath("migration-test-1.db").apply { parentFile?.mkdirs(); delete() }
+        SQLiteDatabase.openOrCreateDatabase(file, null).use { db ->
+            val entities = schema.getJSONArray("entities")
+            for (i in 0 until entities.length()) {
+                val e = entities.getJSONObject(i)
+                db.execSQL(e.getString("createSql").replace("\${TABLE_NAME}", e.getString("tableName")))
+            }
+            val setup = schema.getJSONArray("setupQueries")
+            for (i in 0 until setup.length()) db.execSQL(setup.getString(i))
+            db.execSQL("INSERT INTO settings (`key`, value) VALUES ('safe_message', 'Я в безпеці')")
+            db.version = 1
+        }
+        val room = Room.databaseBuilder(app, PersonalDb::class.java, file.absolutePath).allowMainThreadQueries().build()
+        try {
+            assertEquals("Я в безпеці", runBlocking { room.settings().get("safe_message") })
+            assertEquals(0, runBlocking { room.notes().all().size })
+            assertEquals(0, runBlocking { room.documents().count() })
+            assertEquals(5, room.openHelper.readableDatabase.version)
+        } finally {
+            room.close()
+            file.delete()
+        }
+    }
 }

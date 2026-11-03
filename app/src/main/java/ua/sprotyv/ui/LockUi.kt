@@ -31,6 +31,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -46,7 +48,11 @@ import javax.crypto.Cipher
  * the PIN only. Sprotyv never sees the PIN or the fingerprint; the key itself refuses to work
  * without this confirmation. [onDone] gets the confirmed cipher, or null when cancelled or failed.
  */
+/** The last thing Android's window said went wrong; shown on the locked screen too, where it does not vanish. */
+val LockNotice = kotlinx.coroutines.flow.MutableStateFlow<String?>(null)
+
 fun askOwner(activity: Activity, title: String, cipher: Cipher, pinOnly: Boolean, onDone: (Cipher?) -> Unit) {
+    LockNotice.value = null
     val prompt = BiometricPrompt.Builder(activity)
         .setTitle(title)
         .setAllowedAuthenticators(
@@ -66,6 +72,7 @@ fun askOwner(activity: Activity, title: String, cipher: Cipher, pinOnly: Boolean
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                 if (errorCode != BiometricPrompt.BIOMETRIC_ERROR_USER_CANCELED && errorCode != BiometricPrompt.BIOMETRIC_ERROR_CANCELED) {
                     android.widget.Toast.makeText(activity.applicationContext, errString, android.widget.Toast.LENGTH_LONG).show()
+                    LockNotice.value = errString.toString()
                 }
                 Away.back()
                 onDone(null)
@@ -75,6 +82,7 @@ fun askOwner(activity: Activity, title: String, cipher: Cipher, pinOnly: Boolean
         // The window could not even start: said, and the reason kept for feedback
         PersonalStore.noteLockTrouble(e)
         android.widget.Toast.makeText(activity.applicationContext, activity.getString(R.string.lock_mine_failed), android.widget.Toast.LENGTH_LONG).show()
+        LockNotice.value = activity.getString(R.string.lock_mine_failed)
         Away.back()
         onDone(null)
     }
@@ -122,6 +130,9 @@ fun LockedView(pinOnly: Boolean) {
         Text(stringResource(R.string.lock_mine_locked), style = MaterialTheme.typography.headlineSmall, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, textAlign = androidx.compose.ui.text.style.TextAlign.Center, modifier = Modifier.semantics { heading() })
         Text(stringResource(if (pinOnly) R.string.lock_mine_locked_pin else R.string.lock_mine_locked_text), style = MaterialTheme.typography.bodyLarge, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
         if (trouble) Text(stringResource(R.string.lock_mine_trouble), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.error, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+        // What Android's window said (too many tries, say), kept on the screen until the next try
+        val said by LockNotice.collectAsState()
+        said?.let { Text(it, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.error, textAlign = androidx.compose.ui.text.style.TextAlign.Center, modifier = Modifier.semantics { liveRegion = androidx.compose.ui.semantics.LiveRegionMode.Polite }) }
         Button(onClick = ::ask, enabled = !busy, modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp)) { Text(title, style = MaterialTheme.typography.titleMedium) }
         Text(stringResource(R.string.lock_mine_112_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
         Text(stringResource(R.string.lock_mine_forgot), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = androidx.compose.ui.text.style.TextAlign.Center)

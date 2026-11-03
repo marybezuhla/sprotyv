@@ -2,6 +2,7 @@ package ua.sprotyv.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -393,7 +394,8 @@ private fun Why(why: String, key: String) {
 @Composable
 private fun StepNumber(n: Int, active: Boolean) {
     Box(
-        Modifier.size(36.dp).clip(CircleShape)
+        // Grows with large text instead of clipping the number
+        Modifier.defaultMinSize(36.dp, 36.dp).clip(CircleShape)
             .background(if (active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primaryContainer),
         contentAlignment = Alignment.Center,
     ) {
@@ -478,5 +480,17 @@ fun KeepScreenOn() {
     androidx.compose.runtime.DisposableEffect(view) {
         view.keepScreenOn = true
         onDispose { view.keepScreenOn = false }
+    }
+}
+
+/** The screen at full brightness while shown (a code held out to be scanned), as it was afterwards. */
+@Composable
+fun FullBrightness() {
+    val activity = androidx.compose.ui.platform.LocalContext.current as? android.app.Activity ?: return
+    androidx.compose.runtime.DisposableEffect(activity) {
+        val window = activity.window
+        val before = window.attributes.screenBrightness
+        window.attributes = window.attributes.apply { screenBrightness = 1f }
+        onDispose { window.attributes = window.attributes.apply { screenBrightness = before } }
     }
 }

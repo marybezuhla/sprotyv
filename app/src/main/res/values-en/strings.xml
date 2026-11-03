@@ -311,6 +311,8 @@
     <string name="backup_save">Save backup</string>
     <string name="backup_save_note">Written only into a new file and checked at once. A forgotten password cannot be recovered.</string>
     <string name="backup_restore_title">Restore from a backup</string>
+    <string name="state_open">Expanded</string>
+    <string name="state_closed">Collapsed</string>
     <string name="docs_title">Documents</string>
     <string name="docs_hint">Scans of a passport, certificates, test results: encrypted</string>
     <string name="docs_intro">Only the most valuable: a passport scan, certificates, test results, discharge letters. Files are encrypted like the rest of “My data” and show only here. A digital passport and IDs are already in Diia.</string>
