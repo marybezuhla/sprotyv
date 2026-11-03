@@ -69,7 +69,8 @@ object BackupLines {
         s.settings.forEach { rec("setting", BackupData.setting(it)) }
         s.notes.forEach { rec("note", BackupData.note(it)) }
         if (s.home.isNotEmpty()) rec("home", JSONObject().apply { s.home.toSortedMap().forEach { (k, v) -> put(k, v) } })
-        if (docs != null && source != null) {
+        // No marker for an empty list: restoring such a copy leaves the phone's documents as they are
+        if (!docs.isNullOrEmpty() && source != null) {
             rec("docs", JSONObject().put("n", docs.size))
             val buf = ByteArray(PART_BYTES)
             docs.forEachIndexed { i, d ->
@@ -123,6 +124,8 @@ object BackupLines {
         val docIds = HashSet<Long>()
         var docBytes = 0L
         var docId = -1L; var docSize = 0L; var docGot = 0L; var docPart = 0
+        var inDoc = false
+        var docsPromised = -1
         // Document lines are counted apart: "records" stays the owner's records, as the screen shows them
         var docLines = 0
         while (true) {
@@ -131,7 +134,7 @@ object BackupLines {
             val o = parse(lines.next() ?: throw BackupData.Incompatible())
             val t = o.optString("t")
             // A document's parts come right after it, all of them
-            if (t != "docpart" && docId >= 0) throw BackupData.Incompatible()
+            if (t != "docpart" && inDoc) throw BackupData.Incompatible()
             if (t == "end") {
                 if (o.optInt("n", -1) != count || lines.next() != null) throw BackupData.Incompatible()
                 break
@@ -155,12 +158,14 @@ object BackupLines {
                     "docs" -> {
                         require(docsSeen < 0)
                         docsSeen = 0
-                        require(v.getInt("n") in 0..ua.sprotyv.personal.docs.DocFiles.MAX_DOCS)
+                        docsPromised = v.getInt("n")
+                        require(docsPromised in 0..ua.sprotyv.personal.docs.DocFiles.MAX_DOCS)
                         DocsMarker
                     }
                     "doc" -> {
                         require(docsSeen >= 0)
                         val id = v.getLong("id")
+                        require(id > 0)
                         val title = v.getString("title")
                         val mime = v.getString("mime")
                         val size = v.getLong("size")
@@ -169,11 +174,11 @@ object BackupLines {
                         require(size in 1..ua.sprotyv.personal.docs.DocFiles.MAX_FILE_BYTES)
                         docBytes += size
                         require(docBytes <= ua.sprotyv.personal.docs.DocFiles.MAX_TOTAL_BYTES)
-                        docId = id; docSize = size; docGot = 0; docPart = 0
-                        DocStart(id, title, mime, size, v.getLong("added"))
+                        docId = id; docSize = size; docGot = 0; docPart = 0; inDoc = true
+                        DocStart(id, title, mime, size, v.getLong("added").also { require(it >= 0) })
                     }
                     "docpart" -> {
-                        require(docId >= 0 && v.getLong("id") == docId && v.getInt("n") == docPart++)
+                        require(inDoc && v.getLong("id") == docId && v.getInt("n") == docPart++)
                         val bytes = java.util.Base64.getDecoder().decode(v.getString("b"))
                         require(bytes.isNotEmpty() && bytes.size <= PART_BYTES)
                         docGot += bytes.size
@@ -186,9 +191,10 @@ object BackupLines {
             if (t == "docs" || t == "doc" || t == "docpart") docLines++
             if (record != null) each(record)
             // The last part of a document closes it
-            if (t == "docpart" && docGot == docSize) { docId = -1; each(DocEnd) }
+            if (t == "docpart" && docGot == docSize) { inDoc = false; each(DocEnd) }
         }
-        if (docsSeen >= 0) require(docsSeen == docIds.size)
+        // As many documents, each whole, as the copy said it holds
+        if (docsSeen >= 0 && docsSeen != docsPromised) throw BackupData.Incompatible()
         return Summary(created, people.size, notes.size, count - skipped - homeSeen - docLines, skipped, home, docsSeen, docBytes)
     }
 
@@ -207,7 +213,11 @@ object BackupLines {
                     when (rec) {
                         // Documents in the copy replace those on the phone; a copy without them leaves them
                         DocsMarker -> db.documents().clear()
-                        is DocStart -> { start = rec; writer = files.writer() }
+                        is DocStart -> {
+                            // The reader closes each document before the next; anything else is not ours
+                            if (writer != null) throw BackupData.Incompatible()
+                            start = rec; writer = files.writer()
+                        }
                         is DocPart -> writer!!.write(rec.bytes)
                         DocEnd -> {
                             val s = start!!
@@ -225,6 +235,7 @@ object BackupLines {
         } finally {
             writer?.abort()
             // Files no row names (the old ones replaced, or new ones of a restore that did not finish) go
+            // (recent files are spared: an import may be about to name its file; they go at a later sweep)
             try { files.sweep(db.documents().files().toSet()) } catch (e: Exception) { }
         }
     }

@@ -66,7 +66,7 @@ class Main : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         // A document handed to another app is not kept plain for long
-        Docs.clearShared(this, 60_000)
+        Docs.clearSharedSoon(this)
         ShareIn.sync(this)
         closeLater.removeCallbacks(closeNow)
         Away.back()

@@ -80,6 +80,29 @@ object Docs {
     /** Longest side of a kept photo: text on a scanned page stays readable. */
     const val PHOTO_SIDE = 2400
 
+    /** Imports run outside any screen: leaving or turning the phone never leaves a half-done one behind. */
+    private val scope = kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.SupervisorJob() + Dispatchers.IO)
+    val busy = kotlinx.coroutines.flow.MutableStateFlow(false)
+    val notice = kotlinx.coroutines.flow.MutableStateFlow<Int?>(null)
+
+    /** Brings one file in; [cleanup] (the camera's plain photo) runs whatever happens. */
+    fun start(context: Context, uri: Uri, fallbackTitle: String, type: String? = null, cleanup: () -> Unit = {}) {
+        if (busy.value) { cleanup(); return }
+        busy.value = true
+        notice.value = null
+        val app = context.applicationContext
+        scope.launch {
+            try {
+                notice.value = import(app, uri, fallbackTitle, type)
+            } catch (e: Throwable) {
+                notice.value = R.string.docs_failed
+            } finally {
+                cleanup()
+                busy.value = false
+            }
+        }
+    }
+
     /** Brings a picked file or photo in: checked, encrypted, then named in the database. Returns a notice or null. */
     suspend fun import(context: Context, uri: Uri, fallbackTitle: String, typeHint: String? = null): Int? = withContext(Dispatchers.IO) {
         val app = context.applicationContext
@@ -110,19 +133,24 @@ object Docs {
             return@withContext R.string.docs_failed
         }
         if (w == null) return@withContext R.string.docs_failed
-        val notice = PersonalStore.read { db ->
-            val docs = db.documents()
-            when {
-                docs.count() >= DocFiles.MAX_DOCS -> R.string.docs_full_count
-                docs.bytes() + w.size > DocFiles.MAX_TOTAL_BYTES -> R.string.docs_full_space
-                else -> {
-                    docs.add(Document(title = title, mime = mime, size = w.size, file = w.file, key = w.key, addedAt = System.currentTimeMillis()))
-                    0
+        var notice: Int = R.string.docs_failed
+        try {
+            notice = PersonalStore.read { db ->
+                val docs = db.documents()
+                when {
+                    docs.count() >= DocFiles.MAX_DOCS -> R.string.docs_full_count
+                    docs.bytes() + w.size > DocFiles.MAX_TOTAL_BYTES -> R.string.docs_full_space
+                    else -> {
+                        docs.add(Document(title = title, mime = mime, size = w.size, file = w.file, key = w.key, addedAt = System.currentTimeMillis()))
+                        0
+                    }
                 }
-            }
-        } ?: R.string.docs_failed
-        w.key.fill(0)
-        if (notice != 0) files.delete(w.file)
+            } ?: R.string.docs_failed
+        } finally {
+            // A file that did not get its row goes at once; the key never stays in memory
+            w.key.fill(0)
+            if (notice != 0) files.delete(w.file)
+        }
         if (notice == 0) null else notice
     }
 
@@ -171,12 +199,23 @@ object Docs {
         null
     }
 
-    /** The plain bytes of a document, read from its encrypted file (at most its size limit). */
+    /** The plain bytes of a document, read from its encrypted file; null if it cannot be read. */
     suspend fun bytes(context: Context, id: Long): Pair<Document, ByteArray>? = withContext(Dispatchers.IO) {
         val doc = PersonalStore.read { it.documents().get(id) } ?: return@withContext null
         try {
-            doc to DocFiles.of(context).open(doc.file, doc.key).use { it.readBytes() }
-        } catch (e: Exception) {
+            val out = ByteArray(doc.size.toInt().coerceIn(0, DocFiles.MAX_FILE_BYTES.toInt()))
+            DocFiles.of(context).open(doc.file, doc.key).use { input ->
+                var got = 0
+                while (got < out.size) {
+                    val n = input.read(out, got, out.size - got)
+                    if (n < 0) break
+                    got += n
+                }
+                // Exactly the size the row says, and the end of the file checked (a cut file fails here)
+                if (got != out.size || input.read() != -1) { out.fill(0); return@withContext null }
+            }
+            doc to out
+        } catch (e: Throwable) {
             null
         } finally {
             doc.key.fill(0)
@@ -207,6 +246,16 @@ object Docs {
         shareDir(context).listFiles()?.forEach { if (now - it.lastModified() >= olderThanMs) it.delete() }
     }
 
+    private val clearLater = android.os.Handler(android.os.Looper.getMainLooper())
+
+    /** Back in the app: the plain copy handed out goes a minute later (the other app had time to take it). */
+    fun clearSharedSoon(context: Context) {
+        val app = context.applicationContext
+        if (shareDir(app).listFiles().isNullOrEmpty()) return
+        clearLater.removeCallbacksAndMessages(null)
+        clearLater.postDelayed({ Thread { clearShared(app) }.start() }, 60_000)
+    }
+
     fun share(context: Context, doc: Document, bytes: ByteArray) {
         val dir = shareDir(context).apply { mkdirs() }
         clearShared(context)
@@ -216,11 +265,10 @@ object Docs {
         file.writeBytes(bytes)
         val uri = FileProvider.getUriForFile(context, "${context.packageName}.files", file)
         val send = Intent(Intent.ACTION_SEND).setType(doc.mime).putExtra(Intent.EXTRA_STREAM, uri).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        Away.forOwnWindow()
+        // Not "our own window": another app is in front, so the data closes as on any leaving
         try {
             context.startActivity(Intent.createChooser(send, null).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION))
         } catch (e: Exception) {
-            Away.back()
             file.delete()
         }
     }
@@ -231,21 +279,19 @@ private fun sizeText(context: Context, bytes: Long): String = android.text.forma
 @Composable
 fun DocumentsScreen() {
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
     val docs by remember { PersonalStore.observe { it.documents().observe() } }.collectAsStateWithLifecycle(null)
-    var notice by remember { mutableStateOf<Int?>(null) }
-    var busy by remember { mutableStateOf(false) }
+    val notice by Docs.notice.collectAsStateWithLifecycle()
+    val busy by Docs.busy.collectAsStateWithLifecycle()
     var open by remember { mutableStateOf<DocInfo?>(null) }
-    // A copy given to another app earlier is not kept
-    LaunchedEffect(Unit) { withContext(Dispatchers.IO) { Docs.clearShared(context, 60_000) } }
-    val photoTitle = stringResource(R.string.docs_photo_title, java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy")))
-    fun bring(uri: Uri, type: String? = null, cleanup: () -> Unit = {}) {
-        busy = true
-        notice = null
-        scope.launch {
-            notice = try { Docs.import(context, uri, photoTitle, type) } finally { withContext(Dispatchers.IO) { cleanup() }; busy = false }
+    // A copy given to another app earlier is not kept; files left by an interrupted restore go
+    LaunchedEffect(Unit) {
+        withContext(Dispatchers.IO) {
+            Docs.clearShared(context, 60_000)
+            PersonalStore.read { db -> DocFiles.of(context).sweep(db.documents().files().toSet(), graceMs = 60 * 60_000L) }
         }
     }
+    val photoTitle = stringResource(R.string.docs_photo_title, java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy")))
+    fun bring(uri: Uri, type: String? = null, cleanup: () -> Unit = {}) = Docs.start(context, uri, photoTitle, type, cleanup)
     val pick = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         Away.back()
         if (uri != null) bring(uri)
@@ -310,11 +356,17 @@ fun DocumentsScreen() {
 @Composable
 private fun DocViewer(info: DocInfo, onClose: () -> Unit) {
     val context = LocalContext.current
-    val loaded by produceState<Pair<Document, ByteArray>?>(null, info.id) { value = Docs.bytes(context, info.id) }
+    // Loading, then the bytes, or a plain "could not open"
+    var failed by remember(info.id) { mutableStateOf(false) }
+    val loaded by produceState<Pair<Document, ByteArray>?>(null, info.id) {
+        val got = Docs.bytes(context, info.id)
+        if (got == null) failed = true
+        value = got
+        // Closed before it arrived: wiped at once
+        awaitDispose { got?.second?.fill(0) }
+    }
     var asking by remember { mutableStateOf<String?>(null) }
     var title by remember { mutableStateOf(info.title) }
-    // Nothing of the plain bytes stays once the viewer closes
-    DisposableEffect(info.id) { onDispose { loaded?.second?.fill(0) } }
     val screenshots = HomePrefs.state.collectAsStateWithLifecycle().value?.screenshots == true
     // Its own window: kept off screenshots and away from screen-reading apps like the screen beneath
     Dialog(onDismissRequest = onClose, properties = DialogProperties(usePlatformDefaultWidth = false, securePolicy = if (screenshots) androidx.compose.ui.window.SecureFlagPolicy.Inherit else androidx.compose.ui.window.SecureFlagPolicy.SecureOn)) {
@@ -322,12 +374,13 @@ private fun DocViewer(info: DocInfo, onClose: () -> Unit) {
         Surface(Modifier.fillMaxSize()) {
             Column(Modifier.statusBarsPadding().navigationBarsPadding()) {
                 Row(Modifier.fillMaxWidth().padding(horizontal = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Text(info.title, style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f).padding(8.dp))
+                    Text(title, style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f).padding(8.dp))
                     TextButton(onClick = onClose, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.back)) }
                 }
                 Column(Modifier.weight(1f).fillMaxWidth()) {
                     val l = loaded
                     when {
+                        l == null && failed -> Text(stringResource(R.string.docs_failed), modifier = Modifier.padding(16.dp))
                         l == null -> Loading()
                         l.first.mime == "application/pdf" -> PdfPages(l.second)
                         else -> PhotoView(l.second)

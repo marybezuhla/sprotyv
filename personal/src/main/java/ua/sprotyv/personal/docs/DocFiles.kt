@@ -79,9 +79,13 @@ class DocFiles(val dir: File) {
         if (NAME.matches(file)) File(dir, file).delete()
     }
 
-    /** Removes every file the database does not name (a restore that did not finish, a deleted row). */
-    fun sweep(keep: Set<String>) {
-        dir.listFiles()?.forEach { f -> if (f.name !in keep) f.delete() }
+    /**
+     * Removes files the database does not name (a restore that did not finish, a deleted row), but
+     * none newer than [graceMs]: an import may have written its file and not yet its row.
+     */
+    fun sweep(keep: Set<String>, graceMs: Long = 10 * 60_000L) {
+        val now = System.currentTimeMillis()
+        dir.listFiles()?.forEach { f -> if (f.name !in keep && now - f.lastModified() > graceMs) f.delete() }
     }
 
     companion object {

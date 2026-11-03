@@ -109,7 +109,7 @@ object HomePrefs {
     fun import(context: Context, home: Map<String, String>) {
         if (home.isEmpty()) return
         // Marks from an old backup move into the encrypted data when it next opens
-        Marks.keepLegacy(context, home)
+        Marks.fromOldBackup(home)
         Held.KINDS.forEach { k -> home["held_$k"]?.toIntOrNull()?.let { Held.set(context, k, it) } }
         fun flag(k: String, now: Boolean) = home[k]?.toBooleanStrictOrNull() ?: now
         update(context) { s ->
