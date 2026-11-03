@@ -254,13 +254,17 @@ fun NoteEditScreen(id: Long, nav: Nav) {
     }
     // One field: the first line is what the list shows as the note's name. A note written before
     // with a separate title shows it as its first line, and is kept so at the first change.
-    var text by remember(first) { mutableStateOf(listOf(first.title, first.text).filter { it.isNotBlank() }.joinToString("\n")) }
+    val key = "note:${first.id}"
+    // What is stored, and what is being written: the words change only on "Save", so a stray touch spoils nothing
+    var saved by remember(first) { mutableStateOf(listOf(first.title, first.text).filter { it.isNotBlank() }.joinToString("\n")) }
+    @Suppress("UNCHECKED_CAST")
+    var text by remember(first) { mutableStateOf((EditGuard.drafts[key] as? String) ?: saved) }
     var pinned by remember(first) { mutableStateOf(first.pinned) }
     var confirmDelete by remember { mutableStateOf(false) }
-    val key = "note:${first.id}"
-    fun save() {
-        val n = Note(first.id, "", text, pinned, System.currentTimeMillis())
+    fun store(t: String) {
+        val n = Note(first.id, "", t, pinned, System.currentTimeMillis())
         PersonalStore.save(key) { db -> if (db.notes().get(n.id) != null) db.notes().save(n) }
+        saved = t
     }
     // A note left empty goes; decided on the worker, after every save before it
     DisposableEffect(first.id) {
@@ -276,23 +280,59 @@ fun NoteEditScreen(id: Long, nav: Nav) {
             }
         }
     }
-    // A new note starts with the cursor in it
+    // A note opens to be read; its words change only after "Change", so a stray touch spoils nothing.
+    // A new (empty) note opens ready to write, with the cursor in it
+    var editing by androidx.compose.runtime.saveable.rememberSaveable(first.id) { mutableStateOf(saved.isEmpty() || EditGuard.drafts.containsKey(key)) }
+    // Unsaved words: leaving asks first; kept in memory only for a turn of the screen
+    androidx.compose.runtime.LaunchedEffect(text, saved, editing) {
+        val changed = editing && text != saved
+        EditGuard.mark(key, changed)
+        if (changed) EditGuard.drafts[key] = text else EditGuard.drafts.remove(key)
+    }
+    val activity = context as? android.app.Activity
+    DisposableEffect(key) { onDispose { if (activity?.isChangingConfigurations != true) { EditGuard.mark(key, false); EditGuard.drafts.remove(key) } } }
     val focus = remember { androidx.compose.ui.focus.FocusRequester() }
-    androidx.compose.runtime.LaunchedEffect(first.id) { if (text.isEmpty()) runCatching { focus.requestFocus() } }
-    // A plain note or a list with boxes, as the owner likes; switching keeps every word
+    androidx.compose.runtime.LaunchedEffect(first.id, editing) { if (editing && text.isEmpty()) runCatching { focus.requestFocus() } }
     val lines = text.lines()
     val list = isList(lines.drop(1))
+    if (!editing) {
+        androidx.compose.material3.Surface(
+            shape = MaterialTheme.shapes.medium, border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                if (!list) {
+                    androidx.compose.foundation.text.selection.SelectionContainer { Text(text, style = MaterialTheme.typography.bodyLarge) }
+                } else {
+                    val items = itemsOf(lines.drop(1))
+                    Text(lines.first(), style = MaterialTheme.typography.titleMedium)
+                    // Ticking what is done stays one tap away; the words themselves do not change here
+                    items.indices.sortedBy { if (items[it].done) 1 else 0 }.forEach { i ->
+                        val it0 = items[i]
+                        Row(Modifier.doneRow(it0.done), verticalAlignment = Alignment.CenterVertically) {
+                            androidx.compose.material3.Checkbox(colors = doneCheckbox(), checked = it0.done, onCheckedChange = { v ->
+                                text = listText(lines.first(), items.toMutableList().also { l -> l[i] = it0.copy(done = v) }).take(MAX_NOTE); store(text)
+                            })
+                            Text(it0.text, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f).padding(vertical = 12.dp))
+                        }
+                    }
+                }
+            }
+        }
+        OutlinedButton(onClick = { editing = true }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text(stringResource(R.string.edit)) }
+    } else {
+    // A plain note or a list with boxes, as the owner likes; switching keeps every word
     ChoiceRow {
         androidx.compose.material3.FilterChip(selected = !list, onClick = {
-            if (list) { text = (listOf(lines.first()) + itemsOf(lines.drop(1)).map { it.text }).joinToString("\n"); save() }
+            if (list) text = (listOf(lines.first()) + itemsOf(lines.drop(1)).map { it.text }).joinToString("\n")
         }, label = { ChipText(stringResource(R.string.notes_kind_text)) }, modifier = Modifier.heightIn(min = 48.dp))
         androidx.compose.material3.FilterChip(selected = list, onClick = {
-            if (!list) { text = listText(lines.first(), lines.drop(1).filter { it.isNotBlank() }.map { Item(it, false) }.ifEmpty { listOf(Item("", false)) }); save() }
+            if (!list) text = listText(lines.first(), lines.drop(1).filter { it.isNotBlank() }.map { Item(it, false) }.ifEmpty { listOf(Item("", false)) })
         }, label = { ChipText(stringResource(R.string.notes_kind_list)) }, modifier = Modifier.heightIn(min = 48.dp))
     }
     if (!list) {
         OutlinedTextField(
-            value = text, onValueChange = { text = it.take(MAX_NOTE); save() },
+            value = text, onValueChange = { text = it.take(MAX_NOTE) },
             placeholder = { Text(stringResource(R.string.notes_text_hint)) },
             textStyle = MaterialTheme.typography.bodyLarge,
             minLines = 6, modifier = Modifier.fillMaxWidth().focusRequester(focus),
@@ -301,7 +341,7 @@ fun NoteEditScreen(id: Long, nav: Nav) {
     } else {
         val name = lines.first()
         val items = itemsOf(lines.drop(1))
-        fun put(newName: String, newItems: List<Item>) { text = listText(newName, newItems).take(MAX_NOTE); save() }
+        fun put(newName: String, newItems: List<Item>) { text = listText(newName, newItems).take(MAX_NOTE) }
         OutlinedTextField(
             value = name, onValueChange = { v -> put(v.replace("\n", " "), items) }, singleLine = true,
             label = { ChipText(stringResource(R.string.notes_list_name)) }, textStyle = MaterialTheme.typography.titleMedium,
@@ -331,9 +371,15 @@ fun NoteEditScreen(id: Long, nav: Nav) {
         }
         TextButton(onClick = { put(name, items + Item("", false)) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.notes_list_add)) }
     }
-    Toggle(stringResource(R.string.notes_pin), pinned) { pinned = it; save() }
+    // Saved only now; "Cancel" brings back what was there
+    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Button(onClick = { store(text); editing = false }, enabled = text.isNotBlank(), modifier = Modifier.weight(1f).heightIn(min = 48.dp)) { Text(stringResource(R.string.save)) }
+        if (saved.isNotEmpty()) OutlinedButton(onClick = { text = saved; editing = false }, modifier = Modifier.weight(1f).heightIn(min = 48.dp)) { Text(stringResource(R.string.cancel)) }
+    }
+    }
+    Toggle(stringResource(R.string.notes_pin), pinned) { pinned = it; store(saved) }
     NoteReminder(first.id)
-    val whole = readable(text).trim()
+    val whole = readable(saved).trim()
     val fits = whole.isNotBlank() && whole.toByteArray(Charsets.UTF_8).size <= Qr.MAX_PLAN_BYTES
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         OutlinedButton(enabled = fits, onClick = { QrInbox.text = whole; nav.go(Route.QrText) }, modifier = Modifier.heightIn(min = 48.dp)) {

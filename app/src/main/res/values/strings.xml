@@ -742,7 +742,7 @@
     <string name="notes_pin">Закріпити вгорі</string>
     <string name="notes_as_qr">Показати QR-кодом</string>
     <string name="notes_too_long_for_qr">Задовга для QR-коду: скоротіть, щоб передати.</string>
-    <string name="notes_saved_hint">Зберігається, поки ви пишете.</string>
+    <string name="notes_saved_hint">Текст змінюється лише після «Зберегти»; позначки в списку зберігаються одразу.</string>
     <string name="notes_delete_confirm">Видалити цю нотатку?</string>
     <string name="kind_ngo">Громадська організація</string>
     <string name="resist_title">Спротив: внесок кожного</string>

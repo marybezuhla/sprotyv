@@ -343,14 +343,31 @@ fun SafeScreen(nav: Nav) {
             }
         }
     }
-    Field(stringResource(R.string.safe_message), text, {
-        text = it
-        // Only "I am fine" is kept as the owner's own words; the other two are written fresh each time
-        if (status == SafeStatus.OK) {
-            okText = it
-            PersonalStore.save("setting:$KEY_SAFE_MESSAGE") { db -> db.settings().put(ua.sprotyv.personal.Setting(KEY_SAFE_MESSAGE, it)) }
+    // The message is read first; it changes only after "Change", so a stray touch spoils nothing
+    var editingText by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(false) }
+    if (!editingText) {
+        ReadField(stringResource(R.string.safe_message), text)
+        OutlinedButton(onClick = { editingText = true }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.edit)) }
+    } else {
+        // Written aside; the message changes only on "Save"
+        var draft by remember(text) { mutableStateOf(text) }
+        androidx.compose.runtime.LaunchedEffect(draft, text) { EditGuard.mark("safe-message", draft != text) }
+        androidx.compose.runtime.DisposableEffect(Unit) { onDispose { EditGuard.mark("safe-message", false) } }
+        Field(stringResource(R.string.safe_message), draft, { draft = it }, multiline = true)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Button(onClick = {
+                text = draft
+                // Only "I am fine" is kept as the owner's own words; the other two are written fresh each time
+                if (status == SafeStatus.OK) {
+                    okText = draft
+                    val kept = draft
+                    PersonalStore.save("setting:$KEY_SAFE_MESSAGE") { db -> db.settings().put(ua.sprotyv.personal.Setting(KEY_SAFE_MESSAGE, kept)) }
+                }
+                editingText = false
+            }, modifier = Modifier.weight(1f).heightIn(min = 48.dp)) { Text(stringResource(R.string.save)) }
+            OutlinedButton(onClick = { draft = text; editingText = false }, modifier = Modifier.weight(1f).heightIn(min = 48.dp)) { Text(stringResource(R.string.cancel)) }
         }
-    }, multiline = true)
+    }
     // One SMS to each person is the surest: several numbers in one go may be sent as an MMS, which needs mobile data
     Text(stringResource(R.string.safe_each), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, modifier = Modifier.semantics { heading() })
     list.forEach { p ->

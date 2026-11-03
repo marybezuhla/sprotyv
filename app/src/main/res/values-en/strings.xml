@@ -734,7 +734,7 @@
     <string name="notes_pin">Pin to the top</string>
     <string name="notes_as_qr">Show as a QR code</string>
     <string name="notes_too_long_for_qr">Too long for a QR code: shorten it to pass on.</string>
-    <string name="notes_saved_hint">Saved as you type.</string>
+    <string name="notes_saved_hint">The words change only on “Save”; ticks in a list are kept at once.</string>
     <string name="notes_delete_confirm">Delete this note?</string>
     <string name="kind_ngo">Civic organisation</string>
     <string name="resist_title">Resistance: everyone’s part</string>
