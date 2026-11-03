@@ -135,7 +135,8 @@ object Docs {
         if (w == null) return@withContext R.string.docs_failed
         var notice: Int = R.string.docs_failed
         try {
-            notice = PersonalStore.read { db ->
+            // Only while the data is open: an import never waits for it (the owner left, trip mode)
+            notice = kotlinx.coroutines.withTimeoutOrNull(5_000) { PersonalStore.read { db ->
                 val docs = db.documents()
                 when {
                     docs.count() >= DocFiles.MAX_DOCS -> R.string.docs_full_count
@@ -145,11 +146,12 @@ object Docs {
                         0
                     }
                 }
-            } ?: R.string.docs_failed
+            } } ?: R.string.docs_failed
         } finally {
             // A file that did not get its row goes at once; the key never stays in memory
             w.key.fill(0)
             if (notice != 0) files.delete(w.file)
+            files.done(w.file)
         }
         if (notice == 0) null else notice
     }
@@ -253,11 +255,13 @@ object Docs {
         val app = context.applicationContext
         if (shareDir(app).listFiles().isNullOrEmpty()) return
         clearLater.removeCallbacksAndMessages(null)
-        clearLater.postDelayed({ Thread { clearShared(app) }.start() }, 60_000)
+        // Only copies at least a minute old: one shared again meanwhile keeps its own minute
+        clearLater.postDelayed({ Thread { clearShared(app, 60_000) }.start() }, 60_000)
     }
 
     fun share(context: Context, doc: Document, bytes: ByteArray) {
         val dir = shareDir(context).apply { mkdirs() }
+        clearLater.removeCallbacksAndMessages(null)
         clearShared(context)
         val ext = if (doc.mime == "application/pdf") "pdf" else "jpg"
         val name = doc.title.replace(Regex("[^\\p{L}\\p{N} ._-]"), "_").take(60).ifBlank { "document" } + "." + ext
@@ -285,6 +289,8 @@ fun DocumentsScreen() {
     var open by remember { mutableStateOf<DocInfo?>(null) }
     // A copy given to another app earlier is not kept; files left by an interrupted restore go
     LaunchedEffect(Unit) {
+        // An old message is not shown again on a later visit
+        if (!Docs.busy.value) Docs.notice.value = null
         withContext(Dispatchers.IO) {
             Docs.clearShared(context, 60_000)
             PersonalStore.read { db -> DocFiles.of(context).sweep(db.documents().files().toSet(), graceMs = 60 * 60_000L) }
@@ -359,7 +365,8 @@ private fun DocViewer(info: DocInfo, onClose: () -> Unit) {
     // Loading, then the bytes, or a plain "could not open"
     var failed by remember(info.id) { mutableStateOf(false) }
     val loaded by produceState<Pair<Document, ByteArray>?>(null, info.id) {
-        val got = Docs.bytes(context, info.id)
+        // Finished even if the viewer closes meanwhile, so the bytes are always wiped below
+        val got = withContext(kotlinx.coroutines.NonCancellable) { Docs.bytes(context, info.id) }
         if (got == null) failed = true
         value = got
         // Closed before it arrived: wiped at once

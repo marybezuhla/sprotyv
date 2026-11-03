@@ -43,10 +43,9 @@ object Marks {
         }
     }
 
-    /** For a backup's restore (the data is open then): an old backup's plain marks go straight into the encrypted data. */
-    fun fromOldBackup(home: Map<String, String>) {
-        LEGACY.forEach { (old, key) -> if (home[old]?.toBooleanStrictOrNull() == true) set(key, true) }
-    }
+    /** An old backup's plain marks, as the encrypted settings to write while the restore holds the data. */
+    fun fromOldBackup(home: Map<String, String>): List<Setting> =
+        LEGACY.filter { (old, _) -> home[old]?.toBooleanStrictOrNull() == true }.map { (_, key) -> Setting(key, "true") }
 
     /** Whether the encrypted data exists yet: screens that only read marks never create it. */
     fun dataExists(context: Context): Boolean = PersonalStore.lockMode(context) != null

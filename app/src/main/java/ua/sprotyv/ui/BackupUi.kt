@@ -336,6 +336,8 @@ object BackupJobs {
                                 readCopy(app, snap.uri, snap.key, md) { BackupLines.restore(db, it, BACKED_UP_SETTINGS, snap.summary, DocFiles.of(app)) { md.digest().contentEquals(snap.fingerprint) } }
                             }
                         }
+                        // A backup from before 1.1 has the marks among its plain settings: into the encrypted data, now
+                        Marks.fromOldBackup(snap.home).forEach { db.settings().put(it) }
                         true
                     }
                 } == true
