@@ -98,7 +98,7 @@ class PersonalScreensTest {
         kotlinx.coroutines.runBlocking { BackupData.replaceAll(d, snap, BACKED_UP_SETTINGS) }
         db = d
         PersonalStore.showForTest(d)
-        HomePrefs.update(app) { it.copy(mode = Mode.FULL, pins = Preset.GENERAL.pins, medic = false, trip = false) }
+        HomePrefs.update(app) { it.copy(mode = Mode.FULL, pins = Preset.GENERAL.pins, trip = false) }
     }
 
     @org.junit.After fun tearDown() {

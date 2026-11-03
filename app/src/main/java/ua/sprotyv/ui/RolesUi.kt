@@ -280,7 +280,7 @@ fun parseRoles(s: String?): Set<String> {
 @Composable
 fun rememberRoles(): Set<String>? {
     val stored by remember { PersonalStore.observe { db -> db.settings().observe(KEY_ROLES).map { listOf(it) } } }.collectAsStateWithLifecycle(null)
-    val medic = HomePrefs.state.collectAsState().value?.medic == true
+    val medic = rememberMark(KEY_MEDIC)
     val list = stored ?: return null
     return parseRoles(list.first()) + (if (medic) setOf(ROLE_MEDIC) else emptySet())
 }
@@ -298,7 +298,7 @@ fun RolesScreen(nav: Nav) {
     androidx.compose.runtime.LaunchedEffect(picked.size) { if (HomePrefs.load(context).rolesCount != picked.size) HomePrefs.update(context) { it.copy(rolesCount = picked.size) } }
     fun change(id: String, on: Boolean) {
         if (id == ROLE_MEDIC) {
-            HomePrefs.update(context) { it.copy(medic = on) }
+            Marks.set(KEY_MEDIC, on)
             return
         }
         // Service in the army: the facts about joining are shown by themselves for these roles (switched off any time)
@@ -306,7 +306,7 @@ fun RolesScreen(nav: Nav) {
         val serviceRoles = setOf("dobro", "serving", "veteran")
         if (id in serviceRoles) {
             val left = (if (on) picked + id else picked - id).any { it in serviceRoles }
-            if (HomePrefs.load(context).service != left) HomePrefs.update(context) { it.copy(service = left) }
+            Marks.set(KEY_SERVICE, left)
         }
         PersonalStore.save("setting:$KEY_ROLES:" + java.util.UUID.randomUUID()) { db ->
             val now = parseRoles(db.settings().get(KEY_ROLES))

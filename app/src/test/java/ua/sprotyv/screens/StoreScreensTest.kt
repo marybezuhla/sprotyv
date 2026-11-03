@@ -118,7 +118,7 @@ class StoreScreensTest {
         kotlinx.coroutines.runBlocking { BackupData.replaceAll(d, storeSnapshot(content, lang == "en"), BACKED_UP_SETTINGS) }
         db = d
         PersonalStore.showForTest(d)
-        HomePrefs.update(app) { it.copy(mode = Mode.FULL, pins = Preset.GENERAL.pins, medic = false, service = false, trip = false) }
+        HomePrefs.update(app) { it.copy(mode = Mode.FULL, pins = Preset.GENERAL.pins, trip = false) }
         fun title(id: Int) = app.getString(id)
         shot(dir, "1") { FullHome(content, Preset.GENERAL.pins, nav, {}, {}, {}) }
         shot(dir, "2") { NowScreen(content, nav) }

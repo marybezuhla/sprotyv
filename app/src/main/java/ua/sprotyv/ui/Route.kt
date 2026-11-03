@@ -55,6 +55,9 @@ sealed interface Route {
     /** Opens an outside source from "Situation" and comes straight back. */
     data class External(val id: String) : Route
 
+    /** Screens that change with the owner's encrypted marks ([Marks]): the data is opened for them when it opens by itself. */
+    val readsMarks: Boolean get() = this == MozList || this is Moz || this == Resistance
+
     /** Screens that show the owner's data: opened only with the data, kept off screenshots. */
     val personal: Boolean get() = this is Mine || this is NoteEdit || this == Open(Section.MINE) || this == Open(Section.SAFE) || this == SuppliesRoute || this is PathCheck || this is RoleRoute
 

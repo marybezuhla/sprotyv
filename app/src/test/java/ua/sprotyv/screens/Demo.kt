@@ -91,7 +91,7 @@ object Demo {
         }
         val home = mapOf(
             "mode" to "FULL", "pins" to Pins.write(Preset.GENERAL.pins), "lock" to "false", "theme" to "SYSTEM",
-            "dynamic" to "false", "call_bar" to "true", "readiness_hidden" to "false", "medic" to "false", "service" to "false",
+            "dynamic" to "false", "call_bar" to "true", "readiness_hidden" to "false",
             "neutral" to "false", "lock_mine" to "false",
             "notify_tourniquet" to "true", "notify_wait" to "true", "notify_counts" to "true",
             "notify_supplies" to "true", "notify_notes" to "true", "notify_kit" to "true", "notify_trip_all" to "false",
