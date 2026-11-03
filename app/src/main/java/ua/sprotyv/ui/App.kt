@@ -271,6 +271,7 @@ private fun Screen(
             MinePart.KID_CALL -> Personal(R.string.kid_call_family, personal, nav) { KidCallScreen() }
             MinePart.BOOKMARKS -> Personal(R.string.bookmarks_title, personal, nav) { BookmarksScreen() }
             MinePart.NOTES -> Personal(R.string.notes_title_screen, personal, nav) { NotesScreen(nav) }
+            MinePart.DOCUMENTS -> Personal(R.string.docs_title, personal, nav) { DocumentsScreen() }
             MinePart.PATH -> Personal(R.string.path_title, personal, nav) { PathScreen(nav) }
             MinePart.GART -> Personal(R.string.gart_title, personal, nav) { GartScreen(nav) }
             MinePart.NEW_PLACE -> Personal(R.string.np_title, personal, nav) { NewPlaceScreen(content, nav) }

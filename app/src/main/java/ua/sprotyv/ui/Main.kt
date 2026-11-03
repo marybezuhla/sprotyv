@@ -19,7 +19,7 @@ class Main : ComponentActivity() {
         enableEdgeToEdge()
         // A QR photo left from an earlier run goes. Not when Android restores the app, because a
         // photo just taken may be waiting to be read
-        if (savedInstanceState == null) clearScans(this)
+        if (savedInstanceState == null) { clearScans(this); Docs.clearShared(this) }
         HomePrefs.load(this)
         // A page shared from a browser; only on a fresh start, never again when Android restores the app
         if (savedInstanceState == null) Incoming.take(intent)
@@ -65,6 +65,8 @@ class Main : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
+        // A document handed to another app is not kept plain for long
+        Docs.clearShared(this, 60_000)
         ShareIn.sync(this)
         closeLater.removeCallbacks(closeNow)
         Away.back()

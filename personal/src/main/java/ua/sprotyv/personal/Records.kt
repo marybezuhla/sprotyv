@@ -192,3 +192,63 @@ interface NoteDao {
     @Query("DELETE FROM notes")
     suspend fun clear()
 }
+
+/**
+ * A document of the owner's own (a passport scan, test results): the file is encrypted on its own
+ * with [key], which lives only here, in the encrypted database. So the lock on "My data" covers
+ * the files too, and a file without its row opens nothing.
+ */
+@Entity(tableName = "documents")
+data class Document(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val title: String,
+    /** "image/jpeg" or "application/pdf". */
+    val mime: String,
+    /** Bytes before encryption. */
+    val size: Long,
+    /** The file's random name in the documents folder ([ua.sprotyv.personal.docs.DocFiles]). */
+    val file: String,
+    val key: ByteArray,
+    val addedAt: Long,
+) {
+    // Compared by what it is, not by the key array's identity
+    override fun equals(other: Any?): Boolean = other is Document && id == other.id && title == other.title && mime == other.mime &&
+        size == other.size && file == other.file && key.contentEquals(other.key) && addedAt == other.addedAt
+    override fun hashCode(): Int = file.hashCode()
+}
+
+/** A document as the list shows it: never its key. */
+data class DocInfo(val id: Long, val title: String, val mime: String, val size: Long, val addedAt: Long)
+
+@Dao
+interface DocumentDao {
+    @Query("SELECT id, title, mime, size, addedAt FROM documents ORDER BY addedAt DESC, id DESC")
+    fun observe(): Flow<List<DocInfo>>
+
+    @Query("SELECT * FROM documents WHERE id = :id")
+    suspend fun get(id: Long): Document?
+
+    @Query("SELECT * FROM documents ORDER BY id")
+    suspend fun all(): List<Document>
+
+    @Query("SELECT file FROM documents")
+    suspend fun files(): List<String>
+
+    @Query("SELECT COUNT(*) FROM documents")
+    suspend fun count(): Int
+
+    @Query("SELECT COALESCE(SUM(size), 0) FROM documents")
+    suspend fun bytes(): Long
+
+    @androidx.room.Insert
+    suspend fun add(d: Document): Long
+
+    @Query("UPDATE documents SET title = :title WHERE id = :id")
+    suspend fun rename(id: Long, title: String)
+
+    @Query("DELETE FROM documents WHERE id = :id")
+    suspend fun delete(id: Long)
+
+    @Query("DELETE FROM documents")
+    suspend fun clear()
+}

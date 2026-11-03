@@ -42,14 +42,14 @@ interface SettingDao {
 /**
  * The owner's own data, always encrypted with SQLCipher. Every layout change gets a migration,
  * never a wipe: versions 2 and 3 only add tables (3: notes), version 4 adds one column with a default
- * (the pregnancy line of the medical card), so Room's automatic migrations from
+ * (the pregnancy line of the medical card), version 5 adds the documents table, so Room's automatic migrations from
  * the committed layouts (personal/schemas) are exact.
  */
 @Database(
-    entities = [Setting::class, MedicalCard::class, Person::class, FamilyPlan::class, PlanRow::class, KitCheck::class, Note::class],
-    version = 4,
+    entities = [Setting::class, MedicalCard::class, Person::class, FamilyPlan::class, PlanRow::class, KitCheck::class, Note::class, Document::class],
+    version = 5,
     exportSchema = true,
-    autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3), AutoMigration(from = 3, to = 4)],
+    autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3), AutoMigration(from = 3, to = 4), AutoMigration(from = 4, to = 5)],
 )
 abstract class PersonalDb : RoomDatabase() {
     abstract fun settings(): SettingDao
@@ -58,6 +58,7 @@ abstract class PersonalDb : RoomDatabase() {
     abstract fun plan(): PlanDao
     abstract fun kit(): KitDao
     abstract fun notes(): NoteDao
+    abstract fun documents(): DocumentDao
 
     // The key this copy was opened with, wiped when it closes (SQLCipher holds it only while open)
     @Volatile private var key: ByteArray? = null

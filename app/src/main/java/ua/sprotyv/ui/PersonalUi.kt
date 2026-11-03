@@ -117,7 +117,8 @@ fun MineHub(nav: Nav, content: ua.sprotyv.content.Content?) {
         BlockRow(stringResource(R.string.rescuer_screen), stringResource(R.string.rescuer_hint)) { nav.go(Route.Mine(MinePart.RESCUER)) }
     }
     Block(stringResource(R.string.mine_block_copies), ua.sprotyv.home.Group.MINE, padded = false, foldable = true, summary = stringResource(R.string.mine_block_copies_desc), leading = { ThemeIcon(R.drawable.ocha_services_and_tools, ua.sprotyv.home.Group.MINE.tint()) }) {
-        BlockRow(stringResource(R.string.backup_title), stringResource(R.string.backup_hint), first = true) { nav.go(Route.Mine(MinePart.BACKUP)) }
+        BlockRow(stringResource(R.string.docs_title), stringResource(R.string.docs_hint), first = true) { nav.go(Route.Mine(MinePart.DOCUMENTS)) }
+        BlockRow(stringResource(R.string.backup_title), stringResource(R.string.backup_hint)) { nav.go(Route.Mine(MinePart.BACKUP)) }
         BlockRow(stringResource(R.string.bookmarks_title), stringResource(R.string.bookmarks_hint)) { nav.go(Route.Mine(MinePart.BOOKMARKS)) }
         BlockRow(stringResource(R.string.print_title), stringResource(R.string.print_hint)) { nav.go(Route.Mine(MinePart.PRINT)) }
         BlockRow(stringResource(R.string.plan_code_title), stringResource(R.string.plan_code_hint)) { nav.go(Route.Mine(MinePart.PLAN_QR)) }

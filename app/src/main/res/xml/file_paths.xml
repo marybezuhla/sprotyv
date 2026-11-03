@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Only the scan folder in the cache is shared, and only with the camera app, one photo at a time -->
+<!-- Only two cache folders: scan (a photo from the camera app, one at a time) and share (a document the
+     owner chose to send; removed on the next return to the app or its start) -->
 <paths>
     <cache-path name="scan" path="scan/" />
+    <cache-path name="share" path="share/" />
 </paths>
