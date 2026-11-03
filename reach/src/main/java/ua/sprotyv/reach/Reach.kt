@@ -39,12 +39,11 @@ object Reach {
     }
 
     /**
-     * The messenger is the real one: signed with its maker's own certificate (WhatsApp, Signal), or,
-     * where Sprotyv knows no certificate (WhatsApp Business), installed from Google Play. A
-     * look-alike installed from a file under the same name never receives the text.
+     * The messenger is the real one: signed with its maker's own certificate, wherever it was
+     * installed from. A look-alike under the same name never receives the text.
      */
     fun genuine(context: Context, pkg: String): Boolean {
-        val pins = SIGNERS[pkg] ?: return fromPlay(context, pkg)
+        val pins = SIGNERS[pkg] ?: return false
         return try {
             val info = context.packageManager.getPackageInfo(pkg, android.content.pm.PackageManager.GET_SIGNING_CERTIFICATES).signingInfo ?: return false
             // Only one signer, and that one is the maker's (a rotated key keeps its history)
@@ -59,11 +58,24 @@ object Reach {
         java.security.MessageDigest.getInstance(alg).digest(cert).joinToString("") { "%02x".format(it) }
     }
 
-    /** The makers' signing certificates (as published: Signal on signal.org/android/apk; WhatsApp's long-standing one). */
+    /**
+     * The makers' signing certificates. Signal: its current 4096-bit one and the older 1024-bit one
+     * it rotated from (both on signal.org/android/apk). WhatsApp and WhatsApp Business share
+     * WhatsApp Inc.'s long-standing certificate (SHA-1).
+     */
     private val SIGNERS = mapOf(
-        SIGNAL to setOf("29f34e5f27f211b424bc5bf9d67162c0eafba2da35af35c16416fc446276ba26"),
+        SIGNAL to setOf(
+            "4be4f6cd5be844083e900279dc822af65a547fecc26aba7ff1f5203a45518cd8",
+            "29f34e5f27f211b424bc5bf9d67162c0eafba2da35af35c16416fc446276ba26",
+        ),
         WHATSAPP to setOf("38a0f7d505fe18fec64fbf343ecaaaf310dbd799"),
+        WHATSAPP_BUSINESS to setOf("38a0f7d505fe18fec64fbf343ecaaaf310dbd799"),
     )
+
+    /** On the phone at all, icon or not (a hidden look-alike counts too, so it is checked). */
+    private fun present(context: Context, pkg: String): Boolean = try {
+        context.packageManager.getPackageInfo(pkg, 0); true
+    } catch (e: Exception) { false }
 
     /**
      * Opens the chat with this person in the WhatsApp app itself (never a browser), text ready;
@@ -72,10 +84,12 @@ object Reach {
     fun whatsapp(context: Context, phone: String, text: String) {
         val link = try { Links.whatsapp(phone, text) } catch (e: IllegalArgumentException) { return noNumber(context) }
         val uri = Uri.parse(link)
-        val apps = listOf(WHATSAPP, WHATSAPP_BUSINESS).filter { installed(context, it) }
+        val apps = listOf(WHATSAPP, WHATSAPP_BUSINESS).filter { present(context, it) }
         if (apps.isEmpty()) return notFound(context)
         val real = apps.filter { genuine(context, it) }
         if (real.isEmpty()) return notGenuine(context)
+        // One of them is a look-alike: said, even though the real one opens
+        if (real.size < apps.size) notGenuine(context)
         if (real.none { tryStart(context, Intent(Intent.ACTION_VIEW, uri).setPackage(it)) }) notFound(context)
     }
 
@@ -88,7 +102,9 @@ object Reach {
             .setType("text/plain")
             .putExtra(Intent.EXTRA_TEXT, text)
             .setPackage(SIGNAL)
-        if (installed(context, SIGNAL) && !genuine(context, SIGNAL)) return notGenuine(context)
+        // Checked whenever anything by that name is there, icon or not
+        if (!present(context, SIGNAL)) return notFound(context)
+        if (!genuine(context, SIGNAL)) return notGenuine(context)
         if (!tryStart(context, intent)) notFound(context)
     }
 
