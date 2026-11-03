@@ -51,6 +51,7 @@ import ua.sprotyv.personal.Note
 import ua.sprotyv.ui.GartScreen
 import ua.sprotyv.ui.KEY_SAFE_MESSAGE
 import ua.sprotyv.ui.KidHome
+import ua.sprotyv.ui.DocumentsScreen
 import ua.sprotyv.ui.MozListScreen
 import ua.sprotyv.ui.NotesScreen
 import ua.sprotyv.ui.PathScreen
@@ -116,6 +117,15 @@ class StoreScreensTest {
         val content = Content.get(app)
         val d = androidx.room.Room.inMemoryDatabaseBuilder(app, ua.sprotyv.personal.PersonalDb::class.java).allowMainThreadQueries().build()
         kotlinx.coroutines.runBlocking { BackupData.replaceAll(d, storeSnapshot(content, lang == "en"), BACKED_UP_SETTINGS) }
+        // Three invented documents: small files encrypted as the app does, with their rows
+        val files = ua.sprotyv.personal.docs.DocFiles.of(app)
+        kotlinx.coroutines.runBlocking {
+            (if (lang == "en") listOf("Passport" to 2_400_000L, "Blood test, October" to 380_000L, "Birth certificate" to 1_900_000L)
+            else listOf("Паспорт" to 2_400_000L, "Аналіз крові, жовтень" to 380_000L, "Свідоцтво про народження" to 1_900_000L)).forEachIndexed { i, (t, size) ->
+                val w = files.write(ByteArray(size.toInt()).inputStream())
+                d.documents().add(ua.sprotyv.personal.Document(title = t, mime = if (i == 1) "application/pdf" else "image/jpeg", size = w.size, file = w.file, key = w.key, addedAt = 1_760_000_000_000L + i))
+            }
+        }
         db = d
         PersonalStore.showForTest(d)
         HomePrefs.update(app) { it.copy(mode = Mode.FULL, pins = Preset.GENERAL.pins, trip = false) }
@@ -157,6 +167,7 @@ class StoreScreensTest {
         shot(more, "24-practice", dark = true) { PracticeScreen(content, "", nav) }
         shot(more, "25-card-overview", dark = true) { CardScreen(content, "bleeding", nav) }
         shot(more, "26-sections") { Frame(title(R.string.tab_know), {}) { SectionsList(content, Preset.GENERAL.pins, nav) { _, _ -> } } }
+        shot(more, "28-documents") { Frame(title(R.string.docs_title), {}) { DocumentsScreen() } }
         RuntimeEnvironment.setFontScale(1.3f)
         try { shot(more, "27-large-text") { FullHome(content, Preset.GENERAL.pins, nav, {}, {}, {}) } } finally { RuntimeEnvironment.setFontScale(1f) }
     }
