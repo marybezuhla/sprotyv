@@ -47,6 +47,25 @@ import ua.sprotyv.ui.SearchScreen
 import ua.sprotyv.ui.ShieldsScreen
 import ua.sprotyv.ui.SprotyvTheme
 import ua.sprotyv.ui.ThemeChoice
+import ua.sprotyv.personal.Note
+import ua.sprotyv.ui.GartScreen
+import ua.sprotyv.ui.KEY_SAFE_MESSAGE
+import ua.sprotyv.ui.KidHome
+import ua.sprotyv.ui.MozListScreen
+import ua.sprotyv.ui.NotesScreen
+import ua.sprotyv.ui.PathScreen
+import ua.sprotyv.ui.PdrScreen
+import ua.sprotyv.ui.PeopleScreen
+import ua.sprotyv.ui.PowerScreen
+import ua.sprotyv.ui.PracticeScreen
+import ua.sprotyv.ui.ResistanceScreen
+import ua.sprotyv.ui.RolesScreen
+import ua.sprotyv.ui.SafeScreen
+import ua.sprotyv.ui.SectionsList
+import ua.sprotyv.ui.SimpleHome
+import ua.sprotyv.ui.SituationScreen
+import ua.sprotyv.ui.SuppliesScreen
+import ua.sprotyv.ui.WeaponsScreen
 import java.io.File
 
 /**
@@ -114,6 +133,32 @@ class StoreScreensTest {
         SearchMemory.query = if (lang == "en") "tourniquet" else "турнікет"
         shot(dir, "8", dark = true) { SearchScreen(content, nav) }
         SearchMemory.query = ""
+
+        // More pictures for presentations and other stores (not in the F-Droid listing)
+        val more = "$dir-more"
+        HomePrefs.update(app) { it.copy(mode = Mode.SIMPLE) }
+        shot(more, "09-simple-home") { SimpleHome(content, Preset.GENERAL.pins, nav) {} }
+        HomePrefs.update(app) { it.copy(mode = Mode.KID) }
+        shot(more, "10-kid-home") { KidHome(content, nav) {} }
+        HomePrefs.update(app) { it.copy(mode = Mode.FULL) }
+        shot(more, "11-people") { Frame(title(R.string.people), {}) { PeopleScreen() } }
+        shot(more, "12-safe") { Frame(title(R.string.tile_safe), {}) { SafeScreen(nav) } }
+        shot(more, "13-notes", dark = true) { Frame(title(R.string.notes_title_screen), {}) { NotesScreen(nav) } }
+        shot(more, "14-supplies") { Frame(title(R.string.supplies), {}) { SuppliesScreen(content, nav) } }
+        shot(more, "15-resilience", dark = true) { Frame(title(R.string.gart_title), {}) { GartScreen(nav) } }
+        shot(more, "16-path") { Frame(title(R.string.path_title), {}) { PathScreen(nav) } }
+        shot(more, "17-roles", dark = true) { Frame(title(R.string.roles_title), {}) { RolesScreen(nav) } }
+        shot(more, "18-resistance") { ResistanceScreen(content, nav) }
+        shot(more, "19-situation") { SituationScreen(content, nav) }
+        shot(more, "20-power", dark = true) { PowerScreen(content, nav) }
+        shot(more, "21-road-rules") { PdrScreen(content, nav) }
+        shot(more, "22-weapons-law", dark = true) { WeaponsScreen(nav) }
+        shot(more, "23-moz") { MozListScreen(content, nav) }
+        shot(more, "24-practice", dark = true) { PracticeScreen(content, "", nav) }
+        shot(more, "25-card-overview", dark = true) { CardScreen(content, "bleeding", nav) }
+        shot(more, "26-sections") { Frame(title(R.string.tab_know), {}) { SectionsList(content, Preset.GENERAL.pins, nav) { _, _ -> } } }
+        RuntimeEnvironment.setFontScale(1.3f)
+        try { shot(more, "27-large-text") { FullHome(content, Preset.GENERAL.pins, nav, {}, {}, {}) } } finally { RuntimeEnvironment.setFontScale(1f) }
     }
 
     private fun shot(dir: String, name: String, dark: Boolean = false, body: @Composable () -> Unit) {
@@ -170,6 +215,25 @@ class StoreScreensTest {
             "Немає зв’язку" to "Зустрічаємося в місці 1 о домовленій годині", "Оголосили евакуацію" to "Ідемо до місця збору, пишемо «Я в безпеці»",
         )
         val planRows = base.rows.mapIndexed { i, r -> r.copy(first = rows[i % rows.size].first, second = rows[i % rows.size].second) }
-        return base.copy(medical = medical, people = people, plan = plan, rows = planRows)
+        // Notes and the "I am safe" message in the shown language, invented
+        val noteTexts = if (en) listOf(
+            "Documents" to "Passports and birth certificates: blue folder, top shelf. Copies on the memory stick in the go-bag.",
+            "Water" to "Change the bottles in the hallway every 6 months. Next time: May.",
+            "Neighbours" to "Maria (flat 12) has a generator. Taras (flat 7) is a nurse.",
+            "Shelter" to "Basement entrance from the yard. Key with the house manager.",
+            "Medicines" to "Inhaler, painkillers, plasters. Check the dates in spring.",
+            "Car" to "Keep the tank at least half full. Spare canister in the garage.",
+        ) else listOf(
+            "Документи" to "Паспорти й свідоцтва: синя тека, верхня полиця. Копії на флешці в тривожній валізі.",
+            "Вода" to "Міняти пляшки в коридорі кожні 6 місяців. Наступного разу — у травні.",
+            "Сусіди" to "Марія (кв. 12) має генератор. Тарас (кв. 7) — медбрат.",
+            "Укриття" to "Вхід у підвал з подвір'я. Ключ у старшої по будинку.",
+            "Ліки" to "Інгалятор, знеболювальне, пластирі. Перевірити терміни навесні.",
+            "Авто" to "Тримати бак щонайменше наполовину повним. Запасна каністра в гаражі.",
+        )
+        val notes = noteTexts.mapIndexed { i, (t, x) -> Note(id = i + 1L, text = t + "\n" + x, pinned = i < 2, updatedAt = base.created - i * 86_400_000L * 9) }
+        val safe = if (en) "I am safe. I am in the shelter, all is well. I will call when I can." else "Я в безпеці. Я в укритті, усе гаразд. Подзвоню, коли зможу."
+        val settings = base.settings.map { if (it.key == KEY_SAFE_MESSAGE) it.copy(value = safe) else it }
+        return base.copy(medical = medical, people = people, plan = plan, rows = planRows, notes = notes, settings = settings)
     }
 }

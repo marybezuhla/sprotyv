@@ -111,6 +111,18 @@ object Reach {
     /** Google Play is on this phone (so a link to it can install something). */
     fun hasPlay(context: Context): Boolean = enabled(context, "com.android.vending")
 
+    /**
+     * Sprotyv itself came from an F-Droid store app: then it does not send people to Google Play.
+     * The installing app is the one Android recorded, not anything the store says about itself.
+     */
+    fun fromFdroid(context: Context): Boolean = try {
+        context.packageManager.getInstallSourceInfo(context.packageName).initiatingPackageName in FDROID_CLIENTS
+    } catch (e: Exception) {
+        false
+    }
+
+    private val FDROID_CLIENTS = setOf("org.fdroid.fdroid", "org.fdroid.basic", "com.looker.droidify", "com.machiav3lli.fdroid", "in.sunilpaulmathew.izzyondroid")
+
     /** Firefox Focus (or Klar) installed from Google Play and turned on, or null. */
     private fun focus(context: Context): String? = FOCUS.firstOrNull { enabled(context, it) && fromPlay(context, it) }
 

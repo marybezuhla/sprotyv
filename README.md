@@ -17,11 +17,11 @@
 - **Віджети** на головний екран, зокрема щит-лічильник.
 - **Два вигляди:** простий (шість великих кнопок) і повний (вкладки, усі розділи, власна головна з плитками). Можна налаштувати телефон для рідних і захистити налаштування PIN-кодом телефону.
 - **Подзвонити:** 112 на кожному екрані, 101–104 зі списку служб; дотик відкриває набір номера.
-- **Тривоги** — з версії 1.1. До того тримайте офіційний застосунок «Повітряна тривога» й слухайте сирени.
+- **Тривоги** застосунок не показує: тримайте офіційний застосунок «Повітряна тривога» й слухайте сирени.
 
 ## Прозорість
 
-- **Мережа:** версія 1.0 не має дозволу на інтернет; збірка зупиняється, якщо він з'являється. З 1.1 застосунок лише завантажує тривоги й вміст і нічого не надсилає.
+- **Мережа:** застосунок не має дозволу на інтернет; збірка зупиняється, якщо він з'являється.
 - **Шифрування:** особисті дані — у базі SQLCipher, ключ у захищеному сховищі телефона. Хмарну копію Android вимкнено.
 - **Вміст:** кожна картка має джерело й дату перевірки, розділи довідника — джерело; що не рецензовано фахівцем, позначено. Рецензента, коли він є, названо.
 - **Збірка:** APK збирається з цього коду в GitHub Actions окремо від тестів, з перевіркою контрольних сум залежностей, і підписується лише після схвалення автора. Відбиток сертифіката SHA-256: `d00241499cd44d0859c5762a0b4cc317862358c8df3210fc3a0e9473e038a1ac`.
@@ -55,11 +55,11 @@ A free Android app: what to do right now when it is dangerous, and how to prepar
 - **Widgets** for the home screen, a count shield among them.
 - **Two looks:** simple (six large buttons) and full (tabs, all sections, your own home screen of tiles). A phone can be set up for a relative, with settings locked by the phone's PIN.
 - **Call:** 112 on every screen, 101–104 from the list of services; a tap opens the dialler with the number.
-- **Air alerts** from version 1.1. Until then keep the official "Air Alert" app and listen to the sirens.
+- **Air alerts** are not shown: keep the official "Air Alert" app and listen to the sirens.
 
 ## Transparency
 
-- **Network:** version 1.0 has no internet permission; the build stops if one appears. From 1.1 the app only downloads alerts and content and sends nothing.
+- **Network:** the app has no internet permission; the build stops if one appears.
 - **Encryption:** personal data is in an SQLCipher database with its key in the phone's secure keystore. Android cloud backup is off.
 - **Content:** every card names its source and check date; anything not reviewed by a specialist is marked.
 - **Build:** the APK is built from this code in GitHub Actions apart from the tests, with dependency checksums verified, and signed only after the author's approval. Certificate SHA-256: `d00241499cd44d0859c5762a0b4cc317862358c8df3210fc3a0e9473e038a1ac`.
