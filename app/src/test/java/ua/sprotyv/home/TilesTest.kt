@@ -37,6 +37,8 @@ class TilesTest {
         assertFalse(Tiles.isValid("tool:NOPE", cards, chapters))
         assertFalse(Tiles.isValid("tool:NOW", cards, chapters))
         assertFalse(Tiles.isValid("open:x", cards, chapters))
+        assertTrue(Tiles.isValid("phone:e-112", cards, chapters, phones = setOf("e-112")))
+        assertFalse(Tiles.isValid("phone:e-999", cards, chapters, phones = setOf("e-112")))
         assertEquals(listOf("card:a"), Pins.parse("tool:NOW\ncard:a\ncard:a\n\n"))
     }
 

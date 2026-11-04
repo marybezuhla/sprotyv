@@ -186,7 +186,7 @@ object Widgets {
 /** The parts of Sprotyv the owner put on the home screen, by widget: the tile's id, its name, its colour. */
 object TileWidgets {
     private fun prefs(c: Context) = c.applicationContext.getSharedPreferences("widget_tiles", Context.MODE_PRIVATE)
-    private val ID = Regex("^(card|chapter|tool|link):[A-Za-z0-9_-]{1,40}$")
+    private val ID = Regex("^(card|chapter|tool|link|phone):[A-Za-z0-9_-]{1,40}$")
 
     /** [icon]: the name of the part's picture among the app's own (only ours: checked by the pattern and looked up there). */
     class Chosen(val id: String, val title: String, val tone: String, val icon: String?)
@@ -216,6 +216,7 @@ object TileWidgets {
     fun tripHides(id: String): Boolean = when (id.substringBefore(':')) {
         "link" -> true
         "tool" -> ua.sprotyv.home.Tool.entries.firstOrNull { it.name == id.substringAfter(':') }?.route?.let(Trip::hides) ?: true
+        "phone" -> ua.sprotyv.content.Phone.tripHides(id.substringAfter(':'))
         else -> false
     }
 }

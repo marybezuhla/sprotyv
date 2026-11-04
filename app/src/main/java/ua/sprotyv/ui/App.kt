@@ -113,6 +113,12 @@ fun App() {
                 content?.links?.firstOrNull { it.id == route.id }?.takeIf { !(trip && Trip.hides(it)) }?.let { openLink(context, it) }
                 return
             }
+            // A number from "Phones": the dialler with it, nothing added to the back stack
+            if (route is Route.Dial) {
+                content?.phones?.firstOrNull { it.id == route.id }?.takeIf { !(trip && it.category in ua.sprotyv.content.Phone.TRIP_HIDES) }
+                    ?.let { ua.sprotyv.reach.Reach.dial(context, it.number) }
+                return
+            }
             // Trip mode: what it hides does not open, whatever leads there
             if (trip && Trip.hides(route)) return
             // Something typed and not saved (a notification or a share may lead away): ask first.
@@ -164,8 +170,10 @@ fun App() {
 
     // A notification's tap opens its screen (trip mode and set-up are checked as for any screen)
     val opening by Opening.target.collectAsState()
-    LaunchedEffect(opening) {
+    LaunchedEffect(opening, content != null) {
         val t = opening ?: return@LaunchedEffect
+        // A number from a widget needs the list of numbers: wait for it
+        if (t.startsWith("tile/phone:") && content == null) return@LaunchedEffect
         Opening.clear()
         // Kid mode: only the children's cards from the children's widget
         val allowed = prefs.mode == Mode.FULL || prefs.mode == Mode.SIMPLE || (prefs.mode == Mode.KID && t.startsWith("tile/card:kid-"))
@@ -318,9 +326,9 @@ private fun Screen(
         Route.Comms -> CommsScreen(nav)
         Route.Driving -> DrivingScreen(content, nav)
         Route.Weapons -> WeaponsScreen(nav)
-        Route.Phones -> PhonesScreen(content, nav)
+        Route.Phones -> PhonesScreen(content, nav, prefs.pins) { id, on -> guarded((if (on) ACTION_PIN else ACTION_UNPIN) + id) }
         is Route.PathCheck -> PATH_CHECKS[top.step]?.let { PracticeScreen(content, it, nav, check = top.step) }
-        is Route.External -> {}
+        is Route.External, is Route.Dial -> {}
         Route.Sections -> Frame(stringResource(R.string.add_tile), nav::back) {
             SectionsList(content, prefs.pins, nav) { id, on -> guarded((if (on) ACTION_PIN else ACTION_UNPIN) + id) }
         }

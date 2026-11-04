@@ -92,7 +92,9 @@ private fun Picker(onPick: (String, String, String) -> Unit) {
         Text(stringResource(R.string.widget_tile_pick_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         val c = content ?: return@Column Loading()
         // The same groups as "Sections", the fixed ways in first and resistance after them
-        val groups = listOf(Tiles.FIXED + Tiles.tool(Tool.RESIST)) + Group.entries.map { it.tiles }
+        val groups = listOf(Tiles.FIXED + Tiles.tool(Tool.RESIST)) + Group.entries.map { it.tiles } +
+            // Any number from "Phones": the widget opens the dialler with it
+            listOf(c.phones.map { Tiles.phone(it.id) })
         groups.forEach { ids ->
             val infos = ids.distinct().mapNotNull { tileInfo(it, c) }
             if (infos.isEmpty()) return@forEach
@@ -100,7 +102,7 @@ private fun Picker(onPick: (String, String, String) -> Unit) {
                 infos.forEachIndexed { i, info ->
                     if (i > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                     val tone = when {
-                        info.id == Tiles.tool(Tool.RESIST) || info.id == Tiles.tool(Tool.CONSTITUTION) || info.id == Tiles.tool(Tool.HISTORY) -> "khaki"
+                        isResist(info.id) -> "khaki"
                         info.id == Tiles.tool(Tool.NOW) -> "urgent"
                         else -> when (info.tone) {
                             Group.DANGER -> "urgent"
@@ -110,12 +112,15 @@ private fun Picker(onPick: (String, String, String) -> Unit) {
                         }
                     }
                     Row(
-                        Modifier.fillMaxWidth().heightIn(min = 56.dp).clickable { onPick(info.id, info.title, tone) }.padding(horizontal = 12.dp, vertical = 8.dp),
+                        Modifier.fillMaxWidth().heightIn(min = 56.dp).clickable { onPick(info.id, if (info.id.startsWith("phone:")) info.title + " " + info.hint else info.title, tone) }.padding(horizontal = 12.dp, vertical = 8.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         IconBadge(info.icon, info.badge(), 36.dp)
                         Spacer(Modifier.width(12.dp))
-                        Text(info.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                        Column(Modifier.weight(1f)) {
+                            Text(info.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                            if (info.id.startsWith("phone:")) Text(info.hint, style = MaterialTheme.typography.bodyMedium)
+                        }
                     }
                 }
             }

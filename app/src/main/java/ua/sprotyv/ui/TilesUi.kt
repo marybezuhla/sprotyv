@@ -142,7 +142,12 @@ fun toneOf(id: String): Group = when (id) {
     // Copies of one's own data: blue, as "Mine"
     Tiles.tool(Tool.PRINT), Tiles.tool(Tool.SCAN), Tiles.tool(Tool.QR_TEXT) -> Group.MINE
     Tiles.tool(Tool.SITUATION) -> Group.GUIDE
-    else -> if (id.startsWith("link:")) Group.GUIDE else groupOf(id)
+    else -> when {
+        id.startsWith("link:") -> Group.GUIDE
+        // A number: orange only for the emergency services, green as all help and rescue (resistance's khaki is a mark, see [isResist])
+        id.startsWith("phone:") -> if (ua.sprotyv.content.Phone.categoryOf(id.substringAfter(':')) == "emergency") Group.DANGER else Group.FIRST_AID
+        else -> groupOf(id)
+    }
 }
 
 data class Tint(val container: Color, val ink: Color)
@@ -205,7 +210,8 @@ val Shield: ImageVector by lazy {
 }
 
 /** The tiles that belong to resistance: they wear its mark wherever they are. */
-internal fun isResist(id: String) = id == Tiles.tool(Tool.RESIST) || id == Tiles.tool(Tool.CONSTITUTION) || id == Tiles.tool(Tool.HISTORY)
+internal fun isResist(id: String) = id == Tiles.tool(Tool.RESIST) || id == Tiles.tool(Tool.CONSTITUTION) || id == Tiles.tool(Tool.HISTORY) ||
+    (id.startsWith("phone:") && ua.sprotyv.content.Phone.categoryOf(id.substringAfter(':')) == "security")
 
 /** A tile's badge colours: its group's, or resistance's khaki. */
 @Composable
@@ -464,6 +470,7 @@ fun tileInfo(id: String, content: Content?): TileInfo? {
     if (trip) {
         if (id.startsWith("link:") && content?.links?.firstOrNull { it.id == id.substringAfter(':') }?.let(Trip::hides) == true) return null
         if (id.startsWith("tool:") && Tool.entries.firstOrNull { it.name == id.substringAfter(':') }?.route?.let(Trip::hides) == true) return null
+        if (id.startsWith("phone:") && ua.sprotyv.content.Phone.tripHides(id.substringAfter(':'))) return null
     }
     val kind = id.substringBefore(':')
     val value = id.substringAfter(':', "")
@@ -482,6 +489,10 @@ fun tileInfo(id: String, content: Content?): TileInfo? {
         }
         "link" -> content?.links?.firstOrNull { it.id == value }?.let { l ->
             TileInfo(id, l.title, l.note, Icons.Filled.LocationOn, group, Route.External(l.id))
+        }
+        // The number large, the service below it; a tap opens the dialler
+        "phone" -> content?.phones?.firstOrNull { it.id == value }?.let { p ->
+            TileInfo(id, ua.sprotyv.content.PhonesReader.shown(p.number), p.title, Icons.Filled.Call, toneOf(id), Route.Dial(value))
         }
         "tool" -> Tool.entries.firstOrNull { it.name == value }?.let { tool ->
             val own = TOOL_ICONS[tool]?.let { ImageVector.vectorResource(it) }

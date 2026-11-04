@@ -19,6 +19,22 @@ data class Phone(
     companion object {
         /** In the order shown: the most urgent first. */
         val CATEGORIES = listOf("emergency", "evacuation", "mind", "violence", "children", "health", "security", "veterans", "state")
+
+        /** Each id starts with its category's mark, so a pinned number's category is known from its id alone. */
+        private val PREFIX = mapOf(
+            "emergency" to "e-", "evacuation" to "ev-", "mind" to "m-", "violence" to "v-", "children" to "c-",
+            "health" to "h-", "security" to "s-", "veterans" to "vt-", "state" to "st-",
+        )
+
+        /** Hidden in trip mode, like the same links elsewhere: defence, captivity and veterans' lines are not for a checked phone. */
+        val TRIP_HIDES = setOf("security", "veterans")
+
+        fun categoryOf(id: String): String? = PREFIX.entries.firstOrNull { id.startsWith(it.value) }?.key
+
+        fun prefixOf(category: String): String = PREFIX.getValue(category)
+
+        /** A number hidden in trip mode, by its id (an unknown one is hidden too, to be sure). */
+        fun tripHides(id: String): Boolean = categoryOf(id)?.let { it in TRIP_HIDES } ?: true
     }
 }
 
@@ -35,7 +51,7 @@ object PhonesReader {
         val phones = (0 until a.length()).map { i ->
             val o = a.getJSONObject(i)
             Phone(o.getString("id"), o.getString("category"), o.getString("title"), o.getString("note"), o.getString("number"), o.getString("source"), o.getString("checkedOn")).also { p ->
-                require(ID.matches(p.id) && p.category in Phone.CATEGORIES) { "Bad id or category" }
+                require(ID.matches(p.id) && p.category in Phone.CATEGORIES && Phone.categoryOf(p.id) == p.category) { "Bad id or category" }
                 require(NUMBER.matches(p.number)) { "Bad number" }
                 require(SOURCE.matches(p.source) && DATE.matches(p.checkedOn)) { "Bad source or date" }
                 require(p.title.length in 1..80 && p.note.length in 1..240) { "Bad text" }
