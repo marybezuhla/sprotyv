@@ -45,6 +45,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -164,9 +165,10 @@ private fun CardBody(card: Card, content: Content, nav: Nav) {
     if (card.id == "bleeding") TourniquetTime(nav)
 
     if (all) {
+        val tone = toneOf(ua.sprotyv.home.Tiles.card(card.id)).tint()
         card.steps.forEachIndexed { i, s ->
             Row(verticalAlignment = Alignment.Top) {
-                StepNumber(i + 1, active = false)
+                StepNumber(i + 1, active = false, tone = tone)
                 Spacer(Modifier.width(12.dp))
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     Text(s.action, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
@@ -194,14 +196,25 @@ private fun CardBody(card: Card, content: Content, nav: Nav) {
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
-        Pictogram(s.icon, 88.dp)
-        // Read out by TalkBack whenever the step changes
-        Text(
-            s.action,
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
-        )
+        // The step itself stands out from everything around it: its own panel in the card's
+        // colour (orange for danger, green for first aid), the words in the strongest contrast.
+        // Buttons, "why" and what comes next stay quieter below it
+        val tone = toneOf(ua.sprotyv.home.Tiles.card(card.id)).tint()
+        Column(
+            Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(tone.container)
+                .border(2.dp, tone.ink.copy(alpha = 0.55f), RoundedCornerShape(20.dp)).padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Pictogram(s.icon, 88.dp)
+            // Read out by TalkBack whenever the step changes
+            Text(
+                s.action,
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
+            )
+        }
         if (s.figure.isNotEmpty()) StepFigure(content, s.figure)
         Why(s.why, "${card.id}:$step")
         if (s.wait > 0) WaitTimer(s.wait)
@@ -393,19 +406,20 @@ private fun Why(why: String, key: String) {
 
 /** A step number in a circle; filled for the current step. */
 @Composable
-private fun StepNumber(n: Int, active: Boolean) {
+private fun StepNumber(n: Int, active: Boolean, tone: Tint? = null) {
     Box(
         // Grows with large text instead of clipping the number, but always a fixed size: never
         // stretched by the row it sits in (a free aspect ratio once took the whole width)
         Modifier.size(36.dp * androidx.compose.ui.platform.LocalDensity.current.fontScale.coerceIn(1f, 2f)).clip(CircleShape)
-            .background(if (active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primaryContainer),
+            .background(tone?.container ?: if (active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primaryContainer)
+            .then(if (tone != null) Modifier.border(2.dp, tone.ink.copy(alpha = 0.55f), CircleShape) else Modifier),
         contentAlignment = Alignment.Center,
     ) {
         Text(
             n.toString(),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            color = if (active) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onPrimaryContainer,
+            color = tone?.ink ?: if (active) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onPrimaryContainer,
             modifier = Modifier.clearAndSetSemantics { },
         )
     }

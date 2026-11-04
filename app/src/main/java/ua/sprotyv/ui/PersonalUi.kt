@@ -366,7 +366,12 @@ object PeopleFiles {
                 val known = now.map { key(it.phone) }.toMutableSet()
                 // One number written two ways (0XX… and +380XX…) is one person
                 val fresh = found.filter { known.add(key(it.phone)) }
-                if (fresh.isEmpty()) null to app.getString(R.string.people_import_none) else fresh to null
+                when {
+                    found.isEmpty() -> null to app.getString(R.string.people_import_none)
+                    // The same people again (an export read back): said so, not "no numbers"
+                    fresh.isEmpty() -> null to app.getString(R.string.people_import_all_known, found.size)
+                    else -> fresh to null
+                }
             } catch (e: Exception) {
                 null to app.getString(R.string.people_import_failed)
             }

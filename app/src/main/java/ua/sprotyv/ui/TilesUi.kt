@@ -170,11 +170,12 @@ fun Group.tint(): Tint {
     // High contrast: no pale fills, the plain text colours of the theme; icon and words still say the group
     if (LocalContrast.current) return Tint(MaterialTheme.colorScheme.surfaceVariant, MaterialTheme.colorScheme.onSurface)
     return when (this) {
-        Group.DANGER -> if (dark) Tint(Color(0xFF342318), Color(0xFFF5C39E)) else Tint(Color(0xFFFFE9D6), Color(0xFF8A3B00))
-        Group.FIRST_AID, Group.LEAVE -> if (dark) Tint(Color(0xFF182F28), Color(0xFFA3D3BD)) else Tint(Color(0xFFDDF0E6), Color(0xFF1E5B40))
-        Group.PREPARE, Group.MINE, Group.FAMILY -> if (dark) Tint(Color(0xFF1A2A3C), Color(0xFFBBD0EA)) else Tint(Color(0xFFDCE8F7), Color(0xFF163E6E))
+        // Light: fuller than a wash, so the colour still says the group on a bright screen in daylight
+        Group.DANGER -> if (dark) Tint(Color(0xFF342318), Color(0xFFF5C39E)) else Tint(Color(0xFFFFDDC2), Color(0xFF7A3300))
+        Group.FIRST_AID, Group.LEAVE -> if (dark) Tint(Color(0xFF182F28), Color(0xFFA3D3BD)) else Tint(Color(0xFFCDEADB), Color(0xFF184E36))
+        Group.PREPARE, Group.MINE, Group.FAMILY -> if (dark) Tint(Color(0xFF1A2A3C), Color(0xFFBBD0EA)) else Tint(Color(0xFFD2E1F5), Color(0xFF123A68))
         // Knowing and everyday life: a calm violet, so no group is left without a colour
-        Group.HOME_LIFE, Group.SAFETY, Group.GUIDE -> if (dark) Tint(Color(0xFF272339), Color(0xFFD2C7EE)) else Tint(Color(0xFFEDE7F8), Color(0xFF47387A))
+        Group.HOME_LIFE, Group.SAFETY, Group.GUIDE -> if (dark) Tint(Color(0xFF272339), Color(0xFFD2C7EE)) else Tint(Color(0xFFE6DDF6), Color(0xFF40317A))
     }
 }
 
@@ -202,7 +203,7 @@ private class Shelf(val title: Int, val desc: Int, val group: Group, val ids: Li
 fun resist(): Tint = when {
     LocalContrast.current -> Tint(MaterialTheme.colorScheme.surfaceVariant, MaterialTheme.colorScheme.onSurface)
     LocalDark.current -> Tint(Color(0xFF2A2B21), Color(0xFFD3CEA6))
-    else -> Tint(Color(0xFFECE9D5), Color(0xFF4B4921))
+    else -> Tint(Color(0xFFE6E2C3), Color(0xFF45431C))
 }
 
 /** The app's own shield, the same shape as its icon. */
@@ -533,13 +534,14 @@ fun TileCard(info: TileInfo, big: Boolean, status: String? = null, modifier: Mod
     Card(
         onClick = onClick,
         colors = CardDefaults.cardColors(
-            containerColor = when { marked -> u.container; safe -> green.container; else -> own.container }.copy(alpha = 0.7f).compositeOver(MaterialTheme.colorScheme.surface),
+            // Dark: softened over the surface; light: the full colour, or the tiles fade into white
+            containerColor = when { marked -> u.container; safe -> green.container; else -> own.container }.let { if (LocalDark.current) it.copy(alpha = 0.7f).compositeOver(MaterialTheme.colorScheme.surface) else it },
             contentColor = when { marked -> u.ink; safe -> green.ink; else -> MaterialTheme.colorScheme.onSurface },
         ),
         border = when {
             marked -> BorderStroke(1.dp, u.edge.copy(alpha = 0.7f))
-            safe -> BorderStroke(1.dp, green.ink.copy(alpha = 0.3f))
-            else -> BorderStroke(1.dp, own.ink.copy(alpha = 0.2f))
+            safe -> BorderStroke(1.dp, green.ink.copy(alpha = if (LocalDark.current) 0.3f else 0.45f))
+            else -> BorderStroke(1.dp, own.ink.copy(alpha = if (LocalDark.current) 0.2f else 0.35f))
         },
         modifier = modifier.fillMaxWidth().heightIn(min = if (big) 88.dp else 76.dp),
     ) {

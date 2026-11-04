@@ -1710,4 +1710,5 @@
     <string name="kid_call_open_toggle">My people\'s numbers for the child without the lock</string>
     <string name="kid_call_open_hint">A separate encrypted copy of only the names and numbers of people marked for "I am safe" or as an emergency contact. Updated whenever you open Trusted people. Turned off, the copy is deleted.</string>
     <string name="safe_choose_first">Choose above what to say; the message and the send buttons appear then.</string>
+    <string name="people_import_all_known">All contacts in the file (%1$d) are already in the list.</string>
 </resources>
