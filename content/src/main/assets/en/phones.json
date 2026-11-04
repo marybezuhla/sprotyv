@@ -72,6 +72,15 @@
   "checkedOn": "2026-11-03"
  },
  {
+  "id": "ev-unhcr",
+  "category": "evacuation",
+  "title": "UNHCR (UN Refugee Agency)",
+  "note": "Help for people affected by the war and for displaced people. Mon–Fri 09:00–18:00.",
+  "number": "0800307711",
+  "source": "https://help.unhcr.org/ukraine/",
+  "checkedOn": "2026-11-03"
+ },
+ {
   "id": "ev-redcross",
   "category": "evacuation",
   "title": "Ukrainian Red Cross",
@@ -159,6 +168,33 @@
   "note": "The same as 0 800 500 335, from mobiles. 24/7, free.",
   "number": "116123",
   "source": "https://la-strada.org.ua/en/garyachi-liniyi",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "v-iom-527",
+  "category": "violence",
+  "title": "IOM: safe migration, counter-trafficking",
+  "note": "Information and support for people in Ukraine and those leaving. Free from mobiles.",
+  "number": "527",
+  "source": "https://www.iom.int/ukraine-iom-hotlines-garyachi-linii-mom-persons-affected-war",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "v-iom-0800",
+  "category": "violence",
+  "title": "IOM (0 800)",
+  "note": "The same as 527. Free from landlines.",
+  "number": "0800505501",
+  "source": "https://www.iom.int/ukraine-iom-hotlines-garyachi-linii-mom-persons-affected-war",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "c-116000",
+  "category": "children",
+  "title": "Missing children",
+  "note": "The Magnolia child search service. If a child is missing, call the police at once too: 102. Free.",
+  "number": "116000",
+  "source": "https://www.ombudsman.gov.ua/news_details/znikli-diti-v-umovah-vijni-pravilo-troh-dib-ne-diye",
   "checkedOn": "2026-11-03"
  },
  {
