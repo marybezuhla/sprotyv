@@ -38,6 +38,7 @@ import ua.sprotyv.ui.FullHome
 import ua.sprotyv.ui.GuideSectionScreen
 import ua.sprotyv.ui.HomePrefs
 import ua.sprotyv.ui.MedicalScreen
+import ua.sprotyv.ui.MineHub
 import ua.sprotyv.ui.Nav
 import ua.sprotyv.ui.NowScreen
 import ua.sprotyv.ui.KitScreen
@@ -154,6 +155,21 @@ class StoreScreensTest {
         shot(dir, "10") { GuideSectionScreen(content, "2.5", nav) }
         shot(dir, "11", dark = true) { PowerScreen(content, nav) }
         shot(dir, "12") { ResistanceScreen(content, nav) }
+        // The looks: simple, for a child, and large print (the phone's text at 130 %)
+        shot(dir, "13") { Frame(title(R.string.tile_mine), {}) { MineHub(nav, content) } }
+        HomePrefs.update(app) { it.copy(mode = Mode.SIMPLE) }
+        shot(dir, "14") { SimpleHome(content, Preset.GENERAL.pins, nav) {} }
+        HomePrefs.update(app) { it.copy(mode = Mode.KID) }
+        shot(dir, "15") { KidHome(content, nav) {} }
+        RuntimeEnvironment.setFontScale(1.3f)
+        try {
+            HomePrefs.update(app) { it.copy(mode = Mode.SIMPLE) }
+            shot(dir, "16", dark = true) { SimpleHome(content, Preset.GENERAL.pins, nav) {} }
+            HomePrefs.update(app) { it.copy(mode = Mode.FULL) }
+            shot(dir, "17") { FullHome(content, pins, nav, {}, {}, {}) }
+            shot(dir, "18", dark = true) { CardScreen(content, "bleeding", nav) }
+        } finally { RuntimeEnvironment.setFontScale(1f) }
+        HomePrefs.update(app) { it.copy(mode = Mode.FULL) }
 
         // More pictures for presentations and other stores (not in the F-Droid listing)
         val more = "$dir-more"
