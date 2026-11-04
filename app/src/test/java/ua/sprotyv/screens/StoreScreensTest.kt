@@ -128,9 +128,11 @@ class StoreScreensTest {
         }
         db = d
         PersonalStore.showForTest(d)
-        HomePrefs.update(app) { it.copy(mode = Mode.FULL, pins = Preset.GENERAL.pins, trip = false) }
+        // The general set with one number from "Phones" on it, as someone would add the crisis line
+        val pins = Preset.GENERAL.pins + ua.sprotyv.home.Tiles.phone("ev-1548")
+        HomePrefs.update(app) { it.copy(mode = Mode.FULL, pins = pins, trip = false) }
         fun title(id: Int) = app.getString(id)
-        shot(dir, "1") { FullHome(content, Preset.GENERAL.pins, nav, {}, {}, {}) }
+        shot(dir, "1") { FullHome(content, pins, nav, {}, {}, {}) }
         shot(dir, "2") { NowScreen(content, nav) }
         HomePrefs.update(app) { it.copy(mode = Mode.SIMPLE) }
         shot(dir, "3") { CardScreen(content, "bleeding", nav) }
@@ -143,6 +145,7 @@ class StoreScreensTest {
         SearchMemory.query = if (lang == "en") "tourniquet" else "турнікет"
         shot(dir, "8", dark = true) { SearchScreen(content, nav) }
         SearchMemory.query = ""
+        shot(dir, "9") { PhonesScreen(content, nav, pins) { _, _ -> } }
 
         // More pictures for presentations and other stores (not in the F-Droid listing)
         val more = "$dir-more"
@@ -166,7 +169,8 @@ class StoreScreensTest {
         shot(more, "23-moz") { MozListScreen(content, nav) }
         shot(more, "24-practice", dark = true) { PracticeScreen(content, "", nav) }
         shot(more, "25-card-overview", dark = true) { CardScreen(content, "bleeding", nav) }
-        shot(more, "26-sections") { Frame(title(R.string.tab_know), {}) { SectionsList(content, Preset.GENERAL.pins, nav) { _, _ -> } } }
+        shot(more, "26-sections") { Frame(title(R.string.tab_know), {}) { PhonesEntry(nav); SectionsList(content, pins, nav) { _, _ -> } } }
+        shot(more, "29-phones", dark = true) { PhonesScreen(content, nav, pins) { _, _ -> } }
         shot(more, "28-documents") { Frame(title(R.string.docs_title), {}) { DocumentsScreen() } }
         RuntimeEnvironment.setFontScale(1.3f)
         try { shot(more, "27-large-text") { FullHome(content, Preset.GENERAL.pins, nav, {}, {}, {}) } } finally { RuntimeEnvironment.setFontScale(1f) }
