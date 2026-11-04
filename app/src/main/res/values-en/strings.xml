@@ -180,7 +180,7 @@
     <string name="people_import">Import from a file</string>
     <string name="people_export">Export to a file</string>
     <string name="people_export_title">Save the people to a file?</string>
-    <string name="people_export_warning">The .vcf file is not encrypted: anyone who gets the file or the phone can read the names, numbers and notes. Keep it carefully and delete it when no longer needed.</string>
+    <string name="people_export_warning">The .vcf file is not encrypted: anyone who gets the file or the phone can read the names, numbers and notes. Do not save it to a cloud folder; keep it carefully and delete it when no longer needed.</string>
     <string name="people_import_none">The file has no contacts with a number.</string>
     <string name="people_import_done">Added: %1$d. Skipped (repeats or over 20): %2$d.</string>
     <string name="people_import_failed">Could not read the file. A .vcf contacts file up to 1 MB is needed.</string>
@@ -1674,7 +1674,7 @@
     <string name="situation_maps">Apps without internet: maps and Wikipedia</string>
     <string name="phones_title">Phones</string>
     <string name="phones_hint">Emergency services and hotlines: one tap puts the number in the dialler</string>
-    <string name="phones_intro">Tap a line to open the dialler; nothing is called until you confirm. Every number was checked on an official site; the date is under each number.</string>
+    <string name="phones_intro">Tap a line to open the dialler; nothing is called until you confirm. Every number was checked on an official site or the organisation\'s own; the date is under each number.</string>
     <string name="phones_search">Search: service, topic or number</string>
     <string name="phones_none">Nothing found. Emergency services: 112.</string>
     <string name="phones_note">Numbers change. If a line does not answer, try another one on the same topic; in danger, call 112. Numbers starting +380 are for calling from abroad.</string>

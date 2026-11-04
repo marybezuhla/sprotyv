@@ -1,6 +1,7 @@
 package ua.sprotyv.ui
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class VcfTest {
@@ -21,5 +22,25 @@ class VcfTest {
             "BEGIN:VCARD\nVERSION:4.0\nFN:Без номера\nEND:VCARD\n" +
             "BEGIN:VCARD\nVERSION:4.0\nFN:Через URI\nTEL;VALUE=uri:tel:+380000000105\nEND:VCARD\n"
         assertEquals(listOf(Vcf.Contact("Ім'я Прізвище", "+380000000104"), Vcf.Contact("Через URI", "+380000000105")), Vcf.read(text))
+    }
+
+    @Test fun namesCannotHideOrTurnText() {
+        val c = Vcf.read("BEGIN:VCARD\nFN:Ma\u202Erko\u200B\\nX\nTEL:+\u0661380 00 000 01 01\nNOTE:a\\\\nb\nEND:VCARD\n").single()
+        assertEquals("Marko X", c.name)
+        assertEquals("+380000000101", c.phone)
+        assertEquals("a\\nb", c.note)
+    }
+
+    @Test fun readsOlderCharsets() {
+        // "Олена" in windows-1251, quoted-printable, as older phones wrote it
+        val c = Vcf.read("BEGIN:VCARD\r\nVERSION:2.1\r\nFN;CHARSET=WINDOWS-1251;ENCODING=QUOTED-PRINTABLE:=CE=EB=E5=ED=E0\r\nTEL:0000000101\r\nEND:VCARD\r\n").single()
+        assertEquals("Олена", c.name)
+    }
+
+    @Test fun longFoldedFileStaysQuick() {
+        val text = "BEGIN:VCARD\nFN:A" + "\n x".repeat(200_000) + "\nTEL:0000000101\nEND:VCARD\n"
+        val start = System.nanoTime()
+        assertEquals(1, Vcf.read(text).size)
+        assertTrue((System.nanoTime() - start) / 1_000_000 < 3000)
     }
 }

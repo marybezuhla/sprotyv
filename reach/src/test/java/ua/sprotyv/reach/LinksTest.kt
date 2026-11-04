@@ -45,4 +45,13 @@ class LinksTest {
         assertEquals("https://signal.me/#p/+380000000101", Links.signalChat("+380 00 000 01 01"))
         assertEquals("https://signal.me/#p/+380000000102", Links.signalChat("0000000102"))
     }
+
+    @Test fun unclearNumbersOpenNoChat() {
+        // Too short without a +, or look-alike digits: no chat with a stranger
+        assertThrows(IllegalArgumentException::class.java) { Links.whatsapp("501234567", "x") }
+        assertThrows(IllegalArgumentException::class.java) { Links.signalChat("\u0660\u0661\u0662\u0663\u0664\u0665\u0666\u0667\u0668\u0669") }
+        assertEquals("380000000103", Links.international("80000000103"))
+        assertEquals("380000000104", Links.international("380000000104"))
+        assertEquals("", Links.clean("\uFF10\uFF11"))
+    }
 }

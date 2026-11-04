@@ -7,6 +7,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.PrimaryKey
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 
@@ -119,6 +120,14 @@ interface PeopleDao {
 
     @Query("SELECT * FROM people ORDER BY id")
     suspend fun all(): List<Person>
+
+    /** Adds people while there is room for them under [max] in all, in one transaction; how many were added. */
+    @Transaction
+    suspend fun addUpTo(people: List<Person>, max: Int): Int {
+        val taken = people.take((max - count()).coerceAtLeast(0))
+        taken.forEach { save(it) }
+        return taken.size
+    }
 
     @Query("DELETE FROM people")
     suspend fun clear()
