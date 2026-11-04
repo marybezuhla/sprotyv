@@ -122,13 +122,16 @@ class Main : ComponentActivity() {
         super.onStop()
         // Gone into our own window (a file picker, the camera): if the owner does not come back
         // from it within three minutes, the data closes anyway
-        if (!isChangingConfigurations && Away.expected) { closeLater.postDelayed(closeNow, 3 * 60_000L); watchScreen() }
+        // (a minute: someone else picking up the phone meanwhile could come back to it past the lock)
+        if (!isChangingConfigurations && Away.expected) { closeLater.postDelayed(closeNow, 60_000L); watchScreen() }
         if (!isChangingConfigurations && !Away.expected) {
             // Drafts are kept in memory only for a turn of the screen, never while the app is away
             forgetTyped()
             PersonalStore.close()
             // Settings lock again; not while Android's own PIN window is what covers the app
             Guard.close()
+            // A document handed to another app does not stay plain in the cache
+            Docs.clearSharedSoon(this)
         }
     }
 }

@@ -247,7 +247,7 @@ object Docs {
 
     fun clearShared(context: Context, olderThanMs: Long = 0) {
         val now = System.currentTimeMillis()
-        shareDir(context).listFiles()?.forEach { if (now - it.lastModified() >= olderThanMs) it.delete() }
+        shareDir(context).listFiles()?.forEach { if (now - it.lastModified() >= olderThanMs) it.deleteRecursively() }
     }
 
     private val clearLater = android.os.Handler(android.os.Looper.getMainLooper())
@@ -272,7 +272,10 @@ object Docs {
             clearShared(app)
             val ext = if (doc.mime == "application/pdf") "pdf" else "jpg"
             val name = doc.title.replace(Regex("[^\\p{L}\\p{N} ._-]"), "_").take(60).ifBlank { "document" } + "." + ext
-            val file = File(dir, name)
+            // Each share in its own unguessable folder: an app that kept the address of an earlier
+            // share never reaches a later document of the same name
+            val own = File(dir, java.util.UUID.randomUUID().toString()).apply { mkdirs() }
+            val file = File(own, name)
             try { file.writeBytes(copy) } catch (e: Exception) { file.delete(); return@launch } finally { copy.fill(0) }
             withContext(Dispatchers.Main) {
                 val uri = FileProvider.getUriForFile(app, "${app.packageName}.files", file)

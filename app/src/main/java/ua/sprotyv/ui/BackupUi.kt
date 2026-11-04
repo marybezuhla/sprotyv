@@ -584,7 +584,7 @@ fun BackupScreen() {
         val good = n in setOf(R.string.backup_saved, R.string.backup_restored, R.string.backup_restored_lock, R.string.backup_restored_notify)
         AlertDialog(
             onDismissRequest = { BackupJobs.clearNotice() },
-            title = { Text(stringResource(if (good) R.string.backup_done_title else R.string.backup_problem_title)) },
+            title = { SensitiveWindow(); Text(stringResource(if (good) R.string.backup_done_title else R.string.backup_problem_title)) },
             text = { Text(stringResource(n), style = MaterialTheme.typography.bodyLarge) },
             confirmButton = { TextButton(onClick = { BackupJobs.clearNotice() }) { Text(stringResource(R.string.ok)) } },
         )
@@ -642,7 +642,7 @@ fun BackupScreen() {
         val date = Instant.ofEpochMilli(snap.created).atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
         AlertDialog(
             onDismissRequest = { BackupJobs.cancelRestore() },
-            title = { Text(stringResource(R.string.backup_replace_title)) },
+            title = { SensitiveWindow(); Text(stringResource(R.string.backup_replace_title)) },
             text = {
                 Text(
                     stringResource(R.string.backup_replace_text, date, snap.people, snap.records) +
@@ -800,7 +800,7 @@ fun PlanImportScreen(nav: Nav) {
     if (confirm) {
         AlertDialog(
             onDismissRequest = { confirm = false },
-            text = { Text(stringResource(R.string.plan_code_replace)) },
+            text = { SensitiveWindow(); Text(stringResource(R.string.plan_code_replace)) },
             confirmButton = {
                 TextButton(onClick = {
                     confirm = false

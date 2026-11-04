@@ -229,7 +229,7 @@ class StoreScreensTest {
         val base = Demo.snapshot(content)
         val medical = (base.medical ?: MedicalCard()).copy(
             name = if (en) "Olena Melnyk" else "Олена Мельник",
-            birthDate = "14.03.1987",
+            birthDate = "21.09.1985",
             bloodGroup = "A(II) Rh+",
             allergies = if (en) "Penicillin: rash and swelling" else "Пеніцилін: висип і набряк",
             medicines = if (en) "Inhaler for asthma, in the front pocket of the go-bag" else "Інгалятор від астми, у передній кишені валізи",
@@ -258,14 +258,14 @@ class StoreScreensTest {
         val noteTexts = if (en) listOf(
             "Documents" to "Passports and birth certificates: blue folder, top shelf. Copies on the memory stick in the go-bag.",
             "Water" to "Change the bottles in the hallway every 6 months. Next time: May.",
-            "Neighbours" to "Maria (flat 12) has a generator. Taras (flat 7) is a nurse.",
+            "Neighbours" to "Maria next door has a generator. Taras upstairs is a nurse.",
             "Shelter" to "Basement entrance from the yard. Key with the house manager.",
             "Medicines" to "Inhaler, painkillers, plasters. Check the dates in spring.",
             "Car" to "Keep the tank at least half full. Spare canister in the garage.",
         ) else listOf(
             "Документи" to "Паспорти й свідоцтва: синя тека, верхня полиця. Копії на флешці в тривожній валізі.",
             "Вода" to "Міняти пляшки в коридорі кожні 6 місяців. Наступного разу — у травні.",
-            "Сусіди" to "Марія (кв. 12) має генератор. Тарас (кв. 7) — медбрат.",
+            "Сусіди" to "Марія по сусідству має генератор. Тарас поверхом вище — медбрат.",
             "Укриття" to "Вхід у підвал з подвір'я. Ключ у старшої по будинку.",
             "Ліки" to "Інгалятор, знеболювальне, пластирі. Перевірити терміни навесні.",
             "Авто" to "Тримати бак щонайменше наполовину повним. Запасна каністра в гаражі.",

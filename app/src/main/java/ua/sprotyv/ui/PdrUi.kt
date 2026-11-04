@@ -38,10 +38,10 @@ fun PdrScreen(content: Content?, nav: Nav) {
         val p = content.pdr ?: return@Frame Broken()
         Text(stringResource(R.string.pdr_intro), style = MaterialTheme.typography.bodyLarge)
         var query by rememberSaveable { mutableStateOf("") }
-        OutlinedTextField(
+        NoKeyboardLearning { OutlinedTextField(
             value = query, onValueChange = { query = it.take(60) }, singleLine = true,
             label = { Text(stringResource(R.string.pdr_search)) }, modifier = Modifier.fillMaxWidth(),
-        )
+        ) }
         val q = query.trim()
         if (q.length >= 2) {
             val found = p.sections.flatMap { s ->

@@ -14,7 +14,8 @@ import ua.sprotyv.content.Link
  * who makes the owner unlock the phone and confirm the PIN can turn it off and see it.
  */
 object Trip {
-    private val HIDDEN_GROUPS = setOf("front", "search", "veterans")
+    // Resistance training, drone courses and military service: not for a checked phone either
+    private val HIDDEN_GROUPS = setOf("front", "search", "veterans", "learn", "drones", "service")
     private val HIDDEN_LINKS = setOf(
         "warcrimes", "helsinki", "cpd",
         // Deported children, papers from the occupied areas, care for the war-wounded
@@ -23,7 +24,7 @@ object Trip {
 
     fun hides(route: Route): Boolean = route.personal || route == Route.Scan || route == Route.Resistance || route == Route.HistoryRoute || route is Route.Story ||
         // Which messengers are installed, and the defence words: not for a checkpoint
-        route == Route.Comms
+        route == Route.Comms || route == Route.Weapons
 
     fun hides(link: Link): Boolean = link.group in HIDDEN_GROUPS || link.id in HIDDEN_LINKS
 }

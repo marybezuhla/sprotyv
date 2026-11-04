@@ -85,15 +85,17 @@ fun PhonesScreen(content: Content?, nav: Nav, pins: List<String>, onPin: (String
         if (content.phonesBroken) return@Frame Broken()
         val trip = HomePrefs.state.collectAsState().value?.trip == true
         var query by remember { mutableStateOf("") }
-        OutlinedTextField(
+        NoKeyboardLearning { OutlinedTextField(
             value = query, onValueChange = { query = it.take(40) },
             label = { Text(stringResource(R.string.phones_search)) }, singleLine = true,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
             modifier = Modifier.fillMaxWidth(),
-        )
-        val words = query.trim().lowercase().split(Regex("\\s+")).filter { it.isNotEmpty() }
-        fun matches(p: Phone) = words.all { w -> (p.title + " " + p.note + " " + p.number + " " + PhonesReader.shown(p.number)).lowercase().contains(w) }
-        val shown = content.phones.filter { !(trip && it.category in Phone.TRIP_HIDES) && matches(it) }
+        ) }
+        // One kind of apostrophe, so «здоров'я» finds «здоров’я»
+        fun plain(s: String) = s.lowercase().replace('\u2019', '\'').replace('\u02BC', '\'')
+        val words = plain(query.trim()).split(Regex("\\s+")).filter { it.isNotEmpty() }
+        fun matches(p: Phone) = words.all { w -> plain(p.title + " " + p.note + " " + p.number + " " + PhonesReader.shown(p.number)).contains(w) }
+        val shown = content.phones.filter { !(trip && Phone.tripHides(it.id)) && matches(it) }
         if (shown.isEmpty()) Text(stringResource(R.string.phones_none), style = MaterialTheme.typography.bodyLarge)
         Phone.CATEGORIES.forEach { c ->
             val list = shown.filter { it.category == c }
@@ -120,7 +122,7 @@ fun PhonesScreen(content: Content?, nav: Nav, pins: List<String>, onPin: (String
 @Composable
 private fun PhoneRow(p: Phone, tint: Tint, pinned: Boolean, full: Boolean, onPin: (Boolean) -> Unit, onClick: () -> Unit) {
     val shown = PhonesReader.shown(p.number)
-    val say = stringResource(R.string.phones_call, shown, p.title)
+    val say = stringResource(R.string.phones_call, shown, p.title) + ". " + p.note
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         Row(
             Modifier.weight(1f).heightIn(min = 64.dp)

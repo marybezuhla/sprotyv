@@ -119,8 +119,8 @@ fun Block(
         val header = Modifier.fillMaxWidth().background(tint.container)
         Row(
             (if (foldable) header.clickable(onClickLabel = stringResource(if (open) R.string.shelf_fold else R.string.shelf_unfold)) { open = !open }.heightIn(min = 56.dp)
-                // TalkBack says whether it is open, not only what a tap does
-                .semantics { stateDescription = foldState } else header)
+                // TalkBack says the name, that it is a heading, and whether it is open, on the one row it can tap
+                .semantics(mergeDescendants = true) { stateDescription = foldState; heading() } else header)
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -128,7 +128,7 @@ fun Block(
                 leading()
                 androidx.compose.foundation.layout.Spacer(Modifier.padding(start = 12.dp))
             }
-            androidx.compose.foundation.layout.Column(Modifier.weight(1f).semantics(mergeDescendants = true) { heading() }) {
+            androidx.compose.foundation.layout.Column(Modifier.weight(1f).then(if (foldable) Modifier else Modifier.semantics(mergeDescendants = true) { heading() })) {
                 Text(title, style = BlockTitle, color = tint.ink)
                 if (summary != null) Text(summary, style = MaterialTheme.typography.bodyMedium, color = tint.ink)
             }

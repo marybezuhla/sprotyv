@@ -81,7 +81,7 @@ object Notices {
     }
 }
 
-/** A number's short name for a tile: the operator alone for the grid ("Житомиробленерго"), the title otherwise. */
+/** A number's short name for a tile: the grid operator alone for power lines, the title otherwise. */
 fun phoneShort(p: ua.sprotyv.content.Phone): String = if (p.category == "power") p.title.substringAfter(": ") else p.title
 
 /** Where the notices show, over every screen. */
@@ -92,7 +92,7 @@ fun NoticeHost(modifier: Modifier = Modifier) {
     LaunchedEffect(notice?.id) {
         val n = notice ?: return@LaunchedEffect
         host.currentSnackbarData?.dismiss()
-        val result = host.showSnackbar(n.text, actionLabel = n.action, withDismissAction = false, duration = SnackbarDuration.Short)
+        val result = host.showSnackbar(n.text, actionLabel = n.action, withDismissAction = false, duration = if (n.action != null) SnackbarDuration.Long else SnackbarDuration.Short)
         if (result == SnackbarResult.ActionPerformed) n.onAction?.invoke()
         if (Notices.current.value === n) Notices.current.value = null
     }

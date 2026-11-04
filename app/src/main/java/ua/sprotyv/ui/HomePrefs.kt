@@ -118,7 +118,8 @@ object HomePrefs {
             s.copy(
                 mode = home["mode"]?.let { m -> Mode.entries.firstOrNull { it.name == m } } ?: s.mode,
                 pins = home["pins"]?.let(Pins::parse) ?: s.pins,
-                locked = flag("lock", s.locked),
+                // A backup can turn the settings lock on, never off: a restored file does not lower protection
+                locked = s.locked || flag("lock", s.locked),
                 theme = home["theme"]?.let { t -> ThemeChoice.entries.firstOrNull { it.name == t } } ?: s.theme,
                 dynamic = flag("dynamic", s.dynamic),
                 callBar = flag("call_bar", s.callBar),

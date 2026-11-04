@@ -62,10 +62,10 @@ fun MozListScreen(content: Content?, nav: Nav) {
         }
         // Search across all 29 procedures, word for word
         var query by rememberSaveable { mutableStateOf("") }
-        androidx.compose.material3.OutlinedTextField(
+        NoKeyboardLearning { androidx.compose.material3.OutlinedTextField(
             value = query, onValueChange = { query = it.take(60) }, singleLine = true,
             label = { ChipText(stringResource(R.string.moz_search)) }, modifier = Modifier.fillMaxWidth(),
-        )
+        ) }
         val q = query.trim()
         if (q.length >= 2) {
             val found = moz.procedures.filter { it.allText.contains(q, ignoreCase = true) }

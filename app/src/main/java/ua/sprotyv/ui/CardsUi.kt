@@ -319,14 +319,15 @@ private fun TourniquetTime(nav: Nav? = null) {
                 // Who and where, in own words; not needed to start, written when there is a moment
                 var note by remember(t.n) { mutableStateOf(t.note) }
                 var unsaved by remember(t.n) { mutableStateOf(false) }
-                androidx.compose.material3.OutlinedTextField(
+                // Who was hurt and where: not learned by the keyboard
+                NoKeyboardLearning { androidx.compose.material3.OutlinedTextField(
                     value = note,
                     onValueChange = { v -> note = v.take(Tourniquets.NOTE_MAX); unsaved = !Tourniquets.note(context, t.n, note) },
                     supportingText = if (unsaved) { { Text(stringResource(R.string.tourniquet_note_unsaved)) } } else null,
                     label = { Text(stringResource(R.string.tourniquet_note)) },
                     placeholder = { Text(stringResource(R.string.tourniquet_note_hint)) },
                     singleLine = true, modifier = Modifier.fillMaxWidth(),
-                )
+                ) }
                 androidx.compose.foundation.layout.Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     // Put on before the tap: the time moved back; a slip is put right with "+5"
                     OutlinedButton(onClick = { Tourniquets.shift(context, t.n, -5); changed() }, modifier = Modifier.weight(1f).heightIn(min = 48.dp)
@@ -394,8 +395,9 @@ private fun Why(why: String, key: String) {
 @Composable
 private fun StepNumber(n: Int, active: Boolean) {
     Box(
-        // Grows with large text instead of clipping the number
-        Modifier.defaultMinSize(36.dp, 36.dp).aspectRatio(1f).clip(CircleShape)
+        // Grows with large text instead of clipping the number, but always a fixed size: never
+        // stretched by the row it sits in (a free aspect ratio once took the whole width)
+        Modifier.size(36.dp * androidx.compose.ui.platform.LocalDensity.current.fontScale.coerceIn(1f, 2f)).clip(CircleShape)
             .background(if (active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primaryContainer),
         contentAlignment = Alignment.Center,
     ) {

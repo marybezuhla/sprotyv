@@ -29,13 +29,30 @@ object Reach {
 
     /** Opens the dialer with the number filled in; the person presses call. */
     fun dial(context: Context, number: String) =
-        start(context, Intent(Intent.ACTION_DIAL, Uri.parse(Links.tel(number))))
+        startPreferring(context, Intent(Intent.ACTION_DIAL, Uri.parse(Links.tel(number))), defaultDialer(context))
+
+    /**
+     * Calls and SMS go to the phone's own default dialler and SMS app, not to whichever app also
+     * answers (which number was dialled and the "I am safe" text are not for an app that only
+     * pretends). With no default set, the phone chooses as before.
+     */
+    private fun startPreferring(context: Context, intent: Intent, pkg: String?) {
+        if (pkg != null && tryStart(context, Intent(intent).setPackage(pkg))) return
+        start(context, intent)
+    }
+
+    private fun defaultDialer(context: Context): String? = try {
+        (context.getSystemService(Context.TELECOM_SERVICE) as? android.telecom.TelecomManager)?.defaultDialerPackage
+    } catch (e: Exception) { null }
+
+    private fun defaultSms(context: Context): String? = try {
+        android.provider.Telephony.Sms.getDefaultSmsPackage(context)
+    } catch (e: Exception) { null }
 
     /** One SMS to several numbers at once, with the text ready. Works with no internet. */
     fun sms(context: Context, numbers: List<String>, text: String) {
         val link = try { Links.smsTo(numbers) } catch (e: IllegalArgumentException) { return noNumber(context) }
-        val intent = Intent(Intent.ACTION_SENDTO, Uri.parse(link)).putExtra("sms_body", text)
-        start(context, intent)
+        startPreferring(context, Intent(Intent.ACTION_SENDTO, Uri.parse(link)).putExtra("sms_body", text), defaultSms(context))
     }
 
     /**

@@ -132,7 +132,7 @@ private fun Rows(kind: String, firstLabel: Int, secondLabel: Int, firstHint: Int
         AlertDialog(
             onDismissRequest = { editing = null },
             properties = androidx.compose.ui.window.DialogProperties(dismissOnClickOutside = false, dismissOnBackPress = false),
-            text = {
+            text = { SensitiveWindow();
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Field(stringResource(firstLabel), r.first, { r = r.copy(first = it) }, multiline = true, hint = stringResource(firstHint))
                     Field(stringResource(secondLabel), r.second, { r = r.copy(second = it) }, multiline = true, hint = stringResource(secondHint))
@@ -223,7 +223,7 @@ fun KitScreen(content: Content?, nav: Nav) {
     if (confirmReset) {
         AlertDialog(
             onDismissRequest = { confirmReset = false },
-            text = { Text(stringResource(R.string.kit_reset_confirm)) },
+            text = { SensitiveWindow(); Text(stringResource(R.string.kit_reset_confirm)) },
             confirmButton = {
                 TextButton(onClick = {
                     // Ticks still waiting would land after the clear; they go too

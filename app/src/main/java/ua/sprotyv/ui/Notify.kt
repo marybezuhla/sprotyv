@@ -401,6 +401,9 @@ object Opening {
 
     fun clear() { _target.value = null }
 
+    /** A part of the app opened from inside it (a dialog with no way to navigate of its own). */
+    fun open(tile: String) { if (TILE.matches("tile/$tile")) _target.value = "tile/$tile" }
+
     /** The screen for a word. */
     fun route(t: String): Route? = when (t) {
         "bleeding" -> Route.CardRoute("bleeding")
