@@ -297,6 +297,51 @@
   "checkedOn": "2026-11-03"
  },
  {
+  "id": "p-vinnytsia",
+  "category": "power",
+  "title": "Vinnytsia oblast: Vinnytsiaoblenergo",
+  "note": "No power, a fault in the grid. Call centre.",
+  "number": "0800309595",
+  "source": "https://mev.gov.ua/en/storinka/where-check-electricity-outage-schedules-and-where-report-violations",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-volyn",
+  "category": "power",
+  "title": "Volyn oblast: Volynoblenergo",
+  "note": "No power, a fault in the grid. Call centre.",
+  "number": "0800210131",
+  "source": "https://mev.gov.ua/en/storinka/where-check-electricity-outage-schedules-and-where-report-violations",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-ternopil",
+  "category": "power",
+  "title": "Ternopil oblast: Ternopiloblenergo",
+  "note": "No power, a fault in the grid. Call centre.",
+  "number": "0800409040",
+  "source": "https://mev.gov.ua/en/storinka/where-check-electricity-outage-schedules-and-where-report-violations",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-kharkiv",
+  "category": "power",
+  "title": "Kharkiv oblast: Kharkivoblenergo",
+  "note": "No power, a fault in the grid. Call centre.",
+  "number": "0800508413",
+  "source": "https://mev.gov.ua/en/storinka/where-check-electricity-outage-schedules-and-where-report-violations",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-chernivtsi",
+  "category": "power",
+  "title": "Chernivtsi oblast: Chernivtsioblenergo",
+  "note": "No power, a fault in the grid. Call centre; landline, normal call rates.",
+  "number": "0372584980",
+  "source": "https://mev.gov.ua/en/storinka/where-check-electricity-outage-schedules-and-where-report-violations",
+  "checkedOn": "2026-11-03"
+ },
+ {
   "id": "p-chernihiv",
   "category": "power",
   "title": "Chernihiv oblast: Chernihivoblenergo",
