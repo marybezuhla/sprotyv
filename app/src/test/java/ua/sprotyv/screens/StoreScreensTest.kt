@@ -57,6 +57,8 @@ import ua.sprotyv.ui.NotesScreen
 import ua.sprotyv.ui.PathScreen
 import ua.sprotyv.ui.PdrScreen
 import ua.sprotyv.ui.PeopleScreen
+import ua.sprotyv.ui.PhonesEntry
+import ua.sprotyv.ui.PhonesScreen
 import ua.sprotyv.ui.PowerScreen
 import ua.sprotyv.ui.PracticeScreen
 import ua.sprotyv.ui.ResistanceScreen
@@ -132,20 +134,26 @@ class StoreScreensTest {
         val pins = Preset.GENERAL.pins + ua.sprotyv.home.Tiles.phone("ev-1548")
         HomePrefs.update(app) { it.copy(mode = Mode.FULL, pins = pins, trip = false) }
         fun title(id: Int) = app.getString(id)
+        // The listing, in the order a person meets the app: the colour code at a glance on the home
+        // screen, then danger (orange), help and health (green), one's own data (blue), knowing
+        // and everyday life (violet), resistance (khaki); light and dark mixed
         shot(dir, "1") { FullHome(content, pins, nav, {}, {}, {}) }
         shot(dir, "2") { NowScreen(content, nav) }
         HomePrefs.update(app) { it.copy(mode = Mode.SIMPLE) }
         shot(dir, "3") { CardScreen(content, "bleeding", nav) }
         HomePrefs.update(app) { it.copy(mode = Mode.FULL) }
-        shot(dir, "4") { GuideSectionScreen(content, "2.5", nav) }
+        shot(dir, "4", dark = true) { PhonesScreen(content, nav, pins) { _, _ -> } }
         shot(dir, "5") { Frame(title(R.string.medical_card), {}) { MedicalScreen() } }
-        shot(dir, "6", dark = true) { Frame(title(R.string.kit), {}) { KitScreen(content, nav) } }
-        shot(dir, "7") { Frame(title(R.string.shields_title), {}) { ShieldsScreen(nav) } }
+        shot(dir, "6") { Frame(title(R.string.people), {}) { PeopleScreen() } }
+        shot(dir, "7", dark = true) { Frame(title(R.string.docs_title), {}) { DocumentsScreen() } }
+        shot(dir, "8") { Frame(title(R.string.kit), {}) { KitScreen(content, nav) } }
         // Search, as someone in a hurry types it
         SearchMemory.query = if (lang == "en") "tourniquet" else "турнікет"
-        shot(dir, "8", dark = true) { SearchScreen(content, nav) }
+        shot(dir, "9", dark = true) { SearchScreen(content, nav) }
         SearchMemory.query = ""
-        shot(dir, "9") { PhonesScreen(content, nav, pins) { _, _ -> } }
+        shot(dir, "10") { GuideSectionScreen(content, "2.5", nav) }
+        shot(dir, "11", dark = true) { PowerScreen(content, nav) }
+        shot(dir, "12") { ResistanceScreen(content, nav) }
 
         // More pictures for presentations and other stores (not in the F-Droid listing)
         val more = "$dir-more"
