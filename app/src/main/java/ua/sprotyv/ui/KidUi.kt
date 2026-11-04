@@ -276,6 +276,7 @@ fun KidCallScreen() {
 @Composable
 fun KidCallOpenScreen() {
     val context = LocalContext.current
+    SensitiveWindow()
     val family = remember { KidCall.list(context) }
     if (family.isEmpty()) {
         Text(stringResource(R.string.kid_call_none), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)

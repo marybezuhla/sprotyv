@@ -629,6 +629,7 @@ private fun ImportChoice(list: List<Vcf.Contact>, room: Int, onCancel: () -> Uni
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(stringResource(R.string.people_import_room, picked.size, room), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.people_import_safe_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 androidx.compose.foundation.lazy.LazyColumn(Modifier.heightIn(max = 420.dp)) {
                     items(list.size) { i ->
                         val c = list[i]

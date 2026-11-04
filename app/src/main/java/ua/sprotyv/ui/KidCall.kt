@@ -39,9 +39,10 @@ object KidCall {
     /** Keeps the copy in step with "Trusted people": those marked for "I am safe" or as an emergency contact. */
     fun sync(c: Context, people: List<ua.sprotyv.personal.Person>) {
         if (!isOn(c)) return
-        val family = people.filter { (it.ice || it.safeList) && it.phone.isNotBlank() }.take(MAX)
+        val family = sortedPeople(people).filter { (it.ice || it.safeList) && it.phone.isNotBlank() }.take(MAX)
         val json = JSONArray().apply { family.forEach { put(JSONObject().put("n", it.name.take(80)).put("p", it.phone.take(30))) } }.toString()
-        val sealed = seal(json) ?: return
+        // Not sealed: no copy at all, rather than an old one with someone since removed
+        val sealed = seal(json) ?: return prefs(c).edit().remove(LIST).apply()
         prefs(c).edit().putString(LIST, sealed).apply()
     }
 
@@ -72,6 +73,8 @@ object KidCall {
                 .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
                 .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
                 .setKeySize(256)
+                // Not readable while the phone itself is locked (a seized phone after its first unlock)
+                .setUnlockedDeviceRequired(true)
                 .build(),
         )
         return gen.generateKey().also { cached = it }
