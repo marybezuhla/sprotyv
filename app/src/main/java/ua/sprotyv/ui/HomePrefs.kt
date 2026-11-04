@@ -21,7 +21,7 @@ object HomePrefs {
         val theme: ThemeChoice = ThemeChoice.SYSTEM,
         val dynamic: Boolean = false,
         /** The call bar at the bottom; off, a phone button sits in the corner instead. */
-        val callBar: Boolean = true,
+        val callBar: Boolean = false,
         /** Screenshots of the owner's screens allowed (off by default; the owner's choice, kept until changed). */
         val screenshots: Boolean = false,
         /** The readiness shares last seen in "Mine" ("2/4,1/2,…"), shown on the full home screen; no records. */
@@ -48,6 +48,7 @@ object HomePrefs {
     private const val CALL_BAR = "call_bar"
     private const val SCREENSHOTS = "screenshots"
     private const val SCREENSHOTS_RESET = "screenshots_off_030"
+    private const val CALL_BAR_RESET = "call_bar_off_111"
     private const val READINESS = "readiness"
     private const val READINESS_HIDDEN = "readiness_hidden"
     private const val PATH = "path_share"
@@ -65,13 +66,16 @@ object HomePrefs {
         // Version 0.3.0: screenshots are off by default. Once, for everyone, also where the old
         // default was written down by any change of settings; the owner can allow them again
         if (!p.getBoolean(SCREENSHOTS_RESET, false)) p.edit().putBoolean(SCREENSHOTS, false).putBoolean(SCREENSHOTS_RESET, true).apply()
+        // Version 1.1.2: the call bar at the bottom is off by default, in every mode, once for everyone;
+        // the phone button in the corner keeps 112 two taps away, and the bar can be turned on in settings
+        if (!p.getBoolean(CALL_BAR_RESET, false)) p.edit().putBoolean(CALL_BAR, false).putBoolean(CALL_BAR_RESET, true).apply()
         val s = State(
             mode = Mode.entries.firstOrNull { it.name == p.getString(MODE, null) },
             pins = Pins.parse(p.getString(PINS, null)),
             locked = p.getBoolean(LOCK, false),
             theme = ThemeChoice.entries.firstOrNull { it.name == p.getString(THEME, null) } ?: ThemeChoice.SYSTEM,
             dynamic = p.getBoolean(DYNAMIC, false),
-            callBar = p.getBoolean(CALL_BAR, true),
+            callBar = p.getBoolean(CALL_BAR, false),
             screenshots = p.getBoolean(SCREENSHOTS, false),
             readiness = p.getString(READINESS, null).orEmpty().take(100),
             readinessHidden = p.getBoolean(READINESS_HIDDEN, false),

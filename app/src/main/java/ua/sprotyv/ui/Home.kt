@@ -38,6 +38,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -56,7 +57,7 @@ import ua.sprotyv.reach.Reach
 /** "Call 112" at once; the other services one tap further. On every screen, unless turned off. */
 @Composable
 fun CallBar(edge: Boolean = true) {
-    val shown = HomePrefs.state.collectAsState().value?.callBar ?: true
+    val shown = HomePrefs.state.collectAsState().value?.callBar ?: false
     var others by rememberSaveable { mutableStateOf(false) }
     if (!shown) {
         // No bar: the edge still keeps clear of the system bar
@@ -78,8 +79,11 @@ fun CallBar(edge: Boolean = true) {
             Spacer(Modifier.width(8.dp))
             // One line always: with large text just "112" (the phone icon says the rest), never a word broken in two
             // (stacked, the button has the full width again, so the full words fit)
+            // and on a narrow screen, where the words would be cut ("Подзвонити 11"), just "112" too
             val big = androidx.compose.ui.platform.LocalDensity.current.fontScale > 1.15f && !stacked
-            Text(stringResource(if (big) R.string.kid_call_112 else R.string.call_112), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, maxLines = 1, softWrap = false)
+            var cut by remember { mutableStateOf(false) }
+            Text(stringResource(if (big || cut) R.string.kid_call_112 else R.string.call_112), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, maxLines = 1, softWrap = false,
+                onTextLayout = { if (it.hasVisualOverflow) cut = true })
         }
     }
     val rest: @Composable (Modifier) -> Unit = { m ->
@@ -111,7 +115,7 @@ fun CallBar(edge: Boolean = true) {
  */
 @Composable
 fun CornerCall() {
-    val shown = HomePrefs.state.collectAsState().value?.callBar ?: true
+    val shown = HomePrefs.state.collectAsState().value?.callBar ?: false
     if (shown) return
     var open by rememberSaveable { mutableStateOf(false) }
     IconButton(onClick = { open = true }, modifier = Modifier.size(48.dp)) {

@@ -211,7 +211,7 @@ val Shield: ImageVector by lazy {
 
 /** The tiles that belong to resistance: they wear its mark wherever they are. */
 internal fun isResist(id: String) = id == Tiles.tool(Tool.RESIST) || id == Tiles.tool(Tool.CONSTITUTION) || id == Tiles.tool(Tool.HISTORY) ||
-    (id.startsWith("phone:") && ua.sprotyv.content.Phone.categoryOf(id.substringAfter(':')) == "security")
+    (id.startsWith("phone:") && ua.sprotyv.content.Phone.categoryOf(id.substringAfter(':')) in setOf("security", "veterans"))
 
 /** A tile's badge colours: its group's, or resistance's khaki. */
 @Composable
