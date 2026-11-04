@@ -46,6 +46,13 @@ object KidCall {
         prefs(c).edit().putString(LIST, sealed).apply()
     }
 
+    /** Fills the copy now from "Trusted people" if My data is open (otherwise the next time it is). */
+    suspend fun syncNow(c: Context) {
+        if (!isOn(c)) return
+        val people = ua.sprotyv.personal.PersonalStore.read { it.people().all() } ?: return
+        sync(c, people)
+    }
+
     /** The child's list; empty when off, not yet made, or it does not open (a new phone). */
     fun list(c: Context): List<Entry> {
         if (!isOn(c)) return emptyList()

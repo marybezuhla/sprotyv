@@ -253,12 +253,12 @@ object Docs {
     private val clearLater = android.os.Handler(android.os.Looper.getMainLooper())
 
     /** Back in the app: the plain copy handed out goes a minute later (the other app had time to take it). */
-    fun clearSharedSoon(context: Context) {
+    fun clearSharedSoon(context: Context, afterMs: Long = 60_000) {
         val app = context.applicationContext
         if (shareDir(app).listFiles().isNullOrEmpty()) return
         clearLater.removeCallbacksAndMessages(null)
-        // Only copies at least a minute old: one shared again meanwhile keeps its own minute
-        clearLater.postDelayed({ Thread { clearShared(app, 60_000) }.start() }, 60_000)
+        // Only copies at least that old: one shared again meanwhile keeps its own time
+        clearLater.postDelayed({ Thread { clearShared(app, afterMs) }.start() }, afterMs)
     }
 
     fun share(context: Context, doc: Document, bytes: ByteArray) {

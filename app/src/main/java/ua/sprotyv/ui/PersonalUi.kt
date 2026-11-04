@@ -505,7 +505,9 @@ fun SafeScreen(nav: Nav) {
     var okText by remember(stored) { mutableStateOf(stored.ifBlank { defaultText }) }
     // Three ready messages: "I am fine" (the owner's own words, saved), "I need help", "I can't talk"
     // Nothing chosen at first: in a hurry "all is well" must never go by mistake
-    var status by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf<SafeStatus?>(null) }
+    // Kept only as long as its text is (both plain remember): after turning the phone both start
+    // again from nothing chosen, never a "need help" mark over an "I am fine" message
+    var status by remember { mutableStateOf<SafeStatus?>(null) }
     val helpText = stringResource(R.string.safe_help_message)
     val quietText = stringResource(R.string.safe_quiet_message)
 

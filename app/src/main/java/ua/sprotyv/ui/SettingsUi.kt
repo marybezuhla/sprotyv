@@ -1,5 +1,6 @@
 package ua.sprotyv.ui
 
+import kotlinx.coroutines.launch
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -174,7 +175,8 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
         Text(stringResource(R.string.lock_explain), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         // The child's "Call my people" without the lock on "My data"
         var kidOpen by remember { mutableStateOf(KidCall.isOn(context)) }
-        Toggle(stringResource(R.string.kid_call_open_toggle), kidOpen) { on -> KidCall.set(context, on); kidOpen = on }
+        val kidScope = androidx.compose.runtime.rememberCoroutineScope()
+        Toggle(stringResource(R.string.kid_call_open_toggle), kidOpen) { on -> KidCall.set(context, on); kidOpen = on; if (on) kidScope.launch { KidCall.syncNow(context) } }
         Text(stringResource(R.string.kid_call_open_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         // Screenshots of the owner's screens: off by default, turned on only after reading what it means
         var askScreenshots by rememberSaveable { mutableStateOf(false) }

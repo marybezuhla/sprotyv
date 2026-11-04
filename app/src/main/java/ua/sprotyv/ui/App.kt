@@ -177,7 +177,7 @@ fun App() {
         if (t.startsWith("tile/phone:") && content == null) return@LaunchedEffect
         Opening.clear()
         // Kid mode: only the children's cards from the children's widget
-        val allowed = prefs.mode == Mode.FULL || prefs.mode == Mode.SIMPLE || (prefs.mode == Mode.KID && t.startsWith("tile/card:kid-"))
+        val allowed = prefs.mode == Mode.FULL || prefs.mode == Mode.SIMPLE || (prefs.mode == Mode.KID && (t.startsWith("tile/card:kid-") || t == "kidcall"))
         if (allowed) Opening.route(t)?.let { if (top != it) nav.go(it) }
     }
 

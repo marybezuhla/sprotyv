@@ -1,5 +1,6 @@
 package ua.sprotyv.ui
 
+import kotlinx.coroutines.launch
 import androidx.compose.foundation.layout.fillMaxHeight
 
 import androidx.compose.foundation.BorderStroke
@@ -980,7 +981,8 @@ fun WelcomeScreen(nav: Nav) {
                 // The lock on "My data" would stop the child at a fingerprint: said here, with the way round it
                 Text(stringResource(R.string.kid_call_lock_warn), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
                 var open by remember { mutableStateOf(KidCall.isOn(context)) }
-                Toggle(stringResource(R.string.kid_call_open_toggle), open) { on -> KidCall.set(context, on); open = on }
+                val kidScope = androidx.compose.runtime.rememberCoroutineScope()
+                Toggle(stringResource(R.string.kid_call_open_toggle), open) { on -> KidCall.set(context, on); open = on; if (on) kidScope.launch { KidCall.syncNow(context) } }
                 val canLock = Guard.available(context)
                 if (canLock) {
                     Button(onClick = { HomePrefs.update(context) { it.copy(mode = Mode.KID, locked = true) } }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {

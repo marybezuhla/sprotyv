@@ -36,7 +36,8 @@ object Notices {
     }
 
     /** Puts a tile on the home screen and says so; when the home screen is full, says why nothing happened. */
-    fun pin(context: Context, content: Content?, id: String) {
+    fun pin(screen: Context, content: Content?, id: String) {
+        val context = screen.applicationContext
         val now = HomePrefs.load(context).pins
         if (id in now || id in Tiles.FIXED) return
         if (now.size >= Tiles.MAX_PINS) return show(context.getString(R.string.pins_full_short, Tiles.MAX_PINS))
@@ -49,7 +50,8 @@ object Notices {
     }
 
     /** Takes a tile off and says so, with a way to put it back in the same place. */
-    fun unpin(context: Context, content: Content?, id: String) {
+    fun unpin(screen: Context, content: Content?, id: String) {
+        val context = screen.applicationContext
         val before = HomePrefs.load(context).pins
         val at = before.indexOf(id)
         if (at < 0) return

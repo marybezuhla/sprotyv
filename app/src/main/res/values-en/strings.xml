@@ -1677,7 +1677,7 @@
     <string name="phones_intro">Tap a line to open the dialler; nothing is called until you confirm. Every number was checked on an official site or the organisation\'s own; the date is under each number.</string>
     <string name="phones_search">Search: service, topic or number</string>
     <string name="phones_none">Nothing found. Emergency services: 112.</string>
-    <string name="phones_note">Numbers change. If a line does not answer, try another one on the same topic; in danger, call 112. Any number can also go on the phone\'s own screen: the "Part of Sprotyv" widget, then the number at the end of the list.</string>
+    <string name="phones_note">Numbers change. If a line does not answer, try another one on the same topic; in danger, call 112. Any number can also go on the phone\'s own screen: the “Part of Sprotyv” widget, then the number at the end of the list.</string>
     <string name="phones_call">Call %1$s, %2$s</string>
     <string name="phones_checked">%1$s, checked %2$s</string>
     <string name="phones_cat_emergency">Emergency services</string>
@@ -1705,11 +1705,11 @@
     <string name="people_import_choose">Whom to add?</string>
     <string name="people_import_room">Chosen %1$d · places left: %2$d</string>
     <string name="people_import_add">Add (%1$d)</string>
-    <string name="safe_short">"I am safe"</string>
-    <string name="kid_call_lock_warn">If "My data" is locked, "Call my people" will ask for your fingerprint or PIN, which the child cannot give.</string>
+    <string name="safe_short">“I am safe”</string>
+    <string name="kid_call_lock_warn">If “My data” is locked, “Call my family” will ask for your fingerprint or PIN, which the child cannot give.</string>
     <string name="kid_call_open_toggle">My people\'s numbers for the child without the lock</string>
-    <string name="kid_call_open_hint">A separate encrypted copy of only the names and numbers of people marked for "I am safe" or as an emergency contact. Works only in kids\' mode and is updated whenever you open Trusted people. Turned off, the copy is deleted.</string>
+    <string name="kid_call_open_hint">A separate encrypted copy of only the names and numbers of people marked for “I am safe” or as an emergency contact. Works only in kids\' mode and is updated whenever you open Trusted people. Turned off, the copy is deleted.</string>
     <string name="safe_choose_first">Choose above what to say; the message and the send buttons appear then.</string>
     <string name="people_import_all_known">All contacts in the file (%1$d) are already in the list.</string>
-    <string name="people_import_safe_note">Those added get \"I am safe\"; the mark can be removed in each person\'s card.</string>
+    <string name="people_import_safe_note">Those added get “I am safe”; the mark can be removed in each person\'s card.</string>
 </resources>
