@@ -1697,4 +1697,6 @@
     <string name="phones_cat_security">Безпека, полон, зниклі безвісти</string>
     <string name="phones_cat_veterans">Ветерани й військові</string>
     <string name="phones_cat_state">Держава, права, документи</string>
+    <string name="phones_cat_power">Світло: обленерго</string>
+    <string name="phones_cat_learn">Підготовка до нацспротиву</string>
 </resources>

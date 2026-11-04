@@ -47,6 +47,8 @@ import ua.sprotyv.reach.Reach
 private fun categoryTitle(c: String): Int = when (c) {
     "emergency" -> R.string.phones_cat_emergency
     "evacuation" -> R.string.phones_cat_evacuation
+    "power" -> R.string.phones_cat_power
+    "learn" -> R.string.phones_cat_learn
     "mind" -> R.string.phones_cat_mind
     "violence" -> R.string.phones_cat_violence
     "children" -> R.string.phones_cat_children
@@ -64,7 +66,9 @@ private fun categoryTitle(c: String): Int = when (c) {
 @Composable
 private fun categoryTint(c: String): Tint = when (c) {
     "emergency" -> Group.DANGER.tint()
-    "security", "veterans" -> resist()
+    "security", "veterans", "learn" -> resist()
+    // As the "Power" shelf: everyday life
+    "power" -> Group.HOME_LIFE.tint()
     else -> Group.FIRST_AID.tint()
 }
 

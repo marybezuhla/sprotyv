@@ -81,6 +81,33 @@
   "checkedOn": "2026-11-03"
  },
  {
+  "id": "ev-angels",
+  "category": "evacuation",
+  "title": "Angels of Salvation",
+  "note": "Evacuation from frontline areas. Mon–Fri 08:00–18:00, Sat 08:00–15:00; free.",
+  "number": "0800334620",
+  "source": "https://eng.charity-aos.com/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "ev-helping-to-leave",
+  "category": "evacuation",
+  "title": "Helping to Leave",
+  "note": "Free evacuation from the temporarily occupied territories. Mobile, normal call rates.",
+  "number": "0931776458",
+  "source": "https://helpingtoleave.org/en",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "ev-proliska",
+  "category": "evacuation",
+  "title": "Proliska",
+  "note": "Humanitarian mission: help for displaced and affected people, evacuation. Mon–Fri 09:00–18:00.",
+  "number": "0800888888",
+  "source": "https://krasnopilska-gromada.gov.ua/news/1753359929/",
+  "checkedOn": "2026-11-03"
+ },
+ {
   "id": "ev-redcross",
   "category": "evacuation",
   "title": "Ukrainian Red Cross",
@@ -96,6 +123,195 @@
   "note": "Help for people affected by the war, tracing relatives. Mon–Fri 09:00–13:00 and 14:00–17:00, free.",
   "number": "0800300155",
   "source": "https://www.icrc.org/en/where-we-work/europe-central-asia/ukraine/help-useful-information-affected-people",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-kyiv",
+  "category": "power",
+  "title": "Kyiv: DTEK Kyiv Electric Networks",
+  "note": "No power, a fault in the grid. 24/7, free.",
+  "number": "0800501588",
+  "source": "https://www.dtek-kem.com.ua/ua/contacts",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-kyiv-oblast",
+  "category": "power",
+  "title": "Kyiv oblast: DTEK Kyiv Regional Electric Networks",
+  "note": "No power, a fault in the grid. 24/7, free.",
+  "number": "0800400740",
+  "source": "https://www.dtek-krem.com.ua/ua/contacts",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-dnipro",
+  "category": "power",
+  "title": "Dnipropetrovsk oblast: DTEK Dnipro Electric Networks",
+  "note": "No power, a fault in the grid. 24/7, free.",
+  "number": "0800301497",
+  "source": "https://www.dtek-dnem.com.ua/ua/contacts",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-dnipro-cek",
+  "category": "power",
+  "title": "Dnipropetrovsk oblast: CEK",
+  "note": "No power, a fault in the grid. 24/7, free.",
+  "number": "0800300015",
+  "source": "https://cek.dp.ua/index.php/call-tsentr.html",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-donetsk",
+  "category": "power",
+  "title": "Donetsk oblast: DTEK Donetsk Electric Networks",
+  "note": "No power, a fault in the grid. 24/7, free.",
+  "number": "0800500473",
+  "source": "https://www.dtek-dem.com.ua/ua/contacts",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-zhytomyr",
+  "category": "power",
+  "title": "Zhytomyr oblast: Zhytomyroblenergo",
+  "note": "No power, a fault in the grid. 24/7.",
+  "number": "0800309282",
+  "source": "https://www.ztoe.com.ua/consulting.php",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-zakarpattia",
+  "category": "power",
+  "title": "Zakarpattia oblast: Zakarpattiaoblenergo",
+  "note": "No power, a fault in the grid. Free from mobiles and landlines.",
+  "number": "0800501620",
+  "source": "https://zakarpat.energy/customers/call-center",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-zaporizhzhia",
+  "category": "power",
+  "title": "Zaporizhzhia oblast: Zaporizhzhiaoblenergo",
+  "note": "No power, a fault in the grid. Contact centre.",
+  "number": "0800304502",
+  "source": "https://www.zoe.com.ua",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-ivano-frankivsk",
+  "category": "power",
+  "title": "Ivano-Frankivsk oblast: Prykarpattiaoblenergo",
+  "note": "No power, a fault in the grid. Free.",
+  "number": "0800504020",
+  "source": "https://oe.if.ua/uk/faq/question/68dbbe86b877ec6934ec6ed7",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-kirovohrad",
+  "category": "power",
+  "title": "Kirovohrad oblast: Kirovohradoblenergo",
+  "note": "No power, a fault in the grid. 24/7, free; breaks during air alerts.",
+  "number": "0800501148",
+  "source": "https://kiroe.com.ua/kol-tsentr",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-lviv",
+  "category": "power",
+  "title": "Lviv oblast: Lvivoblenergo",
+  "note": "No power, a fault in the grid. Call centre.",
+  "number": "0800301568",
+  "source": "https://loe.lviv.ua/page/call_center",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-mykolaiv",
+  "category": "power",
+  "title": "Mykolaiv oblast: Mykolaivoblenergo",
+  "note": "No power, a fault in the grid. 24/7, free.",
+  "number": "0800306001",
+  "source": "https://www.energy.mk.ua/koll-czentry/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-odesa",
+  "category": "power",
+  "title": "Odesa oblast: DTEK Odesa Electric Networks",
+  "note": "No power, a fault in the grid. 24/7, free.",
+  "number": "0800409090",
+  "source": "https://www.dtek-oem.com.ua/ua/contacts",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-poltava",
+  "category": "power",
+  "title": "Poltava oblast: Poltavaoblenergo",
+  "note": "No power, a fault in the grid. 24/7; does not work during an air alert.",
+  "number": "0800205035",
+  "source": "https://www.poe.pl.ua/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-rivne",
+  "category": "power",
+  "title": "Rivne oblast: Rivneoblenergo",
+  "note": "No power, a fault in the grid. 24/7.",
+  "number": "0800505380",
+  "source": "https://www.roe.vsei.ua/call/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-sumy",
+  "category": "power",
+  "title": "Sumy oblast: Sumyoblenergo",
+  "note": "No power, a fault in the grid. 24/7.",
+  "number": "0800300247",
+  "source": "https://www.soe.com.ua/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-kherson",
+  "category": "power",
+  "title": "Kherson oblast: Khersonoblenergo",
+  "note": "No power, a fault in the grid. Call centre; landline, normal call rates.",
+  "number": "0552480620",
+  "source": "https://ksoe.com.ua/site/consumers/call_center/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-khmelnytskyi",
+  "category": "power",
+  "title": "Khmelnytskyi oblast: Khmelnytskoblenergo",
+  "note": "No power, a fault in the grid. 24/7, free.",
+  "number": "0800505062",
+  "source": "https://hoe.com.ua/page/call-tsentr",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-cherkasy",
+  "category": "power",
+  "title": "Cherkasy oblast: Cherkasyoblenergo",
+  "note": "No power, a fault in the grid. 24/7.",
+  "number": "0800501328",
+  "source": "https://www.cherkasyoblenergo.com/spozhyvacham/Call_Center2026?lang=uk",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-chernihiv",
+  "category": "power",
+  "title": "Chernihiv oblast: Chernihivoblenergo",
+  "note": "No power, a fault in the grid. 24/7.",
+  "number": "0800210310",
+  "source": "https://chernihivoblenergo.com.ua/in_callcenter",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "m-divchata",
+  "category": "mind",
+  "title": "Divchata support line",
+  "note": "Support for children and adults. 08:00–20:00, free.",
+  "number": "0800600044",
+  "source": "https://howareu.com/hot-lines",
   "checkedOn": "2026-11-03"
  },
  {
@@ -189,6 +405,15 @@
   "checkedOn": "2026-11-03"
  },
  {
+  "id": "c-save-ukraine",
+  "category": "children",
+  "title": "Save Ukraine: bringing children back",
+  "note": "Return of deported and illegally removed children.",
+  "number": "0800333129",
+  "source": "https://www.bringkidsback.org.ua/uk/contacts",
+  "checkedOn": "2026-11-03"
+ },
+ {
   "id": "c-116000",
   "category": "children",
   "title": "Missing children",
@@ -213,6 +438,33 @@
   "note": "The same as 116 111, from mobiles and landlines.",
   "number": "0800500225",
   "source": "https://la-strada.org.ua/en/garyachi-liniyi",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "h-superhumans",
+  "category": "health",
+  "title": "Superhumans",
+  "note": "Prosthetics and rehabilitation centre; help with the patient form.",
+  "number": "0800402222",
+  "source": "https://superhumans.com/en/patients-en/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "h-unbroken",
+  "category": "health",
+  "title": "Unbroken rehabilitation",
+  "note": "National rehabilitation centre (Lviv).",
+  "number": "0800333003",
+  "source": "https://unbroken.org.ua/ua/patients",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "h-nezabutni",
+  "category": "health",
+  "title": "Nezabutni dementia line",
+  "note": "Dementia helpline. Mon–Fri 10:00–18:00, free.",
+  "number": "0800308830",
+  "source": "https://howareu.com/hot-lines",
   "checkedOn": "2026-11-03"
  },
  {
@@ -249,6 +501,33 @@
   "note": "Questions about substitution therapy. 09:00–18:00, free, anonymous.",
   "number": "0800507727",
   "source": "https://www.phc.org.ua/en/activities/ongoing-projects/dont-give-aids-a-chance/hivaids-hotline",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "s-blue-bird",
+  "category": "security",
+  "title": "Blue Bird",
+  "note": "For survivors of captivity and families of the missing: social and medical support. Mon–Fri 10:00–19:00.",
+  "number": "0663621485",
+  "source": "https://howareu.com/hot-lines",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "s-contracts",
+  "category": "security",
+  "title": "Defence Ministry: new contracts",
+  "note": "Advice on serving under the new contracts.",
+  "number": "1519",
+  "source": "https://army.gov.ua/join-army/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "s-recruiting",
+  "category": "security",
+  "title": "Land Forces recruiting",
+  "note": "Talk to a recruiter, including about Contract 18–24.",
+  "number": "0800503696",
+  "source": "https://lfrecruiting.mil.gov.ua/en/18-24",
   "checkedOn": "2026-11-03"
  },
  {
@@ -324,6 +603,24 @@
   "checkedOn": "2026-11-03"
  },
  {
+  "id": "vt-legal100",
+  "category": "veterans",
+  "title": "Legal Hundred",
+  "note": "Free legal help for service members, veterans and families. Mon–Sat 09:00–20:00.",
+  "number": "0800308100",
+  "source": "https://legal100.org.ua/diialnist/hariacha-liniia/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "vt-women-strength",
+  "category": "veterans",
+  "title": "Women's Strength of Ukraine",
+  "note": "Line for service members and families. Daily 10:00–20:00, free.",
+  "number": "0800332720",
+  "source": "https://howareu.com/hot-lines",
+  "checkedOn": "2026-11-03"
+ },
+ {
   "id": "vt-1528",
   "category": "veterans",
   "title": "Unified veterans line",
@@ -348,6 +645,114 @@
   "note": "Veterans, service members, families of captives and the missing. Daily 09:00–21:00; normal call rates.",
   "number": "0673482868",
   "source": "https://veteranhub.com.ua/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "l-vinnytsia",
+  "category": "learn",
+  "title": "Vinnytsia oblast",
+  "note": "Enquiries about the regional centre's course; sign-up by online form.",
+  "number": "0996543793",
+  "source": "https://vin.gov.ua/news/top-novyny/78809-na-zamkovij-gori-vruchili-sertifikati-42-vipusknikam-kursu-pidgotovki-do-natsionalnogo-sprotivu-z-vinnichchini",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "l-lviv",
+  "category": "learn",
+  "title": "Lviv oblast",
+  "note": "Sign-up for the free Zakhyst Lvivshchyny courses in Lviv.",
+  "number": "0677390001",
+  "source": "https://lvivoblrada.gov.ua/instruktory-zakhystu-lvivshchyny-pre/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "l-poltava",
+  "category": "learn",
+  "title": "Poltava oblast",
+  "note": "Regional national resistance training centre, Poltava.",
+  "number": "0636042393",
+  "source": "https://sprotyv.pl.ua/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "l-kharkiv",
+  "category": "learn",
+  "title": "Kharkiv oblast",
+  "note": "Enquiries for the regional centre; sign-up by questionnaire.",
+  "number": "0996834662",
+  "source": "https://oblrada-kharkiv.gov.ua/oblasnyj-czentr-pidgotovky-naselennya-do-naczionalnogo-sprotyvu/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "l-khmelnytskyi",
+  "category": "learn",
+  "title": "Khmelnytskyi oblast",
+  "note": "Regional national resistance training centre.",
+  "number": "0502721850",
+  "source": "https://sprotyv.km.ua/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "l-cherkasy",
+  "category": "learn",
+  "title": "Cherkasy oblast",
+  "note": "Free training for civilians; sign-up by online form.",
+  "number": "0508309597",
+  "source": "https://nacsprotyv.ck.ua/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "st-unicef",
+  "category": "state",
+  "title": "UNICEF Spilno cash assistance",
+  "note": "Registration, payment status, appeals. Mon–Fri 09:00–17:00.",
+  "number": "0800600017",
+  "source": "https://www.unicef.org/ukraine/spilno-cash-transfers",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "st-r2p",
+  "category": "state",
+  "title": "Right to Protection",
+  "note": "Free legal advice. Mon–Fri 08:00–21:00. Also 099 507 50 90 and 093 507 50 90.",
+  "number": "0685075090",
+  "source": "https://krasnopilska-gromada.gov.ua/news/1753349992/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "st-employment",
+  "category": "state",
+  "title": "State Employment Service",
+  "note": "Unemployment, vacancies, training, vouchers.",
+  "number": "0800600288",
+  "source": "https://old.dcz.gov.ua/storinka/kontakty-derzhavnogo-centru-zaynyatosti",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "st-migration",
+  "category": "state",
+  "title": "State Migration Service",
+  "note": "Passports, documents, registration. Mon–Thu 09:00–18:00, Fri to 16:45; Kyiv landline.",
+  "number": "0443632250",
+  "source": "https://dmsu.gov.ua/hotlines.html",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "st-tax",
+  "category": "state",
+  "title": "State Tax Service",
+  "note": "Information and advice. Mon–Thu 08:00–19:00, Fri 08:00–18:00.",
+  "number": "0800501007",
+  "source": "https://ukc.gov.ua/a-dovidkova-informatsiya-a/kontakts-ovv/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "st-disability",
+  "category": "state",
+  "title": "Line for people with disabilities",
+  "note": "Ministry of Social Policy: appeals from people with disabilities.",
+  "number": "1539",
+  "source": "https://www.msp.gov.ua/about/contact",
   "checkedOn": "2026-11-03"
  },
  {

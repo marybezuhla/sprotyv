@@ -81,6 +81,33 @@
   "checkedOn": "2026-11-03"
  },
  {
+  "id": "ev-angels",
+  "category": "evacuation",
+  "title": "«Янголи спасіння»",
+  "note": "Евакуація з прифронтових районів. Пн–пт 08:00–18:00, сб 08:00–15:00; безкоштовно.",
+  "number": "0800334620",
+  "source": "https://eng.charity-aos.com/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "ev-helping-to-leave",
+  "category": "evacuation",
+  "title": "«Допомагаємо виїхати»",
+  "note": "Безкоштовна евакуація з тимчасово окупованих територій. Мобільний, за тарифом оператора.",
+  "number": "0931776458",
+  "source": "https://helpingtoleave.org/en",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "ev-proliska",
+  "category": "evacuation",
+  "title": "«Проліска»",
+  "note": "Гуманітарна місія: допомога переселенцям і постраждалим, евакуація. Пн–пт 09:00–18:00.",
+  "number": "0800888888",
+  "source": "https://krasnopilska-gromada.gov.ua/news/1753359929/",
+  "checkedOn": "2026-11-03"
+ },
+ {
   "id": "ev-redcross",
   "category": "evacuation",
   "title": "Український Червоний Хрест",
@@ -96,6 +123,195 @@
   "note": "Допомога постраждалим від війни, розшук родичів. Пн–пт 09:00–13:00 і 14:00–17:00, безкоштовно.",
   "number": "0800300155",
   "source": "https://www.icrc.org/en/where-we-work/europe-central-asia/ukraine/help-useful-information-affected-people",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-kyiv",
+  "category": "power",
+  "title": "Київ: ДТЕК Київські електромережі",
+  "note": "Немає світла, аварія в мережі. Цілодобово, безкоштовно.",
+  "number": "0800501588",
+  "source": "https://www.dtek-kem.com.ua/ua/contacts",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-kyiv-oblast",
+  "category": "power",
+  "title": "Київська область: ДТЕК Київські регіональні електромережі",
+  "note": "Немає світла, аварія в мережі. Цілодобово, безкоштовно.",
+  "number": "0800400740",
+  "source": "https://www.dtek-krem.com.ua/ua/contacts",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-dnipro",
+  "category": "power",
+  "title": "Дніпропетровська область: ДТЕК Дніпровські електромережі",
+  "note": "Немає світла, аварія в мережі. Цілодобово, безкоштовно.",
+  "number": "0800301497",
+  "source": "https://www.dtek-dnem.com.ua/ua/contacts",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-dnipro-cek",
+  "category": "power",
+  "title": "Дніпропетровська область: ПЕЕМ «ЦЕК»",
+  "note": "Немає світла, аварія в мережі. Цілодобово, безкоштовно.",
+  "number": "0800300015",
+  "source": "https://cek.dp.ua/index.php/call-tsentr.html",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-donetsk",
+  "category": "power",
+  "title": "Донецька область: ДТЕК Донецькі електромережі",
+  "note": "Немає світла, аварія в мережі. Цілодобово, безкоштовно.",
+  "number": "0800500473",
+  "source": "https://www.dtek-dem.com.ua/ua/contacts",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-zhytomyr",
+  "category": "power",
+  "title": "Житомирська область: Житомиробленерго",
+  "note": "Немає світла, аварія в мережі. Цілодобово.",
+  "number": "0800309282",
+  "source": "https://www.ztoe.com.ua/consulting.php",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-zakarpattia",
+  "category": "power",
+  "title": "Закарпатська область: Закарпаттяобленерго",
+  "note": "Немає світла, аварія в мережі. Безкоштовно з мобільних і стаціонарних.",
+  "number": "0800501620",
+  "source": "https://zakarpat.energy/customers/call-center",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-zaporizhzhia",
+  "category": "power",
+  "title": "Запорізька область: Запоріжжяобленерго",
+  "note": "Немає світла, аварія в мережі. Контакт-центр.",
+  "number": "0800304502",
+  "source": "https://www.zoe.com.ua",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-ivano-frankivsk",
+  "category": "power",
+  "title": "Івано-Франківська область: Прикарпаттяобленерго",
+  "note": "Немає світла, аварія в мережі. Безкоштовно.",
+  "number": "0800504020",
+  "source": "https://oe.if.ua/uk/faq/question/68dbbe86b877ec6934ec6ed7",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-kirovohrad",
+  "category": "power",
+  "title": "Кіровоградська область: Кіровоградобленерго",
+  "note": "Немає світла, аварія в мережі. Цілодобово, безкоштовно; перерви під час повітряних тривог.",
+  "number": "0800501148",
+  "source": "https://kiroe.com.ua/kol-tsentr",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-lviv",
+  "category": "power",
+  "title": "Львівська область: Львівобленерго",
+  "note": "Немає світла, аварія в мережі. Кол-центр.",
+  "number": "0800301568",
+  "source": "https://loe.lviv.ua/page/call_center",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-mykolaiv",
+  "category": "power",
+  "title": "Миколаївська область: Миколаївобленерго",
+  "note": "Немає світла, аварія в мережі. Цілодобово, безкоштовно.",
+  "number": "0800306001",
+  "source": "https://www.energy.mk.ua/koll-czentry/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-odesa",
+  "category": "power",
+  "title": "Одеська область: ДТЕК Одеські електромережі",
+  "note": "Немає світла, аварія в мережі. Цілодобово, безкоштовно.",
+  "number": "0800409090",
+  "source": "https://www.dtek-oem.com.ua/ua/contacts",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-poltava",
+  "category": "power",
+  "title": "Полтавська область: Полтаваобленерго",
+  "note": "Немає світла, аварія в мережі. Цілодобово; під час повітряної тривоги не працює.",
+  "number": "0800205035",
+  "source": "https://www.poe.pl.ua/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-rivne",
+  "category": "power",
+  "title": "Рівненська область: Рівнеобленерго",
+  "note": "Немає світла, аварія в мережі. Цілодобово.",
+  "number": "0800505380",
+  "source": "https://www.roe.vsei.ua/call/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-sumy",
+  "category": "power",
+  "title": "Сумська область: Сумиобленерго",
+  "note": "Немає світла, аварія в мережі. Цілодобово.",
+  "number": "0800300247",
+  "source": "https://www.soe.com.ua/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-kherson",
+  "category": "power",
+  "title": "Херсонська область: Херсонобленерго",
+  "note": "Немає світла, аварія в мережі. Кол-центр; міський номер, за тарифом оператора.",
+  "number": "0552480620",
+  "source": "https://ksoe.com.ua/site/consumers/call_center/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-khmelnytskyi",
+  "category": "power",
+  "title": "Хмельницька область: Хмельницькобленерго",
+  "note": "Немає світла, аварія в мережі. Цілодобово, безкоштовно.",
+  "number": "0800505062",
+  "source": "https://hoe.com.ua/page/call-tsentr",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-cherkasy",
+  "category": "power",
+  "title": "Черкаська область: Черкасиобленерго",
+  "note": "Немає світла, аварія в мережі. Цілодобово.",
+  "number": "0800501328",
+  "source": "https://www.cherkasyoblenergo.com/spozhyvacham/Call_Center2026?lang=uk",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-chernihiv",
+  "category": "power",
+  "title": "Чернігівська область: Чернігівобленерго",
+  "note": "Немає світла, аварія в мережі. Цілодобово.",
+  "number": "0800210310",
+  "source": "https://chernihivoblenergo.com.ua/in_callcenter",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "m-divchata",
+  "category": "mind",
+  "title": "«Дівчата»: лінія підтримки",
+  "note": "Підтримка дітям і дорослим. 08:00–20:00, безкоштовно.",
+  "number": "0800600044",
+  "source": "https://howareu.com/hot-lines",
   "checkedOn": "2026-11-03"
  },
  {
@@ -189,6 +405,15 @@
   "checkedOn": "2026-11-03"
  },
  {
+  "id": "c-save-ukraine",
+  "category": "children",
+  "title": "Save Ukraine: повернення дітей",
+  "note": "Повернення депортованих і незаконно вивезених дітей.",
+  "number": "0800333129",
+  "source": "https://www.bringkidsback.org.ua/uk/contacts",
+  "checkedOn": "2026-11-03"
+ },
+ {
   "id": "c-116000",
   "category": "children",
   "title": "Розшук зниклих дітей",
@@ -213,6 +438,33 @@
   "note": "Те саме, що 116 111, з мобільних і стаціонарних.",
   "number": "0800500225",
   "source": "https://la-strada.org.ua/en/garyachi-liniyi",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "h-superhumans",
+  "category": "health",
+  "title": "Superhumans: протезування",
+  "note": "Центр протезування й реабілітації; допомога з анкетою пацієнта.",
+  "number": "0800402222",
+  "source": "https://superhumans.com/en/patients-en/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "h-unbroken",
+  "category": "health",
+  "title": "Unbroken: реабілітація",
+  "note": "Національний реабілітаційний центр (Львів).",
+  "number": "0800333003",
+  "source": "https://unbroken.org.ua/ua/patients",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "h-nezabutni",
+  "category": "health",
+  "title": "«Незабутні»: деменція",
+  "note": "Гаряча лінія з питань деменції. Пн–пт 10:00–18:00, безкоштовно.",
+  "number": "0800308830",
+  "source": "https://howareu.com/hot-lines",
   "checkedOn": "2026-11-03"
  },
  {
@@ -249,6 +501,33 @@
   "note": "Питання замісної терапії. 09:00–18:00, безкоштовно, анонімно.",
   "number": "0800507727",
   "source": "https://www.phc.org.ua/en/activities/ongoing-projects/dont-give-aids-a-chance/hivaids-hotline",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "s-blue-bird",
+  "category": "security",
+  "title": "«Блакитний птах»",
+  "note": "Для тих, хто пережив полон, і родин зниклих: соціальна й медична підтримка. Пн–пт 10:00–19:00.",
+  "number": "0663621485",
+  "source": "https://howareu.com/hot-lines",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "s-contracts",
+  "category": "security",
+  "title": "Міноборони: нові контракти",
+  "note": "Консультації щодо служби за новими контрактами.",
+  "number": "1519",
+  "source": "https://army.gov.ua/join-army/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "s-recruiting",
+  "category": "security",
+  "title": "Рекрутинг Сухопутних військ",
+  "note": "Консультація рекрутера, зокрема щодо «Контракту 18–24».",
+  "number": "0800503696",
+  "source": "https://lfrecruiting.mil.gov.ua/en/18-24",
   "checkedOn": "2026-11-03"
  },
  {
@@ -324,6 +603,24 @@
   "checkedOn": "2026-11-03"
  },
  {
+  "id": "vt-legal100",
+  "category": "veterans",
+  "title": "«Юридична сотня»",
+  "note": "Безкоштовна правова допомога військовим, ветеранам і родинам. Пн–сб 09:00–20:00.",
+  "number": "0800308100",
+  "source": "https://legal100.org.ua/diialnist/hariacha-liniia/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "vt-women-strength",
+  "category": "veterans",
+  "title": "«Жіноча сила України»",
+  "note": "Лінія для військових і їхніх родин. Щодня 10:00–20:00, безкоштовно.",
+  "number": "0800332720",
+  "source": "https://howareu.com/hot-lines",
+  "checkedOn": "2026-11-03"
+ },
+ {
   "id": "vt-1528",
   "category": "veterans",
   "title": "Єдина ветеранська лінія",
@@ -348,6 +645,114 @@
   "note": "Ветерани, військові, родини полонених і зниклих. Щодня 09:00–21:00; дзвінок за тарифом оператора.",
   "number": "0673482868",
   "source": "https://veteranhub.com.ua/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "l-vinnytsia",
+  "category": "learn",
+  "title": "Вінниччина",
+  "note": "Довідки щодо курсу обласного центру; запис через онлайн-форму.",
+  "number": "0996543793",
+  "source": "https://vin.gov.ua/news/top-novyny/78809-na-zamkovij-gori-vruchili-sertifikati-42-vipusknikam-kursu-pidgotovki-do-natsionalnogo-sprotivu-z-vinnichchini",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "l-lviv",
+  "category": "learn",
+  "title": "Львівщина",
+  "note": "Запис на безкоштовні курси «Захисту Львівщини» у Львові.",
+  "number": "0677390001",
+  "source": "https://lvivoblrada.gov.ua/instruktory-zakhystu-lvivshchyny-pre/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "l-poltava",
+  "category": "learn",
+  "title": "Полтавщина",
+  "note": "Обласний центр підготовки до національного спротиву, Полтава.",
+  "number": "0636042393",
+  "source": "https://sprotyv.pl.ua/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "l-kharkiv",
+  "category": "learn",
+  "title": "Харківщина",
+  "note": "Довідки обласного центру; запис через анкету.",
+  "number": "0996834662",
+  "source": "https://oblrada-kharkiv.gov.ua/oblasnyj-czentr-pidgotovky-naselennya-do-naczionalnogo-sprotyvu/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "l-khmelnytskyi",
+  "category": "learn",
+  "title": "Хмельниччина",
+  "note": "Обласний центр підготовки до національного спротиву.",
+  "number": "0502721850",
+  "source": "https://sprotyv.km.ua/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "l-cherkasy",
+  "category": "learn",
+  "title": "Черкащина",
+  "note": "Безкоштовні вишколи для цивільних; запис через онлайн-форму.",
+  "number": "0508309597",
+  "source": "https://nacsprotyv.ck.ua/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "st-unicef",
+  "category": "state",
+  "title": "ЮНІСЕФ «Спільно»: грошова допомога",
+  "note": "Реєстрація, статус виплати, оскарження відмови. Пн–пт 09:00–17:00.",
+  "number": "0800600017",
+  "source": "https://www.unicef.org/ukraine/spilno-cash-transfers",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "st-r2p",
+  "category": "state",
+  "title": "«Право на захист»",
+  "note": "Безоплатні юридичні консультації. Пн–пт 08:00–21:00. Також 099 507 50 90 і 093 507 50 90.",
+  "number": "0685075090",
+  "source": "https://krasnopilska-gromada.gov.ua/news/1753349992/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "st-employment",
+  "category": "state",
+  "title": "Служба зайнятості",
+  "note": "Безробіття, вакансії, навчання, ваучери.",
+  "number": "0800600288",
+  "source": "https://old.dcz.gov.ua/storinka/kontakty-derzhavnogo-centru-zaynyatosti",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "st-migration",
+  "category": "state",
+  "title": "Міграційна служба",
+  "note": "Паспорти, документи, реєстрація. Пн–чт 09:00–18:00, пт до 16:45; міський номер Києва.",
+  "number": "0443632250",
+  "source": "https://dmsu.gov.ua/hotlines.html",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "st-tax",
+  "category": "state",
+  "title": "Податкова служба",
+  "note": "Довідки й консультації. Пн–чт 08:00–19:00, пт 08:00–18:00.",
+  "number": "0800501007",
+  "source": "https://ukc.gov.ua/a-dovidkova-informatsiya-a/kontakts-ovv/",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "st-disability",
+  "category": "state",
+  "title": "Лінія для людей з інвалідністю",
+  "note": "Мінсоцполітики: звернення людей з інвалідністю.",
+  "number": "1539",
+  "source": "https://www.msp.gov.ua/about/contact",
   "checkedOn": "2026-11-03"
  },
  {
