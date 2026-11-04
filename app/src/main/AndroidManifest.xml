@@ -22,6 +22,9 @@
 
     <!-- Opening WhatsApp, Signal and the SMS app by name needs Android to tell they are installed -->
     <queries>
+        <!-- The default dialler and SMS app are asked for by name, so calls and "I am safe" go only to them -->
+        <intent><action android:name="android.intent.action.DIAL" /><data android:scheme="tel" /></intent>
+        <intent><action android:name="android.intent.action.SENDTO" /><data android:scheme="smsto" /></intent>
         <package android:name="com.whatsapp" />
         <package android:name="com.whatsapp.w4b" />
         <package android:name="org.thoughtcrime.securesms" />
@@ -179,6 +182,10 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
+        </provider>
+            <!-- The emoji library would ask Google Play Services for a font at start: not for an offline app -->
+        <provider android:name="androidx.startup.InitializationProvider" android:authorities="${applicationId}.androidx-startup" android:exported="false" tools:node="merge">
+            <meta-data android:name="androidx.emoji2.text.EmojiCompatInitializer" tools:node="remove" />
         </provider>
     </application>
 </manifest>

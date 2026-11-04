@@ -325,14 +325,15 @@ fun SearchScreen(content: Content?, nav: Nav) {
     var query by remember { mutableStateOf(SearchMemory.query) }
     val focus = remember { FocusRequester() }
     Frame(stringResource(R.string.search_guide), nav::back) {
-        OutlinedTextField(
+        // What is searched for ("полон", "мобілізація") is not learned by the keyboard
+        NoKeyboardLearning { OutlinedTextField(
             value = query,
             onValueChange = { query = it.take(80); SearchMemory.query = query },
             label = { Text(stringResource(R.string.search_hint)) },
             singleLine = true,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
             modifier = Modifier.fillMaxWidth().focusRequester(focus),
-        )
+        ) }
         // The keyboard only for a new search; coming back to results, they show first
         LaunchedEffect(Unit) { if (query.isEmpty()) focus.requestFocus() }
         if (content == null) return@Frame Loading()

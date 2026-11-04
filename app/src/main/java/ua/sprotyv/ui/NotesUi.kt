@@ -397,7 +397,7 @@ fun NoteEditScreen(id: Long, nav: Nav) {
     if (confirmSend) {
         AlertDialog(
             onDismissRequest = { confirmSend = false },
-            title = { Text(stringResource(R.string.notes_send_title)) },
+            title = { SensitiveWindow(); Text(stringResource(R.string.notes_send_title)) },
             text = { Text(stringResource(R.string.notes_send_warning)) },
             confirmButton = {
                 TextButton(onClick = {
@@ -419,7 +419,7 @@ fun NoteEditScreen(id: Long, nav: Nav) {
     if (confirmDelete) {
         AlertDialog(
             onDismissRequest = { confirmDelete = false },
-            text = { Text(stringResource(R.string.notes_delete_confirm)) },
+            text = { SensitiveWindow(); Text(stringResource(R.string.notes_delete_confirm)) },
             confirmButton = {
                 TextButton(onClick = {
                     confirmDelete = false

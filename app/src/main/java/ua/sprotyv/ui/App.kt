@@ -115,7 +115,7 @@ fun App() {
             }
             // A number from "Phones": the dialler with it, nothing added to the back stack
             if (route is Route.Dial) {
-                content?.phones?.firstOrNull { it.id == route.id }?.takeIf { !(trip && it.category in ua.sprotyv.content.Phone.TRIP_HIDES) }
+                content?.phones?.firstOrNull { it.id == route.id }?.takeIf { !(trip && ua.sprotyv.content.Phone.tripHides(it.id)) }
                     ?.let { ua.sprotyv.reach.Reach.dial(context, it.number) }
                 return
             }

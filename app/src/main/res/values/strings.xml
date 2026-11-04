@@ -241,8 +241,8 @@
     <string name="settings">Налаштування</string>
     <string name="my_home">Головний екран</string>
     <string name="edit">Змінити</string>
-    <string name="home_empty">Тут будуть ваші плитки. Додайте потрібне з розділів.</string>
-    <string name="add_from_sections">Додати з розділів</string>
+    <string name="home_empty">Тут будуть ваші плитки. Додайте потрібне зі «Знань».</string>
+    <string name="add_from_sections">Додати зі «Знань»</string>
     <string name="pin_add_desc">Додати на головну: %1$s</string>
     <string name="pin_remove_desc">Прибрати з головної: %1$s</string>
     <string name="pins_full">На головній уже максимум плиток. Приберіть якусь, щоб додати нову.</string>
@@ -582,7 +582,7 @@
     <string name="feedback_body">Версія: %1$s\n\nЩо сталося або що хотілося б:\n\n</string>
     <string name="feedback_hint">Відкриється сторінка «Спротиву» на GitHub (потрібен акаунт). Текст відгуку передається туди вже під час відкриття сторінки й лишається в історії браузера; опубліковано буде лише після вашого підтвердження, і там видно ім’я вашого акаунта. Ваші дані з «Мого» туди не потрапляють. Якщо для вас небезпечно, щоб вас пов’язали із застосунком, не надсилайте.</string>
     <string name="crash_title">Минулого разу «Спротив» закрився з помилкою</string>
-    <string name="crash_text">Можна надіслати технічний опис помилки — це допоможе її виправити. У ньому лише назва помилки, місця в коді й версії застосунку та Android, ваших даних немає. Текст передається на публічну сторінку GitHub уже під час її відкриття; опубліковано буде лише після вашого підтвердження.</string>
+    <string name="crash_text">Опис публікується відкрито на GitHub, і з назв у коді видно, якими розділами ви користувалися. Можна надіслати технічний опис помилки — це допоможе її виправити. У ньому лише назва помилки, місця в коді й версії застосунку та Android, ваших даних немає. Текст передається на публічну сторінку GitHub уже під час її відкриття; опубліковано буде лише після вашого підтвердження.</string>
     <string name="crash_send">Надіслати опис</string>
     <string name="crash_no">Видалити опис</string>
     <string name="crash_issue_title">Помилка в застосунку</string>
@@ -1685,7 +1685,7 @@
     <string name="phones_intro">Торкніться рядка — відкриється набір номера; дзвінок почнеться лише після вашого підтвердження. Кожен номер перевірено на офіційному сайті або сайті самої організації; дата перевірки — під номером.</string>
     <string name="phones_search">Пошук: служба, тема або номер</string>
     <string name="phones_none">Нічого не знайдено. Екстрені служби — 112.</string>
-    <string name="phones_note">Номери змінюються. Якщо лінія не відповідає, спробуйте інший номер тієї ж теми; у небезпеці — 112. Будь-який номер можна поставити й на екран телефона: віджет «Частина «Спротиву»», далі — номер у кінці списку.</string>
+    <string name="phones_note">Номери змінюються. Якщо лінія не відповідає, спробуйте інший номер тієї ж теми; у небезпеці — 112. Будь-який номер можна поставити й на екран телефона: віджет „Частина «Спротиву»“, далі — номер у кінці списку.</string>
     <string name="phones_call">Подзвонити %1$s, %2$s</string>
     <string name="phones_checked">%1$s, перевірено %2$s</string>
     <string name="phones_cat_emergency">Екстрені служби</string>
@@ -1707,4 +1707,11 @@
     <string name="pin_restore">Повернути</string>
     <string name="pins_full_short">На головній уже %1$d плиток. Приберіть одну, щоб додати нову.</string>
     <string name="people_mine_hint">До 20 найважливіших: дзвінок, SMS, WhatsApp, Signal</string>
+    <string name="safe_send_sms">SMS: %1$s</string>
+    <string name="safe_send_whatsapp">WhatsApp: %1$s</string>
+    <string name="call_other_numbers">Інші номери: гарячі лінії, світло, виплати</string>
+    <string name="people_import_choose">Кого додати?</string>
+    <string name="people_import_room">Вибрано %1$d · вільних місць: %2$d</string>
+    <string name="people_import_add">Додати (%1$d)</string>
+    <string name="safe_short">«Я в безпеці»</string>
 </resources>

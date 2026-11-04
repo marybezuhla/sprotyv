@@ -155,6 +155,12 @@ private fun ServicesDialog(onClose: () -> Unit) {
                         }
                     }
                 }
+                // Every other number (crisis lines, power, pensions): the full list. Not for children
+                if (HomePrefs.state.collectAsState().value?.mode != ua.sprotyv.home.Mode.KID) {
+                    TextButton(onClick = { onClose(); Opening.open(ua.sprotyv.home.Tiles.tool(ua.sprotyv.home.Tool.PHONES)) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
+                        Text(stringResource(R.string.call_other_numbers))
+                    }
+                }
             }
         },
     )

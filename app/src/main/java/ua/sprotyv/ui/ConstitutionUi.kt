@@ -52,10 +52,10 @@ fun ConstitutionScreen(content: Content?, nav: Nav) {
         val c = content.constitution ?: return@Frame Broken()
         Text(stringResource(R.string.const_intro), style = MaterialTheme.typography.bodyLarge)
         var query by rememberSaveable { mutableStateOf("") }
-        OutlinedTextField(
+        NoKeyboardLearning { OutlinedTextField(
             value = query, onValueChange = { query = it.take(60) }, singleLine = true,
             label = { Text(stringResource(R.string.const_search)) }, modifier = Modifier.fillMaxWidth(),
-        )
+        ) }
         val q = query.trim()
         if (q.length >= 2) {
             val found = c.sections.flatMap { it.articles }.filter { it.allText.contains(q, ignoreCase = true) }

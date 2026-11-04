@@ -134,7 +134,9 @@ fun SecureScreen() {
             onDispose { activity.setRecentsScreenshotEnabled(true) }
         }
     }
-    val allowed = HomePrefs.state.collectAsStateWithLifecycle().value?.screenshots == true
+    // Android 12 cannot hide the recent-apps picture alone: there these screens stay closed to
+    // screenshots whatever the setting, or the picture would show the data past the lock
+    val allowed = HomePrefs.state.collectAsStateWithLifecycle().value?.screenshots == true && Build.VERSION.SDK_INT >= 33
     if (allowed) return
     DisposableEffect(activity) {
         activity.window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)

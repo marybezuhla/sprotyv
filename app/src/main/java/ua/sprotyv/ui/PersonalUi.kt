@@ -225,6 +225,7 @@ fun PeopleScreen() {
     var notice by remember { mutableStateOf<String?>(null) }
     var confirmExport by remember { mutableStateOf(false) }
     var busy by remember { mutableStateOf(false) }
+    var choosing by remember { mutableStateOf<List<Vcf.Contact>?>(null) }
     val full = people.size >= Vcf.MAX_PEOPLE
     Text(stringResource(R.string.people_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     Button(onClick = { editing = Person(name = "", phone = "", sort = (people.maxOfOrNull { it.sort } ?: -1) + 1) }, enabled = !full, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.add_person)) }
@@ -232,17 +233,17 @@ fun PeopleScreen() {
     // People in one blue block of the family's preparation, a line each, the most important first
     if (people.isNotEmpty()) Block(stringResource(R.string.people), ua.sprotyv.home.Group.PREPARE, padded = false) {
         people.forEachIndexed { i, p ->
-            BlockRow(p.name, listOfNotNull(p.phone, p.relation.ifBlank { null }, if (p.ice) stringResource(R.string.ice_short) else null).joinToString(" · "), first = i == 0) { viewing = p.id }
+            BlockRow(p.name, listOfNotNull(p.phone, p.relation.ifBlank { null }, if (p.safeList) stringResource(R.string.safe_short) else null, if (p.ice) stringResource(R.string.ice_short) else null).joinToString(" · "), first = i == 0) { viewing = p.id }
         }
     }
     // Contacts in and out as a file: no access to the phone's own contacts is ever asked for
     val pick = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         Away.back()
-        if (uri != null) { busy = true; PeopleFiles.import(context, uri) { notice = it; busy = false } }
+        if (uri != null) { busy = true; PeopleFiles.read(context, uri) { list, msg -> busy = false; if (list != null) choosing = list else msg?.let { notice = it; Notices.show(it) } } }
     }
     val save = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("text/x-vcard")) { uri ->
         Away.back()
-        if (uri != null) { busy = true; PeopleFiles.export(context, uri, people) { notice = it; busy = false } }
+        if (uri != null) { busy = true; PeopleFiles.export(context, uri, people) { notice = it; Notices.show(it); busy = false } }
     }
     Block(stringResource(R.string.people_files_title), ua.sprotyv.home.Group.MINE, foldable = true, summary = stringResource(R.string.people_files_hint)) {
         Text(stringResource(R.string.people_files_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -253,10 +254,18 @@ fun PeopleScreen() {
         OutlinedButton(onClick = { confirmExport = true }, enabled = people.isNotEmpty() && !busy, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text(stringResource(R.string.people_export)) }
         notice?.let { Text(it, style = MaterialTheme.typography.bodyMedium) }
     }
+    choosing?.let { list ->
+        val room = (Vcf.MAX_PEOPLE - people.size).coerceAtLeast(0)
+        ImportChoice(list, room, onCancel = { choosing = null }) { chosen ->
+            choosing = null
+            busy = true
+            PeopleFiles.add(context, chosen) { notice = it; Notices.show(it); busy = false }
+        }
+    }
     if (confirmExport) {
         AlertDialog(
             onDismissRequest = { confirmExport = false },
-            title = { Text(stringResource(R.string.people_export_title)) },
+            title = { SensitiveWindow(); Text(stringResource(R.string.people_export_title)) },
             text = { Text(stringResource(R.string.people_export_warning)) },
             confirmButton = {
                 TextButton(onClick = {
@@ -291,7 +300,7 @@ private fun PersonCard(p: Person, people: List<Person>, onEdit: () -> Unit, onCl
     }
     AlertDialog(
         onDismissRequest = onClose,
-        title = { Text(p.name) },
+        title = { SensitiveWindow(); Text(p.name) },
         text = {
             Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 ReadField(stringResource(R.string.person_phone), p.phone)
@@ -329,10 +338,14 @@ private fun PersonCard(p: Person, people: List<Person>, onEdit: () -> Unit, onCl
 object PeopleFiles {
     private val scope = kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.SupervisorJob() + kotlinx.coroutines.Dispatchers.IO)
 
-    fun import(context: android.content.Context, uri: android.net.Uri, done: (String) -> Unit) {
+    /**
+     * Reads a .vcf file: the contacts not yet in the list, for the owner to choose from (a whole
+     * phone book is never added as it comes). [done] gets them, or a message when there is nothing.
+     */
+    fun read(context: android.content.Context, uri: android.net.Uri, done: (List<Vcf.Contact>?, String?) -> Unit) {
         val app = context.applicationContext
         scope.launch {
-            val message = try {
+            val (list, message) = try {
                 val bytes = app.contentResolver.openInputStream(uri)?.use { input ->
                     val buf = java.io.ByteArrayOutputStream()
                     val b = ByteArray(16 * 1024)
@@ -345,25 +358,35 @@ object PeopleFiles {
                     buf.toByteArray()
                 } ?: throw IllegalArgumentException()
                 val found = Vcf.read(String(bytes, Charsets.UTF_8))
-                if (found.isEmpty()) {
-                    app.getString(R.string.people_import_none)
-                } else {
-                    // One number written two ways (0XX… and +380XX…) is one person
-                    fun key(phone: String) = ua.sprotyv.reach.Links.international(phone) ?: ua.sprotyv.reach.Links.clean(phone)
-                    val added = PersonalStore.read { db ->
-                        val now = db.people().all()
-                        val known = now.map { key(it.phone) }.toMutableSet()
-                        var sort = (now.maxOfOrNull { it.sort } ?: -1) + 1
-                        val fresh = found.filter { known.add(key(it.phone)) }
-                            .map { c -> Person(name = c.name, phone = c.phone, relation = c.note, safeList = false, ice = false, sort = sort++) }
-                        db.people().addUpTo(fresh, Vcf.MAX_PEOPLE)
-                    }
-                    if (added == null) app.getString(R.string.people_import_failed)
-                    else app.getString(R.string.people_import_done, added, found.size - added)
-                }
+                val now = PersonalStore.read { db -> db.people().all() } ?: throw IllegalStateException()
+                val known = now.map { key(it.phone) }.toMutableSet()
+                // One number written two ways (0XX… and +380XX…) is one person
+                val fresh = found.filter { known.add(key(it.phone)) }
+                if (fresh.isEmpty()) null to app.getString(R.string.people_import_none) else fresh to null
             } catch (e: Exception) {
-                app.getString(R.string.people_import_failed)
+                null to app.getString(R.string.people_import_failed)
             }
+            kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) { done(list, message) }
+        }
+    }
+
+    private fun key(phone: String) = ua.sprotyv.reach.Links.international(phone) ?: ua.sprotyv.reach.Links.clean(phone)
+
+    /** Adds the chosen ones, in the given order, while there is room; they get "I am safe" as people added by hand do. */
+    fun add(context: android.content.Context, chosen: List<Vcf.Contact>, done: (String) -> Unit) {
+        val app = context.applicationContext
+        scope.launch {
+            val added = try {
+                PersonalStore.read { db ->
+                    val now = db.people().all()
+                    val known = now.map { key(it.phone) }.toMutableSet()
+                    var sort = (now.maxOfOrNull { it.sort } ?: -1) + 1
+                    val fresh = chosen.filter { known.add(key(it.phone)) }
+                        .map { c -> Person(name = c.name, phone = c.phone, relation = c.note, safeList = true, ice = false, sort = sort++) }
+                    db.people().addUpTo(fresh, Vcf.MAX_PEOPLE)
+                }
+            } catch (e: Exception) { null }
+            val message = if (added == null) app.getString(R.string.people_import_failed) else app.getString(R.string.people_import_done, added, chosen.size - added)
             kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) { done(message) }
         }
     }
@@ -393,7 +416,7 @@ private fun PersonDialog(start: Person, onDone: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDone,
         properties = androidx.compose.ui.window.DialogProperties(dismissOnClickOutside = false, dismissOnBackPress = false),
-        title = { Text(stringResource(if (start.id == 0L) R.string.add_person else R.string.edit_person)) },
+        title = { SensitiveWindow(); Text(stringResource(if (start.id == 0L) R.string.add_person else R.string.edit_person)) },
         text = {
             // Scrolls: with large text or the keyboard up the switches below must still be reachable
             Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -426,7 +449,7 @@ private fun PersonDialog(start: Person, onDone: () -> Unit) {
     if (confirmDelete) {
         AlertDialog(
             onDismissRequest = { confirmDelete = false },
-            text = { Text(stringResource(R.string.delete_person_confirm, start.name)) },
+            text = { SensitiveWindow(); Text(stringResource(R.string.delete_person_confirm, start.name)) },
             confirmButton = {
                 TextButton(onClick = {
                     PersonalStore.save("delete:" + java.util.UUID.randomUUID()) { it.people().delete(start) }
@@ -537,8 +560,11 @@ fun SafeScreen(nav: Nav) {
     list.forEach { p ->
         Text(p.name, style = MaterialTheme.typography.bodyLarge)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-            Button(onClick = { Reach.sms(context, listOf(p.phone), text) }, modifier = Modifier.weight(1f).heightIn(min = 56.dp)) { Text("SMS") }
-            OutlinedButton(onClick = { Reach.whatsapp(context, p.phone, text) }, modifier = Modifier.weight(1f).heightIn(min = 56.dp)) { Text("WhatsApp") }
+            // Said aloud with the person's name, not "SMS, button" again and again
+            val smsTo = stringResource(R.string.safe_send_sms, p.name)
+            val waTo = stringResource(R.string.safe_send_whatsapp, p.name)
+            Button(onClick = { Reach.sms(context, listOf(p.phone), text) }, modifier = Modifier.weight(1f).heightIn(min = 56.dp).semantics { contentDescription = smsTo }) { Text("SMS") }
+            OutlinedButton(onClick = { Reach.whatsapp(context, p.phone, text) }, modifier = Modifier.weight(1f).heightIn(min = 56.dp).semantics { contentDescription = waTo }) { Text("WhatsApp") }
         }
     }
     Text(stringResource(R.string.safe_sms_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -575,3 +601,41 @@ private fun safeTint(st: SafeStatus): Tint = when (st) {
     SafeStatus.HELP -> ua.sprotyv.home.Group.DANGER.tint()
     SafeStatus.QUIET -> ua.sprotyv.home.Group.GUIDE.tint()
 }
+
+/**
+ * Whom to add from a file: a short list, chosen by hand. A small file is all ticked; a whole phone
+ * book starts with none, so the list is never filled with whoever comes first in the alphabet.
+ */
+@Composable
+private fun ImportChoice(list: List<Vcf.Contact>, room: Int, onCancel: () -> Unit, onAdd: (List<Vcf.Contact>) -> Unit) {
+    val picked = remember(list) { androidx.compose.runtime.mutableStateListOf<Int>().apply { if (list.size <= room) addAll(list.indices) } }
+    AlertDialog(
+        onDismissRequest = onCancel,
+        title = { SensitiveWindow(); Text(stringResource(R.string.people_import_choose)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(stringResource(R.string.people_import_room, picked.size, room), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                androidx.compose.foundation.lazy.LazyColumn(Modifier.heightIn(max = 420.dp)) {
+                    items(list.size) { i ->
+                        val c = list[i]
+                        val on = i in picked
+                        Row(
+                            Modifier.fillMaxWidth().heightIn(min = 56.dp)
+                                .toggleable(value = on, enabled = on || picked.size < room, role = androidx.compose.ui.semantics.Role.Checkbox) { if (on) picked.remove(i) else picked.add(i) },
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            androidx.compose.material3.Checkbox(checked = on, onCheckedChange = null, enabled = on || picked.size < room)
+                            Column(Modifier.padding(start = 8.dp)) {
+                                Text(c.name, style = MaterialTheme.typography.bodyLarge)
+                                Text(c.phone, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = { TextButton(onClick = { onAdd(picked.sorted().map { list[it] }) }, enabled = picked.isNotEmpty()) { Text(stringResource(R.string.people_import_add, picked.size)) } },
+        dismissButton = { TextButton(onClick = onCancel) { Text(stringResource(R.string.cancel)) } },
+    )
+}
+

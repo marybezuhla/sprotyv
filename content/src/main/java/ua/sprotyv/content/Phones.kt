@@ -34,7 +34,10 @@ data class Phone(
         fun prefixOf(category: String): String = PREFIX.getValue(category)
 
         /** A number hidden in trip mode, by its id (an unknown one is hidden too, to be sure). */
-        fun tripHides(id: String): Boolean = categoryOf(id)?.let { it in TRIP_HIDES } ?: true
+        fun tripHides(id: String): Boolean = id in TRIP_HIDES_ALSO || (categoryOf(id)?.let { it in TRIP_HIDES } ?: true)
+
+        /** Single numbers that say too much at a checkpoint though their category does not: care for the war-wounded, deported children, leaving occupied land. */
+        private val TRIP_HIDES_ALSO = setOf("h-superhumans", "h-unbroken", "c-save-ukraine", "ev-helping-to-leave")
     }
 }
 
