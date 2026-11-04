@@ -26,6 +26,8 @@ object Tiles {
     fun tool(t: Tool) = "tool:${t.name}"
     /** A trusted outside source from "Situation", opened outside Sprotyv. */
     fun link(id: String) = "link:$id"
+    /** A number from "Phones": a tap opens the dialler with it. */
+    fun phone(id: String) = "phone:$id"
 
     /** Always on the home screen, first, in both modes: what to do now, and "I am safe". 112 is the bar below. */
     val FIXED = listOf(tool(Tool.NOW), tool(Tool.SAFE))
@@ -36,12 +38,13 @@ object Tiles {
     /** Enough for anyone's own home screen, few enough to stay a home screen. */
     const val MAX_PINS = 16
 
-    fun isValid(id: String, cards: Set<String>, chapters: Set<String>, links: Set<String> = emptySet()): Boolean {
+    fun isValid(id: String, cards: Set<String>, chapters: Set<String>, links: Set<String> = emptySet(), phones: Set<String> = emptySet()): Boolean {
         val (kind, value) = id.split(":", limit = 2).let { it[0] to it.getOrElse(1) { "" } }
         return when (kind) {
             "card" -> value in cards
             "chapter" -> value in chapters
             "link" -> value in links
+            "phone" -> value in phones
             "tool" -> Tool.entries.any { it.name == value } && id !in FIXED
             else -> false
         }

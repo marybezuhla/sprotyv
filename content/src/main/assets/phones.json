@@ -138,7 +138,7 @@
   "id": "v-1547-abroad",
   "category": "violence",
   "title": "Лінія 1547 з-за кордону",
-  "note": "Те саме, що 1547, для дзвінків з-за кордону. Платно.",
+  "note": "Те саме, що 1547; номер для дзвінків з-за кордону, з України теж працює. За тарифом оператора.",
   "number": "+380442841943",
   "source": "https://www.msp.gov.ua/press-center/news/yakshcho-vy-postrazhdaly-vid-domashnoho-nasylstva-abo-staly-yoho-svidkom-ne-movchit!-telefonuyte-na-haryachu-liniyu-1547",
   "checkedOn": "2026-11-03"
@@ -255,7 +255,7 @@
   "id": "s-nib-abroad",
   "category": "security",
   "title": "НІБ з-за кордону",
-  "note": "Те саме, що 1648, для дзвінків з-за кордону. Цілодобово, платно.",
+  "note": "Те саме, що 1648; номер для дзвінків з-за кордону, з України теж працює. Цілодобово; за тарифом оператора.",
   "number": "+380442878165",
   "source": "https://nib.gov.ua/",
   "checkedOn": "2026-11-03"
@@ -327,7 +327,7 @@
   "id": "st-1545-abroad",
   "category": "state",
   "title": "Урядова лінія з-за кордону",
-  "note": "Те саме, що 1545, для дзвінків з-за кордону. Платно.",
+  "note": "Те саме, що 1545; номер для дзвінків з-за кордону, з України теж працює. За тарифом оператора.",
   "number": "+380442841915",
   "source": "https://www.kmu.gov.ua/uryadova-garyacha-liniya-1545",
   "checkedOn": "2026-11-03"
@@ -345,7 +345,7 @@
   "id": "st-legal-abroad",
   "category": "state",
   "title": "Правнича допомога з-за кордону",
-  "note": "Те саме, для дзвінків з-за кордону. Платно.",
+  "note": "Те саме, що 0 800 213 103; номер для дзвінків з-за кордону, з України теж працює. За тарифом оператора.",
   "number": "+380443631041",
   "source": "https://legalaid.gov.ua/kliyentam/pro-bezoplatnu-pravovu-dopomogu-bpd/kontakt-czentr/",
   "checkedOn": "2026-11-03"
@@ -372,7 +372,7 @@
   "id": "st-ombudsman-abroad",
   "category": "state",
   "title": "Омбудсман з-за кордону",
-  "note": "Для дзвінків з-за кордону. Платно.",
+  "note": "Те саме, що 1678; номер для дзвінків з-за кордону, з України теж працює. За тарифом оператора.",
   "number": "+380442997408",
   "source": "https://ombudsman.gov.ua/en/news/tags/diya",
   "checkedOn": "2026-11-03"
@@ -444,7 +444,7 @@
   "id": "st-border-abroad",
   "category": "state",
   "title": "Прикордонна служба з-за кордону",
-  "note": "Те саме, що 1598, для дзвінків з-за кордону. Платно.",
+  "note": "Те саме, що 1598; номер для дзвінків з-за кордону, з України теж працює. За тарифом оператора.",
   "number": "+380445276363",
   "source": "https://dpsu.gov.ua/uk/main-contacts",
   "checkedOn": "2026-11-03"

@@ -11,6 +11,7 @@ Re-check every few months: short numbers change (1516, 1528 and 1548 all did in 
 import json, os, re, sys
 
 CHECKED = "2026-11-03"
+PREFIX = {"emergency": "e-", "evacuation": "ev-", "mind": "m-", "violence": "v-", "children": "c-", "health": "h-", "security": "s-", "veterans": "vt-", "state": "st-"}
 CATEGORIES = ["emergency", "evacuation", "mind", "violence", "children", "health", "security", "veterans", "state"]
 
 UKC = "https://ukc.gov.ua/a-dovidkova-informatsiya-a/kontakts-ovv/"
@@ -76,8 +77,8 @@ P = [
      ("Насильство, торгівля людьми", "Домашнє та гендерне насильство, насильство щодо дітей, торгівля людьми; є психолог. Цілодобово, безкоштовно."),
      ("Violence and trafficking", "Domestic and gender-based violence, violence against children, trafficking; a psychologist is available. 24/7, free.")),
     ("v-1547-abroad", "violence", "+380442841943", MSP_1547,
-     ("Лінія 1547 з-за кордону", "Те саме, що 1547, для дзвінків з-за кордону. Платно."),
-     ("Line 1547 from abroad", "The same as 1547, for calls from abroad. Paid.")),
+     ("Лінія 1547 з-за кордону", "Те саме, що 1547; номер для дзвінків з-за кордону, з України теж працює. За тарифом оператора."),
+     ("Line 1547 from abroad", "The same as 1547; meant for calls from abroad, works from Ukraine too. Normal call rates.")),
     ("v-lastrada", "violence", "0800500335", LASTRADA,
      ("«Ла Страда»: протидія насильству", "Домашнє насильство, торгівля людьми, дискримінація. Цілодобово, безкоштовно з мобільних і стаціонарних."),
      ("La Strada: against violence", "Domestic violence, trafficking, discrimination. 24/7, free from mobiles and landlines.")),
@@ -118,8 +119,8 @@ P = [
      ("Національне інформаційне бюро", "Повідомити про полонених, депортованих, зниклих безвісти, зокрема дітей. Цілодобово."),
      ("National Information Bureau", "Report people captured, deported or missing, including children. 24/7.")),
     ("s-nib-abroad", "security", "+380442878165", NIB,
-     ("НІБ з-за кордону", "Те саме, що 1648, для дзвінків з-за кордону. Цілодобово, платно."),
-     ("NIB from abroad", "The same as 1648, for calls from abroad. 24/7, paid.")),
+     ("НІБ з-за кордону", "Те саме, що 1648; номер для дзвінків з-за кордону, з України теж працює. Цілодобово; за тарифом оператора."),
+     ("NIB from abroad", "The same as 1648; meant for calls from abroad, works from Ukraine too. 24/7; normal call rates.")),
     ("s-missing", "security", "1698", "https://www.kmu.gov.ua/news/hariachi-linii-ofisu-upovnovazhenoho-z-pytan-osib-znyklykh-bezvisty-za-osoblyvykh-obstavyn",
      ("Зниклі безвісти", "Уповноважений з питань осіб, зниклих безвісти за особливих обставин; єдиний реєстр. Пн–сб 09:00–18:00."),
      ("Missing persons", "Commissioner for persons missing under special circumstances; the single register. Mon–Sat 09:00–18:00.")),
@@ -144,14 +145,14 @@ P = [
      ("Урядова гаряча лінія", "Звернення до будь-якого органу влади. Безкоштовно з основних операторів."),
      ("Government hotline", "Appeals to any government body. Free from the main operators.")),
     ("st-1545-abroad", "state", "+380442841915", GOV1545,
-     ("Урядова лінія з-за кордону", "Те саме, що 1545, для дзвінків з-за кордону. Платно."),
-     ("Government hotline from abroad", "The same as 1545, for calls from abroad. Paid.")),
+     ("Урядова лінія з-за кордону", "Те саме, що 1545; номер для дзвінків з-за кордону, з України теж працює. За тарифом оператора."),
+     ("Government hotline from abroad", "The same as 1545; meant for calls from abroad, works from Ukraine too. Normal call rates.")),
     ("st-legal", "state", "0800213103", LEGAL,
      ("Безоплатна правнича допомога", "Порада юриста пн–пт 08:00–18:00; повідомлення про затримання — цілодобово. Безкоштовно."),
      ("Free legal aid", "A lawyer's advice Mon–Fri 08:00–18:00; reporting a detention 24/7. Free.")),
     ("st-legal-abroad", "state", "+380443631041", LEGAL,
-     ("Правнича допомога з-за кордону", "Те саме, для дзвінків з-за кордону. Платно."),
-     ("Legal aid from abroad", "The same, for calls from abroad. Paid.")),
+     ("Правнича допомога з-за кордону", "Те саме, що 0 800 213 103; номер для дзвінків з-за кордону, з України теж працює. За тарифом оператора."),
+     ("Legal aid from abroad", "The same as 0 800 213 103; meant for calls from abroad, works from Ukraine too. Normal call rates.")),
     ("st-ombudsman", "state", "1678", OMB,
      ("Омбудсман", "Порушені права, зокрема полонені й депортовані цивільні. Пн–чт 09:00–18:00, пт до 16:45; безкоштовно."),
      ("Ombudsman", "Rights violated, including captured or deported civilians. Mon–Thu 09:00–18:00, Fri to 16:45; free.")),
@@ -159,8 +160,8 @@ P = [
      ("Омбудсман: другий номер", "Те саме, що 1678; той самий графік."),
      ("Ombudsman: second number", "The same as 1678; same hours.")),
     ("st-ombudsman-abroad", "state", "+380442997408", OMB,
-     ("Омбудсман з-за кордону", "Для дзвінків з-за кордону. Платно."),
-     ("Ombudsman from abroad", "For calls from abroad. Paid.")),
+     ("Омбудсман з-за кордону", "Те саме, що 1678; номер для дзвінків з-за кордону, з України теж працює. За тарифом оператора."),
+     ("Ombudsman from abroad", "The same as 1678; meant for calls from abroad, works from Ukraine too. Normal call rates.")),
     ("st-pension", "state", "0800503753", "https://www.pfu.gov.ua/2177797-rozshyreno-mozhlyvosti-kontakt-tsentru-pensijnogo-fondu-ukrayiny/",
      ("Пенсійний фонд", "Пенсії та соціальні виплати. Пн–пт 08:00–20:00, сб 08:00–14:00."),
      ("Pension Fund", "Pensions and social payments. Mon–Fri 08:00–20:00, Sat 08:00–14:00.")),
@@ -183,8 +184,8 @@ P = [
      ("Прикордонна служба", "Питання перетину кордону."),
      ("Border Guard Service", "Questions about crossing the border.")),
     ("st-border-abroad", "state", "+380445276363", "https://dpsu.gov.ua/uk/main-contacts",
-     ("Прикордонна служба з-за кордону", "Те саме, що 1598, для дзвінків з-за кордону. Платно."),
-     ("Border Guard from abroad", "The same as 1598, for calls from abroad. Paid.")),
+     ("Прикордонна служба з-за кордону", "Те саме, що 1598; номер для дзвінків з-за кордону, з України теж працює. За тарифом оператора."),
+     ("Border Guard from abroad", "The same as 1598; meant for calls from abroad, works from Ukraine too. Normal call rates.")),
     ("st-mfa-centre", "state", "0442245720", UKC,
      ("МЗС: контакт-центр", "Звернення до Міністерства закордонних справ. Цілодобово; міський номер Києва."),
      ("Foreign Ministry contact centre", "Enquiries to the Foreign Ministry. 24/7; Kyiv landline.")),
@@ -199,6 +200,8 @@ def build(lang):
         title, note = uk if lang == "uk" else en
         assert re.fullmatch(r"[a-z0-9-]{1,40}", id), id
         assert cat in CATEGORIES, id
+        # The app knows a pinned number's category by this mark (trip mode, colour)
+        assert id.startswith(PREFIX[cat]) and not any(id.startswith(v) for k, v in PREFIX.items() if k != cat and len(v) > len(PREFIX[cat])), id
         # The same rule as PhonesReader in the app: +380 and 9 digits from abroad, else 3-10 digits
         assert re.fullmatch(r"\+380[0-9]{9}|[0-9]{3,10}", number), id
         assert re.fullmatch(r"https://[a-z0-9.-]+(/\S*)?", source), id

@@ -181,6 +181,9 @@ class ContentTest {
         assertEquals("+380 44 284 19 15", PhonesReader.shown("+380442841915"))
         assertEquals("067 258 05 20", PhonesReader.shown("0672580520"))
         assertEquals("1548", PhonesReader.shown("1548"))
+        // The category is known from the id alone (pinned numbers, widgets, trip mode)
+        uk.forEach { assertEquals(it.id, it.category, Phone.categoryOf(it.id)) }
+        assertTrue(Phone.tripHides("s-sbu") && Phone.tripHides("vt-1528") && !Phone.tripHides("e-112") && Phone.tripHides("unknown"))
     }
 
     @Test fun englishLinksMatchTheOriginal() {

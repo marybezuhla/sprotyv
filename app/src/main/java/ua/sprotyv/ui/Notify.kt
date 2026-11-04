@@ -419,7 +419,7 @@ object Opening {
 
     private val FIXED = setOf("bleeding", "now", "alarm", "power", "supplies", "kit", "path", "gart", "shields", "safe", "kidcall")
     /** A tile the owner put on the home screen as a widget. */
-    private val TILE = Regex("^tile/(card|chapter|tool|link):[A-Za-z0-9_-]{1,40}$")
+    private val TILE = Regex("^tile/(card|chapter|tool|link|phone):[A-Za-z0-9_-]{1,40}$")
 
     private fun tileRoute(id: String): Route? {
         val (kind, value) = id.split(":", limit = 2)
@@ -428,6 +428,7 @@ object Opening {
             "chapter" -> Route.ChapterRoute(value)
             "tool" -> ua.sprotyv.home.Tool.entries.firstOrNull { it.name == value }?.route
             "link" -> Route.External(value)
+            "phone" -> Route.Dial(value)
             else -> null
         }
     }

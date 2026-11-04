@@ -969,7 +969,7 @@
     <string name="widget_path_sample">Моя родина: 2 з 3</string>
     <string name="widget_kit_sample">Зібрано 12 з 20</string>
     <string name="widget_tile_label">Частина «Спротиву»</string>
-    <string name="widget_tile_desc">Будь-яка картка, розділ довідника чи інструмент</string>
+    <string name="widget_tile_desc">Будь-яка картка, розділ довідника, інструмент або телефон</string>
     <string name="widget_tile_choose">Торкніться, щоб вибрати</string>
     <string name="widget_count_label">Щит-лічильник</string>
     <string name="widget_count_desc">Одна ваша добра справа з «Моїх щитів» і кнопка «+1»</string>
@@ -1685,7 +1685,7 @@
     <string name="phones_intro">Торкніться рядка — відкриється набір номера; дзвінок почнеться лише після вашого підтвердження. Кожен номер перевірено на офіційному сайті або сайті самої організації; дата перевірки — під номером.</string>
     <string name="phones_search">Пошук: служба, тема або номер</string>
     <string name="phones_none">Нічого не знайдено. Екстрені служби — 112.</string>
-    <string name="phones_note">Номери змінюються. Якщо лінія не відповідає, спробуйте інший номер тієї ж теми; у небезпеці — 112. Номери з +380 — для дзвінків з-за кордону.</string>
+    <string name="phones_note">Номери змінюються. Якщо лінія не відповідає, спробуйте інший номер тієї ж теми; у небезпеці — 112. Будь-який номер можна поставити й на екран телефона: віджет «Частина «Спротиву»», далі — номер у кінці списку.</string>
     <string name="phones_call">Подзвонити %1$s, %2$s</string>
     <string name="phones_checked">%1$s, перевірено %2$s</string>
     <string name="phones_cat_emergency">Екстрені служби</string>

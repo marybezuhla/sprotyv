@@ -56,6 +56,8 @@ sealed interface Route {
     data class RoleRoute(val id: String) : Route
     /** Opens an outside source from "Situation" and comes straight back. */
     data class External(val id: String) : Route
+    /** Opens the dialler with a number from "Phones" and stays where it is. */
+    data class Dial(val id: String) : Route
 
     /** Screens that change with the owner's encrypted marks ([Marks]): the data is opened for them when it opens by itself. */
     val readsMarks: Boolean get() = this == MozList || this is Moz || this == Resistance
@@ -102,6 +104,7 @@ sealed interface Route {
         is PathCheck -> "pathcheck:$step"
         is RoleRoute -> "role:$id"
         is External -> "external:$id"
+        is Dial -> "dial:$id"
     }
 
     companion object {
@@ -143,6 +146,7 @@ sealed interface Route {
                 "role" -> value.takeIf { it in ROLES }?.let(::RoleRoute)
                 // Never reopened after the app is restored: that would open a page unasked
                 "external" -> null
+                "dial" -> null
                 else -> null
             }
         }
