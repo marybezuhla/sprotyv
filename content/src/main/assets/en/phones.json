@@ -63,10 +63,19 @@
   "checkedOn": "2026-11-03"
  },
  {
+  "id": "ev-uz",
+  "category": "evacuation",
+  "title": "Ukrainian Railways",
+  "note": "Trains, including evacuation trains. 24/7.",
+  "number": "0800503111",
+  "source": "https://ukc.gov.ua/a-dovidkova-informatsiya-a/kontakts-ovv/",
+  "checkedOn": "2026-11-03"
+ },
+ {
   "id": "ev-redcross",
   "category": "evacuation",
   "title": "Ukrainian Red Cross",
-  "note": "What help is available, support, tracing missing relatives. Daily 09:00–18:00, free.",
+  "note": "Information on aid, support, tracing missing relatives. Daily 09:00–18:00, free.",
   "number": "0800332656",
   "source": "https://redcross.org.ua/news/2025/01/102989/",
   "checkedOn": "2026-11-03"
@@ -74,7 +83,7 @@
  {
   "id": "ev-icrc",
   "category": "evacuation",
-  "title": "ICRC (International Red Cross)",
+  "title": "International Committee of the Red Cross",
   "note": "Help for people affected by the war, tracing relatives. Mon–Fri 09:00–13:00 and 14:00–17:00, free.",
   "number": "0800300155",
   "source": "https://www.icrc.org/en/where-we-work/europe-central-asia/ukraine/help-useful-information-affected-people",
@@ -93,18 +102,9 @@
   "id": "m-pin",
   "category": "mind",
   "title": "People in Need support line",
-  "note": "Psychological support for adults and children. 24/7, free.",
+  "note": "Psychological support for adults and children. 24/7.",
   "number": "0800210160",
   "source": "https://ukraine.peopleinneed.net/ua/liniia-pidtrimki-10978gp",
-  "checkedOn": "2026-11-03"
- },
- {
-  "id": "m-redcross",
-  "category": "mind",
-  "title": "Red Cross psychosocial support",
-  "note": "Emotional and psychosocial support. Free.",
-  "number": "0800333161",
-  "source": "https://www.icrc.org/en/where-we-work/europe-central-asia/ukraine/help-useful-information-affected-people",
   "checkedOn": "2026-11-03"
  },
  {
@@ -120,9 +120,9 @@
   "id": "m-varto",
   "category": "mind",
   "title": "Varto zhyty crisis counselling",
-  "note": "Mon–Fri 11:00–19:00; free from lifecell and Vodafone. From Kyivstar: 093 170 72 19 (paid).",
+  "note": "Mon–Fri 11:00–19:00; free from lifecell, Vodafone and Kyivstar.",
   "number": "5522",
-  "source": "https://bf.diia.gov.ua/articles/yak-otrymaty-psykholohichnu-dopomohu-v-umovakh-viiny",
+  "source": "https://vartozhyty.com.ua/en",
   "checkedOn": "2026-11-03"
  },
  {
@@ -183,7 +183,7 @@
   "id": "h-1677",
   "category": "health",
   "title": "National Health Service",
-  "note": "Free services, Affordable Medicines, facilities contracted by the NHSU.",
+  "note": "Free services, Affordable Medicines, facilities contracted by the NHSU. Mon–Thu 09:00–18:00, Fri to 16:45.",
   "number": "1677",
   "source": "https://www.kmu.gov.ua/news/na-yaki-pitannya-vidpovidaye-kontakt-centr-nszu",
   "checkedOn": "2026-11-03"
@@ -192,7 +192,7 @@
   "id": "h-moz",
   "category": "health",
   "title": "Ministry of Health hotline",
-  "note": "Questions and complaints about health care.",
+  "note": "Questions and complaints about health care. Daily 08:00–20:00.",
   "number": "0800505201",
   "source": "https://ukc.gov.ua/a-dovidkova-informatsiya-a/kontakts-ovv/",
   "checkedOn": "2026-11-03"
@@ -201,7 +201,7 @@
   "id": "h-hiv",
   "category": "health",
   "title": "HIV/AIDS helpline",
-  "note": "Counsellors, psychologists, infectious-disease doctors. Free.",
+  "note": "Counsellors, psychologists, infectious-disease doctors.",
   "number": "0800500451",
   "source": "https://www.phc.org.ua/en/activities/ongoing-projects/dont-give-aids-a-chance/hivaids-hotline",
   "checkedOn": "2026-11-03"
@@ -237,7 +237,7 @@
   "id": "s-mod",
   "category": "security",
   "title": "Ministry of Defence",
-  "note": "For service members and families, including the recruitment centres (TCC) and service. 24/7; calls are recorded.",
+  "note": "Matters within the Ministry of Defence's remit. 24/7; calls are recorded.",
   "number": "1512",
   "source": "https://mod.gov.ua/en/ministry-of-defence-of-ukraine-hotline",
   "checkedOn": "2026-11-03"
@@ -282,8 +282,8 @@
   "id": "s-pow-sbu",
   "category": "security",
   "title": "Centre for search and release of POWs",
-  "note": "Prisoners of war, illegally detained civilians, deported children. Kyiv landline, paid.",
-  "number": "+380443211121",
+  "note": "Prisoners of war, illegally detained civilians, deported children. Kyiv landline, normal call rates.",
+  "number": "0443211121",
   "source": "https://ssu.gov.ua/obiednanyi-tsentr-z-koordynatsii-poshuku-ta-zvilnennia-viiskovopolonenykh-nezakonno-pozbavlenykh-voli-osib-vnaslidok-ahresii-proty-ukrainy",
   "checkedOn": "2026-11-03"
  },
@@ -291,7 +291,7 @@
   "id": "vt-1528",
   "category": "veterans",
   "title": "Unified veterans line",
-  "note": "Status and ID, benefits, psychological support, housing, work. Daily 08:00–20:00, free.",
+  "note": "Status and ID, benefits, psychological support, housing, work. Daily 08:00–20:00; advice is free.",
   "number": "1528",
   "source": "https://www.kmu.gov.ua/news/1528-novyi-nomer-iedynoi-veteranskoi-linii",
   "checkedOn": "2026-11-03"
@@ -360,6 +360,15 @@
   "checkedOn": "2026-11-03"
  },
  {
+  "id": "st-ombudsman-0800",
+  "category": "state",
+  "title": "Ombudsman: second number",
+  "note": "The same as 1678; same hours.",
+  "number": "0800501720",
+  "source": "https://cyberpolice.gov.ua/contacts/",
+  "checkedOn": "2026-11-03"
+ },
+ {
   "id": "st-ombudsman-abroad",
   "category": "state",
   "title": "Ombudsman from abroad",
@@ -381,7 +390,7 @@
   "id": "st-social",
   "category": "state",
   "title": "National Social Service",
-  "note": "Social benefits and services.",
+  "note": "Social benefits and services. Mon–Thu 10:30–15:00, Fri to 14:45.",
   "number": "0800505213",
   "source": "https://ukc.gov.ua/a-dovidkova-informatsiya-a/kontakts-ovv/",
   "checkedOn": "2026-11-03"
@@ -426,17 +435,35 @@
   "id": "st-border",
   "category": "state",
   "title": "Border Guard Service",
-  "note": "Questions about crossing the border. From abroad: +380 44 527 63 63.",
+  "note": "Questions about crossing the border.",
   "number": "1598",
   "source": "https://dpsu.gov.ua/uk/main-contacts",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "st-border-abroad",
+  "category": "state",
+  "title": "Border Guard from abroad",
+  "note": "The same as 1598, for calls from abroad. Paid.",
+  "number": "+380445276363",
+  "source": "https://dpsu.gov.ua/uk/main-contacts",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "st-mfa-centre",
+  "category": "state",
+  "title": "Foreign Ministry contact centre",
+  "note": "Enquiries to the Foreign Ministry. 24/7; Kyiv landline.",
+  "number": "0442245720",
+  "source": "https://ukc.gov.ua/a-dovidkova-informatsiya-a/kontakts-ovv/",
   "checkedOn": "2026-11-03"
  },
  {
   "id": "st-mfa",
   "category": "state",
   "title": "Foreign Ministry crisis line",
-  "note": "Ukrainian citizens in trouble abroad. Kyiv landline, paid.",
-  "number": "+380442381588",
+  "note": "Ukrainian citizens in trouble abroad. Kyiv landline, normal call rates.",
+  "number": "0442381588",
   "source": "https://ukc.gov.ua/a-dovidkova-informatsiya-a/kontakts-ovv/",
   "checkedOn": "2026-11-03"
  }

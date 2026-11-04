@@ -222,6 +222,7 @@ fun PeopleScreen() {
     var viewing by remember { mutableStateOf<Long?>(null) }
     var notice by remember { mutableStateOf<String?>(null) }
     var confirmExport by remember { mutableStateOf(false) }
+    var busy by remember { mutableStateOf(false) }
     val full = people.size >= Vcf.MAX_PEOPLE
     Text(stringResource(R.string.people_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     Button(onClick = { editing = Person(name = "", phone = "", sort = (people.maxOfOrNull { it.sort } ?: -1) + 1) }, enabled = !full, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.add_person)) }
@@ -235,19 +236,19 @@ fun PeopleScreen() {
     // Contacts in and out as a file: no access to the phone's own contacts is ever asked for
     val pick = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         Away.back()
-        if (uri != null) PeopleFiles.import(context, uri, people) { notice = it }
+        if (uri != null) { busy = true; PeopleFiles.import(context, uri) { notice = it; busy = false } }
     }
     val save = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("text/x-vcard")) { uri ->
         Away.back()
-        if (uri != null) PeopleFiles.export(context, uri, people) { notice = it }
+        if (uri != null) { busy = true; PeopleFiles.export(context, uri, people) { notice = it; busy = false } }
     }
     Block(stringResource(R.string.people_files_title), ua.sprotyv.home.Group.MINE, foldable = true, summary = stringResource(R.string.people_files_hint)) {
         Text(stringResource(R.string.people_files_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         OutlinedButton(onClick = {
             Away.forOwnWindow()
             try { pick.launch(arrayOf("text/x-vcard", "text/vcard", "text/directory", "*/*")) } catch (e: android.content.ActivityNotFoundException) { Away.back() }
-        }, enabled = !full, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text(stringResource(R.string.people_import)) }
-        OutlinedButton(onClick = { confirmExport = true }, enabled = people.isNotEmpty(), modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text(stringResource(R.string.people_export)) }
+        }, enabled = !full && !busy, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text(stringResource(R.string.people_import)) }
+        OutlinedButton(onClick = { confirmExport = true }, enabled = people.isNotEmpty() && !busy, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text(stringResource(R.string.people_export)) }
         notice?.let { Text(it, style = MaterialTheme.typography.bodyMedium) }
     }
     if (confirmExport) {
@@ -292,6 +293,9 @@ private fun PersonCard(p: Person, people: List<Person>, onEdit: () -> Unit, onCl
         text = {
             Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 ReadField(stringResource(R.string.person_phone), p.phone)
+                // A number without a country code may belong to someone abroad: no chat opened with a stranger
+                val clear = ua.sprotyv.reach.Links.international(p.phone) != null
+                if (!clear) Text(stringResource(R.string.person_phone_format), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 ReadField(stringResource(R.string.person_relation), p.relation)
                 val marks = listOfNotNull(
                     if (p.safeList) stringResource(R.string.person_safe_list) else null,
@@ -304,8 +308,8 @@ private fun PersonCard(p: Person, people: List<Person>, onEdit: () -> Unit, onCl
                     OutlinedButton(onClick = { ua.sprotyv.reach.Reach.smsOne(context, p.phone) }, modifier = Modifier.weight(1f).heightIn(min = 48.dp)) { Text("SMS") }
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    OutlinedButton(onClick = { ua.sprotyv.reach.Reach.whatsapp(context, p.phone, "") }, modifier = Modifier.weight(1f).heightIn(min = 48.dp)) { Text("WhatsApp") }
-                    OutlinedButton(onClick = { ua.sprotyv.reach.Reach.signalTo(context, p.phone) }, modifier = Modifier.weight(1f).heightIn(min = 48.dp)) { Text("Signal") }
+                    OutlinedButton(onClick = { ua.sprotyv.reach.Reach.whatsapp(context, p.phone, "") }, enabled = clear, modifier = Modifier.weight(1f).heightIn(min = 48.dp)) { Text("WhatsApp") }
+                    OutlinedButton(onClick = { ua.sprotyv.reach.Reach.signalTo(context, p.phone) }, enabled = clear, modifier = Modifier.weight(1f).heightIn(min = 48.dp)) { Text("Signal") }
                 }
                 // The most important on top
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -323,7 +327,7 @@ private fun PersonCard(p: Person, people: List<Person>, onEdit: () -> Unit, onCl
 object PeopleFiles {
     private val scope = kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.SupervisorJob() + kotlinx.coroutines.Dispatchers.IO)
 
-    fun import(context: android.content.Context, uri: android.net.Uri, now: List<Person>, done: (String) -> Unit) {
+    fun import(context: android.content.Context, uri: android.net.Uri, done: (String) -> Unit) {
         val app = context.applicationContext
         scope.launch {
             val message = try {
@@ -342,15 +346,18 @@ object PeopleFiles {
                 if (found.isEmpty()) {
                     app.getString(R.string.people_import_none)
                 } else {
-                    val known = now.map { ua.sprotyv.reach.Links.clean(it.phone) }.toMutableSet()
-                    val room = (Vcf.MAX_PEOPLE - now.size).coerceAtLeast(0)
-                    val fresh = found.filter { known.add(ua.sprotyv.reach.Links.clean(it.phone)) }
-                    val taken = fresh.take(room)
-                    var sort = (now.maxOfOrNull { it.sort } ?: -1) + 1
-                    val added = taken.map { c -> Person(name = c.name, phone = c.phone, relation = c.note, safeList = false, ice = false, sort = sort++) }
-                    val ok = PersonalStore.read { db -> added.forEach { db.people().save(it) }; true } == true
-                    if (!ok) app.getString(R.string.people_import_failed)
-                    else app.getString(R.string.people_import_done, added.size, found.size - added.size)
+                    // One number written two ways (0XX… and +380XX…) is one person
+                    fun key(phone: String) = ua.sprotyv.reach.Links.international(phone) ?: ua.sprotyv.reach.Links.clean(phone)
+                    val added = PersonalStore.read { db ->
+                        val now = db.people().all()
+                        val known = now.map { key(it.phone) }.toMutableSet()
+                        var sort = (now.maxOfOrNull { it.sort } ?: -1) + 1
+                        val fresh = found.filter { known.add(key(it.phone)) }
+                            .map { c -> Person(name = c.name, phone = c.phone, relation = c.note, safeList = false, ice = false, sort = sort++) }
+                        db.people().addUpTo(fresh, Vcf.MAX_PEOPLE)
+                    }
+                    if (added == null) app.getString(R.string.people_import_failed)
+                    else app.getString(R.string.people_import_done, added, found.size - added)
                 }
             } catch (e: Exception) {
                 app.getString(R.string.people_import_failed)
@@ -407,7 +414,7 @@ private fun PersonDialog(start: Person, onDone: () -> Unit) {
             var sent by remember { mutableStateOf(false) }
             TextButton(enabled = valid && !sent, onClick = {
                 sent = true
-                val saved = p.copy(name = p.name.trim(), phone = p.phone.trim(), relation = p.relation.trim())
+                val saved = p.copy(name = Vcf.cleanText(p.name), phone = p.phone.trim(), relation = Vcf.cleanText(p.relation))
                 PersonalStore.save("person:" + java.util.UUID.randomUUID()) { it.people().save(saved) }
                 onDone()
             }) { Text(stringResource(R.string.save)) }

@@ -180,7 +180,7 @@
     <string name="people_import">Імпортувати з файлу</string>
     <string name="people_export">Експортувати у файл</string>
     <string name="people_export_title">Зберегти людей у файл?</string>
-    <string name="people_export_warning">Файл .vcf буде незашифрованим: імена, номери й примітки зможе прочитати будь-хто, хто отримає файл або телефон. Зберігайте його обережно й видаліть, коли він більше не потрібен.</string>
+    <string name="people_export_warning">Файл .vcf буде незашифрованим: імена, номери й примітки зможе прочитати будь-хто, хто отримає файл або телефон. Не зберігайте його в хмарну папку; тримайте обережно й видаліть, коли він більше не потрібен.</string>
     <string name="people_import_none">У файлі немає контактів із номером.</string>
     <string name="people_import_done">Додано: %1$d. Пропущено (повтори або понад 20): %2$d.</string>
     <string name="people_import_failed">Не вдалося прочитати файл. Потрібен файл контактів .vcf до 1 МБ.</string>
@@ -481,7 +481,7 @@
     <string name="dir_docs">Документи</string>
     <string name="dir_kids">Діти</string>
     <string name="dir_veterans">Ветеранам і родинам</string>
-    <string name="dir_health">Здоров\'я й реабілітація</string>
+    <string name="dir_health">Здоров’я й реабілітація</string>
     <string name="dir_care">Літнім і людям з інвалідністю</string>
     <string name="practice_title">Що зробите?</string>
     <string name="practice_hint">Навчальні ситуації за картками: перевірте себе</string>
@@ -1682,7 +1682,7 @@
     <string name="situation_maps">Застосунки без інтернету: мапи й Вікіпедія</string>
     <string name="phones_title">Телефони</string>
     <string name="phones_hint">Екстрені служби та гарячі лінії: один дотик — і номер у набирачі</string>
-    <string name="phones_intro">Торкніться рядка — відкриється набір номера; дзвінок почнеться лише після вашого підтвердження. Кожен номер перевірено на офіційному сайті; дата перевірки — під номером.</string>
+    <string name="phones_intro">Торкніться рядка — відкриється набір номера; дзвінок почнеться лише після вашого підтвердження. Кожен номер перевірено на офіційному сайті або сайті самої організації; дата перевірки — під номером.</string>
     <string name="phones_search">Пошук: служба, тема або номер</string>
     <string name="phones_none">Нічого не знайдено. Екстрені служби — 112.</string>
     <string name="phones_note">Номери змінюються. Якщо лінія не відповідає, спробуйте інший номер тієї ж теми; у небезпеці — 112. Номери з +380 — для дзвінків з-за кордону.</string>
@@ -1693,7 +1693,7 @@
     <string name="phones_cat_mind">Психологічна підтримка</string>
     <string name="phones_cat_violence">Насильство й торгівля людьми</string>
     <string name="phones_cat_children">Діти</string>
-    <string name="phones_cat_health">Здоров\'я</string>
+    <string name="phones_cat_health">Здоров’я</string>
     <string name="phones_cat_security">Безпека, полон, зниклі безвісти</string>
     <string name="phones_cat_veterans">Ветерани й військові</string>
     <string name="phones_cat_state">Держава, права, документи</string>

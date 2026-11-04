@@ -233,9 +233,9 @@ object Reach {
 
 /** The links themselves, as plain text, so they can be checked without a phone. */
 object Links {
-    /** Digits only, with a leading + kept: anything else in a number is dropped. */
+    /** ASCII digits only, with a leading + kept: anything else (look-alike digits of other scripts too) is dropped. */
     fun clean(number: String): String {
-        val digits = number.filter { it.isDigit() }
+        val digits = number.filter { it in '0'..'9' }
         return if (number.trim().startsWith("+")) "+$digits" else digits
     }
 
@@ -249,25 +249,31 @@ object Links {
     }
 
     /**
-     * WhatsApp needs the international form without the +. A Ukrainian local number (0XXXXXXXXX)
-     * becomes 380XXXXXXXXX; without that WhatsApp would open the wrong chat. An empty number would
-     * open a picker instead.
+     * The international form without the +, or null when it is unclear which number is meant.
+     * Ukrainian forms are made whole: 0XXXXXXXXX and the old 80XXXXXXXXX become 380XXXXXXXXX.
+     * Anything else without a + would open a chat with a stranger in another country.
      */
+    fun international(phone: String): String? {
+        val c = clean(phone)
+        val digits = c.removePrefix("+")
+        return when {
+            c.startsWith("+") -> digits.takeIf { it.length in 8..15 }
+            digits.length == 10 && digits.startsWith("0") -> "38$digits"
+            digits.length == 11 && digits.startsWith("80") -> "3$digits"
+            digits.length == 12 && digits.startsWith("380") -> digits
+            else -> null
+        }
+    }
+
+    /** WhatsApp's link to a chat with the text ready (international form without the +). */
     fun whatsapp(phone: String, text: String): String {
-        var digits = clean(phone).removePrefix("+")
-        if (!phone.trim().startsWith("+") && digits.length == 10 && digits.startsWith("0")) digits = "38$digits"
-        require(digits.isNotEmpty()) { "No number" }
+        val digits = requireNotNull(international(phone)) { "No number" }
         return "https://wa.me/$digits?text=" + encode(text)
     }
 
-    /**
-     * Signal's own link to the chat with a number (international form with +); Signal opens it
-     * itself. A Ukrainian local number becomes +380…
-     */
+    /** Signal's own link to the chat with a number (international form with +); Signal opens it itself. */
     fun signalChat(phone: String): String {
-        var digits = clean(phone).removePrefix("+")
-        if (!phone.trim().startsWith("+") && digits.length == 10 && digits.startsWith("0")) digits = "38$digits"
-        require(digits.length >= 6) { "No number" }
+        val digits = requireNotNull(international(phone)) { "No number" }
         return "https://signal.me/#p/+$digits"
     }
 
