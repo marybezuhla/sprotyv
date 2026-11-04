@@ -169,7 +169,12 @@ fun Group.tint(): Tint {
     val dark = LocalDark.current
     // High contrast: no pale fills, the plain text colours of the theme; icon and words still say the group
     if (LocalContrast.current) return Tint(MaterialTheme.colorScheme.surfaceVariant, MaterialTheme.colorScheme.onSurface)
-    return when (this) {
+    return Palette.of(this, dark)
+}
+
+/** The colour code in one place, outside Compose, so a test can check every pair's contrast. */
+internal object Palette {
+    fun of(group: Group, dark: Boolean): Tint = when (group) {
         // Light: fuller than a wash, so the colour still says the group on a bright screen in daylight
         Group.DANGER -> if (dark) Tint(Color(0xFF342318), Color(0xFFF5C39E)) else Tint(Color(0xFFFFDDC2), Color(0xFF7A3300))
         Group.FIRST_AID, Group.LEAVE -> if (dark) Tint(Color(0xFF182F28), Color(0xFFA3D3BD)) else Tint(Color(0xFFCDEADB), Color(0xFF184E36))
@@ -177,6 +182,9 @@ fun Group.tint(): Tint {
         // Knowing and everyday life: a calm violet, so no group is left without a colour
         Group.HOME_LIFE, Group.SAFETY, Group.GUIDE -> if (dark) Tint(Color(0xFF272339), Color(0xFFD2C7EE)) else Tint(Color(0xFFE6DDF6), Color(0xFF40317A))
     }
+
+    /** Resistance's own mark (see [resist]). */
+    fun resist(dark: Boolean): Tint = if (dark) Tint(Color(0xFF2A2B21), Color(0xFFD3CEA6)) else Tint(Color(0xFFE6E2C3), Color(0xFF45431C))
 }
 
 internal val Group.title: Int get() = when (this) {
@@ -202,8 +210,7 @@ private class Shelf(val title: Int, val desc: Int, val group: Group, val ids: Li
 @Composable
 fun resist(): Tint = when {
     LocalContrast.current -> Tint(MaterialTheme.colorScheme.surfaceVariant, MaterialTheme.colorScheme.onSurface)
-    LocalDark.current -> Tint(Color(0xFF2A2B21), Color(0xFFD3CEA6))
-    else -> Tint(Color(0xFFE6E2C3), Color(0xFF45431C))
+    else -> Palette.resist(LocalDark.current)
 }
 
 /** The app's own shield, the same shape as its icon. */
