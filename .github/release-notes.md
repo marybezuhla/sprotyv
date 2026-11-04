@@ -5,6 +5,8 @@
 Нове й виправлене:
 - **Імпорт контактів (.vcf):** ви самі позначаєте, кого додати; вся телефонна книга більше не заповнює список першими-ліпшими. Додані одразу отримують «Я в безпеці».
 - **«Довірені люди»** — одразу в «Моєму», під «Я в безпеці».
+- **«Я в безпеці»** відкривається без вибраного стану: спершу ви вибираєте «Усе гаразд», «Потрібна допомога» чи «Не можу говорити».
+- **Дитячий режим:** під час налаштування попереджає, що замок на «Моє» не пустить дитину до номерів своїх, і дає змогу показувати дитині ці номери без замка (окрема зашифрована копія лише імен і номерів).
 - **Головний екран:** повідомлення «Додано на головну» з кнопкою «Скасувати»; номер на плитці не переноситься.
 - **Кнопка телефона в кутку** веде й до всіх номерів «Телефонів».
 - **Режим поїздки** ховає також підготовку до нацспротиву, курси дронів, службу, «Зброю і закон» та номери, що забагато кажуть на блокпосту.
@@ -20,6 +22,8 @@
 New and fixed:
 - **Importing contacts (.vcf):** you tick whom to add; a whole phone book no longer fills the list with whoever comes first. Those added get "I am safe" at once.
 - **Trusted people** right in My data, under "I am safe".
+- **"I am safe"** opens with nothing chosen: first you pick "All is well", "I need help" or "I can't talk".
+- **Kids' mode:** the set-up warns that a lock on My data keeps the child from their people's numbers, and lets the child see those numbers without the lock (a separate encrypted copy of names and numbers only).
 - **Home screen:** an "Added to the home screen" notice with Undo; a number on a tile is never broken in two.
 - **The phone button in the corner** also leads to every number in Phones.
 - **Trip mode** also hides resistance training, drone courses, service, Weapons and the law, and numbers that say too much at a checkpoint.
