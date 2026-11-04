@@ -58,13 +58,13 @@ private fun categoryTitle(c: String): Int = when (c) {
 
 /**
  * The app's one colour code ([toneOf]): orange only for the emergency services (danger, act now);
- * green for everything else, as all help, health and rescue and "Where to turn"; the security
- * services keep resistance's khaki mark, as on their links.
+ * green for everything else, as all help, health and rescue and "Where to turn"; defence,
+ * captivity and those who serve keep resistance's khaki mark, as on their links.
  */
 @Composable
 private fun categoryTint(c: String): Tint = when (c) {
     "emergency" -> Group.DANGER.tint()
-    "security" -> resist()
+    "security", "veterans" -> resist()
     else -> Group.FIRST_AID.tint()
 }
 
