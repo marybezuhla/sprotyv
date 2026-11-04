@@ -148,8 +148,9 @@ fun App() {
             action == ACTION_SETTINGS -> nav.go(Route.Settings)
             action == ACTION_EDIT -> nav.go(Route.EditTiles)
             action == ACTION_TRIP_OFF -> HomePrefs.update(context) { it.copy(trip = false) }
-            action.startsWith(ACTION_PIN) -> HomePrefs.update(context) { it.copy(pins = Pins.pin(it.pins, action.removePrefix(ACTION_PIN))) }
-            action.startsWith(ACTION_UNPIN) -> HomePrefs.update(context) { it.copy(pins = Pins.unpin(it.pins, action.removePrefix(ACTION_UNPIN))) }
+            // Said in a line at the bottom, with a way to undo it
+            action.startsWith(ACTION_PIN) -> Notices.pin(context, content, action.removePrefix(ACTION_PIN))
+            action.startsWith(ACTION_UNPIN) -> Notices.unpin(context, content, action.removePrefix(ACTION_UNPIN))
         }
     }
     val prompt = stringResource(R.string.lock_prompt)

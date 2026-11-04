@@ -146,7 +146,7 @@ private fun PhoneRow(p: Phone, tint: Tint, pinned: Boolean, full: Boolean, onPin
                 Icon(Icons.Filled.Check, contentDescription = stringResource(R.string.pin_remove_desc, label))
             }
         } else {
-            androidx.compose.material3.OutlinedIconButton(onClick = { onPin(true) }, enabled = !full, modifier = Modifier.padding(end = 8.dp).size(48.dp)) {
+            androidx.compose.material3.OutlinedIconButton(onClick = { onPin(true) }, modifier = Modifier.padding(end = 8.dp).size(48.dp)) {
                 Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.pin_add_desc, label))
             }
         }

@@ -4,7 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.unit.dp
 import ua.sprotyv.personal.PersonalStore
 
 /**
@@ -31,7 +36,12 @@ class Main : ComponentActivity() {
         setContent {
             val prefs = HomePrefs.state.collectAsState().value ?: HomePrefs.load(this)
             SprotyvTheme(prefs.theme, prefs.dynamic) {
-                App()
+                androidx.compose.foundation.layout.Box(androidx.compose.ui.Modifier.fillMaxSize()) {
+                    App()
+                    // "Added to the home screen" and the like: above the bottom tabs, never under the keyboard
+                    NoticeHost(androidx.compose.ui.Modifier.align(androidx.compose.ui.Alignment.BottomCenter)
+                        .navigationBarsPadding().imePadding().padding(bottom = 72.dp))
+                }
             }
         }
     }
