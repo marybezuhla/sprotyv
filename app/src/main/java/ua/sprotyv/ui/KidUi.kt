@@ -1,6 +1,7 @@
 package ua.sprotyv.ui
 
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
 
 import androidx.compose.runtime.getValue
 
@@ -256,6 +257,26 @@ fun KidCallScreen() {
     val context = LocalContext.current
     val people = rememberPeople() ?: return Loading()
     val family = people.filter { it.ice || it.safeList }.filter { it.phone.isNotBlank() }
+    if (family.isEmpty()) {
+        Text(stringResource(R.string.kid_call_none), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
+        return
+    }
+    Text(stringResource(R.string.kid_call_intro), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
+    family.forEach { p ->
+        Button(onClick = { Reach.dial(context, p.phone) }, modifier = Modifier.fillMaxWidth().heightIn(min = 72.dp)) {
+            Text("📞", modifier = Modifier.clearAndSetSemantics { })
+            Spacer(Modifier.width(12.dp))
+            Text(p.name.ifBlank { p.phone }, style = MaterialTheme.typography.titleLarge, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
+        }
+    }
+    Text(stringResource(R.string.kid_call_112_hint), style = MaterialTheme.typography.bodyLarge)
+}
+
+/** The same buttons from the child's own copy, when the grown-up allowed it without the lock ([KidCall]). */
+@Composable
+fun KidCallOpenScreen() {
+    val context = LocalContext.current
+    val family = remember { KidCall.list(context) }
     if (family.isEmpty()) {
         Text(stringResource(R.string.kid_call_none), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
         return

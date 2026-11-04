@@ -968,6 +968,10 @@ fun WelcomeScreen(nav: Nav) {
                 // No tile sets for a child; the grown-up is asked once to lock the settings
                 Text(stringResource(R.string.kid_setup_title), style = MaterialTheme.typography.titleLarge, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, modifier = Modifier.semantics { heading() })
                 Text(stringResource(R.string.kid_setup_text), style = MaterialTheme.typography.bodyLarge)
+                // The lock on "My data" would stop the child at a fingerprint: said here, with the way round it
+                Text(stringResource(R.string.kid_call_lock_warn), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
+                var open by remember { mutableStateOf(KidCall.isOn(context)) }
+                Toggle(stringResource(R.string.kid_call_open_toggle), open) { on -> KidCall.set(context, on); open = on }
                 val canLock = Guard.available(context)
                 if (canLock) {
                     Button(onClick = { HomePrefs.update(context) { it.copy(mode = Mode.KID, locked = true) } }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {

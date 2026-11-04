@@ -281,7 +281,9 @@ private fun Screen(
             }
             MinePart.PLAN_QR -> Personal(R.string.plan_code_title, personal, nav) { PlanCodeScreen() }
             MinePart.PLAN_IMPORT -> Personal(R.string.plan_code_import_title, personal, nav) { PlanImportScreen(nav) }
-            MinePart.KID_CALL -> Personal(R.string.kid_call_family, personal, nav) { KidCallScreen() }
+            // Allowed by the grown-up: the child's own copy, with no lock in the way
+            MinePart.KID_CALL -> if (KidCall.isOn(LocalContext.current)) Frame(stringResource(R.string.kid_call_family), nav::back) { SecureScreen(); KidCallOpenScreen() }
+                else Personal(R.string.kid_call_family, personal, nav) { KidCallScreen() }
             MinePart.BOOKMARKS -> Personal(R.string.bookmarks_title, personal, nav) { BookmarksScreen() }
             MinePart.NOTES -> Personal(R.string.notes_title_screen, personal, nav) { NotesScreen(nav) }
             MinePart.DOCUMENTS -> Personal(R.string.docs_title, personal, nav) { DocumentsScreen() }
