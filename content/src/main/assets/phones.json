@@ -297,6 +297,51 @@
   "checkedOn": "2026-11-03"
  },
  {
+  "id": "p-vinnytsia",
+  "category": "power",
+  "title": "Вінницька область: Вінницяобленерго",
+  "note": "Немає світла, аварія в мережі. Кол-центр.",
+  "number": "0800309595",
+  "source": "https://mev.gov.ua/en/storinka/where-check-electricity-outage-schedules-and-where-report-violations",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-volyn",
+  "category": "power",
+  "title": "Волинська область: Волиньобленерго",
+  "note": "Немає світла, аварія в мережі. Кол-центр.",
+  "number": "0800210131",
+  "source": "https://mev.gov.ua/en/storinka/where-check-electricity-outage-schedules-and-where-report-violations",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-ternopil",
+  "category": "power",
+  "title": "Тернопільська область: Тернопільобленерго",
+  "note": "Немає світла, аварія в мережі. Кол-центр.",
+  "number": "0800409040",
+  "source": "https://mev.gov.ua/en/storinka/where-check-electricity-outage-schedules-and-where-report-violations",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-kharkiv",
+  "category": "power",
+  "title": "Харківська область: Харківобленерго",
+  "note": "Немає світла, аварія в мережі. Кол-центр.",
+  "number": "0800508413",
+  "source": "https://mev.gov.ua/en/storinka/where-check-electricity-outage-schedules-and-where-report-violations",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "p-chernivtsi",
+  "category": "power",
+  "title": "Чернівецька область: Чернівціобленерго",
+  "note": "Немає світла, аварія в мережі. Кол-центр; міський номер, за тарифом оператора.",
+  "number": "0372584980",
+  "source": "https://mev.gov.ua/en/storinka/where-check-electricity-outage-schedules-and-where-report-violations",
+  "checkedOn": "2026-11-03"
+ },
+ {
   "id": "p-chernihiv",
   "category": "power",
   "title": "Чернігівська область: Чернігівобленерго",
