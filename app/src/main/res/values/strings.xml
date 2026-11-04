@@ -862,7 +862,6 @@
     <string name="path_delegate">Вмію розподілити кроки між людьми поруч</string>
     <string name="delegate_step">Крок %1$s</string>
     <string name="delegate_who">Хто:</string>
-    <string name="lock_mine_failed">Не вдалося змінити замок. Ваші дані не змінено; спробуйте ще раз.</string>
     <string name="active_title">Зараз триває</string>
     <string name="active_tourniquet">Турнікет накладено %1$s тому</string>
     <string name="active_wait">Не повертайтеся ще %1$d хв</string>
