@@ -81,7 +81,10 @@ fun sortedPeople(list: List<Person>): List<Person> {
 
 @Composable
 fun rememberPeople(): List<Person>? {
+    val context = LocalContext.current
     val people by remember { PersonalStore.observe { it.people().observe() } }.collectAsStateWithLifecycle(null)
+    // The child's own copy (when allowed without the lock) follows every change seen here
+    androidx.compose.runtime.LaunchedEffect(people) { people?.let { KidCall.sync(context, it) } }
     return remember(people) { people?.let(::sortedPeople) }
 }
 
@@ -496,7 +499,8 @@ fun SafeScreen(nav: Nav) {
     // The owner's own "I am fine" as last typed: coming back to it from another status shows it, not the old one
     var okText by remember(stored) { mutableStateOf(stored.ifBlank { defaultText }) }
     // Three ready messages: "I am fine" (the owner's own words, saved), "I need help", "I can't talk"
-    var status by remember { mutableStateOf(SafeStatus.OK) }
+    // Nothing chosen at first: in a hurry "all is well" must never go by mistake
+    var status by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf<SafeStatus?>(null) }
     val helpText = stringResource(R.string.safe_help_message)
     val quietText = stringResource(R.string.safe_quiet_message)
 
@@ -530,6 +534,10 @@ fun SafeScreen(nav: Nav) {
                 Text(stringResource(st.title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
             }
         }
+    }
+    if (status == null) {
+        Text(stringResource(R.string.safe_choose_first), style = MaterialTheme.typography.bodyLarge)
+        return
     }
     // The message is read first; it changes only after "Change", so a stray touch spoils nothing
     var editingText by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(false) }
