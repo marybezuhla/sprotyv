@@ -1,0 +1,1 @@
+Fixed: card steps are readable again in the full look. .vcf import: you choose whom to add. Trip mode hides more. The phone button leads to every number. "Added to the home screen" notices with Undo. Trusted people right in My data. Stronger protection and TalkBack support.

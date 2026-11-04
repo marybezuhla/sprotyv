@@ -19,15 +19,25 @@ jobs:
           - name: a
             os: ubuntu-latest
             java: temurin
+            jdk: 17
             dir: sprotyv
             tz: UTC
             lang: C.UTF-8
           - name: b
             os: ubuntu-22.04
             java: zulu
+            jdk: 17
             dir: elsewhere/build-here
             tz: Pacific/Auckland
             lang: uk_UA.UTF-8
+          # F-Droid's build server may use a newer Java
+          - name: c
+            os: ubuntu-latest
+            java: temurin
+            jdk: 21
+            dir: other/place
+            tz: America/New_York
+            lang: en_US.UTF-8
     runs-on: ${{ matrix.os }}
     timeout-minutes: 40
     env:
@@ -41,7 +51,7 @@ jobs:
       - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         with:
           distribution: ${{ matrix.java }}
-          java-version: 17
+          java-version: ${{ matrix.jdk }}
       - name: Install Gradle (checksum verified)
         shell: bash
         working-directory: ${{ matrix.dir }}
@@ -72,14 +82,15 @@ jobs:
         shell: bash
         run: |
           cd out
-          sha256sum a.apk b.apk | tee -a "$GITHUB_STEP_SUMMARY"
-          if cmp -s a.apk b.apk; then
-            echo "SAME: the two builds are identical byte for byte" | tee -a "$GITHUB_STEP_SUMMARY"
+          sha256sum a.apk b.apk c.apk | tee -a "$GITHUB_STEP_SUMMARY"
+          if cmp -s a.apk b.apk && cmp -s a.apk c.apk; then
+            echo "SAME: the three builds are identical byte for byte" | tee -a "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
           echo "DIFFERENT: entries that differ:" | tee -a "$GITHUB_STEP_SUMMARY"
-          mkdir A B && (cd A && unzip -q ../a.apk) && (cd B && unzip -q ../b.apk)
+          mkdir A B C && (cd A && unzip -q ../a.apk) && (cd B && unzip -q ../b.apk) && (cd C && unzip -q ../c.apk)
           diff -rq A B | tee -a "$GITHUB_STEP_SUMMARY" || true
+          diff -rq A C | tee -a "$GITHUB_STEP_SUMMARY" || true
           # The zip layout itself (order, times, compression) when the contents are the same
           zipinfo -v a.apk > a.txt; zipinfo -v b.apk > b.txt
           diff a.txt b.txt | head -60 | tee -a "$GITHUB_STEP_SUMMARY" || true
