@@ -1691,4 +1691,11 @@
     <string name="phones_cat_state">State, rights, documents</string>
     <string name="phones_cat_power">Power: regional grid operators</string>
     <string name="phones_cat_learn">National resistance training</string>
+    <string name="pin_added">Added to the home screen: %1$s</string>
+    <string name="pin_added_plain">Added to the home screen</string>
+    <string name="pin_removed">Removed from the home screen: %1$s</string>
+    <string name="pin_removed_plain">Removed from the home screen</string>
+    <string name="pin_undo">Undo</string>
+    <string name="pin_restore">Put back</string>
+    <string name="pins_full_short">The home screen already has %1$d tiles. Remove one to add another.</string>
 </resources>

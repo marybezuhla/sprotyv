@@ -1699,4 +1699,11 @@
     <string name="phones_cat_state">Держава, права, документи</string>
     <string name="phones_cat_power">Світло: обленерго</string>
     <string name="phones_cat_learn">Підготовка до нацспротиву</string>
+    <string name="pin_added">Додано на головну: %1$s</string>
+    <string name="pin_added_plain">Додано на головну</string>
+    <string name="pin_removed">Прибрано з головної: %1$s</string>
+    <string name="pin_removed_plain">Прибрано з головної</string>
+    <string name="pin_undo">Скасувати</string>
+    <string name="pin_restore">Повернути</string>
+    <string name="pins_full_short">На головній уже %1$d плиток. Приберіть одну, щоб додати нову.</string>
 </resources>

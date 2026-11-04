@@ -496,7 +496,7 @@ fun tileInfo(id: String, content: Content?): TileInfo? {
         }
         // The number large, the service below it; a tap opens the dialler
         "phone" -> content?.phones?.firstOrNull { it.id == value }?.let { p ->
-            TileInfo(id, ua.sprotyv.content.PhonesReader.shown(p.number), p.title, Icons.Filled.Call, toneOf(id), Route.Dial(value))
+            TileInfo(id, ua.sprotyv.content.PhonesReader.shown(p.number), phoneShort(p), Icons.Filled.Call, toneOf(id), Route.Dial(value))
         }
         "tool" -> Tool.entries.firstOrNull { it.name == value }?.let { tool ->
             val own = TOOL_ICONS[tool]?.let { ImageVector.vectorResource(it) }
@@ -555,6 +555,17 @@ fun TileCard(info: TileInfo, big: Boolean, status: String? = null, modifier: Mod
                     } else if (info.hint.isNotBlank()) {
                         Text(info.hint, style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp, lineHeight = 24.sp, textAlign = androidx.compose.ui.text.style.TextAlign.Start), color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
+                }
+            }
+        } else if (info.id.startsWith("phone:")) {
+            // A number: on its own line across the whole tile, never broken in two (a little smaller
+            // only when it would not fit); the service below it, with a small phone mark
+            Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                FitOneLine(info.title, MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold), 15.sp, own.ink)
+                Row(verticalAlignment = Alignment.Top) {
+                    Icon(Icons.Filled.Call, contentDescription = null, tint = own.ink, modifier = Modifier.padding(top = 2.dp).size(16.dp))
+                    Spacer(Modifier.width(6.dp))
+                    Text(info.hint, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
                 }
             }
         } else {
@@ -755,7 +766,8 @@ fun SectionsList(content: Content?, pins: List<String>, nav: Nav, onPin: (String
                             Icon(Icons.Filled.Check, contentDescription = stringResource(R.string.pin_remove_desc, info.title))
                         }
                     } else {
-                        OutlinedIconButton(onClick = { onPin(info.id, true) }, enabled = !full, modifier = Modifier.size(48.dp)) {
+                        // Not greyed out when full: a tap says why nothing was added
+                        OutlinedIconButton(onClick = { onPin(info.id, true) }, modifier = Modifier.size(48.dp)) {
                             Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.pin_add_desc, info.title))
                         }
                     }
@@ -1003,4 +1015,14 @@ fun tileStatus(id: String, now: Long): String? {
     val d = share.getOrNull(0)?.toIntOrNull() ?: return null
     val t = share.getOrNull(1)?.toIntOrNull() ?: return null
     return if (t > 0 && d >= t) stringResource(R.string.tile_ready) else stringResource(R.string.ready_count, d, t)
+}
+
+/** One line of text that gets a little smaller instead of breaking, down to [min]. */
+@Composable
+fun FitOneLine(text: String, style: androidx.compose.ui.text.TextStyle, min: androidx.compose.ui.unit.TextUnit, color: Color) {
+    var size by remember(text, style.fontSize) { mutableStateOf(style.fontSize) }
+    Text(
+        text, style = style.copy(fontSize = size), color = color, maxLines = 1, softWrap = false,
+        onTextLayout = { if (it.hasVisualOverflow && size.value > min.value) size = (size.value - 1f).sp },
+    )
 }
