@@ -20,7 +20,8 @@ object Qr {
     const val MAX_BYTES = 400
 
     /** Room for the encrypted family plan, read from a phone screen (about version 30). */
-    const val MAX_PLAN_BYTES = 1200
+    // The same limit as a plan code, so every plan fits its QR
+    const val MAX_PLAN_BYTES = ua.sprotyv.personal.backup.PlanCode.MAX_CHARS
 
     fun encode(text: String, size: Int, maxBytes: Int = MAX_BYTES): BitMatrix {
         require(maxBytes <= MAX_PLAN_BYTES && text.toByteArray(Charsets.UTF_8).size <= maxBytes) { "Too long for a QR code" }

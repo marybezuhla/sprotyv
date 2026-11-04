@@ -854,7 +854,7 @@
     <string name="path_delegate">I can share out steps among people nearby</string>
     <string name="delegate_step">Step %1$s</string>
     <string name="delegate_who">Who:</string>
-    <string name="lock_mine_reason">Technical reason (you can copy it and send it in feedback): %1$s</string>
+    <string name="lock_mine_failed">Could not change the lock. Your data is unchanged; please try again.</string>
     <string name="active_title">Running now</string>
     <string name="active_tourniquet">Tourniquet on for %1$s</string>
     <string name="active_wait">Do not go back for %1$d more min</string>

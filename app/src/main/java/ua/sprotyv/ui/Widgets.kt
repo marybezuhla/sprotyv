@@ -245,7 +245,8 @@ internal fun Widgets.tile(c: Context, widget: Int): RemoteViews {
 internal fun Widgets.services(c: Context): RemoteViews {
     val v = RemoteViews(c.packageName, R.layout.widget_services)
     val names = listOf(R.string.service_name_unified, R.string.service_name_rescue, R.string.service_name_police, R.string.service_name_ambulance, R.string.service_name_gas)
-    listOf(R.id.w_s1 to "112", R.id.w_s2 to "101", R.id.w_s3 to "102", R.id.w_s4 to "103", R.id.w_s5 to "104").forEachIndexed { i, (id, number) ->
+    val ids = listOf(R.id.w_s1, R.id.w_s2, R.id.w_s3, R.id.w_s4, R.id.w_s5)
+    ua.sprotyv.content.Service.entries.map { it.number }.zip(ids).forEachIndexed { i, (number, id) ->
         // Said aloud with the service, not just digits
         v.setContentDescription(id, number + ", " + c.getString(names[i]))
         // The dialler with the number filled in; never a call by itself

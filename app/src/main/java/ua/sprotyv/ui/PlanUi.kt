@@ -240,10 +240,6 @@ fun KitScreen(content: Content?, nav: Nav) {
 const val KEY_KIT_REVIEWED = "kit_reviewed_at"
 
 
-/**
- * One kit item: the thing itself first, in plain weight, and the guide's explanation after it,
- * smaller and quieter, so a long line still reads at a glance.
- */
 /** A picture for each pocket of the bag, by its name in the guide. */
 private fun kitIcon(title: String): String {
     val t = title.lowercase()

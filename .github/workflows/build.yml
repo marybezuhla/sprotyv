@@ -207,6 +207,7 @@ jobs:
     needs: [test, build]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     environment: release
     permissions:
       contents: read
@@ -282,6 +283,7 @@ jobs:
     needs: [build, release]
     if: needs.release.outputs.signed == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     permissions:
       contents: write
     steps:

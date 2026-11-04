@@ -57,7 +57,8 @@ object NoteInbox {
     @Volatile var text: String = ""
 }
 
-private const val MAX_NOTE = 20_000
+// The same limit a backup checks, so every note can be restored
+private const val MAX_NOTE = ua.sprotyv.personal.backup.BackupData.MAX_TEXT
 private const val MAX_NOTE_TITLE = 200
 private const val MAX_NOTES = ua.sprotyv.personal.backup.BackupData.MAX_NOTES
 /** Letters in all notes together: every note at its longest; streamed backups take them all back. */
