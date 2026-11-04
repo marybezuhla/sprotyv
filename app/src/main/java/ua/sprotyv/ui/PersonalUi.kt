@@ -107,6 +107,8 @@ fun MineHub(nav: Nav, content: ua.sprotyv.content.Content?) {
     // The colour code of the whole app: green safety and health, blue prepare, neutral copies
     Block(stringResource(R.string.mine_block_now), ua.sprotyv.home.Group.FIRST_AID, padded = false, leading = { ThemeIcon(R.drawable.ocha_walkie_talkie, ua.sprotyv.home.Group.FIRST_AID.tint()) }) {
         BlockRow(stringResource(R.string.tile_safe), stringResource(R.string.tile_safe_hint), first = true) { nav.go(Route.Open(Section.SAFE)) }
+        // Whom to tell, right under it: the short book of the most important contacts
+        BlockRow(stringResource(R.string.people), stringResource(R.string.people_mine_hint)) { nav.go(Route.Mine(MinePart.PEOPLE)) }
     }
     // Who I am now and what is already done: found right here, not only from "My path"
     Block(stringResource(R.string.mine_block_me), ua.sprotyv.home.Group.PREPARE, tint = resist(), padded = false, leading = { ThemeIcon(R.drawable.ocha_users, resist()) }) {
