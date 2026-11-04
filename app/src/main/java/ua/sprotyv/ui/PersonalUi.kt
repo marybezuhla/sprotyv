@@ -1,5 +1,6 @@
 package ua.sprotyv.ui
 
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
