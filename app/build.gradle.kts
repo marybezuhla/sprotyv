@@ -21,7 +21,7 @@ android {
         minSdk = 31
         targetSdk = 36
         // Written out as a number, because F-Droid's update check reads it from this file; checked below
-        versionCode = 10101
+        versionCode = 10102
         versionName = appVersion
     }
 
