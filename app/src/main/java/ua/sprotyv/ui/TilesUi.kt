@@ -145,7 +145,11 @@ fun toneOf(id: String): Group = when (id) {
     else -> when {
         id.startsWith("link:") -> Group.GUIDE
         // A number: orange only for the emergency services, green as all help and rescue (resistance's khaki is a mark, see [isResist])
-        id.startsWith("phone:") -> if (ua.sprotyv.content.Phone.categoryOf(id.substringAfter(':')) == "emergency") Group.DANGER else Group.FIRST_AID
+        id.startsWith("phone:") -> when (ua.sprotyv.content.Phone.categoryOf(id.substringAfter(':'))) {
+            "emergency" -> Group.DANGER
+            "power" -> Group.HOME_LIFE
+            else -> Group.FIRST_AID
+        }
         else -> groupOf(id)
     }
 }
@@ -211,7 +215,7 @@ val Shield: ImageVector by lazy {
 
 /** The tiles that belong to resistance: they wear its mark wherever they are. */
 internal fun isResist(id: String) = id == Tiles.tool(Tool.RESIST) || id == Tiles.tool(Tool.CONSTITUTION) || id == Tiles.tool(Tool.HISTORY) ||
-    (id.startsWith("phone:") && ua.sprotyv.content.Phone.categoryOf(id.substringAfter(':')) in setOf("security", "veterans"))
+    (id.startsWith("phone:") && ua.sprotyv.content.Phone.categoryOf(id.substringAfter(':')) in setOf("security", "veterans", "learn"))
 
 /** A tile's badge colours: its group's, or resistance's khaki. */
 @Composable

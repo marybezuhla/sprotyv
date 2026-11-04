@@ -1689,4 +1689,6 @@
     <string name="phones_cat_security">Security, captivity, missing persons</string>
     <string name="phones_cat_veterans">Veterans and service members</string>
     <string name="phones_cat_state">State, rights, documents</string>
+    <string name="phones_cat_power">Power: regional grid operators</string>
+    <string name="phones_cat_learn">National resistance training</string>
 </resources>

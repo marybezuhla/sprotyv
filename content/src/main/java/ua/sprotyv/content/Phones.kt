@@ -18,16 +18,16 @@ data class Phone(
 ) {
     companion object {
         /** In the order shown: the most urgent first. */
-        val CATEGORIES = listOf("emergency", "evacuation", "mind", "violence", "children", "health", "security", "veterans", "state")
+        val CATEGORIES = listOf("emergency", "evacuation", "power", "mind", "violence", "children", "health", "security", "veterans", "learn", "state")
 
         /** Each id starts with its category's mark, so a pinned number's category is known from its id alone. */
         private val PREFIX = mapOf(
-            "emergency" to "e-", "evacuation" to "ev-", "mind" to "m-", "violence" to "v-", "children" to "c-",
+            "emergency" to "e-", "evacuation" to "ev-", "power" to "p-", "learn" to "l-", "mind" to "m-", "violence" to "v-", "children" to "c-",
             "health" to "h-", "security" to "s-", "veterans" to "vt-", "state" to "st-",
         )
 
-        /** Hidden in trip mode, like the same links elsewhere: defence, captivity and veterans' lines are not for a checked phone. */
-        val TRIP_HIDES = setOf("security", "veterans")
+        /** Hidden in trip mode, like the same links elsewhere: defence, captivity, veterans' lines and resistance training are not for a checked phone. */
+        val TRIP_HIDES = setOf("security", "veterans", "learn")
 
         fun categoryOf(id: String): String? = PREFIX.entries.firstOrNull { id.startsWith(it.value) }?.key
 
@@ -47,7 +47,7 @@ object PhonesReader {
     /** Strict: known categories, plain numbers, an https source and a date for every number. */
     fun parse(json: String): List<Phone> {
         val a = JSONArray(json)
-        require(a.length() in 1..300)
+        require(a.length() in 1..400)
         val phones = (0 until a.length()).map { i ->
             val o = a.getJSONObject(i)
             Phone(o.getString("id"), o.getString("category"), o.getString("title"), o.getString("note"), o.getString("number"), o.getString("source"), o.getString("checkedOn")).also { p ->
