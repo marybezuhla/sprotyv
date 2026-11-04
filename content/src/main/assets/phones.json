@@ -72,6 +72,15 @@
   "checkedOn": "2026-11-03"
  },
  {
+  "id": "ev-unhcr",
+  "category": "evacuation",
+  "title": "УВКБ ООН (агентство ООН у справах біженців)",
+  "note": "Допомога людям, які постраждали від війни, і переселенцям. Пн–пт 09:00–18:00.",
+  "number": "0800307711",
+  "source": "https://help.unhcr.org/ukraine/",
+  "checkedOn": "2026-11-03"
+ },
+ {
   "id": "ev-redcross",
   "category": "evacuation",
   "title": "Український Червоний Хрест",
@@ -159,6 +168,33 @@
   "note": "Те саме, що 0 800 500 335, з мобільних. Цілодобово, безкоштовно.",
   "number": "116123",
   "source": "https://la-strada.org.ua/en/garyachi-liniyi",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "v-iom-527",
+  "category": "violence",
+  "title": "МОМ: безпечна міграція, протидія торгівлі людьми",
+  "note": "Інформація й підтримка для людей в Україні та тих, хто виїжджає. Безкоштовно з мобільних.",
+  "number": "527",
+  "source": "https://www.iom.int/ukraine-iom-hotlines-garyachi-linii-mom-persons-affected-war",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "v-iom-0800",
+  "category": "violence",
+  "title": "МОМ (0 800)",
+  "note": "Те саме, що 527. Безкоштовно зі стаціонарних.",
+  "number": "0800505501",
+  "source": "https://www.iom.int/ukraine-iom-hotlines-garyachi-linii-mom-persons-affected-war",
+  "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "c-116000",
+  "category": "children",
+  "title": "Розшук зниклих дітей",
+  "note": "Служба розшуку дітей «Магнолія». Якщо дитина зникла, одразу дзвоніть і в поліцію — 102. Безкоштовно.",
+  "number": "116000",
+  "source": "https://www.ombudsman.gov.ua/news_details/znikli-diti-v-umovah-vijni-pravilo-troh-dib-ne-diye",
   "checkedOn": "2026-11-03"
  },
  {
