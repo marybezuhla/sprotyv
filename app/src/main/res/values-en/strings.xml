@@ -1707,7 +1707,7 @@
     <string name="people_import_add">Add (%1$d)</string>
     <string name="safe_short">"I am safe"</string>
     <string name="kid_call_lock_warn">If "My data" is locked, "Call my people" will ask for your fingerprint or PIN, which the child cannot give.</string>
-    <string name="kid_call_open_toggle">My people's numbers for the child without the lock</string>
+    <string name="kid_call_open_toggle">My people\'s numbers for the child without the lock</string>
     <string name="kid_call_open_hint">A separate encrypted copy of only the names and numbers of people marked for "I am safe" or as an emergency contact. Updated whenever you open Trusted people. Turned off, the copy is deleted.</string>
     <string name="safe_choose_first">Choose above what to say; the message and the send buttons appear then.</string>
 </resources>
