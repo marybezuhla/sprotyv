@@ -52,17 +52,17 @@
   "reviewedBy": "",
   "steps": [
    {
-    "action": "Ballistic missiles, a \"Kinzhal\" launch or jet drones — put on shoes and go straight to the two-wall zone: hallway, bathroom. Do not gather anything else.",
-    "why": "Ballistic missiles give 1–3 minutes or no time at all; jet drones arrive within minutes.",
+    "action": "Put on shoes and go straight to the two-wall zone (hallway, bathroom), or to the shelter if it is only a few minutes away.",
+    "why": "This is right whatever the threat: ballistic missiles give 1–3 minutes or no time at all.",
     "figure": "3.2"
    },
    {
-    "action": "Otherwise dress for the weather, put on shoes, take your emergency bag. MiG-31K takeoff — do not wait for a launch, go to the shelter at once.",
-    "why": "This is while you still have a few minutes; once a launch is reported — straight to the two-wall zone."
+    "action": "Hear of ballistic missiles, a \"Kinzhal\" launch or jet drones — gather nothing, stay in the two-wall zone.",
+    "why": "Jet drones arrive within minutes; once a launch is reported, only the two-wall zone."
    },
    {
-    "action": "Turn off gas, water and electrical appliances, close windows and curtains. Go to the shelter.",
-    "why": ""
+    "action": "Only an alert, or a MiG-31K takeoff — dress for the weather, take your emergency bag, turn off gas, water and appliances, close the windows. Go to the shelter.",
+    "why": "While you still have a few minutes. On a MiG-31K takeoff do not wait for a launch."
    },
    {
     "action": "Shelter is over 5 minutes away and you already hear explosions — stay in the two-wall zone.",

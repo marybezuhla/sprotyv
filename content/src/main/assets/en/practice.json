@@ -25,7 +25,7 @@
  {
   "id": "air-alert-ballistic",
   "card": "air-alert",
-  "step": 0,
+  "step": 1,
   "situation": "Ballistic missile threat. You are at home, 7 minutes' walk from a shelter.",
   "options": [
    {
