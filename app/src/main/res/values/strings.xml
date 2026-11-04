@@ -1706,4 +1706,5 @@
     <string name="pin_undo">Скасувати</string>
     <string name="pin_restore">Повернути</string>
     <string name="pins_full_short">На головній уже %1$d плиток. Приберіть одну, щоб додати нову.</string>
+    <string name="people_mine_hint">До 20 найважливіших: дзвінок, SMS, WhatsApp, Signal</string>
 </resources>

@@ -1698,4 +1698,5 @@
     <string name="pin_undo">Undo</string>
     <string name="pin_restore">Put back</string>
     <string name="pins_full_short">The home screen already has %1$d tiles. Remove one to add another.</string>
+    <string name="people_mine_hint">Up to 20 most important: call, SMS, WhatsApp, Signal</string>
 </resources>
