@@ -15,7 +15,7 @@
 
 ## Що підтримується
 
-Лише **остання версія** зі сторінки [Releases](https://github.com/Marybezu/sprotyv/releases). Перевірити, що APK справжній: `apksigner verify --print-certs sprotyv-<версія>.apk`, відбиток сертифіката SHA-256 має бути `d00241499cd44d0859c5762a0b4cc317862358c8df3210fc3a0e9473e038a1ac`.
+Лише **остання версія** зі сторінки [Releases](https://github.com/marybezuhla/sprotyv/releases). Перевірити, що APK справжній: `apksigner verify --print-certs sprotyv-<версія>.apk`, відбиток сертифіката SHA-256 має бути `d00241499cd44d0859c5762a0b4cc317862358c8df3210fc3a0e9473e038a1ac`.
 
 ## Мінімальна версія Android: 12
 
@@ -40,7 +40,7 @@ Describe what is vulnerable, how to reproduce it, and which app and Android vers
 
 ## What is supported
 
-Only the **latest version** on the [Releases](https://github.com/Marybezu/sprotyv/releases) page. To check an APK is genuine: `apksigner verify --print-certs sprotyv-<version>.apk`; the certificate's SHA-256 must be `d00241499cd44d0859c5762a0b4cc317862358c8df3210fc3a0e9473e038a1ac`.
+Only the **latest version** on the [Releases](https://github.com/marybezuhla/sprotyv/releases) page. To check an APK is genuine: `apksigner verify --print-certs sprotyv-<version>.apk`; the certificate's SHA-256 must be `d00241499cd44d0859c5762a0b4cc317862358c8df3210fc3a0e9473e038a1ac`.
 
 ## Minimum Android version: 12
 
