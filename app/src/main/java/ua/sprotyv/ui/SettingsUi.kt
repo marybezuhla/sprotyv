@@ -399,4 +399,4 @@ internal fun LicenceTexts(onClose: () -> Unit) {
     }
 }
 
-private const val SOURCE_URL = "https://github.com/Marybezu/sprotyv"
+private const val SOURCE_URL = "https://github.com/marybezuhla/sprotyv"

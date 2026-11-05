@@ -11,7 +11,7 @@ import java.io.File
  * "Mine" is ever added.
  */
 object Feedback {
-    private const val NEW_ISSUE = "https://github.com/Marybezu/sprotyv/issues/new"
+    private const val NEW_ISSUE = "https://github.com/marybezuhla/sprotyv/issues/new"
 
     fun version(context: Context): String =
         runCatching { context.packageManager.getPackageInfo(context.packageName, 0).versionName }.getOrNull() ?: "?"
