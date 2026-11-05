@@ -218,6 +218,14 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
         Block(stringResource(R.string.colour_title), ua.sprotyv.home.Group.GUIDE, foldable = true) { ColourLegend() }
         Block(stringResource(R.string.settings_about), ua.sprotyv.home.Group.GUIDE, foldable = true) {
             AboutApp()
+            // The author's letter and Support Ukraine, as in the author's other apps; never in trip mode
+            // or with the neutral icon: a phone in the wrong hands must not show them
+            val context = androidx.compose.ui.platform.LocalContext.current
+            val hidden = prefs.trip || remember(prefs.trip) { ua.sprotyv.ui.Neutral.isOn(context) }
+            if (!hidden) {
+                AuthorLetter()
+                SupportUkraine(open = { ua.sprotyv.reach.Reach.open(context, it) })
+            }
             BlockRow(stringResource(R.string.about_guide), first = true) { nav.go(Route.About) }
             FeedbackBlock()
         }
