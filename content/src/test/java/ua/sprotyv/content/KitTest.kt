@@ -16,6 +16,19 @@ class KitTest {
         assertEquals("item keys are unique", keys.size, keys.toSet().size)
     }
 
+    @Test fun pocketPicturesFollowTheSameOrderInBothLanguages() {
+        val en = Kit.groups(GuideReader.parse(File("src/main/assets/en/guide.json").readText()))
+        val uk = Kit.groups(guide)
+        assertEquals("the same pockets in both guides", uk.size, en.size)
+        // The pictures go by place: documents, water and food, first aid, clothes, light, hygiene, sleeping
+        listOf("Документи", "Вода", "Аптечка", "Одяг", "Світло", "Гігієна", "Спальне").forEachIndexed { i, start ->
+            assertTrue(uk[i].title, uk[i].title.startsWith(start))
+        }
+        listOf("Documents", "Water", "First aid", "Cloth", "Light", "Hygiene", "Sleep").forEachIndexed { i, start ->
+            assertTrue(en[i].title, en[i].title.startsWith(start))
+        }
+    }
+
     @Test fun keyIgnoresBoldMarks() {
         assertEquals(Kit.key("**Турнікет**"), Kit.key("Турнікет"))
     }
