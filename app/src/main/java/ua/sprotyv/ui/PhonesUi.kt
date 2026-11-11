@@ -108,7 +108,7 @@ fun PhonesScreen(content: Content?, nav: Nav, pins: List<String>, onPin: (String
                 list.forEachIndexed { i, p ->
                     if (i > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                     val id = ua.sprotyv.home.Tiles.phone(p.id)
-                    PhoneRow(p, categoryTint(c), pinned = id in pins, full = pins.size >= ua.sprotyv.home.Tiles.MAX_PINS,
+                    PhoneRow(p, categoryTint(c), pinned = id in pins,
                         onPin = { on -> onPin(id, on) }) { Reach.dial(context, p.number) }
                 }
             }
@@ -120,7 +120,7 @@ fun PhonesScreen(content: Content?, nav: Nav, pins: List<String>, onPin: (String
 
 /** One line: the number large, what it is for, where it was checked; the whole line dials. */
 @Composable
-private fun PhoneRow(p: Phone, tint: Tint, pinned: Boolean, full: Boolean, onPin: (Boolean) -> Unit, onClick: () -> Unit) {
+private fun PhoneRow(p: Phone, tint: Tint, pinned: Boolean, onPin: (Boolean) -> Unit, onClick: () -> Unit) {
     val shown = PhonesReader.shown(p.number)
     val say = stringResource(R.string.phones_call, shown, p.title) + ". " + p.note
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {

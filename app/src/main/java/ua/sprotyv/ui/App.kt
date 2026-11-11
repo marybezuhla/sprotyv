@@ -177,7 +177,7 @@ fun App() {
         if (t.startsWith("tile/phone:") && content == null) return@LaunchedEffect
         Opening.clear()
         // Kid mode: only the children's cards from the children's widget
-        val allowed = prefs.mode == Mode.FULL || prefs.mode == Mode.SIMPLE || (prefs.mode == Mode.KID && t.startsWith("tile/card:kid-"))
+        val allowed = prefs.mode == Mode.FULL || prefs.mode == Mode.SIMPLE || (prefs.mode == Mode.KID && (t.startsWith("tile/card:kid-") || t == "kidcall"))
         if (allowed) Opening.route(t)?.let { if (top != it) nav.go(it) }
     }
 
@@ -282,7 +282,7 @@ private fun Screen(
             MinePart.PLAN_QR -> Personal(R.string.plan_code_title, personal, nav) { PlanCodeScreen() }
             MinePart.PLAN_IMPORT -> Personal(R.string.plan_code_import_title, personal, nav) { PlanImportScreen(nav) }
             // Allowed by the grown-up: the child's own copy, with no lock in the way
-            MinePart.KID_CALL -> if (KidCall.isOn(LocalContext.current)) Frame(stringResource(R.string.kid_call_family), nav::back) { SecureScreen(); KidCallOpenScreen() }
+            MinePart.KID_CALL -> if (KidCall.isOn(LocalContext.current) && prefs.mode == ua.sprotyv.home.Mode.KID) Frame(stringResource(R.string.kid_call_family), nav::back) { SecureScreen(); KidCallOpenScreen() }
                 else Personal(R.string.kid_call_family, personal, nav) { KidCallScreen() }
             MinePart.BOOKMARKS -> Personal(R.string.bookmarks_title, personal, nav) { BookmarksScreen() }
             MinePart.NOTES -> Personal(R.string.notes_title_screen, personal, nav) { NotesScreen(nav) }
@@ -291,7 +291,7 @@ private fun Screen(
             MinePart.GART -> Personal(R.string.gart_title, personal, nav) { GartScreen(nav) }
             MinePart.NEW_PLACE -> Personal(R.string.np_title, personal, nav) { NewPlaceScreen(content, nav) }
             MinePart.ROLES -> Personal(R.string.roles_title, personal, nav) { RolesScreen(nav) }
-            MinePart.SHIELDS -> Personal(R.string.shields_title, personal, nav) { ShieldsScreen(nav) }
+            MinePart.SHIELDS -> Personal(R.string.shields_title, personal, nav) { ShieldsScreen() }
         }
         is Route.RoleRoute -> ROLES[top.id]?.let { r -> Personal(r.title, personal, nav) { RoleScreen(r, content, nav) } }
         Route.Scan -> ScanScreen(nav)

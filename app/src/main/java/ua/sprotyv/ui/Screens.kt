@@ -214,12 +214,12 @@ fun Personal(title: Int, state: Opened?, nav: Nav, content: @Composable () -> Un
             }
             state == Opened.Damaged -> {
                 Problem(R.string.damaged_title, R.string.damaged_text) { PersonalStore.close(); PersonalStore.open(context) }
-                StartFresh { PersonalStore.startFresh(context) }
+                StartFresh { KidCall.set(context, false); PersonalStore.startFresh(context) }
             }
             else -> {
                 Text(stringResource(R.string.key_lost_title), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
                 Text(stringResource(R.string.key_lost_text), style = MaterialTheme.typography.bodyLarge)
-                StartFresh { PersonalStore.startFresh(context) }
+                StartFresh { KidCall.set(context, false); PersonalStore.startFresh(context) }
             }
         }
     }

@@ -26,7 +26,7 @@ object BackupData {
     private const val KIND_PLAN = "plan"
 
     /** Generous limits: real data is far smaller; anything larger is not ours. */
-    internal const val MAX_TEXT = 20_000
+    const val MAX_TEXT = 20_000
     internal const val MAX_ITEMS = 2_000
 
     /** Our files nest four levels at most; anything deeper is refused before parsing. */

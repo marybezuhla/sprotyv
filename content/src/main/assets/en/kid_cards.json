@@ -47,7 +47,7 @@
     "why": "Do not look up and do not film it on a phone."
    },
    {
-    "action": "No roof — crawl deep into thick bushes, lie down and keep still.",
+    "action": "No roof? Crawl deep into thick bushes, lie down and keep still.",
     "why": ""
    },
    {
@@ -72,12 +72,12 @@
   "reviewedBy": "",
   "steps": [
    {
-    "action": "Not mine — I don't touch it.",
+    "action": "Not mine, I don't touch it.",
     "why": "Even if it looks like a toy or it shines.",
     "icon": "no_touch"
    },
    {
-    "action": "See a strange thing — quietly step back.",
+    "action": "See a strange thing? Quietly step back.",
     "why": ""
    },
    {
@@ -106,11 +106,11 @@
     "why": "A grown-up will look for you. You wait."
    },
    {
-    "action": "Shout Mum's or Dad's name loudly. Have a whistle — blow it.",
+    "action": "Shout Mum's or Dad's name loudly. Have a whistle? Blow it.",
     "why": ""
    },
    {
-    "action": "Have a phone — call your family.",
+    "action": "Have a phone? Call your family.",
     "why": ""
    }
   ]
@@ -141,7 +141,7 @@
     "why": "Do not jump: rescuers will come."
    },
    {
-    "action": "Clothes on fire — stop, drop, roll.",
+    "action": "Clothes on fire? Stop, drop, roll.",
     "why": "Running makes the fire bigger."
    },
    {
@@ -189,11 +189,11 @@
   "reviewedBy": "",
   "steps": [
    {
-    "action": "A stranger calls \"from Mum\" or \"from Dad\" — ask for the code word.",
+    "action": "A stranger calls \"from Mum\" or \"from Dad\"? Ask for the code word.",
     "why": "Only your family knows the code word."
    },
    {
-    "action": "Doesn't know the word — hang up.",
+    "action": "Doesn't know the word? Hang up.",
     "why": ""
    },
    {

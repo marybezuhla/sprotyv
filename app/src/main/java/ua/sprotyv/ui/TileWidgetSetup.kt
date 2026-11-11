@@ -96,7 +96,9 @@ private fun Picker(onPick: (String, String, String) -> Unit) {
             // Any number from "Phones": the widget opens the dialler with it
             listOf(c.phones.map { Tiles.phone(it.id) })
         groups.forEach { ids ->
-            val infos = ids.distinct().mapNotNull { tileInfo(it, c) }
+            // This window has no screen state of its own: trip mode read here, so hidden numbers are not offered
+            val trip = HomePrefs.load(context).trip
+            val infos = ids.distinct().filter { !(trip && TileWidgets.tripHides(it)) }.mapNotNull { tileInfo(it, c) }
             if (infos.isEmpty()) return@forEach
             androidx.compose.material3.Card(modifier = Modifier.fillMaxWidth()) {
                 infos.forEachIndexed { i, info ->

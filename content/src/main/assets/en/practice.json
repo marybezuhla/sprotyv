@@ -25,7 +25,7 @@
  {
   "id": "air-alert-ballistic",
   "card": "air-alert",
-  "step": 0,
+  "step": 1,
   "situation": "Ballistic missile threat. You are at home, 7 minutes' walk from a shelter.",
   "options": [
    {
@@ -192,7 +192,7 @@
    {
     "text": "5–8 cm above the wound, not on a joint, tightened until bleeding stops completely; note the time.",
     "right": true,
-    "why": "Wound location unclear — as high on the limb as possible."
+    "why": "Wound location unclear? As high on the limb as possible."
    },
    {
     "text": "Right on the wound.",
@@ -351,14 +351,14 @@
   "situation": "The person is not breathing; people are gathering around.",
   "options": [
    {
-    "text": "Tell one person: “You, in the blue jacket — call 103” — and start CPR.",
+    "text": "Tell one person: “You, in the blue jacket, call 103.” Then start CPR.",
     "right": true,
     "why": "Give the call to a specific person."
    },
    {
     "text": "Shout: “Somebody call an ambulance!”",
     "right": false,
-    "why": "Tell a specific person: “You, in the blue jacket — call 103.”"
+    "why": "Tell a specific person: “You, in the blue jacket, call 103.”"
    },
    {
     "text": "First call the person's family.",
@@ -381,12 +381,12 @@
    {
     "text": "Start chest compressions.",
     "right": false,
-    "why": "Breathing — turn them on their side and check breathing every minute."
+    "why": "If they are breathing, turn them on their side and check breathing every minute."
    },
    {
     "text": "Sit them up and give water.",
     "right": false,
-    "why": "Breathing — turn them on their side and check breathing every minute."
+    "why": "If they are breathing, turn them on their side and check breathing every minute."
    }
   ]
  },
@@ -409,7 +409,7 @@
    {
     "text": "Give breaths only.",
     "right": false,
-    "why": "Compressions come first: 30 compressions, 2 breaths. Cannot give breaths — do compressions only."
+    "why": "Compressions come first: 30 compressions, 2 breaths. Cannot give breaths? Do compressions only."
    }
   ]
  },
@@ -448,7 +448,7 @@
     "why": "A few seconds of a recording from social media are enough to fake a voice."
    },
    {
-    "text": "I send the money at once — what if it's true?",
+    "text": "I send the money at once. What if it's true?",
     "right": false,
     "why": "A request to send money “urgently and tell no one” is always a sign of fraud."
    },
@@ -473,10 +473,10 @@
    {
     "text": "I forward it to everyone in case they missed it.",
     "right": false,
-    "why": "Don't pass on anything unchecked, even “just in case” — panic in queues and on roads kills."
+    "why": "Don't pass on anything unchecked, even “just in case”: panic in queues and on roads kills."
    },
    {
-    "text": "I believe it — I can see the mayor's face.",
+    "text": "I believe it, because I can see the mayor's face.",
     "right": false,
     "why": "A video of “the president or mayor” ordering surrender or evacuation is a classic deepfake. Check two official channels."
    }
@@ -499,7 +499,7 @@
     "why": "Photos and videos of strike damage are not posted: the enemy assesses hits and adjusts the next strike."
    },
    {
-    "text": "I'll post it — only a building is in the frame.",
+    "text": "I'll post it: only a building is in the frame.",
     "right": false,
     "why": "Don't post strike damage. If air defence, soldiers or vehicles are in the frame, it is also a criminal offence."
    }
@@ -509,7 +509,7 @@
   "id": "facts-payout",
   "card": "guide:18.3",
   "step": 0,
-  "situation": "A message arrives: “Get your compensation — enter your card details at this link.”",
+  "situation": "A message arrives: “Get your compensation: enter your card details at this link.”",
   "options": [
    {
     "text": "I don't open it: I apply for payments only in the official app or a site I open myself.",
@@ -517,7 +517,7 @@
     "why": "Links promising “compensation” or “aid” that ask for card details steal accounts."
    },
    {
-    "text": "I'll enter the details — there's a coat of arms.",
+    "text": "I'll enter the details: there's a coat of arms.",
     "right": false,
     "why": "Such links steal accounts. Payments only through official apps and sites you open yourself."
    },

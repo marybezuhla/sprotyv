@@ -85,11 +85,11 @@ EN = {
     ),
     "uanimals": (
         "UAnimals: animals",
-        "Evacuation of animals from frontline areas. Applications are sometimes paused — check the website.",
+        "Evacuation of animals from frontline areas. Applications are sometimes paused, so check the website.",
     ),
     "koordshtab": (
         "Coordination HQ for Prisoners of War",
-        "Report a captured person and track the case; hotline 0 800 300 529. Scammers ask for money “for information” — do not pay.",
+        "Report a captured person and track the case; hotline 0 800 300 529. Scammers ask for money “for information”. Do not pay.",
     ),
     "missing-registry": (
         "Register of missing persons (Ministry of Internal Affairs)",
@@ -109,7 +109,7 @@ EN = {
     ),
     "la-strada": (
         "La Strada: 116 123",
-        "24/7 and free: violence, human trafficking. For children and young people — 116 111.",
+        "24/7 and free: violence, human trafficking. For children and young people: 116 111.",
     ),
     "gov-1547": (
         "Government line 1547",
@@ -293,7 +293,7 @@ EN = {
     ),
     "kyiv-sprotyv": (
         "Kyiv city: national resistance training centre",
-        "City centre: free all year — one-day sessions, 48-hour basic course, 108-hour advanced course.",
+        "City centre: free all year (one-day sessions, 48-hour basic course, 108-hour advanced course).",
     ),
     "lv-sprotyv": (
         "Lviv region: “Defence of Lviv Region” centre",
@@ -313,11 +313,11 @@ EN = {
     ),
     "km-sprotyv": (
         "Khmelnytskyi region: national resistance training centre",
-        "Regional centre: 7 weeks of basic training — tactics, medicine, map reading, communications. Classes are free.",
+        "Regional centre: 7 weeks of basic training (tactics, medicine, map reading, communications). Classes are free.",
     ),
     "ck-sprotyv": (
         "Cherkasy region: national resistance training centre",
-        "Regional centre: all classes free — 2–4 hour modules, short 48-hour or full 108-hour programme.",
+        "Regional centre: all classes free. 2–4 hour modules, short 48-hour or full 108-hour programme.",
     ),
     "cn-sprotyv": (
         "Chernihiv region: national resistance training centre",
@@ -409,7 +409,7 @@ EN = {
     ),
     "msp-eservices": (
         "Ministry of Social Policy e-cabinet",
-        "Apply for social services, including care, online — without visiting the social protection office.",
+        "Apply for social services, including care, online (without visiting the social protection office).",
     ),
     "pfu-portal": (
         "Pension Fund portal",
@@ -620,7 +620,7 @@ EN = {
         "How to exchange or restore a licence online; a first licence is not issued online.",
     ),
     "plast": (
-        "Plast — National Scout Organization of Ukraine",
+        "Plast (National Scout Organization of Ukraine)",
         "Scout groups for children from age 6, teens and youth: camps, outdoor skills, first aid, community service. Branches in Ukraine and abroad.",
     ),
     "cpd": (

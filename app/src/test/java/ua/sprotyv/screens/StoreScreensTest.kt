@@ -45,6 +45,7 @@ import ua.sprotyv.ui.KitScreen
 import ua.sprotyv.ui.Route
 import ua.sprotyv.ui.SearchMemory
 import ua.sprotyv.ui.SearchScreen
+import ua.sprotyv.ui.SettingsScreen
 import ua.sprotyv.ui.ShieldsScreen
 import ua.sprotyv.ui.SprotyvTheme
 import ua.sprotyv.ui.ThemeChoice
@@ -135,41 +136,25 @@ class StoreScreensTest {
         val pins = Preset.GENERAL.pins + ua.sprotyv.home.Tiles.phone("ev-1548")
         HomePrefs.update(app) { it.copy(mode = Mode.FULL, pins = pins, trip = false) }
         fun title(id: Int) = app.getString(id)
-        // The listing, in the order a person meets the app: the colour code at a glance on the home
-        // screen, then danger (orange), help and health (green), one's own data (blue), knowing
-        // and everyday life (violet), resistance (khaki); light and dark mixed
-        shot(dir, "1") { FullHome(content, pins, nav, {}, {}, {}) }
-        shot(dir, "2") { NowScreen(content, nav) }
+        // The listing: exactly eight, the most important first (most people look at three or four):
+        // the home screen, the main action (a card step by step), what is special (one's own data,
+        // encrypted, offline), the phones, trusted people, the same home at night, the simple look
+        // in large print, and the protection settings
+        shot(dir, "01_home") { FullHome(content, pins, nav, {}, {}, {}) }
         HomePrefs.update(app) { it.copy(mode = Mode.SIMPLE) }
-        shot(dir, "3") { CardScreen(content, "bleeding", nav) }
+        shot(dir, "02_card_step") { CardScreen(content, "bleeding", nav) }
         HomePrefs.update(app) { it.copy(mode = Mode.FULL) }
-        shot(dir, "4", dark = true) { PhonesScreen(content, nav, pins) { _, _ -> } }
-        shot(dir, "5") { Frame(title(R.string.medical_card), {}) { MedicalScreen() } }
-        shot(dir, "6") { Frame(title(R.string.people), {}) { PeopleScreen() } }
-        shot(dir, "7", dark = true) { Frame(title(R.string.docs_title), {}) { DocumentsScreen() } }
-        shot(dir, "8") { Frame(title(R.string.kit), {}) { KitScreen(content, nav) } }
-        // Search, as someone in a hurry types it
-        SearchMemory.query = if (lang == "en") "tourniquet" else "турнікет"
-        shot(dir, "9", dark = true) { SearchScreen(content, nav) }
-        SearchMemory.query = ""
-        shot(dir, "10") { GuideSectionScreen(content, "2.5", nav) }
-        shot(dir, "11", dark = true) { PowerScreen(content, nav) }
-        shot(dir, "12") { ResistanceScreen(content, nav) }
-        // The looks: simple, for a child, and large print (the phone's text at 130 %)
-        shot(dir, "13") { Frame(title(R.string.tile_mine), {}) { MineHub(nav, content) } }
-        HomePrefs.update(app) { it.copy(mode = Mode.SIMPLE) }
-        shot(dir, "14") { SimpleHome(content, Preset.GENERAL.pins, nav) {} }
-        HomePrefs.update(app) { it.copy(mode = Mode.KID) }
-        shot(dir, "15") { KidHome(content, nav) {} }
+        shot(dir, "03_mine") { Frame(title(R.string.tile_mine), {}) { MineHub(nav, content) } }
+        shot(dir, "04_phones") { PhonesScreen(content, nav, pins) { _, _ -> } }
+        shot(dir, "05_people") { Frame(title(R.string.people), {}) { PeopleScreen() } }
+        shot(dir, "06_home_dark", dark = true) { FullHome(content, pins, nav, {}, {}, {}) }
         RuntimeEnvironment.setFontScale(1.3f)
         try {
             HomePrefs.update(app) { it.copy(mode = Mode.SIMPLE) }
-            shot(dir, "16", dark = true) { SimpleHome(content, Preset.GENERAL.pins, nav) {} }
-            HomePrefs.update(app) { it.copy(mode = Mode.FULL) }
-            shot(dir, "17") { FullHome(content, pins, nav, {}, {}, {}) }
-            shot(dir, "18", dark = true) { CardScreen(content, "bleeding", nav) }
+            shot(dir, "07_simple_large") { SimpleHome(content, Preset.GENERAL.pins, nav) {} }
         } finally { RuntimeEnvironment.setFontScale(1f) }
         HomePrefs.update(app) { it.copy(mode = Mode.FULL) }
+        shot(dir, "08_settings") { SettingsScreen(HomePrefs.load(app), nav) }
 
         // More pictures for presentations and other stores (not in the F-Droid listing)
         val more = "$dir-more"
@@ -195,6 +180,13 @@ class StoreScreensTest {
         shot(more, "25-card-overview", dark = true) { CardScreen(content, "bleeding", nav) }
         shot(more, "26-sections") { Frame(title(R.string.tab_know), {}) { PhonesEntry(nav); SectionsList(content, pins, nav) { _, _ -> } } }
         shot(more, "29-phones", dark = true) { PhonesScreen(content, nav, pins) { _, _ -> } }
+        shot(more, "30-now") { NowScreen(content, nav) }
+        shot(more, "31-medical") { Frame(title(R.string.medical_card), {}) { MedicalScreen() } }
+        shot(more, "32-kit") { Frame(title(R.string.kit), {}) { KitScreen(content, nav) } }
+        SearchMemory.query = if (lang == "en") "tourniquet" else "турнікет"
+        shot(more, "33-search", dark = true) { SearchScreen(content, nav) }
+        SearchMemory.query = ""
+        shot(more, "34-guide") { GuideSectionScreen(content, "2.5", nav) }
         shot(more, "28-documents") { Frame(title(R.string.docs_title), {}) { DocumentsScreen() } }
         RuntimeEnvironment.setFontScale(1.3f)
         try { shot(more, "27-large-text") { FullHome(content, Preset.GENERAL.pins, nav, {}, {}, {}) } } finally { RuntimeEnvironment.setFontScale(1f) }

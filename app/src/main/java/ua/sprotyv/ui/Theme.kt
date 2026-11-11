@@ -33,7 +33,7 @@ val DangerInk: Color
     @androidx.compose.runtime.Composable get() =
         if (androidx.compose.material3.MaterialTheme.colorScheme.background.luminance() < 0.5f) Color(0xFFFF8A80) else DangerRed
 
-private val Light = lightColorScheme(
+internal val Light = lightColorScheme(
     primary = FlagBlue,
     onPrimary = Color(0xFFFFFFFF),
     primaryContainer = Color(0xFFD6E6F8),
@@ -44,7 +44,7 @@ private val Light = lightColorScheme(
     onTertiary = Color(0xFF2E2500),
     tertiaryContainer = Color(0xFFFFF3B0),
     onTertiaryContainer = Color(0xFF3A2E00),
-    background = Color(0xFFF7F6F2),
+    background = Color(0xFFF2F1EC),
     onBackground = Color(0xFF1C1B19),
     surface = Color(0xFFFFFFFF),
     onSurface = Color(0xFF1C1B19),
@@ -58,7 +58,7 @@ private val Light = lightColorScheme(
     onErrorContainer = Color(0xFF5C2C00),
 )
 
-private val Dark = darkColorScheme(
+internal val Dark = darkColorScheme(
     primary = Color(0xFF8EBBF2),
     onPrimary = Color(0xFF002C5E),
     primaryContainer = Color(0xFF00428C),

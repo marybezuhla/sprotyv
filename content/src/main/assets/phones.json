@@ -3,7 +3,7 @@
   "id": "e-112",
   "category": "emergency",
   "title": "Єдиний номер екстрених служб",
-  "note": "Пожежні, поліція, швидка, газова служба — по всій Україні.",
+  "note": "Пожежні, поліція, швидка, газова служба по всій Україні.",
   "number": "112",
   "source": "https://npu.gov.ua/news/zastosunok-112-ukraine-alternatyvnyi-sposib-vyklyku-ekstrenykh-sluzhb-bez-mobilnoho-zviazku",
   "checkedOn": "2026-11-03"
@@ -39,7 +39,7 @@
   "id": "e-104",
   "category": "emergency",
   "title": "Аварійна газова служба",
-  "note": "Запах або витік газу. Якщо запах не зникає — 104 або 112.",
+  "note": "Запах або витік газу. Якщо запах не зникає, дзвоніть 104 або 112.",
   "number": "104",
   "source": "https://www.kmu.gov.ua/news/moz-rekomenduye-yak-povoditis-v-razi-avarij-v-budinkah",
   "checkedOn": "2026-11-03"
@@ -462,7 +462,7 @@
   "id": "c-116000",
   "category": "children",
   "title": "Розшук зниклих дітей",
-  "note": "Служба розшуку дітей «Магнолія». Якщо дитина зникла, одразу дзвоніть і в поліцію — 102. Безкоштовно.",
+  "note": "Служба розшуку дітей «Магнолія». Якщо дитина зникла, одразу дзвоніть і в поліцію (102). Безкоштовно.",
   "number": "116000",
   "source": "https://www.ombudsman.gov.ua/news_details/znikli-diti-v-umovah-vijni-pravilo-troh-dib-ne-diye",
   "checkedOn": "2026-11-03"
@@ -822,7 +822,7 @@
   "id": "st-legal",
   "category": "state",
   "title": "Безоплатна правнича допомога",
-  "note": "Порада юриста пн–пт 08:00–18:00; повідомлення про затримання — цілодобово. Безкоштовно.",
+  "note": "Порада юриста пн–пт 08:00–18:00; повідомлення про затримання приймають цілодобово. Безкоштовно.",
   "number": "0800213103",
   "source": "https://legalaid.gov.ua/kliyentam/pro-bezoplatnu-pravovu-dopomogu-bpd/kontakt-czentr/",
   "checkedOn": "2026-11-03"
@@ -894,7 +894,7 @@
   "id": "st-police",
   "category": "state",
   "title": "Поліція: не екстрене",
-  "note": "Звернення до поліції, що не потребують негайного виїзду. Пн–пт 09:00–18:00. Екстрене — 102.",
+  "note": "Звернення до поліції, що не потребують негайного виїзду. Пн–пт 09:00–18:00. Екстрені виклики: 102.",
   "number": "0800500202",
   "source": "https://npu.gov.ua/kontakti",
   "checkedOn": "2026-11-03"
