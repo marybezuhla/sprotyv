@@ -106,41 +106,7 @@ fun App() {
     }
     val personal by PersonalStore.state.collectAsState()
 
-    val nav = object : Nav {
-        override fun go(route: Route) {
-            // An outside source opens outside Sprotyv; nothing is added to the back stack
-            if (route is Route.External) {
-                content?.links?.firstOrNull { it.id == route.id }?.takeIf { !(trip && Trip.hides(it)) }?.let { openLink(context, it) }
-                return
-            }
-            // A number from "Phones": the dialler with it, nothing added to the back stack
-            if (route is Route.Dial) {
-                content?.phones?.firstOrNull { it.id == route.id }?.takeIf { !(trip && ua.sprotyv.content.Phone.tripHides(it.id)) }
-                    ?.let { ua.sprotyv.reach.Reach.dial(context, it.number) }
-                return
-            }
-            // Trip mode: what it hides does not open, whatever leads there
-            if (trip && Trip.hides(route)) return
-            // Something typed and not saved (a notification or a share may lead away): ask first.
-            // Never before help in danger: a card or "what to do now" opens at once
-            if (EditGuard.isDirty && route !is Route.CardRoute && route !is Route.Open && route !is Route.Moz) { EditGuard.then = route; EditGuard.asking = true; return }
-            saved = stack.map(Route::save) + route.save()
-        }
-        // Built from what could be read, so an unreadable entry never makes Back look stuck
-        override fun back() {
-            // Something typed and not saved: ask first
-            if (EditGuard.isDirty) { EditGuard.asking = true; return }
-            saved = stack.dropLast(1).map(Route::save)
-        }
-        override fun home() {
-            if (EditGuard.isDirty) { EditGuard.then = Route.Open(Section.NOW); EditGuard.goHome = true; EditGuard.asking = true; return }
-            saved = emptyList()
-        }
-        override fun replace(route: Route) {
-            if (trip && Trip.hides(route)) return
-            saved = stack.dropLast(1).map(Route::save) + route.save()
-        }
-    }
+    val nav = appNav(context, content, stack, trip) { saved = it }
 
     // What runs after the PIN (or at once when settings are not locked)
     fun perform(action: String) {
@@ -169,28 +135,7 @@ fun App() {
         onStopOrDispose { }
     }
 
-    // A notification's tap opens its screen (trip mode and set-up are checked as for any screen)
-    val opening by Opening.target.collectAsState()
-    LaunchedEffect(opening, content != null) {
-        val t = opening ?: return@LaunchedEffect
-        // A number from a widget needs the list of numbers: wait for it
-        if (t.startsWith("tile/phone:") && content == null) return@LaunchedEffect
-        Opening.clear()
-        // Kid mode: only the children's cards from the children's widget
-        val allowed = prefs.mode == Mode.FULL || prefs.mode == Mode.SIMPLE || (prefs.mode == Mode.KID && (t.startsWith("tile/card:kid-") || t == "kidcall"))
-        if (allowed) Opening.route(t)?.let { if (top != it) nav.go(it) }
-    }
-
-    // "Share → Sprotyv" follows the mode, trip mode and the neutral icon
-    LaunchedEffect(prefs.mode, trip) { ShareIn.sync(context); Notify.sync(context); Shortcuts.sync(context) }
-    // A page shared from a browser opens the bookmarks, where the owner names and keeps it.
-    // Not in trip or kid mode, and not before set-up: then it is simply dropped
-    val incoming by Incoming.state.collectAsState()
-    LaunchedEffect(incoming?.id) {
-        if (incoming == null) return@LaunchedEffect
-        if (trip || (prefs.mode != Mode.FULL && prefs.mode != Mode.SIMPLE)) Incoming.clear()
-        else if (top != Route.Mine(MinePart.BOOKMARKS)) nav.go(Route.Mine(MinePart.BOOKMARKS))
-    }
+    OutsideWays(prefs, content, top, nav)
 
     BackHandler(enabled = top != null) { nav.back() }
     // Back from another tab first returns to "Home", then leaves the app
@@ -213,44 +158,119 @@ fun App() {
         Mode.SIMPLE -> SimpleHome(content, prefs.pins, nav, onSettings = { guarded(ACTION_SETTINGS) })
         Mode.KID -> KidHome(content, nav, onGrownUp = { guarded(ACTION_SETTINGS) })
         // While typing, the keyboard pushes the screen up instead of covering it; the bars step aside
-        Mode.FULL -> Column(Modifier.fillMaxSize().imePadding()) {
-            val typing = typing()
-            Box(Modifier.weight(1f)) {
-                CompositionLocalProvider(LocalInTab provides true) {
-                    when (tab) {
-                        Tab.HOME -> FullHome(
-                            content, prefs.pins, nav,
-                            onSettings = { guarded(ACTION_SETTINGS) },
-                            onEdit = { guarded(ACTION_EDIT) },
-                            onAdd = { tabName = Tab.KNOW.name },
-                        )
-                        Tab.KNOW -> Frame(stringResource(R.string.tab_know), {}) {
-                            // One search over the guide first, then everything by theme in coloured shelves
-                            androidx.compose.material3.OutlinedButton(onClick = { nav.go(Route.Search) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
-                                Icon(Icons.Filled.Search, contentDescription = null)
-                                Text("  " + stringResource(R.string.search_guide))
-                            }
-                            // Phones at the top: the one place a number is needed in a hurry
-                            PhonesEntry(nav)
-                            SectionsList(content, prefs.pins, nav) { id, on -> guarded((if (on) ACTION_PIN else ACTION_UNPIN) + id) }
-                        }
-                        Tab.WAY -> if (!trip) Frame(stringResource(R.string.tab_way), {}) { WayHub(nav) }
-                        Tab.MINE -> if (!trip) Personal(R.string.tile_mine, personal, nav) { MineHub(nav, content) }
-                    }
-                }
-            }
-            if (!typing) CallBar(edge = false)
-            if (!typing) NavigationBar {
-                Tab.entries.filter { !(trip && (it == Tab.MINE || it == Tab.WAY)) }.forEach { t ->
-                    NavigationBarItem(
-                        selected = t == tab,
-                        onClick = { tabName = t.name },
-                        icon = { Icon(t.icon(t == tab), contentDescription = null) },
-                        label = { Text(stringResource(t.title)) },
-                        alwaysShowLabel = true,
+        Mode.FULL -> FullTabs(tab, { tabName = it.name }, prefs, content, personal, nav, ::guarded)
+    }
+}
+
+/** Ways in from outside the app: a notification's tap, a widget, "Share → Sprotyv". */
+@Composable
+private fun OutsideWays(prefs: HomePrefs.State, content: Content?, top: Route?, nav: Nav) {
+    val context = LocalContext.current
+    val trip = prefs.trip
+    // A notification's tap opens its screen (trip mode and set-up are checked as for any screen)
+    val opening by Opening.target.collectAsState()
+    LaunchedEffect(opening, content != null) {
+        val t = opening ?: return@LaunchedEffect
+        // A number from a widget needs the list of numbers: wait for it
+        if (t.startsWith("tile/phone:") && content == null) return@LaunchedEffect
+        Opening.clear()
+        // Kid mode: only the children's cards from the children's widget
+        val allowed = prefs.mode == Mode.FULL || prefs.mode == Mode.SIMPLE || (prefs.mode == Mode.KID && (t.startsWith("tile/card:kid-") || t == "kidcall"))
+        if (allowed) Opening.route(t)?.let { if (top != it) nav.go(it) }
+    }
+
+    // "Share → Sprotyv" follows the mode, trip mode and the neutral icon
+    LaunchedEffect(prefs.mode, trip) { ShareIn.sync(context); Notify.sync(context); Shortcuts.sync(context) }
+    // A page shared from a browser opens the bookmarks, where the owner names and keeps it.
+    // Not in trip or kid mode, and not before set-up: then it is simply dropped
+    val incoming by Incoming.state.collectAsState()
+    LaunchedEffect(incoming?.id) {
+        if (incoming == null) return@LaunchedEffect
+        if (trip || (prefs.mode != Mode.FULL && prefs.mode != Mode.SIMPLE)) Incoming.clear()
+        else if (top != Route.Mine(MinePart.BOOKMARKS)) nav.go(Route.Mine(MinePart.BOOKMARKS))
+    }
+}
+
+/** Full mode: the tabs and what each shows, the call bar and the tab bar below. */
+@Composable
+private fun FullTabs(tab: Tab, onTab: (Tab) -> Unit, prefs: HomePrefs.State, content: Content?, personal: ua.sprotyv.personal.Opened?, nav: Nav, guarded: (String) -> Unit) {
+    val trip = prefs.trip
+    Column(Modifier.fillMaxSize().imePadding()) {
+        val typing = typing()
+        Box(Modifier.weight(1f)) {
+            CompositionLocalProvider(LocalInTab provides true) {
+                when (tab) {
+                    Tab.HOME -> FullHome(
+                        content, prefs.pins, nav,
+                        onSettings = { guarded(ACTION_SETTINGS) },
+                        onEdit = { guarded(ACTION_EDIT) },
+                        onAdd = { onTab(Tab.KNOW) },
                     )
+                    Tab.KNOW -> Frame(stringResource(R.string.tab_know), {}) {
+                        // One search over the guide first, then everything by theme in coloured shelves
+                        androidx.compose.material3.OutlinedButton(onClick = { nav.go(Route.Search) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+                            Icon(Icons.Filled.Search, contentDescription = null)
+                            Text("  " + stringResource(R.string.search_guide))
+                        }
+                        // Phones at the top: the one place a number is needed in a hurry
+                        PhonesEntry(nav)
+                        SectionsList(content, prefs.pins, nav) { id, on -> guarded((if (on) ACTION_PIN else ACTION_UNPIN) + id) }
+                    }
+                    Tab.WAY -> if (!trip) Frame(stringResource(R.string.tab_way), {}) { WayHub(nav) }
+                    Tab.MINE -> if (!trip) Personal(R.string.tile_mine, personal, nav) { MineHub(nav, content) }
                 }
             }
+        }
+        if (!typing) CallBar(edge = false)
+        if (!typing) NavigationBar {
+            Tab.entries.filter { !(trip && (it == Tab.MINE || it == Tab.WAY)) }.forEach { t ->
+                NavigationBarItem(
+                    selected = t == tab,
+                    onClick = { onTab(t) },
+                    icon = { Icon(t.icon(t == tab), contentDescription = null) },
+                    label = { Text(stringResource(t.title)) },
+                    alwaysShowLabel = true,
+                )
+            }
+        }
+    }
+}
+
+/** Moving between screens: the back stack as text ([setSaved]), with trip mode and unsaved words checked first. */
+private fun appNav(context: android.content.Context, content: Content?, stack: List<Route>, trip: Boolean, setSaved: (List<String>) -> Unit): Nav {
+    return object : Nav {
+        override fun go(route: Route) {
+            // An outside source opens outside Sprotyv; nothing is added to the back stack
+            if (route is Route.External) {
+                content?.links?.firstOrNull { it.id == route.id }?.takeIf { !(trip && Trip.hides(it)) }?.let { openLink(context, it) }
+                return
+            }
+            // A number from "Phones": the dialler with it, nothing added to the back stack
+            if (route is Route.Dial) {
+                content?.phones?.firstOrNull { it.id == route.id }?.takeIf { !(trip && ua.sprotyv.content.Phone.tripHides(it.id)) }
+                    ?.let { ua.sprotyv.reach.Reach.dial(context, it.number) }
+                return
+            }
+            // Trip mode: what it hides does not open, whatever leads there
+            if (trip && Trip.hides(route)) return
+            // Something typed and not saved (a notification or a share may lead away): ask first.
+            // Never before help in danger: a card or "what to do now" opens at once
+            if (EditGuard.isDirty && route !is Route.CardRoute && route !is Route.Open && route !is Route.Moz) { EditGuard.then = route; EditGuard.asking = true; return }
+            setSaved(stack.map(Route::save) + route.save())
+        }
+        // Built from what could be read, so an unreadable entry never makes Back look stuck
+        override fun back() {
+            // Something typed and not saved: ask first
+            if (EditGuard.isDirty) { EditGuard.asking = true; return }
+            setSaved(stack.dropLast(1).map(Route::save))
+        }
+        override fun home() {
+            if (EditGuard.isDirty) { EditGuard.then = Route.Open(Section.NOW); EditGuard.goHome = true; EditGuard.asking = true; return }
+            setSaved(emptyList())
+        }
+        override fun replace(route: Route) {
+            if (trip && Trip.hides(route)) return
+            setSaved(stack.dropLast(1).map(Route::save) + route.save())
         }
     }
 }
