@@ -211,6 +211,8 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
         Block(stringResource(R.string.settings_other_hands), ua.sprotyv.home.Group.DANGER, foldable = true) {
             TripToggle(prefs.trip)
             NeutralToggle()
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            WipeAll()
         }
         // Medical training is a role, kept encrypted in "My data" (no longer a plain setting)
         Block(stringResource(R.string.medic_title), ua.sprotyv.home.Group.FIRST_AID, foldable = true) {

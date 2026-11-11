@@ -191,6 +191,25 @@ object PersonalStore {
     }
 
     /**
+     * Erasing everything: closes the data and then runs [then] in the same queue, so nothing can
+     * open or save in between. [then] runs even if closing failed.
+     */
+    fun closeThen(then: () -> Unit) {
+        scope.launch {
+            mutex.withLock {
+                try {
+                    (_state.value as? Opened.Ready)?.db?.close()
+                } catch (e: Exception) {
+                    // Closing is best effort; the files are erased right after anyway
+                } finally {
+                    _state.value = null
+                }
+                then()
+            }
+        }
+    }
+
+    /**
      * Saves a change. Changes with the same [key] are folded together: while one is waiting, a
      * newer one replaces it, so typing a word is one write, not one per letter. A change is saved
      * only while the data is open and before any later close; otherwise [saveFailed] turns on.

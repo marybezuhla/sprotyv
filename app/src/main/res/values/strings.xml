@@ -1748,4 +1748,12 @@
     <string name="author_support_defence">Оборона</string>
     <string name="author_support_humanitarian">Гуманітарна допомога</string>
     <string name="author_support_any">Підтримати можна й будь-який перевірений фонд, волонтерів чи підрозділ, яким ви довіряєте. Перевіряйте збори: офіційні реквізити й звіти.</string>
+    <string name="wipe_title">Стерти всі дані</string>
+    <string name="wipe_hint">Усе особисте зникне з телефона назавжди. Довідник лишиться.</string>
+    <string name="wipe_button">Стерти всі дані…</string>
+    <string name="wipe_confirm_title">Стерти всі дані?</string>
+    <string name="wipe_confirm_text">Зникнуть назавжди: «Моє» (медкартка, люди, план, запаси), документи й нотатки, ключі шифрування, PIN і налаштування. Повернути це неможливо. Резервні копії, збережені поза застосунком, лишаться. Після стирання застосунок закриється.</string>
+    <string name="wipe_word">СТЕРТИ</string>
+    <string name="wipe_type">Щоб підтвердити, напишіть: %1$s</string>
+    <string name="wipe_yes">Стерти</string>
 </resources>

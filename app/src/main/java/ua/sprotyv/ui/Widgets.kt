@@ -51,6 +51,12 @@ object Widgets {
         try { CountWidgets.keepOnly(app, ids(app, manager, CountWidget::class.java)) } catch (e: Exception) { }
     }
 
+    /** Every placed widget emptied now (erasing all data): no copied number stays on the home screen. */
+    fun blank(context: Context) {
+        val app = context.applicationContext
+        AppWidgetManager.getInstance(app)?.let { blankAll(app, it) }
+    }
+
     /** Every placed widget emptied: some launchers keep the last picture of a removed widget. */
     private fun blankAll(app: Context, manager: AppWidgetManager) {
         try {

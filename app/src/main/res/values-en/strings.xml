@@ -1740,4 +1740,12 @@
     <string name="author_support_defence">Defence</string>
     <string name="author_support_humanitarian">Humanitarian aid</string>
     <string name="author_support_any">You can also support any trusted foundation, volunteers or unit you know. Check fundraisers: official details and reports.</string>
+    <string name="wipe_title">Erase all data</string>
+    <string name="wipe_hint">Everything personal leaves the phone for good. The guide stays.</string>
+    <string name="wipe_button">Erase all data…</string>
+    <string name="wipe_confirm_title">Erase all data?</string>
+    <string name="wipe_confirm_text">Gone for good: My data (medical card, people, plan, supplies), documents and notes, encryption keys, the PIN and settings. This cannot be undone. Backups saved outside the app stay. After erasing, the app closes.</string>
+    <string name="wipe_word">ERASE</string>
+    <string name="wipe_type">To confirm, type: %1$s</string>
+    <string name="wipe_yes">Erase</string>
 </resources>
