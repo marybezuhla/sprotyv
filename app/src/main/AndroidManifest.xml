@@ -184,7 +184,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
             <!-- The emoji library would ask Google Play Services for a font at start: not for an offline app -->
-        <provider android:name="androidx.startup.InitializationProvider" android:authorities="${applicationId}.androidx-startup" android:exported="false" tools:node="merge">
+        <provider android:name="androidx.startup.InitializationProvider" android:authorities="${applicationId}.androidx-startup" android:exported="false" tools:node="merge" tools:ignore="MissingClass">
             <meta-data android:name="androidx.emoji2.text.EmojiCompatInitializer" tools:node="remove" />
         </provider>
     </application>

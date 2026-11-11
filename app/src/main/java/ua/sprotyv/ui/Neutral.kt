@@ -38,6 +38,10 @@ object Neutral {
     /** The recent apps list shows the neutral name too. */
     fun applyToTask(activity: Activity) {
         val label = activity.getString(if (isOn(activity)) R.string.neutral_name else R.string.app_name)
-        activity.setTaskDescription(ActivityManager.TaskDescription.Builder().setLabel(label).build())
+        // The builder came with Android 13; Android 12 still has only the plain constructor
+        @Suppress("DEPRECATION")
+        val description = if (android.os.Build.VERSION.SDK_INT >= 33) ActivityManager.TaskDescription.Builder().setLabel(label).build()
+            else ActivityManager.TaskDescription(label)
+        activity.setTaskDescription(description)
     }
 }

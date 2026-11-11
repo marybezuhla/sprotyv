@@ -122,7 +122,7 @@ fun NoticeHost(modifier: Modifier = Modifier) {
     val host = remember { SnackbarHostState() }
     val notice by Notices.current.collectAsState()
     val context = androidx.compose.ui.platform.LocalContext.current
-    val activity = context as? android.app.Activity
+    val activity = androidx.activity.compose.LocalActivity.current
     // With TalkBack, finding the button takes longer than any timer: the line stays until it is used or closed
     val talkBack = remember { context.getSystemService(android.view.accessibility.AccessibilityManager::class.java)?.isTouchExplorationEnabled == true }
     LaunchedEffect(notice?.id) {

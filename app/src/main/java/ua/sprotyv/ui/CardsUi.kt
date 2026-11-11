@@ -502,7 +502,7 @@ fun KeepScreenOn() {
 /** The screen at full brightness while shown (a code held out to be scanned), as it was afterwards. */
 @Composable
 fun FullBrightness() {
-    val activity = androidx.compose.ui.platform.LocalContext.current as? android.app.Activity ?: return
+    val activity = androidx.activity.compose.LocalActivity.current ?: return
     androidx.compose.runtime.DisposableEffect(activity) {
         val window = activity.window
         val before = window.attributes.screenBrightness

@@ -1476,7 +1476,7 @@
     <string name="role_donor_1">Citizens of Ukraine from 18 can give blood, as can foreigners and stateless people with a permanent residence permit.</string>
     <string name="role_donor_2">A whole-blood donor weighs at least 50 kg. The blood centre\'s doctor tells about contraindications and the gap between donations.</string>
     <string name="role_donor_3">On the day of donation an employee is released from work with pay kept, and gets one more day of rest after it (Labour Code, art. 124).</string>
-    <string name="role_donor_4">Since 26 January 2026 some benefits ended, such as 100% sick pay and the Honorary Donor supplement; the guarantees of Labour Code art. 124 remain. Ask the blood centre what else changed.</string>
+    <string name="role_donor_4" formatted="false">Since 26 January 2026 some benefits ended, such as 100% sick pay and the Honorary Donor supplement; the guarantees of Labour Code art. 124 remain. Ask the blood centre what else changed.</string>
     <string name="role_donor_5">The donor platform shows which blood group your region lacks and where to give.</string>
     <string name="gart_strip_title">Resilience today</string>
     <string name="gart_strip_all">All done today: %1$d of %2$d ✓</string>

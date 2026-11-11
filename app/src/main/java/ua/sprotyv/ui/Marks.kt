@@ -53,7 +53,7 @@ object Marks {
     /** A mark shown on a screen outside "My data": the recent-apps picture then keeps it hidden, as on the data screens. */
     @Composable
     fun HideFromRecents(on: Boolean) {
-        val activity = LocalContext.current as? android.app.Activity ?: return
+        val activity = androidx.activity.compose.LocalActivity.current ?: return
         if (!on || android.os.Build.VERSION.SDK_INT < 33) return
         androidx.compose.runtime.DisposableEffect(activity) {
             activity.setRecentsScreenshotEnabled(false)

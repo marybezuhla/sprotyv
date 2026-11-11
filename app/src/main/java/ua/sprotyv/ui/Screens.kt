@@ -110,7 +110,7 @@ fun SecureScreen() {
         SecureScreens.open.intValue++
         onDispose { SecureScreens.open.intValue-- }
     }
-    val activity = LocalContext.current as? Activity ?: return
+    val activity = androidx.activity.compose.LocalActivity.current ?: return
     // Apps that read the screen through accessibility (other than real aids such as TalkBack, which
     // Android marks as accessibility tools) see nothing of these screens, screenshots allowed or not
     if (Build.VERSION.SDK_INT >= 34) {

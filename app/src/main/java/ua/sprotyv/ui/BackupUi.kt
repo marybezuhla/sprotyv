@@ -98,7 +98,7 @@ internal fun rememberWords(): List<String>? {
 /** True only when the screen goes for good: turning the phone keeps what it holds. */
 @Composable
 internal fun OnLeave(action: () -> Unit) {
-    val activity = LocalContext.current as? android.app.Activity
+    val activity = androidx.activity.compose.LocalActivity.current
     DisposableEffect(Unit) { onDispose { if (activity?.isChangingConfigurations != true) action() } }
 }
 
