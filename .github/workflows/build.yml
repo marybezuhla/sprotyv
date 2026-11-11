@@ -124,6 +124,14 @@ jobs:
           set -o pipefail
           gradle --no-daemon assembleRelease 2>&1 | tee build.log
 
+      - name: Lint (an error stops the build)
+        shell: bash
+        run: |
+          set -o pipefail
+          gradle --no-daemon lintRelease 2>&1 | tee lint.log
+          echo "---- lint report"
+          cat app/build/reports/lint.txt || true
+
       - name: Check modules in the resolved dependency graph
         shell: bash
         run: |
