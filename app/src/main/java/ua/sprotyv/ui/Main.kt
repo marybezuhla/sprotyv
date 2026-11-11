@@ -131,6 +131,7 @@ class Main : ComponentActivity() {
         if (!isChangingConfigurations && !Away.expected) {
             // Drafts are kept in memory only for a turn of the screen, never while the app is away
             forgetTyped()
+            Notices.finishPending()
             PersonalStore.close()
             // Settings lock again; not while Android's own PIN window is what covers the app
             Guard.close()

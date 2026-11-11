@@ -1,6 +1,5 @@
 package ua.sprotyv.ui
 
-import android.app.Activity
 import android.os.Build
 import android.view.WindowManager
 import androidx.compose.foundation.layout.Arrangement

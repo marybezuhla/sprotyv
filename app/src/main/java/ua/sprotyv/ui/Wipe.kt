@@ -16,6 +16,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -43,8 +44,12 @@ object Wipe {
 
     fun matches(typed: String): Boolean = typed.trim().uppercase() in WORDS
 
+    /** True from the tap until the app closes. In memory only, so a restarted app never shows it stuck. */
+    val running = kotlinx.coroutines.flow.MutableStateFlow(false)
+
     fun everything(context: Context) {
         val app = context.applicationContext
+        running.value = true
         Notices.finishPending()
         // The keys go at once, before waiting for anything: from this moment nothing left can be read
         Thread { deleteKeys() }.start()
@@ -63,11 +68,15 @@ object Wipe {
     }
 
     private fun erase(app: Context) {
-        // Again, now that the data is closed: a key made meanwhile goes too
-        deleteKeys()
-        // Nothing personal stays on the lock screen or the home screen
-        try { NotificationManagerCompat.from(app).cancelAll() } catch (e: Exception) { /* erasing goes on */ }
-        Widgets.blank(app)
+        try {
+            // Again, now that the data is closed: a key made meanwhile goes too
+            deleteKeys()
+            // Nothing personal stays on the lock screen or the home screen
+            NotificationManagerCompat.from(app).cancelAll()
+            Widgets.blank(app)
+        } catch (e: Exception) {
+            // Whatever failed here, the files below are erased and the app closes all the same
+        }
         // Android erases all of the app's files, settings and databases, cancels its alarms and closes it
         val done = try {
             app.getSystemService(ActivityManager::class.java)?.clearApplicationUserData() == true
@@ -89,7 +98,7 @@ object Wipe {
 internal fun WipeAll() {
     val context = LocalContext.current
     var ask by rememberSaveable { mutableStateOf(false) }
-    var erasing by rememberSaveable { mutableStateOf(false) }
+    val erasing by Wipe.running.collectAsState()
     var typed by rememberSaveable { mutableStateOf("") }
     Text(stringResource(R.string.wipe_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     OutlinedButton(
@@ -98,7 +107,7 @@ internal fun WipeAll() {
     ) { Text(stringResource(R.string.wipe_button), color = MaterialTheme.colorScheme.error) }
     if (ask) {
         val ready = Wipe.matches(typed)
-        fun go() { ask = false; erasing = true; Wipe.everything(context) }
+        fun go() { ask = false; Wipe.everything(context) }
         AlertDialog(
             onDismissRequest = { ask = false },
             title = { Text(stringResource(R.string.wipe_confirm_title)) },

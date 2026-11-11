@@ -27,7 +27,7 @@ import ua.sprotyv.home.Tool
  */
 object Notices {
     /** [onGone]: runs once if the line goes without its action (timed out, replaced, or the app closed). */
-    class Notice(val text: String, val action: String? = null, val onAction: (() -> Unit)? = null, val onGone: (() -> Unit)? = null) {
+    class Notice(val text: String, val action: String? = null, val onAction: (() -> Unit)? = null, val onGone: (() -> Unit)? = null, val deletion: Boolean = false) {
         val id = System.nanoTime()
         private var settled = false
 
@@ -52,7 +52,9 @@ object Notices {
      * no document key stays in memory.
      */
     fun finishPending() {
-        current.getAndUpdate { null }?.settle(acted = false)
+        // Only a deletion (it names what went) is finished; other lines (a tile pinned) stay as they are
+        val n = current.value ?: return
+        if (n.deletion && current.compareAndSet(n, null)) n.settle(acted = false)
     }
 
     /**
@@ -61,7 +63,7 @@ object Notices {
      * new one comes is finished at once, so nothing is left half deleted.
      */
     fun deleted(context: Context, text: String, undo: () -> Unit, gone: (() -> Unit)? = null) {
-        val next = Notice(text, context.getString(R.string.undo), undo, gone)
+        val next = Notice(text, context.getString(R.string.undo), undo, gone, deletion = true)
         current.getAndUpdate { next }?.settle(acted = false)
     }
 
@@ -142,7 +144,7 @@ fun NoticeHost(modifier: Modifier = Modifier) {
             // Otherwise (time out, closed, a new line, the app gone) a waiting deletion is finished
             if (activity?.isChangingConfigurations != true) {
                 n.settle(acted)
-                if (Notices.current.value === n) Notices.current.value = null
+                Notices.current.compareAndSet(n, null)
             }
         }
     }
