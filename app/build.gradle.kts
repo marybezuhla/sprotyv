@@ -39,7 +39,6 @@ android {
     // Android's lint runs in CI: an error stops the build; warnings are listed in the log to work through
     lint {
         abortOnError = true
-        checkReleaseBuilds = true
         textReport = true
         textOutput = file("build/reports/lint.txt")
     }

@@ -52,6 +52,7 @@ class Main : ComponentActivity() {
         // A photo the camera was making for Documents is not kept plain once the data closes
         java.io.File(cacheDir, "scan/doc.jpg").delete()
         forgetTyped()
+        Notices.finishPending()
         PersonalStore.close()
         Guard.close()
     }

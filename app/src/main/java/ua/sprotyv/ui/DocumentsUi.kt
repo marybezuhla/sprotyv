@@ -238,7 +238,10 @@ object Docs {
             files.hold(doc.file)
             db.documents().delete(id)
             Notices.deleted(app, app.getString(R.string.deleted_named, doc.title), undo = {
-                PersonalStore.save("doc:restore:$id") { it.documents().add(doc); files.done(doc.file) }
+                PersonalStore.save("doc:restore:$id") {
+                    // Back in the list; the in-memory copy of its key is wiped either way
+                    try { it.documents().add(doc) } finally { files.done(doc.file); doc.key.fill(0) }
+                }
             }, gone = {
                 // Wiped before the file goes, even if deleting it fails
                 doc.key.fill(0)

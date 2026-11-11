@@ -339,12 +339,14 @@ internal fun LanguageChoice() {
         Text(stringResource(R.string.lang_old_phone), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         return
     }
-    val current = androidx.appcompat.app.AppCompatDelegate.getApplicationLocales().toLanguageTags()
+    // Android's own per-app language: AppCompat's helper needs an AppCompat window, which this app has not
+    val context = LocalContext.current
+    val current = AppLanguage.get(context)
     ChoiceRow {
         listOf("" to R.string.lang_phone, "uk" to R.string.lang_uk, "en" to R.string.lang_en).forEach { (tag, label) ->
             androidx.compose.material3.FilterChip(
                 selected = current.substringBefore('-') == tag,
-                onClick = { androidx.appcompat.app.AppCompatDelegate.setApplicationLocales(androidx.core.os.LocaleListCompat.forLanguageTags(tag)) },
+                onClick = { AppLanguage.set(context, tag) },
                 label = { ChipText(stringResource(label)) }, modifier = Modifier.heightIn(min = 48.dp),
             )
         }
@@ -409,3 +411,15 @@ internal fun LicenceTexts(onClose: () -> Unit) {
 }
 
 private const val SOURCE_URL = "https://github.com/marybezuhla/sprotyv"
+
+/** The app's own language through Android's LocaleManager (13 and later); "" is the phone's language. */
+@androidx.annotation.RequiresApi(33)
+private object AppLanguage {
+    private fun manager(context: android.content.Context) = context.getSystemService(android.app.LocaleManager::class.java)
+
+    fun get(context: android.content.Context): String = manager(context)?.applicationLocales?.toLanguageTags().orEmpty()
+
+    fun set(context: android.content.Context, tag: String) {
+        manager(context)?.applicationLocales = android.os.LocaleList.forLanguageTags(tag)
+    }
+}

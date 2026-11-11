@@ -131,7 +131,7 @@ fun App() {
     val marksData = remember(top) { top?.readsMarks == true && Marks.dataExists(context) }
     val personalNow = !trip && (top?.let { it.personal || (it.readsMarks && marksData) } ?: (full && tab == Tab.MINE))
     LifecycleStartEffect(personalNow) {
-        if (personalNow) PersonalStore.open(context) else PersonalStore.close()
+        if (personalNow) PersonalStore.open(context) else { Notices.finishPending(); PersonalStore.close() }
         onStopOrDispose { }
     }
 

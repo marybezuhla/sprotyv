@@ -41,7 +41,18 @@ object Notices {
     val current = MutableStateFlow<Notice?>(null)
 
     fun show(text: String, action: String? = null, onAction: (() -> Unit)? = null) {
-        current.value = Notice(text, action, onAction)
+        val next = Notice(text, action, onAction)
+        // A deletion still waiting for "Undo" is finished, never left half done
+        current.getAndUpdate { next }?.settle(acted = false)
+    }
+
+    /**
+     * The owner's data closes (the app left the screen, "Mine" was left, everything is erased): a
+     * deletion still offering "Undo" is finished now, so no name stays on screen past the lock and
+     * no document key stays in memory.
+     */
+    fun finishPending() {
+        current.getAndUpdate { null }?.settle(acted = false)
     }
 
     /**
@@ -110,17 +121,29 @@ fun phoneShort(p: ua.sprotyv.content.Phone): String = if (p.category == "power")
 fun NoticeHost(modifier: Modifier = Modifier) {
     val host = remember { SnackbarHostState() }
     val notice by Notices.current.collectAsState()
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val activity = context as? android.app.Activity
+    // With TalkBack, finding the button takes longer than any timer: the line stays until it is used or closed
+    val talkBack = remember { context.getSystemService(android.view.accessibility.AccessibilityManager::class.java)?.isTouchExplorationEnabled == true }
     LaunchedEffect(notice?.id) {
         val n = notice ?: return@LaunchedEffect
         host.currentSnackbarData?.dismiss()
         var acted = false
         try {
-            val result = host.showSnackbar(n.text, actionLabel = n.action, withDismissAction = false, duration = if (n.action != null) SnackbarDuration.Long else SnackbarDuration.Short)
+            val duration = when {
+                n.action == null -> SnackbarDuration.Short
+                talkBack -> SnackbarDuration.Indefinite
+                else -> SnackbarDuration.Long
+            }
+            val result = host.showSnackbar(n.text, actionLabel = n.action, withDismissAction = talkBack && n.action != null, duration = duration)
             acted = result == SnackbarResult.ActionPerformed
         } finally {
-            // Also when the screen goes away mid-way: a deletion waiting for its line is finished
-            n.settle(acted)
-            if (Notices.current.value === n) Notices.current.value = null
+            // Turning the phone rebuilds the screen: the same line is shown again, nothing is finished.
+            // Otherwise (time out, closed, a new line, the app gone) a waiting deletion is finished
+            if (activity?.isChangingConfigurations != true) {
+                n.settle(acted)
+                if (Notices.current.value === n) Notices.current.value = null
+            }
         }
     }
     SnackbarHost(host, modifier.padding(horizontal = 16.dp, vertical = 8.dp))

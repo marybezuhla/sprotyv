@@ -52,6 +52,17 @@ jobs:
           set -o pipefail
           gradle --no-daemon testReleaseUnitTest 2>&1 | tee test.log
 
+      # Lint runs check code shipped inside libraries, so it stays here, away from the job that builds the APK
+      - name: Lint (an error stops the build)
+        shell: bash
+        run: |
+          set -o pipefail
+          status=0
+          gradle --no-daemon lintRelease 2>&1 | tee lint.log || status=$?
+          echo "---- lint report"
+          cat app/build/reports/lint.txt || true
+          exit $status
+
       - name: Prepare test log
         if: always()
         shell: bash
@@ -123,14 +134,6 @@ jobs:
         run: |
           set -o pipefail
           gradle --no-daemon assembleRelease 2>&1 | tee build.log
-
-      - name: Lint (an error stops the build)
-        shell: bash
-        run: |
-          set -o pipefail
-          gradle --no-daemon lintRelease 2>&1 | tee lint.log
-          echo "---- lint report"
-          cat app/build/reports/lint.txt || true
 
       - name: Check modules in the resolved dependency graph
         shell: bash

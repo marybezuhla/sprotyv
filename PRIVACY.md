@@ -60,7 +60,7 @@ Android does not copy the app's data to the cloud or to a new phone: this is tur
 
 ## How to erase everything
 
-In the app: Settings → “If the phone is in other hands” → “Erase all data”. The keystore keys go first, then the database, documents, notes, settings and the numbers copied for widgets; the app closes. The guide stays, as it is built in.
+In the app: Settings → “If the phone is in the wrong hands” → “Erase all data”. The keystore keys go first, then the database, documents, notes, settings and the numbers copied for widgets; the app closes. The guide stays, as it is built in.
 
 Or uninstall the app (Android Settings → Apps → Sprotyv → Uninstall): all the same goes with it.
 

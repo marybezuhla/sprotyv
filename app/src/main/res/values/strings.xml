@@ -350,7 +350,7 @@
     <string name="docs_share_title">Поділитися документом?</string>
     <string name="docs_share_warning">Інший застосунок отримає незашифровану копію й може зберегти її в себе, у хмарі чи в листуванні. «Спротив» прибере свою копію за хвилину після того, як ви повернетеся.</string>
     <string name="docs_delete_title">Видалити документ?</string>
-    <string name="docs_delete_text">Документ зникне з телефона. Одразу після видалення його ще можна повернути кнопкою внизу екрана. У вже зроблених резервних копіях він лишиться.</string>
+    <string name="docs_delete_text">Документ зникне з телефона. Ще кілька секунд після видалення його можна повернути кнопкою «Повернути» внизу екрана. У вже зроблених резервних копіях він лишиться.</string>
     <string name="docs_zoom">Відкрити більшим</string>
     <string name="docs_page">Сторінка %1$d з %2$d</string>
     <string name="docs_photo_title">Фото %1$s</string>
@@ -1747,16 +1747,15 @@
     <string name="author_support_defence">Оборона</string>
     <string name="author_support_humanitarian">Гуманітарна допомога</string>
     <string name="author_support_any">Підтримати можна й будь-який перевірений фонд, волонтерів чи підрозділ, яким ви довіряєте. Перевіряйте збори: офіційні реквізити й звіти.</string>
-    <string name="wipe_title">Стерти всі дані</string>
-    <string name="wipe_hint">Усе особисте зникне з телефона назавжди. Довідник лишиться.</string>
+    <string name="wipe_hint">Стерти всі дані: усе особисте зникне з телефона назавжди. Довідник лишиться.</string>
     <string name="wipe_button">Стерти всі дані…</string>
     <string name="wipe_confirm_title">Стерти всі дані?</string>
-    <string name="wipe_confirm_text">Зникнуть назавжди: «Моє» (медкартка, люди, план, запаси), документи й нотатки, ключі шифрування, PIN і налаштування. Повернути це неможливо. Резервні копії, збережені поза застосунком, лишаться. Після стирання застосунок закриється.</string>
-    <string name="wipe_word">СТЕРТИ</string>
-    <string name="wipe_type">Щоб підтвердити, напишіть: %1$s</string>
+    <string name="wipe_confirm_text">Зникнуть назавжди: «Моє» (медкартка, люди, план, запаси), документи й нотатки, ключі шифрування, PIN і налаштування. Повернути це неможливо. Якщо дані ще знадобляться, спершу зробіть резервну копію. Резервні копії, збережені поза застосунком, лишаться, як і назва «Нотатки» з простою іконкою, якщо їх увімкнено. Після стирання застосунок закриється.</string>
+    <string name="wipe_type">Напишіть СТЕРТИ або ERASE</string>
     <string name="wipe_yes">Стерти</string>
     <string name="undo">Повернути</string>
     <string name="deleted_named">Видалено «%1$s»</string>
     <string name="deleted_row">Рядок видалено</string>
     <string name="deleted_note">Нотатку видалено</string>
+    <string name="wipe_erasing">Стираю всі дані… Застосунок закриється сам.</string>
 </resources>

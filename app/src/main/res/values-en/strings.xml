@@ -350,7 +350,7 @@
     <string name="docs_share_title">Share the document?</string>
     <string name="docs_share_warning">The other app gets an unencrypted copy and may keep it, in its cloud or in a chat. Sprotyv removes its own copy a minute after you come back.</string>
     <string name="docs_delete_title">Delete the document?</string>
-    <string name="docs_delete_text">The document is removed from the phone. Right after, it can still be put back with the button at the bottom of the screen. Backups already made still hold it.</string>
+    <string name="docs_delete_text">The document is removed from the phone. For a few seconds after, “Undo” at the bottom of the screen brings it back. Backups already made still hold it.</string>
     <string name="docs_zoom">Open larger</string>
     <string name="docs_page">Page %1$d of %2$d</string>
     <string name="docs_photo_title">Photo %1$s</string>
@@ -1739,16 +1739,15 @@
     <string name="author_support_defence">Defence</string>
     <string name="author_support_humanitarian">Humanitarian aid</string>
     <string name="author_support_any">You can also support any trusted foundation, volunteers or unit you know. Check fundraisers: official details and reports.</string>
-    <string name="wipe_title">Erase all data</string>
-    <string name="wipe_hint">Everything personal leaves the phone for good. The guide stays.</string>
+    <string name="wipe_hint">Erase all data: everything personal leaves the phone for good. The guide stays.</string>
     <string name="wipe_button">Erase all data…</string>
     <string name="wipe_confirm_title">Erase all data?</string>
-    <string name="wipe_confirm_text">Gone for good: My data (medical card, people, plan, supplies), documents and notes, encryption keys, the PIN and settings. This cannot be undone. Backups saved outside the app stay. After erasing, the app closes.</string>
-    <string name="wipe_word">ERASE</string>
-    <string name="wipe_type">To confirm, type: %1$s</string>
+    <string name="wipe_confirm_text">Gone for good: My data (medical card, people, plan, supplies), documents and notes, encryption keys, the PIN and settings. This cannot be undone. If you may need the data again, make a backup first. Backups saved outside the app stay, and so do the “Notes” name and plain icon if they are on. After erasing, the app closes.</string>
+    <string name="wipe_type">Type ERASE or СТЕРТИ</string>
     <string name="wipe_yes">Erase</string>
     <string name="undo">Undo</string>
     <string name="deleted_named">“%1$s” deleted</string>
     <string name="deleted_row">Row deleted</string>
     <string name="deleted_note">Note deleted</string>
+    <string name="wipe_erasing">Erasing all data… The app closes by itself.</string>
 </resources>

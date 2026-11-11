@@ -3,6 +3,10 @@ package ua.sprotyv.ui
 import android.app.ActivityManager
 import android.content.Context
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material3.AlertDialog
@@ -19,6 +23,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationManagerCompat
 import ua.sprotyv.R
@@ -31,21 +38,33 @@ import java.security.KeyStore
  * It cannot be undone, so it asks for a typed word first and says what goes and what stays.
  */
 object Wipe {
+    /** Both words work whatever the app's language: a phone may have only one keyboard. */
+    val WORDS = setOf("СТЕРТИ", "ERASE")
+
+    fun matches(typed: String): Boolean = typed.trim().uppercase() in WORDS
+
     fun everything(context: Context) {
         val app = context.applicationContext
+        Notices.finishPending()
+        // The keys go at once, before waiting for anything: from this moment nothing left can be read
+        Thread { deleteKeys() }.start()
         PersonalStore.closeThen { erase(app) }
     }
 
-    private fun erase(app: Context) {
-        // Keys first: if anything below is cut short, the files left behind can no longer be read
+    private fun deleteKeys() {
         try {
             val ks = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
             ks.aliases().toList().forEach { alias ->
                 try { ks.deleteEntry(alias) } catch (e: Exception) { /* the other keys still go */ }
             }
         } catch (e: Exception) {
-            // The keystore would not open: the files below are erased all the same
+            // The keystore would not open: the files are erased all the same
         }
+    }
+
+    private fun erase(app: Context) {
+        // Again, now that the data is closed: a key made meanwhile goes too
+        deleteKeys()
         // Nothing personal stays on the lock screen or the home screen
         try { NotificationManagerCompat.from(app).cancelAll() } catch (e: Exception) { /* erasing goes on */ }
         Widgets.blank(app)
@@ -53,6 +72,7 @@ object Wipe {
         val done = try {
             app.getSystemService(ActivityManager::class.java)?.clearApplicationUserData() == true
         } catch (e: Exception) {
+            // Refused by this phone: erased by hand just below
             false
         }
         if (done) return
@@ -64,46 +84,56 @@ object Wipe {
     }
 }
 
-/** The line in "If the phone is in other hands", and the question with the typed word. */
+/** The line in "If the phone is in other hands", the question with the typed word, then "Erasing…" until the app closes. */
 @Composable
 internal fun WipeAll() {
     val context = LocalContext.current
     var ask by rememberSaveable { mutableStateOf(false) }
+    var erasing by rememberSaveable { mutableStateOf(false) }
     var typed by rememberSaveable { mutableStateOf("") }
-    val word = stringResource(R.string.wipe_word)
-    Column {
-        Text(stringResource(R.string.wipe_title), style = MaterialTheme.typography.bodyLarge)
-        Text(stringResource(R.string.wipe_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    }
+    Text(stringResource(R.string.wipe_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     OutlinedButton(
         onClick = { typed = ""; ask = true },
         modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
     ) { Text(stringResource(R.string.wipe_button), color = MaterialTheme.colorScheme.error) }
     if (ask) {
-        val ready = typed.trim().equals(word, ignoreCase = true)
+        val ready = Wipe.matches(typed)
+        fun go() { ask = false; erasing = true; Wipe.everything(context) }
         AlertDialog(
             onDismissRequest = { ask = false },
             title = { Text(stringResource(R.string.wipe_confirm_title)) },
             text = {
-                Column {
+                // Scrolls: with the largest text and the keyboard up the field must still be reachable
+                Column(Modifier.verticalScroll(rememberScrollState())) {
                     Text(stringResource(R.string.wipe_confirm_text))
                     OutlinedTextField(
                         value = typed,
                         onValueChange = { typed = it.take(20) },
-                        label = { Text(stringResource(R.string.wipe_type, word)) },
+                        label = { Text(stringResource(R.string.wipe_type)) },
                         singleLine = true,
+                        keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters, autoCorrectEnabled = false, imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = { if (ready) go() }),
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }
             },
             confirmButton = {
-                TextButton(onClick = { ask = false; Wipe.everything(context) }, enabled = ready, modifier = Modifier.heightIn(min = 48.dp)) {
+                TextButton(onClick = { go() }, enabled = ready, modifier = Modifier.heightIn(min = 48.dp)) {
                     Text(stringResource(R.string.wipe_yes), color = if (ready) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { ask = false }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.cancel)) }
             },
+        )
+    }
+    if (erasing) {
+        // Nothing to press: the app closes by itself when it is done
+        AlertDialog(
+            onDismissRequest = { },
+            properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
+            text = { Text(stringResource(R.string.wipe_erasing), style = MaterialTheme.typography.bodyLarge) },
+            confirmButton = { },
         )
     }
 }
