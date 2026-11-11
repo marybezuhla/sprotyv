@@ -173,7 +173,7 @@ fun readable(text: String): String = text.lines().joinToString("\n") { l ->
 @Composable
 fun paper(): androidx.compose.ui.graphics.Color =
     if (LocalContrast.current) MaterialTheme.colorScheme.surfaceVariant
-    else if (LocalDark.current) androidx.compose.ui.graphics.Color(0xFF3A3B40) else androidx.compose.ui.graphics.Color(0xFFFBF8EF)
+    else if (LocalDark.current) Palette.PAPER_DARK else Palette.PAPER_LIGHT
 
 /** One note in the list: pinned ones on paper with a pin, the others plain with a thin border. */
 @Composable

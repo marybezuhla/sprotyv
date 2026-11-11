@@ -322,7 +322,7 @@ fun DocumentsScreen() {
             PersonalStore.read { db -> DocFiles.of(context).sweep(db.documents().files().toSet(), graceMs = 60 * 60_000L) }
         }
     }
-    val photoTitle = stringResource(R.string.docs_photo_title, java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy")))
+    val photoTitle = stringResource(R.string.docs_photo_title, Times.date(java.time.LocalDate.now()))
     fun bring(uri: Uri, type: String? = null, cleanup: () -> Unit = {}) = Docs.start(context, uri, photoTitle, type, cleanup)
     val pick = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         Away.back()

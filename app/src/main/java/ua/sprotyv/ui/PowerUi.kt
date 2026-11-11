@@ -36,9 +36,6 @@ import kotlinx.coroutines.delay
 import ua.sprotyv.R
 import ua.sprotyv.content.Blackout
 import ua.sprotyv.content.Charge
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 
 /**
  * "The power went": one tap keeps the moment, and the screen counts the hours and says what that
@@ -80,7 +77,7 @@ fun BlackoutBlock() {
                 return@run
             }
             val minutes = ((now - since) / 60_000).coerceAtLeast(0)
-            val at = Instant.ofEpochMilli(since).atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("HH:mm"))
+            val at = Times.clock(since)
             CountHead(minutes, stringResource(R.string.blackout_what), since, now, stringResource(R.string.blackout_for, duration(minutes), at))
             Keep(R.string.blackout_fridge_name, Blackout.FRIDGE_HOURS, minutes, R.string.blackout_fridge_over)
             Keep(R.string.blackout_freezer_full_name, Blackout.FREEZER_FULL_HOURS, minutes, R.string.blackout_freezer_over)

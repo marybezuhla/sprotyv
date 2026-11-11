@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
+import ua.sprotyv.home.Group
 
 // Blue and yellow of the flag as accents; calm neutrals around them.
 // Red is kept for real danger now; "error" here is a burnt orange, never red.
@@ -219,3 +220,53 @@ val AppType = androidx.compose.material3.Typography(
     labelMedium = style(14, 20, Medium),
     labelSmall = style(13, 18, Medium),
 )
+
+/** The colour code in one place, outside Compose, so a test can check every pair's contrast. */
+internal object Palette {
+    fun of(group: Group, dark: Boolean): Tint = when (group) {
+        // Light: fuller than a wash, so the colour still says the group on a bright screen in daylight
+        Group.DANGER -> if (dark) Tint(Color(0xFF342318), Color(0xFFF5C39E)) else Tint(Color(0xFFFFDDC2), Color(0xFF7A3300))
+        Group.FIRST_AID, Group.LEAVE -> if (dark) Tint(Color(0xFF182F28), Color(0xFFA3D3BD)) else Tint(Color(0xFFCDEADB), Color(0xFF184E36))
+        Group.PREPARE, Group.MINE, Group.FAMILY -> if (dark) Tint(Color(0xFF1A2A3C), Color(0xFFBBD0EA)) else Tint(Color(0xFFD2E1F5), Color(0xFF123A68))
+        // Knowing and everyday life: a calm violet, so no group is left without a colour
+        Group.HOME_LIFE, Group.SAFETY, Group.GUIDE -> if (dark) Tint(Color(0xFF272339), Color(0xFFD2C7EE)) else Tint(Color(0xFFE6DDF6), Color(0xFF40317A))
+    }
+
+    /** The colour that calls for attention ([urgent]): fill, words, edge. */
+    val URGENT_LIGHT = Urgent(Color(0xFFFFE6D1), Color(0xFF5C2600), Color(0xFFD9772B))
+    val URGENT_DARK = Urgent(Color(0xFF3E2716), Color(0xFFFFD9B8), Color(0xFFC77A3E))
+
+    /** The light plate of notes ([paper]). */
+    val PAPER_LIGHT = Color(0xFFFBF8EF)
+    val PAPER_DARK = Color(0xFF3A3B40)
+
+    /** The kids' sun ([Sunny]): petals, the middle, the face. */
+    val SUN_PETAL = Color(0xFFFFC928)
+    val SUN_MIDDLE = Color(0xFF7A4E2D)
+    val SUN_FACE = Color(0xFFFFF3D6)
+
+    /** Resistance's own mark (see [resist]). */
+    fun resist(dark: Boolean): Tint = if (dark) Tint(Color(0xFF2A2B21), Color(0xFFD3CEA6)) else Tint(Color(0xFFE6E2C3), Color(0xFF45431C))
+}
+
+/** How times and dates are written, the same on every screen, in the phone's own time zone. */
+internal object Times {
+    private val CLOCK = java.time.format.DateTimeFormatter.ofPattern("HH:mm")
+    private val DAY_CLOCK = java.time.format.DateTimeFormatter.ofPattern("dd.MM HH:mm")
+    private val DATE_CLOCK = java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
+    private val DATE = java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy")
+
+    private fun at(t: Long) = java.time.Instant.ofEpochMilli(t).atZone(java.time.ZoneId.systemDefault())
+
+    /** 14:05 */
+    fun clock(t: Long): String = at(t).format(CLOCK)
+
+    /** 03.11 14:05 */
+    fun dayClock(t: Long): String = at(t).format(DAY_CLOCK)
+
+    /** 03.11.2026 14:05 */
+    fun dateClock(t: Long): String = at(t).format(DATE_CLOCK)
+
+    /** 03.11.2026 */
+    fun date(d: java.time.LocalDate): String = d.format(DATE)
+}

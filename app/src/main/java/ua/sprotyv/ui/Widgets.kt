@@ -113,7 +113,7 @@ object Widgets {
         fun prefs(name: String) = context.getSharedPreferences(name, Context.MODE_PRIVATE)
         Tourniquets.all(context, now).let { list ->
             val at = list.firstOrNull()?.at ?: return@let
-            val clock = java.time.Instant.ofEpochMilli(at).atZone(java.time.ZoneId.systemDefault()).format(java.time.format.DateTimeFormatter.ofPattern("HH:mm"))
+            val clock = Times.clock(at)
             out += Count(if (list.size == 1) context.getString(R.string.widget_tourniquet, clock) else context.getString(R.string.widget_tourniquets, list.size, clock), at, false, "bleeding")
         }
         prefs("wait").let { p ->

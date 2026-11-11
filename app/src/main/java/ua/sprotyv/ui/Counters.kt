@@ -34,7 +34,6 @@ import kotlinx.coroutines.delay
 import ua.sprotyv.R
 import java.time.Instant
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 
 /**
  * "Since when": one moment kept on this phone for a running count (the power, the heating, the
@@ -98,7 +97,7 @@ private fun rememberSince(since: Since, tick: Long): Pair<Long, Long> {
 }
 
 private fun clock(t: Long, withDate: Boolean): String =
-    Instant.ofEpochMilli(t).atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern(if (withDate) "dd.MM HH:mm" else "HH:mm"))
+    if (withDate) Times.dayClock(t) else Times.clock(t)
 
 /** "Since" in the fewest words: the time today, "yesterday 23:10", or the date and time. */
 @Composable
