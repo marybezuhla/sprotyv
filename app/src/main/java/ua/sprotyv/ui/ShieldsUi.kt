@@ -76,7 +76,7 @@ private fun readinessShields(shares: String): List<ShieldItem> {
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ShieldsScreen(nav: Nav, openGroups: Boolean = false) {
+fun ShieldsScreen(openGroups: Boolean = false) {
     val habits by remember { PersonalStore.observe { db -> db.settings().observe(KEY_HABITS).map { listOf(it) } } }.collectAsStateWithLifecycle(null)
     val path by remember { PersonalStore.observe { db -> db.settings().observe(KEY_PATH).map { listOf(it) } } }.collectAsStateWithLifecycle(null)
     val stepsStored by remember { PersonalStore.observe { db -> db.settings().observe(KEY_STEPS).map { listOf(it) } } }.collectAsStateWithLifecycle(null)

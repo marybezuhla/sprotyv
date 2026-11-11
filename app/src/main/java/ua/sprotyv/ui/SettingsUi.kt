@@ -1,5 +1,6 @@
 package ua.sprotyv.ui
 
+import kotlinx.coroutines.launch
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -86,7 +87,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -174,7 +174,8 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
         Text(stringResource(R.string.lock_explain), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         // The child's "Call my people" without the lock on "My data"
         var kidOpen by remember { mutableStateOf(KidCall.isOn(context)) }
-        Toggle(stringResource(R.string.kid_call_open_toggle), kidOpen) { on -> KidCall.set(context, on); kidOpen = on }
+        val kidScope = androidx.compose.runtime.rememberCoroutineScope()
+        Toggle(stringResource(R.string.kid_call_open_toggle), kidOpen) { on -> KidCall.set(context, on); kidOpen = on; if (on) kidScope.launch { KidCall.syncNow(context) } }
         Text(stringResource(R.string.kid_call_open_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         // Screenshots of the owner's screens: off by default, turned on only after reading what it means
         var askScreenshots by rememberSaveable { mutableStateOf(false) }
@@ -209,6 +210,8 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
         Block(stringResource(R.string.settings_other_hands), ua.sprotyv.home.Group.DANGER, foldable = true) {
             TripToggle(prefs.trip)
             NeutralToggle()
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            WipeAll()
         }
         // Medical training is a role, kept encrypted in "My data" (no longer a plain setting)
         Block(stringResource(R.string.medic_title), ua.sprotyv.home.Group.FIRST_AID, foldable = true) {
@@ -336,12 +339,14 @@ internal fun LanguageChoice() {
         Text(stringResource(R.string.lang_old_phone), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         return
     }
-    val current = androidx.appcompat.app.AppCompatDelegate.getApplicationLocales().toLanguageTags()
+    // Android's own per-app language: AppCompat's helper needs an AppCompat window, which this app has not
+    val context = LocalContext.current
+    val current = AppLanguage.get(context)
     ChoiceRow {
         listOf("" to R.string.lang_phone, "uk" to R.string.lang_uk, "en" to R.string.lang_en).forEach { (tag, label) ->
             androidx.compose.material3.FilterChip(
                 selected = current.substringBefore('-') == tag,
-                onClick = { androidx.appcompat.app.AppCompatDelegate.setApplicationLocales(androidx.core.os.LocaleListCompat.forLanguageTags(tag)) },
+                onClick = { AppLanguage.set(context, tag) },
                 label = { ChipText(stringResource(label)) }, modifier = Modifier.heightIn(min = 48.dp),
             )
         }
@@ -367,6 +372,8 @@ internal fun AboutApp() {
         androidx.compose.foundation.layout.Column(verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(6.dp)) {
             Text(stringResource(R.string.about_app_version, version), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
             Text(stringResource(R.string.about_app_licence), style = MaterialTheme.typography.bodyMedium)
+            // Said plainly, as in the README
+            Text(stringResource(R.string.about_app_ai), style = MaterialTheme.typography.bodyMedium)
             Text(stringResource(R.string.about_app_libraries), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
@@ -405,4 +412,16 @@ internal fun LicenceTexts(onClose: () -> Unit) {
     }
 }
 
-private const val SOURCE_URL = "https://github.com/Marybezu/sprotyv"
+private const val SOURCE_URL = "https://github.com/marybezuhla/sprotyv"
+
+/** The app's own language through Android's LocaleManager (13 and later); "" is the phone's language. */
+@androidx.annotation.RequiresApi(33)
+private object AppLanguage {
+    private fun manager(context: android.content.Context) = context.getSystemService(android.app.LocaleManager::class.java)
+
+    fun get(context: android.content.Context): String = manager(context)?.applicationLocales?.toLanguageTags().orEmpty()
+
+    fun set(context: android.content.Context, tag: String) {
+        manager(context)?.applicationLocales = android.os.LocaleList.forLanguageTags(tag)
+    }
+}

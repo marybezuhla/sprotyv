@@ -120,6 +120,7 @@ private fun Rows(kind: String, firstLabel: Int, secondLabel: Int, firstHint: Int
     val loaded by remember(kind) { PersonalStore.observe { it.plan().observeRows(kind) } }.collectAsStateWithLifecycle(null)
     val rows = loaded ?: return Loading()
     var editing by remember { mutableStateOf<PlanRow?>(null) }
+    val context = androidx.compose.ui.platform.LocalContext.current
     rows.forEach { r ->
         NavRow(stringResource(firstLabel) + " " + r.first, stringResource(secondLabel) + " " + r.second, ua.sprotyv.home.Group.PREPARE) { editing = r }
     }
@@ -139,6 +140,9 @@ private fun Rows(kind: String, firstLabel: Int, secondLabel: Int, firstHint: Int
                     if (start.id != 0L) {
                         TextButton(onClick = {
                             PersonalStore.save("plan:delete:" + java.util.UUID.randomUUID()) { it.plan().deleteRow(start) }
+                            Notices.deleted(context, context.getString(R.string.deleted_row), undo = {
+                                PersonalStore.save("plan:restore:" + java.util.UUID.randomUUID()) { it.plan().saveRow(start) }
+                            })
                             editing = null
                         }) { Text(stringResource(R.string.delete_row), color = MaterialTheme.colorScheme.error) }
                     }
@@ -196,7 +200,7 @@ fun KitScreen(content: Content?, nav: Nav) {
         Block(
             title, ua.sprotyv.home.Group.PREPARE, padded = false, foldable = true, startOpen = false,
             summary = (if (got == g.items.size) "✓ " else "") + stringResource(R.string.ready_count, got, g.items.size) + if (note.isNotBlank()) " · $note" else "",
-            leading = { Text(kitIcon(title), fontSize = 28.sp, modifier = Modifier.clearAndSetSemantics { }) },
+            leading = { Text(Kit.icon(gi), fontSize = 28.sp, modifier = Modifier.clearAndSetSemantics { }) },
         ) {
             g.items.forEachIndexed { i, item ->
                 if (i > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant, modifier = Modifier.padding(start = 56.dp))
@@ -239,25 +243,6 @@ fun KitScreen(content: Content?, nav: Nav) {
 
 const val KEY_KIT_REVIEWED = "kit_reviewed_at"
 
-
-/**
- * One kit item: the thing itself first, in plain weight, and the guide's explanation after it,
- * smaller and quieter, so a long line still reads at a glance.
- */
-/** A picture for each pocket of the bag, by its name in the guide. */
-private fun kitIcon(title: String): String {
-    val t = title.lowercase()
-    return when {
-        "документ" in t -> "📄"
-        "вода" in t || "їжа" in t -> "🥫"
-        "аптечк" in t -> "🩹"
-        "одяг" in t -> "🧥"
-        "світло" in t || "зв'язок" in t || "зв’язок" in t -> "🔦"
-        "гігієн" in t -> "🧼"
-        "спальн" in t -> "🛏️"
-        else -> "🎒"
-    }
-}
 
 @Composable
 private fun KitRow(text: String, checked: Boolean, onChange: (Boolean) -> Unit) {

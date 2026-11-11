@@ -139,7 +139,7 @@
     <string name="plan_point3_hint">If the town must be left</string>
     <string name="plan_go_between">Out-of-area contact</string>
     <string name="plan_go_between_hint">A relative in another town or country whom everyone calls when they cannot reach each other.</string>
-    <string name="plan_if_then">If — then</string>
+    <string name="plan_if_then">If… then</string>
     <string name="plan_if_then_hint">Write it plainly: “if… then…”. Such a plan is easier to remember and follow.</string>
     <string name="plan_if">If</string>
     <string name="plan_then">then</string>
@@ -312,7 +312,7 @@
     <string name="theme_dynamic_hint">Accent colours come from the phone’s wallpaper. Orange warnings and the red 112 button stay as they are.</string>
     <string name="backup_title">Backup</string>
     <string name="backup_hint">All your data in one encrypted file</string>
-    <string name="backup_intro">A copy of all your data and settings (look, tiles, theme) in one file, encrypted with a password. On a new phone: “Move from another phone”, the file, the password — and all is as it was. Without the password nobody can open it, not even us. Keep it apart from the phone: on a USB stick, a computer or in the cloud.</string>
+    <string name="backup_intro">A copy of all your data and settings (look, tiles, theme) in one file, encrypted with a password. On a new phone: “Move from another phone”, the file, the password, and all is as it was. Without the password nobody can open it, not even us. Keep it apart from the phone: on a USB stick, a computer or in the cloud.</string>
     <string name="backup_last">Last backup: %1$s</string>
     <string name="backup_busy">Working… This takes a few seconds.</string>
     <string name="backup_save_title">Save a backup</string>
@@ -350,7 +350,7 @@
     <string name="docs_share_title">Share the document?</string>
     <string name="docs_share_warning">The other app gets an unencrypted copy and may keep it, in its cloud or in a chat. Sprotyv removes its own copy a minute after you come back.</string>
     <string name="docs_delete_title">Delete the document?</string>
-    <string name="docs_delete_text">The document is removed from the phone for good. Backups already made still hold it.</string>
+    <string name="docs_delete_text">The document is removed from the phone. For a few seconds after, “Undo” at the bottom of the screen brings it back. Backups already made still hold it.</string>
     <string name="docs_zoom">Open larger</string>
     <string name="docs_page">Page %1$d of %2$d</string>
     <string name="docs_photo_title">Photo %1$s</string>
@@ -367,7 +367,7 @@
     <string name="backup_choose_file">Choose the backup file</string>
     <string name="backup_open">Open</string>
     <string name="backup_replace_title">Replace your data?</string>
-    <string name="backup_replace_text">Backup from %1$s: people — %2$d, records in all — %3$d. Everything now in “My data” will be replaced.</string>
+    <string name="backup_replace_text">Backup from %1$s (people: %2$d, records in all: %3$d). Everything now in “My data” will be replaced.</string>
     <string name="backup_saved">Backup saved and checked.</string>
     <string name="backup_failed">That did not work. Nothing changed; please try again.</string>
     <string name="backup_existing">This file already holds something. Choose a new name: older backups are never written over.</string>
@@ -435,7 +435,7 @@
     <string name="safe_quiet_message">I can\'t talk, but I\'m reachable. Write, don\'t call.</string>
     <string name="tourniquet_on">⏱ Tourniquet on: note the time</string>
     <string name="tourniquet_since">Since then: %1$d h %2$02d min</string>
-    <string name="tourniquet_write">Write this time with a marker on the tourniquet or the casualty\'s forehead. Never loosen it: only a medic removes it. Tell the medics the time. Several wounded: write the time on each tourniquet — the phone may run flat.</string>
+    <string name="tourniquet_write">Write this time with a marker on the tourniquet or the casualty\'s forehead. Never loosen it: only a medic removes it. Tell the medics the time. Several wounded: write the time on each tourniquet, as the phone may run flat.</string>
     <string name="tourniquet_mark">T %1$s</string>
     <string name="situation_title">Situation</string>
     <string name="situation_hint">Threat and front-line maps, fact checks</string>
@@ -523,7 +523,7 @@
     <string name="power_schedules">Schedules by oblast</string>
     <string name="blackout_title">Power gone?</string>
     <string name="blackout_hint">Tap, and Sprotyv will count the time and tell you how long the fridge and freezer still keep cold.</string>
-    <string name="blackout_start">Power gone — start counting</string>
+    <string name="blackout_start">Power gone? Start counting</string>
     <string name="blackout_for">No power for %1$s (since %2$s)</string>
     <string name="blackout_left">%1$s left</string>
     <string name="blackout_up">time is up</string>
@@ -590,7 +590,7 @@
     <string name="neutral_toggle">Neutral name and icon</string>
     <string name="neutral_hint">On the phone\'s home screen and in the recent apps list, Sprotyv is called “Notes” with a plain icon.</string>
     <string name="neutral_confirm_title">Turn on “Notes”?</string>
-    <string name="neutral_confirm_text">You may need to add the home-screen icon again: look for “Notes”. Remember this — in danger the app must be found fast. It is not a hiding place: the open app looks like Sprotyv, and the phone\'s settings still call it Sprotyv. Remove Sprotyv\'s widgets and pinned shortcuts from the home screen, if there are any.</string>
+    <string name="neutral_confirm_text">You may need to add the home-screen icon again: look for “Notes”. Remember this: in danger the app must be found fast. It is not a hiding place: the open app looks like Sprotyv, and the phone\'s settings still call it Sprotyv. Remove Sprotyv\'s widgets and pinned shortcuts from the home screen, if there are any.</string>
     <string name="neutral_confirm_yes">Turn on</string>
     <string name="trip_toggle">Trip mode</string>
     <string name="trip_hint">For when the phone may end up in the wrong hands: leaving occupied areas, a threat of capture or abduction, theft. Hides “My data” (medical card, people, plan, supplies), “I am safe”, front maps, the search for prisoners and the missing, veterans\' services, war crimes and human rights, deported children, papers from the occupied areas and care for the wounded. Turning it off needs the phone\'s PIN (or nothing, if the phone\'s screen lock is removed). The guide stays.</string>
@@ -640,7 +640,6 @@
     <string name="bookmarks_not_secure">Only secure addresses (https://) are kept.</string>
     <string name="bookmarks_no_page">There is no page address here.</string>
     <string name="bookmarks_delete">Delete: %1$s</string>
-    <string name="bookmarks_delete_confirm">Delete the bookmark “%1$s”?</string>
     <string name="bookmarks_too_many">You already have %1$d bookmarks, the most there can be. Delete some you no longer need.</string>
     <string name="days_hours_short">%1$d d %2$d h</string>
     <string name="tile_heat_out">no heat %1$s</string>
@@ -715,8 +714,8 @@
     <string name="colour_danger">Orange: danger, act now</string>
     <string name="colour_health">Green: safety, health, first aid, rescue and leaving</string>
     <string name="colour_prepare">Blue: preparing and your own: supplies, plan, people, data protection, copies</string>
-    <string name="colour_calm">Violet — everyday life, the guide, settings</string>
-    <string name="colour_resist">Khaki — resistance: the path, the Constitution, stories</string>
+    <string name="colour_calm">Violet: everyday life, the guide, settings</string>
+    <string name="colour_resist">Khaki means resistance: the path, the Constitution, stories</string>
     <string name="moz_title">First aid: Ministry of Health procedures</string>
     <string name="moz_short">Ministry first-aid procedures</string>
     <string name="moz_hint">29 official procedures, order No. 441</string>
@@ -854,7 +853,6 @@
     <string name="path_delegate">I can share out steps among people nearby</string>
     <string name="delegate_step">Step %1$s</string>
     <string name="delegate_who">Who:</string>
-    <string name="lock_mine_reason">Technical reason (you can copy it and send it in feedback): %1$s</string>
     <string name="active_title">Running now</string>
     <string name="active_tourniquet">Tourniquet on for %1$s</string>
     <string name="active_wait">Do not go back for %1$d more min</string>
@@ -1049,7 +1047,7 @@
     <string name="handover_tourniquet_line">tourniquet on at %1$s (%2$d h %3$02d min ago)</string>
     <string name="notify_tourniquets_on">Tourniquets: %1$d · first T %2$s</string>
     <string name="notify_tourniquet_title_many">Tourniquets %1$s</string>
-    <string name="notify_tourniquet_item">No. %1$d — %2$d h</string>
+    <string name="notify_tourniquet_item">No. %1$d: %2$d h</string>
     <string name="active_tourniquets">Tourniquets: %1$d, longest %2$s</string>
     <string name="widget_tourniquets">Tourniquets: %1$d · first %2$s</string>
     <string name="np_title">New place</string>
@@ -1099,14 +1097,14 @@
     <string name="gart_meaning_hint">Hope and meaning: helping, supporting, our own</string>
     <string name="gart_body">A body that holds up</string>
     <string name="gart_body_hint">Movement every day and a check once a month</string>
-    <string name="gart_body_check">Is the body ready — once a month</string>
+    <string name="gart_body_check">Is the body ready (once a month)</string>
     <string name="gart_body_check_hint">Not a score, a guide: what may be needed in danger.</string>
     <string name="gart_body_doctor">With heart or joint conditions, pregnancy or a recent injury, ask a doctor what load suits you. WHO guide for adults: 150–300 minutes of moderate movement a week and strength exercises on at least two days a week; after 65, balance exercises on 3 days too. Any movement is better than none.</string>
     <string name="gart_why">Why it works</string>
     <string name="gart_why_hint">What science says</string>
     <string name="gart_why_1">A habit mostly becomes automatic in about 66 days, from 18 to more than 200 depending on the person and the habit. So days done are counted here, not an unbroken streak.</string>
-    <string name="gart_why_2">One missed day hardly affects how a habit forms — so nothing is reset.</string>
-    <string name="gart_why_3">An \"if — then\" plan tied to something you already do every day makes you noticeably more likely to actually do it.</string>
+    <string name="gart_why_2">One missed day hardly affects how a habit forms, so nothing is reset.</string>
+    <string name="gart_why_3">An \"if… then\" plan tied to something you already do every day makes you noticeably more likely to actually do it.</string>
     <string name="gart_why_4">The first five groups follow the five supports that help people hold on after disasters: safety, calm, belief that you and your community can act, connection, and hope. The sixth is the body.</string>
     <string name="password_show">Show</string>
     <string name="password_hide">Hide</string>
@@ -1224,7 +1222,7 @@
     <string name="role_dobro_contracts">Since 15 June 2026 new contracts apply: 6 to 24 months. After that, guaranteed discharge and a deferment of at least 6 months. Questions: 1519.</string>
     <string name="role_dobro_tro">The Territorial Defence Forces are a branch of the Armed Forces, with their own recruiting centre.</string>
     <string name="role_dobro_rights">Rights violated? Write to the Military Ombudsman: skarha@milomb.gov.ua. The Defence Ministry hotline 1512 works around the clock.</string>
-    <string name="role_dobro_source">Sources: Ministry of Defence, “Conscious choice: how recruiting works in 2026” (04.03.2026) and “New contracts: answers to 10 questions” (18.06.2026); ArmyInform (10.01.2026, 15.06.2026). Checked 01.11.2026. Terms change — ask a recruiter.</string>
+    <string name="role_dobro_source">Sources: Ministry of Defence, “Conscious choice: how recruiting works in 2026” (04.03.2026) and “New contracts: answers to 10 questions” (18.06.2026); ArmyInform (10.01.2026, 15.06.2026). Checked 01.11.2026. Terms change, so ask a recruiter.</string>
     <string name="role_women_title">Women in the army</string>
     <string name="role_women_1">More than 75,000 women are in the army, over 55,000 of them service members.</string>
     <string name="role_women_2">All positions are open to women, combat ones too. Equal rights were set by law No. 2523-VIII (2018).</string>
@@ -1290,7 +1288,7 @@
     <string name="strength_low">Little</string>
     <string name="strength_normal">Usual</string>
     <string name="strength_high">Plenty</string>
-    <string name="path_week_low">Strength is low right now — that is normal. This week can be for you: sleep, movement, people around you.</string>
+    <string name="path_week_low">Strength is low right now. That is normal. This week can be for you: sleep, movement, people around you.</string>
     <string name="path_week_show_anyway">Show the step anyway</string>
     <string name="path_week_more">Plenty of strength: here is the next step too, if you like.</string>
     <string name="role_instructor">I teach others to save lives</string>
@@ -1312,7 +1310,7 @@
     <string name="role_neighbours_4">The nearest Point of Invincibility can be found in the Diia app.</string>
     <string name="role_teacher">I teach</string>
     <string name="role_teacher_hint">School, kindergarten, university, clubs and courses</string>
-    <string name="role_teacher_affirm">You keep ordinary life going for children and adults — lessons, timetables, faith in tomorrow. That holds the country up.</string>
+    <string name="role_teacher_affirm">You keep ordinary life going for children and adults: lessons, timetables, faith in tomorrow. That holds the country up.</string>
     <string name="role_teacher_facts_title">Teaching in wartime</string>
     <string name="role_teacher_source">Sources: Ministry of Education (14.09.2026, 21.05.2026); Suspilne (13.08.2024); Ukrainian Institute for Education Development (28.09.2026). Checked 01.11.2026. Conditions change, so it\'s worth checking.</string>
     <string name="role_teacher_1">Per Ministry of Education guidance, an alert alone does not cancel a lesson: in a safe shelter teaching can go on.</string>
@@ -1322,7 +1320,7 @@
     <string name="role_teacher_5">Regions have trainers in psychosocial support for educators; the education department can give the list.</string>
     <string name="role_research">I research and invent</string>
     <string name="role_research_hint">Science, engineering, IT, defence tech</string>
-    <string name="role_research_affirm">Your knowledge already works for the country\'s future — in a lab, in code or in a workshop.</string>
+    <string name="role_research_affirm">Your knowledge already works for the country\'s future: in a lab, in code or in a workshop.</string>
     <string name="role_research_facts_title">Grants and programmes</string>
     <string name="role_research_source">Sources: European Commission (MSCA4Ukraine, 2025–2026); Vinnova (21.04.2026); National Research Foundation of Ukraine (2026); Ministry of Defence (2026). Checked 02.11.2026. Conditions change, so it’s worth checking.</string>
     <string name="role_research_1">Ukraine has been associated with Horizon Europe since 9 June 2022: Ukrainian researchers take part on equal terms with EU institutions.</string>
@@ -1358,7 +1356,7 @@
     <string name="role_localgov_4">The civil service agency added psychological support and national resilience to the priority training topics for community officials for 2027.</string>
     <string name="role_culture">Word, culture, media</string>
     <string name="role_culture_hint">Artists, writers, journalists, bloggers, librarians, museum workers</string>
-    <string name="role_culture_affirm">You keep what makes us a people — language, memory, truth. That is resistance without weapons.</string>
+    <string name="role_culture_affirm">You keep what makes us a people: language, memory, truth. That is resistance without weapons.</string>
     <string name="role_culture_facts_title">Good to know</string>
     <string name="role_culture_source">Sources: Government (18.02.2026); Ministry of Culture; National Union of Journalists; Ukrainian Cultural Foundation; Centre for Countering Disinformation. Checked 02.11.2026. Conditions change, so it’s worth checking.</string>
     <string name="role_culture_2">Museum collections within 50 km of the contact line are evacuated and placed at least 75 km from it.</string>
@@ -1376,7 +1374,7 @@
     <string name="role_student_4">The State Employment Service, under certain conditions, pays for licensed programmes through a voucher.</string>
     <string name="role_abroad">I am abroad and with Ukraine</string>
     <string name="role_abroad_hint">Keeping in touch, helping from there, coming back</string>
-    <string name="role_abroad_affirm">Your role is everywhere. You keep the connection and the language, and you help — that is resistance too.</string>
+    <string name="role_abroad_affirm">Your role is everywhere. You keep the connection and the language, and you help. That is resistance too.</string>
     <string name="role_abroad_facts_title">Good to know</string>
     <string name="role_abroad_source">Sources: Ministry of Social Policy (31.07.2026); Ministry of Education (2024); Foreign Ministry; law No. 4924-IX. Checked 01.11.2026. Conditions change, so it\'s worth checking.</string>
     <string name="role_abroad_1">The EU extended temporary protection for Ukrainians until 4 March 2028; new applicants face extra requirements, so it\'s worth checking.</string>
@@ -1403,7 +1401,7 @@
     <string name="role_skills_source">Sources: SBU (02.04.2026); CERT-UA (10.02.2025); Cyber Police; Ministry of Defence (26.03.2026, 14.09.2026); International Committee of the Red Cross (2023). Checked 01.11.2026.</string>
     <string name="role_skills_1">Report suspicious people, recruitment and hostile resources online to the SBU: 1516 or 0 800 501 482, callcenter@ssu.gov.ua.</string>
     <string name="role_skills_2">Report a cyber attack on an organisation to CERT-UA: incidents@cert.gov.ua or +38 044 281 88 25.</string>
-    <string name="role_skills_3">Report cybercrime to the Cyber Police through the form on its site or 0 800 505 170; in an emergency — 102.</string>
+    <string name="role_skills_3">Report cybercrime to the Cyber Police through the form on its site or 0 800 505 170; in an emergency, 102.</string>
     <string name="role_skills_4">Brave1 gives defence developers non-repayable grants, testing and feedback from the military; no stake or rights to the product are taken.</string>
     <string name="role_skills_5">The Defence Forces have more than 2,000 IT vacancies; apply on the Ministry of Defence Digital Team site.</string>
     <string name="role_skills_6">Cyber attacks on one\'s own initiative can have legal consequences for a civilian, abroad too; helping through official channels is safer.</string>
@@ -1412,11 +1410,11 @@
     <string name="role_parent_affirm">You already give your child the sense that the world holds. That is great work, and it matters.</string>
     <string name="role_parent_facts_title">What can help</string>
     <string name="role_parent_source">Sources: Ministry of Health (15.12.2022); “How are you?” programme with UNICEF (11.10.2023); Ministry of Reintegration (19.06.2023); Ministry of Education (15.09.2026). Checked 01.11.2026.</string>
-    <string name="role_parent_1">Look after yourself first — sleep, water, walks: children watch how adults react and copy them.</string>
+    <string name="role_parent_1">Look after yourself first (sleep, water, walks): children watch how adults react and copy them.</string>
     <string name="role_parent_2">Listen to your child 15 minutes a day without interrupting or criticising; hugs and playing together help too.</string>
     <string name="role_parent_3">Name feelings in simple words: what fear is and why people sometimes cry.</string>
     <string name="role_parent_4">Put a card with the parents\' contacts in your child\'s inner pocket and keep a recent photo of them on your phone.</string>
-    <string name="role_parent_5">Ask the school ahead of time how lessons go during alerts — in the shelter, in class or online.</string>
+    <string name="role_parent_5">Ask the school ahead of time how lessons go during alerts: in the shelter, in class or online.</string>
     <string name="role_grandparent">Supporting grandchildren</string>
     <string name="role_grandparent_hint">Grandma or grandpa</string>
     <string name="role_grandparent_affirm">Your experience and calm already hold the family. Here: how to stay safe from scammers and where to find help.</string>
@@ -1425,22 +1423,22 @@
     <string name="role_grandparent_1">The Pension Fund answers through one contact centre: 0 800 503 753. It never asks for card details by phone.</string>
     <string name="role_grandparent_2">A pension or housing subsidy can be applied for online on the Pension Fund portal, with an electronic signature.</string>
     <string name="role_grandparent_3">A call says a relative is in a crash or at the police and asks for money? Hang up and call the relative yourself.</string>
-    <string name="role_grandparent_4">Never tell anyone card details, SMS codes or passwords — even a “police officer” who knows your address.</string>
-    <string name="role_grandparent_5">If money is already sent, call the bank and the police — 102 — at once.</string>
+    <string name="role_grandparent_4">Never tell anyone card details, SMS codes or passwords, even a “police officer” who knows your address.</string>
+    <string name="role_grandparent_5">If money is already sent, call the bank and the police (102) at once.</string>
     <string name="role_grandparent_6">A free course by the Ministry of Digital Transformation teaches messengers, to stay in touch with grandchildren.</string>
     <string name="role_carer">Caring for someone close</string>
     <string name="role_carer_hint">An older, ill or disabled person</string>
     <string name="role_carer_affirm">Every day you already hold someone who cannot manage alone. Here: what help the state gives and where to find strength for yourself.</string>
     <string name="role_carer_facts_title">Help for carers</string>
     <string name="role_carer_source">Sources: law “On social services”; Cabinet of Ministers resolution No. 1040 of 06.10.2021 as amended on 17.09.2025 (No. 1172). Checked 02.11.2026. Conditions change, so it’s worth checking.</string>
-    <string name="role_carer_1">Someone who cares for an older person, a person with a disability, a seriously ill person or a disabled child and has trained in care can, under certain conditions, receive a care compensation — for instance if not employed and not self-employed.</string>
+    <string name="role_carer_1">Someone who cares for an older person, a person with a disability, a seriously ill person or a disabled child and has trained in care can, under certain conditions, receive a care compensation, for instance if not employed and not self-employed.</string>
     <string name="role_carer_2">Apply at an administrative services centre (TsNAP), the community\'s social protection office, by post, or online if Diia already offers it.</string>
     <string name="role_carer_3">Needed: a finding on impaired body functions in the Ministry of Health form, passports, tax numbers and the carer’s written consent.</string>
     <string name="role_carer_4">Needs are assessed within 5 working days, the agreement is prepared within 10 days; compensation is paid from the day it is signed.</string>
     <string name="role_carer_5">Home care as a social service comes from the community: ask the social protection office where you live.</string>
     <string name="role_milfamily">Someone close to me serves</string>
     <string name="role_milfamily_hint">Family of a defender</string>
-    <string name="role_milfamily_affirm">You already hold the home front for your closest person — that is service too. Here: the family\'s rights and where to turn when there is no contact.</string>
+    <string name="role_milfamily_affirm">You already hold the home front for your closest person. That is service too. Here: the family\'s rights and where to turn when there is no contact.</string>
     <string name="role_milfamily_facts_title">Family rights and search</string>
     <string name="role_milfamily_source">Sources: Ministry of Veterans Affairs (30.07.2025, 20.05.2026); Ministry of Defence (30.04.2026, 02.01.2026); Ministry of Internal Affairs (29.01.2025); Ombudsman’s Office leaflet for relatives (12.11.2025); Bar Association (04.05.2026). Checked 02.11.2026. Conditions change, so it’s worth checking.</string>
     <string name="role_milfamily_1">The family of a fallen defender can apply for family-member status at any administrative services centre (TsNAP), online too, wherever they live.</string>
@@ -1450,7 +1448,7 @@
     <string name="role_milfamily_5">Free psychological help under a state programme is open to veterans\' families and to families of fallen defenders.</string>
     <string name="role_milfamily_6">Complaints about service go to the Military Ombudsman: skarha@milomb.gov.ua. Answer within 10 days, within 3 if life is at risk.</string>
     <string name="role_veteran">Veteran</string>
-    <string name="role_veteran_hint">I have combat experience — from 2014 to today</string>
+    <string name="role_veteran_hint">I have combat experience, from 2014 to today</string>
     <string name="role_veteran_affirm">You have already given the country a great deal. Here: what you are entitled to, who helps with documents and where to recover.</string>
     <string name="role_veteran_facts_title">Status and support</string>
     <string name="role_veteran_source">Sources: Ministry of Defence (20.01.2026); Ministry of Veterans Affairs (13.12.2024, 30.07.2025, 10.04.2026). Checked 02.11.2026. Conditions change, so it’s worth checking.</string>
@@ -1472,13 +1470,13 @@
     <string name="role_volunteer_5">To check a fundraiser: ask for reports on earlier ones, search the photos by image, contact the organisation the volunteer is from.</string>
     <string name="role_donor">I give blood</string>
     <string name="role_donor_hint">Or want to start</string>
-    <string name="role_donor_affirm">Your blood already saves the wounded and the ill — quietly and for real. Here: who can give and what rights a donor has.</string>
+    <string name="role_donor_affirm">Your blood already saves the wounded and the ill, quietly and for real. Here: who can give and what rights a donor has.</string>
     <string name="role_donor_facts_title">Who can give</string>
     <string name="role_donor_source">Sources: Ministry of Health (10.01.2023); Labour Code, art. 124; State Labour Service (2026); Ukrainian Transplant Coordination Centre. Checked 01.11.2026. Conditions change, so it\'s worth checking.</string>
     <string name="role_donor_1">Citizens of Ukraine from 18 can give blood, as can foreigners and stateless people with a permanent residence permit.</string>
     <string name="role_donor_2">A whole-blood donor weighs at least 50 kg. The blood centre\'s doctor tells about contraindications and the gap between donations.</string>
     <string name="role_donor_3">On the day of donation an employee is released from work with pay kept, and gets one more day of rest after it (Labour Code, art. 124).</string>
-    <string name="role_donor_4">Since 26 January 2026 some benefits ended, such as 100% sick pay and the Honorary Donor supplement; the guarantees of Labour Code art. 124 remain. Ask the blood centre what else changed.</string>
+    <string name="role_donor_4" formatted="false">Since 26 January 2026 some benefits ended, such as 100% sick pay and the Honorary Donor supplement; the guarantees of Labour Code art. 124 remain. Ask the blood centre what else changed.</string>
     <string name="role_donor_5">The donor platform shows which blood group your region lacks and where to give.</string>
     <string name="gart_strip_title">Resilience today</string>
     <string name="gart_strip_all">All done today: %1$d of %2$d ✓</string>
@@ -1501,7 +1499,7 @@
     <string name="widget_neutral">Open Sprotyv</string>
     <string name="comms_title">When the network is down</string>
     <string name="comms_hint">Phone to phone, and radio without towers</string>
-    <string name="comms_intro">When mobile service and the internet are down, messages can still go directly: phone to phone, or through small radio modules. Agree in advance — later it is too late.</string>
+    <string name="comms_intro">When mobile service and the internet are down, messages can still go directly: phone to phone, or through small radio modules. Agree in advance: later it is too late.</string>
     <string name="comms_before">In advance</string>
     <string name="comms_before_1">Install the app while there is internet.</string>
     <string name="comms_before_2">Exchange contacts in person and test the connection together.</string>
@@ -1537,7 +1535,7 @@
     <string name="shields_path">My path</string>
     <string name="shields_tests">Checked by a test</string>
     <string name="shields_ready">Readiness</string>
-    <string name="shield_how_habit">21 days — half, 66 — full</string>
+    <string name="shield_how_habit">21 days: half; 66: full</string>
     <string name="shield_how_level">All steps of the level</string>
     <string name="shield_how_test">A test without mistakes</string>
     <string name="shield_how_ready">Everything in this part</string>
@@ -1549,7 +1547,7 @@
     <string name="experience_what">What happened:</string>
     <string name="experience_helped">What helped:</string>
     <string name="experience_next">Next time:</string>
-    <string name="experience_support">If remembering is hard — where to find support</string>
+    <string name="experience_support">If remembering is hard: where to find support</string>
     <string name="shield_how_count">Counts by itself</string>
     <string name="held_blackout">Power cuts</string>
     <string name="held_heating">Heating cuts</string>
@@ -1677,7 +1675,7 @@
     <string name="phones_intro">Tap a line to open the dialler; nothing is called until you confirm. Every number was checked on an official site or the organisation\'s own; the date is under each number.</string>
     <string name="phones_search">Search: service, topic or number</string>
     <string name="phones_none">Nothing found. Emergency services: 112.</string>
-    <string name="phones_note">Numbers change. If a line does not answer, try another one on the same topic; in danger, call 112. Any number can also go on the phone\'s own screen: the "Part of Sprotyv" widget, then the number at the end of the list.</string>
+    <string name="phones_note">Numbers change. If a line does not answer, try another one on the same topic; in danger, call 112. Any number can also go on the phone\'s own screen: the “Part of Sprotyv” widget, then the number at the end of the list.</string>
     <string name="phones_call">Call %1$s, %2$s</string>
     <string name="phones_checked">%1$s, checked %2$s</string>
     <string name="phones_cat_emergency">Emergency services</string>
@@ -1705,11 +1703,13 @@
     <string name="people_import_choose">Whom to add?</string>
     <string name="people_import_room">Chosen %1$d · places left: %2$d</string>
     <string name="people_import_add">Add (%1$d)</string>
-    <string name="safe_short">"I am safe"</string>
-    <string name="kid_call_lock_warn">If "My data" is locked, "Call my people" will ask for your fingerprint or PIN, which the child cannot give.</string>
+    <string name="safe_short">“I am safe”</string>
+    <string name="kid_call_lock_warn">If “My data” is locked, “Call my family” will ask for your fingerprint or PIN, which the child cannot give.</string>
     <string name="kid_call_open_toggle">My people\'s numbers for the child without the lock</string>
-    <string name="kid_call_open_hint">A separate encrypted copy of only the names and numbers of people marked for "I am safe" or as an emergency contact. Updated whenever you open Trusted people. Turned off, the copy is deleted.</string>
+    <string name="kid_call_open_hint">A separate encrypted copy of only the names and numbers of people marked for “I am safe” or as an emergency contact. Works only in kids\' mode and is updated whenever you open Trusted people. Turned off, the copy is deleted.</string>
     <string name="safe_choose_first">Choose above what to say; the message and the send buttons appear then.</string>
+    <string name="people_import_all_known">All contacts in the file (%1$d) are already in the list.</string>
+    <string name="people_import_safe_note">Those added get “I am safe”; the mark can be removed in each person\'s card.</string>
     <!-- The author's letter and Support Ukraine (About) -->
     <string name="author_letter_1">The idea of making handy Ukrainian apps that ask for as few permissions as possible and work well offline came while I was working at my laptop in near darkness: after yet another Russian drone attack, the power was gone again. That is how Sprotyv began: knowledge that saves lives should be at hand even with no power and no signal.</string>
     <string name="author_letter_2">Sprotyv is free software: its code is open, and anyone can check what it does. No ads, no tracking, no accounts. Freedom in software is not a small thing. It is the right to know what happens on your phone, and not to hand your life to anyone.</string>
@@ -1739,4 +1739,16 @@
     <string name="author_support_defence">Defence</string>
     <string name="author_support_humanitarian">Humanitarian aid</string>
     <string name="author_support_any">You can also support any trusted foundation, volunteers or unit you know. Check fundraisers: official details and reports.</string>
+    <string name="wipe_hint">Erase all data: everything personal leaves the phone for good. The guide stays.</string>
+    <string name="wipe_button">Erase all data…</string>
+    <string name="wipe_confirm_title">Erase all data?</string>
+    <string name="wipe_confirm_text">Gone for good: My data (medical card, people, plan, supplies), documents and notes, encryption keys, the PIN and settings. This cannot be undone. If you may need the data again, make a backup first. Backups saved outside the app stay, and so do the “Notes” name and plain icon if they are on. After erasing, the app closes.</string>
+    <string name="wipe_type">Type ERASE or СТЕРТИ</string>
+    <string name="wipe_yes">Erase</string>
+    <string name="undo">Undo</string>
+    <string name="deleted_named">“%1$s” deleted</string>
+    <string name="deleted_row">Row deleted</string>
+    <string name="deleted_note">Note deleted</string>
+    <string name="wipe_erasing">Erasing all data… The app closes by itself.</string>
+    <string name="about_app_ai">The code was written with AI (Claude, Anthropic) directed and tested by the author.</string>
 </resources>

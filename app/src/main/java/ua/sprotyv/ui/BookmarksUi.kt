@@ -59,7 +59,6 @@ fun BookmarksScreen() {
     val list = Bookmarks.fromPages(pages ?: return Loading())
     val incoming by Incoming.state.collectAsStateWithLifecycle()
     var tooMany by remember { mutableStateOf(false) }
-    var removing by remember { mutableStateOf<Bookmark?>(null) }
 
     // Each change is made on what is stored at the moment of writing, so two quick changes both count
     fun change(edit: (List<Bookmark>) -> List<Bookmark>) {
@@ -105,7 +104,13 @@ fun BookmarksScreen() {
                         Text(b.title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium, maxLines = 2, overflow = TextOverflow.Ellipsis)
                         Text(Bookmarks.host(b.url), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     }
-                    IconButton(onClick = { removing = b }) {
+                    IconButton(onClick = {
+                        // A small thing: gone at once, with "Undo" to put it back in its place
+                        change { now -> now.filter { it.url != b.url } }
+                        Notices.deleted(context, context.getString(R.string.deleted_named, b.title), undo = {
+                            change { now -> if (now.any { it.url == b.url }) now else now.toMutableList().apply { add(i.coerceAtMost(size), b) } }
+                        })
+                    }) {
                         Icon(Icons.Outlined.Delete, contentDescription = stringResource(R.string.bookmarks_delete, b.title))
                     }
                 }
@@ -114,14 +119,6 @@ fun BookmarksScreen() {
     }
     Text(stringResource(R.string.bookmarks_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
-    removing?.let { b ->
-        AlertDialog(
-            onDismissRequest = { removing = null },
-            text = { Text(stringResource(R.string.bookmarks_delete_confirm, b.title)) },
-            confirmButton = { TextButton(onClick = { change { now -> now.filter { it.url != b.url } }; removing = null }) { Text(stringResource(R.string.delete_row)) } },
-            dismissButton = { TextButton(onClick = { removing = null }) { Text(stringResource(R.string.cancel)) } },
-        )
-    }
     if (tooMany) {
         AlertDialog(
             onDismissRequest = { tooMany = false },

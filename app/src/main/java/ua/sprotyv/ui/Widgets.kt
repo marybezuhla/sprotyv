@@ -35,6 +35,7 @@ object Widgets {
         fun each(cls: Class<*>, draw: (Int) -> RemoteViews) = try {
             ids(app, manager, cls).forEach { manager.updateAppWidget(it, draw(it)) }
         } catch (e: Exception) {
+            // This kind keeps its last picture; the next update tries again
         }
         each(NowWidget::class.java) { now(app) }
         each(RunningWidget::class.java) { running(app) }
@@ -47,15 +48,24 @@ object Widgets {
         each(GartWidget::class.java) { gart(app) }
         each(CountWidget::class.java) { CountWidgets.draw(app, it) }
         // Choices left by widgets removed while nothing was told (the neutral icon)
-        try { TileWidgets.keepOnly(app, ids(app, manager, TileWidget::class.java)) } catch (e: Exception) { }
-        try { CountWidgets.keepOnly(app, ids(app, manager, CountWidget::class.java)) } catch (e: Exception) { }
+        // Tidying only: if it fails, the leftovers are tidied on the next update
+        try { TileWidgets.keepOnly(app, ids(app, manager, TileWidget::class.java)) } catch (e: Exception) { /* next update */ }
+        try { CountWidgets.keepOnly(app, ids(app, manager, CountWidget::class.java)) } catch (e: Exception) { /* next update */ }
+    }
+
+    /** Every placed widget emptied now (erasing all data): no copied number stays on the home screen. */
+    fun blank(context: Context) {
+        val app = context.applicationContext
+        AppWidgetManager.getInstance(app)?.let { blankAll(app, it) }
     }
 
     /** Every placed widget emptied: some launchers keep the last picture of a removed widget. */
     private fun blankAll(app: Context, manager: AppWidgetManager) {
         try {
             PROVIDERS.forEach { cls -> ids(app, manager, cls).forEach { manager.updateAppWidget(it, RemoteViews(app.packageName, R.layout.widget_blank)) } }
-        } catch (e: Exception) { }
+        } catch (e: Exception) {
+            // The launcher would not take it (it went away meanwhile): nothing is left to show then
+        }
     }
 
     /** A "Daily hardening" widget is placed: it is redrawn just after midnight, when today starts at zero. */
@@ -75,7 +85,7 @@ object Widgets {
         if (Neutral.isOn(app)) {
             AppWidgetManager.getInstance(app)?.let { blankAll(app, it) }
             // Nothing a widget chose or copied stays on the phone either
-            try { CountWidgets.forgetCopies(app); TileWidgets.keepOnly(app, IntArray(0)) } catch (e: Exception) { }
+            try { CountWidgets.forgetCopies(app); TileWidgets.keepOnly(app, IntArray(0)) } catch (e: Exception) { /* tried again on the next sync */ }
         }
         val want = if (Neutral.isOn(app)) PackageManager.COMPONENT_ENABLED_STATE_DISABLED else PackageManager.COMPONENT_ENABLED_STATE_ENABLED
         PROVIDERS.forEach { cls ->
@@ -103,7 +113,7 @@ object Widgets {
         fun prefs(name: String) = context.getSharedPreferences(name, Context.MODE_PRIVATE)
         Tourniquets.all(context, now).let { list ->
             val at = list.firstOrNull()?.at ?: return@let
-            val clock = java.time.Instant.ofEpochMilli(at).atZone(java.time.ZoneId.systemDefault()).format(java.time.format.DateTimeFormatter.ofPattern("HH:mm"))
+            val clock = Times.clock(at)
             out += Count(if (list.size == 1) context.getString(R.string.widget_tourniquet, clock) else context.getString(R.string.widget_tourniquets, list.size, clock), at, false, "bleeding")
         }
         prefs("wait").let { p ->
@@ -245,7 +255,8 @@ internal fun Widgets.tile(c: Context, widget: Int): RemoteViews {
 internal fun Widgets.services(c: Context): RemoteViews {
     val v = RemoteViews(c.packageName, R.layout.widget_services)
     val names = listOf(R.string.service_name_unified, R.string.service_name_rescue, R.string.service_name_police, R.string.service_name_ambulance, R.string.service_name_gas)
-    listOf(R.id.w_s1 to "112", R.id.w_s2 to "101", R.id.w_s3 to "102", R.id.w_s4 to "103", R.id.w_s5 to "104").forEachIndexed { i, (id, number) ->
+    val ids = listOf(R.id.w_s1, R.id.w_s2, R.id.w_s3, R.id.w_s4, R.id.w_s5)
+    ua.sprotyv.content.Service.entries.map { it.number }.zip(ids).forEachIndexed { i, (number, id) ->
         // Said aloud with the service, not just digits
         v.setContentDescription(id, number + ", " + c.getString(names[i]))
         // The dialler with the number filled in; never a call by itself

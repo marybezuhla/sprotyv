@@ -57,7 +57,8 @@ object NoteInbox {
     @Volatile var text: String = ""
 }
 
-private const val MAX_NOTE = 20_000
+// The same limit a backup checks, so every note can be restored
+private const val MAX_NOTE = ua.sprotyv.personal.backup.BackupData.MAX_TEXT
 private const val MAX_NOTE_TITLE = 200
 private const val MAX_NOTES = ua.sprotyv.personal.backup.BackupData.MAX_NOTES
 /** Letters in all notes together: every note at its longest; streamed backups take them all back. */
@@ -172,7 +173,7 @@ fun readable(text: String): String = text.lines().joinToString("\n") { l ->
 @Composable
 fun paper(): androidx.compose.ui.graphics.Color =
     if (LocalContrast.current) MaterialTheme.colorScheme.surfaceVariant
-    else if (LocalDark.current) androidx.compose.ui.graphics.Color(0xFF3A3B40) else androidx.compose.ui.graphics.Color(0xFFFBF8EF)
+    else if (LocalDark.current) Palette.PAPER_DARK else Palette.PAPER_LIGHT
 
 /** One note in the list: pinned ones on paper with a pin, the others plain with a thin border. */
 @Composable
@@ -293,46 +294,105 @@ fun NoteEditScreen(id: Long, nav: Nav) {
     DisposableEffect(key) { onDispose { if (activity?.isChangingConfigurations != true) { EditGuard.mark(key, false); EditGuard.drafts.remove(key) } } }
     val focus = remember { androidx.compose.ui.focus.FocusRequester() }
     androidx.compose.runtime.LaunchedEffect(first.id, editing) { if (editing && text.isEmpty()) runCatching { focus.requestFocus() } }
+    if (!editing) {
+        NoteRead(text) { t -> text = t; store(t) }
+        OutlinedButton(onClick = { editing = true }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text(stringResource(R.string.edit)) }
+    } else {
+        NoteEditor(text, { text = it }, focus)
+        // Saved only now; "Cancel" brings back what was there
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Button(onClick = { store(text); editing = false }, enabled = text.isNotBlank(), modifier = Modifier.weight(1f).heightIn(min = 48.dp)) { Text(stringResource(R.string.save)) }
+            if (saved.isNotEmpty()) OutlinedButton(onClick = { text = saved; editing = false }, modifier = Modifier.weight(1f).heightIn(min = 48.dp)) { Text(stringResource(R.string.cancel)) }
+        }
+    }
+    Toggle(stringResource(R.string.notes_pin), pinned) { pinned = it; store(saved) }
+    NoteReminder(first.id)
+    val whole = readable(saved).trim()
+    val fits = whole.isNotBlank() && whole.toByteArray(Charsets.UTF_8).size <= Qr.MAX_PLAN_BYTES
+    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        OutlinedButton(enabled = fits, onClick = { QrInbox.text = whole; nav.go(Route.QrText) }, modifier = Modifier.heightIn(min = 48.dp)) {
+            Text(stringResource(R.string.notes_as_qr))
+        }
+        TextButton(onClick = { confirmDelete = true }, modifier = Modifier.heightIn(min = 48.dp)) {
+            Text(stringResource(R.string.delete_row), color = MaterialTheme.colorScheme.error)
+        }
+    }
+    SendOpenly(whole)
+    if (whole.isNotBlank() && !fits) Text(stringResource(R.string.notes_too_long_for_qr), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    Text(stringResource(R.string.notes_saved_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    if (confirmDelete) {
+        AlertDialog(
+            onDismissRequest = { confirmDelete = false },
+            text = { SensitiveWindow(); Text(stringResource(R.string.notes_delete_confirm)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    confirmDelete = false
+                    val id = first.id
+                    val app = context.applicationContext
+                    // Same key: a save still waiting is replaced by the deletion
+                    PersonalStore.save(key) { db ->
+                        val was = db.notes().get(id)
+                        db.notes().delete(id)
+                        if (was == null) return@save Notify.setNoteReminder(app, id, null)
+                        // The reminder goes only once "Undo" has passed, so undoing brings it back too
+                        Notices.deleted(app, app.getString(R.string.deleted_note), undo = {
+                            PersonalStore.save("note-restore:$id") { it.notes().save(was) }
+                        }, gone = { Notify.setNoteReminder(app, id, null) })
+                    }
+                    nav.back()
+                }) { Text(stringResource(R.string.delete_row)) }
+            },
+            dismissButton = { TextButton(onClick = { confirmDelete = false }) { Text(stringResource(R.string.cancel)) } },
+        )
+    }
+}
+
+/** A note as it reads: plain words, or a list whose boxes can be ticked; [onTick] gets the whole new text. */
+@Composable
+private fun NoteRead(text: String, onTick: (String) -> Unit) {
     val lines = text.lines()
     val list = isList(lines.drop(1))
-    if (!editing) {
-        androidx.compose.material3.Surface(
-            shape = MaterialTheme.shapes.medium, border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                if (!list) {
-                    androidx.compose.foundation.text.selection.SelectionContainer { Text(text, style = MaterialTheme.typography.bodyLarge) }
-                } else {
-                    val items = itemsOf(lines.drop(1))
-                    Text(lines.first(), style = MaterialTheme.typography.titleMedium)
-                    // Ticking what is done stays one tap away; the words themselves do not change here
-                    items.indices.sortedBy { if (items[it].done) 1 else 0 }.forEach { i ->
-                        val it0 = items[i]
-                        Row(Modifier.doneRow(it0.done), verticalAlignment = Alignment.CenterVertically) {
-                            androidx.compose.material3.Checkbox(colors = doneCheckbox(), checked = it0.done, onCheckedChange = { v ->
-                                text = listText(lines.first(), items.toMutableList().also { l -> l[i] = it0.copy(done = v) }).take(MAX_NOTE); store(text)
-                            })
-                            Text(it0.text, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f).padding(vertical = 12.dp))
-                        }
+    androidx.compose.material3.Surface(
+        shape = MaterialTheme.shapes.medium, border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            if (!list) {
+                androidx.compose.foundation.text.selection.SelectionContainer { Text(text, style = MaterialTheme.typography.bodyLarge) }
+            } else {
+                val items = itemsOf(lines.drop(1))
+                Text(lines.first(), style = MaterialTheme.typography.titleMedium)
+                // Ticking what is done stays one tap away; the words themselves do not change here
+                items.indices.sortedBy { if (items[it].done) 1 else 0 }.forEach { i ->
+                    val it0 = items[i]
+                    Row(Modifier.doneRow(it0.done), verticalAlignment = Alignment.CenterVertically) {
+                        androidx.compose.material3.Checkbox(colors = doneCheckbox(), checked = it0.done, onCheckedChange = { v ->
+                            onTick(listText(lines.first(), items.toMutableList().also { l -> l[i] = it0.copy(done = v) }).take(MAX_NOTE))
+                        })
+                        Text(it0.text, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f).padding(vertical = 12.dp))
                     }
                 }
             }
         }
-        OutlinedButton(onClick = { editing = true }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text(stringResource(R.string.edit)) }
-    } else {
-    // A plain note or a list with boxes, as the owner likes; switching keeps every word
+    }
+}
+
+/** Writing a note: plain words or a list with boxes, as the owner likes; switching keeps every word. */
+@Composable
+private fun NoteEditor(text: String, onText: (String) -> Unit, focus: androidx.compose.ui.focus.FocusRequester) {
+    val lines = text.lines()
+    val list = isList(lines.drop(1))
     ChoiceRow {
         androidx.compose.material3.FilterChip(selected = !list, onClick = {
-            if (list) text = (listOf(lines.first()) + itemsOf(lines.drop(1)).map { it.text }).joinToString("\n")
+            if (list) onText((listOf(lines.first()) + itemsOf(lines.drop(1)).map { it.text }).joinToString("\n"))
         }, label = { ChipText(stringResource(R.string.notes_kind_text)) }, modifier = Modifier.heightIn(min = 48.dp))
         androidx.compose.material3.FilterChip(selected = list, onClick = {
-            if (!list) text = listText(lines.first(), lines.drop(1).filter { it.isNotBlank() }.map { Item(it, false) }.ifEmpty { listOf(Item("", false)) })
+            if (!list) onText(listText(lines.first(), lines.drop(1).filter { it.isNotBlank() }.map { Item(it, false) }.ifEmpty { listOf(Item("", false)) }))
         }, label = { ChipText(stringResource(R.string.notes_kind_list)) }, modifier = Modifier.heightIn(min = 48.dp))
     }
     if (!list) {
         OutlinedTextField(
-            value = text, onValueChange = { text = it.take(MAX_NOTE) },
+            value = text, onValueChange = { onText(it.take(MAX_NOTE)) },
             placeholder = { Text(stringResource(R.string.notes_text_hint)) },
             textStyle = MaterialTheme.typography.bodyLarge,
             minLines = 6, modifier = Modifier.fillMaxWidth().focusRequester(focus),
@@ -341,7 +401,7 @@ fun NoteEditScreen(id: Long, nav: Nav) {
     } else {
         val name = lines.first()
         val items = itemsOf(lines.drop(1))
-        fun put(newName: String, newItems: List<Item>) { text = listText(newName, newItems).take(MAX_NOTE) }
+        fun put(newName: String, newItems: List<Item>) = onText(listText(newName, newItems).take(MAX_NOTE))
         OutlinedTextField(
             value = name, onValueChange = { v -> put(v.replace("\n", " "), items) }, singleLine = true,
             label = { ChipText(stringResource(R.string.notes_list_name)) }, textStyle = MaterialTheme.typography.titleMedium,
@@ -371,25 +431,12 @@ fun NoteEditScreen(id: Long, nav: Nav) {
         }
         TextButton(onClick = { put(name, items + Item("", false)) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.notes_list_add)) }
     }
-    // Saved only now; "Cancel" brings back what was there
-    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        Button(onClick = { store(text); editing = false }, enabled = text.isNotBlank(), modifier = Modifier.weight(1f).heightIn(min = 48.dp)) { Text(stringResource(R.string.save)) }
-        if (saved.isNotEmpty()) OutlinedButton(onClick = { text = saved; editing = false }, modifier = Modifier.weight(1f).heightIn(min = 48.dp)) { Text(stringResource(R.string.cancel)) }
-    }
-    }
-    Toggle(stringResource(R.string.notes_pin), pinned) { pinned = it; store(saved) }
-    NoteReminder(first.id)
-    val whole = readable(saved).trim()
-    val fits = whole.isNotBlank() && whole.toByteArray(Charsets.UTF_8).size <= Qr.MAX_PLAN_BYTES
-    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        OutlinedButton(enabled = fits, onClick = { QrInbox.text = whole; nav.go(Route.QrText) }, modifier = Modifier.heightIn(min = 48.dp)) {
-            Text(stringResource(R.string.notes_as_qr))
-        }
-        TextButton(onClick = { confirmDelete = true }, modifier = Modifier.heightIn(min = 48.dp)) {
-            Text(stringResource(R.string.delete_row), color = MaterialTheme.colorScheme.error)
-        }
-    }
-    // Sending openly: the text leaves the encryption, so the owner reads what that means first
+}
+
+/** Sending a note openly: the text leaves the encryption, so the owner reads what that means first. */
+@Composable
+private fun SendOpenly(whole: String) {
+    val context = androidx.compose.ui.platform.LocalContext.current
     var confirmSend by remember { mutableStateOf(false) }
     OutlinedButton(enabled = whole.isNotBlank(), onClick = { confirmSend = true }, modifier = Modifier.heightIn(min = 48.dp)) {
         Text(stringResource(R.string.notes_send_open))
@@ -408,32 +455,13 @@ fun NoteEditScreen(id: Long, nav: Nav) {
                         // Never back into Sprotyv's own "Share" entry (it keeps web pages)
                         .putExtra(android.content.Intent.EXTRA_EXCLUDE_COMPONENTS, arrayOf(android.content.ComponentName(context, "ua.sprotyv.ShareIn")))
                     // No result comes back, so "Mine" closes as usual once another app takes over
-                    try { context.startActivity(chooser) } catch (e: Exception) { }
+                    ua.sprotyv.reach.Reach.start(context, chooser)
                 }) { Text(stringResource(R.string.notes_send_yes)) }
             },
             dismissButton = { TextButton(onClick = { confirmSend = false }) { Text(stringResource(R.string.cancel)) } },
         )
     }
-    if (whole.isNotBlank() && !fits) Text(stringResource(R.string.notes_too_long_for_qr), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    Text(stringResource(R.string.notes_saved_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    if (confirmDelete) {
-        AlertDialog(
-            onDismissRequest = { confirmDelete = false },
-            text = { SensitiveWindow(); Text(stringResource(R.string.notes_delete_confirm)) },
-            confirmButton = {
-                TextButton(onClick = {
-                    confirmDelete = false
-                    // Same key: a save still waiting is replaced by the deletion
-                    PersonalStore.save(key) { it.notes().delete(first.id) }
-                    Notify.setNoteReminder(context, first.id, null)
-                    nav.back()
-                }) { Text(stringResource(R.string.delete_row)) }
-            },
-            dismissButton = { TextButton(onClick = { confirmDelete = false }) { Text(stringResource(R.string.cancel)) } },
-        )
-    }
 }
-
 
 /** "My experience" notes start with this mark, so they can be told apart and counted for a shield. */
 const val EXPERIENCE_MARK = "◆ "

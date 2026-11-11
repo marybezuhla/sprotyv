@@ -81,7 +81,7 @@ fun <T> EditableBlock(
     @Suppress("UNCHECKED_CAST")
     var draft by remember(saved, editing) { mutableStateOf(if (editing) (EditGuard.drafts[key] as? T) ?: saved else saved) }
     // Leaving for good (not a turn of the screen): nothing of the draft stays, not even in memory
-    val activity = androidx.compose.ui.platform.LocalContext.current as? android.app.Activity
+    val activity = androidx.activity.compose.LocalActivity.current
     DisposableEffect(key) { onDispose { if (activity?.isChangingConfigurations != true) { EditGuard.mark(key, false); EditGuard.drafts.remove(key) } } }
     LaunchedEffect(draft, saved, editing) {
         EditGuard.mark(key, editing && draft != saved)

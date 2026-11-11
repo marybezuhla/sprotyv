@@ -115,7 +115,7 @@ fun NoteReminder(id: Long) {
     val zone = java.time.ZoneId.systemDefault()
 
     if (at != null) {
-        val words = java.time.Instant.ofEpochMilli(at).atZone(zone).format(java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))
+        val words = Times.dateClock(at)
         Text(stringResource(R.string.notes_remind_at, words), style = MaterialTheme.typography.bodyLarge)
         androidx.compose.foundation.layout.Row(horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)) {
             OutlinedButton(onClick = { pickDay = true }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.notes_remind_change)) }

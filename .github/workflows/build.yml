@@ -52,6 +52,17 @@ jobs:
           set -o pipefail
           gradle --no-daemon testReleaseUnitTest 2>&1 | tee test.log
 
+      # Lint runs check code shipped inside libraries, so it stays here, away from the job that builds the APK
+      - name: Lint (an error stops the build)
+        shell: bash
+        run: |
+          set -o pipefail
+          status=0
+          gradle --no-daemon lintRelease 2>&1 | tee lint.log || status=$?
+          echo "---- lint report"
+          cat app/build/reports/lint.txt || true
+          exit $status
+
       - name: Prepare test log
         if: always()
         shell: bash
@@ -170,6 +181,14 @@ jobs:
             esac
           done
 
+      - name: Check the manifest (no backup, not debuggable, nothing open without a reason)
+        shell: bash
+        run: |
+          set -euo pipefail
+          AAPT=$(ls "$ANDROID_HOME"/build-tools/*/aapt2 | sort -V | tail -1)
+          "$AAPT" dump xmltree --file AndroidManifest.xml app/build/outputs/apk/release/app-release-unsigned.apk > manifest.txt
+          python3 scripts/ci/check_manifest.py manifest.txt
+
       - name: Prepare build log
         if: always()
         shell: bash
@@ -199,6 +218,7 @@ jobs:
     needs: [test, build]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     environment: release
     permissions:
       contents: read
@@ -274,6 +294,7 @@ jobs:
     needs: [build, release]
     if: needs.release.outputs.signed == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     permissions:
       contents: write
     steps:

@@ -1,6 +1,5 @@
 package ua.sprotyv.ui
 
-import android.app.Activity
 import android.os.Build
 import android.view.WindowManager
 import androidx.compose.foundation.layout.Arrangement
@@ -110,7 +109,7 @@ fun SecureScreen() {
         SecureScreens.open.intValue++
         onDispose { SecureScreens.open.intValue-- }
     }
-    val activity = LocalContext.current as? Activity ?: return
+    val activity = androidx.activity.compose.LocalActivity.current ?: return
     // Apps that read the screen through accessibility (other than real aids such as TalkBack, which
     // Android marks as accessibility tools) see nothing of these screens, screenshots allowed or not
     if (Build.VERSION.SDK_INT >= 34) {
@@ -124,7 +123,7 @@ fun SecureScreen() {
     DisposableEffect(activity) {
         // (a normal permission, granted with the app; without it nothing else changes)
         val hidden = try { activity.window.setHideOverlayWindows(true); true } catch (e: SecurityException) { false }
-        onDispose { if (hidden) try { activity.window.setHideOverlayWindows(false) } catch (e: SecurityException) { } }
+        onDispose { if (hidden) try { activity.window.setHideOverlayWindows(false) } catch (e: SecurityException) { /* never hidden then, nothing to undo */ } }
     }
     // The recent-apps picture never shows these screens, even with screenshots allowed: it would
     // show the data to whoever holds the phone, past the lock on "My data"
@@ -214,12 +213,12 @@ fun Personal(title: Int, state: Opened?, nav: Nav, content: @Composable () -> Un
             }
             state == Opened.Damaged -> {
                 Problem(R.string.damaged_title, R.string.damaged_text) { PersonalStore.close(); PersonalStore.open(context) }
-                StartFresh { PersonalStore.startFresh(context) }
+                StartFresh { KidCall.set(context, false); PersonalStore.startFresh(context) }
             }
             else -> {
                 Text(stringResource(R.string.key_lost_title), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
                 Text(stringResource(R.string.key_lost_text), style = MaterialTheme.typography.bodyLarge)
-                StartFresh { PersonalStore.startFresh(context) }
+                StartFresh { KidCall.set(context, false); PersonalStore.startFresh(context) }
             }
         }
     }

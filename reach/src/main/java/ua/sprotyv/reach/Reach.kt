@@ -225,7 +225,8 @@ object Reach {
     private const val EXTRA_SESSION = "android.support.customtabs.extra.SESSION"
     private const val EXTRA_TOOLBAR_COLOR = "android.support.customtabs.extra.TOOLBAR_COLOR"
 
-    private fun start(context: Context, intent: Intent) {
+    /** Starts another app; if none can take it, says so instead of doing nothing. */
+    fun start(context: Context, intent: Intent) {
         if (!tryStart(context, intent)) notFound(context)
     }
 

@@ -1,5 +1,6 @@
 package ua.sprotyv.ui
 
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.size
@@ -111,14 +112,20 @@ fun Block(
     val tint = tint ?: group.tint()
     var open by androidx.compose.runtime.saveable.rememberSaveable(title) { androidx.compose.runtime.mutableStateOf(startOpen) }
     val foldState = stringResource(if (open) R.string.state_open else R.string.state_closed)
+    // Opened by a tap: the screen moves to what opened, so it is not left below the edge unseen
+    val bring = androidx.compose.runtime.remember { androidx.compose.foundation.relocation.BringIntoViewRequester() }
+    var justOpened by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
+    androidx.compose.runtime.LaunchedEffect(justOpened) {
+        if (justOpened) { kotlinx.coroutines.delay(80); bring.bringIntoView(); justOpened = false }
+    }
     androidx.compose.material3.Card(
         colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         border = androidx.compose.foundation.BorderStroke(1.dp, tint.container),
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().bringIntoViewRequester(bring),
     ) {
         val header = Modifier.fillMaxWidth().background(tint.container)
         Row(
-            (if (foldable) header.clickable(onClickLabel = stringResource(if (open) R.string.shelf_fold else R.string.shelf_unfold)) { open = !open }.heightIn(min = 56.dp)
+            (if (foldable) header.clickable(onClickLabel = stringResource(if (open) R.string.shelf_fold else R.string.shelf_unfold)) { open = !open; if (open) justOpened = true }.heightIn(min = 56.dp)
                 // TalkBack says the name, that it is a heading, and whether it is open, on the one row it can tap
                 .semantics(mergeDescendants = true) { stateDescription = foldState; heading() } else header)
                 .padding(horizontal = 16.dp, vertical = 12.dp),
@@ -289,3 +296,4 @@ fun Modifier.a11yLabel(text: Int): Modifier {
     val t = androidx.compose.ui.res.stringResource(text)
     return this.then(Modifier.semantics { contentDescription = t })
 }
+

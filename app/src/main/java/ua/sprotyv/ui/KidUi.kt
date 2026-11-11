@@ -178,16 +178,16 @@ fun Sunny(size: Dp, happy: Boolean = false) {
     Canvas(Modifier.size(size).clearAndSetSemantics { }) {
         val c = center
         val r = this.size.minDimension / 2
-        val petal = Color(0xFFFFC928)
+        val petal = Palette.SUN_PETAL
         // Twelve petals around the middle
         repeat(12) { i ->
             rotate(i * 30f, c) {
                 drawOval(petal, topLeft = Offset(c.x - r * 0.18f, c.y - r), size = Size(r * 0.36f, r * 0.62f))
             }
         }
-        drawCircle(Color(0xFF7A4E2D), radius = r * 0.5f, center = c)
+        drawCircle(Palette.SUN_MIDDLE, radius = r * 0.5f, center = c)
         // Eyes and a smile; a wider smile when a card is done
-        val eye = Color(0xFFFFF3D6)
+        val eye = Palette.SUN_FACE
         drawCircle(eye, radius = r * 0.07f, center = Offset(c.x - r * 0.18f, c.y - r * 0.1f))
         drawCircle(eye, radius = r * 0.07f, center = Offset(c.x + r * 0.18f, c.y - r * 0.1f))
         val sweep = if (happy) 160f else 120f
@@ -276,6 +276,7 @@ fun KidCallScreen() {
 @Composable
 fun KidCallOpenScreen() {
     val context = LocalContext.current
+    SensitiveWindow()
     val family = remember { KidCall.list(context) }
     if (family.isEmpty()) {
         Text(stringResource(R.string.kid_call_none), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)

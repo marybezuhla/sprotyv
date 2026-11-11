@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.getAndUpdate
 import ua.sprotyv.R
 import ua.sprotyv.content.Content
 import ua.sprotyv.home.Pins
@@ -25,18 +26,50 @@ import ua.sprotyv.home.Tool
  * Quiet: no sound, no system pop-up; TalkBack reads it aloud.
  */
 object Notices {
-    class Notice(val text: String, val action: String? = null, val onAction: (() -> Unit)? = null) {
+    /** [onGone]: runs once if the line goes without its action (timed out, replaced, or the app closed). */
+    class Notice(val text: String, val action: String? = null, val onAction: (() -> Unit)? = null, val onGone: (() -> Unit)? = null, val deletion: Boolean = false) {
         val id = System.nanoTime()
+        private var settled = false
+
+        /** Runs [onAction] or [onGone], never both and never twice. */
+        fun settle(acted: Boolean) {
+            synchronized(this) { if (settled) return; settled = true }
+            if (acted) onAction?.invoke() else onGone?.invoke()
+        }
     }
 
     val current = MutableStateFlow<Notice?>(null)
 
     fun show(text: String, action: String? = null, onAction: (() -> Unit)? = null) {
-        current.value = Notice(text, action, onAction)
+        val next = Notice(text, action, onAction)
+        // A deletion still waiting for "Undo" is finished, never left half done
+        current.getAndUpdate { next }?.settle(acted = false)
+    }
+
+    /**
+     * The owner's data closes (the app left the screen, "Mine" was left, everything is erased): a
+     * deletion still offering "Undo" is finished now, so no name stays on screen past the lock and
+     * no document key stays in memory.
+     */
+    fun finishPending() {
+        // Only a deletion (it names what went) is finished; other lines (a tile pinned) stay as they are
+        val n = current.value ?: return
+        if (n.deletion && current.compareAndSet(n, null)) n.settle(acted = false)
+    }
+
+    /**
+     * Something was deleted: says so with "Undo". [undo] puts it back; [gone] finishes the deletion
+     * (a document's file, say) once the line has gone without "Undo". A line still waiting when a
+     * new one comes is finished at once, so nothing is left half deleted.
+     */
+    fun deleted(context: Context, text: String, undo: () -> Unit, gone: (() -> Unit)? = null) {
+        val next = Notice(text, context.getString(R.string.undo), undo, gone, deletion = true)
+        current.getAndUpdate { next }?.settle(acted = false)
     }
 
     /** Puts a tile on the home screen and says so; when the home screen is full, says why nothing happened. */
-    fun pin(context: Context, content: Content?, id: String) {
+    fun pin(screen: Context, content: Content?, id: String) {
+        val context = screen.applicationContext
         val now = HomePrefs.load(context).pins
         if (id in now || id in Tiles.FIXED) return
         if (now.size >= Tiles.MAX_PINS) return show(context.getString(R.string.pins_full_short, Tiles.MAX_PINS))
@@ -49,7 +82,8 @@ object Notices {
     }
 
     /** Takes a tile off and says so, with a way to put it back in the same place. */
-    fun unpin(context: Context, content: Content?, id: String) {
+    fun unpin(screen: Context, content: Content?, id: String) {
+        val context = screen.applicationContext
         val before = HomePrefs.load(context).pins
         val at = before.indexOf(id)
         if (at < 0) return
@@ -89,12 +123,30 @@ fun phoneShort(p: ua.sprotyv.content.Phone): String = if (p.category == "power")
 fun NoticeHost(modifier: Modifier = Modifier) {
     val host = remember { SnackbarHostState() }
     val notice by Notices.current.collectAsState()
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val activity = androidx.activity.compose.LocalActivity.current
+    // With TalkBack, finding the button takes longer than any timer: the line stays until it is used or closed
+    val talkBack = remember { context.getSystemService(android.view.accessibility.AccessibilityManager::class.java)?.isTouchExplorationEnabled == true }
     LaunchedEffect(notice?.id) {
         val n = notice ?: return@LaunchedEffect
         host.currentSnackbarData?.dismiss()
-        val result = host.showSnackbar(n.text, actionLabel = n.action, withDismissAction = false, duration = if (n.action != null) SnackbarDuration.Long else SnackbarDuration.Short)
-        if (result == SnackbarResult.ActionPerformed) n.onAction?.invoke()
-        if (Notices.current.value === n) Notices.current.value = null
+        var acted = false
+        try {
+            val duration = when {
+                n.action == null -> SnackbarDuration.Short
+                talkBack -> SnackbarDuration.Indefinite
+                else -> SnackbarDuration.Long
+            }
+            val result = host.showSnackbar(n.text, actionLabel = n.action, withDismissAction = talkBack && n.action != null, duration = duration)
+            acted = result == SnackbarResult.ActionPerformed
+        } finally {
+            // Turning the phone rebuilds the screen: the same line is shown again, nothing is finished.
+            // Otherwise (time out, closed, a new line, the app gone) a waiting deletion is finished
+            if (activity?.isChangingConfigurations != true) {
+                n.settle(acted)
+                Notices.current.compareAndSet(n, null)
+            }
+        }
     }
     SnackbarHost(host, modifier.padding(horizontal = 16.dp, vertical = 8.dp))
 }

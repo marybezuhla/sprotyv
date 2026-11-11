@@ -226,13 +226,28 @@ object Docs {
         }
     }
 
+    /**
+     * The row goes at once; the encrypted file stays until "Undo" has passed, then goes too. If the
+     * app is closed in between, the file has no row and the next sweep removes it.
+     */
     fun delete(context: Context, id: Long) {
         val app = context.applicationContext
         PersonalStore.save("doc:delete:$id") { db ->
             val doc = db.documents().get(id) ?: return@save
+            val files = DocFiles.of(app)
+            files.hold(doc.file)
             db.documents().delete(id)
-            DocFiles.of(app).delete(doc.file)
-            doc.key.fill(0)
+            Notices.deleted(app, app.getString(R.string.deleted_named, doc.title), undo = {
+                PersonalStore.save("doc:restore:$id") {
+                    // Back in the list; the in-memory copy of its key is wiped either way
+                    try { it.documents().add(doc) } finally { files.done(doc.file); doc.key.fill(0) }
+                }
+            }, gone = {
+                // Wiped before the file goes, even if deleting it fails
+                doc.key.fill(0)
+                files.delete(doc.file)
+                files.done(doc.file)
+            })
         }
     }
 
@@ -253,12 +268,12 @@ object Docs {
     private val clearLater = android.os.Handler(android.os.Looper.getMainLooper())
 
     /** Back in the app: the plain copy handed out goes a minute later (the other app had time to take it). */
-    fun clearSharedSoon(context: Context) {
+    fun clearSharedSoon(context: Context, afterMs: Long = 60_000) {
         val app = context.applicationContext
         if (shareDir(app).listFiles().isNullOrEmpty()) return
         clearLater.removeCallbacksAndMessages(null)
-        // Only copies at least a minute old: one shared again meanwhile keeps its own minute
-        clearLater.postDelayed({ Thread { clearShared(app, 60_000) }.start() }, 60_000)
+        // Only copies at least that old: one shared again meanwhile keeps its own time
+        clearLater.postDelayed({ Thread { clearShared(app, afterMs) }.start() }, afterMs)
     }
 
     fun share(context: Context, doc: Document, bytes: ByteArray) {
@@ -310,7 +325,7 @@ fun DocumentsScreen() {
             PersonalStore.read { db -> DocFiles.of(context).sweep(db.documents().files().toSet(), graceMs = 60 * 60_000L) }
         }
     }
-    val photoTitle = stringResource(R.string.docs_photo_title, java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy")))
+    val photoTitle = stringResource(R.string.docs_photo_title, Times.date(java.time.LocalDate.now()))
     fun bring(uri: Uri, type: String? = null, cleanup: () -> Unit = {}) = Docs.start(context, uri, photoTitle, type, cleanup)
     val pick = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         Away.back()
@@ -549,7 +564,7 @@ private class PdfDoc private constructor(private val renderer: PdfRenderer) {
 
     fun close() = synchronized(this) {
         closed = true
-        try { renderer.close() } catch (e: Exception) { }
+        try { renderer.close() } catch (e: Exception) { /* closing only; the pages are already drawn */ }
     }
 
     companion object {

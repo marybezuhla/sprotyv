@@ -366,7 +366,12 @@ object PeopleFiles {
                 val known = now.map { key(it.phone) }.toMutableSet()
                 // One number written two ways (0XX… and +380XX…) is one person
                 val fresh = found.filter { known.add(key(it.phone)) }
-                if (fresh.isEmpty()) null to app.getString(R.string.people_import_none) else fresh to null
+                when {
+                    found.isEmpty() -> null to app.getString(R.string.people_import_none)
+                    // The same people again (an export read back): said so, not "no numbers"
+                    fresh.isEmpty() -> null to app.getString(R.string.people_import_all_known, found.size)
+                    else -> fresh to null
+                }
             } catch (e: Exception) {
                 null to app.getString(R.string.people_import_failed)
             }
@@ -414,6 +419,7 @@ object PeopleFiles {
 
 @Composable
 private fun PersonDialog(start: Person, onDone: () -> Unit) {
+    val context = LocalContext.current
     var p by remember(start) { mutableStateOf(start) }
     var confirmDelete by remember { mutableStateOf(false) }
     val valid = p.name.isNotBlank() && ua.sprotyv.reach.Links.clean(p.phone).removePrefix("+").length >= 3
@@ -456,7 +462,12 @@ private fun PersonDialog(start: Person, onDone: () -> Unit) {
             text = { SensitiveWindow(); Text(stringResource(R.string.delete_person_confirm, start.name)) },
             confirmButton = {
                 TextButton(onClick = {
-                    PersonalStore.save("delete:" + java.util.UUID.randomUUID()) { it.people().delete(start) }
+                    val gone = start
+                    PersonalStore.save("delete:" + java.util.UUID.randomUUID()) { it.people().delete(gone) }
+                    // Put back as it was, under the same id
+                    Notices.deleted(context, context.getString(R.string.deleted_named, gone.name), undo = {
+                        PersonalStore.save("restore:" + java.util.UUID.randomUUID()) { it.people().save(gone) }
+                    })
                     confirmDelete = false
                     onDone()
                 }) { Text(stringResource(R.string.delete_person)) }
@@ -500,7 +511,9 @@ fun SafeScreen(nav: Nav) {
     var okText by remember(stored) { mutableStateOf(stored.ifBlank { defaultText }) }
     // Three ready messages: "I am fine" (the owner's own words, saved), "I need help", "I can't talk"
     // Nothing chosen at first: in a hurry "all is well" must never go by mistake
-    var status by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf<SafeStatus?>(null) }
+    // Kept only as long as its text is (both plain remember): after turning the phone both start
+    // again from nothing chosen, never a "need help" mark over an "I am fine" message
+    var status by remember { mutableStateOf<SafeStatus?>(null) }
     val helpText = stringResource(R.string.safe_help_message)
     val quietText = stringResource(R.string.safe_quiet_message)
 
@@ -624,6 +637,7 @@ private fun ImportChoice(list: List<Vcf.Contact>, room: Int, onCancel: () -> Uni
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(stringResource(R.string.people_import_room, picked.size, room), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.people_import_safe_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 androidx.compose.foundation.lazy.LazyColumn(Modifier.heightIn(max = 420.dp)) {
                     items(list.size) { i ->
                         val c = list[i]

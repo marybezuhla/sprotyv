@@ -21,7 +21,7 @@ android {
         minSdk = 31
         targetSdk = 36
         // Written out as a number, because F-Droid's update check reads it from this file; checked below
-        versionCode = 10104
+        versionCode = 10200
         versionName = appVersion
     }
 
@@ -34,6 +34,15 @@ android {
             // Reproducible builds (F-Droid compares its own build with ours): no git details in the APK
             vcsInfo.include = false
         }
+    }
+
+    // Android's lint runs in CI: an error stops the build; warnings are listed in the log to work through
+    lint {
+        abortOnError = true
+        // Home screen widgets are RemoteViews, which know only android:tint (app:tint is AppCompat's, for app screens)
+        disable += "UseAppTint"
+        textReport = true
+        textOutput = file("build/reports/lint.txt")
     }
 
     compileOptions {

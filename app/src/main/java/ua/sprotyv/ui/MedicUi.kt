@@ -38,9 +38,6 @@ import ua.sprotyv.R
 import ua.sprotyv.content.Content
 import ua.sprotyv.home.Group
 import ua.sprotyv.qr.Qr
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 
 /** Who a step is given to: the person holding the phone, or helper 1-3. */
 private val HELPERS = listOf(0, 1, 2, 3)
@@ -165,7 +162,7 @@ private val HANDOVER_ACTIONS = listOf(
     R.string.handover_a_cooling, R.string.handover_a_warming, R.string.handover_a_splint, R.string.handover_a_called,
 )
 
-private fun clockOf(t: Long): String = Instant.ofEpochMilli(t).atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("HH:mm"))
+private fun clockOf(t: Long): String = Times.clock(t)
 
 /** "№2 — girl, left arm — put on at 14:05 (1 h 40 min)": what the crew needs about each tourniquet. */
 private fun tourniquetLine(context: Context, t: Tourniquets.One, count: Int): String {

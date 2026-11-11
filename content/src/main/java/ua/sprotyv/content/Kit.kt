@@ -29,6 +29,14 @@ object Kit {
         return groups
     }
 
+    /**
+     * A picture for each pocket of the bag, by its place in the list: the same in every language
+     * (KitTest checks that both guides keep this order).
+     */
+    private val ICONS = listOf("📄", "🥫", "🩹", "🧥", "🔦", "🧼", "🛏️")
+
+    fun icon(group: Int): String = ICONS.getOrElse(group) { "🎒" }
+
     fun key(text: String): String {
         val digest = MessageDigest.getInstance("SHA-256").digest(plain(text).trim().toByteArray(Charsets.UTF_8))
         return digest.take(8).joinToString("") { "%02x".format(it.toInt() and 0xFF) }

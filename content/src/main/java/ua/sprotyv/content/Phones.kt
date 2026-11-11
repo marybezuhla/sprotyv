@@ -31,8 +31,6 @@ data class Phone(
 
         fun categoryOf(id: String): String? = PREFIX.entries.firstOrNull { id.startsWith(it.value) }?.key
 
-        fun prefixOf(category: String): String = PREFIX.getValue(category)
-
         /** A number hidden in trip mode, by its id (an unknown one is hidden too, to be sure). */
         fun tripHides(id: String): Boolean = id in TRIP_HIDES_ALSO || (categoryOf(id)?.let { it in TRIP_HIDES } ?: true)
 

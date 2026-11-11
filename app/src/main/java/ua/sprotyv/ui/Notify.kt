@@ -14,10 +14,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import ua.sprotyv.R
 import ua.sprotyv.content.Blackout
-import java.time.Instant
 import java.time.YearMonth
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 
 /**
  * Notifications, each kind switched on by the owner (all off by default):
@@ -316,7 +314,7 @@ object Notify {
         nm.createNotificationChannel(NotificationChannel(REMINDERS, c.getString(R.string.notify_channel_reminders), NotificationManager.IMPORTANCE_DEFAULT))
     }
 
-    private fun clock(t: Long): String = Instant.ofEpochMilli(t).atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("HH:mm"))
+    private fun clock(t: Long): String = Times.clock(t)
 
     /** What a tap opens: a fixed word for each kind, read back by [Opening]. */
     private fun open(c: Context, target: String, code: Int): PendingIntent =
@@ -345,7 +343,7 @@ object Notify {
         } else {
             b.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
         }
-        try { NotificationManagerCompat.from(c).notify(id, b.build()) } catch (e: SecurityException) { }
+        try { NotificationManagerCompat.from(c).notify(id, b.build()) } catch (e: SecurityException) { /* notices not allowed on this phone: nothing is shown then */ }
     }
 
     /** The tourniquet's time, in the shade for as long as it is on, with a clock counting up. */
@@ -364,7 +362,7 @@ object Notify {
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setContentIntent(open(c, "bleeding", ID_TOURNIQUET_ON))
             .build()
-        try { NotificationManagerCompat.from(c).notify(ID_TOURNIQUET_ON, n) } catch (e: SecurityException) { }
+        try { NotificationManagerCompat.from(c).notify(ID_TOURNIQUET_ON, n) } catch (e: SecurityException) { /* notices not allowed: the card's own timer still runs */ }
     }
 
     private fun cancel(c: Context, id: Int) = NotificationManagerCompat.from(c).cancel(id)

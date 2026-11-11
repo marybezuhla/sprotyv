@@ -44,7 +44,7 @@ class DocFiles(val dir: File) {
         }
 
         fun abort() {
-            try { out.close() } catch (e: Exception) { }
+            try { out.close() } catch (e: Exception) { /* the file is deleted just below anyway */ }
             key.fill(0)
             target.delete()
             done(file)
@@ -89,6 +89,9 @@ class DocFiles(val dir: File) {
         val busy = synchronized(writing) { writing.toSet() }
         dir.listFiles()?.forEach { f -> if (f.name !in keep && f.name !in busy && now - f.lastModified() >= graceMs) f.delete() }
     }
+
+    /** A deleted document's file, kept while "Undo" is offered: sweeps leave it until [done]. */
+    fun hold(file: String) { synchronized(writing) { writing += file } }
 
     /** A written file is named in the database now (or was dropped): sweeps may take it into account again. */
     fun done(file: String) { synchronized(writing) { writing -= file } }
