@@ -340,12 +340,15 @@ internal fun LanguageChoice() {
         Text(stringResource(R.string.lang_old_phone), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         return
     }
-    val current = androidx.appcompat.app.AppCompatDelegate.getApplicationLocales().toLanguageTags()
+    // Android's own per-app language (13 and later), without the AppCompat library
+    val context = LocalContext.current
+    val locales = remember { context.getSystemService(android.app.LocaleManager::class.java) }
+    val current = locales?.applicationLocales?.toLanguageTags().orEmpty()
     ChoiceRow {
         listOf("" to R.string.lang_phone, "uk" to R.string.lang_uk, "en" to R.string.lang_en).forEach { (tag, label) ->
             androidx.compose.material3.FilterChip(
                 selected = current.substringBefore('-') == tag,
-                onClick = { androidx.appcompat.app.AppCompatDelegate.setApplicationLocales(androidx.core.os.LocaleListCompat.forLanguageTags(tag)) },
+                onClick = { locales?.applicationLocales = android.os.LocaleList.forLanguageTags(tag) },
                 label = { ChipText(stringResource(label)) }, modifier = Modifier.heightIn(min = 48.dp),
             )
         }
