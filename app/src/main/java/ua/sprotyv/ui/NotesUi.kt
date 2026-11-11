@@ -409,7 +409,7 @@ fun NoteEditScreen(id: Long, nav: Nav) {
                         // Never back into Sprotyv's own "Share" entry (it keeps web pages)
                         .putExtra(android.content.Intent.EXTRA_EXCLUDE_COMPONENTS, arrayOf(android.content.ComponentName(context, "ua.sprotyv.ShareIn")))
                     // No result comes back, so "Mine" closes as usual once another app takes over
-                    try { context.startActivity(chooser) } catch (e: Exception) { }
+                    ua.sprotyv.reach.Reach.start(context, chooser)
                 }) { Text(stringResource(R.string.notes_send_yes)) }
             },
             dismissButton = { TextButton(onClick = { confirmSend = false }) { Text(stringResource(R.string.cancel)) } },

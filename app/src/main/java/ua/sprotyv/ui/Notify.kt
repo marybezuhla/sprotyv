@@ -345,7 +345,7 @@ object Notify {
         } else {
             b.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
         }
-        try { NotificationManagerCompat.from(c).notify(id, b.build()) } catch (e: SecurityException) { }
+        try { NotificationManagerCompat.from(c).notify(id, b.build()) } catch (e: SecurityException) { /* notices not allowed on this phone: nothing is shown then */ }
     }
 
     /** The tourniquet's time, in the shade for as long as it is on, with a clock counting up. */
@@ -364,7 +364,7 @@ object Notify {
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setContentIntent(open(c, "bleeding", ID_TOURNIQUET_ON))
             .build()
-        try { NotificationManagerCompat.from(c).notify(ID_TOURNIQUET_ON, n) } catch (e: SecurityException) { }
+        try { NotificationManagerCompat.from(c).notify(ID_TOURNIQUET_ON, n) } catch (e: SecurityException) { /* notices not allowed: the card's own timer still runs */ }
     }
 
     private fun cancel(c: Context, id: Int) = NotificationManagerCompat.from(c).cancel(id)

@@ -190,6 +190,6 @@ internal object Hardening : net.zetetic.database.sqlcipher.SQLiteDatabaseHook {
 
     // A setting that cannot be applied never keeps Sprotyv from opening
     private fun apply(connection: net.zetetic.database.sqlcipher.SQLiteConnection, sql: String) {
-        try { connection.executeRaw(sql, null, null) } catch (e: RuntimeException) { }
+        try { connection.executeRaw(sql, null, null) } catch (e: RuntimeException) { /* see above */ }
     }
 }

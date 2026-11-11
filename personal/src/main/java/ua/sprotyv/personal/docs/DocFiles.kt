@@ -44,7 +44,7 @@ class DocFiles(val dir: File) {
         }
 
         fun abort() {
-            try { out.close() } catch (e: Exception) { }
+            try { out.close() } catch (e: Exception) { /* the file is deleted just below anyway */ }
             key.fill(0)
             target.delete()
             done(file)

@@ -480,9 +480,7 @@ fun ScanScreen(nav: Nav) {
             confirmButton = {
                 TextButton(onClick = {
                     openLink = null
-                    try {
-                        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link.text)).addCategory(Intent.CATEGORY_BROWSABLE))
-                    } catch (e: Exception) { }
+                    ua.sprotyv.reach.Reach.start(context, Intent(Intent.ACTION_VIEW, Uri.parse(link.text)).addCategory(Intent.CATEGORY_BROWSABLE))
                 }) { Text(stringResource(R.string.scan_open)) }
             },
             dismissButton = { TextButton(onClick = { openLink = null }) { Text(stringResource(R.string.cancel)) } },

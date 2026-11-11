@@ -561,7 +561,7 @@ private class PdfDoc private constructor(private val renderer: PdfRenderer) {
 
     fun close() = synchronized(this) {
         closed = true
-        try { renderer.close() } catch (e: Exception) { }
+        try { renderer.close() } catch (e: Exception) { /* closing only; the pages are already drawn */ }
     }
 
     companion object {

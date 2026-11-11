@@ -229,6 +229,11 @@ object Reach {
         if (!tryStart(context, intent)) notFound(context)
     }
 
+    /** Starts another app; if none can take it, says so instead of doing nothing. */
+    fun start(context: Context, intent: Intent) {
+        if (!tryStart(context, intent)) notFound(context)
+    }
+
     private fun tryStart(context: Context, intent: Intent): Boolean = try {
         context.startActivity(intent)
         true

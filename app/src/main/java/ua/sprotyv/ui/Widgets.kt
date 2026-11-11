@@ -35,6 +35,7 @@ object Widgets {
         fun each(cls: Class<*>, draw: (Int) -> RemoteViews) = try {
             ids(app, manager, cls).forEach { manager.updateAppWidget(it, draw(it)) }
         } catch (e: Exception) {
+            // This kind keeps its last picture; the next update tries again
         }
         each(NowWidget::class.java) { now(app) }
         each(RunningWidget::class.java) { running(app) }
@@ -47,8 +48,9 @@ object Widgets {
         each(GartWidget::class.java) { gart(app) }
         each(CountWidget::class.java) { CountWidgets.draw(app, it) }
         // Choices left by widgets removed while nothing was told (the neutral icon)
-        try { TileWidgets.keepOnly(app, ids(app, manager, TileWidget::class.java)) } catch (e: Exception) { }
-        try { CountWidgets.keepOnly(app, ids(app, manager, CountWidget::class.java)) } catch (e: Exception) { }
+        // Tidying only: if it fails, the leftovers are tidied on the next update
+        try { TileWidgets.keepOnly(app, ids(app, manager, TileWidget::class.java)) } catch (e: Exception) { /* next update */ }
+        try { CountWidgets.keepOnly(app, ids(app, manager, CountWidget::class.java)) } catch (e: Exception) { /* next update */ }
     }
 
     /** Every placed widget emptied now (erasing all data): no copied number stays on the home screen. */
@@ -61,7 +63,9 @@ object Widgets {
     private fun blankAll(app: Context, manager: AppWidgetManager) {
         try {
             PROVIDERS.forEach { cls -> ids(app, manager, cls).forEach { manager.updateAppWidget(it, RemoteViews(app.packageName, R.layout.widget_blank)) } }
-        } catch (e: Exception) { }
+        } catch (e: Exception) {
+            // The launcher would not take it (it went away meanwhile): nothing is left to show then
+        }
     }
 
     /** A "Daily hardening" widget is placed: it is redrawn just after midnight, when today starts at zero. */
@@ -81,7 +85,7 @@ object Widgets {
         if (Neutral.isOn(app)) {
             AppWidgetManager.getInstance(app)?.let { blankAll(app, it) }
             // Nothing a widget chose or copied stays on the phone either
-            try { CountWidgets.forgetCopies(app); TileWidgets.keepOnly(app, IntArray(0)) } catch (e: Exception) { }
+            try { CountWidgets.forgetCopies(app); TileWidgets.keepOnly(app, IntArray(0)) } catch (e: Exception) { /* tried again on the next sync */ }
         }
         val want = if (Neutral.isOn(app)) PackageManager.COMPONENT_ENABLED_STATE_DISABLED else PackageManager.COMPONENT_ENABLED_STATE_ENABLED
         PROVIDERS.forEach { cls ->

@@ -243,7 +243,7 @@ object BackupLines {
             made.forEach { if (!ok) files.delete(it); files.done(it) }
             // Files no row names (the old ones replaced, or new ones of a restore that did not finish) go
             // (recent files are spared: an import may be about to name its file; they go at a later sweep)
-            try { files.sweep(db.documents().files().toSet()) } catch (e: Exception) { }
+            try { files.sweep(db.documents().files().toSet()) } catch (e: Exception) { /* tidying only: swept again later */ }
         }
     }
 

@@ -124,7 +124,7 @@ fun SecureScreen() {
     DisposableEffect(activity) {
         // (a normal permission, granted with the app; without it nothing else changes)
         val hidden = try { activity.window.setHideOverlayWindows(true); true } catch (e: SecurityException) { false }
-        onDispose { if (hidden) try { activity.window.setHideOverlayWindows(false) } catch (e: SecurityException) { } }
+        onDispose { if (hidden) try { activity.window.setHideOverlayWindows(false) } catch (e: SecurityException) { /* never hidden then, nothing to undo */ } }
     }
     // The recent-apps picture never shows these screens, even with screenshots allowed: it would
     // show the data to whoever holds the phone, past the lock on "My data"

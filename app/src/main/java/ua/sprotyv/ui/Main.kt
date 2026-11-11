@@ -104,11 +104,13 @@ class Main : ComponentActivity() {
         try {
             if (android.os.Build.VERSION.SDK_INT >= 33) registerReceiver(r, filter, android.content.Context.RECEIVER_NOT_EXPORTED) else registerReceiver(r, filter)
             screenOff = r
-        } catch (e: Exception) { }
+        } catch (e: Exception) {
+            // Without it the data still closes by the timer above (onStop), only not the moment the screen goes off
+        }
     }
 
     private fun stopWatchingScreen() {
-        screenOff?.let { try { unregisterReceiver(it) } catch (e: Exception) { } }
+        screenOff?.let { try { unregisterReceiver(it) } catch (e: Exception) { /* already gone */ } }
         screenOff = null
     }
 
