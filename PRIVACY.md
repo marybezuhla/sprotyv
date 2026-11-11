@@ -25,7 +25,11 @@ Android не копіює дані застосунку ні в хмару, ні
 
 ## Як усе стерти
 
-Видаліть застосунок (Налаштування Android → Застосунки → «Спротив» → Видалити). Разом із ним зникають база, документи, ключі в Keystore, налаштування й віджети. Резервні копії та файли, які ви самі зберегли деінде, видаліть окремо.
+У застосунку: Налаштування → «Якщо телефон у чужих руках» → «Стерти всі дані». Спершу видаляються ключі в Keystore, потім база, документи, нотатки, налаштування й копії чисел у віджетах; застосунок закривається. Довідник лишається, бо він вбудований.
+
+Або видаліть застосунок (Налаштування Android → Застосунки → «Спротив» → Видалити): разом із ним зникає все те саме.
+
+Резервні копії та файли, які ви самі зберегли деінде, видаліть окремо.
 
 ---
 
@@ -56,4 +60,8 @@ Android does not copy the app's data to the cloud or to a new phone: this is tur
 
 ## How to erase everything
 
-Uninstall the app (Android Settings → Apps → Sprotyv → Uninstall). The database, documents, keystore keys, settings and widgets go with it. Delete any backups and files you saved elsewhere yourself.
+In the app: Settings → “If the phone is in other hands” → “Erase all data”. The keystore keys go first, then the database, documents, notes, settings and the numbers copied for widgets; the app closes. The guide stays, as it is built in.
+
+Or uninstall the app (Android Settings → Apps → Sprotyv → Uninstall): all the same goes with it.
+
+Delete any backups and files you saved elsewhere yourself.
