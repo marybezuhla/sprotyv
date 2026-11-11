@@ -350,7 +350,7 @@
     <string name="docs_share_title">Share the document?</string>
     <string name="docs_share_warning">The other app gets an unencrypted copy and may keep it, in its cloud or in a chat. Sprotyv removes its own copy a minute after you come back.</string>
     <string name="docs_delete_title">Delete the document?</string>
-    <string name="docs_delete_text">The document is removed from the phone for good. Backups already made still hold it.</string>
+    <string name="docs_delete_text">The document is removed from the phone. Right after, it can still be put back with the button at the bottom of the screen. Backups already made still hold it.</string>
     <string name="docs_zoom">Open larger</string>
     <string name="docs_page">Page %1$d of %2$d</string>
     <string name="docs_photo_title">Photo %1$s</string>
@@ -640,7 +640,6 @@
     <string name="bookmarks_not_secure">Only secure addresses (https://) are kept.</string>
     <string name="bookmarks_no_page">There is no page address here.</string>
     <string name="bookmarks_delete">Delete: %1$s</string>
-    <string name="bookmarks_delete_confirm">Delete the bookmark “%1$s”?</string>
     <string name="bookmarks_too_many">You already have %1$d bookmarks, the most there can be. Delete some you no longer need.</string>
     <string name="days_hours_short">%1$d d %2$d h</string>
     <string name="tile_heat_out">no heat %1$s</string>
@@ -1748,4 +1747,8 @@
     <string name="wipe_word">ERASE</string>
     <string name="wipe_type">To confirm, type: %1$s</string>
     <string name="wipe_yes">Erase</string>
+    <string name="undo">Undo</string>
+    <string name="deleted_named">“%1$s” deleted</string>
+    <string name="deleted_row">Row deleted</string>
+    <string name="deleted_note">Note deleted</string>
 </resources>

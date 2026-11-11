@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.getAndUpdate
 import ua.sprotyv.R
 import ua.sprotyv.content.Content
 import ua.sprotyv.home.Pins
@@ -25,14 +26,32 @@ import ua.sprotyv.home.Tool
  * Quiet: no sound, no system pop-up; TalkBack reads it aloud.
  */
 object Notices {
-    class Notice(val text: String, val action: String? = null, val onAction: (() -> Unit)? = null) {
+    /** [onGone]: runs once if the line goes without its action (timed out, replaced, or the app closed). */
+    class Notice(val text: String, val action: String? = null, val onAction: (() -> Unit)? = null, val onGone: (() -> Unit)? = null) {
         val id = System.nanoTime()
+        private var settled = false
+
+        /** Runs [onAction] or [onGone], never both and never twice. */
+        fun settle(acted: Boolean) {
+            synchronized(this) { if (settled) return; settled = true }
+            if (acted) onAction?.invoke() else onGone?.invoke()
+        }
     }
 
     val current = MutableStateFlow<Notice?>(null)
 
     fun show(text: String, action: String? = null, onAction: (() -> Unit)? = null) {
         current.value = Notice(text, action, onAction)
+    }
+
+    /**
+     * Something was deleted: says so with "Undo". [undo] puts it back; [gone] finishes the deletion
+     * (a document's file, say) once the line has gone without "Undo". A line still waiting when a
+     * new one comes is finished at once, so nothing is left half deleted.
+     */
+    fun deleted(context: Context, text: String, undo: () -> Unit, gone: (() -> Unit)? = null) {
+        val next = Notice(text, context.getString(R.string.undo), undo, gone)
+        current.getAndUpdate { next }?.settle(acted = false)
     }
 
     /** Puts a tile on the home screen and says so; when the home screen is full, says why nothing happened. */
@@ -94,9 +113,15 @@ fun NoticeHost(modifier: Modifier = Modifier) {
     LaunchedEffect(notice?.id) {
         val n = notice ?: return@LaunchedEffect
         host.currentSnackbarData?.dismiss()
-        val result = host.showSnackbar(n.text, actionLabel = n.action, withDismissAction = false, duration = if (n.action != null) SnackbarDuration.Long else SnackbarDuration.Short)
-        if (result == SnackbarResult.ActionPerformed) n.onAction?.invoke()
-        if (Notices.current.value === n) Notices.current.value = null
+        var acted = false
+        try {
+            val result = host.showSnackbar(n.text, actionLabel = n.action, withDismissAction = false, duration = if (n.action != null) SnackbarDuration.Long else SnackbarDuration.Short)
+            acted = result == SnackbarResult.ActionPerformed
+        } finally {
+            // Also when the screen goes away mid-way: a deletion waiting for its line is finished
+            n.settle(acted)
+            if (Notices.current.value === n) Notices.current.value = null
+        }
     }
     SnackbarHost(host, modifier.padding(horizontal = 16.dp, vertical = 8.dp))
 }

@@ -120,6 +120,7 @@ private fun Rows(kind: String, firstLabel: Int, secondLabel: Int, firstHint: Int
     val loaded by remember(kind) { PersonalStore.observe { it.plan().observeRows(kind) } }.collectAsStateWithLifecycle(null)
     val rows = loaded ?: return Loading()
     var editing by remember { mutableStateOf<PlanRow?>(null) }
+    val context = androidx.compose.ui.platform.LocalContext.current
     rows.forEach { r ->
         NavRow(stringResource(firstLabel) + " " + r.first, stringResource(secondLabel) + " " + r.second, ua.sprotyv.home.Group.PREPARE) { editing = r }
     }
@@ -139,6 +140,9 @@ private fun Rows(kind: String, firstLabel: Int, secondLabel: Int, firstHint: Int
                     if (start.id != 0L) {
                         TextButton(onClick = {
                             PersonalStore.save("plan:delete:" + java.util.UUID.randomUUID()) { it.plan().deleteRow(start) }
+                            Notices.deleted(context, context.getString(R.string.deleted_row), undo = {
+                                PersonalStore.save("plan:restore:" + java.util.UUID.randomUUID()) { it.plan().saveRow(start) }
+                            })
                             editing = null
                         }) { Text(stringResource(R.string.delete_row), color = MaterialTheme.colorScheme.error) }
                     }

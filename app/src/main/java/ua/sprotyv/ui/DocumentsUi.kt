@@ -226,13 +226,25 @@ object Docs {
         }
     }
 
+    /**
+     * The row goes at once; the encrypted file stays until "Undo" has passed, then goes too. If the
+     * app is closed in between, the file has no row and the next sweep removes it.
+     */
     fun delete(context: Context, id: Long) {
         val app = context.applicationContext
         PersonalStore.save("doc:delete:$id") { db ->
             val doc = db.documents().get(id) ?: return@save
+            val files = DocFiles.of(app)
+            files.hold(doc.file)
             db.documents().delete(id)
-            DocFiles.of(app).delete(doc.file)
-            doc.key.fill(0)
+            Notices.deleted(app, app.getString(R.string.deleted_named, doc.title), undo = {
+                PersonalStore.save("doc:restore:$id") { it.documents().add(doc); files.done(doc.file) }
+            }, gone = {
+                // Wiped before the file goes, even if deleting it fails
+                doc.key.fill(0)
+                files.delete(doc.file)
+                files.done(doc.file)
+            })
         }
     }
 

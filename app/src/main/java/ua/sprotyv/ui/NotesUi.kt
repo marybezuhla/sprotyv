@@ -424,9 +424,18 @@ fun NoteEditScreen(id: Long, nav: Nav) {
             confirmButton = {
                 TextButton(onClick = {
                     confirmDelete = false
+                    val id = first.id
+                    val app = context.applicationContext
                     // Same key: a save still waiting is replaced by the deletion
-                    PersonalStore.save(key) { it.notes().delete(first.id) }
-                    Notify.setNoteReminder(context, first.id, null)
+                    PersonalStore.save(key) { db ->
+                        val was = db.notes().get(id)
+                        db.notes().delete(id)
+                        if (was == null) return@save Notify.setNoteReminder(app, id, null)
+                        // The reminder goes only once "Undo" has passed, so undoing brings it back too
+                        Notices.deleted(app, app.getString(R.string.deleted_note), undo = {
+                            PersonalStore.save("note-restore:$id") { it.notes().save(was) }
+                        }, gone = { Notify.setNoteReminder(app, id, null) })
+                    }
                     nav.back()
                 }) { Text(stringResource(R.string.delete_row)) }
             },
