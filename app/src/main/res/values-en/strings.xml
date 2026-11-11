@@ -1750,4 +1750,5 @@
     <string name="deleted_row">Row deleted</string>
     <string name="deleted_note">Note deleted</string>
     <string name="wipe_erasing">Erasing all data… The app closes by itself.</string>
+    <string name="about_app_ai">The code was written with AI (Claude, Anthropic) directed and tested by the author.</string>
 </resources>

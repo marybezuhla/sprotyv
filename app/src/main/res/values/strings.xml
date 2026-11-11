@@ -1758,4 +1758,5 @@
     <string name="deleted_row">Рядок видалено</string>
     <string name="deleted_note">Нотатку видалено</string>
     <string name="wipe_erasing">Стираю всі дані… Застосунок закриється сам.</string>
+    <string name="about_app_ai">Код написано за допомогою ШІ (Claude, Anthropic) під керівництвом і з тестуванням авторки.</string>
 </resources>

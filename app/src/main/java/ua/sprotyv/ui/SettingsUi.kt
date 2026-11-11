@@ -372,6 +372,8 @@ internal fun AboutApp() {
         androidx.compose.foundation.layout.Column(verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(6.dp)) {
             Text(stringResource(R.string.about_app_version, version), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
             Text(stringResource(R.string.about_app_licence), style = MaterialTheme.typography.bodyMedium)
+            // Said plainly, as in the README
+            Text(stringResource(R.string.about_app_ai), style = MaterialTheme.typography.bodyMedium)
             Text(stringResource(R.string.about_app_libraries), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
