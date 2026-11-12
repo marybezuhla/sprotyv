@@ -49,7 +49,7 @@
   "id": "air-alert-after",
   "card": "air-alert",
   "step": 6,
-  "situation": "After explosions nearby, the all-clear has sounded. A neighbour asks you to go and see what happened.",
+  "situation": "After explosions nearby, the all-clear was announced. A neighbour asks you to go and see what happened.",
   "options": [
    {
     "text": "I'll wait at least 40 minutes.",
@@ -846,7 +846,7 @@
    {
     "text": "I'll go outside.",
     "right": false,
-    "why": "Go out only when a grown-up says so or you hear “All clear”."
+    "why": "Go out only when a grown-up says so or “All clear” is announced."
    }
   ]
  },
