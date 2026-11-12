@@ -11,6 +11,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
@@ -175,6 +177,22 @@ class ScreensTest {
     @Test fun weaponsBig() = shot("34-weapons-big", dark = true, big = true) { WeaponsScreen(nav) }
     @Test fun comms() = shot("30-comms-dark", dark = true) { CommsScreen(nav) }
     // Settings in English with large text: rows of choices must wrap, never break a word
+    // "Erase all data": the line in Settings, then the question as the dialog shows it (tests draw no dialogs)
+    @androidx.compose.runtime.Composable
+    private fun WipeLook(typed: String) = androidx.compose.foundation.layout.Column(
+        Modifier.fillMaxSize().padding(16.dp),
+        verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(12.dp),
+    ) {
+        ua.sprotyv.ui.WipeAll()
+        androidx.compose.material3.HorizontalDivider()
+        androidx.compose.material3.Text(androidx.compose.ui.res.stringResource(ua.sprotyv.R.string.wipe_confirm_title), style = MaterialTheme.typography.headlineSmall)
+        ua.sprotyv.ui.WipeQuestion(typed, {}) {}
+        androidx.compose.material3.HorizontalDivider()
+        androidx.compose.material3.Text(androidx.compose.ui.res.stringResource(ua.sprotyv.R.string.wipe_erasing), style = MaterialTheme.typography.bodyLarge)
+    }
+    @Test fun wipe() = shot("32-wipe") { WipeLook("СТЕРТИ") }
+    @Test fun wipeBigDark() = shot("32-wipe-big-dark", dark = true, big = true) { WipeLook("") }
+
     @Test fun settingsBig() { mode(Mode.FULL); shot("31-settings-big", big = true) { SettingsScreen(HomePrefs.load(app), nav) } }
     @Test fun moz() { mode(Mode.FULL); shot("32-moz-big", big = true) { MozScreen(content, 4, nav) } }
 }

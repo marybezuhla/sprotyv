@@ -111,21 +111,7 @@ internal fun WipeAll() {
         AlertDialog(
             onDismissRequest = { ask = false },
             title = { Text(stringResource(R.string.wipe_confirm_title)) },
-            text = {
-                // Scrolls: with the largest text and the keyboard up the field must still be reachable
-                Column(Modifier.verticalScroll(rememberScrollState())) {
-                    Text(stringResource(R.string.wipe_confirm_text))
-                    OutlinedTextField(
-                        value = typed,
-                        onValueChange = { typed = it.take(20) },
-                        label = { Text(stringResource(R.string.wipe_type)) },
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters, autoCorrectEnabled = false, imeAction = ImeAction.Done),
-                        keyboardActions = KeyboardActions(onDone = { if (ready) go() }),
-                        modifier = Modifier.fillMaxWidth(),
-                    )
-                }
-            },
+            text = { WipeQuestion(typed, { typed = it }) { if (ready) go() } },
             confirmButton = {
                 TextButton(onClick = { go() }, enabled = ready, modifier = Modifier.heightIn(min = 48.dp)) {
                     Text(stringResource(R.string.wipe_yes), color = if (ready) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant)
@@ -143,6 +129,26 @@ internal fun WipeAll() {
             properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
             text = { Text(stringResource(R.string.wipe_erasing), style = MaterialTheme.typography.bodyLarge) },
             confirmButton = { },
+        )
+    }
+}
+
+/**
+ * The question's own words and the field for the word, apart from the dialog so tests can draw it
+ * (they do not draw dialogs). Scrolls: with the largest text and the keyboard up the field stays reachable.
+ */
+@Composable
+internal fun WipeQuestion(typed: String, onTyped: (String) -> Unit, onDone: () -> Unit) {
+    Column(Modifier.verticalScroll(rememberScrollState())) {
+        Text(stringResource(R.string.wipe_confirm_text))
+        OutlinedTextField(
+            value = typed,
+            onValueChange = { onTyped(it.take(20)) },
+            label = { Text(stringResource(R.string.wipe_type)) },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters, autoCorrectEnabled = false, imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(onDone = { onDone() }),
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }
