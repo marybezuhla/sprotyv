@@ -339,7 +339,7 @@ internal fun LanguageChoice() {
         Text(stringResource(R.string.lang_old_phone), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         return
     }
-    // Android's own per-app language: AppCompat's helper needs an AppCompat window, which this app has not
+    // Android's own per-app language, without the AppCompat library
     val context = LocalContext.current
     val current = AppLanguage.get(context)
     ChoiceRow {
