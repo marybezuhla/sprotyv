@@ -9,7 +9,7 @@
  "source": "https://github.com/snegireff/dovidnyk-vyzhyvannia",
  "commit": "6a3c6fb6e7ecd160e864232d0f1a47cd928fe928",
  "license": "CC BY-SA 4.0",
- "changes": "Converted for display in the app: markup changed, figures kept as images, the sections of Appendix A numbered A.1–A.5, the cover disclaimer moved to “About the guide”, the rest of the cover, the contents and the note pages left out. Three figures from open sources added (public domain; author in the caption): fig. 11.2, 15.5, 15.6. English translation by Sprotyv from the Ukrainian original (CC BY-SA 4.0); the meaning of the chapters is unchanged, except: in 4.8 and 14.4 official websites, apps and ways named by the OVA instead of chatbots and Telegram channels (the app does not recommend Telegram); in 13.1 and 18.1 CoMaps, Organic Maps or OsmAnd instead of maps.me; in the table of 6.2 the doses for children replaced by a reference to the official Ministry of Health announcement or a doctor, and in 7.13 the activated charcoal dose for children by a reference to 103 or a doctor (doses for children appear in the app only after a paediatrician's review). In November 2026 the advice was checked against current guidelines (Resuscitation Council UK and ERC 2025, Ministry of Health order No. 441, NHS, USDA, WHO) and corrected in 7.2, 7.4–7.6, 7.8, 7.10, 7.11, 7.16, 9.4, 12.1–12.3, 13.2, 16.2, 20.1, 20.5, 21.2, 22.5, 27.5 and 29.4; each change with its source is in scripts/content/adaptation/GUIDE-REVIEW.md in the app's repository.",
+ "changes": "Converted for display in the app: markup changed, figures kept as images, the sections of Appendix A numbered A.1–A.5, the cover disclaimer moved to “About the guide”, the rest of the cover, the contents and the note pages left out. Three figures from open sources added (public domain; author in the caption): fig. 11.2, 15.5, 15.6. English translation by Sprotyv from the Ukrainian original (CC BY-SA 4.0); the meaning of the chapters is unchanged, except: in 4.8 and 14.4 official websites, apps and ways named by the OVA instead of chatbots and Telegram channels (the app does not recommend Telegram); in 13.1 and 18.1 CoMaps, Organic Maps or OsmAnd instead of maps.me; in the table of 6.2 the doses for children replaced by a reference to the official Ministry of Health announcement or a doctor, and in 7.13 the activated charcoal dose for children by a reference to 103 or a doctor (doses for children appear in the app only after a paediatrician's review). In November 2026 the advice was checked against current guidelines (Resuscitation Council UK and ERC 2025, Ministry of Health order No. 441, NHS, USDA, WHO) and corrected in 7.1, 7.2, 7.4–7.6, 7.8, 7.10, 7.11, 7.16, 9.4, 12.1–12.3, 13.2, 16.2, 20.1, 20.5, 21.2, 22.5, 27.5 and 29.4; each change with its source is in scripts/content/adaptation/GUIDE-REVIEW.md in the app's repository.",
  "chapters": [
   {
    "id": "ch1",
@@ -2110,7 +2110,7 @@
          "cells": [
           "**R**: Respiration",
           "Breathing (rate, chest wounds)",
-          "Penetrating chest wound: occlusive seal (sec. 7.5)"
+          "Penetrating chest wound: a seal, vented if possible (sec. 7.5)"
          ]
         },
         {
@@ -2290,7 +2290,7 @@
        "kind": "bullets",
        "items": [
         {
-         "text": "**Penetrating chest wound** (air whistling, frothy blood): cover it with your palm at once. Best is a vented chest seal (with a valve), which lets air out. Without one, an airtight (occlusive) seal or plastic film/a bag taped down on all sides (apply it as the person breathes out), as the Ministry of Health order says. If the condition suddenly gets worse after sealing (increasing breathlessness), peel back one edge, let the air out, stick it down again. Position: half-sitting or lying on the injured side."
+         "text": "**Penetrating chest wound** (air whistling, frothy blood): best is a vented chest seal (with a valve), which lets air out. Without one, an airtight (occlusive) seal or plastic film/a bag taped down on all sides (apply it as the person breathes out), as the Ministry of Health order says. If the condition suddenly gets worse after sealing (increasing breathlessness), peel back one edge, let the air out, stick it down again. Position: half-sitting or lying on the injured side."
         },
         {
          "text": "**Abdominal wound with protruding organs:** do NOT push them back. Cover with a clean damp cloth, film on top, a loose bandage. Knees bent. Give nothing to drink or eat (moistening the lips is allowed)."
@@ -2480,7 +2480,7 @@
       },
       {
        "t": "p",
-       "text": "Signs: hot dry or heavily sweating skin, high temperature, confusion, nausea. Into the shade, call 103, undress and cool at once. Best is to put the body up to the neck in cool or cold water (a bath, a barrel, the edge of a lake; head above water) and keep it there for at least 15 minutes or until the person comes round. If that is not possible: a cold shower, wet sheets, cold packs on the neck/armpits/groin and fanning. If conscious, cool drinks in small sips. If unconscious: recovery position, cooling, urgent help."
+       "text": "Signs: hot dry or heavily sweating skin, high temperature, confusion, nausea. Into the shade, call 103, undress and cool at once. Best is to put the body up to the neck in cool or cold water (a bath, a barrel, the edge of a lake; head above water) and keep it there for up to 15 minutes or until the confusion passes, whichever comes first; never leave the person alone in the water. If that is not possible: a cold shower, wet sheets, cold packs on the neck/armpits/groin and fanning. If conscious, cool drinks in small sips. If unconscious: recovery position, cooling, urgent help."
       },
       {
        "t": "h",
@@ -2522,7 +2522,7 @@
          "text": "**Stroke, the FAST test (Ukrainian «ОРМЧ»):** **F**ace drooping (ask them to smile), **A**rm does not rise or drops, **S**peech slurred or they do not understand, **T**ime: call 103 immediately and remember when it started. Give nothing to eat or drink, lay them down with the head raised, do not leave a conscious person alone. The treatment window is 3–4.5 hours: \"let them lie down, it will pass\" costs brain tissue."
         },
         {
-         "text": "**Sudden drop in blood sugar (a diabetic or a hungry person):** trembling, sweating, irritability, confusion, \"drunk\" behaviour. Conscious: 15–20 g of sugar immediately (3–4 teaspoons of sugar or glucose tablets, or a glass of juice or a sugary, not diet, drink), then bread/biscuits; if no better in 15 min, repeat. Unconscious: nothing in the mouth, recovery position, do not put honey/sugar in the cheek, 103. If you do not know whether sugar is high or low, give something sweet: sugar does not kill someone whose level is high, while low sugar kills within minutes."
+         "text": "**Sudden drop in blood sugar (a diabetic or a hungry person):** trembling, sweating, irritability, confusion, \"drunk\" behaviour. Conscious: 15–20 g of sugar immediately (4–5 teaspoons of sugar or glucose tablets, or half a glass of juice or a sugary, not diet, drink), then bread/biscuits; if no better in 15 min, repeat. Unconscious: nothing in the mouth, recovery position, do not put honey/sugar in the cheek, 103. If you do not know whether sugar is high or low, give something sweet: sugar does not kill someone whose level is high, while low sugar kills within minutes."
         },
         {
          "text": "**Electric shock:** do NOT touch the person until the power is off (circuit breaker, plug) or the wire has been pushed away with a dry stick/plastic; high-voltage line: no closer than 8–10 m, only power engineers. Then: breathing/CPR, look for entry and exit burns (treat both as burns); even someone who seems \"fine\" should see a medic: heart rhythm problems can appear hours later."
@@ -3985,7 +3985,7 @@
        "kind": "bullets",
        "items": [
         {
-         "text": "Moss and lichen grow where it is shady and damp: often on the north side, but in forests and towns this sign often misleads."
+         "text": "Moss and lichen grow where it is shady and damp: often on the north side, but this sign is unreliable, especially in forests and towns."
         },
         {
          "text": "Anthills are on the south side of trees/stumps; the south slope of an anthill is gentler."
@@ -6117,7 +6117,7 @@
          "text": "The head is coming out: support it gently with your palm, without pulling; ask her to \"breathe, don't push\" to prevent tearing. Cord around the neck? Carefully slip it over the head. After the head, the shoulders come out by themselves within 1–2 contractions; catch the baby firmly (slippery), at the level of the mother's body."
         },
         {
-         "text": "The baby: dry them, place them on the mother's belly/chest skin to skin, cover both with something warm. If not breathing after 30 seconds, rub the back and soles of the feet, wipe visible mucus from the mouth and nose with a clean cloth (do not put a finger in the mouth), keep the head level (do not tilt it back or bend it forward). If not breathing after a minute, 5 slow breaths \"mouth to mouth and nose\" very gently, then a breath about every 2 seconds, 103; if the baby does not respond after 30 seconds of these breaths, 3 compressions with two thumbs, hands wrapped around the chest, to 1 breath."
+         "text": "The baby: dry them, place them on the mother's belly/chest skin to skin, cover both with something warm. If not breathing after 30 seconds, rub the back and soles of the feet, wipe visible mucus from the mouth and nose with a clean cloth (do not put a finger in the mouth), keep the head level (do not tilt it back or bend it forward). If not breathing after a minute, 5 slow breaths \"mouth to mouth and nose\" very gently, then a breath about every 2 seconds, 103; if the baby does not start breathing after 30 seconds of these breaths, 3 compressions with two thumbs, hands wrapped around the chest, to 1 breath."
         },
         {
          "text": "Do not rush the cord: when it stops pulsing (3–5 minutes), tie it with boiled threads in two places (10 and 15 cm from the baby's belly), cut between them with clean scissors. Nothing sterile? Do not cut at all; wrap the placenta in a bag next to the baby, wait for medics."
@@ -7913,7 +7913,7 @@
          "head": false,
          "cells": [
           "Safe temperature for cooked meat",
-          "70°C+ inside (poultry: 75°C+); the colour of juices and meat is no reliable sign"
+          "71°C+ inside (poultry: 75°C+); the colour of juices and meat is not a reliable sign"
          ]
         },
         {
