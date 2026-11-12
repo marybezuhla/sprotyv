@@ -523,29 +523,12 @@ fun SafeScreen(nav: Nav) {
         return
     }
     Text(stringResource(R.string.safe_status), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, modifier = Modifier.semantics { heading() })
-    SafeStatus.entries.forEach { st ->
-        val on = st == status
-        Card(
-            onClick = {
-                status = st
-                text = when (st) {
-                    SafeStatus.OK -> okText
-                    SafeStatus.HELP -> helpText
-                    SafeStatus.QUIET -> quietText
-                }
-            },
-            colors = CardDefaults.cardColors(
-                // "All is well" green, "I need help" danger orange, "cannot talk" neutral
-                containerColor = if (!on) MaterialTheme.colorScheme.surface else safeTint(st).container,
-            ),
-            border = BorderStroke(if (on) 2.dp else 1.dp, if (on) safeTint(st).ink else MaterialTheme.colorScheme.outlineVariant),
-            modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).semantics { selected = on },
-        ) {
-            Row(Modifier.padding(horizontal = 16.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically) {
-                Text(st.mark, style = MaterialTheme.typography.titleLarge, modifier = Modifier.clearAndSetSemantics { })
-                Spacer(Modifier.width(12.dp))
-                Text(stringResource(st.title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-            }
+    SafeStatusCards(status) { st ->
+        status = st
+        text = when (st) {
+            SafeStatus.OK -> okText
+            SafeStatus.HELP -> helpText
+            SafeStatus.QUIET -> quietText
         }
     }
     if (status == null) {
@@ -577,6 +560,37 @@ fun SafeScreen(nav: Nav) {
             OutlinedButton(onClick = { draft = text; editingText = false }, modifier = Modifier.weight(1f).heightIn(min = 48.dp)) { Text(stringResource(R.string.cancel)) }
         }
     }
+    SafeSend(list, text)
+}
+
+
+/** The three ready messages as large cards; colour and a mark tell them apart, never colour alone. */
+@Composable
+private fun SafeStatusCards(status: SafeStatus?, onPick: (SafeStatus) -> Unit) {
+    SafeStatus.entries.forEach { st ->
+        val on = st == status
+        Card(
+            onClick = { onPick(st) },
+            colors = CardDefaults.cardColors(
+                // "All is well" green, "I need help" danger orange, "cannot talk" neutral
+                containerColor = if (!on) MaterialTheme.colorScheme.surface else safeTint(st).container,
+            ),
+            border = BorderStroke(if (on) 2.dp else 1.dp, if (on) safeTint(st).ink else MaterialTheme.colorScheme.outlineVariant),
+            modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).semantics { selected = on },
+        ) {
+            Row(Modifier.padding(horizontal = 16.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically) {
+                Text(st.mark, style = MaterialTheme.typography.titleLarge, modifier = Modifier.clearAndSetSemantics { })
+                Spacer(Modifier.width(12.dp))
+                Text(stringResource(st.title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+            }
+        }
+    }
+}
+
+/** Sending: one SMS (or WhatsApp) to each person, all at once, or through Signal; the owner presses Send there. */
+@Composable
+private fun SafeSend(list: List<Person>, text: String) {
+    val context = LocalContext.current
     // One SMS to each person is the surest: several numbers in one go may be sent as an MMS, which needs mobile data
     Text(stringResource(R.string.safe_each), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, modifier = Modifier.semantics { heading() })
     list.forEach { p ->

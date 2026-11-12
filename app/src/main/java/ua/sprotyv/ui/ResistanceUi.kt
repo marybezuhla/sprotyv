@@ -243,6 +243,34 @@ fun PathScreen(nav: Nav) {
             .joinToString(",") { steps -> "${steps.count { it.key in done }}/${steps.size}" }
         if (HomePrefs.load(context).path != share) { HomePrefs.update(context) { it.copy(path = share) }; Widgets.update(context) }
     }
+    PathWeek(path, done, nav, ::change)
+    Block(
+        stringResource(R.string.path_title), Group.PREPARE, tint = resist(),
+        summary = stringResource(R.string.path_summary, count, path.size),
+        leading = { ReadyRing(count.toFloat() / path.size, "$count/${path.size}") },
+    ) {
+        Text(stringResource(R.string.path_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+    val firstLevel = path.firstOrNull { it.key !in done }?.level
+    PATH_LEVELS.forEachIndexed { level, title ->
+        val steps = path.filter { it.level == level }
+        if (steps.isEmpty()) return@forEachIndexed
+        val got = steps.count { it.key in done }
+        Block(stringResource(title), Group.PREPARE, tint = resist(), padded = false, foldable = true, startOpen = level == firstLevel, trailing = {
+            Text((if (got == steps.size) "✓\u2002" else "") + stringResource(R.string.ready_count, got, steps.size), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+        }) {
+            steps.forEachIndexed { i, s ->
+                if (i > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                PathStepRow(s, done, owned, today, nav, ::change)
+            }
+        }
+    }
+}
+
+
+/** This week's step: one at a time, calmly; with little strength it asks nothing, with plenty it shows one more. */
+@Composable
+private fun PathWeek(path: List<PathStep>, done: Set<String>, nav: Nav, change: (String, Boolean) -> Unit) {
     // This week's step: the first one not done yet, in the order of the path. One at a time, calmly
     var justDone by androidx.compose.runtime.saveable.rememberSaveable { androidx.compose.runtime.mutableStateOf<String?>(null) }
     val next = path.firstOrNull { it.key !in done }
@@ -273,55 +301,40 @@ fun PathScreen(nav: Nav) {
             }
         }
     }
-    Block(
-        stringResource(R.string.path_title), Group.PREPARE, tint = resist(),
-        summary = stringResource(R.string.path_summary, count, path.size),
-        leading = { ReadyRing(count.toFloat() / path.size, "$count/${path.size}") },
+}
+
+/** One step of the path: ticked by the owner, with its check (or a quiet offer to repeat it) and where to learn it. */
+@Composable
+private fun PathStepRow(s: PathStep, done: Set<String>, owned: Steps?, today: Long, nav: Nav, change: (String, Boolean) -> Unit) {
+    val on = s.key in done
+    Row(
+        Modifier.fillMaxWidth().heightIn(min = 56.dp).doneRow(on).toggleable(value = on, role = Role.Checkbox) { change(s.key, it) }
+            .padding(end = 8.dp, top = 4.dp, bottom = 4.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(stringResource(R.string.path_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    }
-    val firstLevel = path.firstOrNull { it.key !in done }?.level
-    PATH_LEVELS.forEachIndexed { level, title ->
-        val steps = path.filter { it.level == level }
-        if (steps.isEmpty()) return@forEachIndexed
-        val got = steps.count { it.key in done }
-        Block(stringResource(title), Group.PREPARE, tint = resist(), padded = false, foldable = true, startOpen = level == firstLevel, trailing = {
-            Text((if (got == steps.size) "✓\u2002" else "") + stringResource(R.string.ready_count, got, steps.size), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
-        }) {
-            steps.forEachIndexed { i, s ->
-                if (i > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-                val on = s.key in done
-                Row(
-                    Modifier.fillMaxWidth().heightIn(min = 56.dp).doneRow(on).toggleable(value = on, role = Role.Checkbox) { change(s.key, it) }
-                        .padding(end = 8.dp, top = 4.dp, bottom = 4.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Checkbox(checked = on, onCheckedChange = null, modifier = Modifier.padding(horizontal = 12.dp), colors = doneCheckbox())
-                    androidx.compose.foundation.layout.Column(Modifier.weight(1f)) {
-                        Text(stringResource(s.words), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface)
-                        // A step that can be checked: the mark when passed, or the way to the check
-                        if (s.key in PATH_CHECKS) {
-                            if (s.key + TESTED in done && !(owned?.repeatDue(s.key, today) == true)) {
-                                Text(stringResource(R.string.path_tested), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                            } else if (s.key + TESTED in done) {
-                                // Passed a while ago: a quiet offer to repeat, nothing taken away
-                                androidx.compose.material3.TextButton(onClick = { nav.go(Route.PathCheck(s.key)) }, contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp), modifier = Modifier.heightIn(min = 40.dp)) {
-                                    Text(stringResource(R.string.path_repeat), style = MaterialTheme.typography.labelLarge)
-                                }
-                            } else {
-                                androidx.compose.material3.TextButton(onClick = { nav.go(Route.PathCheck(s.key)) }, contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp), modifier = Modifier.heightIn(min = 40.dp)) {
-                                    Text(stringResource(R.string.path_check), style = MaterialTheme.typography.labelLarge)
-                                }
-                            }
-                        }
+        Checkbox(checked = on, onCheckedChange = null, modifier = Modifier.padding(horizontal = 12.dp), colors = doneCheckbox())
+        androidx.compose.foundation.layout.Column(Modifier.weight(1f)) {
+            Text(stringResource(s.words), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface)
+            // A step that can be checked: the mark when passed, or the way to the check
+            if (s.key in PATH_CHECKS) {
+                if (s.key + TESTED in done && !(owned?.repeatDue(s.key, today) == true)) {
+                    Text(stringResource(R.string.path_tested), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                } else if (s.key + TESTED in done) {
+                    // Passed a while ago: a quiet offer to repeat, nothing taken away
+                    androidx.compose.material3.TextButton(onClick = { nav.go(Route.PathCheck(s.key)) }, contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp), modifier = Modifier.heightIn(min = 40.dp)) {
+                        Text(stringResource(R.string.path_repeat), style = MaterialTheme.typography.labelLarge)
                     }
-                    // A small book: where to learn it, so the step's words keep the width
-                    s.learn?.let { r ->
-                        androidx.compose.material3.IconButton(onClick = { nav.go(r) }, modifier = Modifier.size(48.dp)) {
-                            androidx.compose.material3.Icon(androidx.compose.ui.graphics.vector.ImageVector.vectorResource(R.drawable.tab_know), contentDescription = stringResource(R.string.path_learn), tint = resist().ink)
-                        }
+                } else {
+                    androidx.compose.material3.TextButton(onClick = { nav.go(Route.PathCheck(s.key)) }, contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp), modifier = Modifier.heightIn(min = 40.dp)) {
+                        Text(stringResource(R.string.path_check), style = MaterialTheme.typography.labelLarge)
                     }
                 }
+            }
+        }
+        // A small book: where to learn it, so the step's words keep the width
+        s.learn?.let { r ->
+            androidx.compose.material3.IconButton(onClick = { nav.go(r) }, modifier = Modifier.size(48.dp)) {
+                androidx.compose.material3.Icon(androidx.compose.ui.graphics.vector.ImageVector.vectorResource(R.drawable.tab_know), contentDescription = stringResource(R.string.path_learn), tint = resist().ink)
             }
         }
     }

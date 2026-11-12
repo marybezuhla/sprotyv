@@ -267,20 +267,7 @@ fun NoteEditScreen(id: Long, nav: Nav) {
         PersonalStore.save(key) { db -> if (db.notes().get(n.id) != null) db.notes().save(n) }
         saved = t
     }
-    // A note left empty goes; decided on the worker, after every save before it
-    DisposableEffect(first.id) {
-        onDispose {
-            val gone = first.id
-            // "My experience" opened and left as it came (only the questions): nothing was written, so it goes too
-            val untouched = experienceTemplate(context).lines().map { it.trim() }
-            PersonalStore.save("note-empty:$gone") { db ->
-                db.notes().get(gone)?.let { n ->
-                    val lines = listOf(n.title, n.text).filter { it.isNotBlank() }.joinToString("\n").lines().map { it.trim() }.filter { it.isNotEmpty() }
-                    if (lines.isEmpty() || lines == untouched.filter { it.isNotEmpty() }) db.notes().delete(gone)
-                }
-            }
-        }
-    }
+    ForgetIfEmpty(first.id)
     // A note opens to be read; its words change only after "Change", so a stray touch spoils nothing.
     // A new (empty) note opens ready to write, with the cursor in it
     var editing by androidx.compose.runtime.saveable.rememberSaveable(first.id) { mutableStateOf(saved.isEmpty() || EditGuard.drafts.containsKey(key)) }
@@ -290,7 +277,7 @@ fun NoteEditScreen(id: Long, nav: Nav) {
         EditGuard.mark(key, changed)
         if (changed) EditGuard.drafts[key] = text else EditGuard.drafts.remove(key)
     }
-    val activity = context as? android.app.Activity
+    val activity = androidx.activity.compose.LocalActivity.current
     DisposableEffect(key) { onDispose { if (activity?.isChangingConfigurations != true) { EditGuard.mark(key, false); EditGuard.drafts.remove(key) } } }
     val focus = remember { androidx.compose.ui.focus.FocusRequester() }
     androidx.compose.runtime.LaunchedEffect(first.id, editing) { if (editing && text.isEmpty()) runCatching { focus.requestFocus() } }
@@ -320,31 +307,54 @@ fun NoteEditScreen(id: Long, nav: Nav) {
     SendOpenly(whole)
     if (whole.isNotBlank() && !fits) Text(stringResource(R.string.notes_too_long_for_qr), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     Text(stringResource(R.string.notes_saved_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    if (confirmDelete) {
-        AlertDialog(
-            onDismissRequest = { confirmDelete = false },
-            text = { SensitiveWindow(); Text(stringResource(R.string.notes_delete_confirm)) },
-            confirmButton = {
-                TextButton(onClick = {
-                    confirmDelete = false
-                    val id = first.id
-                    val app = context.applicationContext
-                    // Same key: a save still waiting is replaced by the deletion
-                    PersonalStore.save(key) { db ->
-                        val was = db.notes().get(id)
-                        db.notes().delete(id)
-                        if (was == null) return@save Notify.setNoteReminder(app, id, null)
-                        // The reminder goes only once "Undo" has passed, so undoing brings it back too
-                        Notices.deleted(app, app.getString(R.string.deleted_note), undo = {
-                            PersonalStore.save("note-restore:$id") { it.notes().save(was) }
-                        }, gone = { Notify.setNoteReminder(app, id, null) })
-                    }
-                    nav.back()
-                }) { Text(stringResource(R.string.delete_row)) }
-            },
-            dismissButton = { TextButton(onClick = { confirmDelete = false }) { Text(stringResource(R.string.cancel)) } },
-        )
+    if (confirmDelete) NoteDeleteQuestion(key, first.id, nav) { confirmDelete = false }
+}
+
+
+/** A note left empty (or "My experience" left with only its questions) goes when the screen does; decided on the worker, after every save. */
+@Composable
+private fun ForgetIfEmpty(gone: Long) {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    DisposableEffect(gone) {
+        onDispose {
+            // "My experience" opened and left as it came (only the questions): nothing was written, so it goes too
+            val untouched = experienceTemplate(context).lines().map { it.trim() }
+            PersonalStore.save("note-empty:$gone") { db ->
+                db.notes().get(gone)?.let { n ->
+                    val lines = listOf(n.title, n.text).filter { it.isNotBlank() }.joinToString("\n").lines().map { it.trim() }.filter { it.isNotEmpty() }
+                    if (lines.isEmpty() || lines == untouched.filter { it.isNotEmpty() }) db.notes().delete(gone)
+                }
+            }
+        }
     }
+}
+
+/** "Delete this note?": it goes at once, with "Undo" for a while; its reminder goes only once "Undo" has passed. */
+@Composable
+private fun NoteDeleteQuestion(key: String, id: Long, nav: Nav, onClose: () -> Unit) {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    AlertDialog(
+        onDismissRequest = { onClose() },
+        text = { SensitiveWindow(); Text(stringResource(R.string.notes_delete_confirm)) },
+        confirmButton = {
+            TextButton(onClick = {
+                onClose()
+                val app = context.applicationContext
+                // Same key: a save still waiting is replaced by the deletion
+                PersonalStore.save(key) { db ->
+                    val was = db.notes().get(id)
+                    db.notes().delete(id)
+                    if (was == null) return@save Notify.setNoteReminder(app, id, null)
+                    // The reminder goes only once "Undo" has passed, so undoing brings it back too
+                    Notices.deleted(app, app.getString(R.string.deleted_note), undo = {
+                        PersonalStore.save("note-restore:$id") { it.notes().save(was) }
+                    }, gone = { Notify.setNoteReminder(app, id, null) })
+                }
+                nav.back()
+            }) { Text(stringResource(R.string.delete_row)) }
+        },
+        dismissButton = { TextButton(onClick = { onClose() }) { Text(stringResource(R.string.cancel)) } },
+    )
 }
 
 /** A note as it reads: plain words, or a list whose boxes can be ticked; [onTick] gets the whole new text. */
