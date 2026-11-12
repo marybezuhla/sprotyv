@@ -47,13 +47,13 @@
    "30.2"
   ],
   "call": "",
-  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 3.3, 30.2; English translation by Sprotyv",
-  "checkedOn": "2026-10-30",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 3.3, 30.2; Cabinet of Ministers resolution No. 1092 of 04.09.2026; English translation by Sprotyv",
+  "checkedOn": "2026-11-12",
   "reviewedBy": "",
   "steps": [
    {
     "action": "Put on shoes and go straight to the two-wall zone (hallway, bathroom), or to the shelter if it is in your building.",
-    "why": "This is right whatever the threat: ballistic missiles give 1–3 minutes or no time at all.",
+    "why": "This is right whatever the threat: ballistic missiles give 1–3 minutes or no time at all. The threat level is announced by voice. Red (siren for 1 minute): missiles or a massed drone attack. Yellow (30 seconds): drones.",
     "figure": "3.2"
    },
    {
@@ -78,7 +78,7 @@
    },
    {
     "action": "Leave only after the all-clear. After explosions nearby, wait at least 40 minutes.",
-    "why": "A repeat strike on the same spot can come 10–40 minutes later, sometimes 1–2 hours later.",
+    "why": "The all-clear is announced by voice only, with no siren: follow an alert app or the radio. A repeat strike on the same spot can come 10–40 minutes later, sometimes 1–2 hours later.",
     "wait": 40
    }
   ]

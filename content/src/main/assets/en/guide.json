@@ -9,7 +9,7 @@
  "source": "https://github.com/snegireff/dovidnyk-vyzhyvannia",
  "commit": "6a3c6fb6e7ecd160e864232d0f1a47cd928fe928",
  "license": "CC BY-SA 4.0",
- "changes": "Converted for display in the app: markup changed, figures kept as images, the sections of Appendix A numbered A.1–A.5, the cover disclaimer moved to “About the guide”, the rest of the cover, the contents and the note pages left out. Three figures from open sources added (public domain; author in the caption): fig. 11.2, 15.5, 15.6. English translation by Sprotyv from the Ukrainian original (CC BY-SA 4.0); the meaning of the chapters is unchanged, except: in 4.8 and 14.4 official websites, apps and ways named by the OVA instead of chatbots and Telegram channels (the app does not recommend Telegram); in 13.1 and 18.1 CoMaps, Organic Maps or OsmAnd instead of maps.me; in the table of 6.2 the doses for children replaced by a reference to the official Ministry of Health announcement or a doctor, and in 7.13 the activated charcoal dose for children by a reference to 103 or a doctor (doses for children appear in the app only after a paediatrician's review). In November 2026 the advice was checked against current guidelines (Resuscitation Council UK and ERC 2025, Ministry of Health order No. 441, NHS, USDA, WHO) and corrected in 7.1, 7.2, 7.4–7.6, 7.8, 7.10, 7.11, 7.16, 9.4, 12.1–12.3, 13.2, 16.2, 20.1, 20.5, 21.2, 22.5, 27.5 and 29.4; each change with its source is in scripts/content/adaptation/GUIDE-REVIEW.md in the app's repository.",
+ "changes": "Converted for display in the app: markup changed, figures kept as images, the sections of Appendix A numbered A.1–A.5, the cover disclaimer moved to “About the guide”, the rest of the cover, the contents and the note pages left out. Three figures from open sources added (public domain; author in the caption): fig. 11.2, 15.5, 15.6. English translation by Sprotyv from the Ukrainian original (CC BY-SA 4.0); the meaning of the chapters is unchanged, except: in 4.8 and 14.4 official websites, apps and ways named by the OVA instead of chatbots and Telegram channels (the app does not recommend Telegram); in 13.1 and 18.1 CoMaps, Organic Maps or OsmAnd instead of maps.me; in the table of 6.2 the doses for children replaced by a reference to the official Ministry of Health announcement or a doctor, and in 7.13 the activated charcoal dose for children by a reference to 103 or a doctor (doses for children appear in the app only after a paediatrician's review). In November 2026 the advice was checked against current guidelines and rules (Resuscitation Council UK and ERC 2025, Ministry of Health order No. 441, NHS, USDA, WHO, Cabinet of Ministers resolution No. 1092) and corrected in 3.3, 7.1, 7.2, 7.4–7.6, 7.8, 7.10, 7.11, 7.16, 9.4, 12.1–12.3, 13.2, 16.2, 20.1, 20.5, 21.2, 22.5, 23.3, 27.5 and 29.4; each change with its source is in scripts/content/adaptation/GUIDE-REVIEW.md in the app's repository.",
  "chapters": [
   {
    "id": "ch1",
@@ -1056,7 +1056,7 @@
        "kind": "steps",
        "items": [
         {
-         "text": "Dress for the weather (shoes and a jacket, even at night), take your go-bag."
+         "text": "Listen for the threat level (since September 2026, Cabinet of Ministers resolution No. 1092): a 1-minute siren and the voice message “red level” mean missiles or a massed drone attack, so go to a shelter, underground parking or the metro at once; a 30-second siren and “yellow level” mean drones, so follow official messages and be ready to take cover fast. Dress for the weather (shoes and a jacket, even at night), take your go-bag."
         },
         {
          "text": "If there is time (the alert is not “ballistic”), turn off the gas, electrical appliances and water, close the windows and curtains."
@@ -1068,7 +1068,7 @@
          "text": "In the shelter: do not sit opposite the door; stay closer to load-bearing columns and walls."
         },
         {
-         "text": "Leave only after the all-clear. After a series of explosions, a repeat strike on the same place is possible 10–40 min later, and sometimes 1–2 hours later (when rescuers gather). Do not run to the scene at once “to have a look”."
+         "text": "Leave only after the all-clear: it is announced by voice, with no siren, so follow an alert app or the radio. After a series of explosions, a repeat strike on the same place is possible 10–40 min later, and sometimes 1–2 hours later (when rescuers gather). Do not run to the scene at once “to have a look”."
         },
         {
          "text": "Artillery or mortar fire without a siren: stay in the shelter at least 40 min after the last explosion, as shelling often resumes."
@@ -6266,7 +6266,7 @@
          "text": "A steady wind from one direction for days means stable weather; if the wind \"swings around\" during the day, a front is near."
         },
         {
-         "text": "Aching joints and old fractures throbbing are not superstition: many people really do feel a pressure drop 12+ hours ahead."
+         "text": "Some people feel a change in the weather in their joints or old fractures, but studies do not clearly confirm it: as a forecast it is unreliable."
         }
        ]
       }
