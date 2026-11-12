@@ -18,7 +18,8 @@ import javax.crypto.spec.GCMParameterSpec
  *
  * The times are kept outside the encrypted data on purpose, so they work at once from a card, even
  * with "Mine" locked (a decision on record). The notes are about people, so they are encrypted with
- * a key of the phone's keystore that needs no unlocking (AES-GCM, Android Keystore). They are never
+ * a key of the phone's keystore that works only while the phone is unlocked, as the database key and
+ * the child's copy do (AES-GCM, Android Keystore); no PIN is asked. They are never
  * shown in notifications or widgets, are not in backups, and go when every tourniquet is handed
  * over, or after a day (an alarm clears them even when nothing is opened).
  */
@@ -170,6 +171,7 @@ object Tourniquets {
                 .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
                 .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
                 .setKeySize(256)
+                // Not readable while the phone itself is locked (a seized phone after its first unlock)
                 .setUnlockedDeviceRequired(true)
                 .build(),
         )
