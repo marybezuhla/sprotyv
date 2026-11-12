@@ -39,8 +39,6 @@ android {
     // Android's lint runs in CI: an error stops the build; warnings are listed in the log to work through
     lint {
         abortOnError = true
-        // Home screen widgets are RemoteViews, which know only android:tint (app:tint is AppCompat's, for app screens)
-        disable += "UseAppTint"
         // Style only: the plain Android calls (edit().apply(), Uri.parse) read as clearly as the KTX ones
         disable += "UseKtx"
         // New versions come through Dependabot and a reviewed checksum refresh, not through lint

@@ -13,7 +13,12 @@ android {
     compileSdk = 36
     defaultConfig { minSdk = 31 }
     // Lint's findings printed in the CI log, as for the app
-    lint { textReport = true; textOutput = file("build/reports/lint.txt") }
+    lint {
+        textReport = true
+        textOutput = file("build/reports/lint.txt")
+        // New versions come through Dependabot and a reviewed checksum refresh, not through lint
+        disable += setOf("GradleDependency", "NewerVersionAvailable")
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
