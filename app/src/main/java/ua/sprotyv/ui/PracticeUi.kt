@@ -147,10 +147,10 @@ private fun PracticeEnd(
     nav: Nav,
     onAgain: () -> Unit,
 ) {
-    val practiceCtx = androidx.compose.ui.platform.LocalContext.current
+    val context = androidx.compose.ui.platform.LocalContext.current
     val kid = cardId.startsWith("kid-")
     // A theme answered without a mistake: its shield in "My shields"
-    if (topic != null && rightCount == list.size) androidx.compose.runtime.LaunchedEffect(topic.id) { Steps.practice(practiceCtx, topic = topic.id) }
+    if (topic != null && rightCount == list.size) androidx.compose.runtime.LaunchedEffect(topic.id) { Steps.practice(context, topic = topic.id) }
     if (check != null) {
         val all = rightCount == list.size
         if (all) androidx.compose.runtime.LaunchedEffect(check) { markPathTested(check) }
@@ -170,16 +170,8 @@ private fun PracticeEnd(
     }
     if (kid) {
         // Finishing is what counts, not being right: a sticker for every situation played through
-        val ctx = androidx.compose.ui.platform.LocalContext.current
-        androidx.compose.runtime.LaunchedEffect(cardId) { KidStickers.add(ctx, cardId) }
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Sunny(96.dp, happy = true)
-            Spacer(Modifier.width(16.dp))
-            Column {
-                Text(stringResource(R.string.kid_well_done), style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.SemiBold)
-                Text(stringResource(R.string.kid_sticker_got), style = MaterialTheme.typography.titleMedium)
-            }
-        }
+        androidx.compose.runtime.LaunchedEffect(cardId) { KidStickers.add(context, cardId) }
+        KidPraise(R.string.kid_sticker_got)
         Text(stringResource(R.string.kid_show_grown_up), style = MaterialTheme.typography.bodyLarge)
     } else {
         Text(
@@ -192,7 +184,6 @@ private fun PracticeEnd(
         OutlinedButton(onClick = onAgain, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.again)) }
         Button(onClick = nav::back, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.practice_finish)) }
     }
-    return
 }
 
 /** What the chosen answer means, and the better one if it was wrong; said in words, not only colour. */

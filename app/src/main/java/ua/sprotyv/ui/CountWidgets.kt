@@ -3,7 +3,6 @@ package ua.sprotyv.ui
 import android.app.Activity
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
-import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -106,7 +105,7 @@ object CountWidgets {
         if (counter !in KEYS) return
         synchronized(this) {
             val p = prefs(c)
-            p.edit().putInt("p:$counter", (p.getInt("p:$counter", 0) + 1).coerceAtMost(MAX)).commit()
+            p.edit().putInt("p:$counter", (p.getInt("p:$counter", 0) + 1).coerceAtMost(MAX)).saveNow()
         }
     }
 
@@ -122,7 +121,7 @@ object CountWidgets {
             val p = prefs(c)
             val e = p.edit()
             stored.forEach { (k, n) -> val left = p.getInt("p:$k", 0) - n; if (left > 0) e.putInt("p:$k", left) else e.remove("p:$k") }
-            e.commit()
+            e.saveNow()
         }
     }
 

@@ -243,7 +243,6 @@ fun NotesPlate(nav: Nav) {
  */
 @Composable
 fun NoteEditScreen(id: Long, nav: Nav) {
-    val context = androidx.compose.ui.platform.LocalContext.current
     // Read once; "could not read" is told apart from "not there" (deleted meanwhile)
     val read by androidx.compose.runtime.produceState<Loaded<Note?>>(Loaded.Waiting, id) {
         value = PersonalStore.read { db -> listOf(db.notes().get(id)) }?.let { Loaded.Value(it.first()) } ?: Loaded.Failed

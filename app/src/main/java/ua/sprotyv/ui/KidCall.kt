@@ -101,6 +101,9 @@ object KidCall {
             val cipher = Cipher.getInstance("AES/GCM/NoPadding")
             cipher.init(Cipher.DECRYPT_MODE, key(), GCMParameterSpec(128, bytes, 0, 12))
             String(cipher.doFinal(bytes, 12, bytes.size - 12), Charsets.UTF_8)
-        } catch (e: Exception) { null }
+        } catch (e: Exception) {
+            // Changed, damaged or sealed with a key that is gone: the child's copy is simply not shown
+            null
+        }
     }
 }

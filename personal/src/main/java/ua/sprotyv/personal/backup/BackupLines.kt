@@ -153,7 +153,7 @@ object BackupLines {
             if (t == "docs" || t == "doc" || t == "docpart") docLines++
             if (record != null) each(record)
             // The last part of a document closes it
-            if (t == "docpart" && docs.whole()) each(DocEnd)
+            if (t == "docpart" && docs.closeIfWhole()) each(DocEnd)
         }
         // As many documents, each whole, as the copy said it holds
         if (docs.seen >= 0 && docs.seen != docs.promised) throw BackupData.Incompatible()
@@ -198,6 +198,7 @@ object BackupLines {
             return if (promised > 0) DocsMarker else null
         }
 
+        /** One document's head: a new id, a known type, a size within the limits, all documents together too. */
         fun start(v: JSONObject): DocStart {
             require(seen >= 0)
             val newId = v.getLong("id")
@@ -223,8 +224,8 @@ object BackupLines {
             return DocPart(b)
         }
 
-        /** True once the current document's last part has come; it is closed then. */
-        fun whole(): Boolean = (inDoc && got == size).also { if (it) inDoc = false }
+        /** Closes the current document once its last part has come, and says whether it did. */
+        fun closeIfWhole(): Boolean = (inDoc && got == size).also { if (it) inDoc = false }
     }
 
     /**

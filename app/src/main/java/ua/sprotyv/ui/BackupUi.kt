@@ -38,11 +38,7 @@ import kotlinx.coroutines.withContext
 import ua.sprotyv.R
 import ua.sprotyv.personal.PersonalStore
 import ua.sprotyv.personal.backup.BackupCrypto
-import java.time.Instant
 import java.time.LocalDate
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 
 /** A password field: hidden, no suggestions, no learning by the keyboard. */
 @Composable
@@ -133,7 +129,7 @@ fun BackupScreen() {
 
     Text(stringResource(R.string.backup_intro), style = MaterialTheme.typography.bodyLarge)
     last?.toLongOrNull()?.takeIf { it > 0 }?.let { at ->
-        val date = Instant.ofEpochMilli(at).atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
+        val date = Times.date(at)
         Text(stringResource(R.string.backup_last, date), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
     // The result in a window over the screen: seen wherever the screen is scrolled to
@@ -210,7 +206,7 @@ private fun BackupRestore(busy: Boolean) {
         }
     }
     pending?.let { snap ->
-        val date = Instant.ofEpochMilli(snap.created).atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
+        val date = Times.date(snap.created)
         AlertDialog(
             onDismissRequest = { BackupJobs.cancelRestore() },
             title = { SensitiveWindow(); Text(stringResource(R.string.backup_replace_title)) },

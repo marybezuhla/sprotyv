@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -161,8 +160,21 @@ fun NoKeyboardLearning(content: @Composable () -> Unit) {
             }
             next.startInputMethod(private)
         },
-        content = content,
-    )
+    ) {
+        // Copied from the owner's screens: marked sensitive, so Android's preview and keyboard
+        // clipboard histories do not show or keep it
+        val clipboard = androidx.compose.ui.platform.LocalClipboard.current
+        val sensitive = remember(clipboard) { SensitiveClipboard(clipboard) }
+        androidx.compose.runtime.CompositionLocalProvider(androidx.compose.ui.platform.LocalClipboard provides sensitive, content = content)
+    }
+}
+
+/** The phone's clipboard, with every copy marked sensitive (the key is the same string on Android 12 and 13+). */
+private class SensitiveClipboard(private val inner: androidx.compose.ui.platform.Clipboard) : androidx.compose.ui.platform.Clipboard by inner {
+    override suspend fun setClipEntry(clipEntry: androidx.compose.ui.platform.ClipEntry?) {
+        clipEntry?.clipData?.description?.extras = android.os.PersistableBundle().apply { putBoolean("android.content.extra.IS_SENSITIVE", true) }
+        inner.setClipEntry(clipEntry)
+    }
 }
 
 /**

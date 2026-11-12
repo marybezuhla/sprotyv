@@ -51,14 +51,12 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ua.sprotyv.R
 import ua.sprotyv.content.Card as ActionCard
@@ -216,7 +214,7 @@ internal fun KidCallBar(onFamily: (() -> Unit)?) {
             confirmButton = {
                 Button(
                     onClick = { ask = false; Reach.dial(context, Service.UNIFIED.number) },
-                    colors = ButtonDefaults.buttonColors(containerColor = DangerRed, contentColor = Color.White),
+                    colors = ButtonDefaults.buttonColors(containerColor = DangerRed, contentColor = OnDanger),
                     modifier = Modifier.heightIn(min = 56.dp),
                 ) { Text(stringResource(R.string.kid_112_yes), fontWeight = FontWeight.SemiBold) }
             },
@@ -241,7 +239,7 @@ internal fun KidCallBar(onFamily: (() -> Unit)?) {
             }
             Button(
                 onClick = { ask = true },
-                colors = ButtonDefaults.buttonColors(containerColor = DangerRed, contentColor = Color.White),
+                colors = ButtonDefaults.buttonColors(containerColor = DangerRed, contentColor = OnDanger),
                 modifier = (if (onFamily == null) Modifier.weight(1f) else Modifier).heightIn(min = 64.dp),
             ) { Text(stringResource(R.string.kid_call_112), fontWeight = FontWeight.SemiBold) }
         }
@@ -358,5 +356,23 @@ object KidStickers {
     fun add(c: android.content.Context, id: String) {
         if (!id.matches(Regex("^kid-[a-z0-9-]{1,30}$"))) return
         prefs(c).edit().putStringSet("got", (all(c) + id).take(30).toSet()).apply()
+    }
+}
+
+/** Praise at the end, for a child (guide 5.5: only praise, never scolding): the happy sun, "Well done!" and [line]. */
+@Composable
+internal fun KidPraise(line: Int) {
+    androidx.compose.foundation.layout.Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+        Sunny(96.dp, happy = true)
+        androidx.compose.foundation.layout.Spacer(Modifier.width(16.dp))
+        androidx.compose.foundation.layout.Column {
+            Text(
+                stringResource(R.string.kid_well_done),
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
+                modifier = Modifier.semantics { heading(); liveRegion = androidx.compose.ui.semantics.LiveRegionMode.Polite },
+            )
+            Text(stringResource(line), style = MaterialTheme.typography.titleMedium)
+        }
     }
 }

@@ -104,7 +104,7 @@ object Tourniquets {
             try {
                 val o = a.getJSONObject(i)
                 // A note kept in plain words (an early test build) is not kept
-                val sealed = o.optString("note").takeIf { it.startsWith("v1:") }.orEmpty()
+                val sealed = o.optString("note").takeIf { it.startsWith("v2:") || it.startsWith("v1:") }.orEmpty()
                 One(o.getInt("n").coerceIn(1, 9_999), o.getLong("at"), sealed, o.optInt("told", 0).coerceIn(0, 24))
             } catch (e: Exception) {
                 null
@@ -123,11 +123,36 @@ object Tourniquets {
             next?.let { e.putInt("next", it) }
         }
         if (now) e.saveNow() else e.apply()
+        if (list.none { it.sealed.startsWith("v1:") }) dropLegacyKey()
     }
 
-    // ---- the notes, sealed with a keystore key that needs no unlocking
+    // ---- the notes, sealed with a keystore key that works only while the phone is unlocked
+    // (the alarms read only the times, never the notes)
 
-    private const val KEY = "sprotyv_tourniquet_notes"
+    private const val KEY = "sprotyv_tourniquet_notes_2"
+
+    /** The first key, which also worked on a locked phone: kept only while a note sealed with it is still on (a day at most). */
+    private const val LEGACY_KEY = "sprotyv_tourniquet_notes"
+
+    @Volatile private var legacyGone = false
+
+    private fun dropLegacyKey() {
+        if (legacyGone) return
+        try {
+            val ks = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
+            if (ks.containsAlias(LEGACY_KEY)) ks.deleteEntry(LEGACY_KEY)
+            legacyGone = true
+        } catch (e: Exception) {
+            // Tried again with the next write; the old key opens only old notes meanwhile
+        }
+    }
+
+    private fun legacyKey(): SecretKey? = try {
+        KeyStore.getInstance("AndroidKeyStore").apply { load(null) }.getKey(LEGACY_KEY, null) as? SecretKey
+    } catch (e: Exception) {
+        // Gone or unreadable: its old notes are simply empty
+        null
+    }
 
     @Volatile private var cached: SecretKey? = null
 
@@ -145,19 +170,20 @@ object Tourniquets {
                 .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
                 .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
                 .setKeySize(256)
+                .setUnlockedDeviceRequired(true)
                 .build(),
         )
         return gen.generateKey().also { cached = it }
     }
 
-    /** Empty stays empty; otherwise "v1:" + base64(iv + ciphertext). A note that cannot be sealed is not kept. */
+    /** Empty stays empty; otherwise "v2:" + base64(iv + ciphertext). A note that cannot be sealed is not kept. */
     private fun seal(note: String): String {
         if (note.isEmpty()) return ""
         return try {
             val cipher = Cipher.getInstance("AES/GCM/NoPadding")
             cipher.init(Cipher.ENCRYPT_MODE, key())
             val out = cipher.iv + cipher.doFinal(note.toByteArray(Charsets.UTF_8))
-            "v1:" + Base64.encodeToString(out, Base64.NO_WRAP)
+            "v2:" + Base64.encodeToString(out, Base64.NO_WRAP)
         } catch (e: Exception) {
             forget()
             ""
@@ -166,12 +192,16 @@ object Tourniquets {
 
     /** A note that does not open (a new phone, a damaged file) is simply empty. */
     internal fun open(sealed: String): String {
-        if (!sealed.startsWith("v1:")) return ""
+        val key = when {
+            sealed.startsWith("v2:") -> null
+            sealed.startsWith("v1:") -> legacyKey() ?: return ""
+            else -> return ""
+        }
         return try {
             val bytes = Base64.decode(sealed.substring(3), Base64.NO_WRAP)
             if (bytes.size < 12 + 16) return ""
             val cipher = Cipher.getInstance("AES/GCM/NoPadding")
-            cipher.init(Cipher.DECRYPT_MODE, key(), GCMParameterSpec(128, bytes, 0, 12))
+            cipher.init(Cipher.DECRYPT_MODE, key ?: key(), GCMParameterSpec(128, bytes, 0, 12))
             String(cipher.doFinal(bytes, 12, bytes.size - 12), Charsets.UTF_8)
         } catch (e: Exception) {
             ""

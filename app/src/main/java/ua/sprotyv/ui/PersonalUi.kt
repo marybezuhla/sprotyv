@@ -394,7 +394,12 @@ object PeopleFiles {
                         .map { c -> Person(name = c.name, phone = c.phone, relation = c.note, safeList = true, ice = false, sort = sort++) }
                     db.people().addUpTo(fresh, Vcf.MAX_PEOPLE)
                 }
-            } catch (e: Exception) { null }
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                // Not read or not saved: said in plain words below, nothing half added
+                null
+            }
             val message = if (added == null) app.getString(R.string.people_import_failed) else app.getString(R.string.people_import_done, added, chosen.size - added)
             kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) { done(message) }
         }
@@ -497,7 +502,6 @@ fun Toggle(label: String, checked: Boolean, onChange: (Boolean) -> Unit) {
  */
 @Composable
 fun SafeScreen(nav: Nav) {
-    val context = LocalContext.current
     val people = rememberPeople() ?: return Loading()
     val list = people.filter { it.safeList }
     val defaultText = stringResource(R.string.safe_default_message)

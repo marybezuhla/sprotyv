@@ -33,12 +33,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -293,7 +291,7 @@ fun FigureView(f: Block.Figure) {
                     // The caption below says what it shows; reading it twice helps no one
                     contentDescription = if (f.caption.isBlank()) stringResource(R.string.figure) else null,
                     contentScale = ContentScale.FillWidth,
-                    modifier = Modifier.fillMaxWidth().background(Color.White, RoundedCornerShape(8.dp)).padding(8.dp),
+                    modifier = Modifier.fillMaxWidth().background(PaperWhite, RoundedCornerShape(8.dp)).padding(8.dp),
                 )
             }
         }

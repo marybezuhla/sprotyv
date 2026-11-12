@@ -74,6 +74,8 @@ object Wipe {
             // Nothing personal stays on the lock screen or the home screen
             NotificationManagerCompat.from(app).cancelAll()
             Widgets.blank(app)
+            // The long-press shortcuts may name pinned tiles; they go too
+            app.getSystemService(android.content.pm.ShortcutManager::class.java)?.removeAllDynamicShortcuts()
         } catch (e: Exception) {
             // Whatever failed here, the files below are erased and the app closes all the same
         }

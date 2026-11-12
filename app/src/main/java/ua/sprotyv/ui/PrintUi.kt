@@ -373,7 +373,7 @@ fun RescuerQrScreen(nav: Nav) {
     Image(
         bitmap = bitmap.asImageBitmap(),
         contentDescription = stringResource(R.string.rescuer_qr_desc),
-        modifier = Modifier.widthIn(max = 320.dp).fillMaxWidth().background(androidx.compose.ui.graphics.Color.White).padding(8.dp),
+        modifier = Modifier.widthIn(max = 320.dp).fillMaxWidth().background(PaperWhite).padding(8.dp),
     )
     // Plain text, not selectable: medical facts should not end up in the clipboard by accident
     Text(text, style = MaterialTheme.typography.bodyLarge)

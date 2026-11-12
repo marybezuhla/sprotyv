@@ -11,8 +11,6 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -27,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
@@ -280,13 +277,4 @@ fun marksPassed(n: Int, rare: Boolean): Int {
     val early = start.count { n >= it }
     val later = if (n > 100) (n - 100) / 50 else 0
     return early + later
-}
-
-/**
- * Written to disk at once, not later: a running timer (since when, a tourniquet's time) must
- * survive the app being closed by Android a moment after the tap.
- */
-@android.annotation.SuppressLint("ApplySharedPref")
-internal fun android.content.SharedPreferences.Editor.saveNow() {
-    commit()
 }

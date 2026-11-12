@@ -12,6 +12,8 @@ android {
     namespace = "ua.sprotyv.personal"
     compileSdk = 36
     defaultConfig { minSdk = 31 }
+    // Lint's findings printed in the CI log, as for the app
+    lint { textReport = true; textOutput = file("build/reports/lint.txt") }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17

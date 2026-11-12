@@ -45,7 +45,6 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -159,6 +158,8 @@ object Docs {
     }
 
     /** A photo as a JPEG at most [PHOTO_SIDE] on its longest side, turned upright; only the picture is kept. */
+    // Only the turn is read; from Android 12, the oldest this app runs on, the platform's ExifInterface is the fixed one
+    @android.annotation.SuppressLint("ExifInterface")
     private fun shrink(context: Context, uri: Uri): ByteArray? {
         val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
         context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, bounds) }
@@ -476,12 +477,25 @@ private fun Zoomable(bitmap: androidx.compose.ui.graphics.ImageBitmap, descripti
     )
 }
 
+/**
+ * A photo at most [MAX_PIXELS] in size: one restored from an old or odd backup may be far
+ * larger than the 2400 px the app itself keeps, and Android will not draw a picture that big.
+ */
+private fun decodeCapped(bytes: ByteArray): android.graphics.Bitmap? {
+    val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+    BitmapFactory.decodeByteArray(bytes, 0, bytes.size, bounds)
+    if (bounds.outWidth <= 0 || bounds.outHeight <= 0) return null
+    var sample = 1
+    while (bounds.outWidth.toLong() / sample * (bounds.outHeight.toLong() / sample) > MAX_PIXELS) sample *= 2
+    return BitmapFactory.decodeByteArray(bytes, 0, bytes.size, BitmapFactory.Options().apply { inSampleSize = sample })
+}
+
 /** A photo, decoded away from the screen's thread. */
 @Composable
 private fun PhotoView(bytes: ByteArray) {
     var failed by remember(bytes) { mutableStateOf(false) }
     val bitmap by produceState<androidx.compose.ui.graphics.ImageBitmap?>(null, bytes) {
-        val decoded = withContext(Dispatchers.Default) { try { BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.asImageBitmap() } catch (e: OutOfMemoryError) { null } }
+        val decoded = withContext(Dispatchers.Default) { try { decodeCapped(bytes)?.asImageBitmap() } catch (e: OutOfMemoryError) { null } }
         if (decoded == null) failed = true
         value = decoded
     }
@@ -532,6 +546,7 @@ private fun PdfPages(bytes: ByteArray) {
     }
 }
 
+/** About 4000 × 4000 at most for one drawn picture (a page or a photo): sharp enough to zoom, well under Android's limit. */
 private const val MAX_PIXELS = 16_000_000L
 
 /** memfd_create's own close-on-exec flag (Linux MFD_CLOEXEC; not O_CLOEXEC). */

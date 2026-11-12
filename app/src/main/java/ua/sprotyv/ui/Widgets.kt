@@ -263,7 +263,7 @@ internal fun Widgets.services(c: Context): RemoteViews {
         v.setContentDescription(id, number + ", " + c.getString(names[i]))
         // The dialler with the number filled in; never a call by itself
         v.setOnClickPendingIntent(id, PendingIntent.getActivity(
-            c, 1600 + i, Intent(Intent.ACTION_DIAL, android.net.Uri.parse("tel:$number")).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+            c, 1600 + i, ua.sprotyv.reach.Reach.dialIntent(c, number).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         ))
     }

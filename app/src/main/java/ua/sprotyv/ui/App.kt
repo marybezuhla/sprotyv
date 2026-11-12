@@ -19,8 +19,6 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -45,7 +43,6 @@ import kotlinx.coroutines.withContext
 import ua.sprotyv.R
 import ua.sprotyv.content.Content
 import ua.sprotyv.home.Mode
-import ua.sprotyv.home.Pins
 import ua.sprotyv.personal.PersonalStore
 
 /**

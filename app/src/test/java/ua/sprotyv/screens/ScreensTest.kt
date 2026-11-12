@@ -7,13 +7,13 @@ import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.foundation.layout.padding
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.test.junit4.createEmptyComposeRule
+import androidx.compose.ui.unit.dp
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -176,7 +176,6 @@ class ScreensTest {
     @Test fun pdrBig() = shot("33-pdr-1-big", big = true) { PdrSectionScreen(content, "1", nav) }
     @Test fun weaponsBig() = shot("34-weapons-big", dark = true, big = true) { WeaponsScreen(nav) }
     @Test fun comms() = shot("30-comms-dark", dark = true) { CommsScreen(nav) }
-    // Settings in English with large text: rows of choices must wrap, never break a word
     // "Erase all data": the line in Settings, then the question as the dialog shows it (tests draw no dialogs)
     @androidx.compose.runtime.Composable
     private fun WipeLook(typed: String) = androidx.compose.foundation.layout.Column(
@@ -193,6 +192,7 @@ class ScreensTest {
     @Test fun wipe() = shot("32-wipe") { WipeLook("СТЕРТИ") }
     @Test fun wipeBigDark() = shot("32-wipe-big-dark", dark = true, big = true) { WipeLook("") }
 
+    // Settings in English with large text: rows of choices must wrap, never break a word
     @Test fun settingsBig() { mode(Mode.FULL); shot("31-settings-big", big = true) { SettingsScreen(HomePrefs.load(app), nav) } }
     @Test fun moz() { mode(Mode.FULL); shot("32-moz-big", big = true) { MozScreen(content, 4, nav) } }
 }

@@ -2,15 +2,12 @@ package ua.sprotyv.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -34,7 +31,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
@@ -154,7 +150,7 @@ private fun CardBody(card: Card, content: Content, nav: Nav) {
     card.call?.let { service ->
         Button(
             onClick = { Reach.dial(context, service.number) },
-            colors = ButtonDefaults.buttonColors(containerColor = DangerRed, contentColor = Color.White),
+            colors = ButtonDefaults.buttonColors(containerColor = DangerRed, contentColor = OnDanger),
             modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp),
         ) {
             Icon(Icons.Filled.Call, contentDescription = null)
@@ -166,7 +162,7 @@ private fun CardBody(card: Card, content: Content, nav: Nav) {
 
     when {
         all -> CardOverview(card, content) { all = false; step = 0 }
-        !done -> CardStep(card, content, step, onBack = { step-- }, onNext = { step++ }, onAll = { all = true })
+        !done -> CardStep(card, content, step, onBack = { step = (step - 1).coerceAtLeast(0) }, onNext = { step = (step + 1).coerceAtMost(card.steps.size) }, onAll = { all = true })
         else -> CardEnd(card.steps.size, kid, onAgain = { step = 0 }, onAll = { all = true })
     }
 
@@ -277,20 +273,7 @@ private fun CardStep(card: Card, content: Content, step: Int, onBack: () -> Unit
 @Composable
 private fun CardEnd(steps: Int, kid: Boolean, onAgain: () -> Unit, onAll: () -> Unit) {
     if (kid) {
-        // A child hears praise at the end (guide 5.5: only praise, never scolding)
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Sunny(96.dp, happy = true)
-            Spacer(Modifier.width(16.dp))
-            Column {
-                Text(
-                    stringResource(R.string.kid_well_done),
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.semantics { heading(); liveRegion = LiveRegionMode.Polite },
-                )
-                Text(stringResource(R.string.kid_well_done_hint), style = MaterialTheme.typography.titleMedium)
-            }
-        }
+        KidPraise(R.string.kid_well_done_hint)
         OutlinedButton(onClick = onAgain, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.again)) }
     } else {
         Progress(steps, steps)
@@ -336,8 +319,7 @@ private fun TourniquetTime(nav: Nav? = null) {
     val tint = ua.sprotyv.home.Group.DANGER.tint()
     if (list.size > 1) Text(stringResource(R.string.tourniquets_count, list.size), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
     list.forEach { t -> androidx.compose.runtime.key(t.n) {
-        val clock = java.time.Instant.ofEpochMilli(t.at).atZone(java.time.ZoneId.systemDefault()).toLocalTime()
-        val mark = stringResource(R.string.tourniquet_mark, String.format(java.util.Locale.ROOT, "%02d:%02d", clock.hour, clock.minute))
+        val mark = stringResource(R.string.tourniquet_mark, Times.clock(t.at))
         val minutes = ((now - t.at) / 60_000).coerceAtLeast(0)
         Card(
             colors = CardDefaults.cardColors(containerColor = tint.container, contentColor = tint.ink),

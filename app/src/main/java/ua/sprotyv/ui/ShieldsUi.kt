@@ -27,7 +27,6 @@ import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -272,7 +271,6 @@ private fun ShieldShape(s: ShieldItem, tint: Tint, outline: androidx.compose.ui.
 /** One pill under a count: "−1" for a slip of the finger, "+1" for each time. */
 @Composable
 private fun CountPill(c: String, title: String, tint: Tint) {
-    // One pill: "−1" for a slip of the finger, "+1" for each time
     androidx.compose.material3.Surface(
         shape = androidx.compose.foundation.shape.RoundedCornerShape(50),
         color = tint.container.copy(alpha = 0.5f),
