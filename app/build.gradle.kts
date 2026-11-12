@@ -41,6 +41,14 @@ android {
         abortOnError = true
         // Home screen widgets are RemoteViews, which know only android:tint (app:tint is AppCompat's, for app screens)
         disable += "UseAppTint"
+        // Style only: the plain Android calls (edit().apply(), Uri.parse) read as clearly as the KTX ones
+        disable += "UseKtx"
+        // New versions come through Dependabot and a reviewed checksum refresh, not through lint
+        disable += setOf("GradleDependency", "NewerVersionAvailable", "AndroidGradlePluginVersion")
+        // targetSdk is raised on purpose, together with a test on a phone
+        disable += "OldTargetApi"
+        // From Android 12, the oldest this app runs on, the platform's ExifInterface is the fixed one
+        disable += "ExifInterface"
         textReport = true
         textOutput = file("build/reports/lint.txt")
     }

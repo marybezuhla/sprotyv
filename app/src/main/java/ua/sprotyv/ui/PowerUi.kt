@@ -67,7 +67,7 @@ fun BlackoutBlock() {
                 Text(stringResource(R.string.blackout_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Button(onClick = {
                     val t = System.currentTimeMillis()
-                    prefs.edit().putLong("since", t).commit()
+                    prefs.edit().putLong("since", t).saveNow()
                     Notify.sync(context)
                     now = t
                     since = t
@@ -85,7 +85,7 @@ fun BlackoutBlock() {
             Text(stringResource(R.string.blackout_closed), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             OutlinedButton(onClick = {
                 Held.add(context, "blackout")
-                prefs.edit().remove("since").commit()
+                prefs.edit().remove("since").saveNow()
                 Notify.sync(context)
                 since = 0L
             }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.blackout_back)) }
@@ -198,7 +198,7 @@ fun WaitTimer(total: Int) {
     if (since == 0L) {
         OutlinedButton(onClick = {
             val t = System.currentTimeMillis()
-            prefs.edit().putLong("since", t).putInt("total", total).commit()
+            prefs.edit().putLong("since", t).putInt("total", total).saveNow()
             Notify.sync(context)
             now = t
             since = t
@@ -214,7 +214,7 @@ fun WaitTimer(total: Int) {
             Text(stringResource(R.string.wait_done, total), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
         }
         androidx.compose.material3.TextButton(onClick = {
-            prefs.edit().remove("since").commit()
+            prefs.edit().remove("since").saveNow()
             Notify.sync(context)
             since = 0L
         }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.wait_reset)) }

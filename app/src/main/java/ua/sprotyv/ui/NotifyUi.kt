@@ -47,8 +47,10 @@ fun NotifySettings() {
 
     fun turn(kind: Notify.Kind, on: Boolean) {
         if (!on) return Notify.set(context, kind, false)
+        // Android 12 asks nothing: notices are allowed until the owner turns them off
+        if (android.os.Build.VERSION.SDK_INT < 33) return Notify.set(context, kind, true)
         val granted = ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
-        if (granted || android.os.Build.VERSION.SDK_INT < 33) Notify.set(context, kind, true)
+        if (granted) Notify.set(context, kind, true)
         else { waiting = kind; ask.launch(Manifest.permission.POST_NOTIFICATIONS) }
     }
 

@@ -54,11 +54,11 @@ class Since(private val name: String, private val maxHours: Int) {
         return t
     }
 
-    fun start(context: Context): Long = System.currentTimeMillis().also { prefs(context).edit().putLong("since", it).commit(); Notify.sync(context) }
+    fun start(context: Context): Long = System.currentTimeMillis().also { prefs(context).edit().putLong("since", it).saveNow(); Notify.sync(context) }
     fun stop(context: Context) {
         // One more held through: only the number is kept, for "We hold on"
         if (get(context) != 0L) Held.add(context, name)
-        prefs(context).edit().remove("since").commit(); Notify.sync(context)
+        prefs(context).edit().remove("since").saveNow(); Notify.sync(context)
     }
 
     companion object {
@@ -280,4 +280,13 @@ fun marksPassed(n: Int, rare: Boolean): Int {
     val early = start.count { n >= it }
     val later = if (n > 100) (n - 100) / 50 else 0
     return early + later
+}
+
+/**
+ * Written to disk at once, not later: a running timer (since when, a tourniquet's time) must
+ * survive the app being closed by Android a moment after the tap.
+ */
+@android.annotation.SuppressLint("ApplySharedPref")
+internal fun android.content.SharedPreferences.Editor.saveNow() {
+    commit()
 }

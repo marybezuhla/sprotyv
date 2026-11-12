@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<!-- tools:ignore below marks lint warnings checked by hand: brand names, article numbers, counts that are always many -->
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Sprotyv</string>
 
     <string name="tile_alarm">Air alert</string>
@@ -334,7 +335,7 @@
     <string name="docs_hint">Scans of a passport, certificates, test results: encrypted</string>
     <string name="docs_intro">Only the most valuable: a passport scan, certificates, test results, discharge letters. Files are encrypted like the rest of “My data” and show only here. A digital passport and IDs are already in Diia.</string>
     <string name="docs_space_title">Space for documents</string>
-    <string name="docs_space">%1$s of %2$s used · %3$d of %4$d files</string>
+    <string name="docs_space" tools:ignore="PluralsCandidate">%1$s of %2$s used · %3$d of %4$d files</string>
     <string name="docs_space_low">Almost no space left: delete what you no longer need to add more.</string>
     <string name="docs_add_title">Add</string>
     <string name="docs_add_note">A PDF or a photo, up to 10 MB each. Photos larger than 2400 pixels are made smaller to take less space; text stays readable. Hidden details (such as where it was taken) are removed from photos. The original stays where it was: delete it yourself if you no longer need it.</string>
@@ -558,9 +559,9 @@
         <item quantity="other">%1$d hours</item>
     </plurals>
     <string name="wait_start">Start a %1$d-minute count</string>
-    <string name="wait_left">Wait %1$d more min</string>
+    <string name="wait_left" tools:ignore="PluralsCandidate">Wait %1$d more min</string>
     <string name="wait_of">%1$d of %2$d min</string>
-    <string name="wait_done">%1$d minutes have passed. A repeated strike can come even after 1–2 hours: take care, listen for the all-clear.</string>
+    <string name="wait_done" tools:ignore="PluralsCandidate">%1$d minutes have passed. A repeated strike can come even after 1–2 hours: take care, listen for the all-clear.</string>
     <string name="wait_reset">Reset the count</string>
     <string name="screenshots_allow">Allow screenshots in “My data”</string>
     <string name="screenshots_hint">Off by default: the medical card, people, plan and supplies do not show in screenshots, screen recordings, casting or the recent apps list (another phone’s camera is not stopped). If you allow it, a small camera icon at the top of those screens reminds you. Cards and the guide can always be captured.</string>
@@ -640,7 +641,7 @@
     <string name="bookmarks_not_secure">Only secure addresses (https://) are kept.</string>
     <string name="bookmarks_no_page">There is no page address here.</string>
     <string name="bookmarks_delete">Delete: %1$s</string>
-    <string name="bookmarks_too_many">You already have %1$d bookmarks, the most there can be. Delete some you no longer need.</string>
+    <string name="bookmarks_too_many" tools:ignore="PluralsCandidate">You already have %1$d bookmarks, the most there can be. Delete some you no longer need.</string>
     <string name="days_hours_short">%1$d d %2$d h</string>
     <string name="tile_heat_out">no heat %1$s</string>
     <string name="tile_shelter">In the shelter %1$s</string>
@@ -684,7 +685,7 @@
     <string name="shelf_power_desc">Outage schedules by region</string>
     <string name="shelf_dir_desc">Services for displaced people, money, documents</string>
     <string name="shelf_rest_desc">Guide chapters not listed above</string>
-    <string name="shelf_count">%1$d items</string>
+    <string name="shelf_count">Items: %1$d</string>
     <string name="shelf_on_home">on home: %1$d</string>
     <string name="shelf_fold">fold</string>
     <string name="shelf_unfold">unfold</string>
@@ -701,8 +702,8 @@
     <string name="qr_text_hint">Pass text to another phone with no connection</string>
     <string name="qr_text_intro">Type an address, a number or a short note. The other person reads the code with their phone’s camera; no internet needed. The text is kept nowhere.</string>
     <string name="qr_text_field">Text for the code</string>
-    <string name="qr_text_size">%1$d of %2$d bytes. The shorter the text, the easier to read.</string>
-    <string name="qr_text_too_long">Too long for a code: %1$d of %2$d bytes. Shorten the text.</string>
+    <string name="qr_text_size" tools:ignore="PluralsCandidate">%1$d of %2$d bytes. The shorter the text, the easier to read.</string>
+    <string name="qr_text_too_long" tools:ignore="PluralsCandidate">Too long for a code: %1$d of %2$d bytes. Shorten the text.</string>
     <string name="qr_text_code_desc">QR code with your text</string>
     <string name="qr_text_bright">Turn the screen brightness up and hold the phone steady.</string>
     <string name="qr_text_clear">Clear the text</string>
@@ -814,7 +815,7 @@
     <string name="notes_full">There are very many notes: delete some so the backup keeps working.</string>
     <string name="notes_read_failed">The note could not be read just now. Go back and try again.</string>
     <string name="notes_gone">This note is no longer there.</string>
-    <string name="notes_length">%1$d of %2$d characters</string>
+    <string name="notes_length" tools:ignore="PluralsCandidate">%1$d of %2$d characters</string>
     <string name="moz_compare_title">The Ministry’s official procedure on this</string>
     <string name="moz_search">Search all procedures</string>
     <string name="moz_found">Procedures found: %1$d</string>
@@ -855,7 +856,7 @@
     <string name="delegate_who">Who:</string>
     <string name="active_title">Running now</string>
     <string name="active_tourniquet">Tourniquet on for %1$s</string>
-    <string name="active_wait">Do not go back for %1$d more min</string>
+    <string name="active_wait" tools:ignore="PluralsCandidate">Do not go back for %1$d more min</string>
     <string name="active_wait_done">%1$d min passed: follow the all-clear</string>
     <string name="active_heat">No heat for %1$s</string>
     <string name="handover_to_notes">Save to my notes</string>
@@ -1077,14 +1078,14 @@
     <string name="gart_today">My resilience today</string>
     <string name="gart_today_count">Today %1$d of %2$d</string>
     <string name="gart_none">Nothing chosen yet. Open a group below and take one or two habits.</string>
-    <string name="gart_full">%1$d chosen: a few habits are easier to keep than many. To take a new one, put one aside.</string>
+    <string name="gart_full" tools:ignore="PluralsCandidate">%1$d chosen: a few habits are easier to keep than many. To take a new one, put one aside.</string>
     <string name="gart_take">Take</string>
     <string name="gart_drop">Put aside</string>
     <string name="gart_open">Open</string>
     <string name="gart_stage_rooting">Taking root</string>
     <string name="gart_stage_almost">Almost yours</string>
     <string name="gart_stage_own">Yours</string>
-    <string name="gart_days">%1$d of ~%2$d days</string>
+    <string name="gart_days" tools:ignore="PluralsCandidate">%1$d of ~%2$d days</string>
     <string name="gart_safety">Ready for an alert</string>
     <string name="gart_safety_hint">Safety: charge, documents, water, night</string>
     <string name="gart_calm">Inner calm</string>
@@ -1180,7 +1181,7 @@
     <string name="path_check">Check yourself</string>
     <string name="path_tested">✓ Checked by a test</string>
     <string name="path_check_passed">All answers right: %1$d of %2$d. The step is marked as checked.</string>
-    <string name="path_check_again">%1$d of %2$d right. Look through the card and try again: when all answers are right, the step is marked.</string>
+    <string name="path_check_again" tools:ignore="PluralsCandidate">%1$d of %2$d right. Look through the card and try again: when all answers are right, the step is marked.</string>
     <string name="ready_short_supplies">Supplies</string>
     <string name="ready_done_list">Ready: %1$s ✓</string>
     <string name="roles_title">Who I am now</string>
@@ -1296,7 +1297,7 @@
     <string name="role_instructor_affirm">Every person you train is one more life saved somewhere. Here: where to learn and how to grow.</string>
     <string name="role_instructor_facts_title">Training and instructing</string>
     <string name="role_instructor_source">Sources: Ukrainian Red Cross; Interfax-Ukraine (12.12.2025). Checked 01.11.2026. Conditions change, so it\'s worth checking.</string>
-    <string name="role_instructor_1">The Red Cross runs certified first aid courses of 6, 12 and 48 hours; about 60% of the time is practice.</string>
+    <string name="role_instructor_1" formatted="false">The Red Cross runs certified first aid courses of 6, 12 and 48 hours; about 60% of the time is practice.</string>
     <string name="role_instructor_2">Course conditions: the Red Cross information line 0 800 332 656.</string>
     <string name="role_instructor_3">To become an instructor, the regional Red Cross organisation is the best place to ask.</string>
     <string name="role_neighbours">I support people around me</string>
@@ -1326,7 +1327,7 @@
     <string name="role_research_1">Ukraine has been associated with Horizon Europe since 9 June 2022: Ukrainian researchers take part on equal terms with EU institutions.</string>
     <string name="role_research_2">The National Research Foundation of Ukraine funds projects through open calls; terms are on its site.</string>
     <string name="role_research_3">Researchers forced to leave are supported by the European Commission\'s MSCA4Ukraine fellowships.</string>
-    <string name="role_research_4">Brave1 gives defence developers non-repayable grants, testing and feedback from the military.</string>
+    <string name="role_research_4" tools:ignore="Typos">Brave1 gives defence developers non-repayable grants, testing and feedback from the military.</string>
     <string name="role_infra">I keep power, water, communications, transport running</string>
     <string name="role_infra_hint">Energy, water, telecom, railways, transport</string>
     <string name="role_infra_affirm">When the lights come on and the water runs, that is your work, often under strikes. Thank you.</string>
@@ -1402,7 +1403,7 @@
     <string name="role_skills_1">Report suspicious people, recruitment and hostile resources online to the SBU: 1516 or 0 800 501 482, callcenter@ssu.gov.ua.</string>
     <string name="role_skills_2">Report a cyber attack on an organisation to CERT-UA: incidents@cert.gov.ua or +38 044 281 88 25.</string>
     <string name="role_skills_3">Report cybercrime to the Cyber Police through the form on its site or 0 800 505 170; in an emergency, 102.</string>
-    <string name="role_skills_4">Brave1 gives defence developers non-repayable grants, testing and feedback from the military; no stake or rights to the product are taken.</string>
+    <string name="role_skills_4" tools:ignore="Typos">Brave1 gives defence developers non-repayable grants, testing and feedback from the military; no stake or rights to the product are taken.</string>
     <string name="role_skills_5">The Defence Forces have more than 2,000 IT vacancies; apply on the Ministry of Defence Digital Team site.</string>
     <string name="role_skills_6">Cyber attacks on one\'s own initiative can have legal consequences for a civilian, abroad too; helping through official channels is safer.</string>
     <string name="role_parent">Raising children</string>
@@ -1601,7 +1602,7 @@
     <string name="weapons_found_2">Call 102 or 112. If it looks like a mine or a shell, call 101 or 102 from at least 100 m away and act as with a suspicious object.</string>
     <string name="weapons_found_3">By law, a found firearm or ammunition must be reported to the police at once and, within 24 hours, handed to the police to be surrendered or declared, or its location shown.</string>
     <string name="weapons_found_4">Whoever hands a weapon, ammunition or explosives over to the authorities of their own will bears no criminal liability for unlawful handling of them under art. 263.</string>
-    <string name="weapons_found_source">Sources: Law No. 2114-IX, art. 1-1 (as of 25.11.2024); Criminal Code of Ukraine, art. 263, part 3; State Emergency Service. Checked 02.11.2026. Compiled from the sources listed.</string>
+    <string name="weapons_found_source" tools:ignore="TypographyDashes">Sources: Law No. 2114-IX, art. 1-1 (as of 25.11.2024); Criminal Code of Ukraine, art. 263, part 3; State Emergency Service. Checked 02.11.2026. Compiled from the sources listed.</string>
     <string name="weapons_suspicious">Suspicious object or mine</string>
     <string name="weapons_suspicious_hint">What to do now, step by step</string>
     <string name="weapons_declare_title">Keeping a found weapon during martial law</string>
@@ -1610,7 +1611,7 @@
     <string name="weapons_declare_3">A declared weapon may not be passed to anyone except the police.</string>
     <string name="weapons_declare_4">No later than 90 days after martial law ends, the weapon must be handed to the police. When handing it in, you can state in writing that you want to own it: ownership arises three months after handing it in if nothing prevents it.</string>
     <string name="weapons_declare_5">To declare it you need an application, a passport or ID card, a 3.5×4.5 cm photo, proof of address and a tax number.</string>
-    <string name="weapons_declare_source">Sources: Law No. 2114-IX, arts. 1-1, 1-2, 2, 3 (as of 25.11.2024); National Police of Ukraine. Checked 02.11.2026.</string>
+    <string name="weapons_declare_source" tools:ignore="TypographyDashes">Sources: Law No. 2114-IX, arts. 1-1, 1-2, 2, 3 (as of 25.11.2024); National Police of Ukraine. Checked 02.11.2026.</string>
     <string name="weapons_own_title">Your own weapon: permit and storage</string>
     <string name="weapons_own_1">Bladed, air and blank-firing weapons can be bought from 18, smoothbore hunting guns from 21, rifled hunting guns from 25. For citizens of Ukraine and permanent residents.</string>
     <string name="weapons_own_2">A police permit is needed. Documents can be filed online in the Ministry of Internal Affairs single window, at a gun shop or with the police.</string>
@@ -1623,7 +1624,7 @@
     <string name="weapons_law_2">Bladed weapons without a permit (daggers, finka-type knives, knuckle-dusters and the like): from a fine up to 3 years in prison.</string>
     <string name="weapons_law_3">Making, converting or repairing a firearm unlawfully, or changing its markings: 3 to 7 years; again or by a group by prior conspiracy, 5 to 10; as an organised group, 8 to 12.</string>
     <string name="weapons_law_4">These articles apply during martial law too. The lawful way for a found weapon is to hand it in or declare it to the police.</string>
-    <string name="weapons_law_source">Source: Criminal Code of Ukraine, arts. 263, 263-1 (current text, zakon.rada.gov.ua); Law No. 2114-IX. Checked 02.11.2026. For your own situation, ask a lawyer or free legal aid.</string>
+    <string name="weapons_law_source" tools:ignore="TypographyDashes">Source: Criminal Code of Ukraine, arts. 263, 263-1 (current text, zakon.rada.gov.ua); Law No. 2114-IX. Checked 02.11.2026. For your own situation, ask a lawyer or free legal aid.</string>
     <string name="weapons_learn_title">Where to learn lawfully</string>
     <string name="weapons_learn_1">Basic national resistance training for people aged 18 and over takes place at training centres working in most regions. Ask your regional administration or the centre how to sign up.</string>
     <string name="weapons_learn_2">Since 01.10.2026 students take Foundations of National Resistance, and schoolchildren the subject Defence of Ukraine. Practice is at ranges, shooting grounds, shooting galleries and simulators.</string>
@@ -1695,7 +1696,7 @@
     <string name="pin_removed_plain">Removed from the home screen</string>
     <string name="pin_undo">Undo</string>
     <string name="pin_restore">Put back</string>
-    <string name="pins_full_short">The home screen already has %1$d tiles. Remove one to add another.</string>
+    <string name="pins_full_short" tools:ignore="PluralsCandidate">The home screen already has %1$d tiles. Remove one to add another.</string>
     <string name="people_mine_hint">Up to 20 most important: call, SMS, WhatsApp, Signal</string>
     <string name="safe_send_sms">SMS: %1$s</string>
     <string name="safe_send_whatsapp">WhatsApp: %1$s</string>
@@ -1727,7 +1728,7 @@
     <string name="author_org_redcross">Ukrainian Red Cross Society</string>
     <string name="author_org_redcross_what">The national Red Cross society: help for people hurt by the war</string>
     <string name="author_org_redcross_url">https://redcross.org.ua/en/donate</string>
-    <string name="author_org_brave1">Brave1</string>
+    <string name="author_org_brave1" tools:ignore="Typos">Brave1</string>
     <string name="author_org_brave1_what">Ukraine\'s state defence technology cluster: learn how Ukraine builds them</string>
     <string name="author_org_brave1_url">https://brave1.gov.ua/en/</string>
     <string name="author_org_united24_defence">Ukraine\'s official fundraising platform: Defence</string>

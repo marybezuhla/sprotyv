@@ -195,6 +195,7 @@ object Docs {
         return b.copyOf(got)
     }
 
+    @android.annotation.SuppressLint("Recycle") // closed by use {}, which lint does not follow here
     private fun displayName(context: Context, uri: Uri): String? = try {
         context.contentResolver.query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)?.use { c ->
             if (c.moveToFirst()) c.getString(0) else null

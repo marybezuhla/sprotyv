@@ -245,6 +245,8 @@ internal fun Widgets.tile(c: Context, widget: Int): RemoteViews {
     val chosen = TileWidgets.get(c, widget)?.takeUnless { HomePrefs.load(c).trip && TileWidgets.tripHides(it.id) }
     val v = RemoteViews(c.packageName, layoutFor(chosen?.tone ?: "plain"))
     // The part's own picture, as inside the app; the colour's general one if it has none
+    // The picture is named in the guide's data, not in code; resources are not shrunk, so every one is there
+    @android.annotation.SuppressLint("DiscouragedApi")
     val icon = chosen?.icon?.let { name -> c.resources.getIdentifier(name, "drawable", c.packageName).takeIf { it != 0 } }
     if (icon != null) v.setImageViewResource(R.id.w_icon, icon)
     v.setTextViewText(R.id.w_title, chosen?.title ?: c.getString(R.string.widget_tile_choose))

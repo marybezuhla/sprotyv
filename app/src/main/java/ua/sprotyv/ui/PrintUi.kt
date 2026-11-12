@@ -210,6 +210,7 @@ fun cardsPdf(context: Context, content: Content): ByteArray {
     return pdf.build()
 }
 
+@android.annotation.SuppressLint("Recycle") // closed by use {}, which lint does not follow here
 private fun write(context: Context, uri: Uri, bytes: ByteArray): Boolean {
     for (mode in listOf("wt", "w")) {
         try {

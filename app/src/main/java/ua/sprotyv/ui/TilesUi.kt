@@ -146,7 +146,7 @@ fun IconBadge(icon: ImageVector, tint: Tint, size: Dp) {
  * bottom); otherwise a card for the grid. "What to do now" is the one marked out.
  */
 @Composable
-fun TileCard(info: TileInfo, big: Boolean, status: String? = null, modifier: Modifier = Modifier, onClick: () -> Unit) {
+fun TileCard(info: TileInfo, big: Boolean, modifier: Modifier = Modifier, status: String? = null, onClick: () -> Unit) {
     val marked = info.id == Tiles.tool(Tool.NOW)
     // "I am safe" beside it in its own green, so the two ways in sit side by side in harmony
     val safe = info.id == Tiles.tool(Tool.SAFE)
@@ -253,8 +253,9 @@ fun FullHome(content: Content?, pins: List<String>, nav: Nav, onSettings: () -> 
     val fixed = Tiles.FIXED.mapNotNull { tileInfo(it, content) }
     val mine = pins.mapNotNull { tileInfo(it, content) }
     // Compact tiles two (or three) to a row, as before; one only when the text is made huge
-    val cfg = androidx.compose.ui.platform.LocalConfiguration.current
-    val cols = if (cfg.fontScale >= 1.3f) 1 else ((cfg.screenWidthDp - 20) / 160).coerceIn(2, 3)
+    val density = androidx.compose.ui.platform.LocalDensity.current
+    val widthDp = with(density) { androidx.compose.ui.platform.LocalWindowInfo.current.containerSize.width.toDp().value }.toInt()
+    val cols = if (density.fontScale >= 1.3f) 1 else ((widthDp - 20) / 160).coerceIn(2, 3)
     LazyVerticalGrid(
         columns = GridCells.Fixed(1),
         contentPadding = PaddingValues(16.dp),

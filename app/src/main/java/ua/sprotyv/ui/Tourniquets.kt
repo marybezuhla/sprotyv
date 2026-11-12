@@ -122,7 +122,7 @@ object Tourniquets {
             e.putString("list", a.toString())
             next?.let { e.putInt("next", it) }
         }
-        if (now) e.commit() else e.apply()
+        if (now) e.saveNow() else e.apply()
     }
 
     // ---- the notes, sealed with a keystore key that needs no unlocking
