@@ -141,6 +141,21 @@ fun App() {
     // Back from another tab first returns to "Home", then leaves the app
     BackHandler(enabled = top == null && full && tab != Tab.HOME) { tabName = Tab.HOME.name }
 
+    LeaveUnsaved(nav)
+    if (top != null) return Screen(top, content, prefs, personal, nav, ::guarded)
+
+    when (prefs.mode) {
+        null -> WelcomeScreen(nav)
+        Mode.SIMPLE -> SimpleHome(content, prefs.pins, nav, onSettings = { guarded(ACTION_SETTINGS) })
+        Mode.KID -> KidHome(content, nav, onGrownUp = { guarded(ACTION_SETTINGS) })
+        // While typing, the keyboard pushes the screen up instead of covering it; the bars step aside
+        Mode.FULL -> FullTabs(tab, { tabName = it.name }, prefs, content, personal, nav, ::guarded)
+    }
+}
+
+/** Unsaved words: leaving asks first; on "leave", goes where the owner was going (home, a screen, or back). */
+@Composable
+private fun LeaveUnsaved(nav: Nav) {
     EditGuardDialog {
         val to = EditGuard.then
         val home = EditGuard.goHome
@@ -150,15 +165,6 @@ fun App() {
             to != null -> nav.go(to)
             else -> nav.back()
         }
-    }
-    if (top != null) return Screen(top, content, prefs, personal, nav, ::guarded)
-
-    when (prefs.mode) {
-        null -> WelcomeScreen(nav)
-        Mode.SIMPLE -> SimpleHome(content, prefs.pins, nav, onSettings = { guarded(ACTION_SETTINGS) })
-        Mode.KID -> KidHome(content, nav, onGrownUp = { guarded(ACTION_SETTINGS) })
-        // While typing, the keyboard pushes the screen up instead of covering it; the bars step aside
-        Mode.FULL -> FullTabs(tab, { tabName = it.name }, prefs, content, personal, nav, ::guarded)
     }
 }
 
@@ -287,32 +293,7 @@ private fun Screen(
     when (top) {
         Route.Open(Section.MINE) -> Personal(Section.MINE.title, personal, nav) { MineHub(nav, content) }
         Route.Open(Section.SAFE) -> Personal(Section.SAFE.title, personal, nav) { SafeScreen(nav) }
-        is Route.Mine -> when (top.part) {
-            MinePart.MEDICAL -> Personal(R.string.medical_card, personal, nav) { MedicalScreen() }
-            MinePart.PEOPLE -> Personal(R.string.people, personal, nav) { PeopleScreen() }
-            MinePart.PLAN -> Personal(R.string.family_plan, personal, nav) { PlanScreen() }
-            MinePart.KIT -> Personal(R.string.kit, personal, nav) { KitScreen(content, nav) }
-            MinePart.PRINT -> Personal(R.string.print_title, personal, nav) { PrintScreen(content) }
-            MinePart.RESCUER -> Personal(R.string.rescuer_screen, personal, nav) { RescuerQrScreen(nav) }
-            MinePart.BACKUP -> Personal(R.string.backup_title, personal, nav) {
-                BackupScreen()
-                // After a restore the home screen's readiness strip follows at once, not only when "Mine" is opened
-                ReadinessBlock(content, nav, showUi = false)
-            }
-            MinePart.PLAN_QR -> Personal(R.string.plan_code_title, personal, nav) { PlanCodeScreen() }
-            MinePart.PLAN_IMPORT -> Personal(R.string.plan_code_import_title, personal, nav) { PlanImportScreen(nav) }
-            // Allowed by the grown-up: the child's own copy, with no lock in the way
-            MinePart.KID_CALL -> if (KidCall.isOn(LocalContext.current) && prefs.mode == ua.sprotyv.home.Mode.KID) Frame(stringResource(R.string.kid_call_family), nav::back) { SecureScreen(); KidCallOpenScreen() }
-                else Personal(R.string.kid_call_family, personal, nav) { KidCallScreen() }
-            MinePart.BOOKMARKS -> Personal(R.string.bookmarks_title, personal, nav) { BookmarksScreen() }
-            MinePart.NOTES -> Personal(R.string.notes_title_screen, personal, nav) { NotesScreen(nav) }
-            MinePart.DOCUMENTS -> Personal(R.string.docs_title, personal, nav) { DocumentsScreen() }
-            MinePart.PATH -> Personal(R.string.path_title, personal, nav) { PathScreen(nav) }
-            MinePart.GART -> Personal(R.string.gart_title, personal, nav) { GartScreen(nav) }
-            MinePart.NEW_PLACE -> Personal(R.string.np_title, personal, nav) { NewPlaceScreen(content, nav) }
-            MinePart.ROLES -> Personal(R.string.roles_title, personal, nav) { RolesScreen(nav) }
-            MinePart.SHIELDS -> Personal(R.string.shields_title, personal, nav) { ShieldsScreen() }
-        }
+        is Route.Mine -> MineScreen(top.part, content, prefs, personal, nav)
         is Route.RoleRoute -> ROLES[top.id]?.let { r -> Personal(r.title, personal, nav) { RoleScreen(r, content, nav) } }
         Route.Scan -> ScanScreen(nav)
         Route.SuppliesRoute -> Personal(R.string.supplies, personal, nav) { SuppliesScreen(content, nav) }
@@ -355,6 +336,37 @@ private fun Screen(
         Route.Sections -> Frame(stringResource(R.string.add_tile), nav::back) {
             SectionsList(content, prefs.pins, nav) { id, on -> guarded((if (on) ACTION_PIN else ACTION_UNPIN) + id) }
         }
+    }
+}
+
+/** The owner's own screens, each behind "Mine"'s opening (and its lock, if set). */
+@Composable
+private fun MineScreen(part: MinePart, content: Content?, prefs: HomePrefs.State, personal: ua.sprotyv.personal.Opened?, nav: Nav) {
+    when (part) {
+        MinePart.MEDICAL -> Personal(R.string.medical_card, personal, nav) { MedicalScreen() }
+        MinePart.PEOPLE -> Personal(R.string.people, personal, nav) { PeopleScreen() }
+        MinePart.PLAN -> Personal(R.string.family_plan, personal, nav) { PlanScreen() }
+        MinePart.KIT -> Personal(R.string.kit, personal, nav) { KitScreen(content, nav) }
+        MinePart.PRINT -> Personal(R.string.print_title, personal, nav) { PrintScreen(content) }
+        MinePart.RESCUER -> Personal(R.string.rescuer_screen, personal, nav) { RescuerQrScreen(nav) }
+        MinePart.BACKUP -> Personal(R.string.backup_title, personal, nav) {
+            BackupScreen()
+            // After a restore the home screen's readiness strip follows at once, not only when "Mine" is opened
+            ReadinessBlock(content, nav, showUi = false)
+        }
+        MinePart.PLAN_QR -> Personal(R.string.plan_code_title, personal, nav) { PlanCodeScreen() }
+        MinePart.PLAN_IMPORT -> Personal(R.string.plan_code_import_title, personal, nav) { PlanImportScreen(nav) }
+        // Allowed by the grown-up: the child's own copy, with no lock in the way
+        MinePart.KID_CALL -> if (KidCall.isOn(LocalContext.current) && prefs.mode == ua.sprotyv.home.Mode.KID) Frame(stringResource(R.string.kid_call_family), nav::back) { SecureScreen(); KidCallOpenScreen() }
+            else Personal(R.string.kid_call_family, personal, nav) { KidCallScreen() }
+        MinePart.BOOKMARKS -> Personal(R.string.bookmarks_title, personal, nav) { BookmarksScreen() }
+        MinePart.NOTES -> Personal(R.string.notes_title_screen, personal, nav) { NotesScreen(nav) }
+        MinePart.DOCUMENTS -> Personal(R.string.docs_title, personal, nav) { DocumentsScreen() }
+        MinePart.PATH -> Personal(R.string.path_title, personal, nav) { PathScreen(nav) }
+        MinePart.GART -> Personal(R.string.gart_title, personal, nav) { GartScreen(nav) }
+        MinePart.NEW_PLACE -> Personal(R.string.np_title, personal, nav) { NewPlaceScreen(content, nav) }
+        MinePart.ROLES -> Personal(R.string.roles_title, personal, nav) { RolesScreen(nav) }
+        MinePart.SHIELDS -> Personal(R.string.shields_title, personal, nav) { ShieldsScreen() }
     }
 }
 

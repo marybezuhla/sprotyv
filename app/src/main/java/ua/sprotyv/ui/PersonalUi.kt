@@ -563,7 +563,6 @@ fun SafeScreen(nav: Nav) {
     SafeSend(list, text)
 }
 
-
 /** The three ready messages as large cards; colour and a mark tell them apart, never colour alone. */
 @Composable
 private fun SafeStatusCards(status: SafeStatus?, onPick: (SafeStatus) -> Unit) {

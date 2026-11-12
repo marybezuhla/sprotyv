@@ -214,7 +214,6 @@ fun GartScreen(nav: Nav) {
     }
 }
 
-
 /** The body: a check once a month, never a score; a month counts once its whole check is done. */
 @Composable
 private fun BodyCheck(g: Gart, month: String, change: ((Gart) -> Gart) -> Unit) {
@@ -286,7 +285,6 @@ private fun ActiveHabit(h: Habit, done: Set<Long>, today: Long, nav: Nav, onTick
     }
 }
 
-
 /** Today's "Daily hardening" from the counts kept outside: (done, chosen), or null when none chosen. */
 fun gartToday(share: String, today: Long = LocalDate.now().toEpochDay()): Pair<Int, Int>? {
     val m = Regex("^(\\d{1,9}):(\\d{1,2})/(\\d{1,2})$").matchEntire(share) ?: return null
@@ -310,7 +308,6 @@ fun GartStrip(nav: Nav) {
     ) { nav.go(Route.Mine(MinePart.GART)) }
 }
 
-
 /**
  * Shields for habits: half when a habit is "almost one's own" (21 days done), full when it is
  * one's own (66). Days done count, never a streak; a shield once earned stays, even after a break.
@@ -324,7 +321,6 @@ internal fun habitShields(stored: String?): List<ShieldItem> {
         ShieldItem("habit:" + h.id, h.title, R.string.shield_how_habit, if (h.pillar.resist) null else h.pillar.group, R.drawable.ocha_training, level)
     }
 }
-
 
 /** "We hold on" from the habits: all the days of daily hardening, and the months of the body check. */
 internal fun gartTotals(stored: String?): Pair<Int, Int> {

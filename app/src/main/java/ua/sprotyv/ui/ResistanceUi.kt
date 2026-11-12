@@ -133,27 +133,7 @@ fun ResistanceScreen(content: Content?, nav: Nav) {
         Block(stringResource(R.string.history_title), Group.PREPARE, tint = resist(), padded = false) {
             BlockRow(stringResource(R.string.history_title), stringResource(R.string.history_hint), first = true) { nav.go(Route.HistoryRoute) }
         }
-        // Everything on resistance from other sections, in one plate that opens
-        Block(stringResource(R.string.resist_all_title), Group.PREPARE, tint = resist(), padded = false, foldable = true, summary = stringResource(R.string.resist_all_desc),
-            leading = { IconBadge(Shield, Tint(MaterialTheme.colorScheme.surface, resist().ink), 40.dp) }) {
-            BlockRow(stringResource(R.string.path_title), stringResource(R.string.path_open_hint), first = true) { nav.go(Route.Mine(MinePart.PATH)) }
-            BlockRow(stringResource(R.string.moz_title), stringResource(R.string.role_save_hint)) { nav.go(Route.MozList) }
-            BlockRow(stringResource(R.string.kit), stringResource(R.string.role_ready_hint)) { nav.go(Route.Mine(MinePart.KIT)) }
-            BlockRow(stringResource(R.string.family_plan), stringResource(R.string.role_family_hint)) { nav.go(Route.Mine(MinePart.PLAN)) }
-            BlockRow(stringResource(R.string.const_title), stringResource(R.string.const_hint)) { nav.go(Route.ConstitutionRoute("")) }
-            BlockRow(stringResource(R.string.weapons_title), stringResource(R.string.weapons_hint)) { nav.go(Route.Weapons) }
-            BlockRow(stringResource(R.string.dir_title), stringResource(R.string.resist_all_rights)) { nav.go(Route.Directory) }
-            BlockRow(stringResource(R.string.role_truth), stringResource(R.string.role_truth_hint)) { nav.go(Route.ChapterRoute("ch18")) }
-        }
-        // What anyone can do: each with the place in Sprotyv where it starts
-        Block(stringResource(R.string.resist_roles_title), Group.PREPARE, tint = resist(), padded = false, foldable = true) {
-            BlockRow(stringResource(R.string.role_save), stringResource(R.string.role_save_hint), first = true) { nav.go(Route.MozList) }
-            BlockRow(stringResource(R.string.role_ready), stringResource(R.string.role_ready_hint)) { nav.go(Route.Mine(MinePart.KIT)) }
-            BlockRow(stringResource(R.string.role_family), stringResource(R.string.role_family_hint)) { nav.go(Route.Mine(MinePart.PLAN)) }
-            BlockRow(stringResource(R.string.role_community), stringResource(R.string.role_community_hint)) { nav.go(Route.Directory) }
-            BlockRow(stringResource(R.string.role_truth), stringResource(R.string.role_truth_hint)) { nav.go(Route.ChapterRoute("ch18")) }
-            BlockRow(stringResource(R.string.role_learn), stringResource(R.string.role_learn_hint)) { nav.go(Route.Mine(MinePart.PATH)) }
-        }
+        ResistWays(nav)
         // My path: the owner's own ticks, private, in "Mine"; here only the count
         val share = prefs?.path?.let(::pathShare)
         Block(
@@ -195,6 +175,32 @@ fun ResistanceScreen(content: Content?, nav: Nav) {
             }
         }
         Text(stringResource(R.string.resist_principles), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+}
+
+/** Everything on resistance gathered in one plate, and what anyone can do, each with where it starts in Sprotyv. */
+@Composable
+private fun ResistWays(nav: Nav) {
+    // Everything on resistance from other sections, in one plate that opens
+    Block(stringResource(R.string.resist_all_title), Group.PREPARE, tint = resist(), padded = false, foldable = true, summary = stringResource(R.string.resist_all_desc),
+        leading = { IconBadge(Shield, Tint(MaterialTheme.colorScheme.surface, resist().ink), 40.dp) }) {
+        BlockRow(stringResource(R.string.path_title), stringResource(R.string.path_open_hint), first = true) { nav.go(Route.Mine(MinePart.PATH)) }
+        BlockRow(stringResource(R.string.moz_title), stringResource(R.string.role_save_hint)) { nav.go(Route.MozList) }
+        BlockRow(stringResource(R.string.kit), stringResource(R.string.role_ready_hint)) { nav.go(Route.Mine(MinePart.KIT)) }
+        BlockRow(stringResource(R.string.family_plan), stringResource(R.string.role_family_hint)) { nav.go(Route.Mine(MinePart.PLAN)) }
+        BlockRow(stringResource(R.string.const_title), stringResource(R.string.const_hint)) { nav.go(Route.ConstitutionRoute("")) }
+        BlockRow(stringResource(R.string.weapons_title), stringResource(R.string.weapons_hint)) { nav.go(Route.Weapons) }
+        BlockRow(stringResource(R.string.dir_title), stringResource(R.string.resist_all_rights)) { nav.go(Route.Directory) }
+        BlockRow(stringResource(R.string.role_truth), stringResource(R.string.role_truth_hint)) { nav.go(Route.ChapterRoute("ch18")) }
+    }
+    // What anyone can do: each with the place in Sprotyv where it starts
+    Block(stringResource(R.string.resist_roles_title), Group.PREPARE, tint = resist(), padded = false, foldable = true) {
+        BlockRow(stringResource(R.string.role_save), stringResource(R.string.role_save_hint), first = true) { nav.go(Route.MozList) }
+        BlockRow(stringResource(R.string.role_ready), stringResource(R.string.role_ready_hint)) { nav.go(Route.Mine(MinePart.KIT)) }
+        BlockRow(stringResource(R.string.role_family), stringResource(R.string.role_family_hint)) { nav.go(Route.Mine(MinePart.PLAN)) }
+        BlockRow(stringResource(R.string.role_community), stringResource(R.string.role_community_hint)) { nav.go(Route.Directory) }
+        BlockRow(stringResource(R.string.role_truth), stringResource(R.string.role_truth_hint)) { nav.go(Route.ChapterRoute("ch18")) }
+        BlockRow(stringResource(R.string.role_learn), stringResource(R.string.role_learn_hint)) { nav.go(Route.Mine(MinePart.PATH)) }
     }
 }
 
@@ -266,7 +272,6 @@ fun PathScreen(nav: Nav) {
         }
     }
 }
-
 
 /** This week's step: one at a time, calmly; with little strength it asks nothing, with plenty it shows one more. */
 @Composable
@@ -350,7 +355,6 @@ private fun parsePath(s: String?): Set<String> {
         emptySet()
     }
 }
-
 
 /** Shields for "My path": a level done, and each step checked by a test. */
 internal fun pathShields(stored: String?, roles: Set<String>): List<ShieldItem> {

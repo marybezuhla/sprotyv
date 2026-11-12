@@ -310,7 +310,6 @@ fun NoteEditScreen(id: Long, nav: Nav) {
     if (confirmDelete) NoteDeleteQuestion(key, first.id, nav) { confirmDelete = false }
 }
 
-
 /** A note left empty (or "My experience" left with only its questions) goes when the screen does; decided on the worker, after every save. */
 @Composable
 private fun ForgetIfEmpty(gone: Long) {

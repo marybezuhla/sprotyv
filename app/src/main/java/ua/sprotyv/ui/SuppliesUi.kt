@@ -137,7 +137,6 @@ fun SuppliesScreen(content: Content?, nav: Nav) {
     }
 }
 
-
 /** "How long will it last?": water in days, food lines in place, what to replace soon (never red: this is preparation). */
 @Composable
 private fun SuppliesDash(s: MySupplies, keyed: List<Pair<String, ua.sprotyv.content.SupplyLine>>, now: YearMonth) {

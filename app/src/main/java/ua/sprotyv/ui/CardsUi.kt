@@ -192,7 +192,6 @@ private fun CardBody(card: Card, content: Content, nav: Nav) {
     Source(card)
 }
 
-
 /** The whole card at once: every step with its "why", picture and timer, then "step by step". */
 @Composable
 private fun CardOverview(card: Card, content: Content, onStepByStep: () -> Unit) {

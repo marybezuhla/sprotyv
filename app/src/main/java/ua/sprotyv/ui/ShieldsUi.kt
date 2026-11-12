@@ -90,10 +90,6 @@ fun ShieldsScreen(openGroups: Boolean = false) {
     val (gartDays, bodyMonths) = gartTotals(h.first())
     // Count widgets show a plain copy of their own count only
     androidx.compose.runtime.LaunchedEffect(st.counts) { CountWidgets.mirror(ctx, st.counts) }
-    fun counted(id: String, title: Int, icon: Int, n: Int, rare: Boolean, group: Group?, counter: String? = null): ShieldItem {
-        // Every single time counts: the exact number is on the shield; the marks passed are only notches
-        return ShieldItem(id, title, R.string.shield_how_count, group, icon, if (n > 0) 2 else 0, count = n.takeIf { it > 0 }, counter = counter, notches = marksPassed(n, rare))
-    }
     val held = listOf(
         counted("held:blackout", R.string.held_blackout, R.drawable.ocha_power_outage, Held.get(ctx, "blackout"), false, Group.HOME_LIFE),
         counted("held:heating", R.string.held_heating, R.drawable.ocha_stove, Held.get(ctx, "heating"), false, Group.HOME_LIFE),
@@ -104,36 +100,8 @@ fun ShieldsScreen(openGroups: Boolean = false) {
     val tests = pathDone.filter { it.id.startsWith("test:") } +
         PRACTICE_TOPICS.map { (id, title) -> ShieldItem("topic:$id", title, R.string.shield_how_topic, Group.PREPARE, R.drawable.tab_know, if (id in st.topics) 2 else 0) } +
         counted("solved", R.string.shield_solved, R.drawable.tab_know, st.solved.size, false, Group.PREPARE)
-    // Big steps: some seen from what is already ticked, the rest on the owner's own word
-    val pathKeys = p.first()
-    fun auto(key: String) = pathKeys?.contains("\"$key\"") == true
-    // byPath: seen from "My path" (no tick of its own); otherwise ticked on the owner's word
-    fun marked(m: String, title: Int, icon: Int, group: Group?, big: Boolean, byPath: Boolean? = null) =
-        ShieldItem("step:$m", title, if (byPath != null) R.string.shield_how_auto else R.string.shield_how_mark, group, icon,
-            if (byPath == true || (byPath == null && m in st.marked)) 2 else 0, big = big, mark = m.takeIf { byPath == null })
-    val big = listOf(
-        marked("rescue", R.string.step_rescue, R.drawable.hi_cpr, Group.FIRST_AID, true),
-        marked("left", R.string.step_left, R.drawable.ocha_internally_displaced, Group.LEAVE, true),
-        marked("newlife", R.string.step_newlife, R.drawable.ocha_house, Group.LEAVE, true),
-        marked("course", R.string.step_course, R.drawable.ocha_learning, Group.FIRST_AID, true, byPath = auto("course")),
-        marked("teach", R.string.step_teach, R.drawable.ocha_users, Group.FIRST_AID, true, byPath = auto("teach")),
-        marked("volunteer", R.string.step_volunteer, R.drawable.ocha_group, null, true),
-        marked("defence", R.string.step_defence, R.drawable.ocha_security, null, true),
-    )
-    val small = listOf(
-        marked("donate", R.string.step_donate, R.drawable.ic_heart, null, false),
-        marked("twosources", R.string.step_twosources, R.drawable.ocha_public_information, Group.GUIDE, false),
-    )
-    val counters = listOf(
-        counted("count:blood", R.string.count_blood, R.drawable.ocha_health, st.counts["blood"] ?: 0, true, Group.FIRST_AID, "blood"),
-        counted("count:shifts", R.string.count_shifts, R.drawable.ocha_group, st.counts["shifts"] ?: 0, true, null, "shifts"),
-        counted("count:taught", R.string.count_taught, R.drawable.ocha_users, st.counts["taught"] ?: 0, true, Group.FIRST_AID, "taught"),
-        counted("count:donated", R.string.count_donated, R.drawable.ic_heart, st.counts["donated"] ?: 0, false, null, "donated"),
-        counted("count:helped", R.string.count_helped, R.drawable.ocha_internally_displaced, st.counts["helped"] ?: 0, false, Group.LEAVE, "helped"),
-        counted("count:courses", R.string.count_courses, R.drawable.ocha_learning, st.counts["courses"] ?: 0, true, Group.PREPARE, "courses"),
-        counted("count:animals", R.string.count_animals, R.drawable.ic_leaf, st.counts["animals"] ?: 0, true, null, "animals"),
-        counted("count:thanks", R.string.count_thanks, R.drawable.om_star, st.counts["thanks"] ?: 0, false, null, "thanks"),
-    )
+    val (big, small) = stepShields(st, p.first())
+    val counters = counterShields(st)
     val groups = listOf(
         R.string.shields_held to held,
         R.string.shields_big to big,
@@ -194,37 +162,7 @@ private fun ShieldBadge(s: ShieldItem, modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(Modifier.size(64.dp), contentAlignment = Alignment.Center) {
-            Canvas(Modifier.size(64.dp)) {
-                val w = size.width; val hgt = size.height
-                fun sx(x: Float) = x / 24f * w
-                fun sy(y: Float) = y / 24f * hgt
-                val shield = Path().apply {
-                    moveTo(sx(12f), sy(2.5f)); lineTo(sx(19.5f), sy(5.2f)); lineTo(sx(19.5f), sy(10.6f))
-                    cubicTo(sx(19.5f), sy(15.4f), sx(16.4f), sy(18.9f), sx(12f), sy(20.6f))
-                    cubicTo(sx(7.6f), sy(18.9f), sx(4.5f), sy(15.4f), sx(4.5f), sy(10.6f))
-                    lineTo(sx(4.5f), sy(5.2f)); close()
-                }
-                when (s.level) {
-                    2 -> {
-                        drawPath(shield, tint.container); drawPath(shield, tint.ink, style = Stroke(width = 2.dp.toPx()))
-                        // A big step: a second, inner rim
-                        if (s.big) scale(0.8f) { drawPath(shield, tint.ink, style = Stroke(width = 1.5.dp.toPx())) }
-                        // Marks passed: short notches along the top edge, up to seven shown
-                        val shown = s.notches.coerceAtMost(7)
-                        for (k in 0 until shown) {
-                            val x = sx(12f + (k - (shown - 1) / 2f) * 1.6f)
-                            drawLine(tint.ink, androidx.compose.ui.geometry.Offset(x, sy(4.2f)), androidx.compose.ui.geometry.Offset(x, sy(5.6f)), strokeWidth = 1.5.dp.toPx())
-                        }
-                    }
-                    1 -> {
-                        // Half way: the lower half filled
-                        drawPath(shield, tint.container.copy(alpha = 0.35f))
-                        clipRect(top = hgt * 0.5f) { drawPath(shield, tint.container) }
-                        drawPath(shield, tint.ink, style = Stroke(width = 2.dp.toPx()))
-                    }
-                    else -> drawPath(shield, outline, style = Stroke(width = 1.5.dp.toPx(), pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(floatArrayOf(6f, 6f))))
-                }
-            }
+            ShieldShape(s, tint, outline)
             if (s.count != null) {
                 // Counts: the last mark reached, on the shield itself
                 Text(s.count.toString(), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = tint.ink)
@@ -250,25 +188,106 @@ private fun ShieldBadge(s: ShieldItem, modifier: Modifier = Modifier) {
                 Text(stringResource(if (on) R.string.shield_unmark else R.string.shield_mark), style = MaterialTheme.typography.labelLarge, maxLines = 1, softWrap = false)
             }
         }
-        s.counter?.let { c ->
-            // One pill: "−1" for a slip of the finger, "+1" for each time
-            androidx.compose.material3.Surface(
-                shape = androidx.compose.foundation.shape.RoundedCornerShape(50),
-                color = tint.container.copy(alpha = 0.5f),
-                modifier = Modifier.padding(top = 8.dp),
-            ) {
-                androidx.compose.foundation.layout.Row(verticalAlignment = Alignment.CenterVertically) {
-                    val pad = androidx.compose.foundation.layout.PaddingValues(horizontal = 16.dp)
-                    androidx.compose.material3.TextButton(onClick = { Steps.change { st -> st.copy(counts = st.counts + (c to ((st.counts[c] ?: 0) - 1).coerceAtLeast(0))) } }, contentPadding = pad,
-                        modifier = Modifier.heightIn(min = 48.dp).semantics { contentDescription = "−1: $title" }) {
-                        Text("−1", style = MaterialTheme.typography.titleMedium, color = tint.ink, maxLines = 1, softWrap = false)
-                    }
-                    androidx.compose.foundation.layout.Box(Modifier.size(width = 1.dp, height = 24.dp).background(tint.ink.copy(alpha = 0.3f)))
-                    androidx.compose.material3.TextButton(onClick = { Steps.change { st -> st.copy(counts = st.counts + (c to ((st.counts[c] ?: 0) + 1).coerceAtMost(10_000))) } }, contentPadding = pad,
-                        modifier = Modifier.heightIn(min = 48.dp).semantics { contentDescription = "+1: $title" }) {
-                        Text("+1", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, color = tint.ink, maxLines = 1, softWrap = false)
-                    }
+        s.counter?.let { c -> CountPill(c, title, tint) }
+    }
+}
+
+/** Every single time counts: the exact number is on the shield; the marks passed are only notches. */
+private fun counted(id: String, title: Int, icon: Int, n: Int, rare: Boolean, group: Group?, counter: String? = null): ShieldItem =
+    ShieldItem(id, title, R.string.shield_how_count, group, icon, if (n > 0) 2 else 0, count = n.takeIf { it > 0 }, counter = counter, notches = marksPassed(n, rare))
+
+/** Big and small steps: some seen from what is already ticked in "My path" ([pathKeys]), the rest on the owner's own word. */
+private fun stepShields(st: Steps, pathKeys: String?): Pair<List<ShieldItem>, List<ShieldItem>> {
+    fun auto(key: String) = pathKeys?.contains("\"$key\"") == true
+    // byPath: seen from "My path" (no tick of its own); otherwise ticked on the owner's word
+    fun marked(m: String, title: Int, icon: Int, group: Group?, big: Boolean, byPath: Boolean? = null) =
+        ShieldItem("step:$m", title, if (byPath != null) R.string.shield_how_auto else R.string.shield_how_mark, group, icon,
+            if (byPath == true || (byPath == null && m in st.marked)) 2 else 0, big = big, mark = m.takeIf { byPath == null })
+    val big = listOf(
+        marked("rescue", R.string.step_rescue, R.drawable.hi_cpr, Group.FIRST_AID, true),
+        marked("left", R.string.step_left, R.drawable.ocha_internally_displaced, Group.LEAVE, true),
+        marked("newlife", R.string.step_newlife, R.drawable.ocha_house, Group.LEAVE, true),
+        marked("course", R.string.step_course, R.drawable.ocha_learning, Group.FIRST_AID, true, byPath = auto("course")),
+        marked("teach", R.string.step_teach, R.drawable.ocha_users, Group.FIRST_AID, true, byPath = auto("teach")),
+        marked("volunteer", R.string.step_volunteer, R.drawable.ocha_group, null, true),
+        marked("defence", R.string.step_defence, R.drawable.ocha_security, null, true),
+    )
+    val small = listOf(
+        marked("donate", R.string.step_donate, R.drawable.ic_heart, null, false),
+        marked("twosources", R.string.step_twosources, R.drawable.ocha_public_information, Group.GUIDE, false),
+    )
+    return big to small
+}
+
+/** The owner's own counts, kept by hand with "+1". */
+private fun counterShields(st: Steps): List<ShieldItem> {
+    return listOf(
+        counted("count:blood", R.string.count_blood, R.drawable.ocha_health, st.counts["blood"] ?: 0, true, Group.FIRST_AID, "blood"),
+        counted("count:shifts", R.string.count_shifts, R.drawable.ocha_group, st.counts["shifts"] ?: 0, true, null, "shifts"),
+        counted("count:taught", R.string.count_taught, R.drawable.ocha_users, st.counts["taught"] ?: 0, true, Group.FIRST_AID, "taught"),
+        counted("count:donated", R.string.count_donated, R.drawable.ic_heart, st.counts["donated"] ?: 0, false, null, "donated"),
+        counted("count:helped", R.string.count_helped, R.drawable.ocha_internally_displaced, st.counts["helped"] ?: 0, false, Group.LEAVE, "helped"),
+        counted("count:courses", R.string.count_courses, R.drawable.ocha_learning, st.counts["courses"] ?: 0, true, Group.PREPARE, "courses"),
+        counted("count:animals", R.string.count_animals, R.drawable.ic_leaf, st.counts["animals"] ?: 0, true, null, "animals"),
+        counted("count:thanks", R.string.count_thanks, R.drawable.om_star, st.counts["thanks"] ?: 0, false, null, "thanks"),
+    )
+}
+
+/** The shield drawn: filled when earned (a second rim for a big step, notches for marks), half filled half way, dashed before. */
+@Composable
+private fun ShieldShape(s: ShieldItem, tint: Tint, outline: androidx.compose.ui.graphics.Color) {
+    Canvas(Modifier.size(64.dp)) {
+        val w = size.width; val hgt = size.height
+        fun sx(x: Float) = x / 24f * w
+        fun sy(y: Float) = y / 24f * hgt
+        val shield = Path().apply {
+            moveTo(sx(12f), sy(2.5f)); lineTo(sx(19.5f), sy(5.2f)); lineTo(sx(19.5f), sy(10.6f))
+            cubicTo(sx(19.5f), sy(15.4f), sx(16.4f), sy(18.9f), sx(12f), sy(20.6f))
+            cubicTo(sx(7.6f), sy(18.9f), sx(4.5f), sy(15.4f), sx(4.5f), sy(10.6f))
+            lineTo(sx(4.5f), sy(5.2f)); close()
+        }
+        when (s.level) {
+            2 -> {
+                drawPath(shield, tint.container); drawPath(shield, tint.ink, style = Stroke(width = 2.dp.toPx()))
+                // A big step: a second, inner rim
+                if (s.big) scale(0.8f) { drawPath(shield, tint.ink, style = Stroke(width = 1.5.dp.toPx())) }
+                // Marks passed: short notches along the top edge, up to seven shown
+                val shown = s.notches.coerceAtMost(7)
+                for (k in 0 until shown) {
+                    val x = sx(12f + (k - (shown - 1) / 2f) * 1.6f)
+                    drawLine(tint.ink, androidx.compose.ui.geometry.Offset(x, sy(4.2f)), androidx.compose.ui.geometry.Offset(x, sy(5.6f)), strokeWidth = 1.5.dp.toPx())
                 }
+            }
+            1 -> {
+                // Half way: the lower half filled
+                drawPath(shield, tint.container.copy(alpha = 0.35f))
+                clipRect(top = hgt * 0.5f) { drawPath(shield, tint.container) }
+                drawPath(shield, tint.ink, style = Stroke(width = 2.dp.toPx()))
+            }
+            else -> drawPath(shield, outline, style = Stroke(width = 1.5.dp.toPx(), pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(floatArrayOf(6f, 6f))))
+        }
+    }
+}
+
+/** One pill under a count: "−1" for a slip of the finger, "+1" for each time. */
+@Composable
+private fun CountPill(c: String, title: String, tint: Tint) {
+    // One pill: "−1" for a slip of the finger, "+1" for each time
+    androidx.compose.material3.Surface(
+        shape = androidx.compose.foundation.shape.RoundedCornerShape(50),
+        color = tint.container.copy(alpha = 0.5f),
+        modifier = Modifier.padding(top = 8.dp),
+    ) {
+        androidx.compose.foundation.layout.Row(verticalAlignment = Alignment.CenterVertically) {
+            val pad = androidx.compose.foundation.layout.PaddingValues(horizontal = 16.dp)
+            androidx.compose.material3.TextButton(onClick = { Steps.change { st -> st.copy(counts = st.counts + (c to ((st.counts[c] ?: 0) - 1).coerceAtLeast(0))) } }, contentPadding = pad,
+                modifier = Modifier.heightIn(min = 48.dp).semantics { contentDescription = "−1: $title" }) {
+                Text("−1", style = MaterialTheme.typography.titleMedium, color = tint.ink, maxLines = 1, softWrap = false)
+            }
+            androidx.compose.foundation.layout.Box(Modifier.size(width = 1.dp, height = 24.dp).background(tint.ink.copy(alpha = 0.3f)))
+            androidx.compose.material3.TextButton(onClick = { Steps.change { st -> st.copy(counts = st.counts + (c to ((st.counts[c] ?: 0) + 1).coerceAtMost(10_000))) } }, contentPadding = pad,
+                modifier = Modifier.heightIn(min = 48.dp).semantics { contentDescription = "+1: $title" }) {
+                Text("+1", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, color = tint.ink, maxLines = 1, softWrap = false)
             }
         }
     }

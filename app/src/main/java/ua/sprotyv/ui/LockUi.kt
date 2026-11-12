@@ -214,20 +214,23 @@ fun LockMineSettings() {
         if (busy) return@Toggle
         if (on) askOn = true else changeFromLocked(m, KeyVault.Mode.OPEN)
     }
-    if (m.locked) {
-        Toggle(stringResource(R.string.lock_mine_pin_only), m.pinOnly) { on ->
-            if (!busy) changeFromLocked(m, KeyVault.Mode(locked = true, pinOnly = on))
-        }
-        Text(stringResource(R.string.lock_mine_pin_only_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    }
-    Text(stringResource(R.string.lock_mine_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    // A plain sentence, never the technical reason (class names, keystore messages)
-    if (reason != null) Text(stringResource(R.string.lock_mine_failed), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    LockMineHints(m, failed = reason != null) { on -> if (!busy) changeFromLocked(m, KeyVault.Mode(locked = true, pinOnly = on)) }
     if (askOn) LockOnQuestion(onNo = { askOn = false }) {
         askOn = false
         busy = true
         scope.launch { finish(withContext(Dispatchers.IO) { PersonalStore.startLock(context, pinOnly = false) }) }
     }
+}
+
+/** "PIN only" when locked, what the lock means, and a plain sentence (never the technical reason) after a failure. */
+@Composable
+private fun LockMineHints(m: KeyVault.Mode, failed: Boolean, onPinOnly: (Boolean) -> Unit) {
+    if (m.locked) {
+        Toggle(stringResource(R.string.lock_mine_pin_only), m.pinOnly, onPinOnly)
+        Text(stringResource(R.string.lock_mine_pin_only_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+    Text(stringResource(R.string.lock_mine_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    if (failed) Text(stringResource(R.string.lock_mine_failed), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 }
 
 /** What locking "My data" means, asked once before it is turned on. */

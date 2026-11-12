@@ -135,7 +135,6 @@ fun PracticeScreen(content: Content?, cardId: String, nav: Nav, check: String? =
     }
 }
 
-
 /** The end of a round: "check yourself" with its result, a sticker for a child, or simply done. */
 @Composable
 private fun PracticeEnd(
@@ -247,10 +246,8 @@ private fun PracticeChoice(content: Content?, nav: Nav) {
     }
 }
 
-
 /** The practice themes, for the shields: id and name. */
 internal val PRACTICE_TOPICS: List<Pair<String, Int>> get() = TOPICS.map { it.id to it.title }
-
 
 /** Where a situation's words come from: its card, its guide section or its Constitution article. */
 private fun whereFrom(card: String): Route =
