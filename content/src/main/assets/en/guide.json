@@ -9,7 +9,7 @@
  "source": "https://github.com/snegireff/dovidnyk-vyzhyvannia",
  "commit": "6a3c6fb6e7ecd160e864232d0f1a47cd928fe928",
  "license": "CC BY-SA 4.0",
- "changes": "Converted for display in the app: markup changed, figures kept as images, the sections of Appendix A numbered A.1–A.5, the cover disclaimer moved to “About the guide”, the rest of the cover, the contents and the note pages left out. Three figures from open sources added (public domain; author in the caption): fig. 11.2, 15.5, 15.6. English translation by Sprotyv from the Ukrainian original (CC BY-SA 4.0); the meaning of the chapters is unchanged, except: in 4.8 and 14.4 official websites, apps and ways named by the OVA instead of chatbots and Telegram channels (the app does not recommend Telegram); in 13.1 and 18.1 CoMaps, Organic Maps or OsmAnd instead of maps.me; in the table of 6.2 the doses for children replaced by a reference to the official Ministry of Health announcement or a doctor, and in 7.13 the activated charcoal dose for children by a reference to 103 or a doctor (doses for children appear in the app only after a paediatrician's review).",
+ "changes": "Converted for display in the app: markup changed, figures kept as images, the sections of Appendix A numbered A.1–A.5, the cover disclaimer moved to “About the guide”, the rest of the cover, the contents and the note pages left out. Three figures from open sources added (public domain; author in the caption): fig. 11.2, 15.5, 15.6. English translation by Sprotyv from the Ukrainian original (CC BY-SA 4.0); the meaning of the chapters is unchanged, except: in 4.8 and 14.4 official websites, apps and ways named by the OVA instead of chatbots and Telegram channels (the app does not recommend Telegram); in 13.1 and 18.1 CoMaps, Organic Maps or OsmAnd instead of maps.me; in the table of 6.2 the doses for children replaced by a reference to the official Ministry of Health announcement or a doctor, and in 7.13 the activated charcoal dose for children by a reference to 103 or a doctor (doses for children appear in the app only after a paediatrician's review). In November 2026 the advice was checked against current guidelines (Resuscitation Council UK and ERC 2025, Ministry of Health order No. 441, NHS, USDA, WHO) and corrected in 7.2, 7.4–7.6, 7.8, 7.10, 7.11, 7.16, 9.4, 12.1–12.3, 13.2, 16.2, 20.1, 20.5, 21.2, 22.5, 27.5 and 29.4; each change with its source is in scripts/content/adaptation/GUIDE-REVIEW.md in the app's repository.",
  "chapters": [
   {
    "id": "ch1",
@@ -2147,7 +2147,7 @@
       },
       {
        "t": "p",
-       "text": "Press on the wound with all your weight through cloth/a bandage (if there is nothing, with bare hands). Do not let go. In 80% of cases, strong continuous pressure for 10+ minutes stops the bleeding. But if blood is spurting from an arm or leg, do not wait: apply a tourniquet at once (step 2)."
+       "text": "Press on the wound with all your weight through cloth/a bandage (if there is nothing, with bare hands). Do not let go. Strong continuous pressure for 10+ minutes stops most bleeding. But if blood is spurting from an arm or leg, do not wait: apply a tourniquet at once (step 2)."
       },
       {
        "t": "h",
@@ -2265,7 +2265,7 @@
          "text": "Tilt the head back for breathing; the mouth faces the ground. The upper knee acts as a prop."
         },
         {
-         "text": "Check breathing every minute. Every 30 min, turn the person onto the other side (if the wait is long)."
+         "text": "Put a visibly pregnant woman on her left side. Check breathing every minute. Every 30 min, turn the person onto the other side (if the wait is long; a pregnant woman stays on her left)."
         }
        ]
       },
@@ -2290,7 +2290,7 @@
        "kind": "bullets",
        "items": [
         {
-         "text": "**Penetrating chest wound** (air whistling, frothy blood): cover it with your palm at once, then with an airtight (occlusive) seal or plastic film/a bag stuck down with tape. If the condition suddenly gets worse after sealing (increasing breathlessness), peel back one edge, let the air out, stick it down again. Position: half-sitting or lying on the injured side."
+         "text": "**Penetrating chest wound** (air whistling, frothy blood): cover it with your palm at once. Best is a vented chest seal (with a valve), which lets air out. Without one, an airtight (occlusive) seal or plastic film/a bag taped down on all sides (apply it as the person breathes out), as the Ministry of Health order says. If the condition suddenly gets worse after sealing (increasing breathlessness), peel back one edge, let the air out, stick it down again. Position: half-sitting or lying on the injured side."
         },
         {
          "text": "**Abdominal wound with protruding organs:** do NOT push them back. Cover with a clean damp cloth, film on top, a loose bandage. Knees bent. Give nothing to drink or eat (moistening the lips is allowed)."
@@ -2318,7 +2318,7 @@
          "text": "Stop all bleeding (this is the main \"medicine\" for shock)."
         },
         {
-         "text": "Lay the person flat; if there are no head/chest/abdominal injuries, raise the legs slightly (on a backpack)."
+         "text": "Lay the person flat; if there are no head/chest/abdominal injuries, raise the legs slightly (on a backpack). A visibly pregnant woman goes on her left side: on her back, the womb presses on the large blood vessels."
         },
         {
          "text": "Insulate from below and cover from above (emergency blanket, clothes). In shock people get cold even in summer."
@@ -2392,7 +2392,7 @@
          "text": "Cover with a clean lint-free cloth or cling film (not tightly). Do NOT put oil, sour cream or toothpaste on it; do NOT pop blisters."
         },
         {
-         "text": "Pain relief (paracetamol/ibuprofen), drink plenty."
+         "text": "Pain relief (paracetamol or ibuprofen; in pregnancy, paracetamol only), drink plenty."
         },
         {
          "text": "Always see a doctor: a burn larger than the injured person's palm, burns of the face/hands/genital area/joints, in children, electrical and chemical burns, any deep burns (white-grey or charred skin without pain)."
@@ -2480,7 +2480,7 @@
       },
       {
        "t": "p",
-       "text": "Signs: hot dry or heavily sweating skin, high temperature, confusion, nausea. Into the shade, undress, cool: wet cloths on the neck/armpits/groin, fan, cool drinks in small sips. If unconscious: recovery position, cooling, urgent help."
+       "text": "Signs: hot dry or heavily sweating skin, high temperature, confusion, nausea. Into the shade, call 103, undress and cool at once. Best is to put the body up to the neck in cool or cold water (a bath, a barrel, the edge of a lake; head above water) and keep it there for at least 15 minutes or until the person comes round. If that is not possible: a cold shower, wet sheets, cold packs on the neck/armpits/groin and fanning. If conscious, cool drinks in small sips. If unconscious: recovery position, cooling, urgent help."
       },
       {
        "t": "h",
@@ -2522,7 +2522,7 @@
          "text": "**Stroke, the FAST test (Ukrainian «ОРМЧ»):** **F**ace drooping (ask them to smile), **A**rm does not rise or drops, **S**peech slurred or they do not understand, **T**ime: call 103 immediately and remember when it started. Give nothing to eat or drink, lay them down with the head raised, do not leave a conscious person alone. The treatment window is 3–4.5 hours: \"let them lie down, it will pass\" costs brain tissue."
         },
         {
-         "text": "**Sudden drop in blood sugar (a diabetic or a hungry person):** trembling, sweating, irritability, confusion, \"drunk\" behaviour. Conscious: something sweet (sugar, juice, honey) immediately, then bread/biscuits; if no better in 15 min, repeat. Unconscious: nothing in the mouth, recovery position, do not put honey/sugar in the cheek, 103. If you do not know whether sugar is high or low, give something sweet: sugar does not kill someone whose level is high, while low sugar kills within minutes."
+         "text": "**Sudden drop in blood sugar (a diabetic or a hungry person):** trembling, sweating, irritability, confusion, \"drunk\" behaviour. Conscious: 15–20 g of sugar immediately (3–4 teaspoons of sugar or glucose tablets, or a glass of juice or a sugary, not diet, drink), then bread/biscuits; if no better in 15 min, repeat. Unconscious: nothing in the mouth, recovery position, do not put honey/sugar in the cheek, 103. If you do not know whether sugar is high or low, give something sweet: sugar does not kill someone whose level is high, while low sugar kills within minutes."
         },
         {
          "text": "**Electric shock:** do NOT touch the person until the power is off (circuit breaker, plug) or the wire has been pushed away with a dry stick/plastic; high-voltage line: no closer than 8–10 m, only power engineers. Then: breathing/CPR, look for entry and exit burns (treat both as burns); even someone who seems \"fine\" should see a medic: heart rhythm problems can appear hours later."
@@ -2676,7 +2676,7 @@
          "text": "Hemostatic bandage (kaolin/chitosan-based): 1–2"
         },
         {
-         "text": "Chest occlusive seals: 2 (or thick film + tape)"
+         "text": "Chest occlusive seals, vented if possible: 2 (or thick film + tape)"
         },
         {
          "text": "Sterile gauze bandages 7 m × 14 cm: 5, non-sterile: 3"
@@ -2704,7 +2704,7 @@
        "kind": "check",
        "items": [
         {
-         "text": "Paracetamol 500 mg, ibuprofen 200–400 mg (pain, fever)"
+         "text": "Paracetamol 500 mg, ibuprofen 200–400 mg (pain, fever; in pregnancy, paracetamol only)"
         },
         {
          "text": "Oral rehydration salts: 5+ sachets; loperamide (diarrhoea in adults)"
@@ -3191,7 +3191,7 @@
          "cells": [
           "**Plantain**",
           "Rosette of oval leaves with curved veins",
-          "Young leaves in soup; a leaf on small wounds"
+          "Young leaves in soup. Do not put a leaf on a wound: rinse it with clean water"
          ]
         },
         {
@@ -3814,7 +3814,7 @@
        "kind": "bullets",
        "items": [
         {
-         "text": "**Cotton kills:** a wet cotton T-shirt conducts heat away 25 times faster than air and does not dry. The layer next to the skin should be synthetics or wool."
+         "text": "**Cotton kills:** water carries heat away about 25 times faster than air, and wet cotton takes a long time to dry. The layer next to the skin should be synthetics or wool."
         },
         {
          "text": "**Do not sweat:** take off a layer before work/walking. Sweated = frozen. Better to walk feeling cool than wet."
@@ -3847,7 +3847,7 @@
          "text": "**Windows** are the main heat hole: plastic sheeting/blankets/mattresses at night; during the day uncover the sunny side."
         },
         {
-         "text": "**A tent in the room** or a \"den\" of blankets over the bed: inside it is 5–10° warmer just from breathing."
+         "text": "**A tent in the room** or a \"den\" of blankets over the bed: inside it is noticeably warmer from body heat and breathing."
         },
         {
          "text": "Sleep together; pets are hot-water bottles too. Hot water in bottles into the sleeping bag 30 min before sleep."
@@ -3889,7 +3889,7 @@
          "text": "Do not hide your face inside the sleeping bag: condensation from breathing will wet the insulation. Cover your nose with a buff."
         },
         {
-         "text": "A full bladder takes away heat: go before sleep, however much you want to stay warm."
+         "text": "Go to the toilet before sleep, however much you want to stay warm: then you will not have to climb out into the cold in the night."
         }
        ]
       }
@@ -3985,7 +3985,7 @@
        "kind": "bullets",
        "items": [
         {
-         "text": "Moss and lichen are thicker on the north (damp) side of stones and trees; bark is darker and rougher on the north side."
+         "text": "Moss and lichen grow where it is shady and damp: often on the north side, but in forests and towns this sign often misleads."
         },
         {
          "text": "Anthills are on the south side of trees/stumps; the south slope of an anthill is gentler."
@@ -4497,7 +4497,7 @@
          "text": "When the bag is 1/2–2/3 full, tie it off and take it to a designated place away from homes and water (not into the shared bin if it is not being collected!). Bury it if possible."
         },
         {
-         "text": "Separate collection: urine separately (wide-necked bottles), as it is almost sterile and easy to pour away at a distance; solids separately. This way the bags are lighter and safer."
+         "text": "Separate collection: urine separately (wide-necked bottles), as it carries far fewer dangerous germs than faeces and is easy to pour away at a distance; solids separately. This way the bags are lighter and safer."
         }
        ]
       },
@@ -5525,7 +5525,7 @@
          "text": "Unplug sensitive electronics (the surge when the grid comes back burns out appliances), leave one lamp on as an indicator that power is back."
         },
         {
-         "text": "Do NOT open the fridge/freezer unless you must: a closed freezer stays cold for 24–48 hours. In winter, use an \"outdoor fridge\" (sec. 9.3)."
+         "text": "Do NOT open the fridge/freezer unless you must: a closed freezer stays cold for 24–48 hours (full, about 2 days; half empty, about a day), a fridge only about 4 hours. In winter, use an \"outdoor fridge\" (sec. 9.3)."
         },
         {
          "text": "Cook and eat what spoils first: meat/dairy → vegetables → tinned food and grains last."
@@ -5719,7 +5719,7 @@
        "kind": "bullets",
        "items": [
         {
-         "text": "**Decide \"where we spend the winter\" in September–October,** not at –15° without power: intelligence and energy experts warn that in winter 2026–2027 strikes on heat generation will intensify (jet drones, ballistic missiles), and large cities may stay without heat for weeks. Families with small children, older and sick people should have an agreed place in a village/small town/abroad and a plan for leaving (sec. 17.6, chapter 26)."
+         "text": "**Decide \"where we spend the winter\" in September–October,** not at –15° without power: strikes on energy and heat generation (drones, ballistic missiles) come back every winter, so be ready to be without heating for a long time. Families with small children, older and sick people should have an agreed place in a village/small town/abroad and a plan for leaving (sec. 17.6, chapter 26)."
         },
         {
          "text": "**Pipes freeze** at –5…–10° in an unheated building within 1–3 days. If the heat does not come back: drain the water from the pipes (open all taps, drain the boiler, water heater, toilet cistern, pour antifreeze/salt into the drain traps), otherwise the ice will burst the system and the flat will flood once the heat is restored."
@@ -5804,7 +5804,7 @@
          "text": "Fever is a defence: if it is up to 38.5°C in an adult without serious illnesses, do not bring it down, but drink (+0.5–1 L for every degree above 37) and rest."
         },
         {
-         "text": "To bring it down: paracetamol 500–1000 mg up to 4 times a day (no more than 4 g/day, caution with the liver) or ibuprofen 200–400 mg up to 3 times a day (after food). Children: only children's doses by weight, NOT aspirin."
+         "text": "To bring it down: paracetamol 500–1000 mg up to 4 times a day (no more than 4 g/day, caution with the liver) or ibuprofen 200–400 mg up to 3 times a day (after food; in pregnancy, paracetamol only). Children: only children's doses by weight, NOT aspirin."
         },
         {
          "text": "Physical cooling for high fever: sponging with room-temperature water, something cool on the forehead/armpits, light clothing. Do not bundle the person up \"to sweat it out\" at 39+."
@@ -6098,7 +6098,7 @@
      "blocks": [
       {
        "t": "p",
-       "text": "During a blackout, occupation or evacuation, labour may begin where there are no medics. Childbirth is a natural process: in 90% of cases the helper's task is not to interfere, to keep things warm and clean, and to call for help."
+       "text": "During a blackout, occupation or evacuation, labour may begin where there are no medics. Childbirth is a natural process: mostly the helper's task is not to interfere, to keep things warm and clean, and to call for help."
       },
       {
        "t": "list",
@@ -6117,7 +6117,7 @@
          "text": "The head is coming out: support it gently with your palm, without pulling; ask her to \"breathe, don't push\" to prevent tearing. Cord around the neck? Carefully slip it over the head. After the head, the shoulders come out by themselves within 1–2 contractions; catch the baby firmly (slippery), at the level of the mother's body."
         },
         {
-         "text": "The baby: dry them, place them on the mother's belly/chest skin to skin, cover both with something warm. If not breathing after 30 seconds, rub the back and soles of the feet, wipe visible mucus from the mouth and nose with a clean cloth (do not put a finger in the mouth), keep the head level (do not tilt it back or bend it forward). If not breathing after a minute, 5 breaths \"mouth to mouth and nose\" very gently, then 3 compressions with two thumbs, hands wrapped around the chest, to 1 breath, 103."
+         "text": "The baby: dry them, place them on the mother's belly/chest skin to skin, cover both with something warm. If not breathing after 30 seconds, rub the back and soles of the feet, wipe visible mucus from the mouth and nose with a clean cloth (do not put a finger in the mouth), keep the head level (do not tilt it back or bend it forward). If not breathing after a minute, 5 slow breaths \"mouth to mouth and nose\" very gently, then a breath about every 2 seconds, 103; if the baby does not respond after 30 seconds of these breaths, 3 compressions with two thumbs, hands wrapped around the chest, to 1 breath."
         },
         {
          "text": "Do not rush the cord: when it stops pulsing (3–5 minutes), tie it with boiled threads in two places (10 and 15 cm from the baby's belly), cut between them with clean scissors. Nothing sterile? Do not cut at all; wrap the placenta in a bag next to the baby, wait for medics."
@@ -7364,7 +7364,7 @@
        "kind": "bullets",
        "items": [
         {
-         "text": "Wasps/bees: do not wave your arms, move away slowly; remove a bee sting as quickly as possible with anything (a fingernail, a card, tweezers): speed matters more than method. Cold, an antihistamine. **Danger:** a sting in the mouth or throat (ice in the mouth, to a medic immediately), 10+ stings, or an allergy: swelling of the face, shortness of breath, weakness. This is anaphylaxis: adrenaline (auto-injector) if available, an antihistamine, lie down with legs raised (if short of breath, half-sitting), do not get up suddenly, medics urgently."
+         "text": "Wasps/bees: do not wave your arms, move away slowly; remove a bee sting as quickly as possible with anything (a fingernail, a card, tweezers): speed matters more than method. Cold, an antihistamine. **Danger:** a sting in the mouth or throat (ice in the mouth, to a medic immediately), 10+ stings, or an allergy: swelling of the face, shortness of breath, weakness. This is anaphylaxis: adrenaline (auto-injector into the outer thigh) if available; if no better after 5 min, a second dose into the other thigh if there is one; an antihistamine, lie down with legs raised (if short of breath, half-sitting), do not get up suddenly, medics urgently."
         },
         {
          "text": "Mosquitoes and midges: covered clothing at dawn and dusk, smoke, a face net; DEET repellent on clothing. With warming, mosquitoes in Ukraine carry **West Nile virus** (fever, headache, in older people brain damage), and in Europe also dengue/chikungunya: fever 3–14 days after bites is not a \"cold\" but a reason to see a doctor. Treatment is symptomatic; the main thing is not to get bitten: standing water near homes (barrels, tyres, puddles) is a breeding ground, so cover it or drain it."
@@ -7913,7 +7913,7 @@
          "head": false,
          "cells": [
           "Safe temperature for cooked meat",
-          "Juices run clear, 70°C+ inside (chicken: 75°C+)"
+          "70°C+ inside (poultry: 75°C+); the colour of juices and meat is no reliable sign"
          ]
         },
         {

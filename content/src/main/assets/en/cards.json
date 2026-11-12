@@ -175,7 +175,7 @@
   ],
   "call": "103",
   "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 7.2, 7.6, 30.5; English translation by Sprotyv",
-  "checkedOn": "2026-10-30",
+  "checkedOn": "2026-11-12",
   "reviewedBy": "",
   "steps": [
    {
@@ -201,7 +201,7 @@
     "why": "Packing is removed only in hospital."
    },
    {
-    "action": "Lay the person flat, keep them warm. If there are no head, chest or belly injuries, raise the legs slightly.",
+    "action": "Lay the person flat, keep them warm. If there are no head, chest or belly injuries, raise the legs slightly. A visibly pregnant woman goes on her left side.",
     "why": "In shock, a person feels cold even in summer."
    },
    {
@@ -221,7 +221,7 @@
   ],
   "call": "103",
   "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 7.3, 7.4, 7.7, 30.6; English translation by Sprotyv",
-  "checkedOn": "2026-10-30",
+  "checkedOn": "2026-11-12",
   "reviewedBy": "",
   "steps": [
    {
@@ -238,7 +238,7 @@
    },
    {
     "action": "If they are breathing, turn them on their side, check breathing every minute. If you suspect a spine injury, keep them on their back, head still, push the jaw forward.",
-    "why": "A spinal injury is possible after a fall from height, a road crash, a blow to the back.",
+    "why": "A visibly pregnant woman goes on her left side. A spinal injury is possible after a fall from height, a road crash, a blow to the back.",
     "figure": "7.4"
    },
    {
@@ -298,7 +298,7 @@
   ],
   "call": "103",
   "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 7.8, 7.11; English translation by Sprotyv",
-  "checkedOn": "2026-10-30",
+  "checkedOn": "2026-11-12",
   "reviewedBy": "",
   "steps": [
    {
@@ -323,7 +323,7 @@
    },
    {
     "action": "Cover loosely with a clean lint-free cloth or cling film. Do not put anything on it, do not pop blisters.",
-    "why": "No oil, sour cream or toothpaste. For pain: paracetamol or ibuprofen; drink plenty."
+    "why": "No oil, sour cream or toothpaste. For pain: paracetamol or ibuprofen (in pregnancy, paracetamol only); drink plenty."
    },
    {
     "action": "Always see a doctor: burn larger than the person's palm, on the face, hands, genital area, joints, in children, electrical, chemical or deep.",
