@@ -107,25 +107,14 @@ object BackupLines {
      */
     suspend fun read(r: Reader, each: suspend (Any) -> Unit): Summary {
         val lines = LineReader(r)
-        val head = parse(lines.next() ?: throw BackupData.Incompatible())
-        if (head.optString("app") != "sprotyv" || head.optString("kind") != "backup") throw BackupData.Incompatible()
-        val format = head.optInt("format", -1)
-        if (format > FORMAT) throw BackupData.FromNewer()
-        if (format != FORMAT) throw BackupData.Incompatible()
-        val created = head.optLong("created", -1).also { if (it < 0) throw BackupData.Incompatible() }
+        val created = readHead(lines)
         var medical = 0; var plan = 0; var homeSeen = 0
         val people = HashSet<Long>(); val rows = HashSet<Long>(); val kit = HashSet<String>(); val settings = HashSet<String>(); val notes = HashSet<Long>()
         var notesText = 0L
         var rowCount = 0
         var count = 0; var skipped = 0
         var home = emptyMap<String, String>()
-        // Documents: counted and checked as they come; each must arrive whole, in order
-        var docsSeen = -1
-        val docIds = HashSet<Long>()
-        var docBytes = 0L
-        var docId = -1L; var docSize = 0L; var docGot = 0L; var docPart = 0
-        var inDoc = false
-        var docsPromised = -1
+        val docs = DocCheck()
         // Document lines are counted apart: "records" stays the owner's records, as the screen shows them
         var docLines = 0
         while (true) {
@@ -134,7 +123,7 @@ object BackupLines {
             val o = parse(lines.next() ?: throw BackupData.Incompatible())
             val t = o.optString("t")
             // A document's parts come right after it, all of them
-            if (t != "docpart" && inDoc) throw BackupData.Incompatible()
+            if (t != "docpart" && docs.inDoc) throw BackupData.Incompatible()
             if (t == "end") {
                 if (o.optInt("n", -1) != count || lines.next() != null) throw BackupData.Incompatible()
                 break
@@ -155,48 +144,87 @@ object BackupLines {
                         require(notes.add(it.id) && notes.size <= BackupData.MAX_NOTES && notesText <= BackupData.MAX_NOTES_TEXT)
                     }
                     "home" -> { require(++homeSeen == 1); home = BackupData.homeOf(v); null }
-                    "docs" -> {
-                        require(docsSeen < 0)
-                        docsSeen = 0
-                        docsPromised = v.getInt("n")
-                        require(docsPromised in 0..ua.sprotyv.personal.docs.DocFiles.MAX_DOCS)
-                        // An empty list replaces nothing: the phone's documents stay
-                        if (docsPromised > 0) DocsMarker else null
-                    }
-                    "doc" -> {
-                        require(docsSeen >= 0)
-                        val id = v.getLong("id")
-                        require(id > 0)
-                        val title = v.getString("title")
-                        val mime = v.getString("mime")
-                        val size = v.getLong("size")
-                        require(docIds.add(id) && ++docsSeen <= ua.sprotyv.personal.docs.DocFiles.MAX_DOCS)
-                        require(title.length in 1..MAX_DOC_TITLE && mime in DOC_TYPES)
-                        require(size in 1..ua.sprotyv.personal.docs.DocFiles.MAX_FILE_BYTES)
-                        docBytes += size
-                        require(docBytes <= ua.sprotyv.personal.docs.DocFiles.MAX_TOTAL_BYTES)
-                        docId = id; docSize = size; docGot = 0; docPart = 0; inDoc = true
-                        DocStart(id, title, mime, size, v.getLong("added").also { require(it >= 0) })
-                    }
-                    "docpart" -> {
-                        require(inDoc && v.getLong("id") == docId && v.getInt("n") == docPart++)
-                        val bytes = java.util.Base64.getDecoder().decode(v.getString("b"))
-                        require(bytes.isNotEmpty() && bytes.size <= PART_BYTES)
-                        docGot += bytes.size
-                        require(docGot <= docSize)
-                        DocPart(bytes)
-                    }
+                    "docs" -> docs.list(v)
+                    "doc" -> docs.start(v)
+                    "docpart" -> docs.part(v)
                     else -> { require(++skipped <= MAX_SKIPPED); null }
                 }
             }
             if (t == "docs" || t == "doc" || t == "docpart") docLines++
             if (record != null) each(record)
             // The last part of a document closes it
-            if (t == "docpart" && docGot == docSize) { inDoc = false; each(DocEnd) }
+            if (t == "docpart" && docs.whole()) each(DocEnd)
         }
         // As many documents, each whole, as the copy said it holds
-        if (docsSeen >= 0 && docsSeen != docsPromised) throw BackupData.Incompatible()
-        return Summary(created, people.size, notes.size, count - skipped - homeSeen - docLines, skipped, home, docsSeen, docBytes)
+        if (docs.seen >= 0 && docs.seen != docs.promised) throw BackupData.Incompatible()
+        return Summary(created, people.size, notes.size, count - skipped - homeSeen - docLines, skipped, home, docs.seen, docs.bytes)
+    }
+
+    /** The first line: this app's backup, in the format this version reads; gives when it was made. */
+    private fun readHead(lines: LineReader): Long {
+        val head = parse(lines.next() ?: throw BackupData.Incompatible())
+        if (head.optString("app") != "sprotyv" || head.optString("kind") != "backup") throw BackupData.Incompatible()
+        val format = head.optInt("format", -1)
+        if (format > FORMAT) throw BackupData.FromNewer()
+        if (format != FORMAT) throw BackupData.Incompatible()
+        return head.optLong("created", -1).also { if (it < 0) throw BackupData.Incompatible() }
+    }
+
+    /**
+     * Documents, counted and checked as they come: within the limits, each arriving whole and in
+     * order. Each call throws (through [require]) on anything odd, which refuses the whole file.
+     */
+    private class DocCheck {
+        var seen = -1
+            private set
+        var promised = -1
+            private set
+        var bytes = 0L
+            private set
+        var inDoc = false
+            private set
+        private val ids = HashSet<Long>()
+        private var id = -1L
+        private var size = 0L
+        private var got = 0L
+        private var part = 0
+
+        /** The list's head: how many documents follow. An empty list replaces nothing: the phone's documents stay. */
+        fun list(v: JSONObject): Any? {
+            require(seen < 0)
+            seen = 0
+            promised = v.getInt("n")
+            require(promised in 0..ua.sprotyv.personal.docs.DocFiles.MAX_DOCS)
+            return if (promised > 0) DocsMarker else null
+        }
+
+        fun start(v: JSONObject): DocStart {
+            require(seen >= 0)
+            val newId = v.getLong("id")
+            require(newId > 0)
+            val title = v.getString("title")
+            val mime = v.getString("mime")
+            val newSize = v.getLong("size")
+            require(ids.add(newId) && ++seen <= ua.sprotyv.personal.docs.DocFiles.MAX_DOCS)
+            require(title.length in 1..MAX_DOC_TITLE && mime in DOC_TYPES)
+            require(newSize in 1..ua.sprotyv.personal.docs.DocFiles.MAX_FILE_BYTES)
+            bytes += newSize
+            require(bytes <= ua.sprotyv.personal.docs.DocFiles.MAX_TOTAL_BYTES)
+            id = newId; size = newSize; got = 0; part = 0; inDoc = true
+            return DocStart(newId, title, mime, newSize, v.getLong("added").also { require(it >= 0) })
+        }
+
+        fun part(v: JSONObject): DocPart {
+            require(inDoc && v.getLong("id") == id && v.getInt("n") == part++)
+            val b = java.util.Base64.getDecoder().decode(v.getString("b"))
+            require(b.isNotEmpty() && b.size <= PART_BYTES)
+            got += b.size
+            require(got <= size)
+            return DocPart(b)
+        }
+
+        /** True once the current document's last part has come; it is closed then. */
+        fun whole(): Boolean = (inDoc && got == size).also { if (it) inDoc = false }
     }
 
     /**

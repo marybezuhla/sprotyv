@@ -198,32 +198,7 @@ fun GartScreen(nav: Nav) {
                 }
             }
             // The body: a check once a month, never a score
-            if (p == Pillar.BODY) {
-                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text(stringResource(R.string.gart_body_check), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                    Text(stringResource(R.string.gart_body_check_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
-                val got = if (g.bodyMonth == month) g.body else emptySet()
-                BODY_CHECKS.forEach { (key, words) ->
-                    val on = key in got
-                    Row(
-                        Modifier.fillMaxWidth().heightIn(min = 48.dp).doneRow(on).toggleable(value = on, role = Role.Checkbox) { v ->
-                            change { s ->
-                                val cur = if (s.bodyMonth == month) s.body else emptySet()
-                                val next = if (v) cur + key else cur - key
-                                // A month counts once its whole check is done; unticking later does not take it away
-                                s.copy(body = next, bodyMonth = month, bodyMonths = if (BODY_CHECKS.all { it.first in next }) s.bodyMonths + month else s.bodyMonths)
-                            }
-                        }.padding(end = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Checkbox(checked = on, onCheckedChange = null, modifier = Modifier.padding(horizontal = 12.dp), colors = doneCheckbox())
-                        Text(stringResource(words), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f))
-                    }
-                }
-                Text(stringResource(R.string.gart_body_doctor), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(16.dp))
-            }
+            if (p == Pillar.BODY) BodyCheck(g, month, ::change)
         }
     }
 
@@ -237,6 +212,36 @@ fun GartScreen(nav: Nav) {
                 modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).clickable(role = Role.Button) { Reach.open(context, url) }.padding(vertical = 6.dp))
         }
     }
+}
+
+
+/** The body: a check once a month, never a score; a month counts once its whole check is done. */
+@Composable
+private fun BodyCheck(g: Gart, month: String, change: ((Gart) -> Gart) -> Unit) {
+    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text(stringResource(R.string.gart_body_check), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+        Text(stringResource(R.string.gart_body_check_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+    val got = if (g.bodyMonth == month) g.body else emptySet()
+    BODY_CHECKS.forEach { (key, words) ->
+        val on = key in got
+        Row(
+            Modifier.fillMaxWidth().heightIn(min = 48.dp).doneRow(on).toggleable(value = on, role = Role.Checkbox) { v ->
+                change { s ->
+                    val cur = if (s.bodyMonth == month) s.body else emptySet()
+                    val next = if (v) cur + key else cur - key
+                    // A month counts once its whole check is done; unticking later does not take it away
+                    s.copy(body = next, bodyMonth = month, bodyMonths = if (BODY_CHECKS.all { it.first in next }) s.bodyMonths + month else s.bodyMonths)
+                }
+            }.padding(end = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Checkbox(checked = on, onCheckedChange = null, modifier = Modifier.padding(horizontal = 12.dp), colors = doneCheckbox())
+            Text(stringResource(words), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f))
+        }
+    }
+    Text(stringResource(R.string.gart_body_doctor), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(16.dp))
 }
 
 private val SCIENCE = listOf(

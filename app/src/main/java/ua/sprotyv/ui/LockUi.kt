@@ -223,19 +223,21 @@ fun LockMineSettings() {
     Text(stringResource(R.string.lock_mine_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     // A plain sentence, never the technical reason (class names, keystore messages)
     if (reason != null) Text(stringResource(R.string.lock_mine_failed), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    if (askOn) {
-        AlertDialog(
-            onDismissRequest = { askOn = false },
-            title = { Text(stringResource(R.string.lock_mine_confirm_title)) },
-            text = { Text(stringResource(R.string.lock_mine_confirm_text)) },
-            confirmButton = {
-                TextButton(onClick = {
-                    askOn = false
-                    busy = true
-                    scope.launch { finish(withContext(Dispatchers.IO) { PersonalStore.startLock(context, pinOnly = false) }) }
-                }) { Text(stringResource(R.string.lock_mine_confirm_yes)) }
-            },
-            dismissButton = { TextButton(onClick = { askOn = false }) { Text(stringResource(R.string.cancel)) } },
-        )
+    if (askOn) LockOnQuestion(onNo = { askOn = false }) {
+        askOn = false
+        busy = true
+        scope.launch { finish(withContext(Dispatchers.IO) { PersonalStore.startLock(context, pinOnly = false) }) }
     }
+}
+
+/** What locking "My data" means, asked once before it is turned on. */
+@Composable
+private fun LockOnQuestion(onNo: () -> Unit, onYes: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onNo,
+        title = { Text(stringResource(R.string.lock_mine_confirm_title)) },
+        text = { Text(stringResource(R.string.lock_mine_confirm_text)) },
+        confirmButton = { TextButton(onClick = onYes) { Text(stringResource(R.string.lock_mine_confirm_yes)) } },
+        dismissButton = { TextButton(onClick = onNo) { Text(stringResource(R.string.cancel)) } },
+    )
 }
