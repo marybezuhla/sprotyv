@@ -34,21 +34,21 @@ ksp {
 }
 
 dependencies {
-    val room = "2.7.2"
+    val room = "2.8.5"
     // api: screens in :app receive the opened database
     api("androidx.room:room-runtime:$room")
     implementation("androidx.room:room-ktx:$room")
     ksp("androidx.room:room-compiler:$room")
-    implementation("net.zetetic:sqlcipher-android:4.19.1@aar")
-    implementation("androidx.sqlite:sqlite:2.5.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
+    implementation("net.zetetic:sqlcipher-android:4.20.0@aar")
+    implementation("androidx.sqlite:sqlite:2.7.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")
 
     // Argon2id for password backups and the family plan code (a reviewed version, its checksum pinned)
-    implementation("org.bouncycastle:bcprov-jdk18on:1.79")
+    implementation("org.bouncycastle:bcprov-jdk18on:1.87")
     // Streaming encryption of the backup file (AES-256-GCM-HKDF, in parts), from Google Tink
-    implementation("com.google.crypto.tink:tink-android:1.20.0")
+    implementation("com.google.crypto.tink:tink-android:1.24.0")
 
     testImplementation("junit:junit:4.13.2")
     // Real org.json for unit tests (Android provides it on the phone)
-    testImplementation("org.json:json:20240303")
+    testImplementation("org.json:json:20260814")
 }
