@@ -111,7 +111,6 @@ fun BackupScreen() {
     val context = LocalContext.current
     val busy by BackupJobs.busy.collectAsStateWithLifecycle()
     val notice by BackupJobs.notice.collectAsStateWithLifecycle()
-    val pending by BackupJobs.pending.collectAsStateWithLifecycle()
     val words = rememberWords()
     val suggested by BackupJobs.suggested.collectAsStateWithLifecycle()
     val written by BackupJobs.written.collectAsStateWithLifecycle()
@@ -122,8 +121,6 @@ fun BackupScreen() {
     var own by remember { mutableStateOf(false) }
     var ownText by remember { mutableStateOf("") }
     var ownAgain by remember { mutableStateOf("") }
-    val openUri by BackupJobs.openUri.collectAsStateWithLifecycle()
-    var openText by remember { mutableStateOf("") }
     DisposableEffect(Unit) {
         BackupJobs.shown()
         onDispose { BackupJobs.hidden() }
@@ -132,9 +129,6 @@ fun BackupScreen() {
 
     val save = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/octet-stream")) { uri ->
         if (uri == null) BackupJobs.release() else BackupJobs.save(context, uri)
-    }
-    val pick = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-        if (uri != null) { BackupJobs.openUri.value = uri; openText = "" }
     }
 
     Text(stringResource(R.string.backup_intro), style = MaterialTheme.typography.bodyLarge)
@@ -189,6 +183,20 @@ fun BackupScreen() {
     }, enabled = ready, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(if (busy) R.string.backup_busy else R.string.backup_save)) }
     Text(stringResource(R.string.backup_save_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
+    }
+    BackupRestore(busy)
+}
+
+/** Opening a backup: choose the file, type its password, see what it holds, then replace or not. */
+@Composable
+private fun BackupRestore(busy: Boolean) {
+    val context = LocalContext.current
+    val pending by BackupJobs.pending.collectAsStateWithLifecycle()
+    val openUri by BackupJobs.openUri.collectAsStateWithLifecycle()
+    // The typed password lives only while this screen does: never in saved state
+    var openText by remember { mutableStateOf("") }
+    val pick = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        if (uri != null) { BackupJobs.openUri.value = uri; openText = "" }
     }
     Block(stringResource(R.string.backup_restore_title), ua.sprotyv.home.Group.MINE) {
     Text(stringResource(R.string.backup_restore_intro), style = MaterialTheme.typography.bodyMedium)

@@ -73,49 +73,7 @@ fun PracticeScreen(content: Content?, cardId: String, nav: Nav, check: String? =
         var rightCount by rememberSaveable(cardId) { mutableIntStateOf(0) }
 
         if (index >= list.size) {
-            // A theme answered without a mistake: its shield in "My shields"
-            if (topic != null && rightCount == list.size) androidx.compose.runtime.LaunchedEffect(topic.id) { Steps.practice(practiceCtx, topic = topic.id) }
-            if (check != null) {
-                val all = rightCount == list.size
-                if (all) androidx.compose.runtime.LaunchedEffect(check) { markPathTested(check) }
-                Text(
-                    stringResource(if (all) R.string.path_check_passed else R.string.path_check_again, rightCount, list.size),
-                    style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.semantics { heading(); liveRegion = LiveRegionMode.Polite },
-                )
-                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    if (!all) OutlinedButton(onClick = { index = 0; rightCount = 0 }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.again)) }
-                    Button(onClick = nav::back, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.practice_finish)) }
-                }
-                val first = list.firstOrNull()?.card ?: cardId
-                if (!all) TextButton(onClick = { nav.go(whereFrom(first)) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(openWords(first))) }
-                SourceOf(content, first)
-                return@Frame
-            }
-            if (kid) {
-                // Finishing is what counts, not being right: a sticker for every situation played through
-                val ctx = androidx.compose.ui.platform.LocalContext.current
-                androidx.compose.runtime.LaunchedEffect(cardId) { KidStickers.add(ctx, cardId) }
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Sunny(96.dp, happy = true)
-                    Spacer(Modifier.width(16.dp))
-                    Column {
-                        Text(stringResource(R.string.kid_well_done), style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.SemiBold)
-                        Text(stringResource(R.string.kid_sticker_got), style = MaterialTheme.typography.titleMedium)
-                    }
-                }
-                Text(stringResource(R.string.kid_show_grown_up), style = MaterialTheme.typography.bodyLarge)
-            } else {
-                Text(
-                    stringResource(R.string.practice_done),
-                    style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.semantics { heading(); liveRegion = LiveRegionMode.Polite },
-                )
-            }
-            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                OutlinedButton(onClick = { index = 0; rightCount = 0 }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.again)) }
-                Button(onClick = nav::back, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.practice_finish)) }
-            }
+            PracticeEnd(content, list, cardId, topic, check, rightCount, nav) { index = 0; rightCount = 0 }
             return@Frame
         }
 
@@ -162,34 +120,7 @@ fun PracticeScreen(content: Content?, cardId: String, nav: Nav, check: String? =
         if (chosen >= 0) {
             val picked = p.options[chosen]
             val right = p.options.first { it.right }
-            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), modifier = Modifier.fillMaxWidth()) {
-                Row(Modifier.padding(16.dp), verticalAlignment = Alignment.Top) {
-                    if (kid) {
-                        Sunny(64.dp, happy = picked.right)
-                        Spacer(Modifier.width(12.dp))
-                    }
-                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text(
-                            stringResource(
-                                when {
-                                    picked.right && kid -> R.string.practice_right_kid
-                                    picked.right -> R.string.practice_right
-                                    kid -> R.string.practice_wrong_kid
-                                    else -> R.string.practice_wrong
-                                },
-                            ),
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.SemiBold,
-                            modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
-                        )
-                        Text(picked.why, style = MaterialTheme.typography.bodyLarge)
-                        if (!picked.right) {
-                            Text(stringResource(R.string.practice_better, right.text), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                            Text(right.why, style = MaterialTheme.typography.bodyLarge)
-                        }
-                    }
-                }
-            }
+            PracticeVerdict(picked, right, kid)
             Button(onClick = { index++ }, modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp)) {
                 Text(stringResource(if (index + 1 < list.size) R.string.practice_next else R.string.practice_finish), style = MaterialTheme.typography.titleMedium)
             }
@@ -201,6 +132,100 @@ fun PracticeScreen(content: Content?, cardId: String, nav: Nav, check: String? =
         Text(stringResource(R.string.practice_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         // The same source and review status as the card it comes from
         SourceOf(content, p.card)
+    }
+}
+
+
+/** The end of a round: "check yourself" with its result, a sticker for a child, or simply done. */
+@Composable
+private fun PracticeEnd(
+    content: Content,
+    list: List<ua.sprotyv.content.Practice>,
+    cardId: String,
+    topic: Topic?,
+    check: String?,
+    rightCount: Int,
+    nav: Nav,
+    onAgain: () -> Unit,
+) {
+    val practiceCtx = androidx.compose.ui.platform.LocalContext.current
+    val kid = cardId.startsWith("kid-")
+    // A theme answered without a mistake: its shield in "My shields"
+    if (topic != null && rightCount == list.size) androidx.compose.runtime.LaunchedEffect(topic.id) { Steps.practice(practiceCtx, topic = topic.id) }
+    if (check != null) {
+        val all = rightCount == list.size
+        if (all) androidx.compose.runtime.LaunchedEffect(check) { markPathTested(check) }
+        Text(
+            stringResource(if (all) R.string.path_check_passed else R.string.path_check_again, rightCount, list.size),
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier.semantics { heading(); liveRegion = LiveRegionMode.Polite },
+        )
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            if (!all) OutlinedButton(onClick = onAgain, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.again)) }
+            Button(onClick = nav::back, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.practice_finish)) }
+        }
+        val first = list.firstOrNull()?.card ?: cardId
+        if (!all) TextButton(onClick = { nav.go(whereFrom(first)) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(openWords(first))) }
+        SourceOf(content, first)
+        return
+    }
+    if (kid) {
+        // Finishing is what counts, not being right: a sticker for every situation played through
+        val ctx = androidx.compose.ui.platform.LocalContext.current
+        androidx.compose.runtime.LaunchedEffect(cardId) { KidStickers.add(ctx, cardId) }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Sunny(96.dp, happy = true)
+            Spacer(Modifier.width(16.dp))
+            Column {
+                Text(stringResource(R.string.kid_well_done), style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.SemiBold)
+                Text(stringResource(R.string.kid_sticker_got), style = MaterialTheme.typography.titleMedium)
+            }
+        }
+        Text(stringResource(R.string.kid_show_grown_up), style = MaterialTheme.typography.bodyLarge)
+    } else {
+        Text(
+            stringResource(R.string.practice_done),
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier.semantics { heading(); liveRegion = LiveRegionMode.Polite },
+        )
+    }
+    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        OutlinedButton(onClick = onAgain, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.again)) }
+        Button(onClick = nav::back, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.practice_finish)) }
+    }
+    return
+}
+
+/** What the chosen answer means, and the better one if it was wrong; said in words, not only colour. */
+@Composable
+private fun PracticeVerdict(picked: ua.sprotyv.content.Practice.Option, right: ua.sprotyv.content.Practice.Option, kid: Boolean) {
+    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant), modifier = Modifier.fillMaxWidth()) {
+        Row(Modifier.padding(16.dp), verticalAlignment = Alignment.Top) {
+            if (kid) {
+                Sunny(64.dp, happy = picked.right)
+                Spacer(Modifier.width(12.dp))
+            }
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    stringResource(
+                        when {
+                            picked.right && kid -> R.string.practice_right_kid
+                            picked.right -> R.string.practice_right
+                            kid -> R.string.practice_wrong_kid
+                            else -> R.string.practice_wrong
+                        },
+                    ),
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
+                )
+                Text(picked.why, style = MaterialTheme.typography.bodyLarge)
+                if (!picked.right) {
+                    Text(stringResource(R.string.practice_better, right.text), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                    Text(right.why, style = MaterialTheme.typography.bodyLarge)
+                }
+            }
+        }
     }
 }
 

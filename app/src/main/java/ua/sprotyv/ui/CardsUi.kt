@@ -164,106 +164,10 @@ private fun CardBody(card: Card, content: Content, nav: Nav) {
 
     if (card.id == "bleeding") TourniquetTime(nav)
 
-    if (all) {
-        val tone = toneOf(ua.sprotyv.home.Tiles.card(card.id)).tint()
-        card.steps.forEachIndexed { i, s ->
-            Row(verticalAlignment = Alignment.Top) {
-                StepNumber(i + 1, active = false, tone = tone)
-                Spacer(Modifier.width(12.dp))
-                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text(s.action, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                    // The overview shows everything at once, so "why" is always there, quieter;
-                    // step by step keeps it folded, because that view is for acting
-                    if (s.why.isNotBlank()) {
-                        Text(s.why, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    }
-                    // The picture sits inside its own step, so it is never read as the next one's
-                    if (s.figure.isNotEmpty()) StepFigure(content, s.figure)
-                    if (s.wait > 0) WaitTimer(s.wait)
-                }
-                Pictogram(s.icon, 44.dp)
-            }
-            if (i < card.steps.lastIndex) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant, modifier = Modifier.padding(start = 48.dp))
-        }
-        Button(onClick = { all = false; step = 0 }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
-            Text(stringResource(R.string.step_by_step), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
-        }
-    } else if (!done) {
-        val s = card.steps[step]
-        Progress(card.steps.size, step)
-        Text(
-            stringResource(R.string.step_of, step + 1, card.steps.size),
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        // The step itself stands out from everything around it: its own panel in the card's
-        // colour (orange for danger, green for first aid), the words in the strongest contrast.
-        // Buttons, "why" and what comes next stay quieter below it
-        val tone = toneOf(ua.sprotyv.home.Tiles.card(card.id)).tint()
-        Column(
-            Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(tone.container)
-                .border(2.dp, tone.ink.copy(alpha = 0.55f), RoundedCornerShape(20.dp)).padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            Pictogram(s.icon, 88.dp)
-            // Read out by TalkBack whenever the step changes
-            Text(
-                s.action,
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
-            )
-        }
-        if (s.figure.isNotEmpty()) StepFigure(content, s.figure)
-        Why(s.why, "${card.id}:$step")
-        if (s.wait > 0) WaitTimer(s.wait)
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
-            if (step > 0) {
-                OutlinedButton(onClick = { step-- }, modifier = Modifier.heightIn(min = 64.dp)) { Text(stringResource(R.string.previous)) }
-            }
-            Button(onClick = { step++ }, modifier = Modifier.weight(1f).heightIn(min = 64.dp)) {
-                Text(stringResource(R.string.done_next), style = MaterialTheme.typography.titleMedium)
-            }
-        }
-        // The next step in small print: what comes is never a surprise
-        card.steps.getOrNull(step + 1)?.let { next ->
-            Text(
-                stringResource(R.string.next_step, next.action),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-            )
-        }
-        TextButton(onClick = { all = true }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.all_steps)) }
-    } else if (kid) {
-        // A child hears praise at the end (guide 5.5: only praise, never scolding)
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Sunny(96.dp, happy = true)
-            Spacer(Modifier.width(16.dp))
-            Column {
-                Text(
-                    stringResource(R.string.kid_well_done),
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.semantics { heading(); liveRegion = LiveRegionMode.Polite },
-                )
-                Text(stringResource(R.string.kid_well_done_hint), style = MaterialTheme.typography.titleMedium)
-            }
-        }
-        OutlinedButton(onClick = { step = 0 }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.again)) }
-    } else {
-        Progress(card.steps.size, card.steps.size)
-        Text(
-            stringResource(R.string.all_done),
-            style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.semantics { heading(); liveRegion = LiveRegionMode.Polite },
-        )
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            OutlinedButton(onClick = { step = 0 }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.again)) }
-            OutlinedButton(onClick = { all = true }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.all_steps)) }
-        }
+    when {
+        all -> CardOverview(card, content) { all = false; step = 0 }
+        !done -> CardStep(card, content, step, onBack = { step-- }, onNext = { step++ }, onAll = { all = true })
+        else -> CardEnd(card.steps.size, kid, onAgain = { step = 0 }, onAll = { all = true })
     }
 
     HorizontalDivider()
@@ -286,6 +190,121 @@ private fun CardBody(card: Card, content: Content, nav: Nav) {
         }
     }
     Source(card)
+}
+
+
+/** The whole card at once: every step with its "why", picture and timer, then "step by step". */
+@Composable
+private fun CardOverview(card: Card, content: Content, onStepByStep: () -> Unit) {
+    val tone = toneOf(ua.sprotyv.home.Tiles.card(card.id)).tint()
+    card.steps.forEachIndexed { i, s ->
+        Row(verticalAlignment = Alignment.Top) {
+            StepNumber(i + 1, active = false, tone = tone)
+            Spacer(Modifier.width(12.dp))
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                Text(s.action, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                // The overview shows everything at once, so "why" is always there, quieter;
+                // step by step keeps it folded, because that view is for acting
+                if (s.why.isNotBlank()) {
+                    Text(s.why, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                // The picture sits inside its own step, so it is never read as the next one's
+                if (s.figure.isNotEmpty()) StepFigure(content, s.figure)
+                if (s.wait > 0) WaitTimer(s.wait)
+            }
+            Pictogram(s.icon, 44.dp)
+        }
+        if (i < card.steps.lastIndex) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant, modifier = Modifier.padding(start = 48.dp))
+    }
+    Button(onClick = onStepByStep, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+        Text(stringResource(R.string.step_by_step), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
+    }
+}
+
+/** One step large, in the card's colour, with what comes next in small print. */
+@Composable
+private fun CardStep(card: Card, content: Content, step: Int, onBack: () -> Unit, onNext: () -> Unit, onAll: () -> Unit) {
+    val s = card.steps[step]
+    Progress(card.steps.size, step)
+    Text(
+        stringResource(R.string.step_of, step + 1, card.steps.size),
+        style = MaterialTheme.typography.labelLarge,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+    // The step itself stands out from everything around it: its own panel in the card's
+    // colour (orange for danger, green for first aid), the words in the strongest contrast.
+    // Buttons, "why" and what comes next stay quieter below it
+    val tone = toneOf(ua.sprotyv.home.Tiles.card(card.id)).tint()
+    Column(
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(tone.container)
+            .border(2.dp, tone.ink.copy(alpha = 0.55f), RoundedCornerShape(20.dp)).padding(20.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Pictogram(s.icon, 88.dp)
+        // Read out by TalkBack whenever the step changes
+        Text(
+            s.action,
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
+        )
+    }
+    if (s.figure.isNotEmpty()) StepFigure(content, s.figure)
+    Why(s.why, "${card.id}:$step")
+    if (s.wait > 0) WaitTimer(s.wait)
+    Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
+        if (step > 0) {
+            OutlinedButton(onClick = onBack, modifier = Modifier.heightIn(min = 64.dp)) { Text(stringResource(R.string.previous)) }
+        }
+        Button(onClick = onNext, modifier = Modifier.weight(1f).heightIn(min = 64.dp)) {
+            Text(stringResource(R.string.done_next), style = MaterialTheme.typography.titleMedium)
+        }
+    }
+    // The next step in small print: what comes is never a surprise
+    card.steps.getOrNull(step + 1)?.let { next ->
+        Text(
+            stringResource(R.string.next_step, next.action),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+        )
+    }
+    TextButton(onClick = onAll, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.all_steps)) }
+}
+
+/** The end of the steps: praise for a child, "all done" for everyone else. */
+@Composable
+private fun CardEnd(steps: Int, kid: Boolean, onAgain: () -> Unit, onAll: () -> Unit) {
+    if (kid) {
+        // A child hears praise at the end (guide 5.5: only praise, never scolding)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Sunny(96.dp, happy = true)
+            Spacer(Modifier.width(16.dp))
+            Column {
+                Text(
+                    stringResource(R.string.kid_well_done),
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.semantics { heading(); liveRegion = LiveRegionMode.Polite },
+                )
+                Text(stringResource(R.string.kid_well_done_hint), style = MaterialTheme.typography.titleMedium)
+            }
+        }
+        OutlinedButton(onClick = onAgain, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.again)) }
+    } else {
+        Progress(steps, steps)
+        Text(
+            stringResource(R.string.all_done),
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier.semantics { heading(); liveRegion = LiveRegionMode.Polite },
+        )
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            OutlinedButton(onClick = onAgain, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.again)) }
+            OutlinedButton(onClick = onAll, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.all_steps)) }
+        }
+    }
 }
 
 /**

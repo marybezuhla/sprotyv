@@ -81,32 +81,7 @@ fun SuppliesScreen(content: Content?, nav: Nav) {
     var picking by remember { mutableStateOf<String?>(null) }
 
     // How long will it last
-    Block(stringResource(R.string.supplies_dash_title), ua.sprotyv.home.Group.PREPARE) {
-        run {
-            val waterWords = if (s.waterDays == 0) stringResource(R.string.supplies_water_none) else pluralStringResource(R.plurals.supplies_water_days, s.waterDays, s.waterDays)
-            Meter(waterWords, stringResource(R.string.supplies_of_litres, s.water, s.waterGoal), s.water.toFloat() / s.waterGoal)
-            val have = keyed.count { it.first in s.have }
-            Meter(stringResource(R.string.supplies_food_have), stringResource(R.string.supplies_of, have, keyed.size), if (keyed.isEmpty()) 0f else have.toFloat() / keyed.size)
-            val soon = s.expiring(now)
-            val waterWord = stringResource(R.string.supplies_water_word)
-            val medsWord = stringResource(R.string.supplies_meds)
-            val batteriesWord = stringResource(R.string.supplies_batteries)
-            if (soon.isNotEmpty()) {
-                val names = soon.mapNotNull { (k, m) ->
-                    val what = when (k) {
-                        MySupplies.WATER -> waterWord
-                        MySupplies.MEDS -> medsWord
-                        MySupplies.BATTERIES -> batteriesWord
-                        else -> keyed.firstOrNull { it.first == k }?.second?.what
-                    }
-                    what?.let { "$it (${monthText(m)})" }
-                }.joinToString(", ")
-                if (names.isNotEmpty()) {
-                    Text(stringResource(R.string.supplies_expiring, names), style = MaterialTheme.typography.bodyLarge, color = ua.sprotyv.home.Group.DANGER.tint().ink, fontWeight = FontWeight.SemiBold)
-                }
-            }
-        }
-    }
+    SuppliesDash(s, keyed, now)
 
     // For whom and for how long
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -136,27 +111,7 @@ fun SuppliesScreen(content: Content?, nav: Nav) {
     }
 
     // Food: tick what is at home in the needed amount
-    val haveCount = keyed.count { it.first in s.have }
-    Block(stringResource(R.string.supplies_food), ua.sprotyv.home.Group.PREPARE, foldable = true, trailing = {
-        Text(stringResource(R.string.supplies_of, haveCount, keyed.size), style = MaterialTheme.typography.labelLarge)
-    }) {
-    Text(stringResource(R.string.supplies_have_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    keyed.forEachIndexed { i, (key, line) ->
-        if (i > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-        val have = key in s.have
-        Row(Modifier.fillMaxWidth().heightIn(min = 56.dp).doneRow(have), verticalAlignment = Alignment.Top) {
-            Checkbox(checked = have, onCheckedChange = { on -> change { it.copy(have = if (on) it.have + key else it.have - key) } }, colors = doneCheckbox())
-            Column(Modifier.weight(1f).padding(top = 12.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                Row {
-                    Text(line.what, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f))
-                    Text(line.amount, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
-                }
-                if (line.note.isNotBlank()) Text(line.note, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                if (have) UntilButton(s.until[key]?.let(MySupplies::month)) { picking = key }
-            }
-        }
-    }
-    }
+    SuppliesFood(s, keyed, ::change) { picking = it }
     // Other things that run out: one date each, the soonest
     Block(stringResource(R.string.supplies_other), ua.sprotyv.home.Group.PREPARE, foldable = true) {
     listOf(MySupplies.MEDS to R.string.supplies_meds, MySupplies.BATTERIES to R.string.supplies_batteries).forEach { (key, name) ->
@@ -179,6 +134,64 @@ fun SuppliesScreen(content: Content?, nav: Nav) {
             }
             picking = null
         }, onCancel = { picking = null })
+    }
+}
+
+
+/** "How long will it last?": water in days, food lines in place, what to replace soon (never red: this is preparation). */
+@Composable
+private fun SuppliesDash(s: MySupplies, keyed: List<Pair<String, ua.sprotyv.content.SupplyLine>>, now: YearMonth) {
+    Block(stringResource(R.string.supplies_dash_title), ua.sprotyv.home.Group.PREPARE) {
+        run {
+            val waterWords = if (s.waterDays == 0) stringResource(R.string.supplies_water_none) else pluralStringResource(R.plurals.supplies_water_days, s.waterDays, s.waterDays)
+            Meter(waterWords, stringResource(R.string.supplies_of_litres, s.water, s.waterGoal), s.water.toFloat() / s.waterGoal)
+            val have = keyed.count { it.first in s.have }
+            Meter(stringResource(R.string.supplies_food_have), stringResource(R.string.supplies_of, have, keyed.size), if (keyed.isEmpty()) 0f else have.toFloat() / keyed.size)
+            val soon = s.expiring(now)
+            val waterWord = stringResource(R.string.supplies_water_word)
+            val medsWord = stringResource(R.string.supplies_meds)
+            val batteriesWord = stringResource(R.string.supplies_batteries)
+            if (soon.isNotEmpty()) {
+                val names = soon.mapNotNull { (k, m) ->
+                    val what = when (k) {
+                        MySupplies.WATER -> waterWord
+                        MySupplies.MEDS -> medsWord
+                        MySupplies.BATTERIES -> batteriesWord
+                        else -> keyed.firstOrNull { it.first == k }?.second?.what
+                    }
+                    what?.let { "$it (${monthText(m)})" }
+                }.joinToString(", ")
+                if (names.isNotEmpty()) {
+                    Text(stringResource(R.string.supplies_expiring, names), style = MaterialTheme.typography.bodyLarge, color = ua.sprotyv.home.Group.DANGER.tint().ink, fontWeight = FontWeight.SemiBold)
+                }
+            }
+        }
+    }
+}
+
+/** Food: each line ticked when it is at home in the needed amount, with its "use by" month. */
+@Composable
+private fun SuppliesFood(s: MySupplies, keyed: List<Pair<String, ua.sprotyv.content.SupplyLine>>, change: ((MySupplies) -> MySupplies) -> Unit, onPick: (String) -> Unit) {
+    val haveCount = keyed.count { it.first in s.have }
+    Block(stringResource(R.string.supplies_food), ua.sprotyv.home.Group.PREPARE, foldable = true, trailing = {
+        Text(stringResource(R.string.supplies_of, haveCount, keyed.size), style = MaterialTheme.typography.labelLarge)
+    }) {
+    Text(stringResource(R.string.supplies_have_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    keyed.forEachIndexed { i, (key, line) ->
+        if (i > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+        val have = key in s.have
+        Row(Modifier.fillMaxWidth().heightIn(min = 56.dp).doneRow(have), verticalAlignment = Alignment.Top) {
+            Checkbox(checked = have, onCheckedChange = { on -> change { it.copy(have = if (on) it.have + key else it.have - key) } }, colors = doneCheckbox())
+            Column(Modifier.weight(1f).padding(top = 12.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Row {
+                    Text(line.what, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f))
+                    Text(line.amount, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
+                }
+                if (line.note.isNotBlank()) Text(line.note, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                if (have) UntilButton(s.until[key]?.let(MySupplies::month)) { onPick(key) }
+            }
+        }
+    }
     }
 }
 

@@ -120,84 +120,18 @@ import ua.sprotyv.home.Tool
 fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
     val context = LocalContext.current
     val canLock = Guard.available(context)
-    val locked = prefs.locked
     Frame(stringResource(R.string.settings), nav::back) {
         // Settings in a few calm blocks, each answering one question
-        Block(stringResource(R.string.mode_title), ua.sprotyv.home.Group.PREPARE, foldable = true) {
-        ModeChoice(prefs.mode) { m -> HomePrefs.update(context) { it.copy(mode = m) } }
-        if (prefs.mode != Mode.KID) {
-            Toggle(stringResource(R.string.call_bar_toggle), prefs.callBar) { on -> HomePrefs.update(context) { it.copy(callBar = on) } }
-            Text(stringResource(R.string.call_bar_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        }
-        if (prefs.mode == Mode.FULL) {
-            Toggle(stringResource(R.string.ready_on_home), !prefs.readinessHidden) { on -> HomePrefs.update(context) { it.copy(readinessHidden = !on) } }
-        }
-        }
+        Block(stringResource(R.string.mode_title), ua.sprotyv.home.Group.PREPARE, foldable = true) { ModeSettings(prefs) }
         Block(stringResource(R.string.lang_title), ua.sprotyv.home.Group.GUIDE, foldable = true) { LanguageChoice() }
-        Block(stringResource(R.string.theme_title), ua.sprotyv.home.Group.GUIDE, foldable = true) {
-        ThemeChoice.entries.forEach { t ->
-            val on = t == prefs.theme
-            Row(
-                Modifier.fillMaxWidth().heightIn(min = 48.dp)
-                    .selectable(selected = on, role = Role.RadioButton) { HomePrefs.update(context) { it.copy(theme = t) } },
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                RadioButton(selected = on, onClick = null)
-                Spacer(Modifier.width(12.dp))
-                Text(stringResource(t.title), style = MaterialTheme.typography.bodyLarge)
-            }
-        }
-        if (prefs.theme != ThemeChoice.CONTRAST) {
-            Toggle(stringResource(R.string.theme_dynamic), prefs.dynamic) { on -> HomePrefs.update(context) { it.copy(dynamic = on) } }
-            Text(stringResource(R.string.theme_dynamic_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        }
-        }
+        Block(stringResource(R.string.theme_title), ua.sprotyv.home.Group.GUIDE, foldable = true) { ThemeSettings(prefs) }
         if (prefs.mode != Mode.KID) {
             Block(stringResource(R.string.my_home), ua.sprotyv.home.Group.PREPARE, padded = false, foldable = true) {
                 BlockRow(stringResource(R.string.edit_tiles), stringResource(R.string.edit_tiles_hint), first = true) { nav.go(Route.EditTiles) }
                 BlockRow(stringResource(R.string.presets_title), stringResource(R.string.presets_hint)) { nav.go(Route.Presets) }
             }
         }
-        Block(stringResource(R.string.lock_title), ua.sprotyv.home.Group.MINE, foldable = true) {
-        if (prefs.mode == Mode.KID && !locked) {
-            Text(stringResource(R.string.kid_lock_advice), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
-        }
-        if (canLock) {
-            Toggle(stringResource(R.string.lock_toggle), locked) { on ->
-                // Settings are open now; turning the lock on does not shut them on the spot
-                if (on) Guard.keepOpen()
-                HomePrefs.update(context) { it.copy(locked = on) }
-            }
-        } else {
-            Text(stringResource(R.string.lock_no_screen_lock), style = MaterialTheme.typography.bodyLarge)
-        }
-        Text(stringResource(R.string.lock_explain), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        // The child's "Call my people" without the lock on "My data"
-        var kidOpen by remember { mutableStateOf(KidCall.isOn(context)) }
-        val kidScope = androidx.compose.runtime.rememberCoroutineScope()
-        Toggle(stringResource(R.string.kid_call_open_toggle), kidOpen) { on -> KidCall.set(context, on); kidOpen = on; if (on) kidScope.launch { KidCall.syncNow(context) } }
-        Text(stringResource(R.string.kid_call_open_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        // Screenshots of the owner's screens: off by default, turned on only after reading what it means
-        var askScreenshots by rememberSaveable { mutableStateOf(false) }
-        Toggle(stringResource(R.string.screenshots_allow), prefs.screenshots) { on ->
-            if (on) askScreenshots = true else HomePrefs.update(context) { it.copy(screenshots = false) }
-        }
-        Text(stringResource(R.string.screenshots_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        if (askScreenshots) {
-            androidx.compose.material3.AlertDialog(
-                onDismissRequest = { askScreenshots = false },
-                title = { Text(stringResource(R.string.screenshots_confirm_title)) },
-                text = { Text(stringResource(R.string.screenshots_confirm_text)) },
-                confirmButton = {
-                    androidx.compose.material3.TextButton(onClick = {
-                        askScreenshots = false
-                        HomePrefs.update(context) { it.copy(screenshots = true) }
-                    }) { Text(stringResource(R.string.screenshots_confirm_yes)) }
-                },
-                dismissButton = { androidx.compose.material3.TextButton(onClick = { askScreenshots = false }) { Text(stringResource(R.string.cancel)) } },
-            )
-        }
-        }
+        Block(stringResource(R.string.lock_title), ua.sprotyv.home.Group.MINE, foldable = true) { LockSettings(prefs, canLock) }
         Block(stringResource(R.string.lock_mine_title), ua.sprotyv.home.Group.MINE, foldable = true) { LockMineSettings() }
         Block(stringResource(R.string.notify_title), ua.sprotyv.home.Group.PREPARE, foldable = true) { NotifySettings() }
         // Backup and moving to a new phone, where people look for it;
@@ -232,6 +166,87 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
             BlockRow(stringResource(R.string.about_guide), first = true) { nav.go(Route.About) }
             FeedbackBlock()
         }
+    }
+}
+
+/** How the home looks: simple, full or for a child, and what sits on it. */
+@Composable
+private fun ModeSettings(prefs: HomePrefs.State) {
+    val context = LocalContext.current
+    ModeChoice(prefs.mode) { m -> HomePrefs.update(context) { it.copy(mode = m) } }
+    if (prefs.mode != Mode.KID) {
+        Toggle(stringResource(R.string.call_bar_toggle), prefs.callBar) { on -> HomePrefs.update(context) { it.copy(callBar = on) } }
+        Text(stringResource(R.string.call_bar_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+    if (prefs.mode == Mode.FULL) {
+        Toggle(stringResource(R.string.ready_on_home), !prefs.readinessHidden) { on -> HomePrefs.update(context) { it.copy(readinessHidden = !on) } }
+    }
+}
+
+/** Light, dark or high contrast, and the phone's own colours. */
+@Composable
+private fun ThemeSettings(prefs: HomePrefs.State) {
+    val context = LocalContext.current
+    ThemeChoice.entries.forEach { t ->
+        val on = t == prefs.theme
+        Row(
+            Modifier.fillMaxWidth().heightIn(min = 48.dp)
+                .selectable(selected = on, role = Role.RadioButton) { HomePrefs.update(context) { it.copy(theme = t) } },
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            RadioButton(selected = on, onClick = null)
+            Spacer(Modifier.width(12.dp))
+            Text(stringResource(t.title), style = MaterialTheme.typography.bodyLarge)
+        }
+    }
+    if (prefs.theme != ThemeChoice.CONTRAST) {
+        Toggle(stringResource(R.string.theme_dynamic), prefs.dynamic) { on -> HomePrefs.update(context) { it.copy(dynamic = on) } }
+        Text(stringResource(R.string.theme_dynamic_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+}
+
+/** The lock on the settings, the child's call without the lock, and screenshots. */
+@Composable
+private fun LockSettings(prefs: HomePrefs.State, canLock: Boolean) {
+    val context = LocalContext.current
+    val locked = prefs.locked
+    if (prefs.mode == Mode.KID && !locked) {
+        Text(stringResource(R.string.kid_lock_advice), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
+    }
+    if (canLock) {
+        Toggle(stringResource(R.string.lock_toggle), locked) { on ->
+            // Settings are open now; turning the lock on does not shut them on the spot
+            if (on) Guard.keepOpen()
+            HomePrefs.update(context) { it.copy(locked = on) }
+        }
+    } else {
+        Text(stringResource(R.string.lock_no_screen_lock), style = MaterialTheme.typography.bodyLarge)
+    }
+    Text(stringResource(R.string.lock_explain), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    // The child's "Call my people" without the lock on "My data"
+    var kidOpen by remember { mutableStateOf(KidCall.isOn(context)) }
+    val kidScope = androidx.compose.runtime.rememberCoroutineScope()
+    Toggle(stringResource(R.string.kid_call_open_toggle), kidOpen) { on -> KidCall.set(context, on); kidOpen = on; if (on) kidScope.launch { KidCall.syncNow(context) } }
+    Text(stringResource(R.string.kid_call_open_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    // Screenshots of the owner's screens: off by default, turned on only after reading what it means
+    var askScreenshots by rememberSaveable { mutableStateOf(false) }
+    Toggle(stringResource(R.string.screenshots_allow), prefs.screenshots) { on ->
+        if (on) askScreenshots = true else HomePrefs.update(context) { it.copy(screenshots = false) }
+    }
+    Text(stringResource(R.string.screenshots_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    if (askScreenshots) {
+        androidx.compose.material3.AlertDialog(
+            onDismissRequest = { askScreenshots = false },
+            title = { Text(stringResource(R.string.screenshots_confirm_title)) },
+            text = { Text(stringResource(R.string.screenshots_confirm_text)) },
+            confirmButton = {
+                androidx.compose.material3.TextButton(onClick = {
+                    askScreenshots = false
+                    HomePrefs.update(context) { it.copy(screenshots = true) }
+                }) { Text(stringResource(R.string.screenshots_confirm_yes)) }
+            },
+            dismissButton = { androidx.compose.material3.TextButton(onClick = { askScreenshots = false }) { Text(stringResource(R.string.cancel)) } },
+        )
     }
 }
 
