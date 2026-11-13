@@ -91,7 +91,7 @@ fun CardRow(card: Card, onClick: () -> Unit) {
 }
 
 /** The cards of first aid; the rest are dangers and events. */
-internal val FIRST_AID_CARDS = setOf("bleeding", "unconscious", "choking", "burn")
+internal val FIRST_AID_CARDS = setOf("bleeding", "chest", "unconscious", "choking", "burn", "unwell")
 
 /** "What to do now": every card, grouped, each group in the order of the built-in file. */
 @Composable
@@ -116,13 +116,15 @@ fun NowScreen(content: Content?, nav: Nav) {
  */
 @Composable
 fun CardScreen(content: Content?, id: String, nav: Nav) {
-    // Hands are busy (pressure, CPR, waiting with someone): the screen does not go dark
-    KeepScreenOn()
+    // First aid keeps hands busy (pressure, CPR, waiting with someone): the screen does not go dark.
+    // The other cards leave it to the phone, which saves the battery in a blackout
+    if (id in FIRST_AID_CARDS) KeepScreenOn()
     val card = content?.card(id)
     // A child's card: the child's own two buttons below (family, and 112 after a question)
     val kid = id.startsWith("kid-")
     val trip = HomePrefs.state.collectAsState().value?.trip == true
-    Frame(card?.title ?: "", nav::back, bottom = if (!kid) null else ({ KidCallBar(onFamily = if (trip) null else ({ nav.go(Route.Mine(MinePart.KID_CALL)) })) })) {
+    // A child's card has only the child's own call buttons below, not the list of every service
+    Frame(card?.title ?: "", nav::back, corner = !kid, bottom = if (!kid) null else ({ KidCallBar(onFamily = if (trip) null else ({ nav.go(Route.Mine(MinePart.KID_CALL)) })) })) {
         if (content == null) return@Frame Loading()
         if (content.cardsBroken) return@Frame Broken()
         if (card == null) return@Frame Text(stringResource(R.string.not_found))
@@ -159,6 +161,8 @@ private fun CardBody(card: Card, content: Content, nav: Nav) {
     }
 
     if (card.id == "bleeding") TourniquetTime(nav)
+    // "Power is off": the count of hours (fridge, freezer, pipes) starts right here
+    if (card.id == "blackout") BlackoutBlock()
 
     when {
         all -> CardOverview(card, content) { all = false; step = 0 }
@@ -197,7 +201,10 @@ private fun CardOverview(card: Card, content: Content, onStepByStep: () -> Unit)
             StepNumber(i + 1, active = false, tone = tone)
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text(s.action, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                // Heard as "Step 2 of 7. …": the number in the circle is not read aloud
+                val stepOf = stringResource(R.string.step_of, i + 1, card.steps.size)
+                Text(s.action, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.semantics { contentDescription = "$stepOf. ${s.action}" })
                 // The overview shows everything at once, so "why" is always there, quieter;
                 // step by step keeps it folded, because that view is for acting
                 if (s.why.isNotBlank()) {
@@ -225,7 +232,10 @@ private fun CardStep(card: Card, content: Content, step: Int, onBack: () -> Unit
         stringResource(R.string.step_of, step + 1, card.steps.size),
         style = MaterialTheme.typography.labelLarge,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
+        // Said together with the step itself below, not twice
+        modifier = Modifier.clearAndSetSemantics { },
     )
+    val stepOf = stringResource(R.string.step_of, step + 1, card.steps.size)
     // The step itself stands out from everything around it: its own panel in the card's
     // colour (orange for danger, green for first aid), the words in the strongest contrast.
     // Buttons, "why" and what comes next stay quieter below it
@@ -242,7 +252,7 @@ private fun CardStep(card: Card, content: Content, step: Int, onBack: () -> Unit
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
+            modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite; contentDescription = "$stepOf. ${s.action}" },
         )
     }
     if (s.figure.isNotEmpty()) StepFigure(content, s.figure)
@@ -328,7 +338,10 @@ private fun TourniquetTime(nav: Nav? = null) {
             modifier = Modifier.fillMaxWidth(),
         ) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(if (list.size > 1) "№${t.n} · $mark" else mark, style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.Bold)
+                // "Т 14:25" read aloud as words, and said again whenever the time is set or moved
+                val heard = stringResource(R.string.tourniquet_mark_desc, Times.clock(t.at))
+                Text(if (list.size > 1) "№${t.n} · $mark" else mark, style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.Bold,
+                    modifier = Modifier.semantics { contentDescription = if (list.size > 1) "№${t.n}. $heard" else heard; liveRegion = LiveRegionMode.Polite })
                 Text(stringResource(R.string.tourniquet_since, minutes / 60, minutes % 60), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                 // Who and where, in own words; not needed to start, written when there is a moment
                 var note by remember(t.n) { mutableStateOf(t.note) }

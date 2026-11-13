@@ -343,8 +343,13 @@ fun SearchScreen(content: Content?, nav: Nav) {
         }
         val cards = result.second
         val hits = result.third
-        if (result.first == query && query.trim().length >= 2 && hits.isEmpty() && cards.isEmpty()) {
+        if (result.first == query && query.trim().length >= 2 && hits.isEmpty() && cards.isEmpty() && SEARCH_TOOLS.none { t -> t.words.any { w -> w.startsWith(query.trim().lowercase()) || query.trim().lowercase().startsWith(w) } }) {
             Text(stringResource(R.string.search_none), style = MaterialTheme.typography.bodyLarge)
+        }
+        // Screens of the app itself that answer the words ("ВПО" finds "New place"), before everything else
+        val tools = SEARCH_TOOLS.filter { t -> query.trim().length >= 2 && t.words.any { w -> w.startsWith(query.trim().lowercase()) || query.trim().lowercase().startsWith(w) } }
+        tools.forEach { t ->
+            OutlinedButton(onClick = { nav.go(t.route) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(t.title)) }
         }
         // The short action cards first: in a hurry they are what is wanted; the guide's sections below
         if (cards.isNotEmpty()) {
@@ -367,6 +372,15 @@ fun SearchScreen(content: Content?, nav: Nav) {
         }
     }
 }
+
+/** A screen of the app found by search; [words] in both languages, lower case. */
+private class SearchTool(val title: Int, val route: Route, vararg val words: String)
+
+private val SEARCH_TOOLS = listOf(
+    SearchTool(R.string.np_title, Route.Mine(MinePart.NEW_PLACE), "впо", "переселен", "переїзд", "нове місце", "облік", "допомога на проживання", "idp", "displaced", "new place"),
+    SearchTool(R.string.phones_title, Route.Phones, "телефон", "номер", "гаряча лінія", "евакуац", "phone", "hotline", "evacuation"),
+    SearchTool(R.string.handover_title, Route.Handover, "швидка", "бригад", "передати", "ambulance", "handover"),
+)
 
 /** Where the guide comes from, its licence and what was changed (CC BY-SA 4.0 asks for all three). */
 @Composable

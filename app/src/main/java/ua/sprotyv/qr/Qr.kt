@@ -128,6 +128,8 @@ object RescuerCode {
             ice.take(1).forEach { line(labels.contact, "${it.name} ${it.phone}") }
             line(labels.medicines, card.medicines)
             line(labels.conditions, card.conditions)
+            // Implants and devices (a pacemaker, an insulin pump) matter in the first minutes too
+            if (labels.other.isNotEmpty()) line(labels.other, card.notes)
             ice.drop(1).take(1).forEach { line(labels.contact, "${it.name} ${it.phone}") }
         }
         // Drop the last lines until it fits; the title and the first fields matter most
@@ -154,5 +156,6 @@ object RescuerCode {
         val conditions: String,
         val contact: String,
         val pregnancy: String = "",
+        val other: String = "",
     )
 }

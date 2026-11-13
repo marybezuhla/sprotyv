@@ -50,7 +50,7 @@ val LocalInTab = staticCompositionLocalOf { false }
 
 /** The frame of every inner screen: "Back" always in the same place, the "Call" bar always below. */
 @Composable
-fun Frame(title: String, onBack: () -> Unit, bottom: (@Composable () -> Unit)? = null, content: @Composable () -> Unit) {
+fun Frame(title: String, onBack: () -> Unit, bottom: (@Composable () -> Unit)? = null, corner: Boolean = true, content: @Composable () -> Unit) {
     val inTab = LocalInTab.current
     // While typing, the keyboard pushes the screen up instead of covering what is typed
     val typing = typing()
@@ -68,7 +68,7 @@ fun Frame(title: String, onBack: () -> Unit, bottom: (@Composable () -> Unit)? =
                 modifier = Modifier.weight(1f).padding(start = if (inTab) 12.dp else 0.dp).semantics { heading() },
             )
             ScreenshotsMark()
-            CornerCall()
+            if (corner) CornerCall()
         }
         Column(
             Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(16.dp),

@@ -44,6 +44,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
@@ -580,7 +581,7 @@ private fun SafeStatusCards(status: SafeStatus?, onPick: (SafeStatus) -> Unit) {
                 containerColor = if (!on) MaterialTheme.colorScheme.surface else safeTint(st).container,
             ),
             border = BorderStroke(if (on) 2.dp else 1.dp, if (on) safeTint(st).ink else MaterialTheme.colorScheme.outlineVariant),
-            modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).semantics { selected = on },
+            modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).semantics { selected = on; role = androidx.compose.ui.semantics.Role.RadioButton },
         ) {
             Row(Modifier.padding(horizontal = 16.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically) {
                 Text(st.mark, style = MaterialTheme.typography.titleLarge, modifier = Modifier.clearAndSetSemantics { })

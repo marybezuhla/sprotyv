@@ -190,19 +190,19 @@
   "situation": "Blood is spurting from a forearm. You have a tourniquet.",
   "options": [
    {
-    "text": "5–8 cm above the wound, not on a joint, tightened until bleeding stops completely; note the time.",
+    "text": "5–7 cm above the wound, not on a joint, tightened until bleeding stops completely; note the time.",
     "right": true,
     "why": "Wound location unclear? As high on the limb as possible."
    },
    {
     "text": "Right on the wound.",
     "right": false,
-    "why": "A tourniquet goes 5–8 cm above the wound, not on a joint."
+    "why": "A tourniquet goes 5–7 cm above the wound, not on a joint."
    },
    {
     "text": "On the elbow, so it holds better.",
     "right": false,
-    "why": "Not on a joint: 5–8 cm above the wound, until bleeding stops completely."
+    "why": "Not on a joint: 5–7 cm above the wound, until bleeding stops completely."
    }
   ]
  },
@@ -215,7 +215,7 @@
    {
     "text": "Pack gauze deep into the wound and press: plain gauze 10 minutes, hemostatic gauze 3.",
     "right": true,
-    "why": "On the neck, groin, shoulder or buttock a tourniquet is impossible."
+    "why": "On the base of the neck, groin, armpit or buttock a tourniquet is impossible."
    },
    {
     "text": "Put a tourniquet on the groin.",
@@ -922,7 +922,7 @@
  {
   "id": "kid-fire-smoke",
   "card": "kid-fire",
-  "step": 1,
+  "step": 2,
   "situation": "Smoke has appeared in the flat.",
   "options": [
    {

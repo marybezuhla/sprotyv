@@ -9,7 +9,7 @@
  "source": "https://github.com/snegireff/dovidnyk-vyzhyvannia",
  "commit": "6a3c6fb6e7ecd160e864232d0f1a47cd928fe928",
  "license": "CC BY-SA 4.0",
- "changes": "Converted for display in the app: markup changed, figures kept as images, the sections of Appendix A numbered A.1–A.5, the cover disclaimer moved to “About the guide”, the rest of the cover, the contents and the note pages left out. Three figures from open sources added (public domain; author in the caption): fig. 11.2, 15.5, 15.6. English translation by Sprotyv from the Ukrainian original (CC BY-SA 4.0); the meaning of the chapters is unchanged, except: in 4.8 and 14.4 official websites, apps and ways named by the OVA instead of chatbots and Telegram channels (the app does not recommend Telegram); in 13.1 and 18.1 CoMaps, Organic Maps or OsmAnd instead of maps.me; in the table of 6.2 the doses for children replaced by a reference to the official Ministry of Health announcement or a doctor, and in 7.13 the activated charcoal dose for children by a reference to 103 or a doctor (doses for children appear in the app only after a paediatrician's review). In November 2026 the advice was checked against current guidelines and rules (Resuscitation Council UK and ERC 2025, Ministry of Health order No. 441, NHS, USDA, WHO, Cabinet of Ministers resolution No. 1092) and corrected in 3.3, 7.1, 7.2, 7.4–7.6, 7.8, 7.10, 7.11, 7.16, 9.4, 12.1–12.3, 13.2, 16.2, 20.1, 20.5, 21.2, 22.5, 23.3, 27.5 and 29.4; each change with its source is in scripts/content/adaptation/GUIDE-REVIEW.md in the app's repository.",
+ "changes": "Converted for display in the app: markup changed, figures kept as images, the sections of Appendix A numbered A.1–A.5, the cover disclaimer moved to “About the guide”, the rest of the cover, the contents and the note pages left out. Three figures from open sources added (public domain; author in the caption): fig. 11.2, 15.5, 15.6. English translation by Sprotyv from the Ukrainian original (CC BY-SA 4.0); the meaning of the chapters is unchanged, except: in 4.8 and 14.4 official websites, apps and ways named by the OVA instead of chatbots and Telegram channels (the app does not recommend Telegram); in 13.1 and 18.1 CoMaps, Organic Maps or OsmAnd instead of maps.me; in the table of 6.2 the doses for children replaced by a reference to the official Ministry of Health announcement or a doctor, and in 7.13 the activated charcoal dose for children by a reference to 103 or a doctor (doses for children appear in the app only after a paediatrician's review). In November 2026 the advice was checked against current guidelines and rules (Resuscitation Council UK and ERC 2025, Ministry of Health order No. 441, NHS, USDA, WHO, Cabinet of Ministers resolution No. 1092) and corrected in 3.3, 3.4, 6.2, 7.1, 7.2, 7.4–7.6, 7.8, 7.10, 7.11, 7.16, 9.4, 12.1–12.3, 13.2, 16.2, 18.3, 20.1, 20.5, 21.2, 21.4, 22.5, 23.3, 26.1, 27.5, 29.4 and 30.5; each change with its source is in scripts/content/adaptation/GUIDE-REVIEW.md in the app's repository.",
  "chapters": [
   {
    "id": "ch1",
@@ -1056,7 +1056,7 @@
        "kind": "steps",
        "items": [
         {
-         "text": "Listen for the threat level (since September 2026, Cabinet of Ministers resolution No. 1092): a 1-minute siren and the voice message “red level” mean missiles or a massed drone attack; a 30-second siren and “yellow level” mean drones, so follow official messages. At any level the steps below apply: a shelter, or the two-wall zone if there is a ballistic threat or the shelter is more than 5 minutes away. Dress for the weather (shoes and a jacket, even at night), take your go-bag."
+         "text": "Listen for the threat level (since September 2026, Cabinet of Ministers resolution No. 1092; not in every region): where the regional administration uses them, a 1-minute siren and the voice message “red level” mean missiles or a massed drone attack; a 30-second siren and “yellow level” mean drones, so follow official messages. Elsewhere any siren means an alert, as before. At any level the steps below apply: a shelter, or the two-wall zone if there is a ballistic threat or the shelter is more than 5 minutes away. Dress for the weather (shoes and a jacket, even at night), take your go-bag."
         },
         {
          "text": "If there is time (the alert is not “ballistic”), turn off the gas, electrical appliances and water, close the windows and curtains."
@@ -1131,7 +1131,7 @@
          "head": false,
          "cells": [
           "2",
-          "Basement of a solid building with 2 exits",
+          "Basement of a solid building with 2 exits; in a village, a root cellar",
           "Fragments, blast wave, partly from collapse",
           "Check in advance: ventilation, 2 exits, no gas pipes overhead. Basements of prefab panel blocks and Soviet five-storey blocks (khrushchovky) do not count: the floors fold, the basements are narrow and not sealed"
          ]
@@ -1888,7 +1888,7 @@
       },
       {
        "t": "p",
-       "text": "Taken once after a meal, washed down with water/milk/kysil (a thickened fruit drink). A repeat dose only on official instruction during a prolonged release. Potassium iodide protects only against radioactive iodine (nuclear power plant accident, nuclear explosion); it is not taken after a “dirty bomb”. Doses follow the Regulations on iodine prophylaxis (order of the Ministry of Health of Ukraine of 09.03.2021 No. 408); if the official announcement gives other doses, follow it."
+       "text": "Taken once after a meal, washed down with water/milk/kysil (a thickened fruit drink). A repeat dose only on official instruction during a prolonged release. Later than 24 hours after the cloud has passed, potassium iodide is no longer taken. Potassium iodide protects only against radioactive iodine (nuclear power plant accident, nuclear explosion); it is not taken after a “dirty bomb”. Doses follow the Regulations on iodine prophylaxis (order of the Ministry of Health of Ukraine of 09.03.2021 No. 408); if the official announcement gives other doses, follow it."
       }
      ]
     },
@@ -2165,7 +2165,7 @@
        "kind": "steps",
        "items": [
         {
-         "text": "Apply the tourniquet 5–8 cm above the wound (between the wound and the heart), not on a joint. If the wound location is unclear under clothing and blood is flowing heavily, apply it as high on the limb as possible (\"high and tight\")."
+         "text": "Apply the tourniquet 5–7 cm above the wound (between the wound and the heart), not on a joint. If the wound location is unclear under clothing and blood is flowing heavily, apply it as high on the limb as possible (\"high and tight\")."
         },
         {
          "text": "Pull the strap tight, then turn the windlass until the bleeding stops COMPLETELY and there is no pulse below the tourniquet."
@@ -2183,7 +2183,7 @@
       },
       {
        "t": "h",
-       "text": "Step 3: Wound packing for wounds of the neck, groin, buttocks, shoulders (where a tourniquet is impossible) and for deep limb wounds if there is no tourniquet"
+       "text": "Step 3: Wound packing for wounds at the base of the neck, groin, armpit, buttocks (where a tourniquet is impossible) and for deep limb wounds if there is no tourniquet"
       },
       {
        "t": "list",
@@ -2707,7 +2707,7 @@
          "text": "Paracetamol 500 mg, ibuprofen 200–400 mg (pain, fever; in pregnancy, paracetamol only)"
         },
         {
-         "text": "Oral rehydration salts: 5+ sachets; loperamide (diarrhoea in adults)"
+         "text": "Oral rehydration salts: 5+ sachets; loperamide (diarrhoea in adults; not with blood in the stool or a fever)"
         },
         {
          "text": "Sorbent: for a home first aid kit the Ministry of Health advises silicon dioxide-based products. Activated charcoal (powder or granules, 50 g; you cannot reach the dose with tablets) is for poisoning on the instruction of the 103 dispatcher or a doctor; if there is no contact, dose and exceptions are in sec. 7.13"
@@ -5011,7 +5011,7 @@
          "text": "**Protection No. 1: a family code word.** Agree now on a word/question that only the family knows (a made-up phrase like \"blue tangerine\", not a fact that can be found on social media or guessed). Any \"I'm in trouble\" call is checked with it; if they do not say it, call back on a known number. Children and older people need to know this rule too."
         },
         {
-         "text": "**The pause rule:** any request to transfer money \"urgently and without telling anyone\" is always a sign of fraud. Urgency is a pressure tool."
+         "text": "**\"The bank is calling\":** a bank never asks for the code from an SMS, your PIN or the three digits on the back of the card, and never asks you to move money to a \"safe account\". Hang up and call the number on the back of your own card. **The pause rule:** any request to transfer money \"urgently and without telling anyone\" is always a sign of fraud. Urgency is a pressure tool."
         },
         {
          "text": "**Fake volunteers and \"payments\":** links saying \"get compensation/humanitarian aid, enter your card details\" steal your account. Payments are arranged only through official apps and websites that you open yourself, not through a link from a message."
@@ -5519,7 +5519,7 @@
        "kind": "steps",
        "items": [
         {
-         "text": "Fill all containers and the bathtub with water (pumps will stop within hours)."
+         "text": "Keep water stored in advance: on upper floors it stops at once, because the building's pumps stop. If it still runs, fill all containers and the bathtub."
         },
         {
          "text": "Unplug sensitive electronics (the surge when the grid comes back burns out appliances), leave one lamp on as an indicator that power is back."
@@ -5722,7 +5722,7 @@
          "text": "**Decide \"where we spend the winter\" in September–October,** not at –15° without power: strikes on energy and heat generation (drones, ballistic missiles) come back every winter, so be ready to be without heating for a long time. Families with small children, older and sick people should have an agreed place in a village/small town/abroad and a plan for leaving (sec. 17.6, chapter 26)."
         },
         {
-         "text": "**Pipes freeze** at –5…–10° in an unheated building within 1–3 days. If the heat does not come back: drain the water from the pipes (open all taps, drain the boiler, water heater, toilet cistern, pour antifreeze/salt into the drain traps), otherwise the ice will burst the system and the flat will flood once the heat is restored."
+         "text": "**Pipes freeze** at –5…–10° in an unheated building within 1–3 days. If the heat does not come back: in a house, drain the water from the pipes (open all taps, drain the boiler, water heater, toilet cistern, pour antifreeze/salt into the drain traps); in a block of flats the shared system is drained by the building's managers, you drain only your own water heater and cistern, otherwise the ice will burst the system and the flat will flood once the heat is restored."
         },
         {
          "text": "One warm room, body heat, a tent inside the room (sec. 12.2). A potbelly stove and fuel-burning heaters only with a flue/ventilation (carbon monoxide, sec. 7.11)."
@@ -5801,7 +5801,7 @@
        "kind": "bullets",
        "items": [
         {
-         "text": "Fever is a defence: if it is up to 38.5°C in an adult without serious illnesses, do not bring it down, but drink (+0.5–1 L for every degree above 37) and rest."
+         "text": "Fever is a defence: if it is up to 38.5°C in an adult without serious illnesses, do not bring it down, but drink (+0.5–1 L for every degree above 37; with heart or kidney failure, only as much as your doctor allows) and rest. A baby under 3 months with 38°C or more: to a doctor at once; a rash that does not fade under a glass, a stiff neck, floppiness: call 103."
         },
         {
          "text": "To bring it down: paracetamol 500–1000 mg up to 4 times a day (no more than 4 g/day, caution with the liver) or ibuprofen 200–400 mg up to 3 times a day (after food; in pregnancy, paracetamol only). Children: only children's doses by weight, NOT aspirin."
@@ -5861,10 +5861,10 @@
          "text": "**Main rule: a 30–90-day supply of your own medicines is item No. 1 of all preparation.** Discuss with your doctor in advance: what can replace your drug, how to lower doses if supplies run short, what must absolutely not be stopped abruptly (beta blockers, hormones, anticonvulsants, insulin, antidepressants)."
         },
         {
-         "text": "Diabetes on insulin: insulin without a fridge lasts ~28 days at room temperature (not in the sun, do not freeze!); cooling: wet cloth around the container + a draught, a buried container, an \"outdoor fridge\". Eat regularly in small portions, always keep something sweet in your pocket."
+         "text": "Diabetes on insulin: insulin without a fridge lasts ~28 days at room temperature (not in the sun, do not freeze!); cooling: wet cloth around the container + a draught, a buried container, an \"outdoor fridge\". Eat regularly in small portions, always keep something sweet in your pocket. Do not skip long-acting (basal) insulin, even when you are not eating. Vomiting, stomach pain, fast deep breathing, a smell of acetone, drowsiness: call 103 at once."
         },
         {
-         "text": "Hypertension/heart: without a blood pressure monitor, signs of getting worse are a headache at the back of the head, shortness of breath with usual activity, swollen legs. Less salt; people with heart conditions keep nitroglycerin in their pocket, not in the go-bag."
+         "text": "Hypertension/heart: without a blood pressure monitor, signs of getting worse are a headache at the back of the head, shortness of breath with usual activity, swollen legs. Less salt; people with heart conditions keep nitroglycerin in their pocket, not in the go-bag. Do not stop or double your blood pressure medicines. Pressure 180/120 or higher with chest pain, breathlessness, weakness or trouble speaking: call 103."
         },
         {
          "text": "Asthma: inhaler always on you + a spare. An attack without an inhaler: sitting, leaning on your hands, slow breath out through pursed lips, warm drinks, calm (panic narrows the airways further)."
@@ -6940,7 +6940,7 @@
          "text": "Listen to official announcements: times of \"green corridors\", permitted routes. Check them against two sources (chapter 18): fake \"corridors\" are a weapon. Straying from an announced corridor is life-threatening."
         },
         {
-         "text": "Evacuation hotlines: government line **1548** (free, 24/7); **203**: single line of the charity \"Coordination Humanitarian Centre\"; Vostok SOS charity 0 800 332 614; Proliska 0 800 888 888; Save Ukraine (families with children) 0 800 333 129. Numbers change, so check on dovidka.info."
+         "text": "Evacuation hotlines: government line **1548** (free, 24/7); **203**: Coordination Humanitarian Centre (evacuation requests, including from Donetsk region); Vostok SOS charity 0 800 332 614; Proliska 0 800 888 888; Save Ukraine (families with children) 0 800 333 129. Numbers change, so check on dovidka.info."
         },
         {
          "text": "The main timing rules: leave as early as possible (in the first hours the roads are still clear) or, if you missed the moment, wait out the first wave of panic and traffic jams."
@@ -8188,10 +8188,10 @@
          "text": "Press on the wound with all your weight, do not let go"
         },
         {
-         "text": "Limb and blood \"spurting\" → tourniquet 5–8 cm above the wound, until bleeding stops completely, write down the time"
+         "text": "Limb and blood \"spurting\" → tourniquet 5–7 cm above the wound, until bleeding stops completely, write down the time"
         },
         {
-         "text": "Neck/groin/shoulder → pack the wound deeply with a bandage, press for 3–10 min, tight dressing"
+         "text": "Base of neck/groin/armpit → pack the wound deeply with a bandage, press for 3–10 min, tight dressing"
         },
         {
          "text": "Keep warm, lay down, legs up (unless head/chest/abdomen injury)"

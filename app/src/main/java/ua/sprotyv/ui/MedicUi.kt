@@ -103,7 +103,10 @@ fun HandoverScreen(nav: Nav) {
     var what by remember { mutableStateOf("") }
     var notes by remember { mutableStateOf("") }
     val done = remember { mutableStateListOf<Pair<Int, Long>>() }
-    val tourniquets = remember { Tourniquets.all(context) }
+    // The tourniquet times count on while the screen is open
+    var minute by remember { mutableStateOf(System.currentTimeMillis() / 60_000) }
+    androidx.compose.runtime.LaunchedEffect(Unit) { while (true) { kotlinx.coroutines.delay(20_000); minute = System.currentTimeMillis() / 60_000 } }
+    val tourniquets = remember(minute) { Tourniquets.all(context) }
     SecureScreen()
     // Typed text here is not learned by the keyboard
     NoKeyboardLearning {
@@ -140,6 +143,7 @@ fun HandoverScreen(nav: Nav) {
         OutlinedButton(enabled = fits, onClick = { QrInbox.text = summary; nav.go(Route.QrText) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
             Text(stringResource(R.string.handover_qr))
         }
+        if (!fits) Text(stringResource(R.string.handover_too_long), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         // Kept only if the owner asks: then encrypted in "My notes"
         val noteTitle = stringResource(R.string.handover_note_title, clockOf(System.currentTimeMillis()))
         OutlinedButton(enabled = summary.isNotBlank(), onClick = {
@@ -153,8 +157,11 @@ fun HandoverScreen(nav: Nav) {
 }
 
 private val HANDOVER_ACTIONS = listOf(
-    R.string.handover_a_pressure, R.string.handover_a_dressing, R.string.handover_a_cpr, R.string.handover_a_recovery,
-    R.string.handover_a_cooling, R.string.handover_a_warming, R.string.handover_a_splint, R.string.handover_a_called,
+    R.string.handover_a_pressure, R.string.handover_a_tourniquet, R.string.handover_a_packing, R.string.handover_a_dressing,
+    R.string.handover_a_chest, R.string.handover_a_cpr, R.string.handover_a_recovery,
+    R.string.handover_a_cooling, R.string.handover_a_warming, R.string.handover_a_splint,
+    R.string.handover_a_aspirin, R.string.handover_a_sugar, R.string.handover_a_sorbent, R.string.handover_a_own_medicine,
+    R.string.handover_a_called,
 )
 
 private fun clockOf(t: Long): String = Times.clock(t)

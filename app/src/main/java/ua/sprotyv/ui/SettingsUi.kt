@@ -106,7 +106,8 @@ fun SettingsScreen(prefs: HomePrefs.State, nav: Nav) {
 @Composable
 private fun ModeSettings(prefs: HomePrefs.State) {
     val context = LocalContext.current
-    ModeChoice(prefs.mode) { m -> HomePrefs.update(context) { it.copy(mode = m) } }
+    // The simple look always gets the large "112" bar below (it can still be turned off here)
+    ModeChoice(prefs.mode) { m -> HomePrefs.update(context) { it.copy(mode = m, callBar = it.callBar || m == Mode.SIMPLE) } }
     if (prefs.mode != Mode.KID) {
         Toggle(stringResource(R.string.call_bar_toggle), prefs.callBar) { on -> HomePrefs.update(context) { it.copy(callBar = on) } }
         Text(stringResource(R.string.call_bar_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)

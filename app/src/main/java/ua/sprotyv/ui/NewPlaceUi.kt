@@ -10,7 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.selection.toggleable
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -52,6 +53,7 @@ private fun stepRoute(r: String): Route? = when (r) {
     "safe" -> Route.Open(Section.SAFE)
     "resistance" -> Route.Resistance
     "directory" -> Route.Directory
+    "documents" -> Route.Mine(MinePart.DOCUMENTS)
     else -> null
 }
 
@@ -104,11 +106,13 @@ fun NewPlaceScreen(content: Content?, nav: Nav) {
 private fun StepRow(s: NewPlace.Step, on: Boolean, expanded: Boolean, onExpand: () -> Unit, onTick: (Boolean) -> Unit, nav: Nav) {
     val context = LocalContext.current
     Row(
-        Modifier.fillMaxWidth().heightIn(min = 56.dp).doneRow(on).toggleable(value = on, role = Role.Checkbox, onValueChange = onTick).padding(end = 8.dp, top = 4.dp, bottom = 4.dp),
+        Modifier.fillMaxWidth().heightIn(min = 56.dp).doneRow(on).padding(end = 8.dp, top = 4.dp, bottom = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Checkbox(checked = on, onCheckedChange = null, modifier = Modifier.padding(horizontal = 12.dp), colors = doneCheckbox())
-        Text(s.title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f))
+        // Only the box ticks a step; a tap on its name opens what to do (a tired hand ticks nothing unread)
+        Checkbox(checked = on, onCheckedChange = onTick, modifier = Modifier.padding(horizontal = 4.dp).semantics { contentDescription = s.title }, colors = doneCheckbox())
+        Text(s.title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.weight(1f).heightIn(min = 48.dp).clickable(role = Role.Button, onClickLabel = stringResource(if (expanded) R.string.np_less else R.string.np_more)) { onExpand() }.padding(vertical = 12.dp))
         // A small arrow, so the step's name keeps the width
         androidx.compose.material3.IconButton(onClick = onExpand, modifier = Modifier.size(48.dp)) {
             androidx.compose.material3.Icon(

@@ -93,7 +93,7 @@
     <string name="med_pregnancy_hint">For example: 28 weeks. This line comes first in the code for rescuers, so keep it up to date.</string>
     <string name="med_allergies">Allergies</string>
     <string name="med_medicines">Medicines you take</string>
-    <string name="med_medicines_hint">Name, dose, how often</string>
+    <string name="med_medicines_hint">Most critical first: blood thinners, insulin, hormones, anticonvulsants. Name, dose, how often</string>
     <string name="med_conditions">Illnesses and conditions</string>
     <string name="med_notes">Other (implants, devices)</string>
     <string name="ice_title">Contact in an emergency</string>
@@ -278,7 +278,7 @@
     <string name="preset_general">General</string>
     <string name="preset_general_hint">Alert, bleeding, power cut, medical card</string>
     <string name="preset_elder">Older person</string>
-    <string name="preset_elder_hint">Medical card, alert, power cut, trusted people</string>
+    <string name="preset_elder_hint">Medical card, heart and sugar, alert, trusted people</string>
     <string name="preset_parents">Parents of young children</string>
     <string name="preset_parents_hint">Children in a crisis, first aid, supplies</string>
     <string name="preset_frontline">Frontline community</string>
@@ -308,7 +308,7 @@
     <string name="theme_system">As the phone</string>
     <string name="theme_light">Light</string>
     <string name="theme_dark">Dark</string>
-    <string name="theme_contrast">High contrast (sharpest text; light or dark as the phone)</string>
+    <string name="theme_contrast">High contrast (sharpest text; when dark, a black background that saves battery)</string>
     <string name="theme_dynamic">Colours from the wallpaper (Material You)</string>
     <string name="theme_dynamic_hint">Accent colours come from the phone’s wallpaper. Orange warnings and the red 112 button stay as they are.</string>
     <string name="backup_title">Backup</string>
@@ -405,7 +405,7 @@
     <string name="mode_kid_hint">For a child aged 6–10: pictures, a call to family and 112</string>
     <string name="kid_lock_advice">On a child\'s phone, turn on the settings lock so the look is not changed by accident.</string>
     <string name="kid_setup_title">A phone for a child</string>
-    <string name="kid_setup_text">The child will see seven pictures with short tips, a “Call my family” button and 112. Add family numbers in “Trusted people” in the full look. Locking the settings with the phone\'s PIN is advised.</string>
+    <string name="kid_setup_text">The child will see seven pictures with short tips, a “Call my family” button and 112. Add family numbers in “Trusted people” in the full look. Agree on a code word with the child for calls “from Mum”. Read the cards aloud with younger children. Locking the settings with the phone\'s PIN is advised.</string>
     <string name="kid_setup_lock">Done, lock with the PIN</string>
     <string name="kid_setup_later">Done, no lock</string>
     <string name="kid_grown_up">For grown-ups</string>
@@ -413,7 +413,7 @@
     <string name="kid_call_112">112</string>
     <string name="kid_call_none">No numbers here yet. Ask a grown-up to add them.</string>
     <string name="kid_call_intro">Who do you want to call?</string>
-    <string name="kid_call_112_hint">Something bad happened and your family does not answer: call 112. Say your name, your address and what happened.</string>
+    <string name="kid_call_112_hint">Trouble, and your family does not answer? Call 112. Say your name, address, what happened.</string>
     <string name="kid_hello">Hi there!</string>
     <string name="kid_hello_hint">I\'m Sunny. Tap a picture and I\'ll tell you what to do.</string>
     <string name="kid_well_done">Well done! 🌟</string>
@@ -434,9 +434,10 @@
     <string name="safe_status_quiet">I can\'t talk</string>
     <string name="safe_help_message">I need help. Call or write as soon as you can.</string>
     <string name="safe_quiet_message">I can\'t talk, but I\'m reachable. Write, don\'t call.</string>
-    <string name="tourniquet_on">⏱ Tourniquet on: note the time</string>
+    <string name="tourniquet_on">Tourniquet on: note the time</string>
+    <string name="tourniquet_mark_desc">Tourniquet on at %1$s</string>
     <string name="tourniquet_since">Since then: %1$d h %2$02d min</string>
-    <string name="tourniquet_write">Write this time with a marker on the tourniquet or the casualty\'s forehead. Never loosen it: only a medic removes it. Tell the medics the time. Several wounded: write the time on each tourniquet, as the phone may run flat.</string>
+    <string name="tourniquet_write">Write this time with a marker on the tourniquet or the casualty\'s forehead; if you cannot see, ask someone nearby or tell the medics the time aloud. Never loosen it: only a medic removes it. Several wounded: write the time on each tourniquet, as the phone may run flat.</string>
     <string name="tourniquet_mark">T %1$s</string>
     <string name="situation_title">Situation</string>
     <string name="situation_hint">Threat and front-line maps, fact checks</string>
@@ -451,6 +452,7 @@
     <string name="situation_rule_1">An alert means: to the shelter at once. Do not wait for a target to appear near you on the map.</string>
     <string name="situation_rule_2">No mark near you does not mean no danger. The data comes late, and ballistic missiles are not on the maps.</string>
     <string name="situation_rule_3">Do not film or post air defence at work or strikes as they happen: it helps the enemy, and people have been convicted for it.</string>
+    <string name="situation_rule_4">Do not forward photos of a “downed missile” or debris: they can show the enemy where it hit and where air defence works, or be old or fake. No date and source: do not share.</string>
     <string name="situation_rules_source">Sources: Ministry of Defence (17.10.2026), Kyiv City Administration, Survival guide 3.3. Checked 30.10.2026.</string>
     <string name="situation_note">Sprotyv itself downloads nothing: pages open in the browser or in the source\'s own app. List checked 30.10.2026.</string>
     <string name="situation_no_trace">Chrome on this phone opens these pages in a separate tab: after closing it keeps no history, cookies or cache. The site and the mobile operator still see the visit. The sources\' own apps keep their data as usual.</string>
@@ -651,7 +653,7 @@
     <string name="heat_for">No heating for %1$s (since %2$s)</string>
     <string name="heat_pipes">Pipes may freeze</string>
     <string name="heat_pipes_when">in 1–3 days</string>
-    <string name="heat_pipes_do">At −5…−10° outside, pipes freeze in 1–3 days. If the heat does not come back, drain the pipes, the boiler and the water heater.</string>
+    <string name="heat_pipes_do">At −5…−10° outside, pipes freeze in 1–3 days. If the heat does not come back: in a house, drain the pipes, the boiler and the water heater; in a block of flats the shared system is drained by the building\'s managers, you only your own water heater and cistern.</string>
     <string name="heat_leave">When to leave</string>
     <string name="heat_leave_when">over 2 days</string>
     <string name="heat_leave_do">Below +5° in the flat for over 2 days is a reason for families with children, older or ill people to leave.</string>
@@ -677,7 +679,7 @@
     <string name="group_family_desc">Children, older people, family plan, where to turn</string>
     <string name="group_home_life_desc">Power, water, heat, food, supplies</string>
     <string name="group_prepare_desc">Emergency bag, practice, 30-day plan</string>
-    <string name="group_leave_desc">Evacuation, the road, abroad</string>
+    <string name="group_leave_desc">Evacuation, the road, a new place for displaced people, abroad</string>
     <string name="group_safety_desc">Mines, documents, fakes, crowds, disasters</string>
     <string name="group_mine_desc">Medical card, screen for rescuers, printing</string>
     <string name="group_guide_desc">The whole guide and search</string>
@@ -775,7 +777,7 @@
     <string name="path_title">My path of readiness</string>
     <string name="path_open_hint">Concrete skills and deeds; only you see your ticks</string>
     <string name="path_summary">Done: %1$d of %2$d</string>
-    <string name="path_intro">Tick what you can already do or have done. Encrypted in “My data”; no one else sees it, no rankings.</string>
+    <string name="path_intro">Tick what you can already do or have done. Encrypted in “My data” and never sent anywhere, no rankings. So that no one who picks up your phone sees it, turn on the lock for “My data” in settings.</string>
     <string name="path_level_personal">Myself</string>
     <string name="path_level_family">My family</string>
     <string name="path_level_civic">My community</string>
@@ -847,6 +849,14 @@
     <string name="handover_a_warming">Warming</string>
     <string name="handover_a_splint">Immobilisation</string>
     <string name="handover_a_called">103 called</string>
+    <string name="handover_a_tourniquet">Tourniquet applied</string>
+    <string name="handover_a_packing">Wound packed</string>
+    <string name="handover_a_chest">Chest seal applied</string>
+    <string name="handover_a_aspirin">Aspirin given</string>
+    <string name="handover_a_sugar">Sugar or glucose given</string>
+    <string name="handover_a_sorbent">Sorbent given</string>
+    <string name="handover_a_own_medicine">Took own medicine (inhaler, nitroglycerin)</string>
+    <string name="handover_too_long">Too much text for the code: shorten the description or notes.</string>
     <string name="medic_tools">For medics</string>
     <string name="path_level_medic">For medics</string>
     <string name="path_teach">I teach first aid to people in my community</string>
@@ -914,7 +924,7 @@
     <string name="backup_settings_row">Make a backup or restore</string>
     <string name="backup_settings_hint">All of My data in one encrypted file. Use it to move to a new phone.</string>
     <string name="kid_112_ask">Do you need help right now?</string>
-    <string name="kid_112_ask_hint">112 is for trouble: a fire, someone is hurt, or you are lost and no grown-up is near. Say your name, where you are and what happened.</string>
+    <string name="kid_112_ask_hint">Call 112 when there is trouble and no grown-ups. Say your name, where you are, what happened.</string>
     <string name="kid_112_yes">Yes, call 112</string>
     <string name="kid_112_no">No, by mistake</string>
     <string name="kid_step_next">Next</string>
@@ -1044,7 +1054,7 @@
     <string name="tourniquet_handed_ask">Handed to medics and told them the time %1$s? The record will go.</string>
     <string name="tourniquet_handed_yes">Yes, handed over</string>
     <string name="tourniquet_handed">Handed to medics</string>
-    <string name="tourniquet_another">＋ Another tourniquet</string>
+    <string name="tourniquet_another">Another tourniquet</string>
     <string name="handover_tourniquet_line">tourniquet on at %1$s (%2$d h %3$02d min ago)</string>
     <string name="notify_tourniquets_on">Tourniquets: %1$d · first T %2$s</string>
     <string name="notify_tourniquet_title_many">Tourniquets %1$s</string>
@@ -1133,7 +1143,7 @@
     <string name="habit_night">Clothes and shoes ready for the night</string>
     <string name="habit_night_plan">When I go to bed, I put clothes, shoes and a torch next to me.</string>
     <string name="habit_news">News twice a day, not all day</string>
-    <string name="habit_news_plan">With my morning coffee: 10 minutes of news, then none until evening. Alarm alerts stay on.</string>
+    <string name="habit_news_plan">Over breakfast: 10 minutes of news, then none until evening. Alarm alerts stay on.</string>
     <string name="habit_breath">Two minutes of slow breathing</string>
     <string name="habit_breath_plan">When I am already in the shelter during an alarm, I breathe slowly for two minutes.</string>
     <string name="habit_sleep">Going to bed at the same time</string>
@@ -1176,7 +1186,7 @@
     <string name="blackout_freezer_full_name">Freezer, full</string>
     <string name="blackout_freezer_half_name">Freezer, half-full</string>
     <string name="blackout_of_hours">of ~%1$d h</string>
-    <string name="heat_pipes_now">may be freezing now</string>
+    <string name="heat_pipes_now">may be freezing if it is below −5° outside</string>
     <string name="heat_leave_now">time to decide</string>
     <string name="path_check">Check yourself</string>
     <string name="path_tested">✓ Checked by a test</string>
@@ -1469,6 +1479,7 @@
     <string name="role_volunteer_3">If there is no reason to refuse, the tax service adds the person within one working day.</string>
     <string name="role_volunteer_4">Under martial law the register is closed to outsiders, so check someone else\'s fundraiser in other ways.</string>
     <string name="role_volunteer_5">To check a fundraiser: ask for reports on earlier ones, search the photos by image, contact the organisation the volunteer is from.</string>
+    <string name="role_volunteer_6">Lists of the people you help, with addresses and phones, do not keep in ordinary chats or the gallery: take only what is needed, with the person\'s consent, and delete after handing out. At an enemy checkpoint such a list endangers them.</string>
     <string name="role_donor">I give blood</string>
     <string name="role_donor_hint">Or want to start</string>
     <string name="role_donor_affirm">Your blood already saves the wounded and the ill, quietly and for real. Here: who can give and what rights a donor has.</string>

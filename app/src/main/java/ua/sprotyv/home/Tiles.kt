@@ -89,8 +89,8 @@ enum class Preset(val pins: List<String>) {
     ),
     ELDER(
         listOf(
-            Tiles.tool(Tool.MEDICAL), Tiles.card("air-alert"), Tiles.card("blackout"), Tiles.card("unconscious"),
-            Tiles.tool(Tool.PEOPLE), Tiles.tool(Tool.RESCUER),
+            Tiles.tool(Tool.MEDICAL), Tiles.card("unwell"), Tiles.card("air-alert"), Tiles.tool(Tool.PEOPLE),
+            Tiles.card("blackout"), Tiles.card("unconscious"), Tiles.tool(Tool.RESCUER),
         ),
     ),
     PARENTS(
@@ -137,7 +137,8 @@ enum class Group(val tiles: List<String>) {
     ),
     FIRST_AID(
         listOf(
-            Tiles.card("bleeding"), Tiles.card("unconscious"), Tiles.card("choking"), Tiles.card("burn"), Tiles.tool(Tool.MOZ),
+            Tiles.card("bleeding"), Tiles.card("chest"), Tiles.card("unconscious"), Tiles.card("choking"), Tiles.card("burn"),
+            Tiles.card("unwell"), Tiles.tool(Tool.MOZ),
             Tiles.chapter("ch7"), Tiles.chapter("ch21"),
         ),
     ),

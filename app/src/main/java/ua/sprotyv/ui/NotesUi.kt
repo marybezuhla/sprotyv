@@ -28,6 +28,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
@@ -372,10 +374,11 @@ private fun NoteRead(text: String, onTick: (String) -> Unit) {
                 // Ticking what is done stays one tap away; the words themselves do not change here
                 items.indices.sortedBy { if (items[it].done) 1 else 0 }.forEach { i ->
                     val it0 = items[i]
-                    Row(Modifier.doneRow(it0.done), verticalAlignment = Alignment.CenterVertically) {
-                        androidx.compose.material3.Checkbox(colors = doneCheckbox(), checked = it0.done, onCheckedChange = { v ->
-                            onTick(listText(lines.first(), items.toMutableList().also { l -> l[i] = it0.copy(done = v) }).take(MAX_NOTE))
-                        })
+                    // The whole row ticks, and TalkBack hears the words with the tick
+                    Row(Modifier.doneRow(it0.done).toggleable(value = it0.done, role = androidx.compose.ui.semantics.Role.Checkbox, onValueChange = { v ->
+                        onTick(listText(lines.first(), items.toMutableList().also { l -> l[i] = it0.copy(done = v) }).take(MAX_NOTE))
+                    }), verticalAlignment = Alignment.CenterVertically) {
+                        androidx.compose.material3.Checkbox(colors = doneCheckbox(), checked = it0.done, onCheckedChange = null)
                         Text(it0.text, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f).padding(vertical = 12.dp))
                     }
                 }
@@ -420,7 +423,8 @@ private fun NoteEditor(text: String, onText: (String) -> Unit, focus: androidx.c
             val it0 = items[i]
             androidx.compose.runtime.key(i) {
                 Row(Modifier.doneRow(it0.done), verticalAlignment = Alignment.CenterVertically) {
-                    androidx.compose.material3.Checkbox(colors = doneCheckbox(), checked = it0.done, onCheckedChange = { v -> put(name, items.toMutableList().also { l -> l[i] = it0.copy(done = v) }) })
+                    androidx.compose.material3.Checkbox(colors = doneCheckbox(), checked = it0.done, onCheckedChange = { v -> put(name, items.toMutableList().also { l -> l[i] = it0.copy(done = v) }) },
+                        modifier = Modifier.semantics { contentDescription = it0.text })
                     androidx.compose.foundation.text.BasicTextField(
                         value = it0.text,
                         onValueChange = { v -> put(name, items.toMutableList().also { l -> l[i] = it0.copy(text = v.replace("\n", " ")) }) },

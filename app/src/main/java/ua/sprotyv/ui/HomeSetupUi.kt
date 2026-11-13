@@ -273,7 +273,7 @@ fun WelcomeScreen(nav: Nav) {
                 TextButton(onClick = { step = 0 }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.back)) }
             } else {
                 Text(stringResource(R.string.welcome_preset_q), style = MaterialTheme.typography.titleLarge, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, modifier = Modifier.semantics { heading() })
-                PresetList { p -> HomePrefs.update(context) { it.copy(mode = mode, pins = p.pins) } }
+                PresetList { p -> HomePrefs.update(context) { it.copy(mode = mode, pins = p.pins, callBar = it.callBar || mode == Mode.SIMPLE) } }
                 TextButton(onClick = { step = 0 }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.back)) }
             }
             Text(stringResource(R.string.welcome_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)

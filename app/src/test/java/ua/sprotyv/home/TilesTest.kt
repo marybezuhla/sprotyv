@@ -9,7 +9,7 @@ import ua.sprotyv.personal.Person
 
 class TilesTest {
     private val cards = setOf(
-        "first-60", "air-alert", "ballistic", "drone", "bleeding", "unconscious", "choking", "burn", "home-fire",
+        "first-60", "air-alert", "ballistic", "drone", "bleeding", "chest", "unconscious", "choking", "burn", "unwell", "home-fire",
         "suspicious", "chemical", "radiation", "rubble", "blackout", "leave-home",
     )
     private val chapters = (1..30).map { "ch$it" }.toSet() + setOf("planA", "abroad", "sources")
