@@ -195,4 +195,14 @@ class ScreensTest {
     // Settings in English with large text: rows of choices must wrap, never break a word
     @Test fun settingsBig() { mode(Mode.FULL); shot("31-settings-big", big = true) { SettingsScreen(HomePrefs.load(app), nav) } }
     @Test fun moz() { mode(Mode.FULL); shot("32-moz-big", big = true) { MozScreen(content, 4, nav) } }
+
+    // Large screens and landscape: from targetSdk 37 the app cannot keep a tablet in portrait
+    @Config(sdk = [35], qualifiers = "uk-w1280dp-h800dp-land-mdpi")
+    @Test fun homeTablet() { mode(Mode.FULL); shot("70-home-tablet-land") { FullHome(content, Preset.GENERAL.pins, nav, {}, {}, {}) } }
+    @Config(sdk = [35], qualifiers = "uk-w1280dp-h800dp-land-mdpi")
+    @Test fun cardTablet() { mode(Mode.SIMPLE); shot("71-card-tablet-land") { CardScreen(content, "bleeding", nav) } }
+    @Config(sdk = [35], qualifiers = "uk-w891dp-h411dp-land-xxhdpi")
+    @Test fun cardPhoneLand() { mode(Mode.SIMPLE); shot("72-card-phone-land", dark = true) { CardScreen(content, "air-alert", nav) } }
+    @Config(sdk = [35], qualifiers = "uk-w891dp-h411dp-land-xxhdpi")
+    @Test fun guidePhoneLand() = shot("73-guide-phone-land") { GuideSectionScreen(content, "3.3", nav) }
 }
