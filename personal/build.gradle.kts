@@ -1,8 +1,5 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     id("com.android.library")
-    id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
 }
 
@@ -10,7 +7,7 @@ plugins {
 // key kept in the phone's keystore. Only :app may use this module.
 android {
     namespace = "ua.sprotyv.personal"
-    compileSdk = 36
+    compileSdk = 37
     defaultConfig { minSdk = 31 }
     // Lint's findings printed in the CI log, as for the app
     lint {
@@ -23,10 +20,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-}
-
-kotlin {
-    compilerOptions { jvmTarget.set(JvmTarget.JVM_17) }
 }
 
 ksp {
