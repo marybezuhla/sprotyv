@@ -285,3 +285,30 @@ internal object Times {
     /** 03.2026 */
     fun month(m: java.time.YearMonth): String = "%02d.%d".format(m.monthValue, m.year)
 }
+
+/**
+ * The outlined button as the app has always looked: text in the primary colour and a clear outline.
+ * Material 3 1.4 made both grey (onSurfaceVariant, outlineVariant), which hides that these are buttons;
+ * every outlined button in the app comes through here, and a caller can still pass its own colours.
+ */
+@androidx.compose.runtime.Composable
+internal fun OutlinedButton(
+    onClick: () -> Unit,
+    modifier: androidx.compose.ui.Modifier = androidx.compose.ui.Modifier,
+    enabled: Boolean = true,
+    shape: androidx.compose.ui.graphics.Shape = androidx.compose.material3.ButtonDefaults.outlinedShape,
+    colors: androidx.compose.material3.ButtonColors =
+        androidx.compose.material3.ButtonDefaults.outlinedButtonColors(contentColor = androidx.compose.material3.MaterialTheme.colorScheme.primary),
+    elevation: androidx.compose.material3.ButtonElevation? = null,
+    border: androidx.compose.foundation.BorderStroke? = androidx.compose.foundation.BorderStroke(
+        androidx.compose.ui.unit.Dp(1f),
+        if (enabled) androidx.compose.material3.MaterialTheme.colorScheme.outline
+        else androidx.compose.material3.MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
+    ),
+    contentPadding: androidx.compose.foundation.layout.PaddingValues = androidx.compose.material3.ButtonDefaults.ContentPadding,
+    interactionSource: androidx.compose.foundation.interaction.MutableInteractionSource? = null,
+    content: @androidx.compose.runtime.Composable androidx.compose.foundation.layout.RowScope.() -> Unit,
+) = androidx.compose.material3.OutlinedButton(
+    onClick = onClick, modifier = modifier, enabled = enabled, shape = shape, colors = colors, elevation = elevation,
+    border = border, contentPadding = contentPadding, interactionSource = interactionSource, content = content,
+)

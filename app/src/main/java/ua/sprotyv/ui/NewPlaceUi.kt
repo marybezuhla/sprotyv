@@ -122,7 +122,7 @@ private fun StepRow(s: NewPlace.Step, on: Boolean, expanded: Boolean, onExpand: 
     androidx.compose.foundation.layout.Column(Modifier.padding(start = CheckIndent, end = 16.dp, bottom = 12.dp), verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)) {
         Text(s.text, style = ReadingText)
         Text(stringResource(R.string.np_where, s.where), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
-        stepRoute(s.route)?.let { r -> androidx.compose.material3.OutlinedButton(onClick = { nav.go(r) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text(stringResource(R.string.np_open_in_app)) } }
+        stepRoute(s.route)?.let { r -> OutlinedButton(onClick = { nav.go(r) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text(stringResource(R.string.np_open_in_app)) } }
         s.sources.forEach { src ->
             Text(
                 "↗ " + src.title, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary,

@@ -211,7 +211,7 @@ private fun FullTabs(tab: Tab, onTab: (Tab) -> Unit, prefs: HomePrefs.State, con
                     )
                     Tab.KNOW -> Frame(stringResource(R.string.tab_know), {}) {
                         // One search over the guide first, then everything by theme in coloured shelves
-                        androidx.compose.material3.OutlinedButton(onClick = { nav.go(Route.Search) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+                        OutlinedButton(onClick = { nav.go(Route.Search) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
                             Icon(Icons.Filled.Search, contentDescription = null)
                             Text("  " + stringResource(R.string.search_guide))
                         }

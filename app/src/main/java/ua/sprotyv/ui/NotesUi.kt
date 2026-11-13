@@ -17,7 +17,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -103,7 +102,7 @@ fun NotesScreen(nav: Nav) {
     }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.notes_new)) }
     // "My experience": when the guide was needed in life — only when the owner wants to write it
     val context = androidx.compose.ui.platform.LocalContext.current
-    androidx.compose.material3.OutlinedButton(enabled = !full, onClick = {
+    OutlinedButton(enabled = !full, onClick = {
         val main = android.os.Handler(android.os.Looper.getMainLooper())
         val text = experienceTemplate(context)
         PersonalStore.save("note-new:" + java.util.UUID.randomUUID()) { db ->

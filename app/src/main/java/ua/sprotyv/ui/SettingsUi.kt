@@ -21,7 +21,6 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -327,13 +326,13 @@ internal fun AboutApp() {
             Text(stringResource(R.string.about_app_libraries), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
-    androidx.compose.material3.OutlinedButton(
+    OutlinedButton(
         onClick = { ua.sprotyv.reach.Reach.open(context, SOURCE_URL) },
         modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
     ) { Text(stringResource(R.string.about_app_source)) }
     // The full licence texts travel inside the app, as the licences ask; read here without a network
     var texts by remember { androidx.compose.runtime.mutableStateOf(false) }
-    androidx.compose.material3.OutlinedButton(onClick = { texts = true }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
+    OutlinedButton(onClick = { texts = true }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
         Text(stringResource(R.string.about_app_texts))
     }
     if (texts) LicenceTexts { texts = false }

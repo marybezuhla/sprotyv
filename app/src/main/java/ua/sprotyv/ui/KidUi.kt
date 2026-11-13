@@ -219,7 +219,7 @@ internal fun KidCallBar(onFamily: (() -> Unit)?) {
                 ) { Text(stringResource(R.string.kid_112_yes), fontWeight = FontWeight.SemiBold) }
             },
             dismissButton = {
-                androidx.compose.material3.OutlinedButton(onClick = { ask = false }, modifier = Modifier.heightIn(min = 56.dp)) {
+                OutlinedButton(onClick = { ask = false }, modifier = Modifier.heightIn(min = 56.dp)) {
                     Text(stringResource(R.string.kid_112_no))
                 }
             },
@@ -341,7 +341,7 @@ internal fun KidCardBody(card: ua.sprotyv.content.Card, content: ua.sprotyv.cont
                 Text(stringResource(R.string.practice_card_kid), style = MaterialTheme.typography.titleMedium)
             }
         }
-        androidx.compose.material3.OutlinedButton(onClick = { step = 0 }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.again)) }
+        OutlinedButton(onClick = { step = 0 }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.again)) }
     }
 }
 

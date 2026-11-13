@@ -297,7 +297,7 @@ private fun PathWeek(path: List<PathStep>, done: Set<String>, nav: Nav, change: 
                 androidx.compose.material3.Button(onClick = { change(next.key, true); justDone = next.key }, modifier = Modifier.heightIn(min = 48.dp)) {
                     Text(stringResource(R.string.path_week_done))
                 }
-                next.learn?.let { r -> androidx.compose.material3.OutlinedButton(onClick = { nav.go(r) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.path_learn)) } }
+                next.learn?.let { r -> OutlinedButton(onClick = { nav.go(r) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.path_learn)) } }
             }
             Text(stringResource(R.string.path_week_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             then?.let { t ->
