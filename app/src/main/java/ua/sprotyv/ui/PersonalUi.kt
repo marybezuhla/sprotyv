@@ -198,7 +198,7 @@ fun MedicalScreen() {
             Field(stringResource(R.string.med_pregnancy), card.pregnancy, { change(card.copy(pregnancy = it)) }, hint = stringResource(R.string.med_pregnancy_hint))
             Field(stringResource(R.string.med_allergies), card.allergies, { change(card.copy(allergies = it)) }, multiline = true)
             Field(stringResource(R.string.med_medicines), card.medicines, { change(card.copy(medicines = it)) }, multiline = true, hint = stringResource(R.string.med_medicines_hint))
-            Field(stringResource(R.string.med_conditions), card.conditions, { change(card.copy(conditions = it)) }, multiline = true)
+            Field(stringResource(R.string.med_conditions), card.conditions, { change(card.copy(conditions = it)) }, multiline = true, hint = stringResource(R.string.med_conditions_hint))
             Field(stringResource(R.string.med_notes), card.notes, { change(card.copy(notes = it)) }, multiline = true)
         },
     )

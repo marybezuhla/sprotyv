@@ -95,6 +95,7 @@
     <string name="med_medicines">Medicines you take</string>
     <string name="med_medicines_hint">Most critical first: blood thinners, insulin, hormones, anticonvulsants. Name, dose, how often</string>
     <string name="med_conditions">Illnesses and conditions</string>
+    <string name="med_conditions_hint">Including a pacemaker or an insulin pump: this also goes into the rescuer\'s code</string>
     <string name="med_notes">Other (implants, devices)</string>
     <string name="ice_title">Contact in an emergency</string>
     <string name="ice_none">Not chosen yet. In Trusted people, switch on “Contact in an emergency”.</string>

@@ -84,7 +84,6 @@ private fun labels(context: Context) = RescuerCode.Labels(
     medicines = context.getString(R.string.rescuer_medicines),
     conditions = context.getString(R.string.rescuer_conditions),
     contact = context.getString(R.string.rescuer_contact),
-    other = context.getString(R.string.med_notes),
 )
 
 /** What goes on the owner's paper: chosen by the owner, part by part. */

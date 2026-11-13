@@ -343,11 +343,11 @@ fun SearchScreen(content: Content?, nav: Nav) {
         }
         val cards = result.second
         val hits = result.third
-        if (result.first == query && query.trim().length >= 2 && hits.isEmpty() && cards.isEmpty() && SEARCH_TOOLS.none { t -> t.words.any { w -> w.startsWith(query.trim().lowercase()) || query.trim().lowercase().startsWith(w) } }) {
+        if (result.first == query && query.trim().length >= 2 && hits.isEmpty() && cards.isEmpty() && SEARCH_TOOLS.none { t -> toolMatches(t, query) }) {
             Text(stringResource(R.string.search_none), style = MaterialTheme.typography.bodyLarge)
         }
         // Screens of the app itself that answer the words ("ВПО" finds "New place"), before everything else
-        val tools = SEARCH_TOOLS.filter { t -> query.trim().length >= 2 && t.words.any { w -> w.startsWith(query.trim().lowercase()) || query.trim().lowercase().startsWith(w) } }
+        val tools = SEARCH_TOOLS.filter { t -> toolMatches(t, query) }
         tools.forEach { t ->
             OutlinedButton(onClick = { nav.go(t.route) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(t.title)) }
         }
@@ -375,6 +375,12 @@ fun SearchScreen(content: Content?, nav: Nav) {
 
 /** A screen of the app found by search; [words] in both languages, lower case. */
 private class SearchTool(val title: Int, val route: Route, vararg val words: String)
+
+/** At least three letters, the start of a word ("впо", "перес"), or a word typed in full ("впо 2026"). */
+private fun toolMatches(t: SearchTool, query: String): Boolean {
+    val q = query.trim().lowercase()
+    return q.length >= 3 && t.words.any { w -> w.startsWith(q) || q.startsWith(w) }
+}
 
 private val SEARCH_TOOLS = listOf(
     SearchTool(R.string.np_title, Route.Mine(MinePart.NEW_PLACE), "впо", "переселен", "переїзд", "нове місце", "облік", "допомога на проживання", "idp", "displaced", "new place"),

@@ -244,7 +244,7 @@
    },
    {
     "action": "Give nothing to drink. Check breathing and their condition every 5 minutes.",
-    "why": "Surgery under anaesthesia may be needed."
+    "why": "Surgery under anaesthesia may be needed. Stopped breathing: the card \"Person unconscious\", CPR."
    }
   ]
  },
@@ -264,7 +264,7 @@
   "steps": [
    {
     "action": "Look around: make sure nothing threatens you. Speak to them loudly, gently shake their shoulders.",
-    "why": "If you get hurt yourself, you cannot help anyone. Came round within a minute? Let them lie with legs raised, do not sit them up fast. Not awake within 1–2 minutes, or they hit their head: 103."
+    "why": "If you get hurt yourself, you cannot help anyone. Came round at once? Let them lie with legs raised, do not sit them up fast; if they hit their head, 103."
    },
    {
     "action": "No response? Tilt the head back, lift the chin and check breathing for 10 seconds.",
@@ -381,16 +381,16 @@
   "reviewedBy": "",
   "steps": [
    {
-    "action": "Pain or pressure in the chest over 15 minutes, breathlessness, cold sweat: sit half lying, loosen clothing, call 103.",
+    "action": "Pressing or burning chest pain, spreading to the arm, jaw or back, breathlessness, cold sweat: call 103 at once. Sit propped up, loosen clothing.",
     "why": "On your own? Tell the dispatcher your address and unlock the front door while you can."
    },
    {
     "action": "An adult with chest pain: chew aspirin 150–300 mg, if there is no allergy and no bleeding.",
-    "why": "That is ½ of a 500 mg tablet or 2–3 \"cardio\" tablets of 75–100 mg. Nitroglycerin only if a doctor prescribed it."
+    "why": "That is ½ of a 500 mg tablet or 2–3 \"cardio\" tablets of 100 mg. Nitroglycerin only if a doctor prescribed it."
    },
    {
     "action": "Face drooping, arm falling, speech slurred? This is a stroke: call 103 at once and remember when it started.",
-    "why": "Give no food or drink, lay them with the head raised, do not leave them alone. Treatment works in the first 3–4.5 hours."
+    "why": "Give no food or drink, lay them with the head raised, do not leave them alone. Signs gone: do not cancel the call. The sooner the treatment, the better the chances."
    },
    {
     "action": "Shaking, sweating, confusion in someone with diabetes or who has not eaten: if conscious, 15–20 g of sugar, that is 4–5 teaspoons or half a glass of juice.",
@@ -648,7 +648,7 @@
     "why": "A lift has ventilation: you cannot suffocate, but the shaft is deadly."
    },
    {
-    "action": "Warmth: layers of clothing, one room, hot drinks. Phone: power saving mode. Find the nearest Invincibility Point in Diia while you still have a signal.",
+    "action": "Warmth: layers of clothing, one room, hot drinks. Phone: power saving mode. Find the nearest invincibility point in Diia while you still have a signal.",
     "why": "There is heat, charging, water and a connection. Cold for over a day: move to family or a warming point (sec. 20.5)."
    }
   ]
@@ -672,7 +672,7 @@
     "why": "Fake orders and \"corridors\" do happen."
    },
    {
-    "action": "No way to leave? Call 1548 (24/7) or East SOS 0 800 332 614: they also evacuate people with limited mobility.",
+    "action": "No way to leave? Call 1548 (24/7) or East SOS 0 800 332 614 (Mon–Sat 8–18): they take evacuation requests, including for people with limited mobility.",
     "why": "Other evacuation lines: Phones, the Evacuation section."
    },
    {

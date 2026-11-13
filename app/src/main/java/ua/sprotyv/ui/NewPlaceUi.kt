@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.material3.Checkbox
@@ -110,11 +111,11 @@ private fun StepRow(s: NewPlace.Step, on: Boolean, expanded: Boolean, onExpand: 
         verticalAlignment = Alignment.CenterVertically,
     ) {
         // Only the box ticks a step; a tap on its name opens what to do (a tired hand ticks nothing unread)
-        Checkbox(checked = on, onCheckedChange = onTick, modifier = Modifier.padding(horizontal = 4.dp).semantics { contentDescription = s.title }, colors = doneCheckbox())
+        Checkbox(checked = on, onCheckedChange = onTick, modifier = Modifier.semantics { contentDescription = s.title }, colors = doneCheckbox())
         Text(s.title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.weight(1f).heightIn(min = 48.dp).clickable(role = Role.Button, onClickLabel = stringResource(if (expanded) R.string.np_less else R.string.np_more)) { onExpand() }.padding(vertical = 12.dp))
         // A small arrow, so the step's name keeps the width
-        androidx.compose.material3.IconButton(onClick = onExpand, modifier = Modifier.size(48.dp)) {
+        androidx.compose.material3.IconButton(onClick = onExpand, modifier = Modifier.size(48.dp).clearAndSetSemantics { }) {
             androidx.compose.material3.Icon(
                 if (expanded) androidx.compose.material.icons.Icons.Filled.KeyboardArrowUp else androidx.compose.material.icons.Icons.Filled.KeyboardArrowDown,
                 contentDescription = stringResource(if (expanded) R.string.np_less else R.string.np_more),

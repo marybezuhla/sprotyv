@@ -828,6 +828,52 @@
   ]
  },
  {
+  "id": "chest-seal",
+  "card": "chest",
+  "step": 1,
+  "situation": "Someone has a chest wound and you hear air hissing. There is no vented seal.",
+  "options": [
+   {
+    "text": "I tape a bag down on all sides as they breathe out.",
+    "right": true,
+    "why": "No vented seal: an occlusive seal or a bag taped down on all sides, as they breathe out."
+   },
+   {
+    "text": "I leave the wound open and wait.",
+    "right": false,
+    "why": "The Ministry of Health order says: cover the wound with a bag or seal on all sides, as they breathe out."
+   },
+   {
+    "text": "I wrap it with a plain bandage.",
+    "right": false,
+    "why": "A bandage lets air through. You need a seal or a bag taped down on all sides."
+   }
+  ]
+ },
+ {
+  "id": "unwell-sugar",
+  "card": "unwell",
+  "step": 3,
+  "situation": "A neighbour with diabetes is shaking, sweating and mixing up words, but conscious.",
+  "options": [
+   {
+    "text": "I give 15–20 g of sugar: 4–5 teaspoons or half a glass of juice.",
+    "right": true,
+    "why": "Then bread or biscuits. No better in 15 minutes: again."
+   },
+   {
+    "text": "I give nothing until the ambulance comes.",
+    "right": false,
+    "why": "If conscious, give 15–20 g of sugar at once: low sugar harms within minutes."
+   },
+   {
+    "text": "I give sugar even if they pass out.",
+    "right": false,
+    "why": "Nothing in the mouth of an unconscious person: recovery position and 103."
+   }
+  ]
+ },
+ {
   "id": "kid-siren-window",
   "card": "kid-siren",
   "step": 2,
@@ -956,12 +1002,12 @@
    {
     "text": "I'll run home.",
     "right": false,
-    "why": "You're already in a safe place. Sit next to a grown-up."
+    "why": "Stay in the shelter. Sit next to a grown-up."
    },
    {
     "text": "I'll leave the shelter to look.",
     "right": false,
-    "why": "You're already in a safe place. Sit next to a grown-up or hug your toy."
+    "why": "Stay in the shelter. Sit next to a grown-up; you can hug your toy."
    }
   ]
  },

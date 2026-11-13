@@ -93,8 +93,9 @@
     <string name="med_pregnancy_hint">Наприклад: 28 тижнів. Цей рядок іде першим у код для рятувальників, тож оновлюйте його.</string>
     <string name="med_allergies">Алергії</string>
     <string name="med_medicines">Ліки, які ви приймаєте</string>
-    <string name="med_medicines_hint">Спершу найважливіше: розрідження крові, інсулін, гормони, протисудомні. Назва, доза, як часто</string>
+    <string name="med_medicines_hint">Спершу найважливіше: ліки, що розріджують кров, інсулін, гормони, протисудомні. Назва, доза, як часто</string>
     <string name="med_conditions">Хвороби й стани</string>
+    <string name="med_conditions_hint">Зокрема кардіостимулятор чи інсулінова помпа: це потрапить і в код для рятувальників</string>
     <string name="med_notes">Інше (імпланти, пристрої)</string>
     <string name="ice_title">Контакт на випадок біди</string>
     <string name="ice_none">Ще не обрано. У «Довірених людях» увімкніть «Контакт на випадок біди».</string>
@@ -863,7 +864,7 @@
     <string name="handover_a_aspirin">Дано аспірин</string>
     <string name="handover_a_sugar">Дано цукор чи глюкозу</string>
     <string name="handover_a_sorbent">Дано сорбент</string>
-    <string name="handover_a_own_medicine">Прийняв свої ліки (інгалятор, нітрогліцерин)</string>
+    <string name="handover_a_own_medicine">Прийнято власні ліки (інгалятор, нітрогліцерин)</string>
     <string name="handover_too_long">Забагато тексту для коду: скоротіть опис чи нотатки.</string>
     <string name="medic_tools">Для медика</string>
     <string name="path_level_medic">Для медиків</string>
