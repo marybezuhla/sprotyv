@@ -13,7 +13,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForward
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,8 +40,6 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.heading
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -269,6 +266,7 @@ private val LEVEL_WORDS = listOf(
 @Composable
 private fun PathInspire(levels: List<Pair<Int, Int>>, celebrated: Int, nav: Nav) {
     val context = androidx.compose.ui.platform.LocalContext.current
+    val res = androidx.compose.ui.platform.LocalResources.current
     val current = levels.indexOfFirst { it.first < it.second }
     val lastDone = (if (current < 0) levels.size else current) - 1
     // A level just completed: said once, then the next level's words
@@ -288,7 +286,7 @@ private fun PathInspire(levels: List<Pair<Int, Int>>, celebrated: Int, nav: Nav)
             Spacer(Modifier.width(8.dp))
             // Levels done get a tick; the one in progress shows its count
             val line = levels.mapIndexedNotNull { i, (d, t) ->
-                val name = context.getString(LEVEL_NAMES.getOrElse(i) { LEVEL_NAMES.last() })
+                val name = res.getString(LEVEL_NAMES.getOrElse(i) { LEVEL_NAMES.last() })
                 when {
                     d >= t -> "$name ✓"
                     i == current -> "$name $d/$t"

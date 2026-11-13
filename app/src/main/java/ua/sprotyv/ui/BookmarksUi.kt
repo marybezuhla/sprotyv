@@ -18,7 +18,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -31,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -52,6 +52,7 @@ import ua.sprotyv.reach.Reach
 @Composable
 fun BookmarksScreen() {
     val context = LocalContext.current
+    val res = LocalResources.current
     val toolbar = MaterialTheme.colorScheme.surface.toArgb()
     val pages by remember {
         PersonalStore.observe { db -> combine(Bookmarks.KEYS.map { db.settings().observe(it) }) { it.toList() } }
@@ -107,7 +108,7 @@ fun BookmarksScreen() {
                     IconButton(onClick = {
                         // A small thing: gone at once, with "Undo" to put it back in its place
                         change { now -> now.filter { it.url != b.url } }
-                        Notices.deleted(context, context.getString(R.string.deleted_named, b.title), undo = {
+                        Notices.deleted(context, res.getString(R.string.deleted_named, b.title), undo = {
                             change { now -> if (now.any { it.url == b.url }) now else now.toMutableList().apply { add(i.coerceAtMost(size), b) } }
                         })
                     }) {

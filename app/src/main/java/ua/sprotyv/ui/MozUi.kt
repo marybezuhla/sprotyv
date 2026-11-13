@@ -16,10 +16,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -44,7 +42,7 @@ private val MOZ_GROUPS = listOf(
 )
 
 /** Which procedure stands behind an action card, so the official text is one tap away. */
-val CARD_MOZ = mapOf("bleeding" to 4, "unconscious" to 1, "burn" to 19, "rubble" to 15, "chemical" to 18)
+val CARD_MOZ = mapOf("bleeding" to 4, "chest" to 7, "unconscious" to 1, "burn" to 19, "unwell" to 6, "rubble" to 15, "chemical" to 18)
 
 /** All 29 procedures of order No. 441, grouped, each opening as steps or as the full text. */
 @Composable

@@ -18,7 +18,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -32,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import kotlinx.coroutines.launch
@@ -44,6 +44,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
@@ -197,7 +198,7 @@ fun MedicalScreen() {
             Field(stringResource(R.string.med_pregnancy), card.pregnancy, { change(card.copy(pregnancy = it)) }, hint = stringResource(R.string.med_pregnancy_hint))
             Field(stringResource(R.string.med_allergies), card.allergies, { change(card.copy(allergies = it)) }, multiline = true)
             Field(stringResource(R.string.med_medicines), card.medicines, { change(card.copy(medicines = it)) }, multiline = true, hint = stringResource(R.string.med_medicines_hint))
-            Field(stringResource(R.string.med_conditions), card.conditions, { change(card.copy(conditions = it)) }, multiline = true)
+            Field(stringResource(R.string.med_conditions), card.conditions, { change(card.copy(conditions = it)) }, multiline = true, hint = stringResource(R.string.med_conditions_hint))
             Field(stringResource(R.string.med_notes), card.notes, { change(card.copy(notes = it)) }, multiline = true)
         },
     )
@@ -394,7 +395,12 @@ object PeopleFiles {
                         .map { c -> Person(name = c.name, phone = c.phone, relation = c.note, safeList = true, ice = false, sort = sort++) }
                     db.people().addUpTo(fresh, Vcf.MAX_PEOPLE)
                 }
-            } catch (e: Exception) { null }
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                // Not read or not saved: said in plain words below, nothing half added
+                null
+            }
             val message = if (added == null) app.getString(R.string.people_import_failed) else app.getString(R.string.people_import_done, added, chosen.size - added)
             kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) { done(message) }
         }
@@ -420,6 +426,7 @@ object PeopleFiles {
 @Composable
 private fun PersonDialog(start: Person, onDone: () -> Unit) {
     val context = LocalContext.current
+    val res = LocalResources.current
     var p by remember(start) { mutableStateOf(start) }
     var confirmDelete by remember { mutableStateOf(false) }
     val valid = p.name.isNotBlank() && ua.sprotyv.reach.Links.clean(p.phone).removePrefix("+").length >= 3
@@ -465,7 +472,7 @@ private fun PersonDialog(start: Person, onDone: () -> Unit) {
                     val gone = start
                     PersonalStore.save("delete:" + java.util.UUID.randomUUID()) { it.people().delete(gone) }
                     // Put back as it was, under the same id
-                    Notices.deleted(context, context.getString(R.string.deleted_named, gone.name), undo = {
+                    Notices.deleted(context, res.getString(R.string.deleted_named, gone.name), undo = {
                         PersonalStore.save("restore:" + java.util.UUID.randomUUID()) { it.people().save(gone) }
                     })
                     confirmDelete = false
@@ -497,7 +504,6 @@ fun Toggle(label: String, checked: Boolean, onChange: (Boolean) -> Unit) {
  */
 @Composable
 fun SafeScreen(nav: Nav) {
-    val context = LocalContext.current
     val people = rememberPeople() ?: return Loading()
     val list = people.filter { it.safeList }
     val defaultText = stringResource(R.string.safe_default_message)
@@ -523,29 +529,12 @@ fun SafeScreen(nav: Nav) {
         return
     }
     Text(stringResource(R.string.safe_status), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, modifier = Modifier.semantics { heading() })
-    SafeStatus.entries.forEach { st ->
-        val on = st == status
-        Card(
-            onClick = {
-                status = st
-                text = when (st) {
-                    SafeStatus.OK -> okText
-                    SafeStatus.HELP -> helpText
-                    SafeStatus.QUIET -> quietText
-                }
-            },
-            colors = CardDefaults.cardColors(
-                // "All is well" green, "I need help" danger orange, "cannot talk" neutral
-                containerColor = if (!on) MaterialTheme.colorScheme.surface else safeTint(st).container,
-            ),
-            border = BorderStroke(if (on) 2.dp else 1.dp, if (on) safeTint(st).ink else MaterialTheme.colorScheme.outlineVariant),
-            modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).semantics { selected = on },
-        ) {
-            Row(Modifier.padding(horizontal = 16.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically) {
-                Text(st.mark, style = MaterialTheme.typography.titleLarge, modifier = Modifier.clearAndSetSemantics { })
-                Spacer(Modifier.width(12.dp))
-                Text(stringResource(st.title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-            }
+    SafeStatusCards(status) { st ->
+        status = st
+        text = when (st) {
+            SafeStatus.OK -> okText
+            SafeStatus.HELP -> helpText
+            SafeStatus.QUIET -> quietText
         }
     }
     if (status == null) {
@@ -577,6 +566,36 @@ fun SafeScreen(nav: Nav) {
             OutlinedButton(onClick = { draft = text; editingText = false }, modifier = Modifier.weight(1f).heightIn(min = 48.dp)) { Text(stringResource(R.string.cancel)) }
         }
     }
+    SafeSend(list, text)
+}
+
+/** The three ready messages as large cards; colour and a mark tell them apart, never colour alone. */
+@Composable
+private fun SafeStatusCards(status: SafeStatus?, onPick: (SafeStatus) -> Unit) {
+    SafeStatus.entries.forEach { st ->
+        val on = st == status
+        Card(
+            onClick = { onPick(st) },
+            colors = CardDefaults.cardColors(
+                // "All is well" green, "I need help" danger orange, "cannot talk" neutral
+                containerColor = if (!on) MaterialTheme.colorScheme.surface else safeTint(st).container,
+            ),
+            border = BorderStroke(if (on) 2.dp else 1.dp, if (on) safeTint(st).ink else MaterialTheme.colorScheme.outlineVariant),
+            modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).semantics { selected = on; role = androidx.compose.ui.semantics.Role.RadioButton },
+        ) {
+            Row(Modifier.padding(horizontal = 16.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically) {
+                Text(st.mark, style = MaterialTheme.typography.titleLarge, modifier = Modifier.clearAndSetSemantics { })
+                Spacer(Modifier.width(12.dp))
+                Text(stringResource(st.title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+            }
+        }
+    }
+}
+
+/** Sending: one SMS (or WhatsApp) to each person, all at once, or through Signal; the owner presses Send there. */
+@Composable
+private fun SafeSend(list: List<Person>, text: String) {
+    val context = LocalContext.current
     // One SMS to each person is the surest: several numbers in one go may be sent as an MMS, which needs mobile data
     Text(stringResource(R.string.safe_each), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, modifier = Modifier.semantics { heading() })
     list.forEach { p ->

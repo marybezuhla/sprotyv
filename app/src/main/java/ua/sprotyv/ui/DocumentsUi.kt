@@ -32,7 +32,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -45,15 +44,12 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -159,6 +155,8 @@ object Docs {
     }
 
     /** A photo as a JPEG at most [PHOTO_SIDE] on its longest side, turned upright; only the picture is kept. */
+    // Only the turn is read; from Android 12, the oldest this app runs on, the platform's ExifInterface is the fixed one
+    @android.annotation.SuppressLint("ExifInterface")
     private fun shrink(context: Context, uri: Uri): ByteArray? {
         val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
         context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, bounds) }
@@ -195,6 +193,7 @@ object Docs {
         return b.copyOf(got)
     }
 
+    @android.annotation.SuppressLint("Recycle") // closed by use {}, which lint does not follow here
     private fun displayName(context: Context, uri: Uri): String? = try {
         context.contentResolver.query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)?.use { c ->
             if (c.moveToFirst()) c.getString(0) else null
@@ -475,12 +474,25 @@ private fun Zoomable(bitmap: androidx.compose.ui.graphics.ImageBitmap, descripti
     )
 }
 
+/**
+ * A photo at most [MAX_PIXELS] in size: one restored from an old or odd backup may be far
+ * larger than the 2400 px the app itself keeps, and Android will not draw a picture that big.
+ */
+private fun decodeCapped(bytes: ByteArray): android.graphics.Bitmap? {
+    val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+    BitmapFactory.decodeByteArray(bytes, 0, bytes.size, bounds)
+    if (bounds.outWidth <= 0 || bounds.outHeight <= 0) return null
+    var sample = 1
+    while (bounds.outWidth.toLong() / sample * (bounds.outHeight.toLong() / sample) > MAX_PIXELS) sample *= 2
+    return BitmapFactory.decodeByteArray(bytes, 0, bytes.size, BitmapFactory.Options().apply { inSampleSize = sample })
+}
+
 /** A photo, decoded away from the screen's thread. */
 @Composable
 private fun PhotoView(bytes: ByteArray) {
     var failed by remember(bytes) { mutableStateOf(false) }
     val bitmap by produceState<androidx.compose.ui.graphics.ImageBitmap?>(null, bytes) {
-        val decoded = withContext(Dispatchers.Default) { try { BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.asImageBitmap() } catch (e: OutOfMemoryError) { null } }
+        val decoded = withContext(Dispatchers.Default) { try { decodeCapped(bytes)?.asImageBitmap() } catch (e: OutOfMemoryError) { null } }
         if (decoded == null) failed = true
         value = decoded
     }
@@ -494,7 +506,8 @@ private fun PhotoView(bytes: ByteArray) {
  */
 @Composable
 private fun PdfPages(bytes: ByteArray) {
-    val widthPx = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp.roundToPx() }
+    // The window's width in pixels; never below 720, so a page is drawn even before the window is measured
+    val widthPx = androidx.compose.ui.platform.LocalWindowInfo.current.containerSize.width.coerceAtLeast(720)
     var failedToOpen by remember(bytes) { mutableStateOf(false) }
     val doc by produceState<PdfDoc?>(null, bytes) {
         // Finished even if the viewer closes meanwhile, so it is always closed below
@@ -507,7 +520,7 @@ private fun PdfPages(bytes: ByteArray) {
     var large by remember { mutableStateOf<Int?>(null) }
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         items(d.pages) { i ->
-            val page by produceState<Bitmap?>(null, i) { value = withContext(Dispatchers.Default) { d.render(i, widthPx.coerceAtMost(1600)) } }
+            val page by produceState<Bitmap?>(null, i, widthPx) { value = withContext(Dispatchers.Default) { d.render(i, widthPx.coerceAtMost(1600)) } }
             val label = stringResource(R.string.docs_page, i + 1, d.pages)
             page?.let {
                 Image(it.asImageBitmap(), contentDescription = label, modifier = Modifier.fillMaxWidth().clickable(onClickLabel = stringResource(R.string.docs_zoom)) { large = i })
@@ -521,7 +534,7 @@ private fun PdfPages(bytes: ByteArray) {
             Surface(Modifier.fillMaxSize()) {
                 Column(Modifier.statusBarsPadding().navigationBarsPadding()) {
                     TextButton(onClick = { large = null }, modifier = Modifier.align(Alignment.End).padding(8.dp).heightIn(min = 48.dp)) { Text(stringResource(R.string.back)) }
-                    val big by produceState<Bitmap?>(null, i) { value = withContext(Dispatchers.Default) { d.render(i, (widthPx * 2).coerceAtMost(2800)) } }
+                    val big by produceState<Bitmap?>(null, i, widthPx) { value = withContext(Dispatchers.Default) { d.render(i, (widthPx * 2).coerceAtMost(2800)) } }
                     Column(Modifier.weight(1f)) {
                         big?.let { Zoomable(it.asImageBitmap(), stringResource(R.string.docs_page, i + 1, d.pages)) } ?: Loading()
                     }
@@ -531,6 +544,7 @@ private fun PdfPages(bytes: ByteArray) {
     }
 }
 
+/** About 4000 × 4000 at most for one drawn picture (a page or a photo): sharp enough to zoom, well under Android's limit. */
 private const val MAX_PIXELS = 16_000_000L
 
 /** memfd_create's own close-on-exec flag (Linux MFD_CLOEXEC; not O_CLOEXEC). */

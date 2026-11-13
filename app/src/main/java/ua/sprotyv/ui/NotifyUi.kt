@@ -8,7 +8,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -31,7 +30,7 @@ import ua.sprotyv.R
 fun NotifySettings() {
     val context = LocalContext.current
     val version by Notify.version.collectAsState()
-    var refresh by remember { mutableStateOf(0) }
+    var refresh by remember { androidx.compose.runtime.mutableIntStateOf(0) }
     androidx.lifecycle.compose.LifecycleResumeEffect(Unit) { refresh++; onPauseOrDispose { } }
     var waiting by remember { mutableStateOf<Notify.Kind?>(null) }
     var denied by remember { mutableStateOf(false) }
@@ -47,8 +46,10 @@ fun NotifySettings() {
 
     fun turn(kind: Notify.Kind, on: Boolean) {
         if (!on) return Notify.set(context, kind, false)
+        // Android 12 asks nothing: notices are allowed until the owner turns them off
+        if (android.os.Build.VERSION.SDK_INT < 33) return Notify.set(context, kind, true)
         val granted = ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
-        if (granted || android.os.Build.VERSION.SDK_INT < 33) Notify.set(context, kind, true)
+        if (granted) Notify.set(context, kind, true)
         else { waiting = kind; ask.launch(Manifest.permission.POST_NOTIFICATIONS) }
     }
 

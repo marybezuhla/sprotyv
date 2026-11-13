@@ -152,7 +152,7 @@ fun LockMineSettings() {
     val scope = rememberCoroutineScope()
     var mode by remember { mutableStateOf<KeyVault.Mode?>(null) }
     var busy by remember { mutableStateOf(false) }
-    var refresh by remember { mutableStateOf(0) }
+    var refresh by remember { androidx.compose.runtime.mutableIntStateOf(0) }
     LaunchedEffect(refresh) { mode = withContext(Dispatchers.IO) { PersonalStore.lockMode(context) } }
     var askOn by rememberSaveable { mutableStateOf(false) }
     val canLock = Guard.available(context)
@@ -214,28 +214,33 @@ fun LockMineSettings() {
         if (busy) return@Toggle
         if (on) askOn = true else changeFromLocked(m, KeyVault.Mode.OPEN)
     }
+    LockMineHints(m, failed = reason != null) { on -> if (!busy) changeFromLocked(m, KeyVault.Mode(locked = true, pinOnly = on)) }
+    if (askOn) LockOnQuestion(onNo = { askOn = false }) {
+        askOn = false
+        busy = true
+        scope.launch { finish(withContext(Dispatchers.IO) { PersonalStore.startLock(context, pinOnly = false) }) }
+    }
+}
+
+/** "PIN only" when locked, what the lock means, and a plain sentence (never the technical reason) after a failure. */
+@Composable
+private fun LockMineHints(m: KeyVault.Mode, failed: Boolean, onPinOnly: (Boolean) -> Unit) {
     if (m.locked) {
-        Toggle(stringResource(R.string.lock_mine_pin_only), m.pinOnly) { on ->
-            if (!busy) changeFromLocked(m, KeyVault.Mode(locked = true, pinOnly = on))
-        }
+        Toggle(stringResource(R.string.lock_mine_pin_only), m.pinOnly, onPinOnly)
         Text(stringResource(R.string.lock_mine_pin_only_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
     Text(stringResource(R.string.lock_mine_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    // A plain sentence, never the technical reason (class names, keystore messages)
-    if (reason != null) Text(stringResource(R.string.lock_mine_failed), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    if (askOn) {
-        AlertDialog(
-            onDismissRequest = { askOn = false },
-            title = { Text(stringResource(R.string.lock_mine_confirm_title)) },
-            text = { Text(stringResource(R.string.lock_mine_confirm_text)) },
-            confirmButton = {
-                TextButton(onClick = {
-                    askOn = false
-                    busy = true
-                    scope.launch { finish(withContext(Dispatchers.IO) { PersonalStore.startLock(context, pinOnly = false) }) }
-                }) { Text(stringResource(R.string.lock_mine_confirm_yes)) }
-            },
-            dismissButton = { TextButton(onClick = { askOn = false }) { Text(stringResource(R.string.cancel)) } },
-        )
-    }
+    if (failed) Text(stringResource(R.string.lock_mine_failed), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+}
+
+/** What locking "My data" means, asked once before it is turned on. */
+@Composable
+private fun LockOnQuestion(onNo: () -> Unit, onYes: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onNo,
+        title = { Text(stringResource(R.string.lock_mine_confirm_title)) },
+        text = { Text(stringResource(R.string.lock_mine_confirm_text)) },
+        confirmButton = { TextButton(onClick = onYes) { Text(stringResource(R.string.lock_mine_confirm_yes)) } },
+        dismissButton = { TextButton(onClick = onNo) { Text(stringResource(R.string.cancel)) } },
+    )
 }

@@ -39,7 +39,7 @@ object Marks {
         PersonalStore.save("marks:move") { db ->
             waiting.forEach { old -> if (prefs.getBoolean(old, false)) db.settings().put(Setting(LEGACY.getValue(old), "true")) }
             // Only once they are in the encrypted data
-            prefs.edit().apply { waiting.forEach { remove(it) } }.commit()
+            prefs.edit().apply { waiting.forEach { remove(it) } }.saveNow()
         }
     }
 

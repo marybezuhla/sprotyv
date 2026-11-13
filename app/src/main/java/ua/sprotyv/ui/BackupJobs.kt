@@ -378,6 +378,7 @@ val BACKED_UP_SETTINGS = setOf(KEY_SAFE_MESSAGE, KEY_KIT_REVIEWED, KEY_SUPPLIES,
 const val KEY_BACKUP_AT = "backup_at"
 
 /** True for a new, empty file from the save dialog: an existing file is never written over. */
+@android.annotation.SuppressLint("Recycle") // closed by use {}, which lint does not follow here
 private fun isNewDocument(context: Context, uri: Uri): Boolean = try {
     context.contentResolver.openInputStream(uri)?.use { it.read() < 0 } ?: false
 } catch (e: Exception) {
@@ -396,6 +397,7 @@ internal fun deleteQuietly(context: Context, uri: Uri): Boolean = try {
 }
 
 /** Reads at most [BackupCrypto.MAX_FILE_BYTES]; anything larger is not ours. */
+@android.annotation.SuppressLint("Recycle") // closed by use {}, which lint does not follow here
 private fun readLimited(context: Context, uri: Uri): ByteArray {
     val limit = BackupCrypto.MAX_FILE_BYTES
     context.contentResolver.openInputStream(uri)!!.use { input ->
@@ -426,6 +428,7 @@ private fun readUpTo(input: java.io.InputStream, n: Int): ByteArray {
 }
 
 /** Opens a streamed copy with [key] and hands its content, read in parts, to [block]; [digest] sees every byte of it. */
+@android.annotation.SuppressLint("Recycle") // closed by use {}, which lint does not follow here
 private suspend fun <T> readCopy(context: Context, uri: Uri, key: BackupStream.Key, digest: java.security.MessageDigest, block: suspend (java.io.Reader) -> T): T =
     withContext(Dispatchers.IO) {
         (context.contentResolver.openInputStream(uri) ?: throw BackupCrypto.NotABackup()).use { input ->

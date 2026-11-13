@@ -10,7 +10,6 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -23,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ua.sprotyv.R
@@ -104,7 +104,8 @@ fun <T> EditableBlock(
 /** One stored value with its name above; an empty one says so quietly. */
 @Composable
 fun ReadField(label: String, value: String) {
-    Column {
+    // Name and value heard together, one swipe per field
+    Column(Modifier.semantics(mergeDescendants = true) { }) {
         Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         if (value.isBlank()) Text(stringResource(R.string.not_filled), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
         else Text(value, style = MaterialTheme.typography.bodyLarge)

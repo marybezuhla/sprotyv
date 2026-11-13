@@ -4,7 +4,7 @@
   encrypted database.
 - Google Tink (https://github.com/tink-crypto/tink-java), Apache License 2.0: streaming encryption
   of backups. It carries a copy of Protocol Buffers (Google), BSD 3-Clause.
-- AndroidX, Jetpack Compose, Room and Material Components (Google), Apache License 2.0.
+- AndroidX, Jetpack Compose (with Compose Material 3) and Room (Google), Apache License 2.0.
 - Kotlin standard library and kotlinx.coroutines (JetBrains), Apache License 2.0.
 - Bouncy Castle (https://www.bouncycastle.org), MIT-style licence, provides Argon2id for
   password-protected backups and the family plan code.

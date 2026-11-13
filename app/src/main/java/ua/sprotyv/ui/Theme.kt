@@ -29,6 +29,12 @@ val FlagYellow = Color(0xFFFFD700)
 /** Only for danger that is happening now (an alert, a "call now" button). */
 val DangerRed = Color(0xFFB3261E)
 
+/** Words on [DangerRed] (the call buttons): white, the strongest contrast on that red. */
+val OnDanger = Color.White
+
+/** Behind a QR code or a figure drawing: white in either theme, as scanners and the drawings expect. */
+val PaperWhite = Color.White
+
 /** Red as text or an icon on the screen's own background: lighter on dark ones, so it reads (WCAG AA). */
 val DangerInk: Color
     @androidx.compose.runtime.Composable get() =
@@ -269,4 +275,40 @@ internal object Times {
 
     /** 03.11.2026 */
     fun date(d: java.time.LocalDate): String = d.format(DATE)
+
+    /** 03.11.2026, from a moment */
+    fun date(t: Long): String = day(t).format(DATE)
+
+    /** The day a moment falls on, here */
+    fun day(t: Long): java.time.LocalDate = at(t).toLocalDate()
+
+    /** 03.2026 */
+    fun month(m: java.time.YearMonth): String = "%02d.%d".format(m.monthValue, m.year)
 }
+
+/**
+ * The outlined button as the app has always looked: text in the primary colour and a clear outline.
+ * Material 3 1.4 made both grey (onSurfaceVariant, outlineVariant), which hides that these are buttons;
+ * every outlined button in the app comes through here, and a caller can still pass its own colours.
+ */
+@androidx.compose.runtime.Composable
+internal fun OutlinedButton(
+    onClick: () -> Unit,
+    modifier: androidx.compose.ui.Modifier = androidx.compose.ui.Modifier,
+    enabled: Boolean = true,
+    shape: androidx.compose.ui.graphics.Shape = androidx.compose.material3.ButtonDefaults.outlinedShape,
+    colors: androidx.compose.material3.ButtonColors =
+        androidx.compose.material3.ButtonDefaults.outlinedButtonColors(contentColor = androidx.compose.material3.MaterialTheme.colorScheme.primary),
+    elevation: androidx.compose.material3.ButtonElevation? = null,
+    border: androidx.compose.foundation.BorderStroke? = androidx.compose.foundation.BorderStroke(
+        androidx.compose.ui.unit.Dp(1f),
+        if (enabled) androidx.compose.material3.MaterialTheme.colorScheme.outline
+        else androidx.compose.material3.MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
+    ),
+    contentPadding: androidx.compose.foundation.layout.PaddingValues = androidx.compose.material3.ButtonDefaults.ContentPadding,
+    interactionSource: androidx.compose.foundation.interaction.MutableInteractionSource? = null,
+    content: @androidx.compose.runtime.Composable androidx.compose.foundation.layout.RowScope.() -> Unit,
+) = androidx.compose.material3.OutlinedButton(
+    onClick = onClick, modifier = modifier, enabled = enabled, shape = shape, colors = colors, elevation = elevation,
+    border = border, contentPadding = contentPadding, interactionSource = interactionSource, content = content,
+)

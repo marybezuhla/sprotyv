@@ -2,15 +2,12 @@ package ua.sprotyv.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -22,7 +19,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -34,8 +30,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
@@ -95,7 +91,7 @@ fun CardRow(card: Card, onClick: () -> Unit) {
 }
 
 /** The cards of first aid; the rest are dangers and events. */
-internal val FIRST_AID_CARDS = setOf("bleeding", "unconscious", "choking", "burn")
+internal val FIRST_AID_CARDS = setOf("bleeding", "chest", "unconscious", "choking", "burn", "unwell")
 
 /** "What to do now": every card, grouped, each group in the order of the built-in file. */
 @Composable
@@ -120,13 +116,15 @@ fun NowScreen(content: Content?, nav: Nav) {
  */
 @Composable
 fun CardScreen(content: Content?, id: String, nav: Nav) {
-    // Hands are busy (pressure, CPR, waiting with someone): the screen does not go dark
-    KeepScreenOn()
+    // First aid keeps hands busy (pressure, CPR, waiting with someone): the screen does not go dark.
+    // The other cards leave it to the phone, which saves the battery in a blackout
+    if (id in FIRST_AID_CARDS) KeepScreenOn()
     val card = content?.card(id)
     // A child's card: the child's own two buttons below (family, and 112 after a question)
     val kid = id.startsWith("kid-")
     val trip = HomePrefs.state.collectAsState().value?.trip == true
-    Frame(card?.title ?: "", nav::back, bottom = if (!kid) null else ({ KidCallBar(onFamily = if (trip) null else ({ nav.go(Route.Mine(MinePart.KID_CALL)) })) })) {
+    // A child's card has only the child's own call buttons below, not the list of every service
+    Frame(card?.title ?: "", nav::back, corner = !kid, bottom = if (!kid) null else ({ KidCallBar(onFamily = if (trip) null else ({ nav.go(Route.Mine(MinePart.KID_CALL)) })) })) {
         if (content == null) return@Frame Loading()
         if (content.cardsBroken) return@Frame Broken()
         if (card == null) return@Frame Text(stringResource(R.string.not_found))
@@ -154,7 +152,7 @@ private fun CardBody(card: Card, content: Content, nav: Nav) {
     card.call?.let { service ->
         Button(
             onClick = { Reach.dial(context, service.number) },
-            colors = ButtonDefaults.buttonColors(containerColor = DangerRed, contentColor = Color.White),
+            colors = ButtonDefaults.buttonColors(containerColor = DangerRed, contentColor = OnDanger),
             modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp),
         ) {
             Icon(Icons.Filled.Call, contentDescription = null)
@@ -163,107 +161,13 @@ private fun CardBody(card: Card, content: Content, nav: Nav) {
     }
 
     if (card.id == "bleeding") TourniquetTime(nav)
+    // "Power is off": the count of hours (fridge, freezer, pipes) starts right here
+    if (card.id == "blackout") BlackoutBlock()
 
-    if (all) {
-        val tone = toneOf(ua.sprotyv.home.Tiles.card(card.id)).tint()
-        card.steps.forEachIndexed { i, s ->
-            Row(verticalAlignment = Alignment.Top) {
-                StepNumber(i + 1, active = false, tone = tone)
-                Spacer(Modifier.width(12.dp))
-                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text(s.action, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                    // The overview shows everything at once, so "why" is always there, quieter;
-                    // step by step keeps it folded, because that view is for acting
-                    if (s.why.isNotBlank()) {
-                        Text(s.why, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    }
-                    // The picture sits inside its own step, so it is never read as the next one's
-                    if (s.figure.isNotEmpty()) StepFigure(content, s.figure)
-                    if (s.wait > 0) WaitTimer(s.wait)
-                }
-                Pictogram(s.icon, 44.dp)
-            }
-            if (i < card.steps.lastIndex) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant, modifier = Modifier.padding(start = 48.dp))
-        }
-        Button(onClick = { all = false; step = 0 }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
-            Text(stringResource(R.string.step_by_step), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
-        }
-    } else if (!done) {
-        val s = card.steps[step]
-        Progress(card.steps.size, step)
-        Text(
-            stringResource(R.string.step_of, step + 1, card.steps.size),
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        // The step itself stands out from everything around it: its own panel in the card's
-        // colour (orange for danger, green for first aid), the words in the strongest contrast.
-        // Buttons, "why" and what comes next stay quieter below it
-        val tone = toneOf(ua.sprotyv.home.Tiles.card(card.id)).tint()
-        Column(
-            Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(tone.container)
-                .border(2.dp, tone.ink.copy(alpha = 0.55f), RoundedCornerShape(20.dp)).padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            Pictogram(s.icon, 88.dp)
-            // Read out by TalkBack whenever the step changes
-            Text(
-                s.action,
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
-            )
-        }
-        if (s.figure.isNotEmpty()) StepFigure(content, s.figure)
-        Why(s.why, "${card.id}:$step")
-        if (s.wait > 0) WaitTimer(s.wait)
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
-            if (step > 0) {
-                OutlinedButton(onClick = { step-- }, modifier = Modifier.heightIn(min = 64.dp)) { Text(stringResource(R.string.previous)) }
-            }
-            Button(onClick = { step++ }, modifier = Modifier.weight(1f).heightIn(min = 64.dp)) {
-                Text(stringResource(R.string.done_next), style = MaterialTheme.typography.titleMedium)
-            }
-        }
-        // The next step in small print: what comes is never a surprise
-        card.steps.getOrNull(step + 1)?.let { next ->
-            Text(
-                stringResource(R.string.next_step, next.action),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-            )
-        }
-        TextButton(onClick = { all = true }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.all_steps)) }
-    } else if (kid) {
-        // A child hears praise at the end (guide 5.5: only praise, never scolding)
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Sunny(96.dp, happy = true)
-            Spacer(Modifier.width(16.dp))
-            Column {
-                Text(
-                    stringResource(R.string.kid_well_done),
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.semantics { heading(); liveRegion = LiveRegionMode.Polite },
-                )
-                Text(stringResource(R.string.kid_well_done_hint), style = MaterialTheme.typography.titleMedium)
-            }
-        }
-        OutlinedButton(onClick = { step = 0 }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.again)) }
-    } else {
-        Progress(card.steps.size, card.steps.size)
-        Text(
-            stringResource(R.string.all_done),
-            style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.semantics { heading(); liveRegion = LiveRegionMode.Polite },
-        )
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            OutlinedButton(onClick = { step = 0 }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.again)) }
-            OutlinedButton(onClick = { all = true }, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.all_steps)) }
-        }
+    when {
+        all -> CardOverview(card, content) { all = false; step = 0 }
+        !done -> CardStep(card, content, step, onBack = { step = (step - 1).coerceAtLeast(0) }, onNext = { step = (step + 1).coerceAtMost(card.steps.size) }, onAll = { all = true })
+        else -> CardEnd(card.steps.size, kid, onAgain = { step = 0 }, onAll = { all = true })
     }
 
     HorizontalDivider()
@@ -288,6 +192,113 @@ private fun CardBody(card: Card, content: Content, nav: Nav) {
     Source(card)
 }
 
+/** The whole card at once: every step with its "why", picture and timer, then "step by step". */
+@Composable
+private fun CardOverview(card: Card, content: Content, onStepByStep: () -> Unit) {
+    val tone = toneOf(ua.sprotyv.home.Tiles.card(card.id)).tint()
+    card.steps.forEachIndexed { i, s ->
+        Row(verticalAlignment = Alignment.Top) {
+            StepNumber(i + 1, active = false, tone = tone)
+            Spacer(Modifier.width(12.dp))
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                // Heard as "Step 2 of 7. …": the number in the circle is not read aloud
+                val stepOf = stringResource(R.string.step_of, i + 1, card.steps.size)
+                Text(s.action, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.semantics { contentDescription = "$stepOf. ${s.action}" })
+                // The overview shows everything at once, so "why" is always there, quieter;
+                // step by step keeps it folded, because that view is for acting
+                if (s.why.isNotBlank()) {
+                    Text(s.why, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                // The picture sits inside its own step, so it is never read as the next one's
+                if (s.figure.isNotEmpty()) StepFigure(content, s.figure)
+                if (s.wait > 0) WaitTimer(s.wait)
+            }
+            Pictogram(s.icon, 44.dp)
+        }
+        if (i < card.steps.lastIndex) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant, modifier = Modifier.padding(start = 48.dp))
+    }
+    Button(onClick = onStepByStep, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
+        Text(stringResource(R.string.step_by_step), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold)
+    }
+}
+
+/** One step large, in the card's colour, with what comes next in small print. */
+@Composable
+private fun CardStep(card: Card, content: Content, step: Int, onBack: () -> Unit, onNext: () -> Unit, onAll: () -> Unit) {
+    val s = card.steps[step]
+    Progress(card.steps.size, step)
+    Text(
+        stringResource(R.string.step_of, step + 1, card.steps.size),
+        style = MaterialTheme.typography.labelLarge,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        // Said together with the step itself below, not twice
+        modifier = Modifier.clearAndSetSemantics { },
+    )
+    val stepOf = stringResource(R.string.step_of, step + 1, card.steps.size)
+    // The step itself stands out from everything around it: its own panel in the card's
+    // colour (orange for danger, green for first aid), the words in the strongest contrast.
+    // Buttons, "why" and what comes next stay quieter below it
+    val tone = toneOf(ua.sprotyv.home.Tiles.card(card.id)).tint()
+    Column(
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(tone.container)
+            .border(2.dp, tone.ink.copy(alpha = 0.55f), RoundedCornerShape(20.dp)).padding(20.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Pictogram(s.icon, 88.dp)
+        // Read out by TalkBack whenever the step changes
+        Text(
+            s.action,
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite; contentDescription = "$stepOf. ${s.action}" },
+        )
+    }
+    if (s.figure.isNotEmpty()) StepFigure(content, s.figure)
+    Why(s.why, "${card.id}:$step")
+    if (s.wait > 0) WaitTimer(s.wait)
+    Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
+        if (step > 0) {
+            OutlinedButton(onClick = onBack, modifier = Modifier.heightIn(min = 64.dp)) { Text(stringResource(R.string.previous)) }
+        }
+        Button(onClick = onNext, modifier = Modifier.weight(1f).heightIn(min = 64.dp)) {
+            Text(stringResource(R.string.done_next), style = MaterialTheme.typography.titleMedium)
+        }
+    }
+    // The next step in small print: what comes is never a surprise
+    card.steps.getOrNull(step + 1)?.let { next ->
+        Text(
+            stringResource(R.string.next_step, next.action),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+        )
+    }
+    TextButton(onClick = onAll, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.all_steps)) }
+}
+
+/** The end of the steps: praise for a child, "all done" for everyone else. */
+@Composable
+private fun CardEnd(steps: Int, kid: Boolean, onAgain: () -> Unit, onAll: () -> Unit) {
+    if (kid) {
+        KidPraise(R.string.kid_well_done_hint)
+        OutlinedButton(onClick = onAgain, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.again)) }
+    } else {
+        Progress(steps, steps)
+        Text(
+            stringResource(R.string.all_done),
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier.semantics { heading(); liveRegion = LiveRegionMode.Polite },
+        )
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            OutlinedButton(onClick = onAgain, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.again)) }
+            OutlinedButton(onClick = onAll, modifier = Modifier.heightIn(min = 56.dp)) { Text(stringResource(R.string.all_steps)) }
+        }
+    }
+}
+
 /**
  * The tourniquet times (guide 7.2: write the time on the tourniquet or the forehead, "Т 14:25", for
  * the medics; never loosen it). One tap keeps the time; after a strike there may be several people,
@@ -298,8 +309,9 @@ private fun CardBody(card: Card, content: Content, nav: Nav) {
 @Composable
 private fun TourniquetTime(nav: Nav? = null) {
     val context = LocalContext.current
-    var version by remember { mutableStateOf(0) }
-    var now by remember { mutableStateOf(System.currentTimeMillis()) }
+    val res = LocalResources.current
+    var version by remember { androidx.compose.runtime.mutableIntStateOf(0) }
+    var now by remember { androidx.compose.runtime.mutableLongStateOf(System.currentTimeMillis()) }
     val list = remember(version, now / 60_000) { Tourniquets.all(context, now) }
     LaunchedEffect(list.isNotEmpty()) {
         while (list.isNotEmpty()) {
@@ -318,8 +330,7 @@ private fun TourniquetTime(nav: Nav? = null) {
     val tint = ua.sprotyv.home.Group.DANGER.tint()
     if (list.size > 1) Text(stringResource(R.string.tourniquets_count, list.size), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
     list.forEach { t -> androidx.compose.runtime.key(t.n) {
-        val clock = java.time.Instant.ofEpochMilli(t.at).atZone(java.time.ZoneId.systemDefault()).toLocalTime()
-        val mark = stringResource(R.string.tourniquet_mark, String.format(java.util.Locale.ROOT, "%02d:%02d", clock.hour, clock.minute))
+        val mark = stringResource(R.string.tourniquet_mark, Times.clock(t.at))
         val minutes = ((now - t.at) / 60_000).coerceAtLeast(0)
         Card(
             colors = CardDefaults.cardColors(containerColor = tint.container, contentColor = tint.ink),
@@ -327,7 +338,10 @@ private fun TourniquetTime(nav: Nav? = null) {
             modifier = Modifier.fillMaxWidth(),
         ) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(if (list.size > 1) "№${t.n} · $mark" else mark, style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.Bold)
+                // "Т 14:25" read aloud as words, and said again whenever the time is set or moved
+                val heard = stringResource(R.string.tourniquet_mark_desc, Times.clock(t.at))
+                Text(if (list.size > 1) "№${t.n} · $mark" else mark, style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.Bold,
+                    modifier = Modifier.semantics { contentDescription = if (list.size > 1) "№${t.n}. $heard" else heard; liveRegion = LiveRegionMode.Polite })
                 Text(stringResource(R.string.tourniquet_since, minutes / 60, minutes % 60), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
                 // Who and where, in own words; not needed to start, written when there is a moment
                 var note by remember(t.n) { mutableStateOf(t.note) }
@@ -344,9 +358,9 @@ private fun TourniquetTime(nav: Nav? = null) {
                 androidx.compose.foundation.layout.Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     // Put on before the tap: the time moved back; a slip is put right with "+5"
                     OutlinedButton(onClick = { Tourniquets.shift(context, t.n, -5); changed() }, modifier = Modifier.weight(1f).heightIn(min = 48.dp)
-                        .semantics { contentDescription = context.getString(R.string.tourniquet_earlier_desc, 5) }) { Text(stringResource(R.string.tourniquet_earlier, 5), color = tint.ink) }
+                        .semantics { contentDescription = res.getString(R.string.tourniquet_earlier_desc, 5) }) { Text(stringResource(R.string.tourniquet_earlier, 5), color = tint.ink) }
                     OutlinedButton(onClick = { Tourniquets.shift(context, t.n, 5); changed() }, modifier = Modifier.weight(1f).heightIn(min = 48.dp)
-                        .semantics { contentDescription = context.getString(R.string.tourniquet_later_desc, 5) }) { Text(stringResource(R.string.tourniquet_later, 5), color = tint.ink) }
+                        .semantics { contentDescription = res.getString(R.string.tourniquet_later_desc, 5) }) { Text(stringResource(R.string.tourniquet_later, 5), color = tint.ink) }
                 }
                 // Apart from the time buttons, and asked once: the time is what the medics need
                 var asking by remember(t.n) { mutableStateOf(false) }

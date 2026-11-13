@@ -12,7 +12,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -38,11 +37,7 @@ import kotlinx.coroutines.withContext
 import ua.sprotyv.R
 import ua.sprotyv.personal.PersonalStore
 import ua.sprotyv.personal.backup.BackupCrypto
-import java.time.Instant
 import java.time.LocalDate
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 
 /** A password field: hidden, no suggestions, no learning by the keyboard. */
 @Composable
@@ -111,7 +106,6 @@ fun BackupScreen() {
     val context = LocalContext.current
     val busy by BackupJobs.busy.collectAsStateWithLifecycle()
     val notice by BackupJobs.notice.collectAsStateWithLifecycle()
-    val pending by BackupJobs.pending.collectAsStateWithLifecycle()
     val words = rememberWords()
     val suggested by BackupJobs.suggested.collectAsStateWithLifecycle()
     val written by BackupJobs.written.collectAsStateWithLifecycle()
@@ -122,8 +116,6 @@ fun BackupScreen() {
     var own by remember { mutableStateOf(false) }
     var ownText by remember { mutableStateOf("") }
     var ownAgain by remember { mutableStateOf("") }
-    val openUri by BackupJobs.openUri.collectAsStateWithLifecycle()
-    var openText by remember { mutableStateOf("") }
     DisposableEffect(Unit) {
         BackupJobs.shown()
         onDispose { BackupJobs.hidden() }
@@ -133,13 +125,10 @@ fun BackupScreen() {
     val save = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/octet-stream")) { uri ->
         if (uri == null) BackupJobs.release() else BackupJobs.save(context, uri)
     }
-    val pick = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-        if (uri != null) { BackupJobs.openUri.value = uri; openText = "" }
-    }
 
     Text(stringResource(R.string.backup_intro), style = MaterialTheme.typography.bodyLarge)
     last?.toLongOrNull()?.takeIf { it > 0 }?.let { at ->
-        val date = Instant.ofEpochMilli(at).atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
+        val date = Times.date(at)
         Text(stringResource(R.string.backup_last, date), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
     // The result in a window over the screen: seen wherever the screen is scrolled to
@@ -190,6 +179,20 @@ fun BackupScreen() {
     Text(stringResource(R.string.backup_save_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 
     }
+    BackupRestore(busy)
+}
+
+/** Opening a backup: choose the file, type its password, see what it holds, then replace or not. */
+@Composable
+private fun BackupRestore(busy: Boolean) {
+    val context = LocalContext.current
+    val pending by BackupJobs.pending.collectAsStateWithLifecycle()
+    val openUri by BackupJobs.openUri.collectAsStateWithLifecycle()
+    // The typed password lives only while this screen does: never in saved state
+    var openText by remember { mutableStateOf("") }
+    val pick = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        if (uri != null) { BackupJobs.openUri.value = uri; openText = "" }
+    }
     Block(stringResource(R.string.backup_restore_title), ua.sprotyv.home.Group.MINE) {
     Text(stringResource(R.string.backup_restore_intro), style = MaterialTheme.typography.bodyMedium)
     OutlinedButton(onClick = { BackupJobs.clearNotice(); Away.forOwnWindow(); try { pick.launch(arrayOf("*/*")) } catch (e: android.content.ActivityNotFoundException) { Away.back() } }, enabled = !busy, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
@@ -202,7 +205,7 @@ fun BackupScreen() {
         }
     }
     pending?.let { snap ->
-        val date = Instant.ofEpochMilli(snap.created).atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
+        val date = Times.date(snap.created)
         AlertDialog(
             onDismissRequest = { BackupJobs.cancelRestore() },
             title = { SensitiveWindow(); Text(stringResource(R.string.backup_replace_title)) },

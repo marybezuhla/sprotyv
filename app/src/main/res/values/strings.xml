@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<!-- tools:ignore below marks lint warnings checked by hand: brand names, article numbers, counts that are always many -->
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Спротив</string>
 
     <string name="tile_alarm">Тривога</string>
@@ -92,8 +93,9 @@
     <string name="med_pregnancy_hint">Наприклад: 28 тижнів. Цей рядок іде першим у код для рятувальників, тож оновлюйте його.</string>
     <string name="med_allergies">Алергії</string>
     <string name="med_medicines">Ліки, які ви приймаєте</string>
-    <string name="med_medicines_hint">Назва, доза, як часто</string>
+    <string name="med_medicines_hint">Спершу найважливіше: ліки, що розріджують кров, інсулін, гормони, протисудомні. Назва, доза, як часто</string>
     <string name="med_conditions">Хвороби й стани</string>
+    <string name="med_conditions_hint">Зокрема кардіостимулятор чи інсулінова помпа: це потрапить і в код для рятувальників</string>
     <string name="med_notes">Інше (імпланти, пристрої)</string>
     <string name="ice_title">Контакт на випадок біди</string>
     <string name="ice_none">Ще не обрано. У «Довірених людях» увімкніть «Контакт на випадок біди».</string>
@@ -277,7 +279,7 @@
     <string name="preset_general">Загальний</string>
     <string name="preset_general_hint">Тривога, кровотеча, світло, медкартка</string>
     <string name="preset_elder">Літня людина</string>
-    <string name="preset_elder_hint">Медкартка, тривога, світло, довірені люди</string>
+    <string name="preset_elder_hint">Медкартка, серце й цукор, тривога, довірені люди</string>
     <string name="preset_parents">Батьки з малими дітьми</string>
     <string name="preset_parents_hint">Діти в кризі, перша допомога, запаси</string>
     <string name="preset_frontline">Прифронтова громада</string>
@@ -307,12 +309,12 @@
     <string name="theme_system">Як у телефоні</string>
     <string name="theme_light">Світла</string>
     <string name="theme_dark">Темна</string>
-    <string name="theme_contrast">Контрастна (найчіткіший текст; світла чи темна, як у телефоні)</string>
+    <string name="theme_contrast">Контрастна (найчіткіший текст; у темному варіанті чорне тло, що береже заряд)</string>
     <string name="theme_dynamic">Кольори зі шпалер (Material You)</string>
     <string name="theme_dynamic_hint">Акцентні кольори беруться зі шпалер телефона. Помаранчеве попередження й червона кнопка 112 не змінюються.</string>
     <string name="backup_title">Резервна копія</string>
     <string name="backup_hint">Усі ваші дані в одному зашифрованому файлі</string>
-    <string name="backup_intro">Копія всіх ваших даних і налаштувань (вигляд, плитки, тема) в одному файлі, зашифрованому паролем. На новому телефоні виберіть «Перенести з іншого телефона», потім файл, введіть пароль, і все буде як було. Без пароля його не відкриє ніхто, навіть ми. Зберігайте копію окремо від телефона: на флешці, комп\'ютері чи в хмарі.</string>
+    <string name="backup_intro">Копія всіх ваших даних і налаштувань (вигляд, плитки, тема) в одному файлі, зашифрованому паролем. На новому телефоні виберіть «Відновити з копії» (або «Перенести з іншого телефона» під час першого запуску), потім файл, введіть пароль, і все буде як було. Без пароля його не відкриє ніхто, навіть ми. Зберігайте копію окремо від телефона: на флешці, комп\'ютері чи в хмарі.</string>
     <string name="backup_last">Остання копія: %1$s</string>
     <string name="backup_busy">Зачекайте кілька секунд…</string>
     <string name="backup_save_title">Зберегти копію</string>
@@ -404,7 +406,7 @@
     <string name="mode_kid_hint">Для дитини 6–10 років: картинки, дзвінок своїм і 112</string>
     <string name="kid_lock_advice">На телефоні дитини радимо ввімкнути захист налаштувань, щоб вигляд не змінили випадково.</string>
     <string name="kid_setup_title">Телефон для дитини</string>
-    <string name="kid_setup_text">Дитина бачитиме сім картинок із короткими порадами, кнопку «Подзвонити своїм» і 112. Номери своїх додайте в «Довірені люди» в повному вигляді. Радимо захистити налаштування PIN-кодом телефону.</string>
+    <string name="kid_setup_text">Дитина бачитиме сім картинок із короткими порадами, кнопку «Подзвонити своїм» і 112. Номери своїх додайте в «Довірені люди» в повному вигляді. Домовтеся з дитиною про кодове слово для дзвінків «від мами». Молодшим читайте картки вголос разом. Радимо захистити налаштування PIN-кодом телефону.</string>
     <string name="kid_setup_lock">Готово, захистити PIN-кодом</string>
     <string name="kid_setup_later">Готово, без захисту</string>
     <string name="kid_grown_up">Для дорослих</string>
@@ -412,7 +414,7 @@
     <string name="kid_call_112">112</string>
     <string name="kid_call_none">Тут ще немає номерів. Попроси дорослого додати їх.</string>
     <string name="kid_call_intro">Кому подзвонити?</string>
-    <string name="kid_call_112_hint">Якщо сталася біда, а свої не відповідають, дзвони 112. Скажи своє ім\'я, адресу і що сталося.</string>
+    <string name="kid_call_112_hint">Біда, а свої не відповідають? Дзвони 112. Скажи ім\'я, адресу, що сталося.</string>
     <string name="kid_hello">Привіт!</string>
     <string name="kid_hello_hint">Я Соняшник. Натисни на картинку, і я підкажу, що робити.</string>
     <string name="kid_well_done">Молодець! 🌟</string>
@@ -433,9 +435,10 @@
     <string name="safe_status_quiet">Не можу говорити</string>
     <string name="safe_help_message">Мені потрібна допомога. Зателефонуй або напиши, щойно зможеш.</string>
     <string name="safe_quiet_message">Не можу говорити, але я на зв\'язку. Пиши, не дзвони.</string>
-    <string name="tourniquet_on">⏱ Турнікет накладено: засікти час</string>
+    <string name="tourniquet_on">Турнікет накладено: засікти час</string>
+    <string name="tourniquet_mark_desc">Турнікет накладено о %1$s</string>
     <string name="tourniquet_since">Минуло: %1$d год %2$02d хв</string>
-    <string name="tourniquet_write">Запишіть цей час маркером на турнікеті або на лобі пораненої людини. Не послаблюйте турнікет: знімає лише медик. Час скажіть медикам. Якщо поранених кілька, пишіть час на кожному турнікеті: телефон може розрядитися.</string>
+    <string name="tourniquet_write">Запишіть цей час маркером на турнікеті або на лобі пораненої людини; якщо не бачите, попросіть когось поруч або назвіть час медикам уголос. Не послаблюйте турнікет: знімає лише медик. Якщо поранених кілька, пишіть час на кожному турнікеті: телефон може розрядитися.</string>
     <string name="tourniquet_mark">Т %1$s</string>
     <string name="situation_title">Ситуація</string>
     <string name="situation_hint">Мапи загроз і фронту, перевірка фейків</string>
@@ -450,6 +453,7 @@
     <string name="situation_rule_1">Під час тривоги одразу в укриття. Не чекайте, поки ціль з\'явиться поруч на мапі.</string>
     <string name="situation_rule_2">Якщо поруч немає позначки, це не означає, що небезпеки немає. Дані запізнюються, балістики на мапах немає.</string>
     <string name="situation_rule_3">Не знімайте й не публікуйте роботу ППО та влучання в реальному часі: це допомагає ворогу, за це вже були вироки.</string>
+    <string name="situation_rule_4">Фото «збитої ракети» чи уламків не пересилайте: воно може показати ворогу, куди влучило й де працює ППО, а може бути старим чи фейковим. Немає дати й джерела — не поширюйте.</string>
     <string name="situation_rules_source">Джерела: Міноборони (17.10.2026), КМДА, «Довідник виживання» п. 3.3. Перевірено 30.10.2026.</string>
     <string name="situation_note">«Спротив» сам нічого не завантажує: сторінки відкриваються в браузері або в застосунку джерела. Список перевірено 30.10.2026.</string>
     <string name="situation_no_trace">Chrome на цьому телефоні відкриває ці сторінки в окремій вкладці: після закриття він не зберігає історію, куки й кеш. Сайт і мобільний оператор усе одно бачать відвідування. Застосунки джерел зберігають своє, як завжди.</string>
@@ -658,7 +662,7 @@
     <string name="heat_for">Без опалення %1$s (з %2$s)</string>
     <string name="heat_pipes">Труби можуть замерзнути</string>
     <string name="heat_pipes_when">за 1–3 доби</string>
-    <string name="heat_pipes_do">Коли надворі −5…−10°, труби замерзають за 1–3 доби. Якщо тепло не повернеться, злийте воду з труб, котла, бойлера.</string>
+    <string name="heat_pipes_do">Коли надворі −5…−10°, труби замерзають за 1–3 доби. Якщо тепло не повернеться: у приватному будинку злийте воду з труб, котла, бойлера; у багатоповерхівці спільну систему зливає ОСББ чи ЖЕК, самі лише свій бойлер і бачок.</string>
     <string name="heat_leave">Коли варто виїхати</string>
     <string name="heat_leave_when">понад 2 доби</string>
     <string name="heat_leave_do">Якщо в квартирі понад 2 доби нижче +5°, це привід виїхати родинам з дітьми, літніми, хворими.</string>
@@ -684,7 +688,7 @@
     <string name="group_family_desc">Діти, літні, план родини, куди звернутися</string>
     <string name="group_home_life_desc">Світло, вода, тепло, їжа, запаси</string>
     <string name="group_prepare_desc">Тривожна валіза, тренування, план на 30 днів</string>
-    <string name="group_leave_desc">Евакуація, дорога, за кордоном</string>
+    <string name="group_leave_desc">Евакуація, дорога, нове місце для ВПО, за кордоном</string>
     <string name="group_safety_desc">Міни, документи, фейки, натовп, катастрофи</string>
     <string name="group_mine_desc">Медкартка, екран для рятувальника, друк</string>
     <string name="group_guide_desc">Весь довідник і пошук</string>
@@ -749,7 +753,7 @@
     <string name="medic_where">Позначка «Лікую й рятую» тепер зашифрована в «Моєму» (Хто я зараз). З нею порядки МОЗ одразу відкриваються повним текстом і з’являються інструменти медика; а якщо на «Моє» стоїть замок, то після відбитка чи PIN-коду.</string>
     <string name="notes_title_screen">Мої нотатки</string>
     <string name="notes_hint">Будь-які записи, зашифровано</string>
-    <string name="notes_intro">Записи лише для вас: адреси, номери, домовленості. Зашифровані разом з «Моє», входять у резервну копію, у режимі поїздки сховані.</string>
+    <string name="notes_intro">Записи лише для вас: адреси, номери, домовленості. Зашифровані разом із «Моїм», входять у резервну копію, у режимі поїздки сховані.</string>
     <string name="notes_new">Нова нотатка</string>
     <string name="notes_search">Знайти в нотатках</string>
     <string name="notes_empty">Нотаток ще немає.</string>
@@ -782,7 +786,7 @@
     <string name="path_title">Мій шлях готовності</string>
     <string name="path_open_hint">Конкретні навички й справи; позначки бачите лише ви</string>
     <string name="path_summary">Зроблено: %1$d з %2$d</string>
-    <string name="path_intro">Позначайте те, що вже вмієте чи зробили. Зашифровано в «Моє»; ніхто інший цього не бачить, жодних рейтингів.</string>
+    <string name="path_intro">Позначайте те, що вже вмієте чи зробили. Зашифровано в «Моє» й нікуди не надсилається, жодних рейтингів. Щоб не бачив ніхто, хто бере ваш телефон, увімкніть замок на «Моє» в налаштуваннях.</string>
     <string name="path_level_personal">Особисто</string>
     <string name="path_level_family">Моя родина</string>
     <string name="path_level_civic">Моя громада</string>
@@ -854,6 +858,14 @@
     <string name="handover_a_warming">Зігрівання</string>
     <string name="handover_a_splint">Іммобілізація</string>
     <string name="handover_a_called">Викликано 103</string>
+    <string name="handover_a_tourniquet">Накладено турнікет</string>
+    <string name="handover_a_packing">Тампонада рани</string>
+    <string name="handover_a_chest">Наліпка на рану грудей</string>
+    <string name="handover_a_aspirin">Дано аспірин</string>
+    <string name="handover_a_sugar">Дано цукор чи глюкозу</string>
+    <string name="handover_a_sorbent">Дано сорбент</string>
+    <string name="handover_a_own_medicine">Прийнято власні ліки (інгалятор, нітрогліцерин)</string>
+    <string name="handover_too_long">Забагато тексту для коду: скоротіть опис чи нотатки.</string>
     <string name="medic_tools">Для медика</string>
     <string name="path_level_medic">Для медиків</string>
     <string name="path_teach">Навчаю домедичної допомоги людей у своїй громаді</string>
@@ -919,9 +931,9 @@
     <string name="notes_send_yes">Надіслати</string>
     <string name="backup_restored_notify">Відновлено. Сповіщення з копії ввімкнено, але Android ще не дозволив їх показувати: відкрийте налаштування → «Сповіщення».</string>
     <string name="backup_settings_row">Створити копію або відновити</string>
-    <string name="backup_settings_hint">Усі дані з «Моє» в одному зашифрованому файлі. Через нього можна перейти на новий телефон.</string>
+    <string name="backup_settings_hint">Усі дані з «Мого» в одному зашифрованому файлі. Через нього можна перейти на новий телефон.</string>
     <string name="kid_112_ask">Тобі зараз потрібна допомога?</string>
-    <string name="kid_112_ask_hint">112 дзвони, коли біда: пожежа, хтось поранений, ти не знаєш, де ти, і нікого немає поруч. Скажи своє ім’я, де ти і що сталося.</string>
+    <string name="kid_112_ask_hint">Дзвони 112, коли біда, а дорослих немає. Скажи ім’я, де ти, що сталося.</string>
     <string name="kid_112_yes">Так, дзвонити 112</string>
     <string name="kid_112_no">Ні, помилково</string>
     <string name="kid_step_next">Далі</string>
@@ -1051,7 +1063,7 @@
     <string name="tourniquet_handed_ask">Передали медикам і сказали час %1$s? Запис зникне.</string>
     <string name="tourniquet_handed_yes">Так, передали</string>
     <string name="tourniquet_handed">Передали медикам</string>
-    <string name="tourniquet_another">＋ Ще один турнікет</string>
+    <string name="tourniquet_another">Ще один турнікет</string>
     <string name="handover_tourniquet_line">турнікет накладено о %1$s (минуло %2$d год %3$02d хв)</string>
     <string name="notify_tourniquets_on">Турнікети: %1$d · перший Т %2$s</string>
     <string name="notify_tourniquet_title_many">Турнікети %1$s</string>
@@ -1140,7 +1152,7 @@
     <string name="habit_night">Одяг і взуття поруч на ніч</string>
     <string name="habit_night_plan">Коли лягаю спати, кладу поруч одяг, взуття й ліхтарик.</string>
     <string name="habit_news">Новини двічі на день, а не весь день</string>
-    <string name="habit_news_plan">Коли п\'ю ранкову каву, читаю новини 10 хвилин, далі до вечора ні. Сповіщення про тривогу лишаю ввімкненими.</string>
+    <string name="habit_news_plan">Зранку, поки снідаю, читаю новини 10 хвилин, далі до вечора ні. Сповіщення про тривогу лишаю ввімкненими.</string>
     <string name="habit_breath">Дві хвилини повільного дихання</string>
     <string name="habit_breath_plan">Коли під час тривоги я вже в укритті, дихаю повільно дві хвилини.</string>
     <string name="habit_sleep">Лягати щодня в один час</string>
@@ -1183,7 +1195,7 @@
     <string name="blackout_freezer_full_name">Морозилка, повна</string>
     <string name="blackout_freezer_half_name">Морозилка, наполовину</string>
     <string name="blackout_of_hours">із ~%1$d год</string>
-    <string name="heat_pipes_now">уже можуть замерзати</string>
+    <string name="heat_pipes_now">можуть замерзати, якщо надворі нижче −5°</string>
     <string name="heat_leave_now">час вирішувати</string>
     <string name="path_check">Перевірити себе</string>
     <string name="path_tested">✓ Перевірено тестом</string>
@@ -1334,7 +1346,7 @@
     <string name="role_research_1">Україна асоційована з програмою Horizon Europe з 9 червня 2022 року: українські дослідники беруть участь на рівних з установами ЄС.</string>
     <string name="role_research_2">Національний фонд досліджень України фінансує проєкти через відкриті конкурси; умови публікують на сайті фонду.</string>
     <string name="role_research_3">Науковцям, які вимушено виїхали, допомагають стипендії MSCA4Ukraine від Єврокомісії.</string>
-    <string name="role_research_4">Оборонним розробникам Brave1 дає безповоротні гранти, тестування й відгуки військових.</string>
+    <string name="role_research_4" tools:ignore="Typos">Оборонним розробникам Brave1 дає безповоротні гранти, тестування й відгуки військових.</string>
     <string name="role_infra">Тримаю світло, воду, зв’язок, транспорт</string>
     <string name="role_infra_hint">Енергетика, водоканал, зв’язок, залізниця, транспорт</string>
     <string name="role_infra_affirm">Коли вмикається світло й іде вода, це ваша праця, часто під ударами. Дякуємо.</string>
@@ -1410,7 +1422,7 @@
     <string name="role_skills_1">Про підозрілих людей, вербування й ворожі ресурси в мережі можна повідомити СБУ: 1516 або 0 800 501 482, callcenter@ssu.gov.ua.</string>
     <string name="role_skills_2">Про кібератаку на організацію можна повідомити CERT-UA: incidents@cert.gov.ua або +38 044 281 88 25.</string>
     <string name="role_skills_3">Про кіберзлочин можна повідомити кіберполіції через форму на сайті або 0 800 505 170; у невідкладних випадках телефонуйте 102.</string>
-    <string name="role_skills_4">Brave1 дає оборонним розробникам безповоротні гранти, тестування й відгуки військових; частку чи права на розробку віддавати не треба.</string>
+    <string name="role_skills_4" tools:ignore="Typos">Brave1 дає оборонним розробникам безповоротні гранти, тестування й відгуки військових; частку чи права на розробку віддавати не треба.</string>
     <string name="role_skills_5">У Силах оборони відкрито понад 2000 ІТ-вакансій; заявку подають на сайті Digital Team Міноборони.</string>
     <string name="role_skills_6">Кібератаки на власний розсуд можуть мати для цивільної людини правові наслідки, зокрема за кордоном; надійніше допомагати через офіційні канали.</string>
     <string name="role_parent">Виховую дітей</string>
@@ -1476,6 +1488,7 @@
     <string name="role_volunteer_3">Якщо причин для відмови немає, податкова включає людину до реєстру протягом одного робочого дня.</string>
     <string name="role_volunteer_4">Під час воєнного стану реєстр закритий для сторонніх, тож чужий збір перевіряйте інакше.</string>
     <string name="role_volunteer_5">Як перевірити збір: попросіть звіти про попередні збори, перевірте фото пошуком за зображенням, зверніться до організації, від якої волонтер.</string>
+    <string name="role_volunteer_6">Списки людей, яким допомагаєте, з адресами й телефонами не тримайте у звичайних чатах і в галереї: беріть лише потрібне, за згодою людини, після видачі видаляйте. На ворожому блокпості такий список небезпечний для них.</string>
     <string name="role_donor">Здаю кров</string>
     <string name="role_donor_hint">Або хочу почати</string>
     <string name="role_donor_affirm">Ваша кров уже рятує поранених і хворих, тихо й по-справжньому. Тут про те, хто може здавати і які права має донор.</string>
@@ -1609,7 +1622,7 @@
     <string name="weapons_found_2">Зателефонуйте 102 або 112. Якщо предмет схожий на міну чи снаряд, телефонуйте 101 або 102 щонайменше за 100 м і дійте як із підозрілим предметом.</string>
     <string name="weapons_found_3">Про знайдену вогнепальну зброю чи набої закон вимагає негайно повідомити поліцію й протягом 24 годин передати їх поліції для здачі чи декларування або вказати, де вони лежать.</string>
     <string name="weapons_found_4">Хто добровільно здав зброю, набої чи вибухівку органам влади, не несе кримінальної відповідальності за незаконне поводження з ними за ст. 263.</string>
-    <string name="weapons_found_source">Джерела: Закон № 2114-IX, ст. 1-1 (редакція від 25.11.2024); Кримінальний кодекс України, ст. 263, ч. 3; ДСНС. Перевірено 02.11.2026. Укладено за наведеними джерелами.</string>
+    <string name="weapons_found_source" tools:ignore="TypographyDashes">Джерела: Закон № 2114-IX, ст. 1-1 (редакція від 25.11.2024); Кримінальний кодекс України, ст. 263, ч. 3; ДСНС. Перевірено 02.11.2026. Укладено за наведеними джерелами.</string>
     <string name="weapons_suspicious">Підозрілий предмет або міна</string>
     <string name="weapons_suspicious_hint">Що робити зараз, крок за кроком</string>
     <string name="weapons_declare_title">Залишити знайдену зброю на час воєнного стану</string>
@@ -1618,7 +1631,7 @@
     <string name="weapons_declare_3">Передавати задекларовану зброю іншим людям заборонено, лише поліції.</string>
     <string name="weapons_declare_4">Не пізніше 90 днів після кінця воєнного стану зброю треба здати поліції. Здаючи її, можна письмово заявити, що хочете набути її у власність: право виникає через три місяці від здачі, якщо немає перешкод.</string>
     <string name="weapons_declare_5">Для декларування потрібні заява, паспорт або ID-картка, фото 3,5×4,5 см, підтвердження місця проживання й РНОКПП.</string>
-    <string name="weapons_declare_source">Джерела: Закон № 2114-IX, ст. 1-1, 1-2, 2, 3 (редакція від 25.11.2024); Національна поліція України. Перевірено 02.11.2026.</string>
+    <string name="weapons_declare_source" tools:ignore="TypographyDashes">Джерела: Закон № 2114-IX, ст. 1-1, 1-2, 2, 3 (редакція від 25.11.2024); Національна поліція України. Перевірено 02.11.2026.</string>
     <string name="weapons_own_title">Своя зброя: дозвіл і зберігання</string>
     <string name="weapons_own_1">Купити холодну, пневматичну чи охолощену зброю можна з 18 років, гладкоствольну мисливську з 21, нарізну мисливську з 25. Це для громадян України й тих, хто має посвідку на постійне проживання.</string>
     <string name="weapons_own_2">Потрібен дозвіл поліції. Документи можна подати онлайн у «Єдиному вікні громадянина» МВС, у магазині зброї або в поліції.</string>
@@ -1631,7 +1644,7 @@
     <string name="weapons_law_2">За холодну зброю без дозволу (кинджали, фінські ножі, кастети тощо) — від штрафу до 3 років позбавлення волі.</string>
     <string name="weapons_law_3">Незаконне виготовлення, переробка чи ремонт вогнепальної зброї або зміна її маркування — від 3 до 7 років, повторно чи за попередньою змовою групою осіб від 5 до 10, організованою групою від 8 до 12.</string>
     <string name="weapons_law_4">Ці статті діють і під час воєнного стану. Законний шлях для знайденої зброї — здати її або задекларувати в поліції.</string>
-    <string name="weapons_law_source">Джерело: Кримінальний кодекс України, ст. 263, 263-1 (чинна редакція, zakon.rada.gov.ua); Закон № 2114-IX. Перевірено 02.11.2026. Щодо вашої ситуації порадить юрист або безоплатна правова допомога.</string>
+    <string name="weapons_law_source" tools:ignore="TypographyDashes">Джерело: Кримінальний кодекс України, ст. 263, 263-1 (чинна редакція, zakon.rada.gov.ua); Закон № 2114-IX. Перевірено 02.11.2026. Щодо вашої ситуації порадить юрист або безоплатна правова допомога.</string>
     <string name="weapons_learn_title">Де вчитися законно</string>
     <string name="weapons_learn_1">Базова підготовка до національного спротиву для людей від 18 років проходить у центрах підготовки, що діють у більшості областей. Про запис дізнавайтеся в обласній адміністрації або в центрі.</string>
     <string name="weapons_learn_2">Студенти з 01.10.2026 вивчають «Основи національного спротиву», а школярі вивчають предмет «Захист України». Практичні заняття проходять на полігонах, стрільбищах, у тирах і на тренажерах.</string>
@@ -1735,7 +1748,7 @@
     <string name="author_org_redcross">Товариство Червоного Хреста України</string>
     <string name="author_org_redcross_what">Національне товариство Червоного Хреста: допомога людям, що постраждали від війни</string>
     <string name="author_org_redcross_url">https://redcross.org.ua/</string>
-    <string name="author_org_brave1">Brave1</string>
+    <string name="author_org_brave1" tools:ignore="Typos">Brave1</string>
     <string name="author_org_brave1_what">Державний кластер оборонних технологій: дізнатися, як Україна їх створює</string>
     <string name="author_org_brave1_url">https://brave1.gov.ua/</string>
     <string name="author_org_united24_defence">Офіційна платформа зборів від держави: напрям «Оборона»</string>
@@ -1750,7 +1763,7 @@
     <string name="wipe_hint">Стерти всі дані: усе особисте зникне з телефона назавжди. Довідник лишиться.</string>
     <string name="wipe_button">Стерти всі дані…</string>
     <string name="wipe_confirm_title">Стерти всі дані?</string>
-    <string name="wipe_confirm_text">Зникнуть назавжди: «Моє» (медкартка, люди, план, запаси), документи й нотатки, ключі шифрування, PIN і налаштування. Повернути це неможливо. Якщо дані ще знадобляться, спершу зробіть резервну копію. Резервні копії, збережені поза застосунком, лишаться, як і назва «Нотатки» з простою іконкою, якщо їх увімкнено. Після стирання застосунок закриється.</string>
+    <string name="wipe_confirm_text">Зникнуть назавжди: «Моє» (медкартка, люди, план, запаси), документи й нотатки, ключі шифрування й налаштування. PIN-код телефона не зміниться. Повернути це неможливо. Якщо дані ще знадобляться, спершу зробіть резервну копію. Резервні копії, збережені поза застосунком, лишаться, як і назва «Нотатки» з простою іконкою, якщо їх увімкнено. Після стирання застосунок закриється.</string>
     <string name="wipe_type">Напишіть СТЕРТИ або ERASE</string>
     <string name="wipe_yes">Стерти</string>
     <string name="undo">Повернути</string>

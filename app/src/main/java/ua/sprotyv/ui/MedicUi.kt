@@ -1,23 +1,17 @@
 package ua.sprotyv.ui
 
 import android.content.Context
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,9 +21,9 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -104,11 +98,15 @@ private fun helperName(h: Int) = if (h == 0) stringResource(R.string.delegate_me
 @OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 fun HandoverScreen(nav: Nav) {
     val context = LocalContext.current
+    val res = LocalResources.current
     var when_ by remember { mutableStateOf<Long?>(null) }
     var what by remember { mutableStateOf("") }
     var notes by remember { mutableStateOf("") }
     val done = remember { mutableStateListOf<Pair<Int, Long>>() }
-    val tourniquets = remember { Tourniquets.all(context) }
+    // The tourniquet times count on while the screen is open
+    var minute by remember { mutableStateOf(System.currentTimeMillis() / 60_000) }
+    androidx.compose.runtime.LaunchedEffect(Unit) { while (true) { kotlinx.coroutines.delay(20_000); minute = System.currentTimeMillis() / 60_000 } }
+    val tourniquets = remember(minute) { Tourniquets.all(context) }
     SecureScreen()
     // Typed text here is not learned by the keyboard
     NoKeyboardLearning {
@@ -134,17 +132,18 @@ fun HandoverScreen(nav: Nav) {
         }
         OutlinedTextField(value = notes, onValueChange = { notes = it.take(500) }, label = { Text(stringResource(R.string.handover_notes)) }, minLines = 2, modifier = Modifier.fillMaxWidth())
         val summary = buildString {
-            append(context.getString(R.string.handover_title)); append('\n')
-            when_?.let { append(context.getString(R.string.handover_when)).append(": ").append(clockOf(it)).append('\n') }
-            if (what.isNotBlank()) append(context.getString(R.string.handover_what)).append(": ").append(what.trim()).append('\n')
+            append(res.getString(R.string.handover_title)); append('\n')
+            when_?.let { append(res.getString(R.string.handover_when)).append(": ").append(clockOf(it)).append('\n') }
+            if (what.isNotBlank()) append(res.getString(R.string.handover_what)).append(": ").append(what.trim()).append('\n')
             tourniquets.forEach { append(tourniquetLine(context, it, tourniquets.size)).append('\n') }
-            done.forEach { (a, t) -> append(clockOf(t)).append(" — ").append(context.getString(a)).append('\n') }
+            done.forEach { (a, t) -> append(clockOf(t)).append(" — ").append(res.getString(a)).append('\n') }
             if (notes.isNotBlank()) append(notes.trim())
         }.trim()
         val fits = summary.toByteArray(Charsets.UTF_8).size <= Qr.MAX_PLAN_BYTES
         OutlinedButton(enabled = fits, onClick = { QrInbox.text = summary; nav.go(Route.QrText) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) {
             Text(stringResource(R.string.handover_qr))
         }
+        if (!fits) Text(stringResource(R.string.handover_too_long), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         // Kept only if the owner asks: then encrypted in "My notes"
         val noteTitle = stringResource(R.string.handover_note_title, clockOf(System.currentTimeMillis()))
         OutlinedButton(enabled = summary.isNotBlank(), onClick = {
@@ -158,8 +157,11 @@ fun HandoverScreen(nav: Nav) {
 }
 
 private val HANDOVER_ACTIONS = listOf(
-    R.string.handover_a_pressure, R.string.handover_a_dressing, R.string.handover_a_cpr, R.string.handover_a_recovery,
-    R.string.handover_a_cooling, R.string.handover_a_warming, R.string.handover_a_splint, R.string.handover_a_called,
+    R.string.handover_a_pressure, R.string.handover_a_tourniquet, R.string.handover_a_packing, R.string.handover_a_dressing,
+    R.string.handover_a_chest, R.string.handover_a_cpr, R.string.handover_a_recovery,
+    R.string.handover_a_cooling, R.string.handover_a_warming, R.string.handover_a_splint,
+    R.string.handover_a_aspirin, R.string.handover_a_sugar, R.string.handover_a_sorbent, R.string.handover_a_own_medicine,
+    R.string.handover_a_called,
 )
 
 private fun clockOf(t: Long): String = Times.clock(t)

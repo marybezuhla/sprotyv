@@ -7,13 +7,9 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,8 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.heading
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
@@ -67,7 +61,7 @@ fun BlackoutBlock() {
                 Text(stringResource(R.string.blackout_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Button(onClick = {
                     val t = System.currentTimeMillis()
-                    prefs.edit().putLong("since", t).commit()
+                    prefs.edit().putLong("since", t).saveNow()
                     Notify.sync(context)
                     now = t
                     since = t
@@ -85,7 +79,7 @@ fun BlackoutBlock() {
             Text(stringResource(R.string.blackout_closed), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             OutlinedButton(onClick = {
                 Held.add(context, "blackout")
-                prefs.edit().remove("since").commit()
+                prefs.edit().remove("since").saveNow()
                 Notify.sync(context)
                 since = 0L
             }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.blackout_back)) }
@@ -198,7 +192,7 @@ fun WaitTimer(total: Int) {
     if (since == 0L) {
         OutlinedButton(onClick = {
             val t = System.currentTimeMillis()
-            prefs.edit().putLong("since", t).putInt("total", total).commit()
+            prefs.edit().putLong("since", t).putInt("total", total).saveNow()
             Notify.sync(context)
             now = t
             since = t
@@ -214,7 +208,7 @@ fun WaitTimer(total: Int) {
             Text(stringResource(R.string.wait_done, total), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
         }
         androidx.compose.material3.TextButton(onClick = {
-            prefs.edit().remove("since").commit()
+            prefs.edit().remove("since").saveNow()
             Notify.sync(context)
             since = 0L
         }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.wait_reset)) }
