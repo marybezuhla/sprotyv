@@ -147,7 +147,6 @@ private fun flagTitle(flag: String): Int = when (flag) {
 
 @Composable
 internal fun LinkRow(link: Link, onClick: () -> Unit) {
-    val context = LocalContext.current
     val res = androidx.compose.ui.platform.LocalResources.current
     val official = link.kind == Link.OFFICIAL
     Card(

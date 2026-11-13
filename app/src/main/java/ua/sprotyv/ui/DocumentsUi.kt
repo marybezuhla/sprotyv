@@ -506,7 +506,8 @@ private fun PhotoView(bytes: ByteArray) {
  */
 @Composable
 private fun PdfPages(bytes: ByteArray) {
-    val widthPx = androidx.compose.ui.platform.LocalWindowInfo.current.containerSize.width
+    // The window's width in pixels; never below 720, so a page is drawn even before the window is measured
+    val widthPx = androidx.compose.ui.platform.LocalWindowInfo.current.containerSize.width.coerceAtLeast(720)
     var failedToOpen by remember(bytes) { mutableStateOf(false) }
     val doc by produceState<PdfDoc?>(null, bytes) {
         // Finished even if the viewer closes meanwhile, so it is always closed below
@@ -519,7 +520,7 @@ private fun PdfPages(bytes: ByteArray) {
     var large by remember { mutableStateOf<Int?>(null) }
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         items(d.pages) { i ->
-            val page by produceState<Bitmap?>(null, i) { value = withContext(Dispatchers.Default) { d.render(i, widthPx.coerceAtMost(1600)) } }
+            val page by produceState<Bitmap?>(null, i, widthPx) { value = withContext(Dispatchers.Default) { d.render(i, widthPx.coerceAtMost(1600)) } }
             val label = stringResource(R.string.docs_page, i + 1, d.pages)
             page?.let {
                 Image(it.asImageBitmap(), contentDescription = label, modifier = Modifier.fillMaxWidth().clickable(onClickLabel = stringResource(R.string.docs_zoom)) { large = i })
@@ -533,7 +534,7 @@ private fun PdfPages(bytes: ByteArray) {
             Surface(Modifier.fillMaxSize()) {
                 Column(Modifier.statusBarsPadding().navigationBarsPadding()) {
                     TextButton(onClick = { large = null }, modifier = Modifier.align(Alignment.End).padding(8.dp).heightIn(min = 48.dp)) { Text(stringResource(R.string.back)) }
-                    val big by produceState<Bitmap?>(null, i) { value = withContext(Dispatchers.Default) { d.render(i, (widthPx * 2).coerceAtMost(2800)) } }
+                    val big by produceState<Bitmap?>(null, i, widthPx) { value = withContext(Dispatchers.Default) { d.render(i, (widthPx * 2).coerceAtMost(2800)) } }
                     Column(Modifier.weight(1f)) {
                         big?.let { Zoomable(it.asImageBitmap(), stringResource(R.string.docs_page, i + 1, d.pages)) } ?: Loading()
                     }
