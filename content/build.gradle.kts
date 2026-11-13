@@ -7,6 +7,8 @@ plugins {
 android {
     namespace = "ua.sprotyv.content"
     compileSdk = 37
+    // Unit tests run on the release build, as before; since Android Gradle plugin 9 only the tested build type has them
+    testBuildType = "release"
     defaultConfig { minSdk = 31 }
     // Lint's findings printed in the CI log, as for the app
     lint {

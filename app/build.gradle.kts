@@ -12,6 +12,8 @@ val appVersionCode = appVersion.split(".").map(String::toInt).let { (a, b, c) ->
 android {
     namespace = "ua.sprotyv"
     compileSdk = 37
+    // Unit tests run on the release build, as before; since Android Gradle plugin 9 only the tested build type has them
+    testBuildType = "release"
 
     defaultConfig {
         applicationId = "ua.sprotyv"
