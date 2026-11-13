@@ -152,7 +152,7 @@ fun LockMineSettings() {
     val scope = rememberCoroutineScope()
     var mode by remember { mutableStateOf<KeyVault.Mode?>(null) }
     var busy by remember { mutableStateOf(false) }
-    var refresh by remember { mutableStateOf(0) }
+    var refresh by remember { androidx.compose.runtime.mutableIntStateOf(0) }
     LaunchedEffect(refresh) { mode = withContext(Dispatchers.IO) { PersonalStore.lockMode(context) } }
     var askOn by rememberSaveable { mutableStateOf(false) }
     val canLock = Guard.available(context)

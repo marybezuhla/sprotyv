@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import kotlinx.coroutines.launch
@@ -425,6 +426,7 @@ object PeopleFiles {
 @Composable
 private fun PersonDialog(start: Person, onDone: () -> Unit) {
     val context = LocalContext.current
+    val res = LocalResources.current
     var p by remember(start) { mutableStateOf(start) }
     var confirmDelete by remember { mutableStateOf(false) }
     val valid = p.name.isNotBlank() && ua.sprotyv.reach.Links.clean(p.phone).removePrefix("+").length >= 3
@@ -470,7 +472,7 @@ private fun PersonDialog(start: Person, onDone: () -> Unit) {
                     val gone = start
                     PersonalStore.save("delete:" + java.util.UUID.randomUUID()) { it.people().delete(gone) }
                     // Put back as it was, under the same id
-                    Notices.deleted(context, context.getString(R.string.deleted_named, gone.name), undo = {
+                    Notices.deleted(context, res.getString(R.string.deleted_named, gone.name), undo = {
                         PersonalStore.save("restore:" + java.util.UUID.randomUUID()) { it.people().save(gone) }
                     })
                     confirmDelete = false

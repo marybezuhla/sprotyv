@@ -148,6 +148,7 @@ private fun flagTitle(flag: String): Int = when (flag) {
 @Composable
 internal fun LinkRow(link: Link, onClick: () -> Unit) {
     val context = LocalContext.current
+    val res = androidx.compose.ui.platform.LocalResources.current
     val official = link.kind == Link.OFFICIAL
     Card(
         onClick = onClick,
@@ -173,7 +174,7 @@ internal fun LinkRow(link: Link, onClick: () -> Unit) {
             // Warnings in words: who runs it, ads, beta, data collection
             if (link.flags.isNotEmpty()) {
                 Text(
-                    link.flags.joinToString(" · ") { "⚠ " + context.getString(flagTitle(it)) },
+                    link.flags.joinToString(" · ") { "⚠ " + res.getString(flagTitle(it)) },
                     style = MaterialTheme.typography.bodyMedium,
                     // A caution, not danger now: red is kept for danger
                     color = MaterialTheme.colorScheme.onSurfaceVariant,

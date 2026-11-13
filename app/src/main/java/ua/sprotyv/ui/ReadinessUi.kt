@@ -266,6 +266,7 @@ private val LEVEL_WORDS = listOf(
 @Composable
 private fun PathInspire(levels: List<Pair<Int, Int>>, celebrated: Int, nav: Nav) {
     val context = androidx.compose.ui.platform.LocalContext.current
+    val res = androidx.compose.ui.platform.LocalResources.current
     val current = levels.indexOfFirst { it.first < it.second }
     val lastDone = (if (current < 0) levels.size else current) - 1
     // A level just completed: said once, then the next level's words
@@ -285,7 +286,7 @@ private fun PathInspire(levels: List<Pair<Int, Int>>, celebrated: Int, nav: Nav)
             Spacer(Modifier.width(8.dp))
             // Levels done get a tick; the one in progress shows its count
             val line = levels.mapIndexedNotNull { i, (d, t) ->
-                val name = context.getString(LEVEL_NAMES.getOrElse(i) { LEVEL_NAMES.last() })
+                val name = res.getString(LEVEL_NAMES.getOrElse(i) { LEVEL_NAMES.last() })
                 when {
                     d >= t -> "$name ✓"
                     i == current -> "$name $d/$t"

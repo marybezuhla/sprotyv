@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -98,6 +99,7 @@ private fun helperName(h: Int) = if (h == 0) stringResource(R.string.delegate_me
 @OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 fun HandoverScreen(nav: Nav) {
     val context = LocalContext.current
+    val res = LocalResources.current
     var when_ by remember { mutableStateOf<Long?>(null) }
     var what by remember { mutableStateOf("") }
     var notes by remember { mutableStateOf("") }
@@ -128,11 +130,11 @@ fun HandoverScreen(nav: Nav) {
         }
         OutlinedTextField(value = notes, onValueChange = { notes = it.take(500) }, label = { Text(stringResource(R.string.handover_notes)) }, minLines = 2, modifier = Modifier.fillMaxWidth())
         val summary = buildString {
-            append(context.getString(R.string.handover_title)); append('\n')
-            when_?.let { append(context.getString(R.string.handover_when)).append(": ").append(clockOf(it)).append('\n') }
-            if (what.isNotBlank()) append(context.getString(R.string.handover_what)).append(": ").append(what.trim()).append('\n')
+            append(res.getString(R.string.handover_title)); append('\n')
+            when_?.let { append(res.getString(R.string.handover_when)).append(": ").append(clockOf(it)).append('\n') }
+            if (what.isNotBlank()) append(res.getString(R.string.handover_what)).append(": ").append(what.trim()).append('\n')
             tourniquets.forEach { append(tourniquetLine(context, it, tourniquets.size)).append('\n') }
-            done.forEach { (a, t) -> append(clockOf(t)).append(" — ").append(context.getString(a)).append('\n') }
+            done.forEach { (a, t) -> append(clockOf(t)).append(" — ").append(res.getString(a)).append('\n') }
             if (notes.isNotBlank()) append(notes.trim())
         }.trim()
         val fits = summary.toByteArray(Charsets.UTF_8).size <= Qr.MAX_PLAN_BYTES

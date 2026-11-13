@@ -32,6 +32,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
@@ -299,8 +300,9 @@ private fun CardEnd(steps: Int, kid: Boolean, onAgain: () -> Unit, onAll: () -> 
 @Composable
 private fun TourniquetTime(nav: Nav? = null) {
     val context = LocalContext.current
-    var version by remember { mutableStateOf(0) }
-    var now by remember { mutableStateOf(System.currentTimeMillis()) }
+    val res = LocalResources.current
+    var version by remember { androidx.compose.runtime.mutableIntStateOf(0) }
+    var now by remember { androidx.compose.runtime.mutableLongStateOf(System.currentTimeMillis()) }
     val list = remember(version, now / 60_000) { Tourniquets.all(context, now) }
     LaunchedEffect(list.isNotEmpty()) {
         while (list.isNotEmpty()) {
@@ -344,9 +346,9 @@ private fun TourniquetTime(nav: Nav? = null) {
                 androidx.compose.foundation.layout.Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     // Put on before the tap: the time moved back; a slip is put right with "+5"
                     OutlinedButton(onClick = { Tourniquets.shift(context, t.n, -5); changed() }, modifier = Modifier.weight(1f).heightIn(min = 48.dp)
-                        .semantics { contentDescription = context.getString(R.string.tourniquet_earlier_desc, 5) }) { Text(stringResource(R.string.tourniquet_earlier, 5), color = tint.ink) }
+                        .semantics { contentDescription = res.getString(R.string.tourniquet_earlier_desc, 5) }) { Text(stringResource(R.string.tourniquet_earlier, 5), color = tint.ink) }
                     OutlinedButton(onClick = { Tourniquets.shift(context, t.n, 5); changed() }, modifier = Modifier.weight(1f).heightIn(min = 48.dp)
-                        .semantics { contentDescription = context.getString(R.string.tourniquet_later_desc, 5) }) { Text(stringResource(R.string.tourniquet_later, 5), color = tint.ink) }
+                        .semantics { contentDescription = res.getString(R.string.tourniquet_later_desc, 5) }) { Text(stringResource(R.string.tourniquet_later, 5), color = tint.ink) }
                 }
                 // Apart from the time buttons, and asked once: the time is what the medics need
                 var asking by remember(t.n) { mutableStateOf(false) }

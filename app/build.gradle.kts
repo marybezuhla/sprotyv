@@ -44,6 +44,8 @@ android {
         disable += setOf("GradleDependency", "NewerVersionAvailable", "AndroidGradlePluginVersion")
         // targetSdk is raised on purpose, together with a test on a phone
         disable += "OldTargetApi"
+        // Resources stay unshrunk: the widget finds its pictograms by name (Widgets.kt), which shrinking would remove
+        disable += "NotShrinkingResources"
         textReport = true
         textOutput = file("build/reports/lint.txt")
     }

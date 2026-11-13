@@ -188,6 +188,7 @@ private fun LockSettings(prefs: HomePrefs.State, canLock: Boolean) {
 @Composable
 internal fun FeedbackBlock() {
     val context = LocalContext.current
+    val res = androidx.compose.ui.platform.LocalResources.current
     var crash by remember { mutableStateOf(CrashLog.pending(context)) }
     Text(stringResource(R.string.feedback_title), style = MaterialTheme.typography.titleMedium, fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold, modifier = Modifier.semantics { heading() })
     crash?.let { t ->
@@ -196,7 +197,7 @@ internal fun FeedbackBlock() {
         Text(t, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             OutlinedButton(onClick = {
-                Feedback.open(context, context.getString(R.string.crash_issue_title), context.getString(R.string.crash_issue_body) + "\n\n```\n" + t + "\n```")
+                Feedback.open(context, res.getString(R.string.crash_issue_title), res.getString(R.string.crash_issue_body) + "\n\n```\n" + t + "\n```")
                 CrashLog.clear(context)
                 crash = null
             }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.crash_send)) }
@@ -206,7 +207,7 @@ internal fun FeedbackBlock() {
         }
     }
     OutlinedButton(onClick = {
-        Feedback.open(context, context.getString(R.string.feedback_title), context.getString(R.string.feedback_body, Feedback.version(context)))
+        Feedback.open(context, res.getString(R.string.feedback_title), res.getString(R.string.feedback_body, Feedback.version(context)))
     }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.feedback)) }
     Text(stringResource(R.string.feedback_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 }

@@ -50,9 +50,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -509,7 +507,7 @@ private fun PhotoView(bytes: ByteArray) {
  */
 @Composable
 private fun PdfPages(bytes: ByteArray) {
-    val widthPx = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp.roundToPx() }
+    val widthPx = androidx.compose.ui.platform.LocalWindowInfo.current.containerSize.width
     var failedToOpen by remember(bytes) { mutableStateOf(false) }
     val doc by produceState<PdfDoc?>(null, bytes) {
         // Finished even if the viewer closes meanwhile, so it is always closed below
