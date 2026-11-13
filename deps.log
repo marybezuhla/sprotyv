@@ -1,0 +1,81 @@
+----
+> Task :content:exportReleaseConsumerProguardFiles
+> Task :personal:exportReleaseConsumerProguardFiles
+
+> Task :app:stripReleaseDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libsqlcipher.so. Run with --info option to learn more.
+
+> Task :reach:exportReleaseConsumerProguardFiles
+> Task :app:extractReleaseNativeSymbolTables
+> Task :app:mergeReleaseNativeDebugMetadata NO-SOURCE
+> Task :app:mergeReleaseArtProfile SKIPPED
+> Task :app:expandReleaseArtProfileWildcards SKIPPED
+> Task :app:checkReleaseDuplicateClasses
+> Task :app:mergeReleaseGeneratedProguardFiles
+> Task :app:mergeReleaseStartupProfile
+> Task :app:mergeReleaseJavaResource
+> Task :app:lintAnalyzeReleaseAndroidTest
+> Task :app:compressReleaseAssets
+> Task :app:generateReleaseLintVitalReportModel
+> Task :app:produceReleaseComposeMapping
+> Task :app:reportReleaseComposeMappingErrors
+> Task :content:lintVitalAnalyzeRelease
+> Task :app:lintAnalyzeReleaseUnitTest
+
+> Task :app:lintReportRelease
+Wrote HTML report to file:///home/runner/work/sprotyv/sprotyv/app/build/reports/lint-results-release.html
+Wrote SARIF report to file:///home/runner/work/sprotyv/sprotyv/app/build/reports/lint-results-release.sarif
+
+> Task :app:lintRelease
+
+> Task :app:copyReleaseLintReports
+Copying lint text report to /home/runner/work/sprotyv/sprotyv/app/build/reports/lint.txt
+
+> Task :content:generateReleaseLintVitalModel
+> Task :personal:generateReleaseLintVitalModel
+> Task :reach:generateReleaseLintVitalModel
+> Task :app:optimizeReleaseResources
+> Task :app:writeReleaseAppMetadata
+> Task :app:writeReleaseSigningConfigVersions
+> Task :content:stripReleaseDebugSymbols NO-SOURCE
+> Task :content:copyReleaseJniLibsProjectAndLocalJars
+> Task :reach:lintVitalAnalyzeRelease
+> Task :content:bundleReleaseAar
+> Task :content:mergeReleaseResources
+> Task :personal:stripReleaseDebugSymbols NO-SOURCE
+> Task :personal:copyReleaseJniLibsProjectAndLocalJars
+> Task :personal:bundleReleaseAar
+> Task :personal:mergeReleaseResources
+> Task :content:verifyReleaseResources
+> Task :content:assembleRelease
+> Task :reach:stripReleaseDebugSymbols NO-SOURCE
+> Task :reach:copyReleaseJniLibsProjectAndLocalJars
+> Task :reach:bundleReleaseAar
+> Task :reach:mergeReleaseResources
+> Task :personal:verifyReleaseResources
+> Task :personal:assembleRelease
+> Task :reach:verifyReleaseResources
+> Task :reach:assembleRelease
+> Task :personal:lintVitalAnalyzeRelease
+> Task :app:minifyReleaseWithR8
+> Task :app:lintVitalAnalyzeRelease
+> Task :app:lintVitalReportRelease SKIPPED
+> Task :app:lintVitalRelease SKIPPED
+> Task :app:mergeReleaseComposeMapping
+> Task :app:compileReleaseArtProfile SKIPPED
+> Task :app:packageRelease
+> Task :app:createReleaseApkListingFileRedirect
+> Task :app:assembleRelease
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_2-1794534817694.json
+
+[Incubating] Problems report is available at: file:///home/runner/work/sprotyv/sprotyv/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.8.2/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 7m 53s
+224 actionable tasks: 224 executed
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.8.2/userguide/configuration_cache_enabling.html
