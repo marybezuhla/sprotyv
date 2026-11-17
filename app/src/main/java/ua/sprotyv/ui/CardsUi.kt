@@ -346,12 +346,16 @@ private fun TourniquetTime(nav: Nav? = null) {
                 // Who and where, in own words; not needed to start, written when there is a moment
                 var note by remember(t.n) { mutableStateOf(t.note) }
                 var unsaved by remember(t.n) { mutableStateOf(false) }
+                // What is on disk now, so typing a note back to what it was is saved too
+                var stored by remember(t.n) { mutableStateOf(note) }
                 // Saved a moment after typing stops, away from the screen's thread (it is encrypted with the phone's keys);
                 // leaving the screen saves what is there at once
                 androidx.compose.runtime.LaunchedEffect(t.n, note) {
-                    if (note == t.note) return@LaunchedEffect
+                    if (note == stored) return@LaunchedEffect
                     kotlinx.coroutines.delay(400)
-                    unsaved = !kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { Tourniquets.note(context, t.n, note) }
+                    val ok = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { Tourniquets.note(context, t.n, note) }
+                    if (ok) stored = note
+                    unsaved = !ok
                 }
                 val latest by androidx.compose.runtime.rememberUpdatedState(note)
                 androidx.compose.runtime.DisposableEffect(t.n) {

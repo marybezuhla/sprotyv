@@ -54,7 +54,7 @@ object Tourniquets {
     fun expires(c: Context, now: Long = System.currentTimeMillis()): Long? = all(c, now).minOfOrNull { it.at + DAY }
 
     /** One more, from now. Returns its number, or null when the list is full. Numbers are never reused until all are gone. */
-    fun add(c: Context, now: Long = System.currentTimeMillis()): Int? {
+    @Synchronized fun add(c: Context, now: Long = System.currentTimeMillis()): Int? {
         val list = all(c, now)
         if (list.size >= MAX) return null
         val p = prefs(c)
@@ -64,7 +64,7 @@ object Tourniquets {
     }
 
     /** Written while typing: only this note is sealed again, saved without waiting for the disk. False if it could not be sealed. */
-    fun note(c: Context, n: Int, text: String): Boolean {
+    @Synchronized fun note(c: Context, n: Int, text: String): Boolean {
         val words = clean(text)
         val sealed = seal(words)
         // Not sealed: the note kept before stays as it was
@@ -74,17 +74,17 @@ object Tourniquets {
     }
 
     /** Put on earlier than the tap: the time moved back (never into the future, never past a day). */
-    fun shift(c: Context, n: Int, minutes: Int, now: Long = System.currentTimeMillis()) =
+    @Synchronized fun shift(c: Context, n: Int, minutes: Int, now: Long = System.currentTimeMillis()) =
         write(c, all(c, now).map { if (it.n == n) it.copy(at = (it.at + minutes * 60_000L).coerceIn(now - DAY + 60_000L, now)) else it })
 
     /** Handed over to the medics (or removed by them): gone with its note. */
-    fun remove(c: Context, n: Int) = write(c, all(c).filter { it.n != n })
+    @Synchronized fun remove(c: Context, n: Int) = write(c, all(c).filter { it.n != n })
 
     /**
      * The ones whose next full hour has come and was not yet said, marked as said.
      * However late the alarm comes, each hour is said once, and none is missed.
      */
-    fun dueHours(c: Context, now: Long = System.currentTimeMillis()): List<Pair<One, Int>> {
+    @Synchronized fun dueHours(c: Context, now: Long = System.currentTimeMillis()): List<Pair<One, Int>> {
         val list = all(c, now)
         val due = list.mapNotNull { t -> ((now - t.at) / (3600_000L)).toInt().takeIf { it >= 1 && it > t.told }?.let { t to it } }
         if (due.isNotEmpty()) write(c, list.map { t -> due.firstOrNull { it.first.n == t.n }?.let { t.copy(told = it.second) } ?: t })

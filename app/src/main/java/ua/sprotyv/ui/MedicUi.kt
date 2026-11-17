@@ -105,6 +105,7 @@ fun HandoverScreen(nav: Nav) {
     var what by HandoverDraft.what
     var notes by HandoverDraft.notes
     val done = HandoverDraft.done
+    androidx.compose.runtime.LaunchedEffect(when_, what, notes, done.size) { HandoverDraft.touch() }
     // The tourniquet times count on while the screen is open
     var minute by remember { mutableStateOf(System.currentTimeMillis() / 60_000) }
     androidx.compose.runtime.LaunchedEffect(Unit) { while (true) { kotlinx.coroutines.delay(20_000); minute = System.currentTimeMillis() / 60_000 } }
@@ -160,7 +161,8 @@ fun HandoverScreen(nav: Nav) {
 
 /**
  * What is typed for the medics, in memory only (never on disk: it is about another person). It
- * outlives the screen while the app runs, and is started afresh after 12 hours.
+ * outlives the screen while the app runs, is started afresh 12 hours after the last change, and is cleared
+ * when trip mode is turned on.
  */
 internal object HandoverDraft {
     val when_ = mutableStateOf<Long?>(null)
@@ -169,11 +171,16 @@ internal object HandoverDraft {
     val done = mutableStateListOf<Pair<Int, Long>>()
     private var touched = 0L
 
+    /** Started afresh when nothing was typed or ticked for 12 hours. */
     fun freshen() {
-        val now = System.currentTimeMillis()
-        if (now - touched > 12 * 60 * 60_000L) { when_.value = null; what.value = ""; notes.value = ""; done.clear() }
-        touched = now
+        if (System.currentTimeMillis() - touched > 12 * 60 * 60_000L) clear()
     }
+
+    /** Something was typed or ticked. */
+    fun touch() { touched = System.currentTimeMillis() }
+
+    /** Gone at once: trip mode is turned on. */
+    fun clear() { when_.value = null; what.value = ""; notes.value = ""; done.clear() }
 }
 
 private val HANDOVER_ACTIONS = listOf(
