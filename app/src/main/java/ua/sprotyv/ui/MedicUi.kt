@@ -173,9 +173,11 @@ internal object HandoverDraft {
     val done = mutableStateListOf<Pair<Int, Long>>()
     private var touched = 0L
 
-    /** Started afresh when nothing was typed or ticked for 12 hours. */
-    fun freshen() {
-        if (System.currentTimeMillis() - touched > 12 * 60 * 60_000L) clear()
+    /** Started afresh when nothing was typed or ticked for 12 hours; true if it was. */
+    fun freshen(): Boolean {
+        val old = System.currentTimeMillis() - touched > 12 * 60 * 60_000L
+        if (old) clear()
+        return old
     }
 
     /** Something was typed or ticked. */
