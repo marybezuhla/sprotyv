@@ -41,7 +41,7 @@ object Tourniquets {
     private fun alive(t: One, now: Long) = now - t.at in -SKEW until DAY
 
     /** The ones on now, the longest first; anything older than a day is removed from the phone. */
-    fun all(c: Context, now: Long = System.currentTimeMillis()): List<One> {
+    @Synchronized fun all(c: Context, now: Long = System.currentTimeMillis()): List<One> {
         val read = read(c)
         val list = read.filter { alive(it, now) }
         if (list.size != read.size || (list.isEmpty() && prefs(c).all.isNotEmpty())) write(c, list)

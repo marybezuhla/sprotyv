@@ -105,7 +105,9 @@ fun HandoverScreen(nav: Nav) {
     var what by HandoverDraft.what
     var notes by HandoverDraft.notes
     val done = HandoverDraft.done
-    androidx.compose.runtime.LaunchedEffect(when_, what, notes, done.size) { HandoverDraft.touch() }
+    // Only a change keeps the draft: opening the screen does not
+    var opened by remember { mutableStateOf(false) }
+    androidx.compose.runtime.LaunchedEffect(when_, what, notes, done.toList()) { if (opened) HandoverDraft.touch() else opened = true }
     // The tourniquet times count on while the screen is open
     var minute by remember { mutableStateOf(System.currentTimeMillis() / 60_000) }
     androidx.compose.runtime.LaunchedEffect(Unit) { while (true) { kotlinx.coroutines.delay(20_000); minute = System.currentTimeMillis() / 60_000 } }
