@@ -180,7 +180,7 @@ class StoreScreensTest {
         shot(more, "26-sections") { Frame(title(R.string.tab_know), {}) { PhonesEntry(nav); SectionsList(content, pins, nav) { _, _ -> } } }
         shot(more, "29-phones", dark = true) { PhonesScreen(content, nav, pins) { _, _ -> } }
         shot(more, "30-now") { NowScreen(content, nav) }
-        shot(more, "31-medical") { Frame(title(R.string.medical_card), {}) { MedicalScreen() } }
+        shot(more, "31-medical") { Frame(title(R.string.medical_card), {}) { MedicalScreen(nav) } }
         shot(more, "32-kit") { Frame(title(R.string.kit), {}) { KitScreen(content, nav) } }
         SearchMemory.query = if (lang == "en") "tourniquet" else "турнікет"
         shot(more, "33-search", dark = true) { SearchScreen(content, nav) }
