@@ -346,10 +346,21 @@ private fun TourniquetTime(nav: Nav? = null) {
                 // Who and where, in own words; not needed to start, written when there is a moment
                 var note by remember(t.n) { mutableStateOf(t.note) }
                 var unsaved by remember(t.n) { mutableStateOf(false) }
+                // Saved a moment after typing stops, away from the screen's thread (it is encrypted with the phone's keys);
+                // leaving the screen saves what is there at once
+                androidx.compose.runtime.LaunchedEffect(t.n, note) {
+                    if (note == t.note) return@LaunchedEffect
+                    kotlinx.coroutines.delay(400)
+                    unsaved = !kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { Tourniquets.note(context, t.n, note) }
+                }
+                val latest by androidx.compose.runtime.rememberUpdatedState(note)
+                androidx.compose.runtime.DisposableEffect(t.n) {
+                    onDispose { val last = latest; Thread { Tourniquets.all(context).firstOrNull { it.n == t.n }?.takeIf { it.note != last }?.let { Tourniquets.note(context, t.n, last) } }.start() }
+                }
                 // Who was hurt and where: not learned by the keyboard
                 NoKeyboardLearning { androidx.compose.material3.OutlinedTextField(
                     value = note,
-                    onValueChange = { v -> note = v.take(Tourniquets.NOTE_MAX); unsaved = !Tourniquets.note(context, t.n, note) },
+                    onValueChange = { v -> note = v.take(Tourniquets.NOTE_MAX) },
                     supportingText = if (unsaved) { { Text(stringResource(R.string.tourniquet_note_unsaved)) } } else null,
                     label = { Text(stringResource(R.string.tourniquet_note)) },
                     placeholder = { Text(stringResource(R.string.tourniquet_note_hint)) },

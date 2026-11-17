@@ -99,10 +99,12 @@ private fun helperName(h: Int) = if (h == 0) stringResource(R.string.delegate_me
 fun HandoverScreen(nav: Nav) {
     val context = LocalContext.current
     val res = LocalResources.current
-    var when_ by remember { mutableStateOf<Long?>(null) }
-    var what by remember { mutableStateOf("") }
-    var notes by remember { mutableStateOf("") }
-    val done = remember { mutableStateListOf<Pair<Int, Long>>() }
+    // Kept in memory while the app runs: a turn of the phone or a look at the QR code loses nothing
+    remember { HandoverDraft.freshen() }
+    var when_ by HandoverDraft.when_
+    var what by HandoverDraft.what
+    var notes by HandoverDraft.notes
+    val done = HandoverDraft.done
     // The tourniquet times count on while the screen is open
     var minute by remember { mutableStateOf(System.currentTimeMillis() / 60_000) }
     androidx.compose.runtime.LaunchedEffect(Unit) { while (true) { kotlinx.coroutines.delay(20_000); minute = System.currentTimeMillis() / 60_000 } }
@@ -153,6 +155,24 @@ fun HandoverScreen(nav: Nav) {
         }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.handover_to_notes)) }
         Text(stringResource(R.string.handover_kept_nowhere), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
+    }
+}
+
+/**
+ * What is typed for the medics, in memory only (never on disk: it is about another person). It
+ * outlives the screen while the app runs, and is started afresh after 12 hours.
+ */
+internal object HandoverDraft {
+    val when_ = mutableStateOf<Long?>(null)
+    val what = mutableStateOf("")
+    val notes = mutableStateOf("")
+    val done = mutableStateListOf<Pair<Int, Long>>()
+    private var touched = 0L
+
+    fun freshen() {
+        val now = System.currentTimeMillis()
+        if (now - touched > 12 * 60 * 60_000L) { when_.value = null; what.value = ""; notes.value = ""; done.clear() }
+        touched = now
     }
 }
 

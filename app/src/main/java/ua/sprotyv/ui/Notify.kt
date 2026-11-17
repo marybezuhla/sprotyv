@@ -372,7 +372,8 @@ object Notify {
 class Alarms : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         when (intent.action) {
-            Intent.ACTION_BOOT_COMPLETED, Intent.ACTION_MY_PACKAGE_REPLACED -> Notify.sync(context)
+            // Also when the clock or the time zone changes: reminders keep to the hour on the wall
+            Intent.ACTION_BOOT_COMPLETED, Intent.ACTION_MY_PACKAGE_REPLACED, Intent.ACTION_TIME_CHANGED, Intent.ACTION_TIMEZONE_CHANGED -> Notify.sync(context)
             else -> {
                 val data = intent.data ?: return
                 if (data.scheme != "sprotyv-alarm") return
