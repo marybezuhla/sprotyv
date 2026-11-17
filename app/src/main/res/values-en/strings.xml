@@ -844,7 +844,7 @@
     <string name="handover_tap">Tap when done: the time is noted by itself.</string>
     <string name="handover_notes">Anything else important (allergies, medicines, how the condition changed)</string>
     <string name="handover_qr">Show the crew as a QR code</string>
-    <string name="handover_kept_nowhere">Notes about another person are kept nowhere: close the screen and they are gone.</string>
+    <string name="handover_kept_nowhere">Notes about another person are never saved on the phone: they stay in memory only while the app runs, and are gone after 12 hours without changes or when trip mode is turned on.</string>
     <string name="handover_a_pressure">Pressure on the wound</string>
     <string name="handover_a_dressing">Pressure dressing</string>
     <string name="handover_a_cpr">CPR started</string>

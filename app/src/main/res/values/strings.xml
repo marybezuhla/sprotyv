@@ -852,7 +852,7 @@
     <string name="handover_tap">Торкніться, коли зробили: час запишеться сам.</string>
     <string name="handover_notes">Що ще важливо (алергії, ліки, як змінювався стан)</string>
     <string name="handover_qr">Показати бригаді QR-кодом</string>
-    <string name="handover_kept_nowhere">Записи про іншу людину ніде не зберігаються: щойно закриєте екран, їх не стане.</string>
+    <string name="handover_kept_nowhere">Записи про іншу людину не зберігаються на телефоні: вони лише в пам\'яті, поки застосунок працює, і зникають через 12 годин без змін або коли вмикаєте режим поїздки.</string>
     <string name="handover_a_pressure">Тиск на рану</string>
     <string name="handover_a_dressing">Тиснуча пов’язка</string>
     <string name="handover_a_cpr">Почато СЛР</string>
