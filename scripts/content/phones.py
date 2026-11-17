@@ -11,6 +11,8 @@ Re-check every few months: short numbers change (1516, 1528 and 1548 all did in 
 import json, os, re, sys
 
 CHECKED = "2026-11-03"
+# Numbers added or checked again later
+CHECKED_ON = {"ev-203": "2026-11-17"}
 PREFIX = {"emergency": "e-", "evacuation": "ev-", "power": "p-", "learn": "l-", "mind": "m-", "violence": "v-", "children": "c-", "health": "h-", "security": "s-", "veterans": "vt-", "state": "st-"}
 CATEGORIES = ["emergency", "evacuation", "power", "mind", "violence", "children", "health", "security", "veterans", "learn", "state"]
 
@@ -49,7 +51,10 @@ P = [
      ("Crisis hotline", "Evacuation, housing and payments for displaced people, humanitarian aid, seized homes. 24/7, free.")),
     ("ev-east-sos", "evacuation", "0800332614", "https://east-sos.org/directions/call-center/",
      ("«Схід SOS»: евакуація", "Заявки на евакуацію, зокрема людей з обмеженою рухливістю; допомога ВПО. Пн–сб 08:00–18:00, безкоштовно."),
-     ("East SOS: evacuation", "Evacuation requests, including people with limited mobility; help for displaced people. Mon–Sat 08:00–18:00, free.")),
+     ("Vostok SOS: evacuation", "Evacuation requests, including people with limited mobility; help for displaced people. Mon–Sat 08:00–18:00, free.")),
+    ("ev-203", "evacuation", "203", "https://dn.gov.ua/en/news/koordynatsiinyi-humanitarnyi-tsentr-pryimaie-zaiavky-na-evakuatsiiu-z-donetskoi-oblasti-za-nomerom-203",
+     ("Координаційний гуманітарний центр: евакуація", "Заявки на евакуацію, зокрема з Донеччини. Короткий номер, безкоштовно."),
+     ("Coordination Humanitarian Centre: evacuation", "Evacuation requests, including from Donetsk region. Short number, free.")),
     ("ev-uz", "evacuation", "0800503111", UKC,
      ("Укрзалізниця", "Поїзди, зокрема евакуаційні. Цілодобово."),
      ("Ukrainian Railways", "Trains, including evacuation trains. 24/7.")),
@@ -369,7 +374,7 @@ def build(lang):
         assert re.fullmatch(r"https://[a-z0-9.-]+(/\S*)?", source), id
         assert "t.me" not in source and "telegram" not in source, id
         assert 0 < len(title) <= 80 and 0 < len(note) <= 240, id
-        out.append({"id": id, "category": cat, "title": title, "note": note, "number": number, "source": source, "checkedOn": CHECKED})
+        out.append({"id": id, "category": cat, "title": title, "note": note, "number": number, "source": source, "checkedOn": CHECKED_ON.get(id, CHECKED)})
     assert len({p["id"] for p in out}) == len(out)
     # In category order, as shown
     return sorted(out, key=lambda p: CATEGORIES.index(p["category"]))

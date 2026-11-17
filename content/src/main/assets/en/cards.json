@@ -228,7 +228,7 @@
    },
    {
     "action": "Best is a vented chest seal. Without one: an occlusive seal, or a bag taped down on all sides, put on as they breathe out.",
-    "why": "This is what the Ministry of Health order says. Several wounds, such as entry and exit: seal them all."
+    "why": "The Ministry of Health order says: an occlusive dressing, on the out-breath, on all sides. Several wounds, such as entry and exit: seal them all."
    },
    {
     "action": "Do not pull out an object stuck in the wound: pad it with gauze and hold it in place.",
@@ -240,7 +240,7 @@
    },
    {
     "action": "Breathlessness gets much worse after sealing? Lift one edge, let the air out, stick it down again.",
-    "why": "Under the Ministry of Health order, the dressing is then removed."
+    "why": "This lets the trapped air out; the Ministry of Health order says to remove the dressing in that case."
    },
    {
     "action": "Give nothing to drink. Check breathing and their condition every 5 minutes.",
@@ -376,7 +376,7 @@
    "7.11"
   ],
   "call": "103",
-  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 7.11; Ministry of Health order No. 441, procedures 5, 6, 27; English translation by Sprotyv",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 7.11; Ministry of Health order No. 441, procedures 5, 6, 27; aspirin dose per ESC guidelines and sec. 7.11; English translation by Sprotyv",
   "checkedOn": "2026-11-13",
   "reviewedBy": "",
   "steps": [
@@ -672,7 +672,7 @@
     "why": "Fake orders and \"corridors\" do happen."
    },
    {
-    "action": "No way to leave? Call 1548 (24/7) or East SOS 0 800 332 614 (Mon–Sat 8–18): they take evacuation requests, including for people with limited mobility.",
+    "action": "No way to leave? Call 1548 (24/7) or Vostok SOS 0 800 332 614 (Mon–Sat 8–18): they take evacuation requests, including for people with limited mobility.",
     "why": "Other evacuation lines: Phones, the Evacuation section."
    },
    {

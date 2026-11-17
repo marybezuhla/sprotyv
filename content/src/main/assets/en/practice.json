@@ -991,7 +991,7 @@
  {
   "id": "kid-scared-shelter",
   "card": "kid-scared",
-  "step": 0,
+  "step": 1,
   "situation": "After a loud explosion you feel very scared. You're already in the shelter.",
   "options": [
    {
