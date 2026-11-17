@@ -9,7 +9,7 @@
   ],
   "call": "",
   "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 1.4, 1.2, 30.1; English translation by Sprotyv",
-  "checkedOn": "2026-10-30",
+  "checkedOn": "2026-11-18",
   "reviewedBy": "",
   "steps": [
    {
@@ -93,7 +93,7 @@
   ],
   "call": "",
   "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 3.3, 3.1, 3.2; English translation by Sprotyv",
-  "checkedOn": "2026-10-30",
+  "checkedOn": "2026-11-18",
   "reviewedBy": "",
   "steps": [
    {
@@ -107,7 +107,7 @@
    },
    {
     "action": "Outside, if there is a whistle or a rising sound, do not look at the sky. Drop: face down, feet toward the blast, hands on your head, mouth slightly open. Then crawl to shelter.",
-    "why": "An open mouth protects your eardrums and lungs from the blast wave.",
+    "why": "An open mouth evens out the pressure and may spare your eardrums.",
     "figure": "3.1"
    },
    {
@@ -411,7 +411,7 @@
   ],
   "call": "101",
   "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 10.5, 30.4; English translation by Sprotyv",
-  "checkedOn": "2026-10-30",
+  "checkedOn": "2026-11-18",
   "reviewedBy": "",
   "steps": [
    {
@@ -495,7 +495,7 @@
   ],
   "call": "101",
   "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 6.4, 6.5; English translation by Sprotyv",
-  "checkedOn": "2026-10-30",
+  "checkedOn": "2026-11-18",
   "reviewedBy": "",
   "steps": [
    {
@@ -511,8 +511,8 @@
     "why": ""
    },
    {
-    "action": "Once out of the zone, remove outer clothing without pulling it over your head; rinse skin and eyes with clean water for 10–15 minutes.",
-    "why": ""
+    "action": "Once out of the zone, remove outer clothing without pulling it over your head; rinse skin and eyes under running water for at least 20 minutes.",
+    "why": "Then see a medic, even if it no longer hurts."
    },
    {
     "action": "Casualty: rest, fresh air, half-sitting if short of breath. Unknown substance: do not induce vomiting. Medical help: 103.",
@@ -531,8 +531,8 @@
    "30.8"
   ],
   "call": "",
-  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 6.1, 6.2, 6.6, 6.5, 30.8; English translation by Sprotyv",
-  "checkedOn": "2026-10-30",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 6.1, 6.2, 6.6, 6.5, 30.8; Ministry of Health: 8 answers on iodine prophylaxis; WHO, potassium iodide; English translation by Sprotyv",
+  "checkedOn": "2026-11-18",
   "reviewedBy": "",
   "steps": [
    {
@@ -561,7 +561,7 @@
    },
    {
     "action": "Potassium iodide: only after an official announcement and in the dose it gives. Not given to people aged 40 and over, except pregnant and breastfeeding women. Do not drink iodine tincture.",
-    "why": "Taken within 6 hours before or in the first hours after the cloud passes. Protects only the thyroid; not taken for a \"dirty bomb\"."
+    "why": "Best 6 hours before radioactive iodine arrives; it can be taken from 24 hours before to no later than 8 hours after exposure begins. Not later: that does harm. One dose only. Protects only the thyroid; not taken for a \"dirty bomb\"."
    },
    {
     "action": "Eat and drink only from sealed containers.",
