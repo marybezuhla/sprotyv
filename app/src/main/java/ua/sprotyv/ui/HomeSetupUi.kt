@@ -278,6 +278,6 @@ fun WelcomeScreen(nav: Nav) {
             }
             Text(stringResource(R.string.welcome_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
-        CallBar()
+        CallBar(always = true)
     }
 }

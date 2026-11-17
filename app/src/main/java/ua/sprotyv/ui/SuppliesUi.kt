@@ -20,7 +20,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.foundation.selection.toggleable
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -171,11 +170,10 @@ private fun SuppliesFood(s: MySupplies, keyed: List<Pair<String, ua.sprotyv.cont
     keyed.forEachIndexed { i, (key, line) ->
         if (i > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         val have = key in s.have
-        // The whole row ticks, and TalkBack hears what it is with the tick
-        Row(Modifier.fillMaxWidth().heightIn(min = 56.dp).doneRow(have)
-            .toggleable(value = have, role = androidx.compose.ui.semantics.Role.Checkbox, onValueChange = { on -> change { it.copy(have = if (on) it.have + key else it.have - key) } }),
-            verticalAlignment = Alignment.Top) {
-            Checkbox(checked = have, onCheckedChange = null, colors = doneCheckbox())
+        // The tick has the item's name for TalkBack; the "until" button below stays its own button
+        Row(Modifier.fillMaxWidth().heightIn(min = 56.dp).doneRow(have), verticalAlignment = Alignment.Top) {
+            Checkbox(checked = have, onCheckedChange = { on -> change { it.copy(have = if (on) it.have + key else it.have - key) } }, colors = doneCheckbox(),
+                modifier = Modifier.semantics { contentDescription = "${line.what}, ${line.amount}" })
             Column(Modifier.weight(1f).padding(top = 12.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                 Row {
                     Text(line.what, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f))

@@ -85,7 +85,7 @@ class ScreensTest {
         shadowOf(app.packageManager).addActivityIfNotPresent(ComponentName(app, ComponentActivity::class.java))
     }
 
-    private fun mode(m: Mode) = HomePrefs.update(app) { it.copy(mode = m, pins = Preset.GENERAL.pins) }
+    private fun mode(m: Mode) = HomePrefs.update(app) { it.copy(mode = m, pins = Preset.GENERAL.pins, callBar = m == Mode.SIMPLE) }
 
     private fun shot(name: String, dark: Boolean = false, big: Boolean = false, body: @Composable () -> Unit) = run {
         // "big": the phone's text size raised, as many people set it

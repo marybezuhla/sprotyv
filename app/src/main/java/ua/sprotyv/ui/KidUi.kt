@@ -1,10 +1,17 @@
 package ua.sprotyv.ui
 
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.semantics.onLongClick
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
 
 import androidx.compose.runtime.getValue
 
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.liveRegion
 
 import androidx.compose.ui.semantics.heading
@@ -115,8 +122,11 @@ fun KidHome(content: Content?, nav: Nav, onGrownUp: () -> Unit) {
         ) {
             item(span = { GridItemSpan(maxLineSpan) }) {
                 Column {
-                    // Small and plain on purpose: for the grown-up, behind the phone's PIN
-                    TextButton(onClick = onGrownUp, modifier = Modifier.align(Alignment.End).heightIn(min = 48.dp)) { Text(stringResource(R.string.kid_grown_up)) }
+                    // Small and plain on purpose: for the grown-up, behind the phone's PIN. Without a PIN it
+                    // opens only when held for 3 seconds, which a child tapping around does not do
+                    val locked = HomePrefs.state.collectAsState().value?.locked == true
+                    if (locked) TextButton(onClick = onGrownUp, modifier = Modifier.align(Alignment.End).heightIn(min = 48.dp)) { Text(stringResource(R.string.kid_grown_up)) }
+                    else HoldToOpen(stringResource(R.string.kid_grown_up), stringResource(R.string.kid_grown_up_hold), onGrownUp, Modifier.align(Alignment.End))
                     // The sticker album: one little Sunny for each situation played through
                     val got = KidStickers.all(androidx.compose.ui.platform.LocalContext.current)
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -130,7 +140,7 @@ fun KidHome(content: Content?, nav: Nav, onGrownUp: () -> Unit) {
                     if (cards.isNotEmpty()) {
                         Row(Modifier.padding(top = 12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                             Text(stringResource(R.string.kid_stickers, got.count { id -> cards.any { it.id == id } }, cards.take(7).size), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(end = 8.dp))
-                            cards.take(7).forEach { c -> if (c.id in got) Sunny(24.dp, happy = true) else androidx.compose.foundation.layout.Box(Modifier.size(24.dp).then(androidx.compose.ui.Modifier.border(1.dp, MaterialTheme.colorScheme.outlineVariant, androidx.compose.foundation.shape.CircleShape)).clearAndSetSemantics { }) }
+                            cards.take(7).forEach { c -> if (c.id in got) Sunny(24.dp, happy = true) else androidx.compose.foundation.layout.Box(Modifier.size(24.dp).then(androidx.compose.ui.Modifier.border(1.dp, MaterialTheme.colorScheme.outline, androidx.compose.foundation.shape.CircleShape)).clearAndSetSemantics { }) }
                         }
                     }
                 }
@@ -155,7 +165,7 @@ private fun KidTile(card: ActionCard, tint: Tint, onClick: () -> Unit) {
         colors = CardDefaults.cardColors(containerColor = tint.container, contentColor = tint.ink),
         // Round, soft shapes: friendly to a child's eye, and large enough for a small finger
         shape = RoundedCornerShape(28.dp),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
         modifier = Modifier.fillMaxWidth().heightIn(min = 148.dp),
     ) {
         Column(Modifier.fillMaxWidth().padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -305,18 +315,20 @@ internal fun KidCardBody(card: ua.sprotyv.content.Card, content: ua.sprotyv.cont
         card.steps.indices.forEach { i ->
             androidx.compose.foundation.layout.Box(
                 Modifier.size(if (i == step) 18.dp else 14.dp).background(
-                    if (i <= step) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant, androidx.compose.foundation.shape.CircleShape,
+                    if (i <= step) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline, androidx.compose.foundation.shape.CircleShape,
                 ),
             )
         }
     }
     if (!done) {
         val s = card.steps[step]
+        val stepOf = stringResource(R.string.step_of, step + 1, card.steps.size)
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(16.dp)) {
             androidx.compose.foundation.Image(androidx.compose.ui.res.painterResource(pictureRes(card.id)), null, Modifier.size(72.dp), colorFilter = if (card.id == "kid-buzz") androidx.compose.ui.graphics.ColorFilter.tint(Group.DANGER.tint().ink) else null)
             Text(
                 s.action, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center,
-                modifier = Modifier.semantics { liveRegion = androidx.compose.ui.semantics.LiveRegionMode.Polite },
+                // Heard as "Step 2 of 4. …": the dots above are not read aloud
+                modifier = Modifier.semantics { liveRegion = androidx.compose.ui.semantics.LiveRegionMode.Polite; contentDescription = "$stepOf. ${s.action}" },
             )
             if (s.why.isNotBlank()) Text(s.why, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
         }
@@ -374,5 +386,27 @@ internal fun KidPraise(line: Int) {
             )
             Text(stringResource(line), style = MaterialTheme.typography.titleMedium)
         }
+    }
+}
+
+/** A small text that opens only after being held for 3 seconds; a short tap shows how. */
+@Composable
+private fun HoldToOpen(label: String, hint: String, onOpen: () -> Unit, modifier: Modifier = Modifier) {
+    var showHint by remember { mutableStateOf(false) }
+    Column(modifier, horizontalAlignment = Alignment.End) {
+        Text(
+            label,
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.heightIn(min = 48.dp).padding(horizontal = 12.dp, vertical = 14.dp)
+                .semantics { role = androidx.compose.ui.semantics.Role.Button; onLongClick(hint) { onOpen(); true } }
+                .pointerInput(onOpen) {
+                    detectTapGestures(onPress = {
+                        val released = kotlinx.coroutines.withTimeoutOrNull(3_000) { tryAwaitRelease() }
+                        if (released == null) onOpen() else showHint = true
+                    })
+                },
+        )
+        if (showHint) Text(hint, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }

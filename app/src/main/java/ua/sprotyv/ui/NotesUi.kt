@@ -184,7 +184,7 @@ private fun NoteCard(n: Note, pinned: Boolean, onClick: () -> Unit) {
         border = BorderStroke(if (pinned) 2.dp else 1.dp, if (pinned) MaterialTheme.colorScheme.outline else MaterialTheme.colorScheme.outlineVariant),
         modifier = Modifier.fillMaxWidth(),
     ) {
-        Column(Modifier.fillMaxWidth().heightIn(min = 64.dp).clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 12.dp)) {
+        Column(Modifier.fillMaxWidth().heightIn(min = 64.dp).clickable(role = androidx.compose.ui.semantics.Role.Button, onClick = onClick).padding(horizontal = 16.dp, vertical = 12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (pinned) Text("📌 ", style = MaterialTheme.typography.titleMedium)
                 Text(
@@ -213,7 +213,7 @@ fun NotesPlate(nav: Nav) {
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
         modifier = Modifier.fillMaxWidth(),
     ) {
-        Column(Modifier.fillMaxWidth().clickable { nav.go(Route.Mine(MinePart.NOTES)) }.padding(horizontal = 16.dp, vertical = 14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Column(Modifier.fillMaxWidth().clickable(role = androidx.compose.ui.semantics.Role.Button) { nav.go(Route.Mine(MinePart.NOTES)) }.padding(horizontal = 16.dp, vertical = 14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 androidx.compose.material3.Icon(Icons.Filled.Edit, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
                 Text(
