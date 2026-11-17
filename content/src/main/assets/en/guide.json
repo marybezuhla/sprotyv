@@ -9,7 +9,7 @@
  "source": "https://github.com/snegireff/dovidnyk-vyzhyvannia",
  "commit": "6a3c6fb6e7ecd160e864232d0f1a47cd928fe928",
  "license": "CC BY-SA 4.0",
- "changes": "Converted for display in the app: markup changed, figures kept as images, the sections of Appendix A numbered A.1–A.5, the cover disclaimer moved to “About the guide”, the rest of the cover, the contents and the note pages left out. Three figures from open sources added (public domain; author in the caption): fig. 11.2, 15.5, 15.6. English translation by Sprotyv from the Ukrainian original (CC BY-SA 4.0); the meaning of the chapters is unchanged, except: in 4.8 and 14.4 official websites, apps and ways named by the OVA instead of chatbots and Telegram channels (the app does not recommend Telegram); in 13.1 and 18.1 CoMaps, Organic Maps or OsmAnd instead of maps.me; in the table of 6.2 the doses for children replaced by a reference to the official Ministry of Health announcement or a doctor, and in 7.13 the activated charcoal dose for children by a reference to 103 or a doctor (a child's dose depends on weight and the medicine, so 103, a doctor or the leaflet gives it). In November 2026 the advice was checked against current guidelines and rules (Resuscitation Council UK and ERC 2025, Ministry of Health order No. 441, NHS, USDA, WHO, IOM, Cabinet of Ministers resolution No. 1092) and corrected in 3.3, 3.4, 4.1, 6.1, 6.2, 7.1, 7.2, 7.4–7.6, 7.8, 7.10, 7.11, 7.16, 9.4, 12.1–12.3, 13.2, 16.2, 17.8, 18.3, 18.5, 18.7, 20.1, 20.5, 21.2, 21.4, 22.5, 23.3, 26.1, 26.2, 27.5, 29.4, 29.5 and 30.5, with the wording of a few sentences; the source of each change is named beside it in scripts/build_guide.py in the app's repository.",
+ "changes": "Converted for display in the app: markup changed, figures kept as images, the sections of Appendix A numbered A.1–A.5, the cover disclaimer moved to “About the guide”, the rest of the cover, the contents and the note pages left out. Three figures from open sources added (public domain; author in the caption): fig. 11.2, 15.5, 15.6. English translation by Sprotyv from the Ukrainian original (CC BY-SA 4.0); the meaning of the chapters is unchanged, except: in 4.8 and 14.4 official websites, apps and ways named by the OVA instead of chatbots and Telegram channels (the app does not recommend Telegram); in 13.1 and 18.1 CoMaps, Organic Maps or OsmAnd instead of maps.me; in the table of 6.2 the doses for children replaced by a reference to the official Ministry of Health announcement or a doctor, and in 7.13 the activated charcoal dose for children by a reference to 103 or a doctor (a child's dose depends on weight and the medicine, so 103, a doctor or the leaflet gives it). In November 2026 the advice was checked against current guidelines and rules (Resuscitation Council UK and ERC 2025, Ministry of Health order No. 441, NHS, USDA, WHO, IOM, Cabinet of Ministers resolution No. 1092) and corrected in 3.3, 3.4, 4.1, 6.1, 6.2, 6.4, 7.1, 7.2, 7.4–7.6, 7.8, 7.10, 7.11, 7.16, 9.4, 12.1–12.3, 13.2, 16.2, 17.8, 18.3, 18.5, 18.7, 20.1, 20.5, 21.2, 21.4, 22.5, 23.3, 26.1, 26.2, 27.5, 29.4, 29.5 and 30.5, and reworded a few sentences; the source of each change is named beside it in scripts/build_guide.py in the app's repository.",
  "chapters": [
   {
    "id": "ch1",
@@ -1056,7 +1056,7 @@
        "kind": "steps",
        "items": [
         {
-         "text": "Listen for the threat level (since September 2026, Cabinet of Ministers resolution No. 1092 as amended on 15.09.2026): a 1-minute siren and the voice message “red level” mean missiles or a massed drone attack; a 30-second siren and “yellow level” mean drones (it is announced district by district), so follow official messages. Where sirens are still old, the usual signal sounds with no level: it is an alert, as before. At any level the steps below apply: a shelter, or the two-wall zone if there is a ballistic threat or the shelter is more than 5 minutes away. Dress for the weather (shoes and a jacket, even at night), take your go-bag."
+         "text": "Listen for the threat level (since September 2026, Cabinet of Ministers resolution No. 1092 as amended on 15.09.2026): a 1-minute siren and the voice message “red level” mean missiles or a massed drone attack; a 30-second siren and “yellow level” mean drones (it is announced district by district), so follow official messages. A siren with no level is an alert, as before. At any level the steps below apply: a shelter, or the two-wall zone if there is a ballistic threat or the shelter is more than 5 minutes away. Dress for the weather (shoes and a jacket, even at night), take your go-bag."
         },
         {
          "text": "If there is time (the alert is not “ballistic”), turn off the gas, electrical appliances and water, close the windows and curtains."
@@ -1849,7 +1849,7 @@
        "blocks": [
         {
          "t": "p",
-         "text": "**Potassium iodide protects ONLY the thyroid gland from radioactive iodine and ONLY if there has been a release from a reactor. It does not protect against external radiation or other isotopes.** Take it only after an official announcement, 6 hours before or in the first hours after the cloud passes. Do NOT drink alcoholic iodine solution: that is poisoning."
+         "text": "**Potassium iodide protects ONLY the thyroid gland from radioactive iodine and ONLY if there has been a release from a reactor. It does not protect against external radiation or other isotopes.** Take it only after an official announcement: best 6 hours before radioactive iodine arrives, no later than 8 hours after exposure begins. Do NOT drink alcoholic iodine solution: that is poisoning."
         }
        ]
       },
@@ -1945,7 +1945,7 @@
        "blocks": [
         {
          "t": "p",
-         "text": "**Tear agents (CS, chloropicrin)** are increasingly used away from the front too. Burning eyes and skin, choking without loss of consciousness: that is them. Go upwind into fresh air, do not rub your eyes, rinse with water/saline for 10–15 min, take off and bag your clothes, wash skin with cool water and soap (hot water makes the burning worse), throw away contact lenses. People with asthma should use the inhaler. Go to a medic at once (103) if shortness of breath, chest tightness or a strong cough do not pass within 30 min in fresh air, get worse or come back within a day: chloropicrin damages the lungs, and pulmonary oedema can develop with a delay of several hours, even if you felt better at first. For the first day: rest, no physical exertion, do not stay alone."
+         "text": "**Tear agents (CS, chloropicrin)** are increasingly used away from the front too. Burning eyes and skin, choking without loss of consciousness: that is them. Go upwind into fresh air, do not rub your eyes, rinse with water/saline for at least 20 min, take off and bag your clothes, wash skin with cool water and soap (hot water makes the burning worse), throw away contact lenses. People with asthma should use the inhaler. Go to a medic at once (103) if shortness of breath, chest tightness or a strong cough do not pass within 30 min in fresh air, get worse or come back within a day: chloropicrin damages the lungs, and pulmonary oedema can develop with a delay of several hours, even if you felt better at first. For the first day: rest, no physical exertion, do not stay alone."
         }
        ]
       },
@@ -1970,7 +1970,7 @@
          "text": "Do not eat or drink anything that may have been exposed to the chemical until it is confirmed safe."
         },
         {
-         "text": "Once out of the zone: take off your outer clothing (not over your head; cut it off if possible), rinse your skin and eyes with plenty of clean water for 10–15 min."
+         "text": "Once out of the zone: take off your outer clothing (not over your head; cut it off if possible), rinse your skin and eyes under plenty of running water for at least 20 min."
         },
         {
          "text": "For those affected: rest, fresh air, a half-sitting position if they are choking. Do not induce vomiting if the substance is unknown. Medical help as soon as possible."
