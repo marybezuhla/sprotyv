@@ -33,7 +33,7 @@ BLOCK_CALLOUTS = {"warning", "tip", "critical", "note"}
 MAX_TEXT = 20000
 
 
-# Changes for current evidence; GUIDE-REVIEW.md gives the source and date of each
+# Changes for current evidence; the comment above each pair names its source
 EVIDENCE = [
     # 7.2: a percentage without a source
     ("У 80% випадків сильний безперервний тиск 10+ хвилин зупиняє кровотечу.",
@@ -134,6 +134,9 @@ EVIDENCE = [
     ("**203** — єдина лінія БО «Координаційний гуманітарний центр»", "**203** — Координаційний гуманітарний центр (заявки на евакуацію, зокрема з Донеччини)"),
     # 7.11: call at once, not after 15 minutes (MOZ order 441, procedure 6)
     ("стискальний/пекучий біль за грудиною понад 15 хв,", "стискальний/пекучий біль за грудиною (не чекайте, чи мине: 103 одразу),"),
+    # 7.11: the aspirin dose of MOZ order 441, procedure 6 (162–325 mg)
+    ("розжувати аспірин 150–300 мг (½ таблетки по 500 мг або 2–3 таблетки «кардіо» по 75–100 мг)",
+     "розжувати аспірин 162–325 мг (½ таблетки по 500 мг або 3 таблетки «кардіо» по 75–100 мг)"),
 ]
 
 
@@ -380,7 +383,7 @@ class Builder:
         walk(node)
         names = []
         for svg in svgs:
-            # Words inside drawings that were brought in line with current evidence (GUIDE-REVIEW.md)
+            # Words inside drawings that were brought in line with current evidence (as EVIDENCE)
             for old, new in FIGURE_TEXT:
                 svg = svg.replace(old, new)
             digest = hashlib.sha256(svg.encode("utf-8")).hexdigest()[:16]
@@ -561,8 +564,7 @@ def main():
         ("(Organic Maps, maps.me)", "(CoMaps, Organic Maps або OsmAnd)"),  # 13.1 and 18.1
         ("дитині від 3 років — близько 1 г/кг (дітям до 3 років — лише за вказівкою медиків)", "дітям — лише за вказівкою 103 або лікаря"),  # 7.13
     ])
-    # Brought in line with current evidence (November 2026): each change, its source and date are in
-    # scripts/content/adaptation/GUIDE-REVIEW.md
+    # Brought in line with current evidence (November 2026): the source of each change is named beside it in EVIDENCE
     replace_text(chapters, EVIDENCE)
 
     guide = {
@@ -579,10 +581,10 @@ def main():
                    "у п. 4.8 і 14.4 замість чат-ботів і Telegram-каналів — офіційні сайти, застосунки й способи, які називає ОВА "
                    "(застосунок не радить Telegram); у п. 13.1 і 18.1 замість maps.me — CoMaps, Organic Maps або OsmAnd; у таблиці п. 6.2 "
                    "дози для дітей замінено відсилкою до офіційного оголошення МОЗ або лікаря, а в п. 7.13 дозу активованого вугілля "
-                   "для дітей — відсилкою до 103 або лікаря (дози для дітей у застосунку — лише після рецензії педіатра). "
+                   "для дітей — відсилкою до 103 або лікаря (доза для дитини залежить від ваги й препарату, тож її називає 103, лікар або інструкція). "
                    "У листопаді 2026 року поради звірено з чинними настановами й правилами (Resuscitation Council UK і ERC 2025, наказ МОЗ № 441, "
                    "NHS, USDA, ВООЗ, постанова КМУ № 1092) і виправлено в п. 3.3, 3.4, 6.2, 7.1, 7.2, 7.4–7.6, 7.8, 7.10, 7.11, 7.16, 9.4, 12.1–12.3, 13.2, 16.2, 18.3, 20.1, 20.5, "
-                   "21.2, 21.4, 22.5, 23.3, 26.1, 27.5, 29.4 і 30.5; кожна зміна з джерелом — у файлі scripts/content/adaptation/GUIDE-REVIEW.md сховища застосунку.",
+                   "21.2, 21.4, 22.5, 23.3, 26.1, 27.5, 29.4 і 30.5; джерело кожної зміни названо біля неї у файлі scripts/build_guide.py сховища застосунку.",
         "chapters": chapters,
     }
     os.makedirs(args.out, exist_ok=True)
