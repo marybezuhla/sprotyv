@@ -44,6 +44,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.foundation.layout.Spacer
@@ -171,7 +172,7 @@ private const val MAX_LONG = 2000
 
 /** The medical card: what rescuers and doctors need to know when the owner cannot tell them. */
 @Composable
-fun MedicalScreen() {
+fun MedicalScreen(nav: Nav) {
     val start = when (val l = rememberRead { it.medical().get() ?: MedicalCard() }) {
         Loaded.Waiting -> return Loading()
         Loaded.Failed -> return ReadFailed()
@@ -208,12 +209,16 @@ fun MedicalScreen() {
         if (ice.isEmpty()) Text(stringResource(R.string.ice_none), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         // A tap opens the dialler with the number, as the 112 button does
         val context = androidx.compose.ui.platform.LocalContext.current
+        val callLabel = stringResource(R.string.call_action)
         ice.forEach { p ->
-            TextButton(onClick = { ua.sprotyv.reach.Reach.dial(context, p.phone) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp), contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 0.dp)) {
+            TextButton(onClick = { ua.sprotyv.reach.Reach.dial(context, p.phone) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
+                .semantics { onClick(callLabel) { ua.sprotyv.reach.Reach.dial(context, p.phone); true } }, contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 0.dp)) {
                 Text("${p.name} · ${p.phone}", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.fillMaxWidth())
             }
         }
     }
+    // The same card as a QR code for rescuers, one tap away
+    OutlinedButton(onClick = { nav.go(Route.Mine(MinePart.RESCUER)) }, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.rescuer_show)) }
 }
 
 /**
@@ -580,7 +585,7 @@ private fun SafeStatusCards(status: SafeStatus?, onPick: (SafeStatus) -> Unit) {
                 // "All is well" green, "I need help" danger orange, "cannot talk" neutral
                 containerColor = if (!on) MaterialTheme.colorScheme.surface else safeTint(st).container,
             ),
-            border = BorderStroke(if (on) 2.dp else 1.dp, if (on) safeTint(st).ink else MaterialTheme.colorScheme.outlineVariant),
+            border = BorderStroke(if (on) 2.dp else 1.dp, if (on) safeTint(st).ink else MaterialTheme.colorScheme.outline),
             modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).semantics { selected = on; role = androidx.compose.ui.semantics.Role.RadioButton },
         ) {
             Row(Modifier.padding(horizontal = 16.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically) {

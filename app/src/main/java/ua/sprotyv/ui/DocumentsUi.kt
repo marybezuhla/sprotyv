@@ -456,7 +456,7 @@ private fun DocViewer(info: DocInfo, onClose: () -> Unit) {
 
 /** A picture that can be pinched larger, to read small print; moved only within its own edges. */
 @Composable
-private fun Zoomable(bitmap: androidx.compose.ui.graphics.ImageBitmap, description: String?) {
+internal fun Zoomable(bitmap: androidx.compose.ui.graphics.ImageBitmap, description: String?) {
     var scale by remember { mutableFloatStateOf(1f) }
     var dx by remember { mutableFloatStateOf(0f) }
     var dy by remember { mutableFloatStateOf(0f) }
@@ -520,11 +520,13 @@ private fun PdfPages(bytes: ByteArray) {
     var large by remember { mutableStateOf<Int?>(null) }
     LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         items(d.pages) { i ->
-            val page by produceState<Bitmap?>(null, i, widthPx) { value = withContext(Dispatchers.Default) { d.render(i, widthPx.coerceAtMost(1600)) } }
+            // A page that cannot be drawn (too little memory) says so instead of loading for ever
+            var pageFailed by remember(i) { mutableStateOf(false) }
+            val page by produceState<Bitmap?>(null, i, widthPx) { value = withContext(Dispatchers.Default) { d.render(i, widthPx.coerceAtMost(1600)) }.also { pageFailed = it == null } }
             val label = stringResource(R.string.docs_page, i + 1, d.pages)
             page?.let {
                 Image(it.asImageBitmap(), contentDescription = label, modifier = Modifier.fillMaxWidth().clickable(onClickLabel = stringResource(R.string.docs_zoom)) { large = i })
-            } ?: Loading()
+            } ?: if (pageFailed) Text(stringResource(R.string.docs_failed), modifier = Modifier.padding(16.dp)) else Loading()
         }
     }
     large?.let { i ->
@@ -534,9 +536,11 @@ private fun PdfPages(bytes: ByteArray) {
             Surface(Modifier.fillMaxSize()) {
                 Column(Modifier.statusBarsPadding().navigationBarsPadding()) {
                     TextButton(onClick = { large = null }, modifier = Modifier.align(Alignment.End).padding(8.dp).heightIn(min = 48.dp)) { Text(stringResource(R.string.back)) }
-                    val big by produceState<Bitmap?>(null, i, widthPx) { value = withContext(Dispatchers.Default) { d.render(i, (widthPx * 2).coerceAtMost(2800)) } }
+                    var bigFailed by remember(i) { mutableStateOf(false) }
+                    val big by produceState<Bitmap?>(null, i, widthPx) { value = withContext(Dispatchers.Default) { d.render(i, (widthPx * 2).coerceAtMost(2800)) }.also { bigFailed = it == null } }
                     Column(Modifier.weight(1f)) {
-                        big?.let { Zoomable(it.asImageBitmap(), stringResource(R.string.docs_page, i + 1, d.pages)) } ?: Loading()
+                        big?.let { Zoomable(it.asImageBitmap(), stringResource(R.string.docs_page, i + 1, d.pages)) }
+                            ?: if (bigFailed) Text(stringResource(R.string.docs_failed), modifier = Modifier.padding(16.dp)) else Loading()
                     }
                 }
             }
@@ -546,6 +550,9 @@ private fun PdfPages(bytes: ByteArray) {
 
 /** About 4000 × 4000 at most for one drawn picture (a page or a photo): sharp enough to zoom, well under Android's limit. */
 private const val MAX_PIXELS = 16_000_000L
+
+/** One drawn PDF page at most: 8 million pixels. */
+private const val PAGE_PIXELS = 8_000_000L
 
 /** memfd_create's own close-on-exec flag (Linux MFD_CLOEXEC; not O_CLOEXEC). */
 private const val MFD_CLOEXEC = 1
@@ -559,11 +566,11 @@ private class PdfDoc private constructor(private val renderer: PdfRenderer) {
         if (closed) return null
         try {
             renderer.openPage(i).use { p ->
-                // At most 16 million pixels (a long page is drawn narrower), far below what Android can draw
+                // At most 8 million pixels, about 32 MB (a long page is drawn narrower): room to spare on a small phone
                 var w = width
                 var h = (w.toFloat() * p.height / p.width).toInt().coerceAtLeast(1)
-                if (w.toLong() * h > MAX_PIXELS) {
-                    val k = kotlin.math.sqrt(MAX_PIXELS.toDouble() / (w.toLong() * h))
+                if (w.toLong() * h > PAGE_PIXELS) {
+                    val k = kotlin.math.sqrt(PAGE_PIXELS.toDouble() / (w.toLong() * h))
                     w = (w * k).toInt().coerceAtLeast(1); h = (h * k).toInt().coerceAtLeast(1)
                 }
                 Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888).also {

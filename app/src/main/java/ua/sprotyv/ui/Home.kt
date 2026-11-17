@@ -46,8 +46,9 @@ import ua.sprotyv.reach.Reach
 
 /** "Call 112" at once; the other services one tap further. On every screen, unless turned off. */
 @Composable
-fun CallBar(edge: Boolean = true) {
-    val shown = HomePrefs.state.collectAsState().value?.callBar ?: false
+fun CallBar(edge: Boolean = true, always: Boolean = false) {
+    // [always]: the first screen, before anything is chosen, has 112 too
+    val shown = always || (HomePrefs.state.collectAsState().value?.callBar ?: false)
     var others by rememberSaveable { mutableStateOf(false) }
     if (!shown) {
         // No bar: the edge still keeps clear of the system bar

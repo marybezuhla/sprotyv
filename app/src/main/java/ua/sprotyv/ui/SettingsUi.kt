@@ -272,6 +272,8 @@ internal fun TripToggle(on: Boolean) {
                     HomePrefs.update(context) { it.copy(trip = true) }
                     // No plain copy of a shared document stays behind either
                     Docs.clearShared(context)
+                    // Nor what was typed for the medics about someone else
+                    HandoverDraft.clear()
                 }) { Text(stringResource(R.string.trip_confirm_yes)) }
             },
             dismissButton = { androidx.compose.material3.TextButton(onClick = { ask = false }) { Text(stringResource(R.string.cancel)) } },

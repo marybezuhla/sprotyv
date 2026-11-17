@@ -1,6 +1,10 @@
 package ua.sprotyv.ui
 
 import android.graphics.Bitmap
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -284,14 +288,31 @@ fun FigureView(f: Block.Figure) {
             val bitmap by produceState<Bitmap?>(null, name) {
                 value = withContext(Dispatchers.IO) { Content.picture(context, name) }
             }
+            // Turned sideways the drawing keeps to a part of the screen, so the step's buttons stay in view;
+            // a tap opens it on the whole screen, to pinch the small labels larger
+            val window = androidx.compose.ui.platform.LocalWindowInfo.current.containerSize
+            val sideways = window.width > window.height
+            var open by remember(name) { mutableStateOf(false) }
             bitmap?.let {
                 Image(
                     bitmap = it.asImageBitmap(),
                     // The caption below says what it shows; reading it twice helps no one
                     contentDescription = if (f.caption.isBlank()) stringResource(R.string.figure) else null,
-                    contentScale = ContentScale.FillWidth,
-                    modifier = Modifier.fillMaxWidth().background(PaperWhite, RoundedCornerShape(8.dp)).padding(8.dp),
+                    contentScale = if (sideways) ContentScale.Fit else ContentScale.FillWidth,
+                    modifier = Modifier.fillMaxWidth().then(if (sideways) Modifier.heightIn(max = 240.dp) else Modifier)
+                        .background(PaperWhite, RoundedCornerShape(8.dp))
+                        .clickable(onClickLabel = stringResource(R.string.docs_zoom)) { open = true }.padding(8.dp),
                 )
+                if (open) androidx.compose.ui.window.Dialog(onDismissRequest = { open = false }, properties = androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth = false)) {
+                    androidx.compose.material3.Surface(Modifier.fillMaxSize(), color = PaperWhite) {
+                        Column(Modifier.statusBarsPadding().navigationBarsPadding()) {
+                            androidx.compose.material3.TextButton(onClick = { open = false }, modifier = Modifier.align(Alignment.End).padding(8.dp).heightIn(min = 48.dp)) {
+                                Text(stringResource(R.string.back), color = androidx.compose.ui.graphics.Color(0xFF1B1B1F))
+                            }
+                            Column(Modifier.weight(1f)) { Zoomable(it.asImageBitmap(), f.caption.ifBlank { null }) }
+                        }
+                    }
+                }
             }
         }
         if (f.caption.isNotBlank()) {
@@ -376,10 +397,17 @@ fun SearchScreen(content: Content?, nav: Nav) {
 /** A screen of the app found by search; [words] in both languages, lower case. */
 private class SearchTool(val title: Int, val route: Route, vararg val words: String)
 
-/** At least three letters, the start of a word ("впо", "перес"), or a word typed in full ("впо 2026"). */
+/**
+ * At least three letters. The query begins a key word ("перес" → «переселен»), or one of its words is a
+ * short key word in full ("впо", not «впорядкувати») or begins with a longer one («переселенці»).
+ * In trip mode the screens it hides are not offered.
+ */
 private fun toolMatches(t: SearchTool, query: String): Boolean {
     val q = query.trim().lowercase()
-    return q.length >= 3 && t.words.any { w -> w.startsWith(q) || q.startsWith(w) }
+    if (q.length < 3) return false
+    if (HomePrefs.state.value?.trip == true && Trip.hides(t.route)) return false
+    val words = q.split(Regex("\\s+"))
+    return t.words.any { w -> w.startsWith(q) || (w.contains(' ') && q.startsWith(w)) || words.any { k -> if (w.length <= 3) k == w else k.startsWith(w) } }
 }
 
 private val SEARCH_TOOLS = listOf(

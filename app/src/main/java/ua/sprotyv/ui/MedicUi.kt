@@ -99,10 +99,15 @@ private fun helperName(h: Int) = if (h == 0) stringResource(R.string.delegate_me
 fun HandoverScreen(nav: Nav) {
     val context = LocalContext.current
     val res = LocalResources.current
-    var when_ by remember { mutableStateOf<Long?>(null) }
-    var what by remember { mutableStateOf("") }
-    var notes by remember { mutableStateOf("") }
-    val done = remember { mutableStateListOf<Pair<Int, Long>>() }
+    // Kept in memory while the app runs: a turn of the phone or a look at the QR code loses nothing
+    remember { HandoverDraft.freshen() }
+    var when_ by HandoverDraft.when_
+    var what by HandoverDraft.what
+    var notes by HandoverDraft.notes
+    val done = HandoverDraft.done
+    // Only a change keeps the draft: opening the screen does not
+    var opened by remember { mutableStateOf(false) }
+    androidx.compose.runtime.LaunchedEffect(when_, what, notes, done.toList()) { if (opened) HandoverDraft.touch() else opened = true }
     // The tourniquet times count on while the screen is open
     var minute by remember { mutableStateOf(System.currentTimeMillis() / 60_000) }
     androidx.compose.runtime.LaunchedEffect(Unit) { while (true) { kotlinx.coroutines.delay(20_000); minute = System.currentTimeMillis() / 60_000 } }
@@ -154,6 +159,32 @@ fun HandoverScreen(nav: Nav) {
         Text(stringResource(R.string.handover_kept_nowhere), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
     }
+}
+
+/**
+ * What is typed for the medics, in memory only (never on disk: it is about another person). It
+ * outlives the screen while the app runs, is started afresh 12 hours after the last change, and is cleared
+ * when trip mode is turned on.
+ */
+internal object HandoverDraft {
+    val when_ = mutableStateOf<Long?>(null)
+    val what = mutableStateOf("")
+    val notes = mutableStateOf("")
+    val done = mutableStateListOf<Pair<Int, Long>>()
+    private var touched = 0L
+
+    /** Started afresh when nothing was typed or ticked for 12 hours; true if it was. */
+    fun freshen(): Boolean {
+        val old = System.currentTimeMillis() - touched > 12 * 60 * 60_000L
+        if (old) clear()
+        return old
+    }
+
+    /** Something was typed or ticked. */
+    fun touch() { touched = System.currentTimeMillis() }
+
+    /** Gone at once: trip mode is turned on. */
+    fun clear() { when_.value = null; what.value = ""; notes.value = ""; done.clear() }
 }
 
 private val HANDOVER_ACTIONS = listOf(

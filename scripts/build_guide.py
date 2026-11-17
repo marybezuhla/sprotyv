@@ -137,6 +137,12 @@ EVIDENCE = [
 ]
 
 
+# Words inside the figures' drawings: 7.1, a tourniquet 5–7 cm above the wound (MOZ order 441, procedure 4)
+FIGURE_TEXT = [
+    ("5–8 см вище рани (ближче до тулуба)", "5–7 см вище рани (ближче до тулуба)"),
+]
+
+
 def replace_text(chapters, pairs):
     """Exact replacements in the text, everywhere; each must be found at least once, or the script stops."""
     blob = json.dumps(chapters, ensure_ascii=False)
@@ -374,6 +380,9 @@ class Builder:
         walk(node)
         names = []
         for svg in svgs:
+            # Words inside drawings that were brought in line with current evidence (GUIDE-REVIEW.md)
+            for old, new in FIGURE_TEXT:
+                svg = svg.replace(old, new)
             digest = hashlib.sha256(svg.encode("utf-8")).hexdigest()[:16]
             name = f"fig_{digest}"
             self.figures[name] = svg

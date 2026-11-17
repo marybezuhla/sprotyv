@@ -1,5 +1,6 @@
 package ua.sprotyv.ui
 
+import androidx.compose.runtime.collectAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -60,7 +61,11 @@ private fun pick(all: List<ua.sprotyv.content.Practice>, t: Topic) =
 fun PracticeScreen(content: Content?, cardId: String, nav: Nav, check: String? = null) {
     // No card or theme given: the choice of what to practise
     if (cardId.isEmpty() && check == null) return PracticeChoice(content, nav)
-    Frame(stringResource(if (check != null) R.string.path_check else R.string.practice_title), nav::back) {
+    // A child's game has the child's own call buttons, as the child's cards do
+    val kidGame = cardId.startsWith("kid-")
+    val trip = HomePrefs.state.collectAsState().value?.trip == true
+    Frame(stringResource(if (check != null) R.string.path_check else R.string.practice_title), nav::back, corner = !kidGame,
+        bottom = if (!kidGame) null else ({ KidCallBar(onFamily = if (trip) null else ({ nav.go(Route.Mine(MinePart.KID_CALL)) })) })) {
         if (content == null) return@Frame Loading()
         val topic = TOPICS.firstOrNull { "topic:" + it.id == cardId }
         val practiceCtx = androidx.compose.ui.platform.LocalContext.current

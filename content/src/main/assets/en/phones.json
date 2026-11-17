@@ -56,11 +56,20 @@
  {
   "id": "ev-east-sos",
   "category": "evacuation",
-  "title": "East SOS: evacuation",
+  "title": "Vostok SOS: evacuation",
   "note": "Evacuation requests, including people with limited mobility; help for displaced people. Mon–Sat 08:00–18:00, free.",
   "number": "0800332614",
   "source": "https://east-sos.org/directions/call-center/",
   "checkedOn": "2026-11-03"
+ },
+ {
+  "id": "ev-203",
+  "category": "evacuation",
+  "title": "Coordination Humanitarian Centre: evacuation",
+  "note": "Evacuation requests from Donetsk region. Short number, free.",
+  "number": "203",
+  "source": "https://dn.gov.ua/en/news/koordynatsiinyi-humanitarnyi-tsentr-pryimaie-zaiavky-na-evakuatsiiu-z-donetskoi-oblasti-za-nomerom-203",
+  "checkedOn": "2026-11-17"
  },
  {
   "id": "ev-uz",

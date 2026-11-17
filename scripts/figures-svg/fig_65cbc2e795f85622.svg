@@ -15,7 +15,7 @@
   
   <line x1="176" y1="140" x2="277" y2="140" stroke="#2e7d32" stroke-width="2" marker-end="url(#ga)" marker-start="url(#ga)"/>
   <defs><marker id="ga" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><circle cx="4" cy="4" r="3" fill="#2e7d32"/></marker></defs>
-  <text x="180" y="156" font-family="DejaVu Sans" font-size="10" fill="#2e7d32">5–8 см вище рани (ближче до тулуба)</text>
+  <text x="180" y="156" font-family="DejaVu Sans" font-size="10" fill="#2e7d32">5–7 см вище рани (ближче до тулуба)</text>
   <text x="392" y="80" font-family="DejaVu Sans" font-size="10" fill="#333">НЕ на суглоб,</text>
   <text x="392" y="94" font-family="DejaVu Sans" font-size="10" fill="#333">НЕ поверх</text>
   <text x="392" y="108" font-family="DejaVu Sans" font-size="10" fill="#333">предметів</text>

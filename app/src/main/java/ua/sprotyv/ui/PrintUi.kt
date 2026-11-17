@@ -524,13 +524,23 @@ private fun warning(code: String): Int = when (code) {
     else -> R.string.scan_warn_many_parts
 }
 
-/** Copies text, marked as sensitive so Android does not show it in the clipboard preview. */
+/** Copies text, marked as sensitive so Android does not show it, and takes it off the clipboard after a minute. */
 private fun copy(context: Context, text: String) {
     val clip = ClipData.newPlainText("", text)
-    if (Build.VERSION.SDK_INT >= 33) {
-        clip.description.extras = PersistableBundle().apply { putBoolean(ClipDescription.EXTRA_IS_SENSITIVE, true) }
+    val mark = System.nanoTime()
+    clip.description.extras = PersistableBundle().apply {
+        if (Build.VERSION.SDK_INT >= 33) putBoolean(ClipDescription.EXTRA_IS_SENSITIVE, true)
+        putLong("ua.sprotyv.copy", mark)
     }
-    context.getSystemService(ClipboardManager::class.java)?.setPrimaryClip(clip)
+    val manager = context.getSystemService(ClipboardManager::class.java) ?: return
+    manager.setPrimaryClip(clip)
+    android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+        try {
+            if (manager.primaryClipDescription?.extras?.getLong("ua.sprotyv.copy") == mark) manager.clearPrimaryClip()
+        } catch (e: Exception) {
+            // Out of reach on this phone: the copy stays as it was
+        }
+    }, 60_000)
 }
 
 /** The camera writes here (the app's own cache), and the photo is deleted right after reading. */

@@ -75,6 +75,8 @@ object Wipe {
             Widgets.blank(app)
             // The long-press shortcuts (now, I am safe, tourniquet) go too: nothing of the app is left set up
             app.getSystemService(android.content.pm.ShortcutManager::class.java)?.removeAllDynamicShortcuts()
+            // Whatever was copied from the app goes too
+            app.getSystemService(android.content.ClipboardManager::class.java)?.clearPrimaryClip()
         } catch (e: Exception) {
             // Whatever failed here, the files below are erased and the app closes all the same
         }

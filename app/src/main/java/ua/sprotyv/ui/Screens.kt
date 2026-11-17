@@ -168,11 +168,30 @@ fun NoKeyboardLearning(content: @Composable () -> Unit) {
     }
 }
 
-/** The phone's clipboard, with every copy marked sensitive (the key is the same string on Android 12 and 13+). */
+/**
+ * The phone's clipboard, with every copy marked sensitive (the key is the same string on Android 12 and 13+),
+ * and taken off it again after a minute if nothing else was copied meanwhile.
+ */
 private class SensitiveClipboard(private val inner: androidx.compose.ui.platform.Clipboard) : androidx.compose.ui.platform.Clipboard by inner {
     override suspend fun setClipEntry(clipEntry: androidx.compose.ui.platform.ClipEntry?) {
-        clipEntry?.clipData?.description?.extras = android.os.PersistableBundle().apply { putBoolean("android.content.extra.IS_SENSITIVE", true) }
+        val mark = System.nanoTime()
+        clipEntry?.clipData?.description?.extras = android.os.PersistableBundle().apply {
+            putBoolean("android.content.extra.IS_SENSITIVE", true)
+            putLong(OURS, mark)
+        }
         inner.setClipEntry(clipEntry)
+        val manager = inner.nativeClipboard
+        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+            try {
+                if (manager.primaryClipDescription?.extras?.getLong(OURS) == mark) manager.clearPrimaryClip()
+            } catch (e: Exception) {
+                // The clipboard is out of reach (another app in front on some phones): it stays as it was
+            }
+        }, 60_000)
+    }
+
+    companion object {
+        const val OURS = "ua.sprotyv.copy"
     }
 }
 

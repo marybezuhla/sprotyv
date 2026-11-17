@@ -129,7 +129,7 @@ class PersonalScreensTest {
     @Test fun roles() = shot("43-roles-dark", dark = true) { Frame("Хто я зараз", {}) { RolesScreen(nav) } }
     @Test fun roleVolunteer() = shot("44-role-volunteer-dark", dark = true) { Frame("Волонтерю", {}) { RoleScreen(ROLES.getValue("volunteer"), content, nav) } }
     @Test fun roleDobro() = shot("44-role-dobro") { Frame("Доброволець / доброволиця", {}) { RoleScreen(ROLES.getValue("dobro"), content, nav) } }
-    @Test fun medical() = shot("45-medical-dark", dark = true) { Frame("Медкартка", {}) { MedicalScreen() } }
+    @Test fun medical() = shot("45-medical-dark", dark = true) { Frame("Медкартка", {}) { MedicalScreen(nav) } }
     @Test fun people() = shot("46-people") { Frame("Довірені люди", {}) { PeopleScreen() } }
     @Test fun plan() = shot("47-plan-dark", dark = true) { Frame("План родини", {}) { PlanScreen() } }
     @Test fun kit() = shot("48-kit-dark", dark = true) { Frame("Тривожна валіза", {}) { KitScreen(content, nav) } }
@@ -140,6 +140,6 @@ class PersonalScreensTest {
     @Test fun shields() = shot("53-shields-dark", dark = true) { Frame("Мої щити", {}) { ShieldsScreen() } }
     @Test fun shieldsLight() = shot("53-shields") { Frame("Мої щити", {}) { ShieldsScreen() } }
     @Test fun shieldsBig() = shot("53-shields-big", big = true) { Frame("Мої щити", {}) { ShieldsScreen(openGroups = true) } }
-    @Test fun medicalBig() = shot("45-medical-big", big = true) { Frame("Медкартка", {}) { MedicalScreen() } }
+    @Test fun medicalBig() = shot("45-medical-big", big = true) { Frame("Медкартка", {}) { MedicalScreen(nav) } }
     @Test fun shieldsOpen() = shot("53-shields-open-dark", dark = true) { Frame("Мої щити", {}) { ShieldsScreen(openGroups = true) } }
 }

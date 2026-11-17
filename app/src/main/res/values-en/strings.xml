@@ -35,7 +35,7 @@
     <string name="key_lost_title">Your saved data cannot be opened</string>
     <string name="key_lost_text">The key to it is no longer on this phone, for example after a reset or damage to the key file. The guide, cards and calls work as usual. A fresh start sets the old data aside on the phone without deleting it, but Sprotyv will not be able to open it again. To get them back, start afresh and restore a backup: My data → Backup. This also happens after the screen lock was removed.</string>
     <string name="key_lost_fresh">Start fresh</string>
-    <string name="key_lost_fresh_confirm">Set the old data aside and start fresh? Sprotyv will not be able to open the old data.</string>
+    <string name="key_lost_fresh_confirm">Set the old data aside and start fresh? Sprotyv will not open it again, but an encrypted copy stays on the phone until you erase all data in settings.</string>
     <string name="key_lost_keep">Not now</string>
     <string name="damaged_title">Your data would not open</string>
     <string name="damaged_text">The key fits, but the data itself would not open, for example after a failed update. Nothing was deleted. Try again. If it keeps failing, you can set the old data aside and start fresh.</string>
@@ -195,6 +195,8 @@
     <string name="safe_each">To each person</string>
     <string name="rescuer_screen">Code for rescuers</string>
     <string name="rescuer_hint">Blood group, allergies, medicines, contact as a QR code</string>
+    <string name="rescuer_show">Show the code for rescuers</string>
+    <string name="call_action">Call</string>
     <string name="rescuer_title">MEDICAL INFORMATION</string>
     <string name="rescuer_intro">Only what helps in the first minutes, without your name or date of birth. Any phone camera reads this code; no app is needed.</string>
     <string name="rescuer_qr_desc">QR code with your key medical facts</string>
@@ -410,6 +412,7 @@
     <string name="kid_setup_lock">Done, lock with the PIN</string>
     <string name="kid_setup_later">Done, no lock</string>
     <string name="kid_grown_up">For grown-ups</string>
+    <string name="kid_grown_up_hold">For grown-ups: hold for 3 seconds</string>
     <string name="kid_call_family">Call my family</string>
     <string name="kid_call_112">112</string>
     <string name="kid_call_none">No numbers here yet. Ask a grown-up to add them.</string>
@@ -841,7 +844,7 @@
     <string name="handover_tap">Tap when done: the time is noted by itself.</string>
     <string name="handover_notes">Anything else important (allergies, medicines, how the condition changed)</string>
     <string name="handover_qr">Show the crew as a QR code</string>
-    <string name="handover_kept_nowhere">Notes about another person are kept nowhere: close the screen and they are gone.</string>
+    <string name="handover_kept_nowhere">Notes about another person are never saved on the phone: they stay in memory only while the app runs, and are gone after 12 hours without changes or when trip mode is turned on.</string>
     <string name="handover_a_pressure">Pressure on the wound</string>
     <string name="handover_a_dressing">Pressure dressing</string>
     <string name="handover_a_cpr">CPR started</string>
@@ -989,7 +992,7 @@
     <string name="widget_kit_open">Tap to open</string>
     <string name="widget_kid_siren">Siren</string>
     <string name="widget_kid_fire">Fire</string>
-    <string name="widget_kid_lost">I don’t know where I am</string>
+    <string name="widget_kid_lost">I can’t see my family</string>
     <string name="widget_kid_call">Family</string>
     <string name="shortcut_now">What to do</string>
     <string name="shortcut_safe">I am safe</string>

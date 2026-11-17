@@ -103,7 +103,10 @@ fun App() {
     }
     val personal by PersonalStore.state.collectAsState()
 
-    val nav = appNav(context, content, stack, trip) { saved = it }
+    // One Nav for the screen's life, reading the stack as it is now: a step taken later (after a post or a
+    // dialog) never brings back a screen that was closed meanwhile
+    val stackNow by androidx.compose.runtime.rememberUpdatedState(stack)
+    val nav = remember(content, trip) { appNav(context, content, { stackNow }, trip) { saved = it } }
 
     // What runs after the PIN (or at once when settings are not locked)
     fun perform(action: String) {
@@ -240,7 +243,7 @@ private fun FullTabs(tab: Tab, onTab: (Tab) -> Unit, prefs: HomePrefs.State, con
 }
 
 /** Moving between screens: the back stack as text ([setSaved]), with trip mode and unsaved words checked first. */
-private fun appNav(context: android.content.Context, content: Content?, stack: List<Route>, trip: Boolean, setSaved: (List<String>) -> Unit): Nav {
+private fun appNav(context: android.content.Context, content: Content?, stack: () -> List<Route>, trip: Boolean, setSaved: (List<String>) -> Unit): Nav {
     return object : Nav {
         override fun go(route: Route) {
             // An outside source opens outside Sprotyv; nothing is added to the back stack
@@ -259,13 +262,13 @@ private fun appNav(context: android.content.Context, content: Content?, stack: L
             // Something typed and not saved (a notification or a share may lead away): ask first.
             // Never before help in danger: a card or "what to do now" opens at once
             if (EditGuard.isDirty && route !is Route.CardRoute && route !is Route.Open && route !is Route.Moz) { EditGuard.then = route; EditGuard.asking = true; return }
-            setSaved(stack.map(Route::save) + route.save())
+            setSaved(stack().map(Route::save) + route.save())
         }
         // Built from what could be read, so an unreadable entry never makes Back look stuck
         override fun back() {
             // Something typed and not saved: ask first
             if (EditGuard.isDirty) { EditGuard.asking = true; return }
-            setSaved(stack.dropLast(1).map(Route::save))
+            setSaved(stack().dropLast(1).map(Route::save))
         }
         override fun home() {
             if (EditGuard.isDirty) { EditGuard.then = Route.Open(Section.NOW); EditGuard.goHome = true; EditGuard.asking = true; return }
@@ -273,7 +276,7 @@ private fun appNav(context: android.content.Context, content: Content?, stack: L
         }
         override fun replace(route: Route) {
             if (trip && Trip.hides(route)) return
-            setSaved(stack.dropLast(1).map(Route::save) + route.save())
+            setSaved(stack().dropLast(1).map(Route::save) + route.save())
         }
     }
 }
@@ -340,7 +343,7 @@ private fun Screen(
 @Composable
 private fun MineScreen(part: MinePart, content: Content?, prefs: HomePrefs.State, personal: ua.sprotyv.personal.Opened?, nav: Nav) {
     when (part) {
-        MinePart.MEDICAL -> Personal(R.string.medical_card, personal, nav) { MedicalScreen() }
+        MinePart.MEDICAL -> Personal(R.string.medical_card, personal, nav) { MedicalScreen(nav) }
         MinePart.PEOPLE -> Personal(R.string.people, personal, nav) { PeopleScreen() }
         MinePart.PLAN -> Personal(R.string.family_plan, personal, nav) { PlanScreen() }
         MinePart.KIT -> Personal(R.string.kit, personal, nav) { KitScreen(content, nav) }

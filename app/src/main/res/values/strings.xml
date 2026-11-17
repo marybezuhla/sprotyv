@@ -35,7 +35,7 @@
     <string name="key_lost_title">Збережені дані не відкриваються</string>
     <string name="key_lost_text">Ключа до них більше немає на цьому телефоні, наприклад після скидання налаштувань або пошкодження файлу ключа. Довідник, картки й дзвінки працюють як звичайно. Якщо почати з нуля, старі дані залишаться відкладеними на телефоні, нічого не видаляється, але відкрити їх «Спротив» уже не зможе. Щоб повернути їх, почніть з нуля й відновіть резервну копію: «Моє» → «Резервна копія». Так буває й після зняття блокування екрана.</string>
     <string name="key_lost_fresh">Почати з нуля</string>
-    <string name="key_lost_fresh_confirm">Відкласти старі дані й почати з нуля? Відкрити старі дані «Спротив» уже не зможе.</string>
+    <string name="key_lost_fresh_confirm">Відкласти старі дані й почати з нуля? «Спротив» їх більше не відкриє, але зашифрована копія лишиться на телефоні, доки ви не зітрете всі дані в налаштуваннях.</string>
     <string name="key_lost_keep">Не зараз</string>
     <string name="damaged_title">Дані не відкрилися</string>
     <string name="damaged_text">Ключ підходить, але самі дані не відкрилися, наприклад після невдалого оновлення. Нічого не видалено. Спробуйте ще раз. Якщо не допоможе, старі дані можна відкласти й почати з нуля.</string>
@@ -195,6 +195,8 @@
     <string name="safe_each">Кожному окремо</string>
     <string name="rescuer_screen">Код для рятувальників</string>
     <string name="rescuer_hint">Група крові, алергії, ліки, контакт у QR-коді</string>
+    <string name="rescuer_show">Показати код для рятувальників</string>
+    <string name="call_action">Подзвонити</string>
     <string name="rescuer_title">МЕДИЧНІ ДАНІ</string>
     <string name="rescuer_intro">Лише те, що допоможе в перші хвилини, без імені й дати народження. Цей код прочитає камера будь-якого телефона, застосунок не потрібен.</string>
     <string name="rescuer_qr_desc">QR-код із головними медичними даними</string>
@@ -410,6 +412,7 @@
     <string name="kid_setup_lock">Готово, захистити PIN-кодом</string>
     <string name="kid_setup_later">Готово, без захисту</string>
     <string name="kid_grown_up">Для дорослих</string>
+    <string name="kid_grown_up_hold">Для дорослих: утримуйте 3 секунди</string>
     <string name="kid_call_family">Подзвонити своїм</string>
     <string name="kid_call_112">112</string>
     <string name="kid_call_none">Тут ще немає номерів. Попроси дорослого додати їх.</string>
@@ -849,7 +852,7 @@
     <string name="handover_tap">Торкніться, коли зробили: час запишеться сам.</string>
     <string name="handover_notes">Що ще важливо (алергії, ліки, як змінювався стан)</string>
     <string name="handover_qr">Показати бригаді QR-кодом</string>
-    <string name="handover_kept_nowhere">Записи про іншу людину ніде не зберігаються: щойно закриєте екран, їх не стане.</string>
+    <string name="handover_kept_nowhere">Записи про іншу людину не зберігаються на телефоні: вони лише в пам\'яті, поки застосунок працює, і зникають через 12 годин без змін або коли вмикаєте режим поїздки.</string>
     <string name="handover_a_pressure">Тиск на рану</string>
     <string name="handover_a_dressing">Тиснуча пов’язка</string>
     <string name="handover_a_cpr">Почато СЛР</string>
@@ -997,7 +1000,7 @@
     <string name="widget_kit_open">Торкніться, щоб відкрити</string>
     <string name="widget_kid_siren">Сирена</string>
     <string name="widget_kid_fire">Вогонь</string>
-    <string name="widget_kid_lost">Не знаю, де я</string>
+    <string name="widget_kid_lost">Не бачу своїх</string>
     <string name="widget_kid_call">Своїм</string>
     <string name="shortcut_now">Що робити</string>
     <string name="shortcut_safe">Я в безпеці</string>
