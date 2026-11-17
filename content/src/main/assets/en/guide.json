@@ -9,7 +9,7 @@
  "source": "https://github.com/snegireff/dovidnyk-vyzhyvannia",
  "commit": "6a3c6fb6e7ecd160e864232d0f1a47cd928fe928",
  "license": "CC BY-SA 4.0",
- "changes": "Converted for display in the app: markup changed, figures kept as images, the sections of Appendix A numbered A.1–A.5, the cover disclaimer moved to “About the guide”, the rest of the cover, the contents and the note pages left out. Three figures from open sources added (public domain; author in the caption): fig. 11.2, 15.5, 15.6. English translation by Sprotyv from the Ukrainian original (CC BY-SA 4.0); the meaning of the chapters is unchanged, except: in 4.8 and 14.4 official websites, apps and ways named by the OVA instead of chatbots and Telegram channels (the app does not recommend Telegram); in 13.1 and 18.1 CoMaps, Organic Maps or OsmAnd instead of maps.me; in the table of 6.2 the doses for children replaced by a reference to the official Ministry of Health announcement or a doctor, and in 7.13 the activated charcoal dose for children by a reference to 103 or a doctor (a child's dose depends on weight and the medicine, so 103, a doctor or the leaflet gives it). In November 2026 the advice was checked against current guidelines and rules (Resuscitation Council UK and ERC 2025, Ministry of Health order No. 441, NHS, USDA, WHO, Cabinet of Ministers resolution No. 1092) and corrected in 3.3, 3.4, 6.2, 7.1, 7.2, 7.4–7.6, 7.8, 7.10, 7.11, 7.16, 9.4, 12.1–12.3, 13.2, 16.2, 18.3, 20.1, 20.5, 21.2, 21.4, 22.5, 23.3, 26.1, 27.5, 29.4 and 30.5; the source of each change is named beside it in scripts/build_guide.py in the app's repository.",
+ "changes": "Converted for display in the app: markup changed, figures kept as images, the sections of Appendix A numbered A.1–A.5, the cover disclaimer moved to “About the guide”, the rest of the cover, the contents and the note pages left out. Three figures from open sources added (public domain; author in the caption): fig. 11.2, 15.5, 15.6. English translation by Sprotyv from the Ukrainian original (CC BY-SA 4.0); the meaning of the chapters is unchanged, except: in 4.8 and 14.4 official websites, apps and ways named by the OVA instead of chatbots and Telegram channels (the app does not recommend Telegram); in 13.1 and 18.1 CoMaps, Organic Maps or OsmAnd instead of maps.me; in the table of 6.2 the doses for children replaced by a reference to the official Ministry of Health announcement or a doctor, and in 7.13 the activated charcoal dose for children by a reference to 103 or a doctor (a child's dose depends on weight and the medicine, so 103, a doctor or the leaflet gives it). In November 2026 the advice was checked against current guidelines and rules (Resuscitation Council UK and ERC 2025, Ministry of Health order No. 441, NHS, USDA, WHO, IOM, Cabinet of Ministers resolution No. 1092) and corrected in 3.3, 3.4, 4.1, 6.1, 6.2, 7.1, 7.2, 7.4–7.6, 7.8, 7.10, 7.11, 7.16, 9.4, 12.1–12.3, 13.2, 16.2, 17.8, 18.3, 18.5, 18.7, 20.1, 20.5, 21.2, 21.4, 22.5, 23.3, 26.1, 26.2, 27.5, 29.4, 29.5 and 30.5, with the wording of a few sentences; the source of each change is named beside it in scripts/build_guide.py in the app's repository.",
  "chapters": [
   {
    "id": "ch1",
@@ -1388,7 +1388,7 @@
          "cells": [
           "**Jet long-range** (“Geran-3/4/5”, “Banderol”, “Dan-M”/“Dan-T”)",
           "A turbine whistle instead of a “moped”, speed 300–700 km/h (2–4 times faster than an ordinary “Shahed”), warhead 50–130 kg",
-          "The main threat of winter 2026–2027: according to intelligence, up to 500 launches a day; harder to shoot down, the time from alert to impact is minutes, so a “drone” alert no longer means “there is time”",
+          "The main threat of winter 2026–2027: more and more of them are launched; harder to shoot down, the time from alert to impact is minutes, so a “drone” alert no longer means “there is time”",
           "1000+ km"
          ]
         },
@@ -1821,7 +1821,7 @@
          "text": "**Seal yourself in:** close windows, doors, ventilation, chimneys. Seal gaps with wet towels, tape, plastic sheeting."
         },
         {
-         "text": "**If you were outside:** take off your outer clothing BEFORE entering the living area, put it in a bag and take it far away. Take a shower with soap (do not scrub the skin hard), wash your hair without conditioner (it holds particles in)."
+         "text": "**If you were outside:** take off your outer clothing BEFORE entering the living area, put it in a bag and take it far away. Wash under a shower with soap (do not scrub the skin hard), wash your hair without conditioner (it holds particles in)."
         },
         {
          "text": "**Listen to official announcements** (battery radio). Do not go out until the authorities say so."
@@ -1888,7 +1888,7 @@
       },
       {
        "t": "p",
-       "text": "Taken once after a meal, washed down with water/milk/kysil (a thickened fruit drink). A repeat dose only on official instruction during a prolonged release. Later than 24 hours after the cloud has passed, potassium iodide is no longer taken. Potassium iodide protects only against radioactive iodine (nuclear power plant accident, nuclear explosion); it is not taken after a “dirty bomb”. Doses follow the Regulations on iodine prophylaxis (order of the Ministry of Health of Ukraine of 09.03.2021 No. 408); if the official announcement gives other doses, follow it."
+       "text": "Taken once after a meal, washed down with water/milk/kysil (a thickened fruit drink). A repeat dose only on official instruction during a prolonged release. Best 6 hours before radioactive iodine arrives; later than 8 hours after exposure begins, potassium iodide is not taken: it does harm by then (Ministry of Health). Potassium iodide protects only against radioactive iodine (nuclear power plant accident, nuclear explosion); it is not taken after a “dirty bomb”. Doses follow the Regulations on iodine prophylaxis (order of the Ministry of Health of Ukraine of 09.03.2021 No. 408); if the official announcement gives other doses, follow it."
       }
      ]
     },
@@ -4879,7 +4879,7 @@
      "blocks": [
       {
        "t": "p",
-       "text": "Crisis and displacement are a time when people are hunted: under the guise of \"volunteers\", \"employers\", \"free housing\". Victims include women with children abroad and men looking for work in Ukraine. Rules of the National Hotline on Countering Human Trafficking (**527** from a mobile, **0 800 107 527** from a landline or mobile, daily 7:00–22:00, free; abroad: IOM offices and the consulate):"
+       "text": "Crisis and displacement are a time when people are hunted: under the guise of \"volunteers\", \"employers\", \"free housing\". Victims include women with children abroad and men looking for work in Ukraine. Rules of the National Hotline on Countering Human Trafficking (**527** from a mobile, **0 800 505 501** from a landline, free; abroad: IOM offices and the consulate):"
       },
       {
        "t": "list",
@@ -5068,7 +5068,7 @@
          "head": false,
          "cells": [
           "Photos/videos of strike aftermath with the place and time, \"where it hit\"",
-          "The enemy assesses the hits and adjusts the next strike. If air defence, soldiers, military vehicles or a military site are in the frame, this means criminal liability (Art. 114-2 of the Criminal Code of Ukraine, 5–8 years, up to 12 if the consequences are grave); the SBU (Security Service of Ukraine) treats such posts as fire adjustment. Wait for the official announcement"
+          "The enemy assesses the hits and adjusts the next strike. If air defence, soldiers, military vehicles or a military site are in the frame, this means criminal liability (Art. 114-2 of the Criminal Code of Ukraine: 3 to 8 years, up to 12 in aggravated cases); the SBU (Security Service of Ukraine) treats such posts as fire adjustment. Wait for the official announcement"
          ]
         },
         {
@@ -5149,7 +5149,7 @@
          "text": "PMR446 walkie-talkies (sec. 14.4): family and neighbours, an agreed channel and times; no names or addresses on air."
         },
         {
-         "text": "Mesh messengers (Bridgefy, Briar) work over Bluetooth between phones at 10–30 m indoors (up to 100 m in open space). They are for a courtyard and a queue, not for a city."
+         "text": "Mesh messengers work over Bluetooth between phones at 10–30 m indoors (up to 100 m in open space). They are for a courtyard and a queue, not for a city. For anything sensitive use Briar, not Bridgefy: researchers broke its encryption."
         },
         {
          "text": "National roaming and satellite SOS: see sec. 14.4. A second SIM from another operator (or an eSIM) is cheap insurance."
@@ -7983,15 +7983,15 @@
         {
          "head": false,
          "cells": [
-          "One arm raised",
-          "All is well, don't wait"
+          "One arm up, the other down (the letter N)",
+          "No, no help needed"
          ]
         },
         {
          "head": false,
          "cells": [
           "Arms crossed above the head",
-          "No / don't come closer / danger ahead"
+          "Don't come closer / danger ahead (to a pilot: \"do not land here\")"
          ]
         },
         {
