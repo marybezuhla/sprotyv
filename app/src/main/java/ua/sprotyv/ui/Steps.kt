@@ -95,7 +95,7 @@ data class Steps(
                 val s = parse(db.settings().get(KEY_STEPS))
                 db.settings().put(Setting(KEY_STEPS, s.copy(solved = (s.solved + solved).take(300).toSet(), topics = (s.topics + topics).take(30).toSet()).json()))
                 p.edit().putStringSet("solved", p.getStringSet("solved", emptySet()).orEmpty() - solved.toSet())
-                    .putStringSet("topics", p.getStringSet("topics", emptySet()).orEmpty() - topics.toSet()).commit()
+                    .putStringSet("topics", p.getStringSet("topics", emptySet()).orEmpty() - topics.toSet()).saveNow()
             }
         }
 

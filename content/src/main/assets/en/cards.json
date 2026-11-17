@@ -47,13 +47,13 @@
    "30.2"
   ],
   "call": "",
-  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 3.3, 30.2; English translation by Sprotyv",
-  "checkedOn": "2026-10-30",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 3.3, 30.2; Cabinet of Ministers resolution No. 1092 of 04.09.2026; English translation by Sprotyv",
+  "checkedOn": "2026-11-13",
   "reviewedBy": "",
   "steps": [
    {
     "action": "Put on shoes and go straight to the two-wall zone (hallway, bathroom), or to the shelter if it is in your building.",
-    "why": "This is right whatever the threat: ballistic missiles give 1–3 minutes or no time at all.",
+    "why": "This is right whatever the threat: ballistic missiles give 1–3 minutes or no time at all. At school, go with your class and follow the teacher. Where threat levels are in use, the level is announced by voice: red (siren for 1 minute) means missiles or a massed drone attack, yellow (30 seconds) drones. Your regional administration says whether they apply where you live.",
     "figure": "3.2"
    },
    {
@@ -69,8 +69,8 @@
     "why": "Crossing the city under fire is more dangerous."
    },
    {
-    "action": "In a frontline region under a guided bomb (KAB) threat, use only a basement or underground parking.",
-    "why": "The two-wall rule does not protect against guided aerial bombs."
+    "action": "In a frontline region under a guided bomb (KAB) threat, shelter only underground: a basement, a root cellar, underground parking.",
+    "why": "The two-wall rule does not protect against guided aerial bombs. Do not lock a cellar door from inside, and burn nothing in a cellar."
    },
    {
     "action": "In the shelter, do not sit opposite the door; stay by load-bearing walls. Keep away from windows.",
@@ -78,7 +78,7 @@
    },
    {
     "action": "Leave only after the all-clear. After explosions nearby, wait at least 40 minutes.",
-    "why": "A repeat strike on the same spot can come 10–40 minutes later, sometimes 1–2 hours later.",
+    "why": "The all-clear is announced by voice only, with no siren: follow an alert app or the radio. A repeat strike on the same spot can come 10–40 minutes later, sometimes 1–2 hours later.",
     "wait": 40
    }
   ]
@@ -127,7 +127,7 @@
   ],
   "call": "101",
   "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 4.3, 4.6, 4.4, 30.3; English translation by Sprotyv",
-  "checkedOn": "2026-10-30",
+  "checkedOn": "2026-11-13",
   "reviewedBy": "",
   "steps": [
    {
@@ -135,7 +135,7 @@
     "why": "Do not stare at it, do not film it, do not wave your arms."
    },
    {
-    "action": "Within 5–10 seconds, get under a roof: entrance, basement, shop. Don't stop in the doorway: shut the door, move deep inside, away from windows, freeze.",
+    "action": "Within 5–10 seconds, get under a roof: entrance, basement, shop, house or shed. Don't stop in the doorway: shut the door, move deep inside, away from windows, freeze.",
     "why": "An FPV drone can fly in through an open door or window. This rule is for FPV and drop drones; for Shaheds and missiles you need a basement or two walls."
    },
    {
@@ -175,7 +175,7 @@
   ],
   "call": "103",
   "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 7.2, 7.6, 30.5; English translation by Sprotyv",
-  "checkedOn": "2026-10-30",
+  "checkedOn": "2026-11-13",
   "reviewedBy": "",
   "steps": [
    {
@@ -184,8 +184,8 @@
     "icon": "press"
    },
    {
-    "action": "If blood is spurting from an arm or leg, or pressure fails, apply a tourniquet 5–8 cm above the wound, not on a joint, until bleeding stops completely. Note the time.",
-    "why": "Wound location unclear? As high on the limb as possible. Never loosen a tourniquet: only a medic removes it.",
+    "action": "If blood is spurting from an arm or leg, or pressure fails, apply a tourniquet 5–7 cm above the wound, not on a joint, until bleeding stops completely. Note the time.",
+    "why": "Wound location unclear, or still under fire or a drone nearby? As high on the limb as possible, over the clothing, and drag the person to cover; note the time there. Not over objects in pockets. It will hurt a lot; that is normal. Never loosen a tourniquet: only a medic removes it.",
     "figure": "7.2"
    },
    {
@@ -193,7 +193,7 @@
     "why": "An improvised tourniquet without training usually does not stop the bleeding and wastes time."
    },
    {
-    "action": "If the wound is on the neck, groin, shoulder or buttock, pack gauze deep into the wound and press: plain gauze 10 minutes, hemostatic gauze 3.",
+    "action": "If the wound is at the base of the neck, in the groin, armpit or buttock, pack gauze deep into the wound and press: plain gauze 10 minutes, hemostatic gauze 3.",
     "why": "A tourniquet is impossible there."
    },
    {
@@ -201,12 +201,50 @@
     "why": "Packing is removed only in hospital."
    },
    {
-    "action": "Lay the person flat, keep them warm. If there are no head, chest or belly injuries, raise the legs slightly.",
+    "action": "Lay the person flat, keep them warm. If there are no head, chest or belly injuries, raise the legs slightly. A visibly pregnant woman goes on her left side.",
     "why": "In shock, a person feels cold even in summer."
    },
    {
     "action": "If an ambulance is on its way, give nothing to drink. Check their condition every 5 minutes.",
     "why": "Surgery under anaesthesia may be needed. Shock: pale skin, cold sweat, fast weak pulse."
+   }
+  ]
+ },
+ {
+  "id": "chest",
+  "title": "Chest wound",
+  "guide": [
+   "7.5",
+   "7.1"
+  ],
+  "call": "103",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 7.5, 7.1; Ministry of Health order No. 441, procedure 7; English translation by Sprotyv",
+  "checkedOn": "2026-11-13",
+  "reviewedBy": "",
+  "steps": [
+   {
+    "action": "Cover the wound with a gloved palm or through clean cloth. Tell a specific person to call 103.",
+    "why": "Air hissing or frothy blood: the wound goes into the chest."
+   },
+   {
+    "action": "Best is a vented chest seal. Without one: an occlusive seal, or a bag taped down on all sides, put on as they breathe out.",
+    "why": "This is what the Ministry of Health order says. Several wounds, such as entry and exit: seal them all."
+   },
+   {
+    "action": "Do not pull out an object stuck in the wound: pad it with gauze and hold it in place.",
+    "why": ""
+   },
+   {
+    "action": "Sit them half upright or lay them on the injured side, keep them warm.",
+    "why": "Breathing is easier, and warmth guards against shock."
+   },
+   {
+    "action": "Breathlessness gets much worse after sealing? Lift one edge, let the air out, stick it down again.",
+    "why": "Under the Ministry of Health order, the dressing is then removed."
+   },
+   {
+    "action": "Give nothing to drink. Check breathing and their condition every 5 minutes.",
+    "why": "Surgery under anaesthesia may be needed. Stopped breathing: the card \"Person unconscious\", CPR."
    }
   ]
  },
@@ -221,32 +259,32 @@
   ],
   "call": "103",
   "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 7.3, 7.4, 7.7, 30.6; English translation by Sprotyv",
-  "checkedOn": "2026-10-30",
+  "checkedOn": "2026-11-13",
   "reviewedBy": "",
   "steps": [
    {
     "action": "Look around: make sure nothing threatens you. Speak to them loudly, gently shake their shoulders.",
-    "why": "If you get hurt yourself, you cannot help anyone."
+    "why": "If you get hurt yourself, you cannot help anyone. Came round at once? Let them lie with legs raised, do not sit them up fast; if they hit their head, 103."
    },
    {
     "action": "No response? Tilt the head back, lift the chin and check breathing for 10 seconds.",
-    "why": "Watch the chest, listen, feel the breath on your cheek."
+    "why": "Watch the chest, listen, feel the breath on your cheek. After an explosion, a crash or a fall, first stop heavy bleeding, and do not tilt the head: push the jaw forward."
    },
    {
     "action": "Tell a specific person to call 103: \"You, in the blue jacket, call 103.\"",
     "why": ""
    },
    {
-    "action": "If they are breathing, turn them on their side, check breathing every minute. If you suspect a spine injury, keep them on their back, head still, push the jaw forward.",
-    "why": "A spinal injury is possible after a fall from height, a road crash, a blow to the back.",
+    "action": "If they are breathing, turn them on their side (pregnant: left side), check breathing every minute. If you suspect a spine injury, keep them on their back, head still, push the jaw forward.",
+    "why": "For a visibly pregnant woman, lying on her back lets the womb press on the large blood vessels. A spinal injury is possible after a fall from height, a road crash, a blow to the back.",
     "figure": "7.4"
    },
    {
-    "action": "Not breathing or only occasional gasps? Start CPR on a hard surface. Child or infant? Give 5 breaths first.",
+    "action": "Not breathing or only occasional gasps? Start CPR on a hard surface. Child or infant? Give 5 breaths first; a teenager as an adult.",
     "why": ""
    },
    {
-    "action": "Press the centre of the chest: adult 5–6 cm, child ~5 cm, infant with two thumbs ~4 cm. 30 compressions, 2 breaths, 100–120 per minute.",
+    "action": "Press the centre of the chest: adult 5–6 cm, child about 5 cm, infant with two thumbs about 4 cm. 30 compressions, 2 breaths, 100–120 per minute.",
     "why": "Do not stop until breathing returns or medics arrive. If you cannot give breaths, do compressions only; that also saves lives. Swap every 2 minutes.",
     "figure": "7.7"
    }
@@ -298,7 +336,7 @@
   ],
   "call": "103",
   "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 7.8, 7.11; English translation by Sprotyv",
-  "checkedOn": "2026-10-30",
+  "checkedOn": "2026-11-13",
   "reviewedBy": "",
   "steps": [
    {
@@ -323,11 +361,44 @@
    },
    {
     "action": "Cover loosely with a clean lint-free cloth or cling film. Do not put anything on it, do not pop blisters.",
-    "why": "No oil, sour cream or toothpaste. For pain: paracetamol or ibuprofen; drink plenty."
+    "why": "No oil, sour cream or toothpaste. For pain: paracetamol or ibuprofen (in pregnancy, paracetamol only); drink plenty."
    },
    {
     "action": "Always see a doctor: burn larger than the person's palm, on the face, hands, genital area, joints, in children, electrical, chemical or deep.",
     "why": "A deep burn may not hurt: white-grey or charred skin."
+   }
+  ]
+ },
+ {
+  "id": "unwell",
+  "title": "Heart, stroke, low sugar",
+  "guide": [
+   "7.11"
+  ],
+  "call": "103",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 7.11; Ministry of Health order No. 441, procedures 5, 6, 27; English translation by Sprotyv",
+  "checkedOn": "2026-11-13",
+  "reviewedBy": "",
+  "steps": [
+   {
+    "action": "Pressing or burning chest pain, spreading to the arm, jaw or back, breathlessness, cold sweat: call 103 at once. Sit propped up, loosen clothing.",
+    "why": "On your own? Tell the dispatcher your address and unlock the front door while you can."
+   },
+   {
+    "action": "An adult with chest pain: chew aspirin 150–300 mg, if there is no allergy and no bleeding.",
+    "why": "That is ½ of a 500 mg tablet or 2–3 \"cardio\" tablets of 100 mg. Nitroglycerin only if a doctor prescribed it."
+   },
+   {
+    "action": "Face drooping, arm falling, speech slurred? This is a stroke: call 103 at once and remember when it started.",
+    "why": "Give no food or drink, lay them with the head raised, do not leave them alone. Signs gone: do not cancel the call. The sooner the treatment, the better the chances."
+   },
+   {
+    "action": "Shaking, sweating, confusion in someone with diabetes or who has not eaten: if conscious, 15–20 g of sugar, that is 4–5 teaspoons or half a glass of juice.",
+    "why": "Then bread or biscuits. No better in 15 minutes: again. If unconscious, nothing in the mouth, recovery position, 103."
+   },
+   {
+    "action": "They collapsed and are not breathing? Open the card \"Person unconscious\" and start CPR.",
+    "why": ""
    }
   ]
  },
@@ -384,7 +455,7 @@
   ],
   "call": "101",
   "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 5.3, 5.4, 30.7; English translation by Sprotyv",
-  "checkedOn": "2026-10-30",
+  "checkedOn": "2026-11-13",
   "reviewedBy": "",
   "steps": [
    {
@@ -398,7 +469,7 @@
    },
    {
     "action": "Move at least 100 metres away (300 for a shell or aerial bomb), and only then call 101 or 102.",
-    "why": "Phones and radios are not used near the object."
+    "why": "Phones and radios are not used near the object. No signal? Send someone to the village head, the police or a checkpoint; do not go back to the object."
    },
    {
     "action": "Mark the danger where you stopped and warn people.",
@@ -506,7 +577,7 @@
   ],
   "call": "101",
   "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 3.5; English translation by Sprotyv",
-  "checkedOn": "2026-10-30",
+  "checkedOn": "2026-11-13",
   "reviewedBy": "",
   "steps": [
    {
@@ -527,7 +598,7 @@
    },
    {
     "action": "Someone under rubble? Mark the spot, call 101, talk to the person. Do not clear the rubble yourself.",
-    "why": "Structures can settle and hurt both you and the person beneath."
+    "why": "Structures can settle and hurt both you and the person beneath. No signal? Try 112 or send someone for help."
    },
    {
     "action": "If a limb has been trapped less than 10 minutes, free it at once. If longer or the time is unknown, do not free it yourself: call 103, do as the dispatcher says.",
@@ -545,12 +616,12 @@
   ],
   "call": "",
   "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 20.1, 7.11, 2.5; English translation by Sprotyv",
-  "checkedOn": "2026-10-30",
+  "checkedOn": "2026-11-13",
   "reviewedBy": "",
   "steps": [
    {
-    "action": "Fill all containers and the bathtub with water.",
-    "why": "Water supply pumps will stop within a few hours."
+    "action": "Keep water stored in advance: on upper floors it stops at once. If it still runs, fill all containers and the bathtub.",
+    "why": "Without power, the building's and the water supply's pumps stop."
    },
    {
     "action": "Unplug sensitive electronics. Leave one lamp switched on: you will see when power comes back.",
@@ -558,7 +629,7 @@
    },
    {
     "action": "Do not open the fridge and freezer unless you must.",
-    "why": "A closed freezer stays cold for 24–48 hours."
+    "why": "A closed freezer stays cold for 24–48 hours, a fridge only about 4 hours."
    },
    {
     "action": "Eat what spoils first: meat and dairy, then vegetables, tinned food last.",
@@ -569,12 +640,16 @@
     "why": "Carbon monoxide kills silently: headache, nausea, \"drunk\" behaviour. Get the person into fresh air."
    },
    {
-    "action": "Use a gas burner indoors only with a window open.",
-    "why": "Otherwise carbon monoxide builds up."
+    "action": "Do not heat the room with a gas cooker or oven. Use a gas burner indoors only with a window open.",
+    "why": "Otherwise carbon monoxide builds up; it kills in sleep."
    },
    {
-    "action": "Do not use the lift. If you are stuck, press the call button or call 101; do not force the doors.",
+    "action": "Do not use the lift. If you are stuck, press the call button, call the dispatcher on the number in the cabin or 101; do not force the doors.",
     "why": "A lift has ventilation: you cannot suffocate, but the shaft is deadly."
+   },
+   {
+    "action": "Warmth: layers of clothing, one room, hot drinks. Phone: power saving mode. Find the nearest invincibility point in Diia while you still have a signal.",
+    "why": "There is heat, charging, water and a connection. Cold for over a day: move to family or a warming point (sec. 20.5)."
    }
   ]
  },
@@ -589,7 +664,7 @@
   ],
   "call": "",
   "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 17.6, 26, 18.6, 30.10; English translation by Sprotyv",
-  "checkedOn": "2026-10-30",
+  "checkedOn": "2026-11-13",
   "reviewedBy": "",
   "steps": [
    {
@@ -597,8 +672,12 @@
     "why": "Fake orders and \"corridors\" do happen."
    },
    {
-    "action": "Take documents, copies, cash and medicines for 30 days.",
-    "why": ""
+    "action": "No way to leave? Call 1548 (24/7) or East SOS 0 800 332 614 (Mon–Sat 8–18): they take evacuation requests, including for people with limited mobility.",
+    "why": "Other evacuation lines: Phones, the Evacuation section."
+   },
+   {
+    "action": "Take documents, copies, cash and medicines for 30 days. Take pets with you; any you leave, do not lock in: leave water, food and a way out.",
+    "why": "Pets: carrier, lead, food for 3 days (sec. 22.4)."
    },
    {
     "action": "Take water (2 L), food for 3 days, warm clothes, comfortable shoes, phone, power bank, radio, torch.",

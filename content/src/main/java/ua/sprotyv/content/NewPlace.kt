@@ -18,7 +18,7 @@ data class NewPlace(val title: String, val steps: List<Step>) {
 object NewPlaceReader {
     private const val MAX_TEXT = 2_000
     private val ID = Regex("^[a-z0-9-]{1,40}$")
-    private val ROUTES = setOf("", "safe", "resistance", "directory")
+    private val ROUTES = setOf("", "safe", "resistance", "directory", "documents")
 
     fun parse(json: String): NewPlace {
         val o = JSONObject(json)

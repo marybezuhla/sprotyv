@@ -8,27 +8,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import ua.sprotyv.content.Content
-import ua.sprotyv.content.Kit
-import ua.sprotyv.content.MySupplies
-import ua.sprotyv.content.Supplies
-import ua.sprotyv.home.Pins
-import ua.sprotyv.home.Preset
-import ua.sprotyv.personal.FamilyPlan
-import ua.sprotyv.personal.KitCheck
-import ua.sprotyv.personal.MedicalCard
-import ua.sprotyv.personal.Note
-import ua.sprotyv.personal.Person
-import ua.sprotyv.personal.PlanRow
-import ua.sprotyv.personal.Setting
 import ua.sprotyv.personal.backup.BackupCrypto
 import ua.sprotyv.personal.backup.BackupData
-import ua.sprotyv.ui.Bookmark
-import ua.sprotyv.ui.Bookmarks
-import ua.sprotyv.ui.KEY_KIT_REVIEWED
-import ua.sprotyv.ui.KEY_PATH
-import ua.sprotyv.ui.KEY_SAFE_MESSAGE
-import ua.sprotyv.ui.KEY_SUPPLIES
-import java.io.File
 import java.time.LocalDateTime
 import java.time.ZoneId
 

@@ -59,8 +59,8 @@ jobs:
           set -o pipefail
           status=0
           gradle --no-daemon lintRelease 2>&1 | tee lint.log || status=$?
-          echo "---- lint report"
-          cat app/build/reports/lint.txt || true
+          # Every module's report: a warning in a library module is not hidden behind the app's
+          for f in */build/reports/lint.txt; do echo "---- $f"; cat "$f"; done || true
           exit $status
 
       - name: Prepare test log

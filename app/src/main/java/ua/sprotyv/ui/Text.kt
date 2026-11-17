@@ -46,7 +46,7 @@ fun rich(text: String): AnnotatedString = buildAnnotatedString {
 }
 
 @Composable
-fun RichText(text: String, style: TextStyle = MaterialTheme.typography.bodyLarge, modifier: Modifier = Modifier) {
+fun RichText(text: String, modifier: Modifier = Modifier, style: TextStyle = MaterialTheme.typography.bodyLarge) {
     Text(rich(text), style = style, modifier = modifier)
 }
 

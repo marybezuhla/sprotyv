@@ -11,10 +11,7 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -27,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
@@ -54,11 +50,11 @@ class Since(private val name: String, private val maxHours: Int) {
         return t
     }
 
-    fun start(context: Context): Long = System.currentTimeMillis().also { prefs(context).edit().putLong("since", it).commit(); Notify.sync(context) }
+    fun start(context: Context): Long = System.currentTimeMillis().also { prefs(context).edit().putLong("since", it).saveNow(); Notify.sync(context) }
     fun stop(context: Context) {
         // One more held through: only the number is kept, for "We hold on"
         if (get(context) != 0L) Held.add(context, name)
-        prefs(context).edit().remove("since").commit(); Notify.sync(context)
+        prefs(context).edit().remove("since").saveNow(); Notify.sync(context)
     }
 
     companion object {

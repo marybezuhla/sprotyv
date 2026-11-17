@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -23,7 +22,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -52,7 +50,7 @@ val LocalInTab = staticCompositionLocalOf { false }
 
 /** The frame of every inner screen: "Back" always in the same place, the "Call" bar always below. */
 @Composable
-fun Frame(title: String, onBack: () -> Unit, bottom: (@Composable () -> Unit)? = null, content: @Composable () -> Unit) {
+fun Frame(title: String, onBack: () -> Unit, bottom: (@Composable () -> Unit)? = null, corner: Boolean = true, content: @Composable () -> Unit) {
     val inTab = LocalInTab.current
     // While typing, the keyboard pushes the screen up instead of covering what is typed
     val typing = typing()
@@ -70,7 +68,7 @@ fun Frame(title: String, onBack: () -> Unit, bottom: (@Composable () -> Unit)? =
                 modifier = Modifier.weight(1f).padding(start = if (inTab) 12.dp else 0.dp).semantics { heading() },
             )
             ScreenshotsMark()
-            CornerCall()
+            if (corner) CornerCall()
         }
         Column(
             Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(16.dp),
@@ -161,8 +159,21 @@ fun NoKeyboardLearning(content: @Composable () -> Unit) {
             }
             next.startInputMethod(private)
         },
-        content = content,
-    )
+    ) {
+        // Copied from the owner's screens: marked sensitive, so Android's preview and keyboard
+        // clipboard histories do not show or keep it
+        val clipboard = androidx.compose.ui.platform.LocalClipboard.current
+        val sensitive = remember(clipboard) { SensitiveClipboard(clipboard) }
+        androidx.compose.runtime.CompositionLocalProvider(androidx.compose.ui.platform.LocalClipboard provides sensitive, content = content)
+    }
+}
+
+/** The phone's clipboard, with every copy marked sensitive (the key is the same string on Android 12 and 13+). */
+private class SensitiveClipboard(private val inner: androidx.compose.ui.platform.Clipboard) : androidx.compose.ui.platform.Clipboard by inner {
+    override suspend fun setClipEntry(clipEntry: androidx.compose.ui.platform.ClipEntry?) {
+        clipEntry?.clipData?.description?.extras = android.os.PersistableBundle().apply { putBoolean("android.content.extra.IS_SENSITIVE", true) }
+        inner.setClipEntry(clipEntry)
+    }
 }
 
 /**

@@ -46,7 +46,6 @@ import ua.sprotyv.ui.Route
 import ua.sprotyv.ui.SearchMemory
 import ua.sprotyv.ui.SearchScreen
 import ua.sprotyv.ui.SettingsScreen
-import ua.sprotyv.ui.ShieldsScreen
 import ua.sprotyv.ui.SprotyvTheme
 import ua.sprotyv.ui.ThemeChoice
 import ua.sprotyv.personal.Note

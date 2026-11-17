@@ -1,8 +1,5 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
@@ -14,14 +11,17 @@ val appVersionCode = appVersion.split(".").map(String::toInt).let { (a, b, c) ->
 
 android {
     namespace = "ua.sprotyv"
-    compileSdk = 36
+    compileSdk = 37
+    // Unit tests run on the release build, as before; since Android Gradle plugin 9 only the tested build type has them
+    testBuildType = "release"
 
     defaultConfig {
         applicationId = "ua.sprotyv"
         minSdk = 31
-        targetSdk = 36
+        // Android 17: tablets and foldables may turn and resize the app (screens 70–73 check landscape)
+        targetSdk = 37
         // Written out as a number, because F-Droid's update check reads it from this file; checked below
-        versionCode = 10200
+        versionCode = 10300
         versionName = appVersion
     }
 
@@ -39,8 +39,14 @@ android {
     // Android's lint runs in CI: an error stops the build; warnings are listed in the log to work through
     lint {
         abortOnError = true
-        // Home screen widgets are RemoteViews, which know only android:tint (app:tint is AppCompat's, for app screens)
-        disable += "UseAppTint"
+        // Style only: the plain Android calls (edit().apply(), Uri.parse) read as clearly as the KTX ones
+        disable += "UseKtx"
+        // New versions come through Dependabot and a reviewed checksum refresh, not through lint
+        disable += setOf("GradleDependency", "NewerVersionAvailable", "AndroidGradlePluginVersion")
+        // targetSdk is raised on purpose, together with a test on a phone
+        disable += "OldTargetApi"
+        // Resources stay unshrunk: the widget finds its pictograms by name (Widgets.kt), which shrinking would remove
+        disable += "NotShrinkingResources"
         textReport = true
         textOutput = file("build/reports/lint.txt")
     }
@@ -73,39 +79,32 @@ android {
     }
 }
 
-kotlin {
-    compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_17)
-    }
-}
-
 dependencies {
     implementation(project(":content"))
     implementation(project(":personal"))
     implementation(project(":reach"))
 
-    val composeBom = platform("androidx.compose:compose-bom:2025.09.00")
+    val composeBom = platform("androidx.compose:compose-bom:2026.09.00")
     implementation(composeBom)
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material-icons-core")
 
-    implementation("androidx.core:core-ktx:1.16.0")
-    implementation("androidx.appcompat:appcompat:1.7.1")
-    implementation("androidx.activity:activity-compose:1.10.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.9.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
+    implementation("androidx.core:core-ktx:1.19.1")
+    implementation("androidx.activity:activity-compose:1.13.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.11.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")
 
     // QR codes, made and read on the phone (ZXing core: Apache 2.0, plain Java, no network, no Google services)
-    implementation("com.google.zxing:core:3.5.3")
+    implementation("com.google.zxing:core:3.5.4")
 
     testImplementation("junit:junit:4.13.2")
     // Screens drawn on the computer (Robolectric) from the real content, for review
     testImplementation(composeBom)
     testImplementation("androidx.compose.ui:ui-test-junit4")
     testImplementation("androidx.compose.ui:ui-test-manifest")
-    testImplementation("androidx.test.ext:junit:1.2.1")
-    testImplementation("org.robolectric:robolectric:4.16.1")
+    testImplementation("androidx.test.ext:junit:1.3.0")
+    testImplementation("org.robolectric:robolectric:4.17")
 }
 
 // Reproducible builds: the start-up profile AGP writes into the APK can differ from build to build

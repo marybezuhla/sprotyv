@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- A count of "My shields": a small shield with the number, "+1" under it, the name if the owner wants it -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/w_root" android:layout_width="match_parent" android:layout_height="match_parent"
+<!-- A count of "My shields": a small shield with the number, "+1" under it, the name if the owner wants it.
+     The numbers are the same in every language. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" tools:ignore="HardcodedText" android:id="@+id/w_root" android:layout_width="match_parent" android:layout_height="match_parent"
     android:gravity="center" android:orientation="vertical">
     <FrameLayout android:layout_width="56dp" android:layout_height="72dp">
         <ImageView android:layout_width="56dp" android:layout_height="64dp" android:src="@drawable/w_shield" android:scaleType="fitCenter" android:importantForAccessibility="no" />

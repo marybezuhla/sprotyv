@@ -10,7 +10,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -142,7 +141,7 @@ val ROLES: Map<String, Role> = listOf(
     Role(
         "volunteer", Circle.HELP, R.string.role_volunteer, R.string.role_volunteer_hint, R.string.role_volunteer_affirm,
         factsTitle = R.string.role_volunteer_facts_title,
-        facts = listOf(R.string.role_volunteer_1, R.string.role_volunteer_2, R.string.role_volunteer_3, R.string.role_volunteer_4, R.string.role_volunteer_5),
+        facts = listOf(R.string.role_volunteer_1, R.string.role_volunteer_2, R.string.role_volunteer_3, R.string.role_volunteer_4, R.string.role_volunteer_5, R.string.role_volunteer_6),
         source = R.string.role_volunteer_source,
         links = listOf("#tax-volunteers", "#cyberpolice", "#redcross"),
     ),

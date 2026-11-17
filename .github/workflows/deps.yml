@@ -37,7 +37,7 @@ jobs:
         run: |
           rm -f gradle/verification-metadata.xml
           # Failing tests must not stop the checksums from being written; the log shows why
-          gradle --no-daemon --continue --write-verification-metadata sha256 testReleaseUnitTest assembleRelease > deps.log 2>&1 || true
+          gradle --no-daemon --continue --write-verification-metadata sha256 testReleaseUnitTest lintRelease assembleRelease > deps.log 2>&1 || true
           mkdir -p meta
           cp gradle/verification-metadata.xml meta/ 2>/dev/null || echo "no metadata written" > meta/MISSING
           # Which network classes are left in the built APK (should be none)

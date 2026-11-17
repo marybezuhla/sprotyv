@@ -18,13 +18,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.heading
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import ua.sprotyv.R
@@ -89,7 +86,7 @@ fun SituationScreen(content: Content?, nav: Nav) {
     val toolbar = MaterialTheme.colorScheme.surface.toArgb()
     Frame(stringResource(R.string.situation_title), nav::back) {
         Block(stringResource(R.string.situation_rules_title), ua.sprotyv.home.Group.GUIDE) {
-            listOf(R.string.situation_rule_1, R.string.situation_rule_2, R.string.situation_rule_3).forEachIndexed { i, r ->
+            listOf(R.string.situation_rule_1, R.string.situation_rule_2, R.string.situation_rule_3, R.string.situation_rule_4).forEachIndexed { i, r ->
                 Row {
                     Text("${i + 1}", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, modifier = Modifier.width(24.dp))
                     Text(stringResource(r), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
@@ -150,7 +147,7 @@ private fun flagTitle(flag: String): Int = when (flag) {
 
 @Composable
 internal fun LinkRow(link: Link, onClick: () -> Unit) {
-    val context = LocalContext.current
+    val res = androidx.compose.ui.platform.LocalResources.current
     val official = link.kind == Link.OFFICIAL
     Card(
         onClick = onClick,
@@ -176,7 +173,7 @@ internal fun LinkRow(link: Link, onClick: () -> Unit) {
             // Warnings in words: who runs it, ads, beta, data collection
             if (link.flags.isNotEmpty()) {
                 Text(
-                    link.flags.joinToString(" · ") { "⚠ " + context.getString(flagTitle(it)) },
+                    link.flags.joinToString(" · ") { "⚠ " + res.getString(flagTitle(it)) },
                     style = MaterialTheme.typography.bodyMedium,
                     // A caution, not danger now: red is kept for danger
                     color = MaterialTheme.colorScheme.onSurfaceVariant,

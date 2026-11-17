@@ -41,6 +41,15 @@ object Reach {
         start(context, intent)
     }
 
+    /**
+     * The dialler with [number] filled in, for a widget's tap: aimed at the phone's default dialler
+     * (which handles this by definition), so no other app that answers "dial" learns the number.
+     */
+    fun dialIntent(context: Context, number: String): Intent {
+        val intent = Intent(Intent.ACTION_DIAL, Uri.parse(Links.tel(number)))
+        return defaultDialer(context)?.let { Intent(intent).setPackage(it) } ?: intent
+    }
+
     private fun defaultDialer(context: Context): String? = try {
         (context.getSystemService(Context.TELECOM_SERVICE) as? android.telecom.TelecomManager)?.defaultDialerPackage
     } catch (e: Exception) { null }

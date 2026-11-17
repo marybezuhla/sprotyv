@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -155,19 +154,7 @@ fun PlanImportScreen(nav: Nav) {
         problem?.let { Text(stringResource(it), style = MaterialTheme.typography.bodyLarge) }
         return
     }
-    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-        fun line(label: Int, value: String) = if (value.isBlank()) null else label to value
-        listOfNotNull(
-            line(R.string.plan_point1, p.plan.point1),
-            line(R.string.plan_point2, p.plan.point2),
-            line(R.string.plan_point3, p.plan.point3),
-            line(R.string.plan_go_between, listOf(p.plan.goBetweenName, p.plan.goBetweenPhone).filter { it.isNotBlank() }.joinToString(" ")),
-        ).forEach { (label, value) ->
-            Text(stringResource(label), style = MaterialTheme.typography.labelLarge)
-            Text(value, style = MaterialTheme.typography.bodyLarge)
-        }
-        if (p.rows.isNotEmpty()) Text(stringResource(R.string.plan_code_rows, p.rows.size), style = MaterialTheme.typography.bodyLarge)
-    }
+    SharedPlanView(p)
     Button(onClick = { confirm = true }, enabled = !working, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp)) { Text(stringResource(R.string.plan_code_take)) }
     if (confirm) {
         AlertDialog(
@@ -195,4 +182,22 @@ fun PlanImportScreen(nav: Nav) {
         )
     }
     problem?.let { Text(stringResource(it), style = MaterialTheme.typography.bodyLarge) }
+}
+
+/** What a received plan holds, line by line, before the owner decides to take it. */
+@Composable
+private fun SharedPlanView(p: BackupData.SharedPlan) {
+    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        fun line(label: Int, value: String) = if (value.isBlank()) null else label to value
+        listOfNotNull(
+            line(R.string.plan_point1, p.plan.point1),
+            line(R.string.plan_point2, p.plan.point2),
+            line(R.string.plan_point3, p.plan.point3),
+            line(R.string.plan_go_between, listOf(p.plan.goBetweenName, p.plan.goBetweenPhone).filter { it.isNotBlank() }.joinToString(" ")),
+        ).forEach { (label, value) ->
+            Text(stringResource(label), style = MaterialTheme.typography.labelLarge)
+            Text(value, style = MaterialTheme.typography.bodyLarge)
+        }
+        if (p.rows.isNotEmpty()) Text(stringResource(R.string.plan_code_rows, p.rows.size), style = MaterialTheme.typography.bodyLarge)
+    }
 }

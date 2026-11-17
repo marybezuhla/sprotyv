@@ -133,27 +133,7 @@ fun ResistanceScreen(content: Content?, nav: Nav) {
         Block(stringResource(R.string.history_title), Group.PREPARE, tint = resist(), padded = false) {
             BlockRow(stringResource(R.string.history_title), stringResource(R.string.history_hint), first = true) { nav.go(Route.HistoryRoute) }
         }
-        // Everything on resistance from other sections, in one plate that opens
-        Block(stringResource(R.string.resist_all_title), Group.PREPARE, tint = resist(), padded = false, foldable = true, summary = stringResource(R.string.resist_all_desc),
-            leading = { IconBadge(Shield, Tint(MaterialTheme.colorScheme.surface, resist().ink), 40.dp) }) {
-            BlockRow(stringResource(R.string.path_title), stringResource(R.string.path_open_hint), first = true) { nav.go(Route.Mine(MinePart.PATH)) }
-            BlockRow(stringResource(R.string.moz_title), stringResource(R.string.role_save_hint)) { nav.go(Route.MozList) }
-            BlockRow(stringResource(R.string.kit), stringResource(R.string.role_ready_hint)) { nav.go(Route.Mine(MinePart.KIT)) }
-            BlockRow(stringResource(R.string.family_plan), stringResource(R.string.role_family_hint)) { nav.go(Route.Mine(MinePart.PLAN)) }
-            BlockRow(stringResource(R.string.const_title), stringResource(R.string.const_hint)) { nav.go(Route.ConstitutionRoute("")) }
-            BlockRow(stringResource(R.string.weapons_title), stringResource(R.string.weapons_hint)) { nav.go(Route.Weapons) }
-            BlockRow(stringResource(R.string.dir_title), stringResource(R.string.resist_all_rights)) { nav.go(Route.Directory) }
-            BlockRow(stringResource(R.string.role_truth), stringResource(R.string.role_truth_hint)) { nav.go(Route.ChapterRoute("ch18")) }
-        }
-        // What anyone can do: each with the place in Sprotyv where it starts
-        Block(stringResource(R.string.resist_roles_title), Group.PREPARE, tint = resist(), padded = false, foldable = true) {
-            BlockRow(stringResource(R.string.role_save), stringResource(R.string.role_save_hint), first = true) { nav.go(Route.MozList) }
-            BlockRow(stringResource(R.string.role_ready), stringResource(R.string.role_ready_hint)) { nav.go(Route.Mine(MinePart.KIT)) }
-            BlockRow(stringResource(R.string.role_family), stringResource(R.string.role_family_hint)) { nav.go(Route.Mine(MinePart.PLAN)) }
-            BlockRow(stringResource(R.string.role_community), stringResource(R.string.role_community_hint)) { nav.go(Route.Directory) }
-            BlockRow(stringResource(R.string.role_truth), stringResource(R.string.role_truth_hint)) { nav.go(Route.ChapterRoute("ch18")) }
-            BlockRow(stringResource(R.string.role_learn), stringResource(R.string.role_learn_hint)) { nav.go(Route.Mine(MinePart.PATH)) }
-        }
+        ResistWays(nav)
         // My path: the owner's own ticks, private, in "Mine"; here only the count
         val share = prefs?.path?.let(::pathShare)
         Block(
@@ -195,6 +175,32 @@ fun ResistanceScreen(content: Content?, nav: Nav) {
             }
         }
         Text(stringResource(R.string.resist_principles), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+}
+
+/** Everything on resistance gathered in one plate, and what anyone can do, each with where it starts in Sprotyv. */
+@Composable
+private fun ResistWays(nav: Nav) {
+    // Everything on resistance from other sections, in one plate that opens
+    Block(stringResource(R.string.resist_all_title), Group.PREPARE, tint = resist(), padded = false, foldable = true, summary = stringResource(R.string.resist_all_desc),
+        leading = { IconBadge(Shield, Tint(MaterialTheme.colorScheme.surface, resist().ink), 40.dp) }) {
+        BlockRow(stringResource(R.string.path_title), stringResource(R.string.path_open_hint), first = true) { nav.go(Route.Mine(MinePart.PATH)) }
+        BlockRow(stringResource(R.string.moz_title), stringResource(R.string.role_save_hint)) { nav.go(Route.MozList) }
+        BlockRow(stringResource(R.string.kit), stringResource(R.string.role_ready_hint)) { nav.go(Route.Mine(MinePart.KIT)) }
+        BlockRow(stringResource(R.string.family_plan), stringResource(R.string.role_family_hint)) { nav.go(Route.Mine(MinePart.PLAN)) }
+        BlockRow(stringResource(R.string.const_title), stringResource(R.string.const_hint)) { nav.go(Route.ConstitutionRoute("")) }
+        BlockRow(stringResource(R.string.weapons_title), stringResource(R.string.weapons_hint)) { nav.go(Route.Weapons) }
+        BlockRow(stringResource(R.string.dir_title), stringResource(R.string.resist_all_rights)) { nav.go(Route.Directory) }
+        BlockRow(stringResource(R.string.role_truth), stringResource(R.string.role_truth_hint)) { nav.go(Route.ChapterRoute("ch18")) }
+    }
+    // What anyone can do: each with the place in Sprotyv where it starts
+    Block(stringResource(R.string.resist_roles_title), Group.PREPARE, tint = resist(), padded = false, foldable = true) {
+        BlockRow(stringResource(R.string.role_save), stringResource(R.string.role_save_hint), first = true) { nav.go(Route.MozList) }
+        BlockRow(stringResource(R.string.role_ready), stringResource(R.string.role_ready_hint)) { nav.go(Route.Mine(MinePart.KIT)) }
+        BlockRow(stringResource(R.string.role_family), stringResource(R.string.role_family_hint)) { nav.go(Route.Mine(MinePart.PLAN)) }
+        BlockRow(stringResource(R.string.role_community), stringResource(R.string.role_community_hint)) { nav.go(Route.Directory) }
+        BlockRow(stringResource(R.string.role_truth), stringResource(R.string.role_truth_hint)) { nav.go(Route.ChapterRoute("ch18")) }
+        BlockRow(stringResource(R.string.role_learn), stringResource(R.string.role_learn_hint)) { nav.go(Route.Mine(MinePart.PATH)) }
     }
 }
 
@@ -243,6 +249,33 @@ fun PathScreen(nav: Nav) {
             .joinToString(",") { steps -> "${steps.count { it.key in done }}/${steps.size}" }
         if (HomePrefs.load(context).path != share) { HomePrefs.update(context) { it.copy(path = share) }; Widgets.update(context) }
     }
+    PathWeek(path, done, nav, ::change)
+    Block(
+        stringResource(R.string.path_title), Group.PREPARE, tint = resist(),
+        summary = stringResource(R.string.path_summary, count, path.size),
+        leading = { ReadyRing(count.toFloat() / path.size, "$count/${path.size}") },
+    ) {
+        Text(stringResource(R.string.path_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+    val firstLevel = path.firstOrNull { it.key !in done }?.level
+    PATH_LEVELS.forEachIndexed { level, title ->
+        val steps = path.filter { it.level == level }
+        if (steps.isEmpty()) return@forEachIndexed
+        val got = steps.count { it.key in done }
+        Block(stringResource(title), Group.PREPARE, tint = resist(), padded = false, foldable = true, startOpen = level == firstLevel, trailing = {
+            Text((if (got == steps.size) "✓\u2002" else "") + stringResource(R.string.ready_count, got, steps.size), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+        }) {
+            steps.forEachIndexed { i, s ->
+                if (i > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                PathStepRow(s, done, owned, today, nav, ::change)
+            }
+        }
+    }
+}
+
+/** This week's step: one at a time, calmly; with little strength it asks nothing, with plenty it shows one more. */
+@Composable
+private fun PathWeek(path: List<PathStep>, done: Set<String>, nav: Nav, change: (String, Boolean) -> Unit) {
     // This week's step: the first one not done yet, in the order of the path. One at a time, calmly
     var justDone by androidx.compose.runtime.saveable.rememberSaveable { androidx.compose.runtime.mutableStateOf<String?>(null) }
     val next = path.firstOrNull { it.key !in done }
@@ -264,7 +297,7 @@ fun PathScreen(nav: Nav) {
                 androidx.compose.material3.Button(onClick = { change(next.key, true); justDone = next.key }, modifier = Modifier.heightIn(min = 48.dp)) {
                     Text(stringResource(R.string.path_week_done))
                 }
-                next.learn?.let { r -> androidx.compose.material3.OutlinedButton(onClick = { nav.go(r) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.path_learn)) } }
+                next.learn?.let { r -> OutlinedButton(onClick = { nav.go(r) }, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.path_learn)) } }
             }
             Text(stringResource(R.string.path_week_hint), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             then?.let { t ->
@@ -273,55 +306,40 @@ fun PathScreen(nav: Nav) {
             }
         }
     }
-    Block(
-        stringResource(R.string.path_title), Group.PREPARE, tint = resist(),
-        summary = stringResource(R.string.path_summary, count, path.size),
-        leading = { ReadyRing(count.toFloat() / path.size, "$count/${path.size}") },
+}
+
+/** One step of the path: ticked by the owner, with its check (or a quiet offer to repeat it) and where to learn it. */
+@Composable
+private fun PathStepRow(s: PathStep, done: Set<String>, owned: Steps?, today: Long, nav: Nav, change: (String, Boolean) -> Unit) {
+    val on = s.key in done
+    Row(
+        Modifier.fillMaxWidth().heightIn(min = 56.dp).doneRow(on).toggleable(value = on, role = Role.Checkbox) { change(s.key, it) }
+            .padding(end = 8.dp, top = 4.dp, bottom = 4.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(stringResource(R.string.path_intro), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    }
-    val firstLevel = path.firstOrNull { it.key !in done }?.level
-    PATH_LEVELS.forEachIndexed { level, title ->
-        val steps = path.filter { it.level == level }
-        if (steps.isEmpty()) return@forEachIndexed
-        val got = steps.count { it.key in done }
-        Block(stringResource(title), Group.PREPARE, tint = resist(), padded = false, foldable = true, startOpen = level == firstLevel, trailing = {
-            Text((if (got == steps.size) "✓\u2002" else "") + stringResource(R.string.ready_count, got, steps.size), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
-        }) {
-            steps.forEachIndexed { i, s ->
-                if (i > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-                val on = s.key in done
-                Row(
-                    Modifier.fillMaxWidth().heightIn(min = 56.dp).doneRow(on).toggleable(value = on, role = Role.Checkbox) { change(s.key, it) }
-                        .padding(end = 8.dp, top = 4.dp, bottom = 4.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Checkbox(checked = on, onCheckedChange = null, modifier = Modifier.padding(horizontal = 12.dp), colors = doneCheckbox())
-                    androidx.compose.foundation.layout.Column(Modifier.weight(1f)) {
-                        Text(stringResource(s.words), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface)
-                        // A step that can be checked: the mark when passed, or the way to the check
-                        if (s.key in PATH_CHECKS) {
-                            if (s.key + TESTED in done && !(owned?.repeatDue(s.key, today) == true)) {
-                                Text(stringResource(R.string.path_tested), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                            } else if (s.key + TESTED in done) {
-                                // Passed a while ago: a quiet offer to repeat, nothing taken away
-                                androidx.compose.material3.TextButton(onClick = { nav.go(Route.PathCheck(s.key)) }, contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp), modifier = Modifier.heightIn(min = 40.dp)) {
-                                    Text(stringResource(R.string.path_repeat), style = MaterialTheme.typography.labelLarge)
-                                }
-                            } else {
-                                androidx.compose.material3.TextButton(onClick = { nav.go(Route.PathCheck(s.key)) }, contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp), modifier = Modifier.heightIn(min = 40.dp)) {
-                                    Text(stringResource(R.string.path_check), style = MaterialTheme.typography.labelLarge)
-                                }
-                            }
-                        }
+        Checkbox(checked = on, onCheckedChange = null, modifier = Modifier.padding(horizontal = 12.dp), colors = doneCheckbox())
+        androidx.compose.foundation.layout.Column(Modifier.weight(1f)) {
+            Text(stringResource(s.words), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface)
+            // A step that can be checked: the mark when passed, or the way to the check
+            if (s.key in PATH_CHECKS) {
+                if (s.key + TESTED in done && !(owned?.repeatDue(s.key, today) == true)) {
+                    Text(stringResource(R.string.path_tested), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                } else if (s.key + TESTED in done) {
+                    // Passed a while ago: a quiet offer to repeat, nothing taken away
+                    androidx.compose.material3.TextButton(onClick = { nav.go(Route.PathCheck(s.key)) }, contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp), modifier = Modifier.heightIn(min = 40.dp)) {
+                        Text(stringResource(R.string.path_repeat), style = MaterialTheme.typography.labelLarge)
                     }
-                    // A small book: where to learn it, so the step's words keep the width
-                    s.learn?.let { r ->
-                        androidx.compose.material3.IconButton(onClick = { nav.go(r) }, modifier = Modifier.size(48.dp)) {
-                            androidx.compose.material3.Icon(androidx.compose.ui.graphics.vector.ImageVector.vectorResource(R.drawable.tab_know), contentDescription = stringResource(R.string.path_learn), tint = resist().ink)
-                        }
+                } else {
+                    androidx.compose.material3.TextButton(onClick = { nav.go(Route.PathCheck(s.key)) }, contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp), modifier = Modifier.heightIn(min = 40.dp)) {
+                        Text(stringResource(R.string.path_check), style = MaterialTheme.typography.labelLarge)
                     }
                 }
+            }
+        }
+        // A small book: where to learn it, so the step's words keep the width
+        s.learn?.let { r ->
+            androidx.compose.material3.IconButton(onClick = { nav.go(r) }, modifier = Modifier.size(48.dp)) {
+                androidx.compose.material3.Icon(androidx.compose.ui.graphics.vector.ImageVector.vectorResource(R.drawable.tab_know), contentDescription = stringResource(R.string.path_learn), tint = resist().ink)
             }
         }
     }
@@ -337,7 +355,6 @@ private fun parsePath(s: String?): Set<String> {
         emptySet()
     }
 }
-
 
 /** Shields for "My path": a level done, and each step checked by a test. */
 internal fun pathShields(stored: String?, roles: Set<String>): List<ShieldItem> {

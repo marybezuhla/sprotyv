@@ -32,7 +32,6 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -210,6 +209,7 @@ fun cardsPdf(context: Context, content: Content): ByteArray {
     return pdf.build()
 }
 
+@android.annotation.SuppressLint("Recycle") // closed by use {}, which lint does not follow here
 private fun write(context: Context, uri: Uri, bytes: ByteArray): Boolean {
     for (mode in listOf("wt", "w")) {
         try {
@@ -372,7 +372,7 @@ fun RescuerQrScreen(nav: Nav) {
     Image(
         bitmap = bitmap.asImageBitmap(),
         contentDescription = stringResource(R.string.rescuer_qr_desc),
-        modifier = Modifier.widthIn(max = 320.dp).fillMaxWidth().background(androidx.compose.ui.graphics.Color.White).padding(8.dp),
+        modifier = Modifier.widthIn(max = 320.dp).fillMaxWidth().background(PaperWhite).padding(8.dp),
     )
     // Plain text, not selectable: medical facts should not end up in the clipboard by accident
     Text(text, style = MaterialTheme.typography.bodyLarge)
