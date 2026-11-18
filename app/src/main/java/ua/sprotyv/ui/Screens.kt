@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -70,13 +71,20 @@ fun Frame(title: String, onBack: () -> Unit, bottom: (@Composable () -> Unit)? =
             ScreenshotsMark()
             if (corner) CornerCall()
         }
-        Column(
-            Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) { content() }
+        // On a tablet or a phone turned sideways the text keeps to a readable width in the middle;
+        // the whole width still scrolls
+        Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()), horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                Modifier.widthIn(max = READABLE_WIDTH).fillMaxWidth().padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) { content() }
+        }
         if (!inTab && !typing) { if (bottom != null) bottom() else CallBar() }
     }
 }
+
+/** The widest a column of text and buttons gets, so lines stay easy to read on a tablet. */
+internal val READABLE_WIDTH = 720.dp
 
 /** True while the on-screen keyboard is up. */
 @OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
