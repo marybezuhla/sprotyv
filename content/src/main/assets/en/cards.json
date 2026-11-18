@@ -9,7 +9,7 @@
   ],
   "call": "",
   "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 1.4, 1.2, 30.1; English translation by Sprotyv",
-  "checkedOn": "2026-10-30",
+  "checkedOn": "2026-11-18",
   "reviewedBy": "",
   "steps": [
    {
@@ -47,13 +47,13 @@
    "30.2"
   ],
   "call": "",
-  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 3.3, 30.2; Cabinet of Ministers resolution No. 1092 of 04.09.2026; English translation by Sprotyv",
-  "checkedOn": "2026-11-13",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 3.3, 30.2; Cabinet of Ministers resolution No. 1092 of 04.09.2026 (as amended by No. 1128 of 15.09.2026); English translation by Sprotyv",
+  "checkedOn": "2026-11-18",
   "reviewedBy": "",
   "steps": [
    {
     "action": "Put on shoes and go straight to the two-wall zone (hallway, bathroom), or to the shelter if it is in your building.",
-    "why": "This is right whatever the threat: ballistic missiles give 1–3 minutes or no time at all. At school, go with your class and follow the teacher. Where threat levels are in use, the level is announced by voice: red (siren for 1 minute) means missiles or a massed drone attack, yellow (30 seconds) drones. Your regional administration says whether they apply where you live.",
+    "why": "This is right whatever the threat: ballistic missiles give 1–3 minutes or no time at all. At school, go with your class and follow the teacher. The siren announces the threat level by voice: red (siren for 1 minute) means missiles or a massed drone attack, yellow (30 seconds) drones. A siren with no level is an alert, as before.",
     "figure": "3.2"
    },
    {
@@ -93,7 +93,7 @@
   ],
   "call": "",
   "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 3.3, 3.1, 3.2; English translation by Sprotyv",
-  "checkedOn": "2026-10-30",
+  "checkedOn": "2026-11-18",
   "reviewedBy": "",
   "steps": [
    {
@@ -107,8 +107,7 @@
    },
    {
     "action": "Outside, if there is a whistle or a rising sound, do not look at the sky. Drop: face down, feet toward the blast, hands on your head, mouth slightly open. Then crawl to shelter.",
-    "why": "An open mouth protects your eardrums and lungs from the blast wave.",
-    "figure": "3.1"
+    "why": "An open mouth evens out the pressure and may spare your eardrums."
    },
    {
     "action": "Stay where you are until the all-clear; do not go to the window.",
@@ -185,8 +184,7 @@
    },
    {
     "action": "If blood is spurting from an arm or leg, or pressure fails, apply a tourniquet 5–7 cm above the wound, not on a joint, until bleeding stops completely. Note the time.",
-    "why": "Wound location unclear, or still under fire or a drone nearby? As high on the limb as possible, over the clothing, and drag the person to cover; note the time there. Not over objects in pockets. It will hurt a lot; that is normal. Never loosen a tourniquet: only a medic removes it.",
-    "figure": "7.2"
+    "why": "Wound location unclear, or still under fire or a drone nearby? As high on the limb as possible, over the clothing, and drag the person to cover; note the time there. Not over objects in pockets. It will hurt a lot; that is normal. Never loosen a tourniquet: only a medic removes it."
    },
    {
     "action": "No tourniquet? A belt, shoelace or wire will not do. Keep pressing with all your weight or pack the wound with gauze.",
@@ -276,8 +274,7 @@
    },
    {
     "action": "If they are breathing, turn them on their side (pregnant: left side), check breathing every minute. If you suspect a spine injury, keep them on their back, head still, push the jaw forward.",
-    "why": "For a visibly pregnant woman, lying on her back lets the womb press on the large blood vessels. A spinal injury is possible after a fall from height, a road crash, a blow to the back.",
-    "figure": "7.4"
+    "why": "For a visibly pregnant woman, lying on her back lets the womb press on the large blood vessels. A spinal injury is possible after a fall from height, a road crash, a blow to the back."
    },
    {
     "action": "Not breathing or only occasional gasps? Start CPR on a hard surface. Child or infant? Give 5 breaths first; a teenager as an adult.",
@@ -285,8 +282,7 @@
    },
    {
     "action": "Press the centre of the chest: adult 5–6 cm, child about 5 cm, infant with two thumbs about 4 cm. 30 compressions, 2 breaths, 100–120 per minute.",
-    "why": "Do not stop until breathing returns or medics arrive. If you cannot give breaths, do compressions only; that also saves lives. Swap every 2 minutes.",
-    "figure": "7.7"
+    "why": "Do not stop until breathing returns or medics arrive. If you cannot give breaths, do compressions only; that also saves lives. Swap every 2 minutes."
    }
   ]
  },
@@ -297,8 +293,8 @@
    "7.11"
   ],
   "call": "103",
-  "source": "Order of the Ministry of Health of Ukraine No. 441 of 09.03.2022, procedure 3; \"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 7.11; English translation by Sprotyv",
-  "checkedOn": "2026-11-02",
+  "source": "Order of the Ministry of Health of Ukraine No. 441 of 09.03.2022, procedure 3; ERC 2025 (presses for a baby); \"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 7.11; English translation by Sprotyv",
+  "checkedOn": "2026-11-18",
   "reviewedBy": "",
   "steps": [
    {
@@ -314,7 +310,7 @@
     "why": "For a pregnant or large person: chest thrusts, not abdominal."
    },
    {
-    "action": "A baby: face down along your forearm, 5 pats between the shoulder blades, then 5 presses with two fingers on the breastbone. Alternate.",
+    "action": "A baby: face down along your forearm, 5 pats between the shoulder blades, then 5 presses on the breastbone with both thumbs, your hands around the chest. Alternate.",
     "why": ""
    },
    {
@@ -376,8 +372,8 @@
    "7.11"
   ],
   "call": "103",
-  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 7.11; Ministry of Health order No. 441, procedures 5, 6, 27; aspirin dose per ESC guidelines and sec. 7.11; English translation by Sprotyv",
-  "checkedOn": "2026-11-13",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 7.11; Ministry of Health order No. 441, procedures 5, 6, 27; English translation by Sprotyv",
+  "checkedOn": "2026-11-18",
   "reviewedBy": "",
   "steps": [
    {
@@ -385,8 +381,8 @@
     "why": "On your own? Tell the dispatcher your address and unlock the front door while you can."
    },
    {
-    "action": "An adult with chest pain: chew aspirin 150–300 mg, if there is no allergy and no bleeding.",
-    "why": "That is ½ of a 500 mg tablet or 2–3 \"cardio\" tablets of 100 mg. Nitroglycerin only if a doctor prescribed it."
+    "action": "An adult with chest pain: chew aspirin 162–325 mg, if there is no allergy and no bleeding.",
+    "why": "That is ½ of a 500 mg tablet or 3 \"cardio\" tablets of 75–100 mg. Nitroglycerin only if a doctor prescribed it."
    },
    {
     "action": "Face drooping, arm falling, speech slurred? This is a stroke: call 103 at once and remember when it started.",
@@ -411,7 +407,7 @@
   ],
   "call": "101",
   "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 10.5, 30.4; English translation by Sprotyv",
-  "checkedOn": "2026-10-30",
+  "checkedOn": "2026-11-18",
   "reviewedBy": "",
   "steps": [
    {
@@ -495,7 +491,7 @@
   ],
   "call": "101",
   "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 6.4, 6.5; English translation by Sprotyv",
-  "checkedOn": "2026-10-30",
+  "checkedOn": "2026-11-18",
   "reviewedBy": "",
   "steps": [
    {
@@ -511,8 +507,8 @@
     "why": ""
    },
    {
-    "action": "Once out of the zone, remove outer clothing without pulling it over your head; rinse skin and eyes with clean water for 10–15 minutes.",
-    "why": ""
+    "action": "Once out of the zone, remove outer clothing without pulling it over your head; rinse skin and eyes under running water for at least 20 minutes.",
+    "why": "Then see a medic, even if it no longer hurts."
    },
    {
     "action": "Casualty: rest, fresh air, half-sitting if short of breath. Unknown substance: do not induce vomiting. Medical help: 103.",
@@ -531,8 +527,8 @@
    "30.8"
   ],
   "call": "",
-  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 6.1, 6.2, 6.6, 6.5, 30.8; English translation by Sprotyv",
-  "checkedOn": "2026-10-30",
+  "source": "\"Survival Guide\" (Довідник виживання) 2.3 (CC BY-SA 4.0), sec. 6.1, 6.2, 6.6, 6.5, 30.8; Ministry of Health: 8 answers on iodine prophylaxis; WHO, potassium iodide; English translation by Sprotyv",
+  "checkedOn": "2026-11-18",
   "reviewedBy": "",
   "steps": [
    {
@@ -561,7 +557,7 @@
    },
    {
     "action": "Potassium iodide: only after an official announcement and in the dose it gives. Not given to people aged 40 and over, except pregnant and breastfeeding women. Do not drink iodine tincture.",
-    "why": "Taken within 6 hours before or in the first hours after the cloud passes. Protects only the thyroid; not taken for a \"dirty bomb\"."
+    "why": "Best 6 hours before radioactive iodine arrives; it can be taken from 24 hours before to no later than 8 hours after exposure begins. Not later: that does harm. One dose; a second only on official instruction. Protects only the thyroid; not taken for a \"dirty bomb\"."
    },
    {
     "action": "Eat and drink only from sealed containers.",

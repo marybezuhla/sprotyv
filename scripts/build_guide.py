@@ -33,7 +33,7 @@ BLOCK_CALLOUTS = {"warning", "tip", "critical", "note"}
 MAX_TEXT = 20000
 
 
-# Changes for current evidence; GUIDE-REVIEW.md gives the source and date of each
+# Changes for current evidence; the comment above each pair names its source
 EVIDENCE = [
     # 7.2: a percentage without a source
     ("У 80% випадків сильний безперервний тиск 10+ хвилин зупиняє кровотечу.",
@@ -94,9 +94,9 @@ EVIDENCE = [
      "удари по енергетиці й тепловій генерації (дрони, балістика) повторюються щозими, тож готуйтеся до того, що опалення може не бути довго."),
     # 29.4: colour is no sign of done meat (USDA FSIS: poultry 74 °C, minced meat 71 °C)
     ("Сік прозорий, всередині 70°C+, курка — 75°C+", "Усередині 71°C+, птиця — 75°C+; колір соку й м'яса — ненадійна ознака"),
-    # 3.3: threat levels and a spoken all-clear since September 2026 (Cabinet of Ministers resolution No. 1092 of 04.09.2026)
+    # 3.3: threat levels and a spoken all-clear since September 2026 (Cabinet of Ministers resolution No. 1092 of 04.09.2026, as amended by No. 1128 of 15.09.2026)
     ("Одягніться за погодою (навіть уночі — взуття і куртка), візьміть тривожну валізу.",
-     "Слухайте рівень загрози (з вересня 2026 року, постанова КМУ № 1092; не в усіх областях): там, де їх запровадила ОВА, сирена 1 хвилину й голосом «червоний рівень» — ракети або масована атака дронів; сирена 30 секунд і «жовтий рівень» — дрони, стежте за офіційними повідомленнями. В інших областях будь-яка сирена означає тривогу, як і раніше. За будь-якого рівня діють кроки нижче: укриття, а за балістики або якщо до укриття понад 5 хвилин — зона двох стін. Одягніться за погодою (навіть уночі — взуття і куртка), візьміть тривожну валізу."),
+     "Слухайте рівень загрози (з вересня 2026 року, постанова КМУ № 1092 зі змінами від 15.09.2026): сирена 1 хвилину й голосом «червоний рівень» — ракети або масована атака дронів; сирена 30 секунд і «жовтий рівень» — дрони (його оголошують по районах), стежте за офіційними повідомленнями. Звучить сирена без рівня — це тривога, як і раніше. За будь-якого рівня діють кроки нижче: укриття, а за балістики або якщо до укриття понад 5 хвилин — зона двох стін. Одягніться за погодою (навіть уночі — взуття і куртка), візьміть тривожну валізу."),
     ("Вихід — лише після відбою. Після серії вибухів",
      "Вихід — лише після відбою: його оголошують голосом, без сирени, тож стежте за застосунком тривог або радіо. Після серії вибухів"),
     # 23.3: studies of weather and joint pain disagree; no study supports a 12-hour forecast
@@ -127,19 +127,49 @@ EVIDENCE = [
     # 21.2: more fluid is not for heart or kidney failure (NHS)
     ("пити (+0,5–1 л на кожен градус вище 37) і відпочивати.",
      "пити (+0,5–1 л на кожен градус вище 37; при серцевій чи нирковій недостатності — скільки дозволив ваш лікар) і відпочивати. Дитині до 3 місяців з температурою 38°C і вище — до лікаря одразу; висип, що не блідне під склянкою, тверда шия, млявість — 103."),
-    # 6.2: too late after a day (WHO 2017, iodine thyroid blocking)
+    # 6.2: the time limit of MOZ (8 answers on iodine prophylaxis, 2022)
     ("Повторна доза — лише за офіційною вказівкою при тривалому викиді.",
-     "Повторна доза — лише за офіційною вказівкою при тривалому викиді. Пізніше ніж через 24 години після проходження хмари йодид калію вже не приймають."),
+     "Повторна доза — лише за офіційною вказівкою при тривалому викиді. Найкраще — за 6 год до надходження радіоактивного йоду; пізніше ніж через 8 годин після початку опромінення йодид калію не приймають — це вже шкодить (МОЗ)."),
     # 26.1: what 203 is (Donetsk regional administration, 15.12.2025)
     ("**203** — єдина лінія БО «Координаційний гуманітарний центр»", "**203** — Координаційний гуманітарний центр (заявки на евакуацію, зокрема з Донеччини)"),
     # 7.11: call at once, not after 15 minutes (MOZ order 441, procedure 6)
     ("стискальний/пекучий біль за грудиною понад 15 хв,", "стискальний/пекучий біль за грудиною (не чекайте, чи мине: 103 одразу),"),
+    # 7.11: the aspirin dose of MOZ order 441, procedure 6 (162–325 mg)
+    ("розжувати аспірин 150–300 мг (½ таблетки по 500 мг або 2–3 таблетки «кардіо» по 75–100 мг)",
+     "розжувати аспірин 162–325 мг (½ таблетки по 500 мг або 3 таблетки «кардіо» по 75–100 мг)"),
+    # 17.8: the counter-trafficking line as IOM gives it (iom.int, checked 18.11.2026)
+    ("(**527** з мобільного, **0 800 107 527** зі стаціонарного або мобільного, щодня 7:00–22:00, безкоштовно;",
+     "(**527** з мобільного, **0 800 505 501** зі стаціонарного, безкоштовно;"),
+    # 18.7: Bridgefy's encryption was broken (Albrecht et al., USENIX Security 2022)
+    ("Mesh-месенджери (Bridgefy, Briar) працюють через Bluetooth між телефонами на 10–30 м у приміщенні (до 100 м на відкритому просторі) — для двору і черги, не для міста.",
+     "Mesh-месенджери працюють через Bluetooth між телефонами на 10–30 м у приміщенні (до 100 м на відкритому просторі) — для двору і черги, не для міста. Для чутливих повідомлень — Briar, а не Bridgefy: дослідники зламали його шифрування."),
+    # 4.1: a figure without a source the app could confirm
+    ("за даними розвідки, до 500 запусків на добу;", "їх запускають дедалі більше;"),
+    # 18.5: all three parts of the article (Criminal Code, art. 114-2)
+    ("(ст. 114-2 ККУ, 5–8 років, за тяжких наслідків до 12)", "(ст. 114-2 ККУ: від 3 до 8 років, за обтяжувальних обставин до 12)"),
+    # 29.5: the same body signals as 14.3 (one arm up, one down is "no")
+    ("Одна рука піднята", "Одна рука вгору, друга вниз (літера N)"),
+    ("Усе гаразд, не чекайте", "Ні, допомога не потрібна"),
+    ("Ні / не підходь / небезпека попереду", "Не підходь / небезпека попереду (пілоту: «тут не сідайте»)"),
+    # Ukrainian wording
+    ("Розхід у заторі", "Витрата пального в заторі"),
+    ("Відмічайте виконане", "Позначайте виконане"),
+    ("Прийміть душ з милом", "Помийтеся під душем з милом"),
+    # 6.2: the same window as the card (MOZ, 8 answers on iodine prophylaxis)
+    ("Приймати — тільки після офіційного оголошення, за 6 год до або в перші години після проходження хмари.",
+     "Приймати — тільки після офіційного оголошення: найкраще за 6 год до надходження радіоактивного йоду, не пізніше 8 год після початку опромінення."),
+    # 6.4: at least 20 minutes for a chemical on skin or in the eyes, as the burn and chemical cards
+    ("промийте шкіру і очі великою кількістю чистої води 10–15 хв.", "промийте шкіру і очі великою кількістю проточної води щонайменше 20 хв."),
+    ("промивати водою/фізрозчином 10–15 хв,", "промивати водою/фізрозчином щонайменше 20 хв,"),
 ]
 
 
-# Words inside the figures' drawings: 7.1, a tourniquet 5–7 cm above the wound (MOZ order 441, procedure 4)
-FIGURE_TEXT = [
-    ("5–8 см вище рани (ближче до тулуба)", "5–7 см вище рани (ближче до тулуба)"),
+# The drawings kept, by the start of their captions
+KEEP_FIGURES = ("Рис. 3.2.", "Рис. 5.1.")
+
+# Where the text points to a drawing that is left out
+NO_FIGURES = [
+    (" Рис. 15.1.", ""), (" Рис. 15.2.", ""), (" Рис. 15.3.", ""), (" Рис. 15.4.", ""),
 ]
 
 
@@ -156,8 +186,8 @@ def replace_text(chapters, pairs):
 
 def child_doses_out(chapters, children_row):
     """
-    Sprotyv's own rule: doses for children only from an official source after a paediatrician's
-    review. Until then the children's rows of the potassium iodide table (6.2) become one row that
+    Sprotyv's own rule: a child's dose depends on weight and the medicine, so it comes from an
+    official announcement or a doctor. The children's rows of the potassium iodide table (6.2) become one row that
     points to the official announcement or a doctor. Fails loudly if the table changes upstream.
     """
     for c in chapters:
@@ -378,11 +408,12 @@ class Builder:
                     raise ValueError(f"Unexpected <{c.tag}> inside a figure")
 
         walk(node)
+        # Sprotyv keeps two drawings: the two-wall rule (3.2) and the marks of mined ground (5.1), both things
+        # to recognise by eye at once. The others are left out; their words stay in the text
+        if not any(caption.startswith(k) for k in KEEP_FIGURES):
+            return None
         names = []
         for svg in svgs:
-            # Words inside drawings that were brought in line with current evidence (GUIDE-REVIEW.md)
-            for old, new in FIGURE_TEXT:
-                svg = svg.replace(old, new)
             digest = hashlib.sha256(svg.encode("utf-8")).hexdigest()[:16]
             name = f"fig_{digest}"
             self.figures[name] = svg
@@ -414,7 +445,9 @@ class Builder:
             elif c.tag == "table":
                 out.append({"t": "table", **table(c)})
             elif c.tag == "figure":
-                out.append(self.figure(c))
+                f = self.figure(c)
+                if f:
+                    out.append(f)
             elif c.tag == "div" and c.cls() in BLOCK_CALLOUTS:
                 if has_blocks(c):
                     out.append({"t": "callout", "kind": c.cls(), "blocks": self.blocks(c)})
@@ -505,26 +538,6 @@ def main():
         if not ch["title"]:
             sys.exit(f"Chapter without a title: {ch['id']}")
 
-    # Pictures the guide lacks, from open sources (scripts/figures-extra), each after its heading
-    extra_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "figures-extra")
-    with open(os.path.join(extra_dir, "extras.json"), encoding="utf-8") as f:
-        extras = json.load(f)
-    for x in extras:
-        if not re.fullmatch(r"fig_[0-9a-f]{16}", x["name"]):
-            sys.exit(f"Bad extra figure name: {x['name']}")
-        placed = 0
-        for ch in chapters:
-            if ch["title"] != x["chapter"]:
-                continue
-            for sec in ch["sections"]:
-                for i, b in enumerate(sec["blocks"]):
-                    if b.get("t") == "h" and b["text"].startswith(x["after"]):
-                        sec["blocks"].insert(i + 1, {"t": "figure", "pictures": [x["name"]], "caption": x["caption"]})
-                        placed += 1
-                        break
-        if placed != 1:
-            sys.exit(f"Extra figure {x['name']}: heading «{x['after']}» found {placed} times")
-
     try:
         commit = subprocess.run(["git", "-C", args.source, "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
     except Exception:
@@ -561,9 +574,9 @@ def main():
         ("(Organic Maps, maps.me)", "(CoMaps, Organic Maps або OsmAnd)"),  # 13.1 and 18.1
         ("дитині від 3 років — близько 1 г/кг (дітям до 3 років — лише за вказівкою медиків)", "дітям — лише за вказівкою 103 або лікаря"),  # 7.13
     ])
-    # Brought in line with current evidence (November 2026): each change, its source and date are in
-    # scripts/content/adaptation/GUIDE-REVIEW.md
+    # Brought in line with current evidence (November 2026): the source of each change is named beside it in EVIDENCE
     replace_text(chapters, EVIDENCE)
+    replace_text(chapters, NO_FIGURES)
 
     guide = {
         "title": "Довідник виживання",
@@ -572,17 +585,16 @@ def main():
         "source": "https://github.com/snegireff/dovidnyk-vyzhyvannia",
         "commit": commit,
         "license": "CC BY-SA 4.0",
-        "changes": "Перетворено для показу в застосунку: розмітку змінено, рисунки збережено як зображення, "
+        "changes": "Перетворено для показу в застосунку: розмітку змінено, з рисунків лишено два (рис. 3.2, правило двох стін, і рис. 5.1, позначення замінованих ділянок), решту не включено, "
                    "розділам Додатку А додано номери А.1–А.5, застереження з обкладинки перенесено в «Про довідник», "
-                   "решту обкладинки, зміст і бланки нотаток не включено. Додано три рисунки з відкритих джерел "
-                   "(суспільне надбання; автор — у підписі): рис. 11.2, 15.5, 15.6. Текст розділів не змінено, крім такого: "
+                   "решту обкладинки, зміст і бланки нотаток не включено. Текст розділів не змінено, крім такого: "
                    "у п. 4.8 і 14.4 замість чат-ботів і Telegram-каналів — офіційні сайти, застосунки й способи, які називає ОВА "
                    "(застосунок не радить Telegram); у п. 13.1 і 18.1 замість maps.me — CoMaps, Organic Maps або OsmAnd; у таблиці п. 6.2 "
                    "дози для дітей замінено відсилкою до офіційного оголошення МОЗ або лікаря, а в п. 7.13 дозу активованого вугілля "
-                   "для дітей — відсилкою до 103 або лікаря (дози для дітей у застосунку — лише після рецензії педіатра). "
+                   "для дітей — відсилкою до 103 або лікаря (доза для дитини залежить від ваги й препарату, тож її називає 103, лікар або інструкція). "
                    "У листопаді 2026 року поради звірено з чинними настановами й правилами (Resuscitation Council UK і ERC 2025, наказ МОЗ № 441, "
-                   "NHS, USDA, ВООЗ, постанова КМУ № 1092) і виправлено в п. 3.3, 3.4, 6.2, 7.1, 7.2, 7.4–7.6, 7.8, 7.10, 7.11, 7.16, 9.4, 12.1–12.3, 13.2, 16.2, 18.3, 20.1, 20.5, "
-                   "21.2, 21.4, 22.5, 23.3, 26.1, 27.5, 29.4 і 30.5; кожна зміна з джерелом — у файлі scripts/content/adaptation/GUIDE-REVIEW.md сховища застосунку.",
+                   "NHS, USDA, ВООЗ, МОМ, постанова КМУ № 1092) і виправлено в п. 3.3, 3.4, 4.1, 6.1, 6.2, 6.4, 7.1, 7.2, 7.4–7.6, 7.8, 7.10, 7.11, 7.16, 9.4, 12.1–12.3, 13.2, 16.2, 17.8, 18.3, 18.5, 18.7, 20.1, 20.5, "
+                   "21.2, 21.4, 22.5, 23.3, 26.1, 26.2, 27.5, 29.4, 29.5 і 30.5, а також переформульовано кілька речень; джерело кожної зміни названо біля неї у файлі scripts/build_guide.py сховища застосунку.",
         "chapters": chapters,
     }
     os.makedirs(args.out, exist_ok=True)

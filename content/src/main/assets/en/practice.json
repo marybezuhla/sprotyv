@@ -77,7 +77,7 @@
    {
     "text": "I'll drop face down, feet towards the blast, hands on my head, mouth slightly open.",
     "right": true,
-    "why": "An open mouth protects your eardrums and lungs from the blast wave. Then crawl to shelter."
+    "why": "An open mouth evens out the pressure and may spare your eardrums. Then crawl to shelter."
    },
    {
     "text": "I'll look up to see where it's coming from.",
@@ -376,7 +376,7 @@
    {
     "text": "Turn them on their side and check breathing every minute.",
     "right": true,
-    "why": "A spinal injury is possible after a fall from height, a road crash, a blow to the back."
+    "why": "On their side, the tongue and vomit cannot block breathing. There was no injury, so turning them is safe."
    },
    {
     "text": "Start chest compressions.",

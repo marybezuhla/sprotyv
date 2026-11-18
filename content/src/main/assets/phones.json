@@ -66,10 +66,10 @@
   "id": "ev-203",
   "category": "evacuation",
   "title": "Координаційний гуманітарний центр: евакуація",
-  "note": "Заявки на евакуацію з Донеччини. Короткий номер, безкоштовно.",
+  "note": "Заявки на евакуацію з Донеччини. Цілодобово, короткий номер, безкоштовно.",
   "number": "203",
   "source": "https://dn.gov.ua/en/news/koordynatsiinyi-humanitarnyi-tsentr-pryimaie-zaiavky-na-evakuatsiiu-z-donetskoi-oblasti-za-nomerom-203",
-  "checkedOn": "2026-11-17"
+  "checkedOn": "2026-11-18"
  },
  {
   "id": "ev-uz",
@@ -120,10 +120,10 @@
   "id": "ev-redcross",
   "category": "evacuation",
   "title": "Український Червоний Хрест",
-  "note": "Інформація про допомогу, підтримка, розшук зниклих родичів. Щодня 09:00–18:00, безкоштовно.",
+  "note": "Інформація про допомогу, підтримка, розшук зниклих родичів. Пн–пт 09:00–18:00, безкоштовно.",
   "number": "0800332656",
   "source": "https://redcross.org.ua/news/2025/01/102989/",
-  "checkedOn": "2026-11-03"
+  "checkedOn": "2026-11-18"
  },
  {
   "id": "ev-icrc",
@@ -202,9 +202,9 @@
   "category": "power",
   "title": "Запорізька область: Запоріжжяобленерго",
   "note": "Немає світла, аварія в мережі. Контакт-центр.",
-  "number": "0800304502",
-  "source": "https://www.zoe.com.ua",
-  "checkedOn": "2026-11-03"
+  "number": "0800304050",
+  "source": "https://mev.gov.ua/en/storinka/where-check-electricity-outage-schedules-and-where-report-violations",
+  "checkedOn": "2026-11-18"
  },
  {
   "id": "p-ivano-frankivsk",
@@ -264,10 +264,10 @@
   "id": "p-rivne",
   "category": "power",
   "title": "Рівненська область: Рівнеобленерго",
-  "note": "Немає світла, аварія в мережі. Цілодобово.",
-  "number": "0800505380",
-  "source": "https://www.roe.vsei.ua/call/",
-  "checkedOn": "2026-11-03"
+  "note": "Немає світла, аварія в мережі. Міський номер, за тарифом оператора.",
+  "number": "0362694555",
+  "source": "https://mev.gov.ua/en/storinka/where-check-electricity-outage-schedules-and-where-report-violations",
+  "checkedOn": "2026-11-18"
  },
  {
   "id": "p-sumy",
@@ -390,10 +390,10 @@
   "id": "m-men",
   "category": "mind",
   "title": "Лінія підтримки для чоловіків",
-  "note": "Стрес, криза, вигорання. 14:00–06:00; безкоштовно з мобільних.",
+  "note": "Стрес, криза, вигорання. Безкоштовно з мобільних; у різних джерелах години різні.",
   "number": "2345",
   "source": "https://la-strada.org.ua/en/garyachi-liniyi",
-  "checkedOn": "2026-11-03"
+  "checkedOn": "2026-11-18"
  },
  {
   "id": "m-varto",
@@ -687,10 +687,10 @@
   "id": "vt-uvf",
   "category": "veterans",
   "title": "Ветеранський фонд: кризова лінія",
-  "note": "Психологічна кризова підтримка для ветеранів і родин, зокрема коли є думки про самогубство. Цілодобово, безкоштовно. Життю загрожує небезпека просто зараз: 103.",
+  "note": "Психологічна кризова підтримка для ветеранів і родин, зокрема коли є думки про самогубство. Цілодобово, безкоштовно; буває довге очікування. Життю загрожує небезпека просто зараз: 103.",
   "number": "0800332029",
   "source": "https://veteranfund.com.ua/en/2023/01/14/the-uvf-crisis-support-hotline/",
-  "checkedOn": "2026-11-03"
+  "checkedOn": "2026-11-18"
  },
  {
   "id": "vt-hub",
@@ -852,15 +852,6 @@
   "note": "Порушені права, зокрема полонені й депортовані цивільні. Пн–чт 09:00–18:00, пт до 16:45; безкоштовно.",
   "number": "1678",
   "source": "https://ombudsman.gov.ua/en/news/tags/diya",
-  "checkedOn": "2026-11-03"
- },
- {
-  "id": "st-ombudsman-0800",
-  "category": "state",
-  "title": "Омбудсман: другий номер",
-  "note": "Те саме, що 1678; той самий графік.",
-  "number": "0800501720",
-  "source": "https://cyberpolice.gov.ua/contacts/",
   "checkedOn": "2026-11-03"
  },
  {

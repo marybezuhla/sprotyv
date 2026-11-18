@@ -9,7 +9,7 @@
  "source": "https://github.com/snegireff/dovidnyk-vyzhyvannia",
  "commit": "6a3c6fb6e7ecd160e864232d0f1a47cd928fe928",
  "license": "CC BY-SA 4.0",
- "changes": "Converted for display in the app: markup changed, figures kept as images, the sections of Appendix A numbered A.1–A.5, the cover disclaimer moved to “About the guide”, the rest of the cover, the contents and the note pages left out. Three figures from open sources added (public domain; author in the caption): fig. 11.2, 15.5, 15.6. English translation by Sprotyv from the Ukrainian original (CC BY-SA 4.0); the meaning of the chapters is unchanged, except: in 4.8 and 14.4 official websites, apps and ways named by the OVA instead of chatbots and Telegram channels (the app does not recommend Telegram); in 13.1 and 18.1 CoMaps, Organic Maps or OsmAnd instead of maps.me; in the table of 6.2 the doses for children replaced by a reference to the official Ministry of Health announcement or a doctor, and in 7.13 the activated charcoal dose for children by a reference to 103 or a doctor (doses for children appear in the app only after a paediatrician's review). In November 2026 the advice was checked against current guidelines and rules (Resuscitation Council UK and ERC 2025, Ministry of Health order No. 441, NHS, USDA, WHO, Cabinet of Ministers resolution No. 1092) and corrected in 3.3, 3.4, 6.2, 7.1, 7.2, 7.4–7.6, 7.8, 7.10, 7.11, 7.16, 9.4, 12.1–12.3, 13.2, 16.2, 18.3, 20.1, 20.5, 21.2, 21.4, 22.5, 23.3, 26.1, 27.5, 29.4 and 30.5; each change with its source is in scripts/content/adaptation/GUIDE-REVIEW.md in the app's repository.",
+ "changes": "Converted for display in the app: markup changed, of the figures only two kept (fig. 3.2, the two-wall rule, and fig. 5.1, marks of mined ground), the rest left out, the sections of Appendix A numbered A.1–A.5, the cover disclaimer moved to “About the guide”, the rest of the cover, the contents and the note pages left out. English translation by Sprotyv from the Ukrainian original (CC BY-SA 4.0); the meaning of the chapters is unchanged, except: in 4.8 and 14.4 official websites, apps and ways named by the OVA instead of chatbots and Telegram channels (the app does not recommend Telegram); in 13.1 and 18.1 CoMaps, Organic Maps or OsmAnd instead of maps.me; in the table of 6.2 the doses for children replaced by a reference to the official Ministry of Health announcement or a doctor, and in 7.13 the activated charcoal dose for children by a reference to 103 or a doctor (a child's dose depends on weight and the medicine, so 103, a doctor or the leaflet gives it). In November 2026 the advice was checked against current guidelines and rules (Resuscitation Council UK and ERC 2025, Ministry of Health order No. 441, NHS, USDA, WHO, IOM, Cabinet of Ministers resolution No. 1092) and corrected in 3.3, 3.4, 4.1, 6.1, 6.2, 6.4, 7.1, 7.2, 7.4–7.6, 7.8, 7.10, 7.11, 7.16, 9.4, 12.1–12.3, 13.2, 16.2, 17.8, 18.3, 18.5, 18.7, 20.1, 20.5, 21.2, 21.4, 22.5, 23.3, 26.1, 26.2, 27.5, 29.4, 29.5 and 30.5, and reworded a few sentences; the source of each change is named beside it in scripts/build_guide.py in the app's repository.",
  "chapters": [
   {
    "id": "ch1",
@@ -999,13 +999,6 @@
          "text": "**Rule:** if you hear a whistle or a rising sound, do NOT look at the sky and do not run. Drop to the ground WHERE YOU ARE, face down, feet toward the blast, mouth slightly open (protects the eardrums and lungs from the wave), hands covering your head and neck."
         }
        ]
-      },
-      {
-       "t": "figure",
-       "pictures": [
-        "fig_d52368b31358cc30"
-       ],
-       "caption": "Fig. 3.1. Position during sudden shelling in the open"
       }
      ]
     },
@@ -1056,7 +1049,7 @@
        "kind": "steps",
        "items": [
         {
-         "text": "Listen for the threat level (since September 2026, Cabinet of Ministers resolution No. 1092; not in every region): where the regional administration uses them, a 1-minute siren and the voice message “red level” mean missiles or a massed drone attack; a 30-second siren and “yellow level” mean drones, so follow official messages. Elsewhere any siren means an alert, as before. At any level the steps below apply: a shelter, or the two-wall zone if there is a ballistic threat or the shelter is more than 5 minutes away. Dress for the weather (shoes and a jacket, even at night), take your go-bag."
+         "text": "Listen for the threat level (since September 2026, Cabinet of Ministers resolution No. 1092 as amended on 15.09.2026): a 1-minute siren and the voice message “red level” mean missiles or a massed drone attack; a 30-second siren and “yellow level” mean drones (it is announced district by district), so follow official messages. A siren with no level is an alert, as before. At any level the steps below apply: a shelter, or the two-wall zone if there is a ballistic threat or the shelter is more than 5 minutes away. Dress for the weather (shoes and a jacket, even at night), take your go-bag."
         },
         {
          "text": "If there is time (the alert is not “ballistic”), turn off the gas, electrical appliances and water, close the windows and curtains."
@@ -1388,7 +1381,7 @@
          "cells": [
           "**Jet long-range** (“Geran-3/4/5”, “Banderol”, “Dan-M”/“Dan-T”)",
           "A turbine whistle instead of a “moped”, speed 300–700 km/h (2–4 times faster than an ordinary “Shahed”), warhead 50–130 kg",
-          "The main threat of winter 2026–2027: according to intelligence, up to 500 launches a day; harder to shoot down, the time from alert to impact is minutes, so a “drone” alert no longer means “there is time”",
+          "The main threat of winter 2026–2027: more and more of them are launched; harder to shoot down, the time from alert to impact is minutes, so a “drone” alert no longer means “there is time”",
           "1000+ km"
          ]
         },
@@ -1821,7 +1814,7 @@
          "text": "**Seal yourself in:** close windows, doors, ventilation, chimneys. Seal gaps with wet towels, tape, plastic sheeting."
         },
         {
-         "text": "**If you were outside:** take off your outer clothing BEFORE entering the living area, put it in a bag and take it far away. Take a shower with soap (do not scrub the skin hard), wash your hair without conditioner (it holds particles in)."
+         "text": "**If you were outside:** take off your outer clothing BEFORE entering the living area, put it in a bag and take it far away. Wash under a shower with soap (do not scrub the skin hard), wash your hair without conditioner (it holds particles in)."
         },
         {
          "text": "**Listen to official announcements** (battery radio). Do not go out until the authorities say so."
@@ -1849,7 +1842,7 @@
        "blocks": [
         {
          "t": "p",
-         "text": "**Potassium iodide protects ONLY the thyroid gland from radioactive iodine and ONLY if there has been a release from a reactor. It does not protect against external radiation or other isotopes.** Take it only after an official announcement, 6 hours before or in the first hours after the cloud passes. Do NOT drink alcoholic iodine solution: that is poisoning."
+         "text": "**Potassium iodide protects ONLY the thyroid gland from radioactive iodine and ONLY if there has been a release from a reactor. It does not protect against external radiation or other isotopes.** Take it only after an official announcement: best 6 hours before radioactive iodine arrives, no later than 8 hours after exposure begins. Do NOT drink alcoholic iodine solution: that is poisoning."
         }
        ]
       },
@@ -1888,7 +1881,7 @@
       },
       {
        "t": "p",
-       "text": "Taken once after a meal, washed down with water/milk/kysil (a thickened fruit drink). A repeat dose only on official instruction during a prolonged release. Later than 24 hours after the cloud has passed, potassium iodide is no longer taken. Potassium iodide protects only against radioactive iodine (nuclear power plant accident, nuclear explosion); it is not taken after a “dirty bomb”. Doses follow the Regulations on iodine prophylaxis (order of the Ministry of Health of Ukraine of 09.03.2021 No. 408); if the official announcement gives other doses, follow it."
+       "text": "Taken once after a meal, washed down with water/milk/kysil (a thickened fruit drink). A repeat dose only on official instruction during a prolonged release. Best 6 hours before radioactive iodine arrives; later than 8 hours after exposure begins, potassium iodide is not taken: it does harm by then (Ministry of Health). Potassium iodide protects only against radioactive iodine (nuclear power plant accident, nuclear explosion); it is not taken after a “dirty bomb”. Doses follow the Regulations on iodine prophylaxis (order of the Ministry of Health of Ukraine of 09.03.2021 No. 408); if the official announcement gives other doses, follow it."
       }
      ]
     },
@@ -1945,7 +1938,7 @@
        "blocks": [
         {
          "t": "p",
-         "text": "**Tear agents (CS, chloropicrin)** are increasingly used away from the front too. Burning eyes and skin, choking without loss of consciousness: that is them. Go upwind into fresh air, do not rub your eyes, rinse with water/saline for 10–15 min, take off and bag your clothes, wash skin with cool water and soap (hot water makes the burning worse), throw away contact lenses. People with asthma should use the inhaler. Go to a medic at once (103) if shortness of breath, chest tightness or a strong cough do not pass within 30 min in fresh air, get worse or come back within a day: chloropicrin damages the lungs, and pulmonary oedema can develop with a delay of several hours, even if you felt better at first. For the first day: rest, no physical exertion, do not stay alone."
+         "text": "**Tear agents (CS, chloropicrin)** are increasingly used away from the front too. Burning eyes and skin, choking without loss of consciousness: that is them. Go upwind into fresh air, do not rub your eyes, rinse with water/saline for at least 20 min, take off and bag your clothes, wash skin with cool water and soap (hot water makes the burning worse), throw away contact lenses. People with asthma should use the inhaler. Go to a medic at once (103) if shortness of breath, chest tightness or a strong cough do not pass within 30 min in fresh air, get worse or come back within a day: chloropicrin damages the lungs, and pulmonary oedema can develop with a delay of several hours, even if you felt better at first. For the first day: rest, no physical exertion, do not stay alone."
         }
        ]
       },
@@ -1970,7 +1963,7 @@
          "text": "Do not eat or drink anything that may have been exposed to the chemical until it is confirmed safe."
         },
         {
-         "text": "Once out of the zone: take off your outer clothing (not over your head; cut it off if possible), rinse your skin and eyes with plenty of clean water for 10–15 min."
+         "text": "Once out of the zone: take off your outer clothing (not over your head; cut it off if possible), rinse your skin and eyes under plenty of running water for at least 20 min."
         },
         {
          "text": "For those affected: rest, fresh air, a half-sitting position if they are choking. Do not induce vomiting if the substance is unknown. Medical help as soon as possible."
@@ -2154,13 +2147,6 @@
        "text": "Step 2: Tourniquet (if it is a limb and blood is \"spurting\" or pressure does not help)"
       },
       {
-       "t": "figure",
-       "pictures": [
-        "fig_65cbc2e795f85622"
-       ],
-       "caption": "Fig. 7.1. Applying a tourniquet to a limb"
-      },
-      {
        "t": "list",
        "kind": "steps",
        "items": [
@@ -2241,13 +2227,6 @@
      "num": "7.4",
      "title": "Recovery position (stable side position)",
      "blocks": [
-      {
-       "t": "figure",
-       "pictures": [
-        "fig_a0acb232cdd99d47"
-       ],
-       "caption": "Fig. 7.2. Recovery position for an unconscious person who is breathing"
-      },
       {
        "t": "list",
        "kind": "steps",
@@ -2340,13 +2319,6 @@
       {
        "t": "p",
        "text": "Do it if the person is unconscious and NOT breathing (or only occasional agonal \"gasps\")."
-      },
-      {
-       "t": "figure",
-       "pictures": [
-        "fig_9a9ed4aaab6a264b"
-       ],
-       "caption": "Fig. 7.3. Chest compressions"
       },
       {
        "t": "list",
@@ -2516,7 +2488,7 @@
          "text": "**Concussion/blast injury:** ringing in the ears, being stunned, blood from the ears/nose, disorientation. Rest, quiet, monitor consciousness; examine carefully for hidden wounds. If consciousness worsens, get to medics urgently (possible internal bleeding/brain swelling)."
         },
         {
-         "text": "**Heart attack:** squeezing/burning pain behind the breastbone (do not wait for it to pass: 103 at once), spreading to the left arm, jaw, back; shortness of breath, cold sweat, fear. Stress and physical overexertion in a crisis trigger it more often. Actions: sit half-reclining, rest, loosen clothing, 103; **chew aspirin 150–300 mg (½ of a 500 mg tablet or 2–3 \"cardio\" tablets of 75–100 mg)** if there is no allergy and no bleeding; nitroglycerin only if it has been prescribed to the person. If unconscious and not breathing: CPR (sec. 7.7)."
+         "text": "**Heart attack:** squeezing/burning pain behind the breastbone (do not wait for it to pass: 103 at once), spreading to the left arm, jaw, back; shortness of breath, cold sweat, fear. Stress and physical overexertion in a crisis trigger it more often. Actions: sit half-reclining, rest, loosen clothing, 103; **chew aspirin 162–325 mg (½ of a 500 mg tablet or 3 \"cardio\" tablets of 75–100 mg)** if there is no allergy and no bleeding; nitroglycerin only if it has been prescribed to the person. If unconscious and not breathing: CPR (sec. 7.7)."
         },
         {
          "text": "**Stroke, the FAST test (Ukrainian «ОРМЧ»):** **F**ace drooping (ask them to smile), **A**rm does not rise or drops, **S**peech slurred or they do not understand, **T**ime: call 103 immediately and remember when it started. Give nothing to eat or drink, lay them down with the head raised, do not leave a conscious person alone. The treatment window is 3–4.5 hours: \"let them lie down, it will pass\" costs brain tissue."
@@ -2894,13 +2866,6 @@
       {
        "t": "h",
        "text": "Homemade filter"
-      },
-      {
-       "t": "figure",
-       "pictures": [
-        "fig_622a5c80c428ad42"
-       ],
-       "caption": "Fig. 8.1. Homemade filter from a bottle. Charcoal from a burnt-out campfire (not embers!)"
       },
       {
        "t": "p",
@@ -3484,24 +3449,8 @@
      "title": "Types of fires",
      "blocks": [
       {
-       "t": "figure",
-       "pictures": [
-        "fig_995d675c6a0f5d77",
-        "fig_63437a33d44a7ae4",
-        "fig_26ee595e90b614da"
-       ],
-       "caption": "Fig. 10.1. Main types of fires"
-      },
-      {
        "t": "h",
        "text": "Dakota fire hole: hidden and highly efficient"
-      },
-      {
-       "t": "figure",
-       "pictures": [
-        "fig_c2534ec9fbd18536"
-       ],
-       "caption": "Fig. 10.2. Dakota fire hole: two pits joined by a tunnel. Almost no smoke or light, minimal wood, strong draught"
       },
       {
        "t": "p",
@@ -3709,13 +3658,6 @@
        "text": "Lean-to from plastic sheeting/tarp (30 minutes)"
       },
       {
-       "t": "figure",
-       "pictures": [
-        "fig_3207c196d37570c9"
-       ],
-       "caption": "Fig. 11.1. Single-slope lean-to: the quickest shelter, works with a reflector fire"
-      },
-      {
        "t": "list",
        "kind": "steps",
        "items": [
@@ -3733,13 +3675,6 @@
       {
        "t": "h",
        "text": "Debris hut (no tarp, 2–3 hours)"
-      },
-      {
-       "t": "figure",
-       "pictures": [
-        "fig_479b44acd3076aa1"
-       ],
-       "caption": "Fig. 11.2. Debris hut: (1) ridgepole on a support and ribs of branches; (2) covered with a thick layer of branches and leaves. Drawing: U.S. Army, field manual FM 21-76, public domain"
       },
       {
        "t": "p",
@@ -3802,13 +3737,6 @@
      "num": "12.1",
      "title": "The three-layer principle",
      "blocks": [
-      {
-       "t": "figure",
-       "pictures": [
-        "fig_06c270600e32c2ef"
-       ],
-       "caption": "Fig. 12.1. Three layers of clothing: base (thermal underwear, synthetics/wool, NOT cotton), insulation (fleece, sweater, down), shell (membrane, raincoat). It is not the fabric that keeps you warm but the air between the layers"
-      },
       {
        "t": "list",
        "kind": "bullets",
@@ -3951,13 +3879,6 @@
        "text": "Hold the watch level and point the **hour hand at the sun**. Halve the angle between the hour hand and the \"12\" (in winter time) or the \"1\" (in summer time). This line (the bisector) points **south**, the opposite direction is north. The method is approximate and works only in the northern hemisphere; check it with other methods."
       },
       {
-       "t": "figure",
-       "pictures": [
-        "fig_bac22340966d26ce"
-       ],
-       "caption": "Fig. 13.1. The \"sun + watch\" method (northern hemisphere): hour hand at the sun, the bisector of the angle to \"12\" (in summer, to \"1\") = south"
-      },
-      {
        "t": "h",
        "text": "By shadow (the two-mark method)"
       },
@@ -3968,13 +3889,6 @@
       {
        "t": "h",
        "text": "By the North Star (at night)"
-      },
-      {
-       "t": "figure",
-       "pictures": [
-        "fig_df8c58773df0625e"
-       ],
-       "caption": "Fig. 13.2. Finding the North Star using the Big Dipper"
       },
       {
        "t": "h",
@@ -4065,13 +3979,6 @@
      "num": "14.2",
      "title": "Signal mirror",
      "blocks": [
-      {
-       "t": "figure",
-       "pictures": [
-        "fig_22f77e4ccc02c0b8"
-       ],
-       "caption": "Fig. 14.1. Aiming a sun flash by sighting through your fingers"
-      },
       {
        "t": "p",
        "text": "Any shiny surface works: a small mirror, foil on cardboard, a phone screen, a tin lid. The flash is visible from an aircraft at 10–20+ km. Sweep the flash along the horizon in series, even if you see no one: they may see you first."
@@ -4231,127 +4138,36 @@
        "text": "1. Figure-eight: a stopper knot and a reliable loop"
       },
       {
-       "t": "figure",
-       "pictures": [
-        "fig_9ecff72a1cf54d78"
-       ],
-       "caption": "Fig. 15.1, step 1. Loop: the end over the standing part"
-      },
-      {
-       "t": "figure",
-       "pictures": [
-        "fig_0fabc9ae283612b0"
-       ],
-       "caption": "2. The end BEHIND the standing part and up"
-      },
-      {
-       "t": "figure",
-       "pictures": [
-        "fig_d37afab0ee5b8c86"
-       ],
-       "caption": "3. Down through the loop, and there is your \"eight\""
-      },
-      {
        "t": "p",
-       "text": "**What for:** stops the end slipping out of a hole or carabiner; tied on a doubled rope it makes a strong loop for a carabiner, hook or hanging point. It can be untied even after a heavy load. Fig. 15.1."
+       "text": "**What for:** stops the end slipping out of a hole or carabiner; tied on a doubled rope it makes a strong loop for a carabiner, hook or hanging point. It can be untied even after a heavy load."
       },
       {
        "t": "h",
        "text": "2. Bowline, the \"king of knots\": a loop that does not tighten"
       },
       {
-       "t": "figure",
-       "pictures": [
-        "fig_2231976af70b4314"
-       ],
-       "caption": "Fig. 15.2, step 1. A small loop in the standing part; the end from below"
-      },
-      {
-       "t": "figure",
-       "pictures": [
-        "fig_353e7f1e49ad8f15"
-       ],
-       "caption": "2. The end from below UP through the small loop"
-      },
-      {
-       "t": "figure",
-       "pictures": [
-        "fig_cca3562137aec997"
-       ],
-       "caption": "3. Behind the standing part and back into the loop, downwards"
-      },
-      {
        "t": "p",
-       "text": "**Mnemonic:** \"The rabbit comes out of the hole (small loop), goes round the tree (standing part) and goes back into the hole\". **What for:** a loop that does NOT tighten under load and is easy to untie afterwards: tying around a person to pull them out (in that case it is MANDATORY: first pull the bowline tight, then with the free end tie a backup knot, an overhand or better a double overhand, around the adjacent leg of the loop, right up against the bowline; the tail after it no shorter than 10 cm. Without a backup knot a bowline can come undone with jerks and changing loads), attaching guylines, a loop at the end of a rope. Check: pull the standing part. The loop must not get smaller. Fig. 15.2."
+       "text": "**Mnemonic:** \"The rabbit comes out of the hole (small loop), goes round the tree (standing part) and goes back into the hole\". **What for:** a loop that does NOT tighten under load and is easy to untie afterwards: tying around a person to pull them out (in that case it is MANDATORY: first pull the bowline tight, then with the free end tie a backup knot, an overhand or better a double overhand, around the adjacent leg of the loop, right up against the bowline; the tail after it no shorter than 10 cm. Without a backup knot a bowline can come undone with jerks and changing loads), attaching guylines, a loop at the end of a rope. Check: pull the standing part. The loop must not get smaller."
       },
       {
        "t": "h",
        "text": "3. Square (reef) knot: tying two equal ropes together"
       },
       {
-       "t": "figure",
-       "pictures": [
-        "fig_fda0fcf4f369247a"
-       ],
-       "caption": "Fig. 15.3, step 1. Left over right: the first half-knot"
-      },
-      {
-       "t": "figure",
-       "pictures": [
-        "fig_c5a4920ecc3418f7"
-       ],
-       "caption": "2. Right over left: the second half-knot on top"
-      },
-      {
-       "t": "figure",
-       "pictures": [
-        "fig_5307e1740197d670"
-       ],
-       "caption": "3. Done: two interlocked loops"
-      },
-      {
        "t": "p",
-       "text": "**Rule:** \"left over right, then right over left\". A correct knot is flat, and the ends of each rope come out on the same side. If the ends \"stick out\" crosswise, it is a \"granny knot\", and it slips. **What for:** bandages, packing, tying together ropes of the SAME thickness. Not for loads that a life depends on and not for ropes of different thickness. Fig. 15.3."
+       "text": "**Rule:** \"left over right, then right over left\". A correct knot is flat, and the ends of each rope come out on the same side. If the ends \"stick out\" crosswise, it is a \"granny knot\", and it slips. **What for:** bandages, packing, tying together ropes of the SAME thickness. Not for loads that a life depends on and not for ropes of different thickness."
       },
       {
        "t": "h",
        "text": "4. Clove hitch (knot to a post)"
       },
       {
-       "t": "figure",
-       "pictures": [
-        "fig_6a9f8ffc776c1d55"
-       ],
-       "caption": "Fig. 15.4, step 1. A turn: in front to the right, behind to the left"
-      },
-      {
-       "t": "figure",
-       "pictures": [
-        "fig_c323918943d7e624"
-       ],
-       "caption": "2. Second turn: diagonally, crossing the first"
-      },
-      {
-       "t": "figure",
-       "pictures": [
-        "fig_14e16b01d58c1d84"
-       ],
-       "caption": "3. The end under its own last turn, pull tight"
-      },
-      {
        "t": "p",
-       "text": "**What for:** the start of any lashing: lean-to, tarp, debris hut frame, hanging a pot, tying to a pole. Ties and unties in seconds, but holds only under steady, constant tension: under a changing load it slips, so always add a half hitch on top (see \"Round turn and two half hitches\" below). Fig. 15.4."
+       "text": "**What for:** the start of any lashing: lean-to, tarp, debris hut frame, hanging a pot, tying to a pole. Ties and unties in seconds, but holds only under steady, constant tension: under a changing load it slips, so always add a half hitch on top (see \"Round turn and two half hitches\" below)."
       },
       {
        "t": "h",
        "text": "5. Round turn and two half hitches: fastening under strong pull, easy to untie"
-      },
-      {
-       "t": "figure",
-       "pictures": [
-        "fig_29d20c919ba49d49"
-       ],
-       "caption": "Fig. 15.5. Round turn and two half hitches: a turn around the support and two half hitches. Drawing: Sawims, Wikimedia Commons, public domain"
       },
       {
        "t": "list",
@@ -4375,13 +4191,6 @@
       {
        "t": "h",
        "text": "6. Adjustable tension knot (taut-line hitch)"
-      },
-      {
-       "t": "figure",
-       "pictures": [
-        "fig_5a2c70a4d6bb2137"
-       ],
-       "caption": "Fig. 15.6. Adjustable tension knot: the loop slides when the rope is slack. Drawing: Dontpanic, Wikimedia Commons, public domain"
       },
       {
        "t": "list",
@@ -4879,7 +4688,7 @@
      "blocks": [
       {
        "t": "p",
-       "text": "Crisis and displacement are a time when people are hunted: under the guise of \"volunteers\", \"employers\", \"free housing\". Victims include women with children abroad and men looking for work in Ukraine. Rules of the National Hotline on Countering Human Trafficking (**527** from a mobile, **0 800 107 527** from a landline or mobile, daily 7:00–22:00, free; abroad: IOM offices and the consulate):"
+       "text": "Crisis and displacement are a time when people are hunted: under the guise of \"volunteers\", \"employers\", \"free housing\". Victims include women with children abroad and men looking for work in Ukraine. Rules of the National Hotline on Countering Human Trafficking (**527** from a mobile, **0 800 505 501** from a landline, free; abroad: IOM offices and the consulate):"
       },
       {
        "t": "list",
@@ -5068,7 +4877,7 @@
          "head": false,
          "cells": [
           "Photos/videos of strike aftermath with the place and time, \"where it hit\"",
-          "The enemy assesses the hits and adjusts the next strike. If air defence, soldiers, military vehicles or a military site are in the frame, this means criminal liability (Art. 114-2 of the Criminal Code of Ukraine, 5–8 years, up to 12 if the consequences are grave); the SBU (Security Service of Ukraine) treats such posts as fire adjustment. Wait for the official announcement"
+          "The enemy assesses the hits and adjusts the next strike. If air defence, soldiers, military vehicles or a military site are in the frame, this means criminal liability (Art. 114-2 of the Criminal Code of Ukraine: 3 to 8 years, up to 12 in aggravated cases); the SBU (Security Service of Ukraine) treats such posts as fire adjustment. Wait for the official announcement"
          ]
         },
         {
@@ -5149,7 +4958,7 @@
          "text": "PMR446 walkie-talkies (sec. 14.4): family and neighbours, an agreed channel and times; no names or addresses on air."
         },
         {
-         "text": "Mesh messengers (Bridgefy, Briar) work over Bluetooth between phones at 10–30 m indoors (up to 100 m in open space). They are for a courtyard and a queue, not for a city."
+         "text": "Mesh messengers work over Bluetooth between phones at 10–30 m indoors (up to 100 m in open space). They are for a courtyard and a queue, not for a city. For anything sensitive use Briar, not Bridgefy: researchers broke its encryption."
         },
         {
          "text": "National roaming and satellite SOS: see sec. 14.4. A second SIM from another operator (or an eSIM) is cheap insurance."
@@ -5275,13 +5084,6 @@
       {
        "t": "h",
        "text": "During the shaking (indoors)"
-      },
-      {
-       "t": "figure",
-       "pictures": [
-        "fig_baabeef488034a33"
-       ],
-       "caption": "Fig. 19.1. \"Drop, cover, hold on\": the international standard for what to do during shaking"
       },
       {
        "t": "list",
@@ -7242,13 +7044,6 @@
        "text": "Removing an attached tick"
       },
       {
-       "t": "figure",
-       "pictures": [
-        "fig_4b19d52914d2013e"
-       ],
-       "caption": "Fig. 27.1. Removing a tick: with tweezers (left) or a thread loop (right), grip as close to the skin as possible, pull smoothly upwards"
-      },
-      {
        "t": "list",
        "kind": "steps",
        "items": [
@@ -7983,15 +7778,15 @@
         {
          "head": false,
          "cells": [
-          "One arm raised",
-          "All is well, don't wait"
+          "One arm up, the other down (the letter N)",
+          "No, no help needed"
          ]
         },
         {
          "head": false,
          "cells": [
           "Arms crossed above the head",
-          "No / don't come closer / danger ahead"
+          "Don't come closer / danger ahead (to a pilot: \"do not land here\")"
          ]
         },
         {

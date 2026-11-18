@@ -66,10 +66,10 @@
   "id": "ev-203",
   "category": "evacuation",
   "title": "Coordination Humanitarian Centre: evacuation",
-  "note": "Evacuation requests from Donetsk region. Short number, free.",
+  "note": "Evacuation requests from Donetsk region. 24/7, short number, free.",
   "number": "203",
   "source": "https://dn.gov.ua/en/news/koordynatsiinyi-humanitarnyi-tsentr-pryimaie-zaiavky-na-evakuatsiiu-z-donetskoi-oblasti-za-nomerom-203",
-  "checkedOn": "2026-11-17"
+  "checkedOn": "2026-11-18"
  },
  {
   "id": "ev-uz",
@@ -120,10 +120,10 @@
   "id": "ev-redcross",
   "category": "evacuation",
   "title": "Ukrainian Red Cross",
-  "note": "Information on aid, support, tracing missing relatives. Daily 09:00–18:00, free.",
+  "note": "Information on aid, support, tracing missing relatives. Mon–Fri 09:00–18:00, free.",
   "number": "0800332656",
   "source": "https://redcross.org.ua/news/2025/01/102989/",
-  "checkedOn": "2026-11-03"
+  "checkedOn": "2026-11-18"
  },
  {
   "id": "ev-icrc",
@@ -202,9 +202,9 @@
   "category": "power",
   "title": "Zaporizhzhia oblast: Zaporizhzhiaoblenergo",
   "note": "No power, a fault in the grid. Contact centre.",
-  "number": "0800304502",
-  "source": "https://www.zoe.com.ua",
-  "checkedOn": "2026-11-03"
+  "number": "0800304050",
+  "source": "https://mev.gov.ua/en/storinka/where-check-electricity-outage-schedules-and-where-report-violations",
+  "checkedOn": "2026-11-18"
  },
  {
   "id": "p-ivano-frankivsk",
@@ -264,10 +264,10 @@
   "id": "p-rivne",
   "category": "power",
   "title": "Rivne oblast: Rivneoblenergo",
-  "note": "No power, a fault in the grid. 24/7.",
-  "number": "0800505380",
-  "source": "https://www.roe.vsei.ua/call/",
-  "checkedOn": "2026-11-03"
+  "note": "No power, a fault in the grid. A city number, charged at your operator's rate.",
+  "number": "0362694555",
+  "source": "https://mev.gov.ua/en/storinka/where-check-electricity-outage-schedules-and-where-report-violations",
+  "checkedOn": "2026-11-18"
  },
  {
   "id": "p-sumy",
@@ -390,10 +390,10 @@
   "id": "m-men",
   "category": "mind",
   "title": "Support line for men",
-  "note": "Stress, crisis, burnout. 14:00–06:00; free from mobiles.",
+  "note": "Stress, crisis, burnout. Free from mobiles; hours differ between sources.",
   "number": "2345",
   "source": "https://la-strada.org.ua/en/garyachi-liniyi",
-  "checkedOn": "2026-11-03"
+  "checkedOn": "2026-11-18"
  },
  {
   "id": "m-varto",
@@ -687,10 +687,10 @@
   "id": "vt-uvf",
   "category": "veterans",
   "title": "Veterans Fund crisis line",
-  "note": "Psychological crisis support for veterans and families, including thoughts of suicide. 24/7, free. Life in danger right now: 103.",
+  "note": "Psychological crisis support for veterans and families, including thoughts of suicide. 24/7, free; the wait can be long. Life in danger right now: 103.",
   "number": "0800332029",
   "source": "https://veteranfund.com.ua/en/2023/01/14/the-uvf-crisis-support-hotline/",
-  "checkedOn": "2026-11-03"
+  "checkedOn": "2026-11-18"
  },
  {
   "id": "vt-hub",
@@ -852,15 +852,6 @@
   "note": "Rights violated, including captured or deported civilians. Mon–Thu 09:00–18:00, Fri to 16:45; free.",
   "number": "1678",
   "source": "https://ombudsman.gov.ua/en/news/tags/diya",
-  "checkedOn": "2026-11-03"
- },
- {
-  "id": "st-ombudsman-0800",
-  "category": "state",
-  "title": "Ombudsman: second number",
-  "note": "The same as 1678; same hours.",
-  "number": "0800501720",
-  "source": "https://cyberpolice.gov.ua/contacts/",
   "checkedOn": "2026-11-03"
  },
  {

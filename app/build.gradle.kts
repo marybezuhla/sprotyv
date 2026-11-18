@@ -21,7 +21,7 @@ android {
         // Android 17: tablets and foldables may turn and resize the app (screens 70–73 check landscape)
         targetSdk = 37
         // Written out as a number, because F-Droid's update check reads it from this file; checked below
-        versionCode = 10300
+        versionCode = 10301
         versionName = appVersion
     }
 
