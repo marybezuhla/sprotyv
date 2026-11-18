@@ -3,7 +3,7 @@
 "New place": what to do after leaving home for another region, step by step (first days, the first
 week, the first month, three to six months), and a short part for those abroad. Each step: the
 action first, a few plain lines, where to go, official sources and the date checked. Written for
-Sprotyv from the sources named (scripts/content/adaptation/RESEARCH.md); amounts only with a date,
+Sprotyv from the official sources named in each step; amounts only with a date,
 and rules that are changing are said to be changing.
 
     python3 scripts/content/new_place.py  ->  content/src/main/assets/new_place.json

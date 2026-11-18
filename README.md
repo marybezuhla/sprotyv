@@ -1,77 +1,73 @@
 # Спротив · Sprotyv
 
-Безкоштовний застосунок для Android: що робити просто зараз, коли небезпечно, і як підготуватися заздалегідь. Українська та англійська. Без реклами, акаунтів і стеження.
+Безкоштовний застосунок для Android: що робити просто зараз, коли небезпечно, і як підготуватися заздалегідь. Українська та англійська. Без реклами, акаунтів і стеження, інтернет не потрібен. Потрібен Android 12 або новіший.
 
-> **Версія 1.3.** Завантажте .apk з [Releases](../../releases) або додайте репозиторій в Obtainium. Помилки й побажання: [Issues](../../issues).
+> Помилки й побажання: [Issues](../../issues).
 
-**Вимоги:** Android 12 або новіший. Інтернет не потрібен.
+## Особливості
 
-## Що є
+- 🆘 **Що робити зараз.** Покрокові картки: тривога, кровотеча, людина вдавилася, дрон, пожежа, завал та інше. Біля кожної картки джерело й дата перевірки.
+- 📖 **Довідник** виживання й базової медицини, порядки домедичної допомоги МОЗ, Конституція й Правила дорожнього руху повним текстом, «Зброя і закон» стисло.
+- 🕯️ **Побут у кризі:** немає світла, тепла, води, газу чи зв'язку.
+- ☎️ **Телефони.** Перевірені номери служб і гарячих ліній з джерелом і датою; 112 у кутку кожного екрана.
+- ✅ **Я в безпеці.** Готове повідомлення рідним через WhatsApp, Signal або SMS.
+- 🔒 **Моє.** Медкартка, сімейний план, довірені люди, тривожна валіза, запаси, нотатки, документи. Зашифровано й лише на телефоні; резервна копія з паролем.
+- 🛡️ **Готовність.** Ролі, шлях готовності, щоденний гарт, щити й лічильники добрих справ, де навчитися.
+- 🧒 **Для різних людей:** простий вигляд із шістьма великими кнопками, дитячий режим, режим поїздки, нейтральна іконка «Нотатки», віджети.
 
-- **Що робити зараз:** покрокові картки для тривоги, кровотечі, дрона, пожежі, завалу та інших ситуацій.
-- **Довідник** виживання й базової медицини для дорослих і дітей — повністю офлайн.
-- **Побут у кризі:** немає світла, тепла, води, газу чи зв'язку.
-- **Я в безпеці:** готове повідомлення рідним через WhatsApp, Signal або SMS (WhatsApp і Signal отримують текст, лише якщо це справжні застосунки: перевіряється їхній підпис).
-- **Моє:** медкартка, сімейний план, тривожна валіза, нотатки, документи (скани й PDF, до 20 файлів) — зашифровано, лише на телефоні; резервна копія з паролем.
-- **Спротив:** ролі й обставини, шлях готовності, щоденний гарт, щити й лічильники добрих справ; Конституція й Правила дорожнього руху повним текстом, «Зброя і закон» — стислий виклад за законом.
-- **Віджети** на головний екран, зокрема щит-лічильник.
-- **Два вигляди:** простий (шість великих кнопок) і повний (вкладки, усі розділи, власна головна з плитками). Можна налаштувати телефон для рідних і захистити налаштування PIN-кодом телефону.
-- **Подзвонити:** кнопка телефона в кутку кожного екрана відкриває 112 і 101–104 (червону панель «Подзвонити 112» можна ввімкнути в налаштуваннях); дотик відкриває набір номера.
-- **Тривоги** застосунок не показує: тримайте офіційний застосунок «Повітряна тривога» й слухайте сирени.
+Тривоги застосунок не показує: тримайте офіційний застосунок «Повітряна тривога» й слухайте сирени.
+
+## Встановлення
+
+- 📲 **Напряму:** завантажте файл `.apk` звідси: [github.com/marybezuhla/sprotyv/releases/latest](https://github.com/marybezuhla/sprotyv/releases/latest).
+- 🔄 **З оновленнями:** скористайтеся безкоштовним застосунком Obtainium. Його можна встановити з F-Droid: [f-droid.org/packages/dev.imranr.obtainium.fdroid](https://f-droid.org/packages/dev.imranr.obtainium.fdroid) (F-Droid — це безкоштовний каталог застосунків для Android, щось на зразок Google Play. Усі застосунки там мають відкритий код, без реклами й стеження, а перед публікацією їх перевіряють і збирають самі укладачі каталогу). В Obtainium натисніть «Додати застосунок» і вставте посилання `github.com/marybezuhla/sprotyv`.
 
 ## Прозорість
 
-- **Мережа:** застосунок не має дозволу на інтернет; збірка зупиняється, якщо він з'являється.
-- **Шифрування:** особисті дані — у базі SQLCipher, ключ у захищеному сховищі телефона. Хмарну копію Android вимкнено.
-- **Вміст:** кожна картка має джерело й дату перевірки, розділи довідника — джерело; що не рецензовано фахівцем, позначено. Рецензента, коли він є, названо.
-- **Збірка:** APK збирається з цього коду в GitHub Actions окремо від тестів, з перевіркою контрольних сум залежностей, і підписується лише після схвалення авторки. Відбиток сертифіката SHA-256: `d00241499cd44d0859c5762a0b4cc317862358c8df3210fc3a0e9473e038a1ac`. Перевірити завантажений файл: `apksigner verify --print-certs sprotyv-<версія>.apk` має показати саме цей відбиток.
-- **Межі захисту:** щоб у небезпеці застосунок відкривався миттєво, типово ключ не вимагає відбитка чи PIN-коду щоразу. Тому будь-хто з розблокованим телефоном, зокрема якщо вас змусять його розблокувати, побачить ваші дані. Без блокування екрана (або коли його тримає відкритим Smart Lock) захист від сторонніх відсутній. За бажанням «Моє» можна захистити відбитком або PIN-кодом (налаштування → «Замок на «Моє»»; є «Лише PIN»): тоді ключ працює лише після підтвердження, щоразу після повернення в застосунок. Увага: на деяких версіях Android після зняття блокування екрана ключ стає непридатним, і збережені дані вже не відкриються (довідник і дзвінки працюватимуть). Перевіряємо це на реальних телефонах; робіть резервну копію. Коли застосунок іде з екрана, база закривається; уже показаний на екрані текст лишається в пам'яті застосунку до повернення, щоб не загубити недописане (знімки екрана при цьому заборонені, доки ви самі не дозволите їх у налаштуваннях; поки дозвіл увімкнено, про нього нагадує значок камери вгорі). У «Моєму» застосунок просить клавіатуру не запам'ятовувати набране; не кожна клавіатура це виконує, тож для чутливого тексту можна вимкнути в ній навчання. Із замком на «Моє» дані закриваються й тоді, коли екран телефона гасне, поки ви у виборі файлу чи в камері. Плаваючі вікна інших застосунків над екранами «Мого» приховано. Якщо телефон не має захищеного апаратного сховища ключів, застосунок про це попередить.
-- **Резервна копія й код плану:** зашифровані паролем (Argon2id, 64 МБ пам'яті, + AES-256-GCM). Файл копії має нейтральну назву; на його початку є коротка позначка формату, а решта без пароля нечитабельна; копія й код плану зашифровані з різним призначенням, тож одне ніколи не відкриється як інше. Застосунок сам не копіює паролі в буфер обміну, а код плану показується без пароля, щоб одне фото екрана не дало обох. Код сімейного плану починається з короткої позначки, щоб «Спротив» його впізнав; решта без пароля нечитабельна. Пароль копії — шість випадкових слів зі списку EFF або власний (від 16 знаків), пароль плану — чотири слова, які кажуть голосом. Забутий пароль не відновити.
-- **Документи:** кожен файл зашифровано окремо (AES-256-GCM, свій випадковий ключ), ключі — лише в зашифрованій базі, тож замок «Моє» захищає й файли. Переглядаються в пам'яті, розшифрований файл на диск не записується. «Поділитися» дає іншому застосунку незашифровану копію — лише після попередження; свою копію «Спротив» прибирає за хвилину після повернення. Фото понад 2400 пікселів зменшуються, прихована інформація з них прибирається. Резервна копія може містити документи або бути без них.
-- **Налаштування головної:** вигляд, вибрані плитки й увімкнений захист налаштувань зберігаються без шифрування, бо головна й 112 мають відкриватися миттєво. Особистих записів там немає, лише які плитки показати, частки «Моєї готовності» для головної (наприклад, «2 з 4», без самих записів), скільки відключень і ночей в укритті пережито, лічильники «Моїх щитів», пройдені вправи, режим поїздки і чи дозволено знімки екрана в «Моєму» (дозвіл зберігається, доки ви його не вимкнете); у резервні копії Android вони не потрапляють. Позначки «Лікую й рятую» та військової служби зберігаються зашифрованими в «Моєму»: із замком вони з'являються лише після відбитка чи PIN-коду. Захист налаштувань просить PIN-код телефону у вікні самого Android, щоб плитки не змінили випадково; застосунок PIN-код не бачить. Це не замок на ваші дані. Якщо з телефона зняти блокування екрана, захист налаштувань перестає діяти. Вибір плиток може натякати, що для вас важливо (наприклад, діти чи прифронтова місцевість), тож за потреби тримайте на головній лише загальне.
-- **Режим поїздки й «Нотатки»:** режим поїздки ховає «Моє» й чутливі джерела з екранів (довідник лишається) і вимикається лише PIN-кодом телефона, якщо на телефоні є блокування екрана; нічого не видаляє, тож хто змусить вас ввести PIN, побачить дані. Щоб справді прибрати все особисте з телефона, є «Стерти всі дані» (налаштування → «Якщо телефон у чужих руках»). Нейтральна назва «Нотатки» змінює лише іконку й назву на головному екрані та в недавніх застосунках.
-- **Межі порад:** застосунок дає загальні рекомендації й не замінює лікаря, рятувальників, офіційних вказівок і сирен.
-- **Конфіденційність і безпека:** [PRIVACY.md](PRIVACY.md), [SECURITY.md](SECURITY.md) (як приватно повідомити про вразливість).
+- **Мережа:** дозволу на інтернет немає; збірка зупиняється, якщо він з'являється.
+- **Шифрування:** особисті дані в базі SQLCipher, ключ у захищеному сховищі телефона; хмарну копію Android вимкнено. Щоб застосунок відкривався миттєво, типово ключ не просить відбитка: хто тримає розблокований телефон, побачить дані. «Моє» можна закрити відбитком чи PIN-кодом, а все стерти — у налаштуваннях («Якщо телефон у чужих руках»). Подробиці — у [PRIVACY.md](PRIVACY.md).
+- **Вміст:** кожна картка має джерело й дату перевірки; що не рецензовано фахівцем, позначено.
+- **Підпис:** справжній APK підписано сертифікатом із відбитком SHA-256 `d00241499cd44d0859c5762a0b4cc317862358c8df3210fc3a0e9473e038a1ac`. Перевірити: `apksigner verify --print-certs sprotyv-<версія>.apk` (з Android SDK Build Tools) має показати саме цей відбиток.
+- **Збірка:** APK збирається з цього коду в GitHub Actions з перевіркою контрольних сум залежностей і підписується лише після схвалення авторки.
 - **Як створено:** код написано за допомогою ШІ (Claude, Anthropic) під керівництвом і з тестуванням авторки.
+- **Застереження:** поради загальні й не замінюють лікаря, рятувальників, офіційних вказівок і сирен.
 
-Kotlin · Jetpack Compose · Room · SQLCipher. Сторонні матеріали — [NOTICE.md](NOTICE.md). Ліцензія коду GPL-3.0-or-later (GNU GPL версії 3 або новішої).
+Kotlin · Jetpack Compose · Room · SQLCipher. Ліцензія коду GNU GPL версії 3 або (на ваш вибір) будь-якої пізнішої (GPL-3.0-or-later), довідника CC BY-SA 4.0. Бібліотеки й джерела — [NOTICE.md](NOTICE.md), приватність — [PRIVACY.md](PRIVACY.md), вразливості — [SECURITY.md](SECURITY.md).
 
 ---
 
 # Sprotyv · English
 
-A free Android app: what to do right now when it is dangerous, and how to prepare in advance. Ukrainian and English. No ads, no accounts, no tracking.
+A free Android app: what to do right now when it is dangerous, and how to prepare in advance. Ukrainian and English. No ads, no accounts, no tracking, no internet needed. Requires Android 12 or newer.
 
-> **Version 1.3.** Download the .apk from [Releases](../../releases) or add this repository to Obtainium. Bugs and wishes: [Issues](../../issues).
+> Bugs and wishes: [Issues](../../issues).
 
-**Requirements:** Android 12 or newer. No internet needed.
+## Features
 
-## What is there
+- 🆘 **What to do now.** Step-by-step cards: an air alert, bleeding, choking, a drone, fire, rubble and more. Every card shows its source and check date.
+- 📖 **A guide** to survival and basic medicine, the Ministry of Health first aid procedures, the Constitution and the Rules of the Road in full, "Weapons and the law" in brief.
+- 🕯️ **Life in a crisis:** no power, heat, water, gas or connection.
+- ☎️ **Phones.** Checked numbers of services and hotlines with source and date; 112 in the corner of every screen.
+- ✅ **I am safe.** A ready message to family through WhatsApp, Signal or SMS.
+- 🔒 **My data.** Medical card, family plan, trusted people, go-bag, supplies, notes, documents. Encrypted and only on the phone; a backup with a password.
+- 🛡️ **Readiness.** Roles, a readiness path, daily resilience, shields and counts of good deeds, where to learn.
+- 🧒 **For different people:** a simple look with six large buttons, a kids' mode, trip mode, a neutral "Notes" icon, widgets.
 
-- **What to do now:** step-by-step cards for an air alert, bleeding, a drone, fire, rubble and more.
-- **A guide** to survival and basic medicine for adults and children, fully offline.
-- **Life in a crisis:** no power, heat, water, gas or connection.
-- **I am safe:** a ready message to family through WhatsApp, Signal or SMS (WhatsApp and Signal get the text only if they are the genuine apps: their signature is checked).
-- **My data:** medical card, family plan, go-bag, notes, documents (scans and PDFs, up to 20 files): encrypted, on the phone only; a backup with a password.
-- **Resistance:** roles and circumstances, a readiness path, daily resilience, shields and counts of good deeds; the Constitution and the Rules of the Road in full, "Weapons and the law" as a short summary of the law.
-- **Widgets** for the home screen, a count shield among them.
-- **Two looks:** simple (six large buttons) and full (tabs, all sections, your own home screen of tiles). A phone can be set up for a relative, with settings locked by the phone's PIN.
-- **Call:** the phone button in the corner of every screen opens 112 and 101–104 (the red “Call 112” bar can be turned on in settings); a tap opens the dialler with the number.
-- **Air alerts** are not shown: keep the official "Air Alert" app and listen to the sirens.
+The app does not show air alerts: keep the official "Air Alert" app and listen to the sirens.
+
+## Install
+
+- 📲 **Directly:** download the `.apk` file from [github.com/marybezuhla/sprotyv/releases/latest](https://github.com/marybezuhla/sprotyv/releases/latest).
+- 🔄 **With updates:** use the free app Obtainium, available on F-Droid: [f-droid.org/packages/dev.imranr.obtainium.fdroid](https://f-droid.org/packages/dev.imranr.obtainium.fdroid) (F-Droid is a free catalogue of Android apps, a bit like Google Play: every app there is open source, without ads or tracking, and is checked and built by the catalogue's maintainers before publishing). In Obtainium tap "Add App" and paste `github.com/marybezuhla/sprotyv`.
 
 ## Transparency
 
-- **Network:** the app has no internet permission; the build stops if one appears.
-- **Encryption:** personal data is in an SQLCipher database with its key in the phone's secure keystore. Android cloud backup is off.
-- **Content:** every card names its source and check date; anything not reviewed by a specialist is marked. A reviewer, when there is one, is named.
-- **Build:** the APK is built from this code in GitHub Actions apart from the tests, with dependency checksums verified, and signed only after the author's approval. Certificate SHA-256: `d00241499cd44d0859c5762a0b4cc317862358c8df3210fc3a0e9473e038a1ac`. To check a downloaded file: `apksigner verify --print-certs sprotyv-<version>.apk` must show exactly this fingerprint.
-- **Protection limits:** so the app opens at once in danger, by default the key needs no fingerprint or PIN each time. Anyone holding the phone unlocked, including if you are forced to unlock it, can see your data. With no screen lock (or when Smart Lock keeps it open) there is no protection from others. Optionally “My data” can be protected with a fingerprint or PIN (settings → Lock on “My data”; “PIN only” too): the key then works only after confirmation, every time you return to the app. Note: on some Android versions, removing the screen lock makes the key unusable and the saved data can no longer be opened (the guide and calls keep working). We are checking this on real phones; keep a backup. The database is closed when the app leaves the screen; text already on screen stays in the app's memory until you return, so nothing half-typed is lost (screenshots stay blocked unless you allow them in settings; while allowed, a camera icon at the top says so). In “My data” the app asks the keyboard not to learn what is typed; not every keyboard obeys, so for sensitive text you can turn off its learning. With the lock on “My data”, the data also closes when the phone's screen goes off while you are in a file picker or the camera. Other apps' floating windows are hidden over the screens of “My data”. If the phone has no secure hardware for keys, the app says so.
-- **Backup and plan code:** encrypted with a password (Argon2id, 64 MB of memory, + AES-256-GCM). The backup file has a neutral name; it starts with a short format tag, and the rest is unreadable without the password; the backup and the plan code are encrypted for different purposes, so one never opens as the other. The app never copies passwords to the clipboard itself, and the plan code is shown without its password, so one photo of the screen never holds both. The family plan code starts with a short tag so Sprotyv knows it; the rest is unreadable without the password. The backup password is six random words from the EFF list or your own (16 characters or more); the plan password is four words said aloud. A forgotten password cannot be recovered.
-- **Documents:** each file is encrypted on its own (AES-256-GCM, its own random key); the keys live only in the encrypted database, so the lock on “My data” covers the files too. They are viewed in memory; a decrypted file is never written to storage. “Share” gives another app an unencrypted copy, only after a warning; Sprotyv removes its copy a minute after you return. Photos over 2400 pixels are made smaller and lose hidden details. A backup can include the documents or leave them out.
-- **Home screen settings:** the look, the chosen tiles and whether settings are locked are stored unencrypted, so the home screen and 112 open at once. They hold no personal records, only which tiles to show, the “My readiness” shares for the home screen (such as “2 of 4”, no records), how many power cuts and shelter nights were lived through, the “My shields” counters, practised drills, trip mode and whether screenshots of “My data” are allowed (kept until you turn it off), and are not in Android backups. The “I treat and save” and military service marks are kept encrypted in “My data”: with its lock on they show only after the fingerprint or PIN. The settings lock asks for the phone's PIN in Android's own window, so tiles are not changed by accident; the app never sees the PIN. It is not a lock on your data. If the phone's screen lock is removed, the settings lock stops working. The choice of tiles can hint at what matters to you (children or a frontline area, say), so keep only general tiles on the home screen if that is a concern.
-- **Trip mode and “Notes”:** trip mode hides “My data” and sensitive sources from the screens (the guide stays) and turns off only with the phone's PIN while the phone has a screen lock; it deletes nothing, so anyone who makes you enter the PIN can see the data. To really remove everything personal from the phone, use “Erase all data” (Settings → “If the phone is in the wrong hands”). The neutral name “Notes” changes only the icon and name on the home screen and in recent apps.
-- **Advice limits:** general advice; it does not replace a doctor, rescuers, official instructions or sirens.
-- **Privacy and security:** [PRIVACY.md](PRIVACY.md), [SECURITY.md](SECURITY.md) (how to report a vulnerability privately).
-- **How it was made:** written with AI assistance (Claude, Anthropic), directed and tested by the author.
+- **Network:** no internet permission; the build stops if one appears.
+- **Encryption:** personal data is in an SQLCipher database with its key in the phone's secure keystore; Android cloud backup is off. So the app opens at once, by default the key asks for no fingerprint: anyone holding the phone unlocked can see the data. "My data" can be locked with a fingerprint or PIN, and everything can be erased in settings ("If the phone is in the wrong hands"). Details: [PRIVACY.md](PRIVACY.md).
+- **Content:** every card names its source and check date; anything not reviewed by a specialist is marked.
+- **Signature:** the genuine APK is signed with a certificate whose SHA-256 fingerprint is `d00241499cd44d0859c5762a0b4cc317862358c8df3210fc3a0e9473e038a1ac`. To check it: `apksigner verify --print-certs sprotyv-<version>.apk` (from the Android SDK Build Tools) must show this fingerprint.
+- **Build:** the APK is built from this code in GitHub Actions with dependency checksums verified, and signed only after the author's approval.
+- **How it was made:** the code was written with AI (Claude, Anthropic), directed and tested by the author.
+- **Disclaimer:** advice is general and does not replace a doctor, rescuers, official instructions or sirens.
 
-Kotlin · Jetpack Compose · Room · SQLCipher. Third-party material: [NOTICE.md](NOTICE.md). Code licence GPL-3.0-or-later.
+Kotlin · Jetpack Compose · Room · SQLCipher. Licence: code under GNU GPL version 3 or (at your option) any later version (GPL-3.0-or-later), the guide under CC BY-SA 4.0. Libraries and sources: [NOTICE.md](NOTICE.md), privacy: [PRIVACY.md](PRIVACY.md), vulnerabilities: [SECURITY.md](SECURITY.md).
