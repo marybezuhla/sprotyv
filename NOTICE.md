@@ -16,16 +16,15 @@
 - `content/src/main/assets/guide.json` and `content/src/main/assets/figures/` — the open
   "Довідник виживання" 2.3 (https://github.com/snegireff/dovidnyk-vyzhyvannia), licensed under
   CC BY-SA 4.0. Changes: converted for display in the app by `scripts/build_guide.py` (markup
-  changed, figures rendered as pictures by `scripts/render_figures.js`, cover, table of contents
-  and blank note forms left out). The text is unchanged except: in 4.8 and 14.4 official websites,
+  changed; of the figures only 3.2, the two-wall rule, kept and rendered as a picture by
+  `scripts/render_figures.js`, the other figures, cover, table of contents and blank note forms
+  left out). The text is unchanged except: in 4.8 and 14.4 official websites,
   apps and ways named by the regional military administration instead of chatbots and Telegram
   channels; in 13.1 and 18.1 CoMaps, Organic Maps or OsmAnd instead of maps.me; in the table of 6.2
   the doses for children replaced by a reference to the official announcement or a doctor, and in
-  7.13 the activated charcoal dose for children by a reference to 103 or a doctor (until a
-  paediatrician's review). `content/src/main/assets/en/guide.json` is an English translation by
-  Sprotyv, also under CC BY-SA 4.0. Three public-domain pictures
-  from Wikimedia Commons were added (figures 11.2, 15.5, 15.6; authors in the captions and in
-  `scripts/figures-extra/SOURCE.md`). This material stays under
+  7.13 the activated charcoal dose for children by a reference to 103 or a doctor; a few points
+  brought in line with current guidance, each with its source in `scripts/build_guide.py`. `content/src/main/assets/en/guide.json` is an English translation by
+  Sprotyv, also under CC BY-SA 4.0. This material stays under
   CC BY-SA 4.0 with its authorship kept, separate from the GPL-3.0 code.
 - `content/src/main/assets/cards.json` (written in `scripts/content/cards.py`) — action cards
   adapted from the same guide: steps shortened and reworded for quick reading. As an

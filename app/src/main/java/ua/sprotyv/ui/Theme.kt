@@ -32,8 +32,11 @@ val DangerRed = Color(0xFFB3261E)
 /** Words on [DangerRed] (the call buttons): white, the strongest contrast on that red. */
 val OnDanger = Color.White
 
-/** Behind a QR code or a figure drawing: white in either theme, as scanners and the drawings expect. */
+/** Behind a QR code (white in either theme, as scanners expect) and a drawing in the light theme. */
 val PaperWhite = Color.White
+
+/** A drawing's white in the dark theme: soft grey, so it does not glare at night (dark lines still read on it). */
+val DimPaper = Color(0xFFD6D6D6)
 
 /** Red as text or an icon on the screen's own background: lighter on dark ones, so it reads (WCAG AA). */
 val DangerInk: Color

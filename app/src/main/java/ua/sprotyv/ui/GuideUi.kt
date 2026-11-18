@@ -279,10 +279,15 @@ private fun TableView(t: Block.Table) {
     }
 }
 
-/** Figures are drawings on white; they stay on white in the dark theme too, so they read the same. */
+/**
+ * Figures are drawings on white. In the dark theme the white is toned down to a soft grey, so the
+ * drawing does not glare at night in a shelter; lines and labels stay dark on it and read the same.
+ */
 @Composable
 fun FigureView(f: Block.Figure) {
     val context = LocalContext.current
+    val dark = LocalDark.current
+    val paper = if (dark) DimPaper else PaperWhite
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         f.pictures.forEach { name ->
             val bitmap by produceState<Bitmap?>(null, name) {
@@ -299,8 +304,9 @@ fun FigureView(f: Block.Figure) {
                     // The caption below says what it shows; reading it twice helps no one
                     contentDescription = if (f.caption.isBlank()) stringResource(R.string.figure) else null,
                     contentScale = if (sideways) ContentScale.Fit else ContentScale.FillWidth,
+                    colorFilter = if (dark) androidx.compose.ui.graphics.ColorFilter.tint(DimPaper, androidx.compose.ui.graphics.BlendMode.Multiply) else null,
                     modifier = Modifier.fillMaxWidth().then(if (sideways) Modifier.heightIn(max = 240.dp) else Modifier)
-                        .background(PaperWhite, RoundedCornerShape(8.dp))
+                        .background(paper, RoundedCornerShape(8.dp))
                         .clickable(onClickLabel = stringResource(R.string.docs_zoom)) { open = true }.padding(8.dp),
                 )
                 if (open) androidx.compose.ui.window.Dialog(onDismissRequest = { open = false }, properties = androidx.compose.ui.window.DialogProperties(usePlatformDefaultWidth = false)) {

@@ -164,9 +164,12 @@ EVIDENCE = [
 ]
 
 
-# Words inside the figures' drawings: 7.1, a tourniquet 5–7 cm above the wound (MOZ order 441, procedure 4)
-FIGURE_TEXT = [
-    ("5–8 см вище рани (ближче до тулуба)", "5–7 см вище рани (ближче до тулуба)"),
+# The only drawing kept, by the start of its caption
+KEEP_FIGURES = ("Рис. 3.2.",)
+
+# Where the text points to a drawing that is left out
+NO_FIGURES = [
+    (" Рис. 15.1.", ""), (" Рис. 15.2.", ""), (" Рис. 15.3.", ""), (" Рис. 15.4.", ""),
 ]
 
 
@@ -405,11 +408,12 @@ class Builder:
                     raise ValueError(f"Unexpected <{c.tag}> inside a figure")
 
         walk(node)
+        # Sprotyv keeps one drawing: the two-wall rule (3.2), the one that changes what people do in the moment.
+        # The others are left out; their words stay in the text
+        if not any(caption.startswith(k) for k in KEEP_FIGURES):
+            return None
         names = []
         for svg in svgs:
-            # Words inside drawings that were brought in line with current evidence (as EVIDENCE)
-            for old, new in FIGURE_TEXT:
-                svg = svg.replace(old, new)
             digest = hashlib.sha256(svg.encode("utf-8")).hexdigest()[:16]
             name = f"fig_{digest}"
             self.figures[name] = svg
@@ -441,7 +445,9 @@ class Builder:
             elif c.tag == "table":
                 out.append({"t": "table", **table(c)})
             elif c.tag == "figure":
-                out.append(self.figure(c))
+                f = self.figure(c)
+                if f:
+                    out.append(f)
             elif c.tag == "div" and c.cls() in BLOCK_CALLOUTS:
                 if has_blocks(c):
                     out.append({"t": "callout", "kind": c.cls(), "blocks": self.blocks(c)})
@@ -532,26 +538,6 @@ def main():
         if not ch["title"]:
             sys.exit(f"Chapter without a title: {ch['id']}")
 
-    # Pictures the guide lacks, from open sources (scripts/figures-extra), each after its heading
-    extra_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "figures-extra")
-    with open(os.path.join(extra_dir, "extras.json"), encoding="utf-8") as f:
-        extras = json.load(f)
-    for x in extras:
-        if not re.fullmatch(r"fig_[0-9a-f]{16}", x["name"]):
-            sys.exit(f"Bad extra figure name: {x['name']}")
-        placed = 0
-        for ch in chapters:
-            if ch["title"] != x["chapter"]:
-                continue
-            for sec in ch["sections"]:
-                for i, b in enumerate(sec["blocks"]):
-                    if b.get("t") == "h" and b["text"].startswith(x["after"]):
-                        sec["blocks"].insert(i + 1, {"t": "figure", "pictures": [x["name"]], "caption": x["caption"]})
-                        placed += 1
-                        break
-        if placed != 1:
-            sys.exit(f"Extra figure {x['name']}: heading «{x['after']}» found {placed} times")
-
     try:
         commit = subprocess.run(["git", "-C", args.source, "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
     except Exception:
@@ -590,6 +576,7 @@ def main():
     ])
     # Brought in line with current evidence (November 2026): the source of each change is named beside it in EVIDENCE
     replace_text(chapters, EVIDENCE)
+    replace_text(chapters, NO_FIGURES)
 
     guide = {
         "title": "Довідник виживання",
@@ -598,10 +585,9 @@ def main():
         "source": "https://github.com/snegireff/dovidnyk-vyzhyvannia",
         "commit": commit,
         "license": "CC BY-SA 4.0",
-        "changes": "Перетворено для показу в застосунку: розмітку змінено, рисунки збережено як зображення, "
+        "changes": "Перетворено для показу в застосунку: розмітку змінено, з рисунків лишено один (рис. 3.2, правило двох стін), решту не включено, "
                    "розділам Додатку А додано номери А.1–А.5, застереження з обкладинки перенесено в «Про довідник», "
-                   "решту обкладинки, зміст і бланки нотаток не включено. Додано три рисунки з відкритих джерел "
-                   "(суспільне надбання; автор — у підписі): рис. 11.2, 15.5, 15.6. Текст розділів не змінено, крім такого: "
+                   "решту обкладинки, зміст і бланки нотаток не включено. Текст розділів не змінено, крім такого: "
                    "у п. 4.8 і 14.4 замість чат-ботів і Telegram-каналів — офіційні сайти, застосунки й способи, які називає ОВА "
                    "(застосунок не радить Telegram); у п. 13.1 і 18.1 замість maps.me — CoMaps, Organic Maps або OsmAnd; у таблиці п. 6.2 "
                    "дози для дітей замінено відсилкою до офіційного оголошення МОЗ або лікаря, а в п. 7.13 дозу активованого вугілля "
