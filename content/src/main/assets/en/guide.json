@@ -9,7 +9,7 @@
  "source": "https://github.com/snegireff/dovidnyk-vyzhyvannia",
  "commit": "6a3c6fb6e7ecd160e864232d0f1a47cd928fe928",
  "license": "CC BY-SA 4.0",
- "changes": "Converted for display in the app: markup changed, of the figures only one kept (fig. 3.2, the two-wall rule), the rest left out, the sections of Appendix A numbered A.1–A.5, the cover disclaimer moved to “About the guide”, the rest of the cover, the contents and the note pages left out. English translation by Sprotyv from the Ukrainian original (CC BY-SA 4.0); the meaning of the chapters is unchanged, except: in 4.8 and 14.4 official websites, apps and ways named by the OVA instead of chatbots and Telegram channels (the app does not recommend Telegram); in 13.1 and 18.1 CoMaps, Organic Maps or OsmAnd instead of maps.me; in the table of 6.2 the doses for children replaced by a reference to the official Ministry of Health announcement or a doctor, and in 7.13 the activated charcoal dose for children by a reference to 103 or a doctor (a child's dose depends on weight and the medicine, so 103, a doctor or the leaflet gives it). In November 2026 the advice was checked against current guidelines and rules (Resuscitation Council UK and ERC 2025, Ministry of Health order No. 441, NHS, USDA, WHO, IOM, Cabinet of Ministers resolution No. 1092) and corrected in 3.3, 3.4, 4.1, 6.1, 6.2, 6.4, 7.1, 7.2, 7.4–7.6, 7.8, 7.10, 7.11, 7.16, 9.4, 12.1–12.3, 13.2, 16.2, 17.8, 18.3, 18.5, 18.7, 20.1, 20.5, 21.2, 21.4, 22.5, 23.3, 26.1, 26.2, 27.5, 29.4, 29.5 and 30.5, and reworded a few sentences; the source of each change is named beside it in scripts/build_guide.py in the app's repository.",
+ "changes": "Converted for display in the app: markup changed, of the figures only two kept (fig. 3.2, the two-wall rule, and fig. 5.1, marks of mined ground), the rest left out, the sections of Appendix A numbered A.1–A.5, the cover disclaimer moved to “About the guide”, the rest of the cover, the contents and the note pages left out. English translation by Sprotyv from the Ukrainian original (CC BY-SA 4.0); the meaning of the chapters is unchanged, except: in 4.8 and 14.4 official websites, apps and ways named by the OVA instead of chatbots and Telegram channels (the app does not recommend Telegram); in 13.1 and 18.1 CoMaps, Organic Maps or OsmAnd instead of maps.me; in the table of 6.2 the doses for children replaced by a reference to the official Ministry of Health announcement or a doctor, and in 7.13 the activated charcoal dose for children by a reference to 103 or a doctor (a child's dose depends on weight and the medicine, so 103, a doctor or the leaflet gives it). In November 2026 the advice was checked against current guidelines and rules (Resuscitation Council UK and ERC 2025, Ministry of Health order No. 441, NHS, USDA, WHO, IOM, Cabinet of Ministers resolution No. 1092) and corrected in 3.3, 3.4, 4.1, 6.1, 6.2, 6.4, 7.1, 7.2, 7.4–7.6, 7.8, 7.10, 7.11, 7.16, 9.4, 12.1–12.3, 13.2, 16.2, 17.8, 18.3, 18.5, 18.7, 20.1, 20.5, 21.2, 21.4, 22.5, 23.3, 26.1, 26.2, 27.5, 29.4, 29.5 and 30.5, and reworded a few sentences; the source of each change is named beside it in scripts/build_guide.py in the app's repository.",
  "chapters": [
   {
    "id": "ch1",
@@ -1639,6 +1639,13 @@
      "num": "5.2",
      "title": "Mine danger signs",
      "blocks": [
+      {
+       "t": "figure",
+       "pictures": [
+        "fig_59158d66153137da"
+       ],
+       "caption": "Fig. 5.1. Official and improvised markings of mined areas"
+      },
       {
        "t": "p",
        "text": "Both the military and locals leave informal markings: ribbons on branches, cans on stakes, crosses made of branches, rows of stones across a path. **Any unclear “marking” = go around that place.**"

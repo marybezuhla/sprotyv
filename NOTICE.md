@@ -16,9 +16,9 @@
 - `content/src/main/assets/guide.json` and `content/src/main/assets/figures/` — the open
   "Довідник виживання" 2.3 (https://github.com/snegireff/dovidnyk-vyzhyvannia), licensed under
   CC BY-SA 4.0. Changes: converted for display in the app by `scripts/build_guide.py` (markup
-  changed; of the figures only 3.2, the two-wall rule, kept and rendered as a picture by
-  `scripts/render_figures.js`, the other figures, cover, table of contents and blank note forms
-  left out). The text is unchanged except: in 4.8 and 14.4 official websites,
+  changed; of the figures only 3.2 (the two-wall rule) and 5.1 (marks of mined ground) kept,
+  rendered as pictures by `scripts/render_figures.js`; the other figures, cover, table of
+  contents and blank note forms left out). The text is unchanged except: in 4.8 and 14.4 official websites,
   apps and ways named by the regional military administration instead of chatbots and Telegram
   channels; in 13.1 and 18.1 CoMaps, Organic Maps or OsmAnd instead of maps.me; in the table of 6.2
   the doses for children replaced by a reference to the official announcement or a doctor, and in

@@ -469,7 +469,8 @@
    },
    {
     "action": "Mark the danger where you stopped and warn people.",
-    "why": "Bright cloth or a branch. Do not go to the object itself."
+    "why": "Bright cloth or a branch. Do not go to the object itself.",
+    "figure": "5.2"
    },
    {
     "action": "If you walked into a minefield, freeze, call for help and wait for deminers.",

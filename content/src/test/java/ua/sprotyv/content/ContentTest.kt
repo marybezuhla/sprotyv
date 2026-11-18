@@ -137,9 +137,9 @@ class ContentTest {
 
     @Test fun stepFiguresPointToRealPictures() {
         val withFigures = cards.flatMap { it.steps }.filter { it.figure.isNotEmpty() }
-        // Only the two-wall drawing (3.2) is kept; the air alert, ballistic and kid siren cards show it
-        assertTrue(withFigures.size >= 3)
-        assertTrue(withFigures.all { it.figure == "3.2" })
+        // Only two drawings are kept: the two-wall rule (3.2) and the marks of mined ground (5.2)
+        assertTrue(withFigures.size >= 4)
+        assertTrue(withFigures.all { it.figure == "3.2" || it.figure == "5.2" })
         withFigures.forEach { st ->
             val section = guide.section(st.figure)?.second
             assertTrue("no section ${st.figure}", section != null)

@@ -1,0 +1,24 @@
+<svg width="470" height="150" viewBox="0 0 470 150" xmlns="http://www.w3.org/2000/svg">
+  
+  <rect x="20" y="20" width="120" height="80" fill="#c0392b"/>
+  <polygon points="80,30 40,90 120,90" fill="none" stroke="#fff" stroke-width="4"/>
+  <text x="72" y="82" font-family="DejaVu Sans" font-size="26" fill="#fff" font-weight="bold">☠</text>
+  <text x="30" y="118" font-family="DejaVu Sans" font-size="10" fill="#333">Офіційний знак:</text>
+  <text x="30" y="131" font-family="DejaVu Sans" font-size="10" fill="#333">червоний, череп, «МІНИ!»</text>
+
+  
+  <line x1="200" y1="35" x2="260" y2="95" stroke="#7a5a2f" stroke-width="7"/>
+  <line x1="260" y1="35" x2="200" y2="95" stroke="#7a5a2f" stroke-width="7"/>
+  <text x="185" y="118" font-family="DejaVu Sans" font-size="10" fill="#333">Схрещені палиці/гілки</text>
+  <text x="185" y="131" font-family="DejaVu Sans" font-size="10" fill="#333">на дорозі чи стежці</text>
+
+  
+  <line x1="360" y1="40" x2="360" y2="100" stroke="#7a5a2f" stroke-width="6"/>
+  <path d="M360 40 l30 8 l-30 10 z" fill="#c0392b"/>
+  <circle cx="330" cy="100" r="7" fill="#888"/>
+  <circle cx="346" cy="103" r="7" fill="#888"/>
+  <circle cx="376" cy="103" r="7" fill="#888"/>
+  <circle cx="392" cy="100" r="7" fill="#888"/>
+  <text x="315" y="118" font-family="DejaVu Sans" font-size="10" fill="#333">Ганчірка/стрічка на палиці,</text>
+  <text x="315" y="131" font-family="DejaVu Sans" font-size="10" fill="#333">викладені камені, купки землі</text>
+</svg>

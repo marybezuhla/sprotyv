@@ -164,8 +164,8 @@ EVIDENCE = [
 ]
 
 
-# The only drawing kept, by the start of its caption
-KEEP_FIGURES = ("Рис. 3.2.",)
+# The drawings kept, by the start of their captions
+KEEP_FIGURES = ("Рис. 3.2.", "Рис. 5.1.")
 
 # Where the text points to a drawing that is left out
 NO_FIGURES = [
@@ -408,8 +408,8 @@ class Builder:
                     raise ValueError(f"Unexpected <{c.tag}> inside a figure")
 
         walk(node)
-        # Sprotyv keeps one drawing: the two-wall rule (3.2), the one that changes what people do in the moment.
-        # The others are left out; their words stay in the text
+        # Sprotyv keeps two drawings: the two-wall rule (3.2) and the marks of mined ground (5.1), both things
+        # to recognise by eye at once. The others are left out; their words stay in the text
         if not any(caption.startswith(k) for k in KEEP_FIGURES):
             return None
         names = []
@@ -585,7 +585,7 @@ def main():
         "source": "https://github.com/snegireff/dovidnyk-vyzhyvannia",
         "commit": commit,
         "license": "CC BY-SA 4.0",
-        "changes": "Перетворено для показу в застосунку: розмітку змінено, з рисунків лишено один (рис. 3.2, правило двох стін), решту не включено, "
+        "changes": "Перетворено для показу в застосунку: розмітку змінено, з рисунків лишено два (рис. 3.2, правило двох стін, і рис. 5.1, позначення замінованих ділянок), решту не включено, "
                    "розділам Додатку А додано номери А.1–А.5, застереження з обкладинки перенесено в «Про довідник», "
                    "решту обкладинки, зміст і бланки нотаток не включено. Текст розділів не змінено, крім такого: "
                    "у п. 4.8 і 14.4 замість чат-ботів і Telegram-каналів — офіційні сайти, застосунки й способи, які називає ОВА "
